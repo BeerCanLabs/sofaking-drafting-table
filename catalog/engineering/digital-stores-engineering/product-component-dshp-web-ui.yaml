@@ -1,0 +1,106 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-9DNC
+type: product_component
+name: Digital Stores Suite+ Web UI
+aliases:
+- DshpUiNg2Wp
+- dshp-ui-ng2-wp
+- main-ang
+description: Angular single-page application for Digital Stores Suite+ (DSHP). Compiled to static bundles
+  and served by IIS from a /dist/ path on the same origin as the EntityAPI. Authored from a direct read
+  of BeerCanLabs/sk-main-ang on 2026-08-20; architecture facts and their provenance are recorded in
+  DecisionRecord 01M0GBWMZJ-AAX4. Availability, scalability, recoverability and failure-domain posture
+  were closed on 2026-09-08 from the DRAFT L1 Baseline Questionnaire and the Digital Stores Environment
+  Guide.
+version: 1.1.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- digital-stores
+- product-component
+- source-derived
+- owner-confirmed
+repoUrl: https://github.com/BeerCanLabs/sk-main-ang
+language: TypeScript
+classification: web-application
+runtimeRequirement: Angular 14.2 / TypeScript 4.7 static bundles served by IIS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-main-ang
+  sourceRepository: https://github.com/BeerCanLabs/sk-main-ang
+  repositoryPrimaryLanguage: TypeScript
+  observedRuntimeSignals: angular, npm, iis, static-bundle
+  observedManifestPaths: package.json; package-lock.json; angular.json; tsconfig.json; tsconfig.template.json;
+    karma.conf.js; protractor.conf.js; typings.json; .eslintrc.json; tslint.json; web.config; build-alpha.ps1
+  serviceAuthentication: 'Confirmed by direct repository read. The SPA holds no credentials of its own.
+    It signs in against POST /DSLogin.axd and then sends four custom headers on every backend call from
+    src/app/dshp/ds-core/services/dsal.service.ts: ds-session, Authorization: Bearer <session GUID>, ds-region-id,
+    and ds-fingerprint. The fingerprint is a SHA-256 request signature computed client-side in src/app/dshp/ds-core/utils.
+    Route access is gated by the isAuthorizedToActivate guard and src/app/dshp/ds-core/services/security.service.ts.
+    See DecisionRecord 01M0GBWMZJ-TMGD - this frontend guard is currently the only enforced per-screen
+    authorization check, which the 2026-09-08 owner answer confirmed rather than refuted: the security
+    list is fetched once at sign-in and cached on the front end.'
+  secretsManagement: 'Confirmed by direct repository read: no secret store is used. Backend base URLs
+    are derived at runtime from window.location.hostname in src/app/dshp/ds-core/services/dshpConfig.service.ts.
+    A Pendo analytics application key (PENDO_DS) is hardcoded in that same file. No other credential material
+    was found in the repository.'
+  serviceLogging: 'Confirmed by direct repository read: no frontend logging or error-reporting SDK is
+    configured. src/app/dshp/Support/services/applog.service.ts reads an application log from the backend
+    for display in the UI; it does not emit client-side telemetry. Browser errors are not shipped anywhere.'
+  healthWelfareMonitoring: 'Confirmed by direct repository read: no health endpoint and no synthetic monitor.
+    The only monitoring-adjacent signal is Pendo product analytics (us1.app.pendo.io). No APM or real-user
+    monitoring is present. Host-level monitoring exists outside the application: per the Environment Guide,
+    production web hosts are monitored by AWS CloudWatch in AWS account 472468972873 and by Nagios XI at
+    http://issuse1nagios1/nagiosxi/, with Observium present in the estate. There is no Dynatrace OneAgent.'
+  availabilityModel: 'Confirmed 2026-09-08 by the owner and corroborated by the Environment Guide, and it
+    is not uniform across tiers. Production runs PRAngWeb1 (c5.large) in an AWS Auto Scaling group behind
+    PRLB-155628125.us-west-1.elb.amazonaws.com, and sandbox runs SBWeb (c5.xlarge) behind
+    SBLB-3852661381.us-west-1.elb.amazonaws.com. QA (QAWeb, t3.small) and alpha (ALWeb4, t3.small) each
+    run a single web host with no load balancer recorded. The web hosts are not domain-joined; the
+    Environment Guide records them in WORKGROUP. No availability target, RTO or RPO is recorded for the
+    product - see DecisionRecord 01M25X9W0R-GKSK. Because the SPA and the EntityAPI share one IIS origin
+    and the same hosts, this posture is identical for ProductComponent 01M0GBWMZJ-E0NF.'
+  scalabilityModel: 'Partially confirmed 2026-09-08. Production and sandbox scale horizontally through an
+    AWS Auto Scaling group that the Environment Guide describes as adding web servers based on load; the
+    policy bounds, minimum and maximum instance counts and scaling metric are not recorded anywhere, so no
+    autoscaling range is asserted in DRAFT. QA and alpha do not scale: one t3.small host each, powered off
+    outside scheduled hours through AWS Instance Scheduler (corrected 2026-10-20 from Park My Cloud; see
+    SoftwareDeploymentPattern 01KRZ1GCH3-99RF notes.scheduledJobs). Because the bundles are static files
+    served by IIS, scaling the presentation tier is scaling the shared IIS host rather than the SPA itself.'
+  recoverabilityModel: 'Confirmed 2026-09-08. Recovery is host-level restore from infrastructure backup,
+    not application redeployment. AWS Backup takes weekly AMIs of tagged instances on Friday at 23:00 CST
+    and daily EBS snapshots Monday through Thursday at 23:00 CST, retains both 30 days, and copies them to
+    us-west-1 and us-east-1. The Environment Guide additionally records that the sandbox host SBWeb is the
+    source of the production AMI, so a production web host can be rebuilt from sandbox. No restore has a
+    tested RTO. The backup design page is dated 2023-02-28 and prospectively worded, so the implemented
+    state should be confirmed against the live account - see DecisionRecord 01M25X9W0R-GKSK.'
+  failureDomain: 'Confirmed 2026-09-08. Service-group scope in production and sandbox, where the loss of
+    one web host is absorbed by the load balancer and the Auto Scaling group; tier-wide in QA and alpha,
+    where the single web host is the tier. In every tier the presentation tier is not the binding
+    constraint: the SPA is unusable without the EntityAPI it shares an origin with, and the EntityAPI is
+    unusable without DS_Admin, which the owner confirmed is a platform-wide single point of failure. The
+    effective blast radius for a user-visible outage is therefore platform-wide and is recorded on the
+    SoftwareDeploymentPattern 01KRZ1GCH3-99RF rather than here.'
+  buildAndDeployment: 'Confirmed by direct repository read: there is no .github/workflows directory and
+    no CI pipeline of any kind in this repository. The only automation artifact is build-alpha.ps1, a
+    manual PowerShell script that runs an Angular production build, MSBuild-publishes the EntityAPI from
+    the sibling server-ang checkout, copies both into a third repository (dshpDeploy, branch angular)
+    and git-pushes it. That script targets the alpha tier only. Per the owner on 2026-08-27 and 2026-09-08,
+    dshpDeploy drives all four tiers the same way, one branch per tier (angular, QAAng, Sandbox, PRAng),
+    with a developer triggering the QA to Sandbox to Production promotion manually and no automated
+    validation or approval gate before a promotion goes live. Cloud Engineering can obtain read access to
+    dshpDeploy through Beanstalk; that direct read has not yet been done.'
+  testCoverage: 'Confirmed by direct repository read: README.md states there are currently no unit tests
+    and no e2e tests, despite Karma/Jasmine and Protractor being configured.'
+decisionRecords:
+- ref: 01M0GBWMZJ-AAX4
+  key: serviceAuthentication
+- ref: 01M0GBWMZJ-AAX4
+  key: buildAndDeployment
+- ref: 01M0GBWMZJ-TMGD
+  key: serviceAuthentication
+- ref: 01M25X9W0R-GKSK
+  key: recoverabilityModel

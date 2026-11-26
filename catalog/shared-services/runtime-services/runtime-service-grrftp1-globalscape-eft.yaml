@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KYN1RHK6-FTP1
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: GRRFTP1 File Transfer Service
+description: Single-instance Grand Rapids managed file-transfer service running Globalscape EFT Server. Hosts the shares used by GRRLVEUTIL1 for the Leave Management file-transformation workflow.
+version: 1.0.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - service
+  - file-transfer
+  - ftp
+  - ftps
+  - sftp
+  - grand rapids
+  - legacy
+host: 01KYN1RJ06-HST1
+primaryTechnologyComponent: 01KYN1RHK7-EFT6
+internalComponents:
+  - ref: 01KYN1RHK7-EFT6
+    role: function
+    configuration: grrftp1-transfer-endpoints
+architectureNotes:
+  serviceAuthentication: Supports username/password and SSH public-key authentication; accounts are managed locally within Globalscape EFT rather than Active Directory.
+  secretsManagement: Not yet confirmed; account credentials are administered locally in Globalscape EFT.
+  serviceLogging: Authentication and file-transfer logs are retained locally on GRRFTP1 and also forwarded to the existing Amazon S3 Storage service (01KQQ5JT05-KT3Z).
+  healthWelfareMonitoring: Nagios monitors GRRFTP1 server and Globalscape EFT health (owner-confirmed 2026-07-31). The specific checks, thresholds, and alert-routing configuration have not yet been documented.
+  availabilityModel: Single server with no standby or clustered high-availability partner (owner-confirmed 2026-07-29). This is a single point of failure for FTP, FTPS, and SFTP workloads and for the Sofa King Central-to-Leave file-transformation path.
+  scalabilityModel: Not yet confirmed; single-instance service with no known scaling mechanism.
+  recoverabilityModel: Can be restored from a Veeam VM backup (backup product owner-confirmed 2026-09-03). No documented recovery drill evidence.
+  failureDomain: Scoped to GRRFTP1 and the FTP/FTPS/SFTP workloads it hosts, including the Sofa King Central-to-Leave file-transformation path through GRRLVEUTIL1.
+notes:
+  ownerRationale: Reuse model exception — no existing reusable managed file-transfer service matched Globalscape EFT Server, so this RuntimeService and its TechnologyComponent were authored net-new rather than duplicated per product. Authored by Cloud Engineering / Infrastructure (Shared Services) for reuse by any product depending on GRRFTP1.
+  sourceSession: Confirmed via the Leave Management DRAFT L1 Compute and Runtime Review drafting session (catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml), tracked by OPS-049026.
+deliveryModel: self-managed

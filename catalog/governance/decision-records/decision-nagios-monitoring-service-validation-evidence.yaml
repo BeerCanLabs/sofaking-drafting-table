@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJE9-TPQ0
+type: decision_record
+name: Nagios Monitoring Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-E2CC
+linkedObject: 01KQQ5JT1F-E2CC
+decisionRationale: "secretsManagement: Monitoring credentials and notification secrets are managed through the enterprise secret-control process.\n\nscalabilityModel: Monitoring coverage scales by adding monitored hosts, checks, and poller capacity.\n\nfailureDomain: Scoped to the Nagios monitoring platform and its configured monitoring zones."

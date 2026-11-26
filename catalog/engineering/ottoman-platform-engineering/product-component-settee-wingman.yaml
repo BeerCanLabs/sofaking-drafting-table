@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGJ-43SY
+type: product_component
+ownerRole: engineer
+name: Settee Wingman
+description: The dependable UI wingman
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- settee
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Settee-Wingman
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Settee-Wingman
+  observedRuntimeSignals: github_actions, node, readme
+  observedManifestPaths: .github/hooks/on-design-doc.json; .github/hooks/on-epic.json; .github/hooks/on-stories.json; .github/workflows/lint.yaml; .github/workflows/unit-test.yaml; build-scripts/versioning.json; cypress.json; cypress/config/ui/dev_neo.json; cypress/config/ui/local_neo.json; cypress/config/ui/stage.json; cypress/config/ui/stage_neo.json; deploymentPipeline/cdk.context.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

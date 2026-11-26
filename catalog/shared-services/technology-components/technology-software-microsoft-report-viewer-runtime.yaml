@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-Z9BG
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Report Viewer 2012 Runtime
+description: Microsoft Report Viewer 2012 runtime installed for Salesdesk web reporting workloads.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- reporting
+- runtime
+classification: software
+vendor: Microsoft
+productName: Report Viewer 2012 Runtime
+productVersion: 11.0.3452.0
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2023-01-10'
+  notes: The pinned SRE download URL resolves to Microsoft Report Viewer 2012 Runtime, which is past vendor support.
+capabilities:
+- 01KT0XNZEY-70Y6
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/som/salesdesk_web/tasks/main.yml and vars/main.yml."

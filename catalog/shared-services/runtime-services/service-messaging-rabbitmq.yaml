@@ -1,0 +1,64 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-JBCV
+type: runtime_service
+ownerRole: technology-admin
+name: RabbitMQ Messaging Service
+description: 'Standard RabbitMQ messaging service pattern for asynchronous communication and queue-based workload decoupling.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - messaging
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1V-Y71K
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: none
+  serviceAuthentication: Broker administrative and client identities use centralized secret distribution with broker-side authentication policy.
+  scalingApproach: quorum queues with clustered brokers
+  serviceLogging: Broker logs and queue events are forwarded to centralized logging beyond host-level collection.
+  healthCheck: broker health and queue depth monitoring
+  healthWelfareMonitoring: Broker health probes, queue-depth telemetry, and platform monitoring track service welfare.
+  secretsManagement: credentials stored in a centralized secrets platform
+  availabilityModel: Clustered brokers with quorum queues sustain messaging availability across node failure.
+  scalabilityModel: Broker cluster capacity scales by manual addition of clustered nodes.
+  recoverabilityModel: Failed brokers are replaced and cluster quorum is restored through broker rejoin and queue recovery.
+  failureDomain: Scoped to the shared RabbitMQ cluster serving dependent workloads.
+deploymentConfigurations:
+  - id: clustered-availability
+    name: Clustered Availability
+    description: Clustered brokers with quorum queues provide messaging availability and failover tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: clustered-scale
+    name: Clustered Scale
+    description: Additional brokers can be added to the cluster to increase messaging capacity.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1V-Y71K
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJDK-112H
+    key: serviceAuthentication
+  - ref: 01KT16XJDK-112H
+    key: secretsManagement
+  - ref: 01KT16XJDK-112H
+    key: serviceLogging
+  - ref: 01KT16XJDK-112H
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJDK-112H
+    key: failureDomain

@@ -1,0 +1,129 @@
+schemaVersion: '1.0'
+uid: 01KY3N1RDT-CRPJ
+type: drafting_session
+name: WSERP Hosted Infrastructure Drafting Session
+description: >-
+  Infrastructure-scoped session for the three independent WSERP Desktop,
+  Portal, and Web software deployment patterns. It records owner-interview
+  evidence and Atlassian research while deferring application, network-device,
+  database, and file-cluster validation.
+version: 2.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+sessionStatus: open
+owner:
+  team: sre-management
+  contact: jordan.hale@sofaking.example
+tags: [drafting-session, wserp, infrastructure, windows, vmware]
+primaryObjectType: software_deployment_pattern
+sourceArtifacts:
+  - name: WSERP owner and infrastructure interview
+    type: interview
+    notes: >-
+      Confirmed topology, sizing, environments, availability, provisioning,
+      patching, observability, capacity, recovery, testing, drift, and runbooks.
+  - name: Abacus OL5/OL6 Environment Guide
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/1160661492/Abacus+OL5+OL6+-+Environment+Guide
+    notes: Corroborates XCOLO and High Point infrastructure.
+  - name: Abacus OL5/OL6 Maintenance
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/1334588511/Abacus+OL5+OL6+-+Maintenance
+    notes: Provides maintenance and environment-refresh context.
+  - name: Automox Production Environments Patching Schedule
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/16888903494/Automox+-+Production+Environments+Patching+Schedule
+    notes: Current monthly WSERP Group A and Group B patch scheduling evidence.
+  - name: XCOLO Veeam Jira evidence
+    type: other
+    location: https://sofaking-example.atlassian.net/browse/OPS-52996
+    notes: Confirms XCOLO Veeam but not a WSERP-specific schedule or retention policy.
+generatedObjects:
+  - name: WSERP Desktop Hosted
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KF1-Z1SJ
+    notes: Replaced the former combined WSERP pattern with the Desktop-specific deployment boundary.
+  - name: WSERP Portal Hosted
+    type: software_deployment_pattern
+    status: created
+    ref: 01KY5YYDNN-4DTD
+    notes: Independent Portal/Velocity and Dispatch deployment boundary.
+  - name: WSERP Web Hosted
+    type: software_deployment_pattern
+    status: created
+    ref: 01KY5YYDNN-5DEA
+    notes: Independent Web/Ledgerline, Proxy, and Grizzly deployment boundary.
+unresolvedQuestions:
+  - id: veeam-policy
+    question: What are WSERP Veeam scheduling, retention, offsite protection, restore-test cadence, RPO, and RTO?
+    status: deferred
+    reason: Atlassian sources confirm Veeam use but not an authoritative WSERP policy.
+    currentBestGuess: Veeam protects hosted WSERP VMs and supports full-VM restoration.
+    impact: Recoverability evidence and scheduled restore assurance remain incomplete.
+    relatedObjects: &allPatterns [{ref: 01KSM38KF1-Z1SJ}, {ref: 01KY5YYDNN-4DTD}, {ref: 01KY5YYDNN-5DEA}]
+  - id: network-validation
+    question: Will Network Engineering validate the Imperva, FortiGate, F5, DSR, health-check, and load-balancing configuration?
+    status: deferred
+    reason: The paths are owner-described but have not been validated by the accountable network team.
+    currentBestGuess: The documented product-specific ingress topologies are current.
+    impact: Network evidence is not team-attested.
+    relatedObjects: *allPatterns
+  - id: database-validation
+    question: Will DMT validate SQL topology, backup, encryption, recovery objectives, and restore testing?
+    status: deferred
+    reason: Database-platform evidence is outside this infrastructure-scoped session.
+    currentBestGuess: Per-customer databases run on shared SQL clusters with two Always On replicas.
+    impact: Data-tier maturity must be assessed separately.
+    relatedObjects: [{ref: 01KSM38KF1-Z1SJ}, {ref: 01KY5YYDNN-4DTD}, {ref: 01KY5YYDNN-5DEA}, {ref: 01KSM38KF3-3RT8}]
+  - id: documents-cluster-validation
+    question: Will Systems Engineering validate Documents cluster topology, backup, capacity, monitoring, and recovery testing?
+    status: deferred
+    reason: The access patterns are known, but the storage implementation has not been supplied.
+    currentBestGuess: Customer-specific paths reside on shared clustered file servers in XCOLO.
+    impact: File-storage availability and recovery evidence remains incomplete.
+    relatedObjects: *allPatterns
+  - id: application-component-validation
+    question: Will WS ERP Engineering validate components, runtimes, relationships, authentication, and secrets?
+    status: deferred
+    reason: This session is deliberately infrastructure-scoped.
+    currentBestGuess: Repository-discovered components are directional; Proxy lacks its own ProductComponent.
+    impact: This session does not establish whole-application maturity for any pattern.
+    relatedObjects: *allPatterns
+assumptions:
+  - id: infrastructure-score-boundary
+    statement: Infrastructure maturity is assessed independently from application, network, database, and file-cluster maturity.
+    rationale: Separate accountable teams have not supplied or validated those areas.
+    impact: The scoped results are not formal whole-application maturity scores.
+    relatedObjects: *allPatterns
+  - id: reactive-practices-are-current-state
+    statement: Reactive capacity, incident/change-only recovery exercises, no drift detection, and partial runbooks are confirmed current state.
+    rationale: The infrastructure owner explicitly answered each interview question.
+    impact: These findings reduce infrastructure maturity and are improvement opportunities.
+    relatedObjects: *allPatterns
+nextSteps:
+  - id: obtain-veeam-policy
+    action: Obtain the WSERP Veeam policy and restore-test evidence from Systems Engineering.
+    status: open
+    owner: Systems Engineering (not yet in workspace team vocabulary)
+    relatedObjects: *allPatterns
+  - id: add-infrastructure-runbooks
+    action: Maintain authoritative provisioning, rebuild, Portal failover, and VM restoration runbooks.
+    status: open
+    owner: sre-management
+    relatedObjects: *allPatterns
+  - id: establish-resilience-exercises
+    action: Schedule Desktop failover, Portal failover, Web recovery, and Veeam restoration exercises.
+    status: open
+    owner: sre-management
+    relatedObjects: *allPatterns
+  - id: establish-drift-detection
+    action: Implement configuration-baseline and drift detection for Windows and IIS.
+    status: open
+    owner: sre-management
+    relatedObjects: *allPatterns
+  - id: establish-capacity-review
+    action: Define recurring capacity review using CPU, memory, disk, and load trends.
+    status: open
+    owner: sre-management
+    relatedObjects: *allPatterns

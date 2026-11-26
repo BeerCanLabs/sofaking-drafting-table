@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ5D-FJA8
+type: decision_record
+name: Amazon Neptune Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-TQSS
+linkedObject: 01KQQ5JT05-TQSS
+decisionRationale: "resilienceModel: Managed multi-AZ high availability.\n\nconfigurableSurface: Cluster instances, parameters, and storage scaling.\n\nfailureDomain: Scoped to the AWS region and cluster."

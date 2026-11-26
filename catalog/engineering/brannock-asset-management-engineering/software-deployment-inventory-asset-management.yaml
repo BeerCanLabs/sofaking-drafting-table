@@ -1,0 +1,180 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF8-TKMW
+type: software_deployment_pattern
+ownerRole: engineer
+name: Asset Management - Pattern
+aliases:
+  - Sofa King Inventory Management – Asset Management
+  - Trackweb-IT
+description: >-
+  Asset Management (AM) is Sofa King's RETAIL asset/inventory management product,
+  branded Trackweb-IT (repo family BeerCanLabs/sk-WHM_AM_*). It is a legacy
+  ASP.NET Web Forms + MVC application (.NET Framework 4.8) with a per-region
+  single-tenant SQL Server data tier, an identity/SSO subsystem, a mobile
+  client and backend API, integration and reporting APIs, and a modern AWS
+  Lambda-based serverless ETL layer for third-party MDM sync (InTune, Mosyle,
+  JamfStore, Google Workspace) and a planned Sofa King ERP integration. This
+  pattern previously conflated AM with Display Materials Management
+  (IMM) and the obsolete IM Refresh (IMR) rebuild. Product ownership confirmed
+  on 2026-08-06 that AM and IMM require separate DRAFT entries and that IMR no
+  longer exists as a current product. IMM is described by 01KSM38KFD-1G0D.
+  See DecisionRecord 01KYRT1P14-Y2RH for the scope-correction rationale.
+
+  Source Documentation: - https://sofaking-example.atlassian.net/wiki/spaces/AR/pages/17893014094/Asset+Management+Architecture
+  - https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/16800335071/Asset+Management+Product+Ownership+and+Component+Verification+Questions
+version: 2.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.brannock-asset-management-engineering
+  productFamily: Asset Management
+  notes: Product ownership confirmed the Business Solutions pillar, Brannock Asset Management Engineering ownership, and Group_dev_whm@sofaking.example contact on 2026-08-06.
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - sdm
+  - asset-management
+  - trackweb
+  - dotnet-framework
+  - legacy
+  - hybrid-modernization
+  - serverless-etl
+followsReferenceArchitecture: 01KQQ5JT1D-DAAM
+architectureNotes:
+  availabilityRequirement: 'High availability during the owner-reported store-season operating window of 7:00 AM Pacific through 9:00 PM Eastern; no web farm or web-tier failover is currently deployed.'
+  dataClassification: 'Restricted. Stores customer and staff PII including names, email addresses, phone numbers, addresses, classes, and courses; also stores database, API-key, and SSO credential material.'
+  failureDomain: 'Each region has its own TrackwebIT database and IIS application pool. An application-pool failure affects one region; a shared EC2/IIS server failure affects every region hosted on that server. Production SQL uses AlwaysOn availability groups. APIs, mobile, and individual integrations can fail independently, and the serverless ETL layer is decomposed per MDM system and ETL stage.'
+  deploymentTargets: 'AWS only, with completely separated production and non-production accounts and networks in us-east-1. Production legacy web/API/identity/reporting/notifications workloads run on 90+ Windows Server 2022 EC2 hosts with IIS 10 in account 675180657723; non-production uses 10+ comparable EC2 hosts in account 672459384728. Owner verification reports SQL Server 2016 with 2008 compatibility and production AlwaysOn, with one TrackwebIT database per region plus shared databases. ETL/Lambda workloads are also in us-east-1. The shared SQL service reference and Brannock ETL transport remain open reconciliation items in DraftingSession 01KYRVK1NJ-M3CN.'
+  patternDeviations:
+    - 'Secrets-management maturity is inconsistent across the estate: SSIS (01KSM38KFB-FJX4) and the ETL microservices (01KSM38KFB-G3T3) use Delinea/Thycotic Secret Server (and, for ETL_MSA, AWS Secrets Manager as well), while the web/API/mobile tier (01KSM38KFB-QFJ1, -XZ3E, -D6MJ, -7ZWT, -XABQ) stores secrets in plaintext config files - a real, documented architectural inconsistency, not a placeholder guess.'
+    - 'The integration API (01KSM38KFB-XZ3E) issues JWTs with no org/tenant scoping today - the same token grants access to all data (documented gap in the repository''s own ERP_Integration_Gap_Analysis.md).'
+    - 'A resilience library (Library.Shared.Resilience) is scaffolded in the ETL microservices solution but contains no implementation yet.'
+    - 'Hybrid legacy-style Windows EC2/IIS/SQL Server and modern AWS Lambda serverless architectures run in parallel. The followed Reference Architecture still contains on-prem and us-east-2 assumptions that require Architecture Review Board reconciliation.'
+  externalDependencies: >-
+    Documented as relationship objects under catalog/relationships/. Confirmed
+    dependencies include SAP, Sofa King ERP, Google Workspace, Jamf Pro, Jamf
+    Store, Microsoft Intune, Mosyle, ConfigCat, Pendo, Salesforce account
+    mapping, Azure Application Insights, AWS CloudWatch Logs, Secrets Manager,
+    SQS, Lambda, API Gateway, S3, and Delinea Secret Server. Legacy AM sends
+    application logs through NLog.AWS.Logger to the AMIMMApplication CloudWatch
+    Logs group in us-east-1, with local-file fallback only when CloudWatch is
+    unavailable. Product-owner verification also identifies an AM-to-HelpDesk
+    interaction; direction, authentication, per-dependency lifecycle status,
+    and whether Salesforce is a runtime integration remain explicitly open in
+    DraftingSession 01KYRVK1NJ-M3CN. Sources:
+    https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/16233526188/AM+Logging+Strategy
+    and https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/16800335071/Asset+Management+Product+Ownership+and+Component+Verification+Questions
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Presentation & Application Tier
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-QFJ1
+        diagramTier: application
+        networkZone: web
+        notes: Trackweb-IT - the primary RETAIL asset/inventory web application (ASP.NET Web Forms + MVC, .NET Framework 4.8).
+  - name: Identity & SSO
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-YGSN
+        diagramTier: application
+        networkZone: app
+        notes: TIPIdentityCore - multi-provider SSO (LDAP/IWA/ADFS/SAML/OAuth), user profile, and password-policy management.
+  - name: Mobile
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-27S3
+        diagramTier: presentation
+        networkZone: web
+        notes: Native Android (Kotlin) and iOS (Swift) asset-scanning client apps.
+      - ref: 01KSM38KFB-D6MJ
+        diagramTier: application
+        networkZone: web
+        notes: ASP.NET Web API backing the mobile client.
+  - name: Integration API
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-XZ3E
+        diagramTier: application
+        networkZone: app
+        notes: Trackweb_API - integration-facing Web API (Products, PurchaseOrders, Vendor, Shipments, Funding); existing inbound ERP-style integrations plus a planned expanded Sofa King ERP integration.
+  - name: Reporting
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-XABQ
+        diagramTier: application
+        networkZone: app
+        notes: Custom multi-tenant reporting service on GrapeCity ActiveReports (not SSRS).
+  - name: Notifications
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-7ZWT
+        diagramTier: application
+        networkZone: app
+        notes: In-app banner/announcement notification service (not email/SMS/push).
+  - name: ETL & Data Integration
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-FJX4
+        diagramTier: application
+        networkZone: data
+        notes: SSIS packages (bulk location import, deactivate, inventory transfer) resolving per-region credentials from Secret Server.
+      - ref: 01KSM38KFB-4JYM
+        diagramTier: data
+        networkZone: ops
+        notes: Versioned SQL Server migrations, environment configs, SSIS deployment scripts, and AWS CDK infrastructure-as-code for the AM estate.
+  - name: Serverless MDM ETL Microservices
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFB-G3T3
+        diagramTier: application
+        networkZone: app
+        notes: AWS Lambda microservices (per MDM system - InTune, Mosyle, JamfStore, GoogleOU - plus ERP), SQS-queue-driven, VPC-deployed.
+  - name: Shared ETL & MDM Integration (external)
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KSM38KFC-VK1S
+        diagramTier: application
+        networkZone: app
+        notes: Brannock.ETL.Hangfire - a centralized, shared Brannock ETL/MDM-sync service. Product-owner verification reports SQL Server TDS from the AM web tier, while prior repository evidence reported HTTP from MDMTriggerService; transport remains unresolved in DraftingSession 01KYRVK1NJ-M3CN.
+  - name: Data Tier
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: data
+        networkZone: data
+        notes: Owner verification reports SQL Server 2016 with 2008 compatibility and production AlwaysOn. One TrackwebIT database exists per region; shared databases include TrackwebReports, IntegrationMiddleWay, TIPIdentityCore, TrackwebAPI, _TrackwebSystem, _TrackwebSSIS, Trackweb_MDM_ETL, TrackwebNotifications, and MDM/config stores. The referenced shared service is currently labeled SQL Server 2019, so exact service mapping remains open.
+decisionRecords:
+  - ref: 01KYRT1P14-Y2RH
+    key: scopeDecision
+  - ref: 01KT16XHKS-XBZJ
+    key: deploymentTargets
+  - ref: 01KT16XHKS-XBZJ
+    key: availabilityRequirement
+  - ref: 01KT16XHKS-XBZJ
+    key: dataClassification
+  - ref: 01KT16XHKS-XBZJ
+    key: failureDomain
+  - ref: 01KT16XHKS-XBZJ
+    key: patternDeviations
+  - ref: 01KT16XHKS-XBZJ
+    key: externalDependencies
+  - ref: 01KT16XHKS-XBZJ
+    key: interServiceConnections

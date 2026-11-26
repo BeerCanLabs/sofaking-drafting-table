@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-PGTY
+type: host
+ownerRole: technology-admin
+name: Windows Server 2022 Physical Standard Host
+description: Stub host for Windows Server 2022 workloads on physical Dell PowerEdge infrastructure.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- physical
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-RTYQ
+computePlatformComponent: 01KQQ5JT1P-9G0K
+internalComponents:
+- ref: 01KQQ5JT1Q-RTYQ
+  role: os
+- ref: 01KQQ5JT1P-9G0K
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

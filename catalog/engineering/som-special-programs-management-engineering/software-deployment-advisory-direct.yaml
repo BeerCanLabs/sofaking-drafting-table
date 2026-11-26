@@ -1,0 +1,62 @@
+schemaVersion: '1.0'
+uid: 01KXK822CN-M74S
+type: software_deployment_pattern
+ownerRole: engineer
+name: Advisory Direct
+description: >-
+  Software Deployment Pattern for Advisory Direct — a public career-advisory
+  web application in the Trifold/Corvid product family, discovered live
+  behind the WAF via the CDP Direct - WAF Info Confluence page
+  (www.guidedirect.example). Owner confirmed on 2026-09-10 the AdvisoryCode
+  folder in KIOTrifoldStandaloneApplication is the source repository.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Trifold
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - trifold
+  - advisory-direct
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+notes:
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  dataClassification: internal
+  failureDomain:
+    scope: service-group
+    description: >-
+      Assumed consistent with the rest of the Trifold family. Not yet
+      confirmed by owner interview.
+  patternDeviations: >-
+    Owner confirmed hosted on the same servers as Nysdcb Directors and
+    Translation Direct: GRRCDPMISCWEB11 (prod, grr-datacenter) /
+    HPTCDPDEVMISC1 (QA, high point-datacenter). Application composition
+    confirmed as the AdvisoryCode folder in KIOTrifoldStandaloneApplication.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KX4JP6P0-F5TY
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Advisory Direct public web application. Owner confirmed the
+          AdvisoryCode folder (KIOTrifoldStandaloneApplication) is the
+          source repository.
+decisionRecords:
+  - ref: 01KZPK2KV0-5Y2P
+    key: deploymentTargets
+  - ref: 01KZPK2KV0-5Y2P
+    key: noAdditionalInteractions
+  - ref: 01KZPK2KV0-5Y2P
+    key: noCrossBoundaryConnections

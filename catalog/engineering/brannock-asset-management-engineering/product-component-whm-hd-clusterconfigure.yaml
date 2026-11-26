@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-HBSC
+type: product_component
+ownerRole: engineer
+name: Whm Hd Clusterconfigure
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-WHM_HD_ClusterConfigure.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- whm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_HD_ClusterConfigure
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_HD_ClusterConfigure
+  observedRuntimeSignals: cloudformation, docker, dotnet, readme, serverless
+  observedManifestPaths: CloudFormation/AutoDeploy-Bootstrap.yaml; CloudFormation/AutoDeploy-EBCluster.yaml; CloudFormation/AutoDeploy-ElasticBeanstalk.yaml; CloudFormation/AutoDeploy-Lambda.yaml; CloudFormation/AutoDeploy-UrlNormalizer-Lambda.yaml; ClusterConfigure.Lib/ClusterConfigure.Lib.csproj; ClusterConfigure.sln; ClusterConfigure/ClusterConfigure.csproj; ClusterConfigure/Dockerfile; ClusterConfigure/aws-lambda-tools-defaults.json; ClusterConfigureZip/ClusterConfigureZip.csproj; ClusterConfigureZip/aws-lambda-tools-defaults.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

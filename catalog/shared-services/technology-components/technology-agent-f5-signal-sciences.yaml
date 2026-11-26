@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-8E8B
+type: technology_component
+ownerRole: technology-admin
+name: F5 Signal Sciences Agent
+description: Host-level WAF and runtime protection agent for supported workloads.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- security
+classification: agent
+vendor: F5
+productName: Signal Sciences Agent
+productVersion: current
+platformDependency: external.security.signal-sciences-platform
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Lifecycle is tied to the vendor-managed platform service.
+capabilities:
+- 01KT0V5MCV-Z079

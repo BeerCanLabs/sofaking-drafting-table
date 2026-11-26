@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KX4JP6P0-F5TY
+type: product_component
+ownerRole: engineer
+name: Advisory Direct
+description: >-
+  Public career-advisory web application (www.guidedirect.example), part of
+  the Trifold/Corvid product family. Originally deferred as "AdvisoryCode
+  legacy libraries" (assumed retired/reference-only, based on .NET 4.0 COM
+  adapter code found in the KIOTrifoldStandaloneApplication repo) — corrected
+  on 2026-07-15 after the CDP Direct WAF Info Confluence page showed it live
+  behind the WAF today. Owner confirmed on 2026-09-10 that the AdvisoryCode
+  folder (MidTierResume, MidTierCareerAdmin, MidTierOccupSearch,
+  AdvisoryEmailCOMAdapter, .NET 4.0) is in fact what serves the live site.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - advisory-direct
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+runtimeRequirement: >-
+  .NET Framework 4.0 (AdvisoryCode: MidTierResume, MidTierCareerAdmin,
+  MidTierOccupSearch, AdvisoryEmailCOMAdapter; COM adapters).
+notes:
+  sourceRepository: >-
+    Confirmed by owner on 2026-09-10: the AdvisoryCode folder in
+    KIOTrifoldStandaloneApplication (MidTierResume, MidTierCareerAdmin,
+    MidTierOccupSearch, AdvisoryEmailCOMAdapter, .NET 4.0) is what serves
+    the live www.guidedirect.example site.
+  repositoryName: KIOTrifoldStandaloneApplication
+  sourcePage: CDP Direct - WAF Info (Confluence, SKENG space, page 35904193026)

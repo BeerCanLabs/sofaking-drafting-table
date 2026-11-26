@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-5642
+type: product_component
+ownerRole: engineer
+name: Legacy Trackweb-IM Platform
+description: 'Retired: this hand-authored stub (repoUrl TBD) and the repository-discovered 01KSM38KFC-STJH ("Whm Im", BeerCanLabs/sk-WHM_IM) describe the same real system. STJH is retained as the canonical product_component because it carries the real repoUrl and repository-confirmed facts; this name is recorded as an alias on STJH. See DecisionRecord 01M07T82GS-FGWX for the merge rationale.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT04-JKFX
+tags:
+- trackweb
+- inventory
+- legacy
+- dotnet-framework
+- vb6
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  technologyStack: Built on VB6, .NET Framework, and ASPX.
+  deploymentModel: Single-tenant SQL databases with multi-tenant shared IIS servers.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '
+  retirementRationale: Retired as part of TRK-870 (IMM DRAFT correction). Merged into 01KSM38KFC-STJH, which describes the same real system with a confirmed repository link. Superseded by that component; no content was lost since both stubs already agreed on the underlying technology stack.
+decisionRecords:
+  - ref: 01M07T82GS-FGWX
+    key: retirementRationale

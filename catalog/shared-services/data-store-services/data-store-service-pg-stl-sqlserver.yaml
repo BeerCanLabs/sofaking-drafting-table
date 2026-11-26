@@ -1,0 +1,116 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-MBKA
+type: data_store_service
+ownerRole: technology-admin
+name: PG STL SQL Server Database
+description: >-
+  Microsoft SQL Server database service backing Sofa King Associate Development's
+  PLM/EEM product. The STL database is the system of record for professional
+  learning and associate evaluation data and is deployed in a hub-and-spoke
+  topology on availability group GRRPGPRDAG01 at the Grand Rapids data center.
+  Consumed by the legacy estate (LDMS .NET, LDMS Classic ASP, FORMIX, Report
+  Writer) and, indirectly, by the PLM/EEM cloud services tier.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - associate-development
+  - plm
+  - eem
+  - stl
+  - apex-l1
+  - skpg-50273
+category: service
+serviceCategory: database
+deliveryModel: self-managed
+host: 01KQQ5JT04-PGTY
+primaryTechnologyComponent: 01KQQ5JT1T-F6Q1
+architectureNotes:
+  hostResolvedSkpg50273: >-
+    UPDATED under SKPG-19589 review. host previously pointed at Windows Server
+    2019 Physical Standard Host (01KQQ5JT04-F2AX), which was an assumption and
+    is now known to be wrong on the OS version. The PLM/EEM Environment Guide
+    (Confluence 648381633) records the production database servers GRRPGDB01
+    (10.219.40.87) and GRRPGDB02 (10.175.40.88) on Windows Server 2022, so host
+    is repointed at Windows Server 2022 Physical Standard Host
+    (01KQQ5JT04-PGTY). ONE ELEMENT REMAINS UNCONFIRMED: whether the GRR estate
+    is physical or VMware. The deployment-targets vocabulary describes GRR as
+    Sofa King-owned VMware hardware, which would point at Windows Server 2022
+    on VMware Standard Host (01KQQ5JT04-A7W8) instead - but that object is
+    lifecycleStatus deprecated, and asserting deprecated infrastructure on the
+    strength of a vocabulary description would be a worse error than naming the
+    preferred physical host. CloudOps to confirm; tracked in DraftingSession
+    01M1F8WB4E-0GSN as legacy-windows-host-hypervisor.
+  sqlVersionStillUnconfirmed: >-
+    STILL UNCONFIRMED, and the evidence now points away from the declared
+    value. Microsoft SQL Server 2019 (01KQQ5JT1T-F6Q1) is declared because the
+    schema requires a primaryTechnologyComponent when deliveryModel is
+    self-managed, and it is retained here only to avoid substituting one
+    unverified value for another. The Environment Guide records the DR pair
+    DRPGDB01/DRPGDB02 running SQL Server 2016 Enterprise Edition, and a DR
+    replica normally matches or trails production, so production may well be
+    2016 - which the catalog marks deprecated. Do not treat the declared
+    version as a finding. The PG database pages are authored by Tony
+    Sandoval and Jared Kemp, who should be able to confirm in minutes. See
+    DraftingSession 01M1F8WB4E-0GSN, database-version-assumed.
+  hostingBoundaryResolved: >-
+    RESOLVED under SKPG-19589 review. The Data Source=AWSPGDB01S.corp.flp
+    string in the committed configuration was read as evidence that the estate
+    had moved to AWS. It had not: AWSPGDB01S is the AWS STAGE database under
+    the Environment Guide's own suffix convention, where AWSPLMWEB01Q is QA and
+    AWSPLMWEB01S is stage, and AWSPGDB01Q is documented as the QA database in
+    Confluence 422904436. Production is GRRPGDB01/GRRPGDB02 at
+    grr-datacenter.
+  tenancyModel: >-
+    Hub-and-spoke. Connection strings name STLSharedEntitiesHub and
+    STLSharedEntitiesSpoke0 alongside a plain Spoke entry, indicating a shared
+    hub database with one or more tenant spoke databases. The number of spokes,
+    the sharding key, and the tenant-to-spoke mapping are NOT known.
+  availabilityModel: >-
+    Two SQL Server availability groups serve the PG estate. GRRPGPRDAG01 hosts
+    STL, FORMIXFORMS, FORMIXAUDIT and SSISDB; GRRPGPRDAG02 hosts STL.Application,
+    STL.EMail, STL.Exceptions, STL.Form, STL.Security, STL.XML, PGDashBoardKPI,
+    PGReportWriter and PGScormMsvc (Confluence 604045714). This is consistent
+    with the Data Source=tcp:ag1 and ApplicationIntent=ReadOnly read-routing
+    seen in the release configuration. Replica count, synchronisation mode and
+    failover posture are NOT confirmed, and an availability group is not by
+    itself evidence of tested failover.
+  backup: >-
+    Ola Hallengren-based maintenance plans. FULL, DIFF and LOG backups are
+    written to each SQL Server's local K:\ drive, and a separate hourly process
+    scrapes and uploads them to an AWS S3 bucket (Confluence 604045714).
+    Retention, the specific bucket, and restore testing cadence are NOT
+    confirmed.
+  recoverabilityModel: >-
+    Log shipping to the AWS DR estate (DRPGDB01/DRPGDB02), with a documented
+    manual cutover procedure in "PG - DR Cut Over Plan (Master)" (Confluence
+    603882129), which the page itself flags as needing updating. Cutover
+    requires Director-level or higher consent and the plan notes possible data
+    loss, so this is a manual recovery path, not automatic failover. No RTO or
+    RPO has been ratified.
+  observedHosts: >-
+    Production: GRRPGDB01, GRRPGDB02 (Windows Server 2022, grr-datacenter),
+    reached as Data Source=tcp:ag1 through the availability groups. Stage:
+    AWSPGDB01S.corp.flp. QA: AWSPGDB01Q. Other non-production references seen
+    in committed configuration are DBHUB, devdb1.rs.stlpi.example and
+    dev.skilltrail.example,1344.
+  serviceAuthentication: >-
+    Mixed. SQL authentication is used in some paths (User ID=stl_rw,
+    User ID=SVC_PG_DEV_ALL) and Integrated Security=SSPI in others. Credentials
+    are committed to the repository in web.db.secrets.config files — reported
+    separately as a secrets-handling concern, outside SKPG-19589 scope.
+  schemaOwnership: >-
+    Schema, stored procedures, functions, and triggers appear to be maintained
+    in the BeerCanLabs/sk-pg-sql repository (src/SQL/01_Schema through
+    05_Triggers), catalogued as data component 01M1F8WB4E-TGHY.
+  otherDatabasesOnThisEstate: >-
+    Recorded for boundary awareness, not claimed by this object: GRRPGDB01 also
+    hosts three RMLP client-reporting databases (RMLP_17036 for Miami-Dade,
+    RMLP_10020 as a template, RMLP_13589), per Confluence 440697522. They are
+    reporting data loads rather than PLM/EEM system-of-record data.

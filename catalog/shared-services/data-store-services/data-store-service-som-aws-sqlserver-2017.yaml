@@ -1,0 +1,94 @@
+schemaVersion: '1.0'
+uid: 01KWF5PCRR-8FHN
+type: data_store_service
+ownerRole: technology-admin
+name: SOM AWS SQL Server 2017 Database Service
+description: 'Self-managed Microsoft SQL Server 2017 database service for AWS-hosted SOM/Quickfit Plan Management and Service Management sub-environments. Each AWS sub-environment has its own SQL Server cluster and assigned customer population.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - som
+  - quickfit
+  - aws
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-C74W
+primaryTechnologyComponent: 01KQQ5JT1T-QKGB
+architectureNotes:
+  sqlPlatform: Microsoft SQL Server 2017 Enterprise. Exact host inventory requires confirmation.
+  hostModel: Modeled against the Windows Server 2019 on EC2 host pattern until exact AWS SQL host inventory is confirmed.
+  tenancyModel: AWS SOM uses customer-level single-tenant application databases inside assigned sub-environments. The main customer database naming pattern is PRDSOM_Quickfitplan_CUSTOMERNAME.
+  sharedDatabaseModel: SOM Solo is a Financing Billing shared service for all customers and is shared by AWS and Webloom; detailed usage and ownership still require follow-up with the application owners. QuickfitImport is a shared database for all AWS customers and is used for customer upload data, staging, and incoming-data transformation. The shared import database uses organization ID segregation and guardrails to prevent data mixing between clients; Development follow-up is needed for the detailed import flow. SKDBA and SSISDB are per-SQL-server databases, not single global databases.
+  databaseInventory:
+    customerApplicationDatabases: Customer-specific single-tenant application databases using the PRDSOM_Quickfitplan_CUSTOMERNAME naming pattern.
+    sharedConfigurationDatabases: SOM Solo, related to Financing Billing and shared by AWS and Webloom customers.
+    importStagingDatabases: QuickfitImport, a shared customer-upload, staging, and incoming-data transformation database for AWS customers.
+    reportingDatabases: No dedicated reporting database identified.
+    auditLoggingDatabases: SKDBA exists on each SQL Server and is the central local logging location for system-related tasks, logs, and SQL cluster operations on that server.
+    ssisIntegrationDatabases: SSISDB exists per SQL Server. SSIS service is installed on all SQL Servers.
+    legacyWebloomSpecificDatabases: Not applicable to AWS SOM.
+  serviceAuthentication: SSIS uses a SQL password service account for package execution. Application database authentication and connection-string storage require confirmation.
+  secretsManagement: SQL password account secret storage, rotation, and application connection-string storage require confirmation.
+  serviceLogging: SQL logs are local today and are not shipped off box yet. Local SQL/log retention is approximately 90 days with automatic cleanup. Dynatrace Logging is planned to centralize log collection. SKDBA on each SQL Server stores system-related tasks, logs, and cluster operations for that server.
+  healthWelfareMonitoring: SQL Server health is monitored through standard Nagios tooling.
+  availabilityModel: AWS SQL uses two-node Always On clusters with cross-AZ behavior. Some deployment patterns are mixed today, with movement toward synchronous replication. Passive nodes are used only for HA, not reporting workloads.
+  scalabilityModel: Customer density drives when new sub-environments and SQL Server clusters are provisioned. Passive nodes are HA-only; they are not used for reporting scale-out.
+  recoverabilityModel: Full, differential, and transaction-log backups support recovery. RPO is 15 minutes. RTO varies by client database size. Customer-level restore is supported for single-tenant databases; restore owner requires confirmation.
+  failureDomain: Customer-specific database failures are isolated to that customer when scoped to a single-tenant database. Shared QuickfitImport, SOM Solo, SSISDB, SKDBA, or SQL cluster failures can affect a full sub-environment or, for cross-sub-environment services such as QuickfitImport, multiple AWS sub-environments.
+  backup:
+    strategy: Full, differential, and transaction-log backups.
+    platform: SQL Server DBA Tools create backups; CloudBerry uploads backups to S3. Transaction-log, full, and differential backups are sent to S3 for both AWS and Webloom.
+    rto: Varies by client database size.
+    rpo: 15 minutes.
+    retention: Annual backups retained for 7 years, monthly backups retained for 12 months, and full backups retained for 30 days. Local backup copies are retained for roughly one week.
+    s3RetentionControls: S3 backups are encrypted and protected by compliance lock controls, requiring appropriate decryption keys for restore.
+  ha:
+    mechanism: Always On Availability Groups.
+    nodes: 2.
+    failoverScope: Cross-AZ.
+    replicationMode: Mixed today, moving toward synchronous.
+  encryption:
+    atRest: EBS volumes and SQL backups are encrypted at rest.
+    inTransit: SQL connections are not believed to be encrypted in transit because internal PKI is not a strong current practice.
+  accessControl:
+    model: Requires confirmation for application access. SSIS uses a SQL password service account.
+  sensitiveDataBoundaries: Customer data is stored in the main per-customer database. SOM databases include FERPA/CDP data, Financing or claims-related data, health-adjacent data, audit records, file import metadata, and integration credentials or secrets. Sensitive-table inventory and data-obfuscation scripts are pending from the database team and Development. Customer data deletion for churned clients follows the documented SOM Data Deletion - Churning Clients Process; churned customer data is archived to S3 and retained under the 7-year backup/compliance retention posture rather than deleted immediately from S3.
+  dataDeletionProcessReference: https://sofaking-example.atlassian.net/wiki/spaces/PRODMGMT/pages/15787982433/SOM+Data+Deletion+-+Churning+Clients+Process
+  restoreProcessReference: https://sofaking-example.atlassian.net/wiki/spaces/SaaSIO/pages/15477171876
+  reportingAnalyticsFlows: No dedicated reporting database was identified. Passive nodes are used only for HA. Snowflake feeds are populated through SOM data pulls. State reporting, Financing/claims extracts, imports, migrations, and reporting flows use SSIS packages.
+  fileToDatabaseFlow: QuickfitImport is leveraged by the Data Import Service for customer upload data, staging, and incoming-data transformation. Development follow-up is needed for the detailed consumer and write flow. Database-side import/export processing uses local SSIS packages and SFTP/customer file locations for most operations; the exact FSx handoff boundary with application-owned ingestion still requires Development confirmation. Import status, errors, and audit trails are logged and notifications are sent. No purge policy exists today; purge automation is in process and the current process is manual.
+  databaseRoadmapUncertainty: The database conversation referenced upgrade planning from SQL Server 2017 toward newer SQL Server versions, but target version, target environment, and timeline require confirmation before being modeled as current state.
+deploymentConfigurations:
+  - id: alwayson-cross-az
+    name: Two-Node Always On Cross-AZ Availability
+    description: SQL Server Always On Availability Groups provide two-node cross-AZ failover behavior for AWS SOM database services. Deployment is mixed today and moving toward synchronous replication.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: customer-density-scale-out
+    name: Customer Density Scale-Out
+    description: Capacity grows by adding repeatable sub-environments and SQL Server clusters when customer density requires additional infrastructure.
+    addressesQualities:
+      - scalability
+  - id: backup-and-customer-restore
+    name: Backup And Customer Restore
+    description: SQL Server DBA Tools and CloudBerry-backed S3 backups support 15-minute RPO and customer-level restore for single-tenant databases.
+    addressesQualities:
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT03-C74W
+    role: host
+    notes: Placeholder host pattern for AWS SQL Server until exact host inventory is confirmed.
+  - ref: 01KQQ5JT1T-QKGB
+    role: function
+    configuration: default-tds-listener
+deliveryModel: self-managed

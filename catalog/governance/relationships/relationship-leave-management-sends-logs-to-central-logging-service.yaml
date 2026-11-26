@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KZ935GM7-0J1Y
+type: relationship
+name: Leave Management → Central Logging Service
+catalogStatus: incomplete
+source: 01KSM38KEQ-JS8E
+target: 01KQQ5JT1E-A6M5
+label: sends logs to
+direction: asynchronous
+flow: outbound
+capabilities:
+- 01KQQ4Q026-D04B
+notes:
+  background: >-
+    Owner-confirmed on 2026-08-05 that application and container logs from the
+    production Leave EKS workloads are collected in OpenSearch. The existing
+    Central Logging Service and AWS OpenSearch Service definitions are reused,
+    with separate OpenSearch deployment instances for leave-prod and chaise.
+    Each domain is hosted in its corresponding cluster account: Team_Leave_Prod
+    829641239427 and Production Microservices 736016846305. Exact forwarding
+    configuration, domain names, endpoints, and retention remain unconfirmed.

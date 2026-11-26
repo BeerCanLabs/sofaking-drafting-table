@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-NR4R
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+category: service
+serviceCategory: saas
+name: Snowflake Data Cloud
+description: 'Cloud-based data warehousing platform provided as a SaaS. Used in Project Recliner for analytics and reporting workloads.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- saas
+- data-warehouse
+- analytics
+vendor: Snowflake Inc.
+productName: Snowflake
+productVersion: TBD
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: US-only
+  dpaNotes: Global DPA in place for Snowflake platform.
+  vendorSLA: 99.9% uptime
+  incidentNotificationProcess: Not confirmed in the source catalog.
+complianceCerts:
+- SOC2
+- ISO27001
+- HIPAA
+authenticationModel: oauth
+capabilities:
+- 01KT0XNZEY-A7GK
+architectureNotes:
+  auditVisibility: Query history and access logs available via Snowflake account usage views.
+  healthStatusVisibility: Vendor status page and automated alerts.
+  failureDomain: Scoped to the Snowflake account and regional cloud deployment.
+decisionRecords:
+- ref: 01KSNAW2AK-59AB
+  key: auditVisibility
+- ref: 01KSNAW2AK-59AB
+  key: failureDomain
+deliveryModel: saas

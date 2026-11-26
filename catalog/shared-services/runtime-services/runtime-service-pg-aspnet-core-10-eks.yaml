@@ -1,0 +1,87 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-V1HG
+type: runtime_service
+ownerRole: technology-admin
+name: PG ASP.NET Core 10 on EKS Application Runtime
+description: >-
+  Application runtime substrate for the Associate Development PLM/EEM cloud
+  services tier. Hosts the containerised .NET services — pg-msvc-plm-eem-api and
+  PG-ReportWriterAgent — on Amazon EKS. Added under SKPG-19589: before this
+  object, PG components pointed their runsOn directly at the Amazon EKS
+  Standard Container Host, so no runtime service existed in the graph for either
+  PG compute tier. Follows the convention set by
+  runtime-service-recliner-dotnet-eks and
+  runtime-service-hcm-rh-aspnet-core-9-eks.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - runtime
+  - application
+  - dotnet
+  - aspnet-core-10
+  - eks
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+category: service
+serviceCategory: general
+deliveryModel: self-managed
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01M1HJY7E4-WE6B
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01M1HJY7E4-WE6B
+    role: function
+architectureNotes:
+  runtimeEvidence: >-
+    Both consuming components build from mcr.microsoft.com/dotnet/sdk:10.0 and
+    run on mcr.microsoft.com/dotnet/aspnet:10.0, read from their Dockerfiles.
+  clusterInventory: >-
+    NOT fully resolved. pg-msvc-plm-eem-api carries two parallel manifest sets —
+    cd/prod plus cd/prod-ottoman, and cd/stage plus cd/stage-ottoman — which
+    indicates it is dual-homed across a pre-Ottoman cluster and the shared
+    Ottoman cluster, consistent with an in-progress migration.
+    PG-ReportWriterAgent has cd/{dr,prod,qa,stage} only, with no Ottoman
+    variant, so it does NOT appear to run on Ottoman. The cluster names
+    themselves are not recorded in the repositories. Confirm with CloudOps.
+  scalingApproach: >-
+    Each service runs as its own Kubernetes Deployment with a Horizontal Pod
+    Autoscaler (cd/*/hpa.yml present for both components). Replica bounds have
+    not been read out per environment.
+  ingressBoundary: >-
+    Inbound traffic terminates on the shared Traefik Kubernetes Ingress Service
+    (01KYAXMZ7H-72BR), confirmed by kubernetes.io/ingress.class:traefik in every
+    cd/*/ingress.yml. Production hosts resolve under use1; the cd/dr manifests
+    publish equivalent use2 hosts.
+  observabilityConcern: >-
+    pg-msvc-plm-eem-api sets NEW_RELIC_APP_NAME in all five of its deployment
+    manifests, so New Relic is configured on this runtime rather than the
+    Sofa King-standard Dynatrace OneAgent. Recorded as a non-standard
+    technology choice in decision record 01M1F8WB4E-2ND0.
+  deploymentMethod: >-
+    Codefresh pipelines (codefresh.yml and cd/codefresh-deploy-*.yml) apply the
+    Kubernetes manifests. ArgoCD involvement is not evidenced for PG.
+  serviceAuthentication: >-
+    Not confirmed. The API's ConfigMap points token authority and the IDM
+    gateway at login.sofaking.example with reference tokens allowed, but
+    the upstream validation boundary has not been confirmed by owner interview.
+  secretsManagement: >-
+    Not confirmed, and a concern: the production ConfigMap commits two AWS
+    access key IDs in plaintext rather than sourcing them from AWS Secrets
+    Manager. Reported separately to Information Security; outside SKPG-19589
+    scope.
+  serviceLogging: Not confirmed by owner interview.
+  healthWelfareMonitoring: Not confirmed by owner interview.
+  availabilityModel: Not confirmed by owner interview.
+  scalabilityModel: Horizontal Pod Autoscaler per service; bounds not read out.
+  recoverabilityModel: Not confirmed by owner interview.
+  failureDomain: >-
+    Workload failures scope to a single Kubernetes Deployment. Cluster-level
+    failure scope cannot be stated until the cluster inventory is confirmed.

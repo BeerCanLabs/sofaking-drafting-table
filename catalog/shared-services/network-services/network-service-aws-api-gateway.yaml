@@ -1,0 +1,81 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-RPTG
+type: network_service
+ownerRole: technology-admin
+name: AWS API Gateway (REST)
+description: >-
+  Amazon API Gateway REST API service — the managed HTTP front door for
+  Lambda-backed services. Added under SKPG-19589 after the Associate Development
+  form service was found to publish a REST API through it. No API Gateway object
+  existed in the catalog, despite it being a distinct edge boundary from the
+  load balancers and ingress controllers already catalogued.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+vendor: Amazon Web Services
+productName: Amazon API Gateway
+productVersion: REST (v1)
+tags:
+  - network
+  - edge
+  - api-gateway
+  - aws
+  - apex-l1
+  - skpg-50273
+category: service
+serviceCategory: network
+deliveryModel: paas
+patchingOwner: aws-managed
+authenticationModel: other
+architectureNotes:
+  observedUse: >-
+    SK.PG.FormService.CDK/FormServiceLambdaStack.cs in
+    BeerCanLabs/sk-msvc-pg-forms constructs an Amazon.CDK.AWS.APIGateway
+    RestApi named "pgformservice" with a per-environment Stage, five
+    LambdaIntegration methods under /org/{orgId}/form[/{formId}], and a
+    TokenAuthorizer.
+  consumerIsPreProduction: >-
+    Added under SKPG-19589 review. The only evidenced consumer,
+    msvc-pg-forms (01KSM38KG3-8PKZ), is lifecycleStatus candidate and is not
+    believed ever to have reached production: no cd/ directory, no
+    codefresh.yml, and absent from the PG pipeline inventory in Confluence
+    39199080479. So while API Gateway is a real and distinct edge boundary
+    worth cataloguing, this object currently has NO confirmed production
+    consumer at Sofa King. That is why the Architecture Review Board question
+    on whether API Gateway is an approved edge standard is deferred rather than
+    treated as an APEX L1 item, and why the security concerns below are
+    pre-production hygiene.
+  authenticationModel: >-
+    Recorded as "other" because the observed use is a custom Lambda
+    TokenAuthorizer reading method.request.header.Authorization, which is
+    neither plain IAM, API key, OAuth nor SAML from API Gateway's point of view.
+    The authorizer itself delegates to the Sofa King IDM gateway.
+  scopeOfThisObject: >-
+    Catalogued as a shared network service so that any Sofa King product
+    fronting Lambda with API Gateway can reference it. The Associate Development
+    form service is the first evidenced consumer, not the owner.
+  ownershipNote: >-
+    Authored by Associate Development engineering under SKPG-19589 because PG
+    surfaced the gap, but owner.team is set to the Architecture Review Board:
+    this is shared AWS edge infrastructure, not a PG asset, and the object is
+    awaiting an ARB ruling on whether API Gateway is an approved Sofa King edge
+    standard. Reassign to whichever team ARB designates as the steward.
+  securityConcerns: >-
+    Two issues observed in the PG consumer's stack, recorded here because they
+    are properties of how the gateway is configured rather than of the gateway
+    itself. (1) The REST API sets AllowOrigins to Cors.ALL_ORIGINS while also
+    setting AllowCredentials true — a wildcard origin combined with credentials
+    is an invalid and unsafe CORS configuration. (2) The authorizer Lambda
+    hardcodes idmUrl to idgatewayawsstage.skqa.example, a QA endpoint, carrying a
+    TODO to make it configurable, in a stack that deploys to every environment.
+    Both are referred to Information Security and the owning team; neither is in
+    SKPG-19589 scope. Both are pre-production while the consumer is unpromoted -
+    ordinary hygiene, not live exposure - and item (2) is itself evidence the
+    service never went live.
+  lifecycleRationale: >-
+    Candidate rather than preferred: no Architecture Review Board decision
+    establishes API Gateway as an approved Sofa King edge standard, and its only
+    evidenced consumer is not in production.

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHG0-CARF
+type: decision_record
+name: shopstar - Households Portal - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KEX-DF2H
+linkedObject: 01KSM38KEX-DF2H
+decisionRationale: 'deploymentTargets: Production hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware.'

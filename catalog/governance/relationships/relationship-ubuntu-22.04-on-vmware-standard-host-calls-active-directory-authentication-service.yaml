@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z0-T63S
+name: Ubuntu 22.04 on VMware Standard Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT03-AQA9
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Domain-based authentication for administrative access."
+capabilities:
+- 01KQQ4Q026-MHJM

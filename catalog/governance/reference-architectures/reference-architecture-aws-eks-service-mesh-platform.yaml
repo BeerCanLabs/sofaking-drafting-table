@@ -1,0 +1,64 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-5SV6
+type: reference_architecture
+name: AWS EKS Service Mesh Platform
+description: Reference Architecture for a shared platform built on AWS EKS with gateway, service mesh, identity, platform data services, serverless functions, and GitOps delivery.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- aws
+- eks
+- service-mesh
+- platform
+patternType: aws-eks-service-mesh-platform
+serviceGroups:
+- name: Gateway and Service Mesh
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT02-75QN
+    diagramTier: application
+  - ref: 01KQQ5JT1E-SW3X
+    diagramTier: application
+  - ref: 01KQQ5JT05-9P9S
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-P7QJ
+    diagramTier: presentation
+- name: Identity and Authentication
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1D-SHXD
+    diagramTier: utility
+  - ref: 01KQQ5JT00-191S
+    diagramTier: data
+- name: Platform Core Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT02-75QN
+    diagramTier: application
+  - ref: 01KQQ5JT04-27EP
+    diagramTier: data
+  - ref: 01KQQ5JT05-TQSS
+    diagramTier: data
+- name: Serverless Functions
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT05-CT7X
+    diagramTier: utility
+- name: Observability and Delivery
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1E-A6M5
+    diagramTier: utility
+  - ref: 01KQQ5JT1E-01JZ
+    diagramTier: utility
+architectureNotes:
+  lifecycleRationale: Cloud-forward EKS platform pattern with no currently end-of-support Technology Components in the referenced Standards.
+  availabilityModel: Primary platform services must be multi-AZ and define DR posture for shared identity, gateway, and mesh dependencies.
+  tenancyModel: Platform services serve multiple products and must document product and tenant isolation boundaries.
+  serviceMeshModel: Gateway, mesh control planes, and sidecars must be modeled as shared platform dependencies.
+  patternRisks: Platform outage blast radius and downstream product coupling must be explicitly governed.

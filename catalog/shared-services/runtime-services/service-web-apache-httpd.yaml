@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-NKX3
+type: runtime_service
+ownerRole: technology-admin
+name: Apache HTTP Server Web Service
+description: Stub web service for Apache HTTP Server workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - web
+  - apache
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1R-98H0
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: TLS certificates and administrative access use centralized identity and certificate services.
+  scalingApproach: horizontal autoscaling behind load balancer
+  serviceLogging: Apache access and error logs are forwarded to centralized logging beyond host-level event collection.
+  healthCheck: HTTP 200 endpoint monitored by the load balancer
+  healthWelfareMonitoring: HTTP endpoint probes, synthetic URL monitoring, and platform telemetry monitor service health.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  availabilityModel: Multi-node active web service behind load balancing for sustained endpoint availability.
+  scalabilityModel: Horizontal autoscaling behind a load balancer.
+  recoverabilityModel: Replace failed nodes from the standard deployment pattern while remaining nodes continue serving traffic.
+  failureDomain: Scoped to the Apache web tier deployment unit behind the load balancer.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple Apache nodes behind a load balancer with no single active web node.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: elastic-scale
+    name: Elastic Scale
+    description: Autoscaled Apache node pool that increases or decreases capacity behind the load balancer.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1R-98H0
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJFE-JMAA
+    key: serviceAuthentication
+  - ref: 01KT16XJFE-JMAA
+    key: secretsManagement
+  - ref: 01KT16XJFE-JMAA
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJFE-JMAA
+    key: failureDomain

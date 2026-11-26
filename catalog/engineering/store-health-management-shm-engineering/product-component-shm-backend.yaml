@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG9-4ACV
+type: product_component
+ownerRole: engineer
+name: Shm Backend
+description: SHM Backend
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: store-health-management-shm-engineering
+  contact: sara.gilmore@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- shm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-SHM-Backend
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-SHM-Backend
+  observedRuntimeSignals: dotnet, node, readme
+  observedManifestPaths: SHM-Backend.sln; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/053e832ea80051704b5e5893801f85c5.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/192552608d51d7220d8b1df559442b52.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/2bd66d72c9d55f80b39bf3a0032269a0.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/63a65961dbc77fb4c23fd10e01ae7f34.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/6b1893e0f45499a3a9fe79950418619b.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/815f5e913bf96475c21cb3681c8790e3.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/984911db2660e2f32efa38049eb9c282.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/b40cba8867af67cf308bfa9b982daa90.json; SHM-Backend/ClientApp/.angular/cache/13.2.3/babel-webpack/c2b0d0af9f8d50532e1f514d344a3b87.json; SHM-Backend/ClientApp/angular.json; SHM-Backend/ClientApp/package-lock.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

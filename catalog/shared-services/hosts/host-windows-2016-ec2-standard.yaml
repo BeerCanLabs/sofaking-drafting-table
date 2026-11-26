@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-4A7S
+type: host
+ownerRole: technology-admin
+name: Windows Server 2016 on EC2 Standard Host
+description: Windows Server 2016 host retained for existing AWS EC2 workloads that still require migration planning.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- aws
+- legacy
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-ZMCZ
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1Q-ZMCZ
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

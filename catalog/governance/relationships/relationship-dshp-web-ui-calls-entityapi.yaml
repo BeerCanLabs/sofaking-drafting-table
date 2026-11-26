@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-RC84
+type: relationship
+name: Digital Stores Suite+ Web UI calls Digital Stores EntityAPI
+description: The Angular SPA calls the EntityAPI REST surface for all data access. Base URL is built at
+  runtime from window.location.hostname in dshpConfig.service.ts as https://<region>.digital-showrooms.example/api/v1/,
+  so browser origin and API origin are identical in deployed environments. All calls route through EntityAdapterService,
+  the single sanctioned backend gateway. Confirmed by direct repository read on 2026-08-20.
+source: 01M0GBWMZJ-9DNC
+target: 01M0GBWMZJ-E0NF
+label: calls
+technology: HTTPS/JSON REST; PATCH uses application/json-patch+json
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+- digital-stores
+- source-derived

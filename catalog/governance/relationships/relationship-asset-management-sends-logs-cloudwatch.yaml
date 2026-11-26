@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: CS5EJJJA63-82BC
+type: relationship
+name: Asset Management sends application logs to Amazon CloudWatch Logs
+description: >-
+  Legacy Asset Management (Trackweb-IT) sends application logs to the
+  AMIMMApplication log group in Amazon CloudWatch Logs in us-east-1 through
+  NLog.AWS.Logger.
+source: 01KSM38KFB-QFJ1
+externalTarget: Amazon CloudWatch Logs
+label: sends application logs to
+technology: NLog.AWS.Logger
+direction: event
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KQQ4Q026-D04B
+tags:
+  - asset-management
+  - logging
+  - cloudwatch
+  - observability
+notes: >-
+  Scope: legacy Asset Management (Trackweb-IT) only - does not cover
+  Display Materials Management or the IM Refresh (IMR) cloud rebuild.
+  CloudWatch is the primary centrally searchable log destination; local files
+  are used only as a fallback when CloudWatch is unavailable. Each user
+  session has a correlation GUID, Warn/Error logs are always emitted, and
+  diagnostic verbosity can be enabled per region. Source uid corrected from
+  the retired stub 01KSM38KF8-VQ4B to the canonical merged product_component
+  01KSM38KFB-QFJ1 per DecisionRecord 01KYRT1P14-Y2RH. Evidence:
+  https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/16233526188/AM+Logging+Strategy

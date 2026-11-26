@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-V402
+type: decision_record
+name: External Identity Services — Region Fallback Semantics Resolved
+description: >-
+  Sofa King IDM is the preferred authentication path. Region LDAP over LDAPS
+  and local database authentication are retained as region-specific alternate
+  or exception paths rather than the standard Sofa King identity baseline.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- rt-erp
+- identity
+category: risk
+status: resolved
+affectedComponent: External Identity Services
+impact: >-
+  The SDM keeps the installed-base identity options visible without presenting
+  LDAP or database-local authentication as the preferred company standard.
+mitigationPath: >-
+  Model region LDAP as an external LDAPS 636 relationship and retain
+  database-local authentication as a region-specific exception interaction.
+  Revisit only when a region migrates identity paths or the product standard
+  changes.
+linkedObject: 01KSM38KEY-JC4K

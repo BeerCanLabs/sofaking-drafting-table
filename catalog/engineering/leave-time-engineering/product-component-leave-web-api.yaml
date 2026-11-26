@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0A-7VKB
+type: product_component
+ownerRole: engineer
+name: Leave Web API
+description: Web API
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-web-api
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-web-api
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: SK.Rotaops.API.Tests/SK.Rotaops.API.Tests.csproj; SK.Rotaops.API/SK.Rotaops.API.csproj;
+    SK.Rotaops.API/Subscriptions.json; SK.Rotaops.PdfReportGenerator/SK.Rotaops.PdfReportGenerator.csproj;
+    SK.Rotaops.PdfReportGeneratorTests/SK.Rotaops.PdfReportGeneratorTests.csproj;
+    GitVersion.yml; abs-web-api.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-7RGZ
+type: decision_record
+name: PG PLM/EEM Legacy - Inter-Service Connections
+description: >-
+  Inter-service connection decision for the PLM/EEM legacy deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - legacy
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-RWQB
+linkedObject: 01M1F8WB4E-RWQB
+decisionRationale: >-
+  interServiceConnections: Three cross-boundary paths are evidenced. (1) Application-to-data: LDMS .NET, LDMS Classic ASP, FORMIX, and the Report Writer all connect to the STL SQL Server database 01M1F8WB4E-MBKA, with the release configuration routing read-only traffic to a secondary replica via ApplicationIntent=ReadOnly on tcp:ag1. (2) FORMIX connects to the FORMIXFORMS database 01M1F8WB4E-R0RG. (3) Cross-pattern: PG-ReportWriter (01KSM38KG3-PN95) in this pattern is paired with PG-ReportWriterAgent (01KSM38KG3-2X43) in the cloud pattern 01M1F8WB4E-8WVS - the two patterns were split by deployment shape, so this pair now spans a pattern boundary. Whether the two still communicate, and over what protocol, is NOT confirmed. No first-class relationship objects have been authored yet; doing so is deferred past L1 Baseline and tracked in DraftingSession 01M1F8WB4E-0GSN. Status open pending Associate Development engineering ratification.

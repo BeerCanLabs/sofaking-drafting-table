@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DY-TVTF
+name: F5 BIG-IP → Apache Tomcat Application Service
+catalogStatus: incomplete
+source: 01KQQ5JT00-Z6WV
+label: routes traffic to
+target: 01KQQ5JT1E-9CDM
+description: >-
+  F5 BIG-IP routes login.cusord.example, tx.cusord.example, and cobblestone.cusord.example to
+  hostname-specific shopstar v3 Tomcat pools. Every production GRRSHS3TC* Tomcat
+  server runs the same shopstar-v3 application on Ubuntu 22.04; hostname selection
+  does not enforce tenant isolation.
+technology: HTTP on port 9080 behind external HTTPS ingress
+direction: synchronous
+flow: outbound
+tags:
+  - shopstar-v3
+  - ingress
+  - source-reconciled
+notes:
+  background: >-
+    F5 BIG-IP uses sticky sessions when routing to Tomcat port 9080. The
+    established pool names are Prod_Cusord_dunmoreV3_9080,
+    Prod_Cusord_cobblestoneV3_9080, and Prod_Cusord_v3_login_9080. No evidence
+    establishes replacement pool names for the Ubuntu migration.
+  unresolved: >-
+    Current GRRSHS3TC* membership in the three established pools and exact
+    failover behavior remain unresolved.
+capabilities: []

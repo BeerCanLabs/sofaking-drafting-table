@@ -1,0 +1,66 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T72-0MXK
+type: software_deployment_pattern
+ownerRole: engineer
+name: Nysdcb Directors
+description: >-
+  Software Deployment Pattern for Nysdcb Directors — a member-management web
+  application for the NY State Directors association. Discovered from the
+  NysdcbdirectorsCode folder of the KIOTrifoldStandaloneApplication repo.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Trifold
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - trifold
+  - nyse-directors
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+notes:
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  dataClassification: internal
+  failureDomain:
+    scope: service-group
+    description: >-
+      Legacy dedicated-stack deployment, consistent with the rest of the
+      Trifold family. Not yet confirmed by owner interview.
+  patternDeviations: >-
+    Owner confirmed production hosted on GRRCDPMISCWEB11 (grr-datacenter);
+    QA hosted on HPTCDPDEVMISC1 (high point-datacenter). Owner believes
+    the previously-observed connection-string server name CDPINTMISC is an
+    outdated/retired name, not a distinct current host.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KX4A2T6M-PJ5C
+        diagramTier: presentation
+        networkZone: web
+        notes: Nysdcb Directors association/member-management web application.
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: data
+        networkZone: data
+        notes: Shared SQL Server 2019 DataStoreService (existing-only); not yet confirmed by owner interview.
+      - ref: 01KX4A2T6F-ZVRF
+        diagramTier: data
+        networkZone: data
+        notes: Nysdcb Directors Database.
+decisionRecords: []

@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-G59V
+type: product_component
+ownerRole: engineer
+name: SOM Data Ingestion Web Service
+description: 'Web service handling data ingestion for SOM. Imported files are archived to shared FSx file storage. Contains Sofa King-authored code. Currently single instance — unintentional SPOF. See ard.som.001.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT1F-JCA7
+tags:
+- som
+- ingestion
+- product-component
+repoUrl: TBD
+classification: web-application
+architectureNotes:
+  serviceAuthentication: Product identities and administrative access use the SOM web authentication model and centralized secret distribution.
+  secretsManagement: Product secrets and certificates are sourced from centralized secret storage.
+  serviceLogging: Data-ingestion application logs are forwarded to centralized logging beyond the underlying IIS runtime tier.
+  healthWelfareMonitoring: Endpoint monitoring, ingestion workflow telemetry, and runtime monitoring track service welfare.
+  availabilityModel: Intended to run as a highly available multi-instance web service, though current deployment remains a single instance.
+  scalabilityModel: Horizontal scale-out behind the web-tier load-balancing pattern when HA remediation is completed.
+  recoverabilityModel: Rebuild failed instances from the deployment package and restore ingestion workflow configuration.
+  failureDomain: Scoped to the SOM data-ingestion service within a single sub-environment.
+  dataImportDatabaseFlow: QuickfitImport is leveraged by the Data Import Service for customer upload data, staging, and incoming-data transformation. The shared import database uses organization ID segregation and guardrails to prevent data mixing between clients. Database-side import/export processing uses local SSIS packages and SFTP/customer file locations for most operations; Development follow-up is needed to define the exact service consumer, write path, FSx handoff boundary, and import-status/error/audit storage.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

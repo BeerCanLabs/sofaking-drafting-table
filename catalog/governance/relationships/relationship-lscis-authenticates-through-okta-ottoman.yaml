@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYNXWY27-2GRE
+type: relationship
+name: LSCIS (Sofa King CIS - Lakeshore) -> Okta (Ottoman / Sofa King ID)
+description: LSCIS has an external authentication integration with Ottoman (the shared Sofa King identity platform, soon to be rebranded Sofa King ID), which is itself backed by the vendor-managed Okta identity provider.
+catalogStatus: incomplete
+source: 01KSM38KFQ-K5NB
+label: authenticates through
+target: 01KQQ5JT1D-SHXD
+direction: synchronous
+flow: outbound
+capabilities:
+- 01KQQ4Q026-MHJM
+tags:
+- sis
+- lakeshore
+- lscis
+- ottoman
+- sofaking-id
+- okta
+- authentication
+notes: Confirmed by the product owner on 2026-07-28. Protocol/technology is left unconfirmed pending owner interview — see DraftingSession session-lakeshore-cis-infrastructure-2026-07-28 for the open question about how this relates to the SDP's existing "hard dependency on external LDAP for authentication" patternDeviation note (owner was not sure whether Ottoman is the real current path with LDAP being stale documentation, or whether both are separate, still-active dependencies).

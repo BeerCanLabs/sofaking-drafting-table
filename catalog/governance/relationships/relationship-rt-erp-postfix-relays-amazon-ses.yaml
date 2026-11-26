@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: JGW4DE2X3B-KX7G
+type: relationship
+name: RT ERP Postfix Mail Service → Amazon SES
+catalogStatus: incomplete
+source: 01KQQ5JT1E-TT1N
+label: relays outbound mail through
+externalTarget: Amazon Simple Email Service (us-east-2)
+technology: SMTP with STARTTLS port 587
+direction: asynchronous
+flow: outbound
+notes: >-
+  The region Gateway-B Postfix relay forwards application mail to the Amazon
+  SES SMTP endpoint in us-east-2. SES domain verification, DKIM, production
+  access, and quota remain provider-side operational prerequisites.
+capabilities:
+  - 01KT0XNZEY-KPTW

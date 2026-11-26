@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-KSVC
+type: technology_component
+ownerRole: technology-admin
+name: Oracle JDK 21
+description: Java Development Kit 21 LTS.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- app-runtime
+- java
+classification: software
+vendor: Oracle Corporation
+productName: JDK
+productVersion: '21'
+vendorLifecycle:
+  mainstreamSupportEnd: 2028-09-30
+  extendedSupportEnd: 2031-09-30
+  notes: Oracle Java SE Support Roadmap lists JDK 21 premier support through September 2028 and extended support through September 2031.
+capabilities:
+- 01KT0V5MCV-RZV0

@@ -1,0 +1,69 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-0Q0X
+type: decision_record
+name: Digital Stores Database-Per-Region Pattern Is The Intended Long-Term Architecture
+category: decision
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Digital Stores is filed against the Sharded Multi-Tenant AWS SQL Server reference architecture
+  (01KQQ5JT1D-NMRQ) with five recorded deviations, the material ones being a single application tier
+  shared across all regions rather than replicated per shard, a central DS_Admin catalog that is a
+  cross-shard data dependency with a platform-wide blast radius, and a single non-highly-available SQL
+  Server instance per environment tier where the reference architecture expects a shard-scoped highly
+  available data tier. When the composition was authored on 2026-08-20 it was not known whether this
+  shape was a transitional state or a settled position. Question 8.1 of the DRAFT L1 Baseline
+  Questionnaire asked directly whether the current model - one shared application tier, one database
+  per region, resolved at request time through DS_Admin - is the intended long-term architecture or
+  whether a move toward per-tenant isolation is planned. The engineering owner answered on 2026-09-08
+  that it is the intended long-term architecture. No per-tenant isolation work is planned.
+version: 1.0.0
+owner:
+  team: architecture-review-board
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- reference-architecture
+- architecture-review-board
+- owner-confirmed
+linkedObject: 01KRZ1GCH3-99RF
+affectedComponent: 01KRZ1GCH3-99RF
+decisionRationale: >-
+  The pattern is kept filed against 01KQQ5JT1D-NMRQ with the deviations recorded, rather than
+  refiled, unfiled or matched to a different reference architecture, for three reasons. First, no
+  better match exists: the alternative candidate, Hosted Dedicated Windows and SQL Server Suite
+  (01KQQ5JT1D-N9DB), was rejected during composition because its hosting model is customer, ITC or
+  partner-hosted and Digital Stores is Sofa King-hosted SaaS. Second, DRAFT doctrine is not to force
+  a product to match a reference architecture the evidence does not support, and equally not to leave
+  a pattern unfiled when the closest match plus explicit deviations is more informative than silence;
+  the deviations are now enumerated on the pattern's patternDeviations field rather than implied.
+  Third, and this is what the owner's answer changes, the deviation is no longer plausibly temporary.
+  A transitional deviation can be accepted informally on the expectation that it closes. A permanent
+  one cannot: it is either an accepted architectural position that the reference architecture should
+  admit, or it is a pattern common enough at Sofa King to deserve a reference architecture of its own
+  - database-per-tenant with a central routing catalog behind a shared application tier. That is an
+  Architecture Review Board judgment, not an authoring one, which is why this record is raised with
+  status open and owned by the board rather than accepted here. The board should also note that the
+  permanence of the shape makes the DS_Admin single point of failure and the single-instance data
+  tier standing risks rather than interim ones; those are recorded separately in DecisionRecord
+  01M25X9W0R-GKSK and should be dispositioned alongside this one, because accepting the pattern
+  without accepting its failure domain would leave the two decisions inconsistent.
+impact: >-
+  Until the board rules, Digital Stores cannot be used as a conformance example for
+  01KQQ5JT1D-NMRQ, and any other product presenting the same shape has no precedent to file against.
+  The reference-architecture-conformance requirement in requirement group 01KQQ4Q027-VK45 is recorded
+  as satisfied on the pattern by the followsReferenceArchitecture field, so this record does not block
+  L1 on its own - the questionnaire itself flagged 8.1 as informational rather than a developer
+  blocker. What it does block is any claim that Digital Stores conforms to the referenced pattern
+  rather than deviates from it, and the standing acceptance of a platform-wide blast radius that the
+  pattern's applicable-definition checklist does not permit without an explicit decision.
+mitigationPath: >-
+  Take this record to the Architecture Review Board together with DecisionRecord 01M25X9W0R-GKSK.
+  Two viable outcomes: accept the recorded deviation against 01KQQ5JT1D-NMRQ, setting approver and
+  approvalDate on this record and moving it to accepted; or commission a database-per-tenant with
+  central-routing-catalog reference architecture and refile Digital Stores against it, in which case
+  this record moves to superseded by the new architecture's own decision record. Either way the board
+  should state its position on the DS_Admin platform-wide failure domain, because that is the specific
+  checklist item the deviation turns on. This supersedes the arb-reference-architecture-decision next
+  step in DraftingSession 01M0GBWMZJ-8XYB as the tracking object for the decision.

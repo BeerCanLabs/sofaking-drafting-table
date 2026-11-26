@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: M91C6NTACB-1DPJ
+name: Tailor EMS Management Sites -> Tailor SQL Server Data
+catalogStatus: incomplete
+source: W8QA2W732F-1TQA
+label: reads/writes
+target: 73F2M1GSPK-PNGJ
+technology: SQL Server/TDS
+direction: synchronous
+flow: outbound
+notes:
+  background: Tailor EMS management, hub, query, services, and extranet sites are modeled as IIS applications backed by the Tailor SQL Server data tier. Exact schemas and report/query boundaries require owner confirmation.
+capabilities: []

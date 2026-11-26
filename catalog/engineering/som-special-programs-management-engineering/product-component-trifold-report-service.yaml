@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-YEMQ
+type: product_component
+ownerRole: engineer
+name: Trifold Report Service
+description: >-
+  CorvidReportService.exe Windows Service and its ReportServerAdmin.exe
+  companion admin UI for the Trifold product line. Uses Crystal Reports
+  runtime and custom report processors, and serves state-specific report
+  definitions (CT/NJ/NY). Discovered from the ReportServer folder of the
+  KIOTrifold TFS codebase.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - cdp
+  - windows-service
+  - reporting
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: worker
+notes:
+  sourceRepository: "tfs://KIOTrifold/Dev/Source/ReportServer"
+  repositoryName: KIOTrifold
+  observedManifestPaths:
+    - ReportServer.txt
+    - ReportDllToWWWBin.txt
+    - ReportAdminService.txt

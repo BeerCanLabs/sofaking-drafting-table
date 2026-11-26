@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ61-BDW0
+type: decision_record
+name: IBM Db2 DBMS Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT00-5TYB
+linkedObject: 01KQQ5JT00-5TYB
+decisionRationale: "availabilityModel: Treated provisionally as a production database service that must satisfy the same high-availability expectations as the region application runtime.\n\nrecoverabilityModel: Failed nodes are rebuilt and rejoined through the region database recovery process backed by off-host backups.\n\nfailureDomain: Scoped to the Db2 deployment serving a single region.\n\nbackup.platform: IBM Db2 native backup to managed storage\n\nencryption.atRest: required"

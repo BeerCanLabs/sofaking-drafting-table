@@ -1,0 +1,186 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-0KZE
+type: data_component
+ownerRole: engineer
+name: Leave Database
+aliases:
+  - Rota Database
+  - Main Rota DB
+description: Shared multi-tenant Rota production database for Leave Management.
+version: 1.0.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT01-950D
+tags:
+  - repository-discovery
+  - confluence-documented
+  - leave
+  - rota
+  - sqlserver
+  - alwayson
+  - data-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-database
+targetEngine: mssql
+dataClassification: restricted
+containsPII: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-database
+  observedRuntimeSignals: dotnet, github_actions, readme
+  observedManifestPaths: .github/workflows/create-finish-branches.yml; SQL-Deploy/Build-Sql/Build-Sql.sln
+  sourceDocuments:
+    - title: AT - SQL Server Environment Connectivity - 2025 Build
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19925233917/AT+-+SQL+Server+Environment+Connectivity+-+2025+Build
+      lastModified: '2026-06-24'
+      authority: Confirmed by owner interview on 2026-07-15 as current truth for Leave Management.
+    - title: Sofa King - Disaster Recovery (DR) and Data Retention
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/193049745/Sofa King+Retail+-+Disaster+Recovery+DR+and+Data+Retention
+      lastModified: '2025-11-19'
+      authority: Confirmed by the Leave & Time data SME on 2026-07-16 as the source of truth for published recovery objectives and backup retention.
+    - title: Leave Management - Disaster Recovery
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/161271214/Leave+Management+-+Disaster+Recovery
+      lastModified: '2020-03-18'
+      authority: Supporting documentation for the AWS us-east-2 DR environment; current database recovery behavior was clarified by owner interview on 2026-07-15 and 2026-07-16.
+    - title: Permissions Management via Spreadsheet Tool - ACL (Access Control List)
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13823977/Permissions+Management+via+Spreadsheet+Tool+-+ACL+Access+Control+List
+      lastModified: '2026-03-18'
+      authority: Current documentation for DBRE-managed human database access.
+    - title: Application, Environments and Roles
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13544865/Application+Environments+and+Roles
+      lastModified: '2025-06-11'
+      authority: Current documentation for application-, environment-, and role-scoped database access.
+    - title: Kelly Services Snowflake Data Warehouse Audit Process - WIP
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/16398815815/Kelly+Services+Snowflake+Data+Warehouse+Audit+Process+-+WIP
+      lastModified: '2026-07-06'
+      authority: Linked supporting document for the Snowflake comparison audit flow.
+  databasePlatform: Windows Server 2022 with SQL Server 2022.
+  tenancyModel: One shared multi-tenant production Rota database.
+  piiDeclaration: Owner confirmed on 2026-07-15 that the main Rota database contains PII/person-level leave data.
+  classificationRationale: Owner confirmed restricted classification on 2026-07-15 for the main Rota database.
+  nonProductionSqlEnvironments:
+    - environment: dev
+      sqlInstance: HPTLVADB01D\LVADEV01
+      listener: DEVLVADBCNL1.corp.flp
+      port: 60719
+    - environment: qa
+      sqlInstance: HPTLVADB01Q\LVAQA01
+      listener: QALVADBCNL1.corp.flp
+      port: 56334
+    - environment: stage
+      sqlInstances:
+        - HPTLVADB01S\LVASTG01
+        - HPTLVADB02S\LVASTG02
+      clusterName: HPTLVADBCLU01.orp.flp
+      availabilityGroups:
+        - name: HPTLVASTGAG01
+          primary: HPTLVADB01S\LVASTG01
+          secondary: HPTLVADB02S\LVASTG02
+          listener: HPTLVASTGLIST01.corp.flp
+          port: 60173
+        - name: HPTLVASTGAG02
+          primary: HPTLVADB02S\LVASTG02
+          secondary: HPTLVADB01S\LVASTG01
+          listener: HPTLVASTGLIST02.corp.flp
+          port: 60173
+      readWriteCname: STGLVADBCNL1.corp.flp,60173
+      readOnlyCname: STGLVADBCNL1RO.corp.flp,60173
+      backupShare: '\\HPTLVADB01S\Backups on HPTLVADB02S'
+  productionSqlEnvironment:
+    sqlInstances:
+      - GRRLVADB01\LVAPRD01
+      - GRRLVADB02\LVAPRD02
+      - GRRLVADB03\LVAPRD03
+      - GRRLVADB04\LVAPRD04
+    hostCapacityPerServer:
+      logicalProcessors: 96
+      memoryTb: 2
+    availabilityGroupListeners:
+      - name: GRRLVAPRDLIST01
+        port: 60173
+        readWriteCname: PRDLVADBCNL1
+        readOnlyCname: PRDLVADBCNL1RO
+      - name: GRRLVAPRDLIST02
+        port: 62621
+        cname: PRDLVADBCNL2
+    observedEksClientEndpoints:
+      evidenceSource: Dynatrace database client spans reviewed on 2026-08-04.
+      endpoints:
+        - prdlvadbcnl1.rotaprod.example:60173
+        - prdlvadbcnl1ro.rotaprod.example:62621
+        - prdlvadbcnl2.rotaprod.example:62621
+      observedClients: Selected workloads in the chaise EKS cluster; no direct database client spans were found from the reviewed leave-prod abs-* workloads across four complete, unsampled six-hour windows.
+      limitation: This evidence covers direct database connections only and does not exclude indirect access through HTTP services.
+  disasterRecoverySqlEnvironment:
+    region: us-east-2
+    sqlInstances:
+      - DRLVADB01\LVADR01
+      - DRLVADB02\LVADR02
+    availabilityGroups:
+      - DRLVAPRDAG01
+      - DRLVAPRDAG02
+    availabilityGroupListeners:
+      - name: DRLVAPRDLIST01
+        port: 60173
+      - name: DRLVAPRDLIST02
+        port: 62621
+    restoreTopology: Backup files are downloaded and restored independently to both AWS DR SQL Server instances before databases are joined to the preconfigured availability groups.
+  reportingAuditFlows:
+    - name: KES Snowflake Data Warehouse Audit
+      status: work-in-progress-documentation
+      purpose: Compare Snowflake data warehouse data with production Rota database data.
+      sourceListener: PRDLVADBCN3.rotaprod.example
+      sourcePort: 5659
+      auditServer: GRRDWAUDIT01.rotaprod.example
+      schedule: 'Saturday at 12:01 AM'
+      averageRuntime: 1.5 hours
+      movementPath: Production Rota read-only AG listener to audit server, then S3, then Snowflake comparison queries.
+      s3Bucket: Snowflake-databucket/ABS_DF
+      monitoring: Nagios Task Scheduler monitor alerts through OpsGenie.
+  serviceAuthentication: Applications use both Windows-integrated authentication and SQL authentication. Human administrators use separate privileged AD accounts; access is granted through AD ACL groups mapped to environment- and responsibility-specific database roles.
+  accessGovernance:
+    owner: DBRE team
+    scopeModel: Human database access is scoped by application, environment, and role.
+    productionApproval: Production access requires manager approval.
+    validation: Automated daily checks verify that ACL members remain active in AD and report discrepancies to the Data team.
+  secretsManagement: SQL-authenticated application credentials originate in Secret Server and are also stored as Octopus variables for application connectivity and deployments. No password rotation policy currently exists, and these passwords are not routinely rotated.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring:
+    sqlPerformance: SolarWinds DPA monitors SQL Server performance indicators.
+    hostResources: Host-level monitors cover CPU, disk, and related resources.
+    databaseHealth: Custom SQL query-based Nagios checks cover blocking, availability-group health, tempdb capacity, tempdb contention, and other database conditions.
+    incidentRouting: Nagios alerts route through OpsGenie and Jira Service Management.
+    historicalBlocking: A DBRE-developed Block Monitor captures and retains blocking data on each SQL instance for retrospective analysis.
+    runbooks: DBRE maintains runbook documentation for triaging tempdb capacity and contention alerts.
+  availabilityModel: Production and DR use SQL Server AlwaysOn Availability Groups with documented listeners; Stage also uses paired AGs.
+  capacityModel:
+    combinedDataAndLogTb: 11.5
+    rotaDataAndLogTb: 10.8
+    averageCompressedBackupTb: 2.5
+    tempdbDataAndLogGb: 272
+    tempdbStorage: Separate dedicated drive.
+  scalabilityModel: The production estate has no known sustained CPU, memory, or storage constraint. Short-lived tempdb contention can occur during peak store-year workload periods and is monitored through Nagios.
+  maintenanceModel:
+    rotaDatabase: Weekly DBCC integrity checks, index maintenance, and statistics maintenance; selected highly utilized tables receive daily statistics maintenance.
+    supportingDatabases: Daily integrity, index, and statistics maintenance.
+    tooling: Rota index maintenance uses the internally developed Process Defrag utility. Other integrity, index, statistics, backup, and cleanup processes use the Ola Hallengren maintenance solution.
+    capacityManagement: DBRE-managed automated processes report database space consumption and related capacity indicators.
+    owner: DBRE team
+  recoverabilityModel:
+    publishedRpo: 5m/15m; the meaning of each value has not been independently confirmed. Production transaction-log backups run every five minutes.
+    publishedRto: Four hours; technically considered achievable but not demonstrated through a recent production-scale exercise.
+    backupCadence: Weekly full backups, daily differential backups, and transaction-log backups every five minutes.
+    backupProtection: Backups are encrypted with LVE-875, written first to a local file share, and copied through CloudBerry/MSP Backup to an immutable AWS S3 bucket.
+    backupRetention: Governed by the Sofa King Disaster Recovery (DR) and Data Retention source-of-truth document.
+    validation: Transaction-log backups are exercised daily through AWS DR log shipping. Full and differential backups are tested when DR log shipping must be reseeded.
+    exerciseHistory: No production-scale restore or DR exercise has occurred in at least several years.
+    observedRecoveryDuration: Approximately 14 hours for the most recently recalled end-to-end database recovery, including downloading the latest full, differential, and transaction-log backups to both DR servers, restoring each server independently, and joining the databases to preconfigured availability groups.
+  dependencyModel: The Rota database is a critical shared dependency of the core Leave Management and Time & Attendance applications. A complete upstream and downstream dependency map requires SRE and Engineering validation.
+  recentImprovements: Application and database changes during the past year, including a SQL Server hardware and DBMS version upgrade in July 2025, materially improved system stability and performance.
+  knownOperationalRisks:
+    - The published four-hour RTO has not been validated recently; the most recently recalled end-to-end database recovery took approximately 14 hours.
+    - SQL-authenticated application credentials have no defined password rotation policy and are not routinely rotated.
+    - Historical incidents show that severe database blocking or unhealthy Web/API server state can require IIS or application-server restarts to restore service health; SRE/DevOps runbook coverage has not been confirmed.
+  failureDomain: Failure of the shared multi-tenant Rota database can affect multiple customers and both core Leave Management and Time & Attendance applications.
+

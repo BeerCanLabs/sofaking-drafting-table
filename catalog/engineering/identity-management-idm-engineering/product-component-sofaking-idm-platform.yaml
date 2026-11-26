@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-8Z19
+type: product_component
+ownerRole: engineer
+name: Sofa King IDM
+description: Sofa King Identity Management platform, a separate product hosted in the Production Microservices AWS account and consumed by AWS SOM through Tri-State CommWeb.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: identity-management-idm-engineering
+  contact: identity-management-idm-eng@sofaking.example
+tags:
+  - idm
+  - identity-management
+  - authentication
+  - production-microservices
+repoUrl: TBD
+classification: other
+architectureNotes:
+  serviceAuthentication: Sofa King IDM provides the identity and authentication platform for connected Sofa King products. AWS SOM reaches it through the Tri-State CommWeb broker.
+  secretsManagement: Requires confirmation from IDM architects.
+  serviceLogging: Requires confirmation from IDM architects.
+  healthWelfareMonitoring: Requires confirmation from IDM architects.
+  availabilityModel: Requires confirmation from IDM architects.
+  scalabilityModel: Requires confirmation from IDM architects.
+  recoverabilityModel: Requires confirmation from IDM architects.
+  failureDomain: Sofa King IDM is a separate product and deployment pattern; a service disruption can prevent authentication for dependent products including AWS SOM.

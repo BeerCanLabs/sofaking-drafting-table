@@ -1,0 +1,77 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-NWYD
+type: software_deployment_pattern
+ownerRole: engineer
+name: Cw Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: CW
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- cw
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KGC-AFQD
+    repositoryName: BeerCanLabs/sk-CSW-8609-QuickfitProgress-Mobile
+    sourceRepository: https://github.com/BeerCanLabs/sk-CSW-8609-QuickfitProgress-Mobile
+    repositoryPrimaryLanguage: Dart
+    observedRuntimeSignals: java, readme
+  - productService: 01KSM38KGC-KBJQ
+    repositoryName: BeerCanLabs/sk-CSW-8609-Mobile
+    sourceRepository: https://github.com/BeerCanLabs/sk-CSW-8609-Mobile
+    repositoryPrimaryLanguage: Swift
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KGC-X06P
+    repositoryName: BeerCanLabs/sk-CSW-8609-CDP
+    sourceRepository: https://github.com/BeerCanLabs/sk-CSW-8609-CDP
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: docker, dotnet, github_actions, node, readme, teamcity
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KGC-AFQD
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGC-KBJQ
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGC-X06P
+    diagramTier: application
+    networkZone: app

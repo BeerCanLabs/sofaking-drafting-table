@@ -1,0 +1,130 @@
+schemaVersion: '1.0'
+uid: 01KX18GPWW-8CJS
+type: product_component
+ownerRole: engineer
+name: Tiers of Intensity SQS Poller Lambda
+description: |
+  Sofa King-authored containerized AWS Lambda adapter invoked by the Tiers of
+  Intensity SQS event-source mapping. It converts SQS records into queue-batch
+  API requests, calls the calculation service, and returns partial batch
+  failures so SQS can retry and redrive unsuccessful messages.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT05-CT7X
+runtimeRequirement: .NET 10 container image on AWS Lambda
+language: C#
+tags:
+  - som
+  - recliner
+  - tiers-of-intensity
+  - lambda
+  - sqs
+  - worker
+repoUrl: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+classification: worker
+interfaces:
+  - name: Tiers of Intensity SQS event source
+    protocol: other
+    authenticationModel: iam
+    description: SQS event-source mapping that delivers queued ProductEvents to the Lambda function.
+  - name: Calculation service queue batch client
+    protocol: REST
+    path: /v1/intensity-calculations/queue-batches
+    authenticationModel: api-key
+    description: >-
+      HTTPS client that sends X-TierCalc-Queue-Key when
+      CalculationService__ApiKey is configured.
+networkBindings:
+  - port: 443
+    protocol: HTTPS
+    direction: outbound
+    description: Calls the EKS-hosted calculation service queue-batch endpoint.
+environmentConfiguration:
+  - name: CalculationService__BaseUrl
+    description: Environment-specific calculation API base URL.
+    required: true
+    sensitive: false
+  - name: CalculationService__QueueBatchPath
+    description: Queue-batch API path.
+    required: true
+    sensitive: false
+  - name: CalculationService__ApiKey
+    description: Optional shared key sent to the calculation API.
+    required: false
+    sensitive: true
+  - name: CalculationService__TimeoutSeconds
+    description: HTTPS request timeout; defaults to 30 seconds.
+    required: false
+    sensitive: false
+runtimeSpec:
+  ports:
+    - number: 443
+      protocol: HTTPS
+      name: calculation-api
+      direction: outbound
+      description: Calls the queue-batch API.
+  dependencies:
+    - ref: 01KQQ5JT05-0C4P
+      purpose: Consumes queued ProductEvents from per-environment Tiers of Intensity queues and relies on DLQs for failed messages.
+      interface: TOI queues and DLQs
+    - ref: 01KX18GPWW-93YA
+      purpose: Sends each queued ProductEvents message to the Tiers of Intensity service for domain scoring and tier calculation.
+      interface: Tiers of Intensity API
+decisionRecords:
+  - ref: 01KYMPFAPR-YF1D
+    concern: authentication and deployment configuration
+requirementImplementations:
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: source-repository
+    status: satisfied
+    mechanism: field
+    key: repoUrl
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: component-owner
+    status: satisfied
+    mechanism: field
+    key: owner.team
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: runtime-requirement
+    status: satisfied
+    mechanism: field
+    key: runtimeRequirement
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: classification
+    status: satisfied
+    mechanism: field
+    key: classification
+notes:
+  triggerConfiguration: |
+    Terraform configures batch size 10, no batching window, 30-second timeout,
+    512 MB memory, reserved concurrency 10, and ReportBatchItemFailures. SQS
+    uses a 300-second visibility timeout, four-day message retention, five
+    receives before redrive, and fourteen-day DLQ retention.
+  serviceInvocation: |
+    The worker calls the environment API over HTTPS and supports
+    X-TierCalc-Queue-Key. The optional-key deployment state and production
+    hostname mismatch are tracked in the authentication and configuration risk
+    record.
+  runtimeEvidence: |
+    The tier-calc-api CI workflow defines sqs-worker-image-build with
+    dotnet-version 10.0.x, image-name som-tiers-of-intensity-sqs-worker, and
+    Dockerfile path src/TierCalc.Lambda.SqsWorker/Dockerfile. Current source
+    contains the Lambda handler, queue application/domain/infrastructure
+    projects, partial-batch response mapping, HTTPS client, and tests.
+  logging: Terraform creates the Lambda CloudWatch log group with 365-day retention.
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+  repositoryName: BeerCanLabs/sk-som-tiers-of-intensity
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: .NET 10, AWS Lambda, SQS event mapping, partial batch failures, HTTPS
+  observedManifestPaths: |
+    src/TierCalc.Lambda.SqsWorker, src/TierCalc.Queue.Application,
+    src/TierCalc.Queue.Domain, src/TierCalc.Queue.Infrastructure,
+    tests/TierCalc.Queue.Tests
+  discoveryBoundary: |
+    Application origin/main commit fc727888dd2bd3be32ccde3363417c20152ac376
+    and Terraform commit 9a133d2a2ed983aecec2a212e01f55149941b1a9
+    were reviewed read-only on 2026-07-28.

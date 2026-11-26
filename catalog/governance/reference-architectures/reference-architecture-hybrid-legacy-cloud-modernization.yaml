@@ -1,0 +1,67 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-DAAM
+type: reference_architecture
+name: Hybrid Legacy to Cloud Modernization
+description: Reference Architecture for products running legacy Windows or SQL Server estates alongside a modern AWS EKS, serverless, or managed-service target architecture during migration.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- hybrid
+- modernization
+- aws
+- eks
+- legacy
+patternType: hybrid-modernization
+serviceGroups:
+- name: Legacy Web and Application Tier
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT04-JKFX
+    diagramTier: presentation
+  - ref: 01KQQ5JT03-4A7S
+    diagramTier: application
+- name: Legacy Data and Integration Tier
+  deploymentTarget: grr-datacenter
+  deployableObjects:
+  - ref: 01KQQ5JT01-QFN5
+    diagramTier: data
+  - ref: 01KQQ5JT01-SM8X
+    diagramTier: data
+- name: Modern Presentation and Ingress
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT04-6F8T
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-P7QJ
+    diagramTier: presentation
+  - ref: 01KQQ5JT1D-MY47
+    diagramTier: presentation
+- name: Modern Application Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT02-75QN
+    diagramTier: application
+  - ref: 01KQQ5JT1E-4060
+    diagramTier: application
+  - ref: 01KQQ5JT03-FGYJ
+    diagramTier: utility
+- name: Modern Data and Migration Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT00-X90C
+    diagramTier: data
+  - ref: 01KQQ5JT05-12C2
+    diagramTier: utility
+  - ref: 01KQQ5JT05-WX2Z
+    diagramTier: utility
+notes:
+  lifecycleRationale: Maintain as an explicit modernization exception while extended-support Windows Server and SQL Server components are still active. This pattern is acceptable for controlled migration work, but it is not target-state architecture for new builds.
+  availabilityModel: The legacy and target architectures must each declare independent failure domains and recovery posture.
+  migrationModel: Migration pipelines and coexistence boundaries must be explicitly modeled.
+  tenancyModel: Legacy tenancy and target tenancy may differ and must both be recorded.
+  patternRisks: Running two architectures in parallel creates data sync, identity, observability, and operational ownership risks.

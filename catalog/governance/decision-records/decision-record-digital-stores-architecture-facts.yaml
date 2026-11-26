@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-AAX4
+type: decision_record
+name: Digital Stores Architecture Facts From Direct Repository Read
+category: decision
+status: accepted
+catalogStatus: complete
+lifecycleStatus: preferred
+description: Records the architecture facts confirmed by a direct read of BeerCanLabs/sk-main-ang
+  and BeerCanLabs/sk-server-ang on 2026-08-20, which replaced the empty Pending Owner Interview stub
+  on the Digital Stores SoftwareDeploymentPattern 01KRZ1GCH3-99RF with two evidenced ProductComponents
+  and one relationship.
+version: 1.0.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- source-derived
+- repository-discovery
+linkedObject: 01KRZ1GCH3-99RF
+decisionRationale: 'Three decisions were made while authoring, each in preference to guessing. One: model
+  the product as two ProductComponents rather than one. main-ang and server-ang are separate repositories
+  with separate languages, separate build steps and a real network boundary between them, so they are
+  modelled as a web-application and an api-service joined by a relationship object, even though they deploy
+  to a single IIS origin. Two: treat the Dockerfile and docker-compose.yml in server-ang as development
+  tooling rather than production runtime. No deployed environment evidence for containers was found in
+  either repository, and asserting a container runtime the catalog cannot evidence would be worse than
+  recording the gap. Three: do not assign a deployment target. The only infrastructure signal in either
+  repository is the database hostname aldb.dsh-aws.local, which implies AWS but names no region, account
+  or VPC. The workspace deployment-targets vocabulary defaults generic AWS workloads to aws-us-east-2,
+  but adopting that default here would assert placement the source material does not support, so the service
+  groups carry the owner-interview-required sentinel already used across other patterns in this catalog.
+  Reference architecture fit was assessed and is deviation-heavy; see notes on the SoftwareDeploymentPattern
+  and the open question in DraftingSession 01M0GBWMZJ-8XYB.'
+impact: Digital Stores moves from an empty Pendo-discovered stub to an evidenced pattern with two components,
+  a documented tenancy model and a recorded set of gaps. Remaining unknowns are infrastructure placement,
+  SQL Server engine version, availability, scalability and recoverability posture, and the deployment
+  mechanism for production, QA and sandbox.

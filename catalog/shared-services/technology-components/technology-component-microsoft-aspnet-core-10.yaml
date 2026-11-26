@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-WE6B
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft ASP.NET Core 10
+description: >-
+  ASP.NET Core 10 application framework and runtime. Added under SKPG-19589
+  because three Sofa King product families already run on .NET 10 with no
+  Technology Component in the catalog, which topped out at ASP.NET Core 9.
+  Cataloguing this closes a company-wide gap rather than recording a
+  Associate Development exception.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+vendor: Microsoft
+productName: ASP.NET Core
+productVersion: '10.0'
+classification: software
+tags:
+  - dotnet
+  - aspnet-core
+  - runtime
+  - apex-l1
+  - skpg-50273
+architectureNotes:
+  observedUse: >-
+    Associate Development: pg-msvc-plm-eem-api and PG-ReportWriterAgent both build
+    from mcr.microsoft.com/dotnet/sdk:10.0 and run on
+    mcr.microsoft.com/dotnet/aspnet:10.0. Already recorded elsewhere in the
+    catalog for SOM Tiers of Intensity (software-deployment-tiers-of-intensity
+    names "ASP.NET Core 10") and for the Customer Data Platform components, whose
+    observed runtime signals read "dotnet (net10.0)".
+  lifecycleRationale: >-
+    Recorded as candidate rather than preferred. Three product families use it,
+    but no Architecture Review Board decision has established .NET 10 as an
+    approved Sofa King standard. Promotion to preferred is an ARB action.
+  approvalStatus: >-
+    NOT approved. This object exists so that deployments on .NET 10 can
+    reference a real Technology Component instead of pointing at nothing.
+    Whether .NET 10 becomes an approved standard is an open ARB question.

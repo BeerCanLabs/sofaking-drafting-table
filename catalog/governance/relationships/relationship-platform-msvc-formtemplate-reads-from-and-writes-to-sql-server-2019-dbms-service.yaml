@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSF8-61PD
+type: relationship
+name: 'Platform Msvc Formtemplate → SQL Server 2019 DBMS Service'
+catalogStatus: stub
+source: 01KYQ4D9RJ-XDT3
+target: 01KQQ5JT01-QFN5
+label: reads from and writes to
+technology: TDS
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: References System.Data.SqlClient alongside Npgsql; whether this SQL Server dependency is live or residual is unconfirmed.
+  confidence: unconfirmed

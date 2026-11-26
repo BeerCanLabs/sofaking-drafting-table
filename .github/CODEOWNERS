@@ -1,0 +1,85 @@
+# CODEOWNERS — DRAFT three-role governance model
+#
+# Cloud Engineering repo-owner roster:
+#   @dwhitf                  Dana Whitfield
+#   @JordanHale-SK  Jordan Hale
+#   @tlane0412               Trevor Lane
+#   @shu-sk          Sam Hu
+#   @sholt-sk         Sean Holt
+#
+# TODO: Replace individual handles with GitHub team slugs once issue #6 is resolved:
+#   @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk  →  @BeerCanLabs/sk-draft-admins
+#   (technology-admin lines)             →  @BeerCanLabs/sk-technology-admins
+#   catalog/decision-records/            →  @BeerCanLabs/sk-architecture-review-board (ARB approval required; any team may open a PR)
+
+# ── repo-wide fallback ───────────────────────────────────────────────────────
+*                               @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+
+# ── draft-admin ──────────────────────────────────────────────────────────────
+.draft/                         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+.github/                        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+configurations/                 @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+
+# ── technology-admin ─────────────────────────────────────────────────────────
+catalog/technology-components/  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/runtime-services/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/hosts/                  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/edge-gateway-services/  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/data-store-services/    @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/decision-records/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+
+# ── engineer tier (per-team) — all 53 teams assigned; no _unassigned folder ──
+catalog/engineering/a2c-erprt/                  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/leave-and-time/           @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/leave-management-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/leave-time-engineering/   @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/quickfit-development/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/rota-services-team/        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/asset-management-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/cloud-architecture/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/data-analytics-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/data-analytics-implementation/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/dev_rh/                     @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/dev-hcm-core/               @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/devops/                     @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/digital-stores-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/upskill/                    @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/erp-ws-engineering/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/erp-engineering/            @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/erp-cis-engineering/        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/erp-cis-hrms-developers/    @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/abacus-developer/           @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/sofaking-central/          @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/sofaking-central-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/hcm-rem-b/                  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/hcm-rh-engineering/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/helpdesk-engineering/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/idm/                        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/whm-am-developers/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/whm-hd-developers/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/whm-integrations/          @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/im-refresh-engineering/     @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/imr-exadel/                 @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/display-materials-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/stl/                        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/mobiledev/                  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/lakeshore-cis-engineering/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/pd-engineering/             @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/pg-devs/                    @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/platform_valet/            @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/platform-engineering/       @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/platform-loveseat/             @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/platform-team/              @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/rem-srv/                    @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/rh-engineering/             @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/kio-shopstar-v3/               @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/shared-customer-record-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/shm-developers/             @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/cis-engineering/            @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/cis-oh-engineering/         @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/software-answers-developer/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/special-programs-engineering/ @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/som-recliner-dev/              @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/sre/                        @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/sre-aws-infra/              @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk
+catalog/engineering/settee/                  @dwhitf @JordanHale-SK @tlane0412 @shu-sk @sholt-sk

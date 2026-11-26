@@ -1,0 +1,426 @@
+schemaVersion: '1.0'
+uid: 01KX422R8G-TR15
+type: drafting_session
+name: Trifold Service Composition Drafting Session
+description: >-
+  Drafting session reconstructing the Trifold CDP SoftwareDeploymentPattern's
+  service composition from the KIOTrifold TFS codebase
+  (C:\CDPTrifoldCode\KIOTrifold\Dev\Source), replacing the empty
+  "Pending Owner Interview" stub with evidenced ProductComponents,
+  DataComponents, and relationships, while preserving unresolved facts.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - trifold
+  - cdp
+  - repository-discovery
+  - drafting
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGH-DBFS
+sourceArtifacts:
+  - name: KIOTrifold TFS repository
+    type: repository
+    location: C:\CDPTrifoldCode\KIOTrifold\Dev\Source\
+    notes: >-
+      Legacy .NET TFS codebase surveyed folder-by-folder (WebSolutions,
+      ServiceSolutions, DBSolutions, ReportServer, Financing, ObjectSolutions,
+      AppControlSolutions) plus root deployment manifest .txt files
+      (WWWBin.txt, GAC.txt, MaintenanceService.txt, ReportServer.txt,
+      CorvidSync.txt, MDClaimService.txt, DemographicNotify*.txt) to
+      reconstruct deployable units and cross-component dependencies.
+  - name: SOM - CDP Direct (Tri-State) Confluence space
+    type: documentation
+    location: >-
+      https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/117072156/SOM+-+CDP+Direct+Tri-State
+    notes: >-
+      Surveyed on 2026-07-15: the landing page itself was stale/empty, so its
+      full descendant tree (~100 pages) was enumerated and the
+      architecture-relevant pages read directly — "Trifold - System
+      Requirements" (confirmed SQL Server 2016 SP3-GDR Enterprise, VMware
+      Tools on every host tier), "Trifold/CDP - Cluster, Node and Instance
+      Overview" (12 active AlwaysOn-style DB clusters, 24 SQL instances),
+      "CDP Direct - CI/CD" (TFS repo, deployment cadence), and "CDP Direct -
+      WAF Info" (public DNS/WAF endpoint map surfacing several previously
+      unmodeled live services). The "Signing Portal / Signature Service"
+      design page was reviewed and excluded — it is a 2020 proposal with
+      unfilled template placeholder text, never built.
+generatedObjects:
+  - name: Corvid Front End Web
+    type: product_component
+    status: created
+    ref: 01KX421X4Q-R73N
+    notes: >-
+      Absorbed the Financing billing web UI (originally modeled separately as
+      Trifold Financing Web UI, ref 01KX421X4Q-6GYZ) at the owner's direction
+      on 2026-07-09; that component was deleted.
+  - name: Trifold Authentication API
+    type: product_component
+    status: created
+    ref: 01KX421X4P-S9K4
+  - name: Trifold Maintenance Service
+    type: product_component
+    status: created
+    ref: 01KX421X4Q-YSDR
+  - name: Trifold Email Service
+    type: product_component
+    status: created
+    ref: 01KX421X4Q-MZW2
+  - name: Trifold Report Service
+    type: product_component
+    status: created
+    ref: 01KX421X4R-YEMQ
+  - name: Trifold Sync Service
+    type: product_component
+    status: created
+    ref: 01KX421X4R-0KCD
+  - name: Trifold Batch Processing
+    type: product_component
+    status: created
+    ref: 01KX421X4P-FE7F
+  - name: Trifold Director Database
+    type: data_component
+    status: created
+    ref: 01KX421X49-VNRW
+  - name: Trifold Director Master Database
+    type: data_component
+    status: created
+    ref: 01KX421X49-TV6R
+  - name: Trifold SIFSUPPORT Database
+    type: data_component
+    status: deferred
+    proposedUid: 01KX421X4A-JGFS
+    notes: >-
+      Originally created with this uid, then deleted at the owner's direction
+      on 2026-07-09 — out of scope for this catalog.
+  - name: Trifold SDP service composition
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KGH-DBFS
+    notes: >-
+      Updated from an empty "Pending Owner Interview" stub to four service
+      groups (Web, Application Services, Batch Processing, Database) following
+      the Hosted Dedicated Windows and SQL Server Suite ReferenceArchitecture.
+      Web Tier extended on 2026-07-15 with four services discovered via the
+      CDP Direct WAF Info Confluence page (Identity Hub, Document Repository,
+      Messaging Service, CDP Viewer).
+  - name: Trifold Identity Hub
+    type: product_component
+    status: created
+    ref: 01KXK81789-T026
+  - name: Trifold Document Repository
+    type: product_component
+    status: created
+    ref: 01KXK81788-D45P
+  - name: Trifold Messaging Service
+    type: product_component
+    status: created
+    ref: 01KXK8178A-CAKJ
+  - name: CDP Viewer
+    type: product_component
+    status: created
+    ref: 01KXK81789-KW2Q
+  - name: Advisory Direct
+    type: product_component
+    status: created
+    ref: 01KX4JP6P0-F5TY
+    notes: >-
+      Re-authored on 2026-07-15 from a deferred entry in
+      session-seitrifold-standalone-application-2026-07-09.yaml (originally
+      "AdvisoryCode legacy libraries", assumed retired/reference-only). The
+      CDP Direct WAF Info page showed www.guidedirect.example live behind the
+      WAF today, contradicting that assumption; modeled as a live product per
+      owner direction, reusing the already-reserved proposedUid.
+  - name: Advisory Direct
+    type: software_deployment_pattern
+    status: created
+    ref: 01KXK822CN-M74S
+unresolvedQuestions:
+  - id: sql-server-version
+    question: What SQL Server version actually hosts the Director / DirectorMaster databases in production?
+    status: answered
+    reason: >-
+      Confirmed on 2026-07-15 via the "Trifold - System Requirements"
+      Confluence page: production DBMS hosts run "SQL Server 2016 (SP3-GDR)
+      (KB5029186) or greater Enterprise Edition". The catalog's only SQL
+      Server 2016 DataStoreService (01KQQ5JT01-Z39K) is deprecated, so the
+      SDP continues to reference the preferred SQL Server 2019
+      DataStoreService (01KQQ5JT01-QFN5) per the "never reference deprecated
+      objects" rule — this is now a known inaccuracy, not an open question.
+    currentBestGuess: >-
+      Confirmed SQL Server 2016 SP3-GDR Enterprise Edition in production per
+      the Confluence System Requirements page; catalog reference remains SQL
+      Server 2019 DataStoreService (01KQQ5JT01-QFN5) as a placeholder since
+      no preferred 2016 object exists. SUPERSEDED 2026-08-11: owner directly
+      confirmed the GRRCDPDBSQL19\CDPPROD19 instance (Director,
+      DirectorMaster, Corvid Portal Database) actually runs engine build
+      16.0.42551.1 — SQL Server 2022, not 2016. The Confluence page's
+      fleet-wide claim may be stale, or other Trifold SQL instances may
+      still be on 2016; this is not yet reconciled across the whole data
+      tier.
+    impact: >-
+      SQL Server 2016 mainstream support ended 2021; extended support ends
+      July 2026. Modeling the data tier as SQL Server 2019 understates EOL
+      risk. Needs a Shared Services decision: un-deprecate/refresh the 2016
+      object, or confirm an in-flight upgrade to 2019+. Given the 2026-08-11
+      finding, this EOL risk may not apply to the GRRCDPDBSQL19\CDPPROD19
+      instance specifically — needs re-scoping to whichever instances are
+      still actually on 2016.
+    relatedObjects:
+      - ref: 01KX421X49-VNRW
+      - ref: 01KX421X49-TV6R
+  - id: windows-service-runtime-gap
+    question: >-
+      Should Shared Services author a non-deprecated Windows Service
+      RuntimeService object (distinct from IIS) for legacy .NET Windows
+      Services, since the only existing candidate
+      (.NET Application Service on Windows Server 2016) is deprecated?
+    status: open
+    reason: >-
+      MaintenanceService, EmailService, CorvidReportService, and CorvidSync
+      currently attach directly to the Host substrate in the SDP rather than a
+      RuntimeService layer, because no non-deprecated Windows Service
+      RuntimeService exists in the catalog.
+    currentBestGuess: >-
+      Treat this as a Shared Services catalog gap rather than model a new
+      RuntimeService from an Engineering session.
+    impact: >-
+      Service-level RequirementGroup evidence (health monitoring, patch
+      management) for these Windows Services has no dedicated RuntimeService
+      object to attach to until this gap is resolved.
+    relatedObjects:
+      - ref: 01KX421X4Q-YSDR
+      - ref: 01KX421X4Q-MZW2
+      - ref: 01KX421X4R-YEMQ
+      - ref: 01KX421X4R-0KCD
+  - id: host-substrate-vmware-vs-physical
+    question: >-
+      Is Trifold's Windows Server 2022 host physical hardware or a VMware
+      VM? The grr-datacenter vocabulary notes describe the facility generally
+      as "Sofa King-owned hardware, VMware," but the owner specifically
+      confirmed "Windows Server 2022" without specifying physical vs. VMware.
+    status: answered
+    reason: >-
+      Confirmed on 2026-07-15 via the "Trifold - System Requirements"
+      Confluence page: every server tier (Application, Reporting, Session,
+      Web, DBMS) has "VMware Tools 12.5.0" installed — substrate is VMware,
+      not physical hardware. host-windows-2022-vmware-standard
+      (01KQQ5JT04-A7W8) is deprecated, so the SDP continues to reference the
+      preferred host-windows-2022-physical-standard (01KQQ5JT04-PGTY) per the
+      "never reference deprecated objects" rule — this is now a known
+      inaccuracy, not an open question.
+    currentBestGuess: >-
+      Confirmed VMware; catalog reference remains
+      host-windows-2022-physical-standard (01KQQ5JT04-PGTY) as a placeholder
+      since no preferred VMware host object exists.
+    impact: >-
+      Wrong host object misstates virtualization posture and lifecycle risk.
+      Needs a Shared Services decision: un-deprecate/refresh the VMware host
+      object, or confirm this Trifold finding is itself wrong.
+    relatedObjects:
+      - ref: 01KX421X4Q-R73N
+      - ref: 01KX421X4Q-YSDR
+  - id: identity-hub-vs-auth-api-overlap
+    question: >-
+      Is Trifold Identity Hub (identity.cdpdirect.example) the same system as
+      the already-modeled Trifold Authentication API
+      (SKSS.Authentication.Trifold, ref 01KX421X4P-S9K4), a successor to it,
+      or a genuinely separate component?
+    status: open
+    reason: >-
+      Only evidence for Identity Hub is a live public DNS/WAF entry; no
+      source repository has been reviewed to confirm the relationship to the
+      TFS-discovered authentication API.
+    currentBestGuess: Modeled as a separate ProductComponent pending confirmation.
+    impact: If they are the same system, this creates a duplicate component that should be merged.
+    relatedObjects:
+      - ref: 01KXK81789-T026
+      - ref: 01KX421X4P-S9K4
+  - id: messaging-service-vs-rabbitmq-infra
+    question: >-
+      Is Trifold Messaging Service (messaging.cdpdirect.example) an
+      application/API layer over the shared RabbitMQ Messaging Service
+      RuntimeService (ref 01KQQ5JT1E-JBCV), or an unrelated product sharing
+      only a naming coincidence?
+    status: open
+    reason: Only evidence is a live public DNS/WAF entry; no source repository reviewed.
+    currentBestGuess: Unknown — no relationship modeled pending confirmation.
+    impact: If related, a relationship to the shared RabbitMQ RuntimeService should be added.
+    relatedObjects:
+      - ref: 01KXK8178A-CAKJ
+  - id: cdp-viewer-unknown-function
+    question: What does CDP Viewer (viewer.cdpdirect.example) actually do?
+    status: open
+    reason: Only evidence is a live public DNS/WAF entry name; no source repository reviewed.
+    currentBestGuess: Unknown.
+    impact: Component is currently a name-only stub with no functional description.
+    relatedObjects:
+      - ref: 01KXK81789-KW2Q
+  - id: document-repository-vs-docrepositorydb-gap
+    question: >-
+      Does Trifold Document Repository (docs.cdpdirect.example) front the
+      DocRepositoryDB shared-services gap (flagged in
+      session-seitrifold-standalone-application-2026-07-09.yaml,
+      proposedUid 01KX4JP6P0-0WRQ), or a different data store entirely?
+    status: open
+    reason: Only evidence is a live public DNS/WAF entry; no source repository reviewed to confirm its data dependency.
+    currentBestGuess: Likely fronts DocRepositoryDB, based on naming and the CorvidPortal DocumentViewerAPI's existing reference to it.
+    impact: Confirms scope of the DocRepositoryDB Shared Services routing next step.
+    relatedObjects:
+      - ref: 01KXK81788-D45P
+  - id: advisory-direct-source-unconfirmed
+    question: >-
+      What source repository or codebase actually serves www.guidedirect.example
+      today? Is it the same AdvisoryCode (.NET 4.0 COM adapters) found in the
+      KIOTrifoldStandaloneApplication repo, or a different/newer codebase?
+    status: answered
+    reason: >-
+      The WAF Info page only confirms the site is live; the earlier
+      AdvisoryCode folder evidence looked retired (.NET 4.0, COM adapters),
+      so the two may not be the same implementation. ANSWERED 2026-09-10:
+      owner confirmed AdvisoryCode is in fact what serves the live site.
+    currentBestGuess: Confirmed — AdvisoryCode (KIOTrifoldStandaloneApplication) serves www.guidedirect.example.
+    impact: Confirms the Advisory Direct source repository and tech stack; remaining component breakdown still needs to be modeled.
+    relatedObjects:
+      - ref: 01KX4JP6P0-F5TY
+      - ref: 01KXK822CN-M74S
+  - id: network-zone-connection-interview-incomplete
+    question: >-
+      The full Network Zone and Connection Elicitation procedure (zone
+      pattern confirmation, tier-crossing yes/no rounds, protocol
+      confirmation) has not been run with the product owner.
+    status: open
+    reason: >-
+      Relationships authored this session are grounded in repo evidence only
+      (config references, service-to-database wiring); same-tier connections
+      and zone-boundary crossings have not been reviewed with the owner.
+    currentBestGuess: Existing networkZones (web/app/data/ops) retained from the original stub; zone assignments follow diagramTier defaults.
+    impact: Some cross-service or same-tier connections may be undocumented.
+    relatedObjects:
+      - ref: 01KSM38KGH-DBFS
+assumptions:
+  - id: single-shared-host
+    statement: >-
+      All Web Tier and Application Services Tier components run on the same
+      dedicated Windows Server 2022 host, consistent with the legacy
+      single-box deployment pattern observed in the repo (IIS site and
+      Windows Services co-located).
+    rationale: >-
+      No evidence in the repo of separate host boundaries per service; the
+      Hosted Dedicated Windows and SQL Server Suite RA also models
+      Presentation and Application tiers on the same host UIDs.
+    impact: If services actually run on separate hosts, service groups need to be split accordingly.
+    relatedObjects:
+      - ref: 01KSM38KGH-DBFS
+  - id: report-service-combined
+    statement: >-
+      CorvidReportService.exe and its ReportServerAdmin.exe companion admin
+      UI are modeled as a single ProductComponent rather than two, since they
+      are tightly coupled and deploy together.
+    rationale: Owner approved this grouping when reviewing the proposed tier breakdown.
+    impact: If finer-grained tracking is needed later, ReportServerAdmin can be split into its own ProductComponent.
+    relatedObjects:
+      - ref: 01KX421X4R-YEMQ
+  - id: batch-jobs-combined
+    statement: >-
+      DemographicNotify/DemographicNotifyBatch and MDClaimService/MDClaimServiceBatch
+      are modeled as a single "Trifold Batch Processing" ProductComponent
+      rather than four separate components.
+    rationale: Owner approved this grouping when reviewing the proposed tier breakdown.
+    impact: If finer-grained tracking is needed later, each batch job can be split into its own ProductComponent.
+    relatedObjects:
+      - ref: 01KX421X4P-FE7F
+  - id: financing-ui-merged-into-frontend
+    statement: >-
+      The Financing billing web UI is modeled as part of Corvid Front End Web
+      rather than as its own ProductComponent.
+    rationale: Owner directed this merge on 2026-07-09.
+    impact: If Financing-specific tracking is needed later, it can be split back out into its own ProductComponent.
+    relatedObjects:
+      - ref: 01KX421X4Q-R73N
+  - id: advisory-direct-pillar
+    statement: Advisory Direct is assigned business-pillar.customer-solutions.
+    rationale: Owner confirmed this on 2026-07-15.
+    impact: If ownership actually differs, businessContext.pillar needs correction.
+    relatedObjects:
+      - ref: 01KXK822CN-M74S
+  - id: sifsupport-database-out-of-scope
+    statement: >-
+      The SIFSUPPORT database is excluded from this catalog. The Sync
+      Service's SIF integration is modeled only via its external relationship
+      to the region CIS platform.
+    rationale: Owner directed this exclusion on 2026-07-09.
+    impact: If the SIFSUPPORT database later becomes architecturally relevant (e.g. for data-classification or backup evidence), it can be re-added as a DataComponent.
+    relatedObjects:
+      - ref: 01KX421X4R-0KCD
+nextSteps:
+  - id: route-sql-server-2016-eol-gap
+    action: >-
+      Raise with Shared Services / Architecture Review Board: Confluence evidence suggests some Trifold SQL instances may still be on SQL Server 2016 (extended support ended July 2026), but owner confirmed the GRRCDPDBSQL19\CDPPROD19 instance is SQL Server 2022 (engine build 16.0.42551.1). Verify which instances (if any) remain on 2016 and decide whether to refresh/un-deprecate a SQL Server 2016 DataStoreService object or close out the EOL gap.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KX421X49-VNRW
+      - ref: 01KX421X49-TV6R
+  - id: route-windows-service-runtime-gap
+    action: >-
+      Raise the missing non-deprecated Windows Service RuntimeService object
+      with Shared Services / Architecture Review Board.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KX421X4Q-YSDR
+  - id: route-vmware-host-lifecycle-gap
+    action: >-
+      Raise with Shared Services / Architecture Review Board: confirmed
+      Trifold hosts run VMware, but the catalog's only VMware Windows
+      Server 2022 host object is deprecated. Either un-deprecate/refresh it,
+      or confirm this finding needs re-verification.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KX421X4Q-R73N
+  - id: run-connection-elicitation
+    action: Run the full Network Zone and Connection Elicitation procedure with the Trifold product owner to confirm zone assignments and remaining connections.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGH-DBFS
+  - id: identify-source-repos-for-waf-discovered-services
+    action: >-
+      Identify and review the actual source repositories for Identity Hub,
+      Document Repository, Messaging Service, CDP Viewer, and Advisory
+      Direct — all currently modeled as name-only stubs from DNS/WAF
+      evidence with no code reviewed.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KXK81789-T026
+      - ref: 01KXK81788-D45P
+      - ref: 01KXK8178A-CAKJ
+      - ref: 01KXK81789-KW2Q
+      - ref: 01KX4JP6P0-F5TY
+resumptionContext:
+  matchedReferenceArchitecture: 01KQQ5JT1D-N9DB
+  confirmedHostOs: Windows Server 2022
+  confirmedHostRef: 01KQQ5JT04-PGTY
+  scopeDecision: >-
+    Session covers Trifold's on-prem KIOTrifold legacy stack only (web,
+    application services, batch, database tiers). External systems (SIF/CIS,
+    Financing Direct) modeled via externalTarget relationships, not as catalog
+    objects.
+notes:
+  frameworkFinding: >-
+    tools/repair_uids.py appears to unconditionally propose a reference
+    rewrite in .draft/framework/configurations/requirement-groups/
+    requirement-group-drafting-session.yaml on every invocation, regardless of
+    which files are targeted via --file. This looks like a pre-existing
+    framework-owned issue unrelated to this session's catalog changes; UIDs
+    for this session's new objects were assigned by hand instead of running
+    the tool's write phase, to avoid touching the vendored framework copy.
+    Recommend the user consider filing this upstream to getdraft/draftsman.

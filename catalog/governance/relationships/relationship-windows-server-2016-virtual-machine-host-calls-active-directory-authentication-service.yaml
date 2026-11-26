@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z5-F1YP
+name: Windows Server 2016 Virtual Machine Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT03-2NEW
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Domain-based authentication and authorization for administrators and service identities."
+capabilities:
+- 01KQQ4Q026-MHJM

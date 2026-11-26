@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF3-745H
+type: product_component
+ownerRole: engineer
+name: ERP Ws Online5
+description: Repository for Abacus Online 5
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- erp
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-ws-online5
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-erp-ws-online5
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Assemblies/CopyReleaseVersions/CopyReleaseVersions.csproj; Assemblies/CryptoConsoleApp/CryptoConsoleApp.csproj; Assemblies/DoInstall/DoInstall.csproj; Assemblies/DocValid/DocValid.csproj; Assemblies/Abacus.TlbImp/Abacus.TlbImp.csproj; Assemblies/AbacuspluginLicenseTool/AbacuspluginLicenseTool.csproj; Assemblies/AbacusTech.ClientServices.ClientManager/AbacusTech.ClientServices.ClientManager.csproj; Assemblies/AbacusTech.ClientServices.ClientRouter/AbacusTech.ClientServices.ClientRouter.csproj; Assemblies/AbacusTech.ClientServices/AbacusTech.ClientServices.csproj; Assemblies/AbacusTech.Common.Exceptions/AbacusTech.Common.Exceptions.csproj; Assemblies/AbacusTech.Compression.Library/AbacusTech.Compression.Library/AbacusTech.Compression.Library.sln; Assemblies/AbacusTech.CoreSystem.3rdParty/AbacusTech.CoreSystem.3rdParty.csproj
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

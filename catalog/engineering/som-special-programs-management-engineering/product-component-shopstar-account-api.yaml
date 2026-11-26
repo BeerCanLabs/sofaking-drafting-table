@@ -1,0 +1,67 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGC-DDE9
+type: product_component
+ownerRole: engineer
+name: Shopstar Account API
+description: >-
+  Separately deployed shopstar account and credential API packaged as a Spring
+  Boot JAR. It reads the admin2 database, validates legacy PBKDF2 and configured
+  LDAP credentials, and initiates password resets through SMTP.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- repository-discovery
+- shopstar
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar-account-api
+language: Java
+classification: api-service
+runtimeRequirement: Spring Boot JAR; Java version is not yet confirmed.
+runtimeSpec:
+  ports:
+    - number: 8888
+      protocol: HTTP
+      name: application-listener
+      direction: inbound
+      description: >-
+        Production listener monitored through an F5 HTTP health monitor. The
+        exact health-check URI remains unresolved.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstar-account-api
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: pom.xml
+  serviceAuthentication: >-
+    Validates FE-prefixed PBKDF2 password hashes and configured LDAP
+    credentials. The exact LDAP service endpoint and runtime credential
+    injection mechanism remain unresolved.
+  secretsManagement: >-
+    Secret Server is the confirmed store for operational, server, and database
+    credentials, and Ansible Vault is used by infrastructure automation. The
+    exact runtime injection mechanisms for LDAP, SMTP, and application JDBC
+    credentials remain unresolved.
+  serviceLogging: >-
+    Centralized V3 application-log aggregation or SIEM handling is not
+    established by current V3-only evidence.
+  healthWelfareMonitoring: >-
+    An F5 HTTP health monitor covers the Account API service pool. The exact
+    health-check URI remains unresolved.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  deploymentModel: >-
+    Deployed separately from the main shopstar v3 Tomcat application on
+    grrshs3idm01 and grrshs3idm02 on port 8888. An F5 service pool exists for
+    the Account API. The exact RuntimeService catalog binding and Java version
+    remain unresolved, so no generic Java runtime binding is asserted.
+  adminDatabase: >-
+    Connects to admin2. The database engine, schema boundary, and exact catalog
+    service binding are not confirmed and must not be inferred from the generic
+    MySQL shared-service object.
+  passwordReset: >-
+    Password reset uses SMTP. The exact SMTP relay, transport security, and
+    delivery path remain unresolved.

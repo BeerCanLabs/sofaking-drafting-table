@@ -1,0 +1,46 @@
+# Generate DRAFT Browser (manual only)
+#
+# This workflow no longer commits the generated browser. The generated files
+# (docs/index.html, docs/user-manual.html, docs/company-vocabulary.html and
+# docs/assets/browser-data.js) are untracked - see .gitignore - and are built
+# from the catalog at deploy time by deploy-pages.yml, so the published site is
+# always current without anything being committed.
+#
+# Why the auto-commit was removed: while both this workflow and PR authors
+# committed regenerations, two PRs that each regenerated from their own merge
+# base would overwrite one another. Whichever merged second silently dropped the
+# other's objects from the artifact, which is how main's browser-data.js came to
+# be missing objects that were present in main's catalog.
+#
+# Why this file is kept rather than deleted: draft-framework-update.yml
+# re-materializes missing workspace workflows from the vendored templates, so a
+# deleted file would silently reappear on the next framework update. It only
+# fills in files that do not exist, so this edited copy is preserved.
+#
+# What remains: a manual smoke test that the catalog still generates cleanly.
+
+name: Generate DRAFT Browser
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: [self-hosted, linux, docker]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependency
+        run: python -m pip install pyyaml
+
+      - name: Generate browser
+        run: python .draft/framework/tools/generate_browser.py --workspace . --output docs/index.html --refresh-shell

@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+type: vocabulary_proposal
+name: Add FTPS connection protocol
+vocabulary: connectionProtocols
+proposalKind: non-standard-value
+status: proposed
+proposedId: FTPS
+proposedName: FTPS
+description: File Transfer Protocol protected with TLS.
+fieldRefs:
+- object: 01KYN1REHT-6YRN
+  path: notes.nonStandardVocabularyValues[2].value
+  value: FTPS
+rationale: >-
+  GRRFTP1 supports FTPS for Grand Rapids file-transfer workloads. The
+  architecture must distinguish TLS-protected FTP from both unencrypted FTP
+  and SFTP over SSH, but FTPS is not currently available in the approved
+  connectionProtocols vocabulary.
+relatedObjects:
+- ref: 01KYN1REHT-6YRN
+- ref: 01KSM38KEQ-JS8E

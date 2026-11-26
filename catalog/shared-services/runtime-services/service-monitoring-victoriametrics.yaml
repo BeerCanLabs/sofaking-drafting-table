@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-HCBR
+type: runtime_service
+ownerRole: technology-admin
+name: VictoriaMetrics Monitoring Service
+description: 'Standard VictoriaMetrics monitoring service pattern for metrics collection and storage.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - monitoring
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1W-N7WW
+architectureNotes:
+  serviceAuthentication: mTLS within the service mesh.
+  secretsManagement: Integrated with External Secrets (AWS Secrets Manager).
+  serviceLogging: Logs are forwarded to the Central Logging Service.
+  healthWelfareMonitoring: Self-monitored via VictoriaMetrics health endpoints.
+  availabilityModel: Clustered deployment for HA.
+  scalabilityModel: Scales horizontally by adding additional nodes/replicas.
+  recoverabilityModel: Automatic pod restart and persistent volume management.
+  failureDomain: Scoped to the EKS cluster.
+internalComponents:
+  - ref: 01KQQ5JT1W-N7WW
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJDT-5QQQ
+    key: serviceAuthentication
+  - ref: 01KT16XJDT-5QQQ
+    key: secretsManagement
+  - ref: 01KT16XJDT-5QQQ
+    key: availabilityModel
+  - ref: 01KT16XJDT-5QQQ
+    key: scalabilityModel
+  - ref: 01KT16XJDT-5QQQ
+    key: recoverabilityModel
+  - ref: 01KT16XJDT-5QQQ
+    key: failureDomain

@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: B6XV417K89-AKM7
+name: Tailor SSIS Integration Host -> Tailor SQL Server Data
+catalogStatus: incomplete
+source: M2K1CTVHYE-GGXG
+label: reads/writes
+target: 73F2M1GSPK-PNGJ
+technology: SQL Server/TDS
+direction: asynchronous
+flow: outbound
+notes:
+  background: AAP exposes Tailor production and UAT SSIS playbook templates. The SSIS host is modeled as an asynchronous integration workload that interacts with the Tailor SQL Server data tier; package and schedule details require owner confirmation.
+capabilities: []

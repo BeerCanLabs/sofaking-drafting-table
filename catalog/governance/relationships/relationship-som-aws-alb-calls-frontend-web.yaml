@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-RT89
+type: relationship
+name: AWS Application Load Balancer -> SOM Frontend Web
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+label: routes requests to
+target: 01KSM38KEW-Q2SE
+technology: HTTP
+direction: synchronous
+flow: outbound
+notes: The web-tier ALB routes traffic to SOM Frontend Web targets over TCP 80 after SSL termination.

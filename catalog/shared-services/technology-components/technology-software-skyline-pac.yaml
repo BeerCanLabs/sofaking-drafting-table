@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-VGXJ
+type: technology_component
+ownerRole: technology-admin
+name: Skyline PAC
+description: Skyline PAC installer package deployed as part of the Salesdesk Connex integration automation.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- data-integration
+- retail-integration
+classification: software
+vendor: Skyline
+productName: PAC
+productVersion: unknown
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Package appears as skylinepac.msi in a Connex installer bundle; exact product identity and version need owner confirmation.
+capabilities:
+- 01KT0XNZEY-DENJ
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/som/salesdesk_connex/tasks/main.yml."

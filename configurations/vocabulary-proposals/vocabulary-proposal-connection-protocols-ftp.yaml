@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+type: vocabulary_proposal
+name: Add FTP connection protocol
+vocabulary: connectionProtocols
+proposalKind: non-standard-value
+status: proposed
+proposedId: FTP
+proposedName: FTP
+description: Traditional File Transfer Protocol used for unencrypted file-transfer connections.
+fieldRefs:
+- object: 01KYN1REHT-6YRN
+  path: notes.nonStandardVocabularyValues[1].value
+  value: FTP
+rationale: >-
+  GRRFTP1 supports traditional FTP for Grand Rapids file-transfer workloads.
+  The architecture must preserve that real transport and its unencrypted
+  security posture, but FTP is not currently available in the approved
+  connectionProtocols vocabulary.
+relatedObjects:
+- ref: 01KYN1REHT-6YRN
+- ref: 01KSM38KEQ-JS8E

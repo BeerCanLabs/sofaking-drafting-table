@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-3PWG
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server Native Client 11
+description: SQL Server Native Client runtime installed for legacy LDMS database connectivity.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- database-driver
+- legacy
+classification: software
+vendor: Microsoft
+productName: SQL Server Native Client
+productVersion: '11'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2022-07-12'
+  notes: SQL Server Native Client 11 is not recommended for application use; treat the standalone application driver as end-of-support and migrate to a supported SQL driver.
+capabilities:
+- 01KT0XNZEY-DENJ
+- 01KT0V5MCV-VD0Y
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/ldms/sqlncli/tasks/main.yml and ldms-ottoman-playbook.yml."

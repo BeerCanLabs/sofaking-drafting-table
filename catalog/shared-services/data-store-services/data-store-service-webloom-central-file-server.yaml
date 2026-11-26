@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KWF4ASYK-MCE5
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: storage
+name: Webloom Central File Server
+description: 'Existing-only central file server in Webloom used as the target for customer-specific SOM legacy file locations. BestSync moves inbound SFTP files from local Bitvise storage to these customer file locations.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - webloom
+  - legacy
+  - file-storage
+  - som
+host: 01KQQ5JT03-BEFY
+primaryTechnologyComponent: 01KWF4ASYK-668N
+authenticationModel: other
+capabilities:
+  - 01KT0V5MCV-924J
+architectureNotes:
+  serviceAuthentication: File-share access model for customer-specific locations requires confirmation.
+  secretsManagement: Service-account and share credential storage requires confirmation.
+  serviceLogging: File access and transfer logging posture requires confirmation.
+  healthWelfareMonitoring: File server health and free-space monitoring require confirmation.
+  availabilityModel: Hosted on Windows Server 2012 R2 in Webloom; HA or standby posture requires confirmation.
+  scalabilityModel: Scales with underlying Windows Server 2012 R2 storage capacity and share design.
+  recoverabilityModel: Backup and restore approach for Webloom central customer file locations requires confirmation.
+  failureDomain: Central file-server failure affects Webloom legacy customer file placement and downstream import workflows.
+internalComponents:
+  - ref: 01KWF4ASYK-668N
+    role: file-storage
+    configuration: smb-file-share
+deliveryModel: self-managed

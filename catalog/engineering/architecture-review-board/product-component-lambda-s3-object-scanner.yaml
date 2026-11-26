@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-TPY2
+type: product_component
+ownerRole: engineer
+name: Lambda S3 Object Scanner
+description: lambda functions for scanning objects uploaded to s3
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- lambda
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-lambda-s3-object-scanner
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-lambda-s3-object-scanner
+  observedRuntimeSignals: node, readme, serverless
+  observedManifestPaths: ci/params.yml; ci/pipeline.yml; package.json; serverless.yml; tsconfig.json; yarn.lock
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

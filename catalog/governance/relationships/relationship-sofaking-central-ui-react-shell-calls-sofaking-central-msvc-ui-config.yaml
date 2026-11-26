@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP85-GJCA
+type: relationship
+name: 'Sofa King Central UI React Shell → Sofa King Central Msvc UI Config'
+catalogStatus: stub
+source: 01KQQ5JT0K-G87M
+target: 01KYQ4D9S1-D1J5
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Fetches Wingman and UI configuration at bootstrap.

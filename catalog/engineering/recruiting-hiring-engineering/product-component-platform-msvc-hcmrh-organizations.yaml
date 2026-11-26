@@ -1,0 +1,138 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-B4CV
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Organizations
+description: Retail institution management microservice handling agency and store data with multi-source aggregation from EIS, Platform Org, and Org Unit services, providing public institution search, Loveseat event consumption for organization and site synchronization, and image management
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- recruiting-hiring
+- organizations
+- microservice
+- dotnet
+- multi-source-aggregation
+- repository-discovery
+- platform
+- product-component
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-organizations
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: Agency Public API
+  protocol: REST
+  endpoint: /api/institutions/agency
+  authentication: TBD
+  description: Public agency search and discovery
+- name: Agency Management API
+  protocol: REST
+  endpoint: /api/institutions/agency/management
+  authentication: oauth
+  description: Authenticated agency management and updates
+- name: Store Public API
+  protocol: REST
+  endpoint: /api/institutions/stores
+  authentication: TBD
+  description: Public store search
+- name: Store Management API
+  protocol: REST
+  endpoint: /api/institutions/stores/management
+  authentication: oauth
+  description: Authenticated store management
+- name: Organization Event Handler
+  protocol: REST
+  endpoint: /api/institutions/events/organizationtype
+  authentication: TBD
+  description: Loveseat organization events
+- name: Site Event Handler
+  protocol: REST
+  endpoint: /api/institutions/sites/events/sitetype
+  authentication: TBD
+  description: Loveseat site events
+- name: Organization Setup
+  protocol: REST
+  endpoint: /api/institutions/setup
+  authentication: oauth
+  description: Organization initialization
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  type: connection string
+  required: true
+  sensitive: true
+- name: MongoDB__DatabaseName
+  type: database name
+  example: hcmrh_prod
+  required: true
+  sensitive: false
+- name: ConnectionStrings__Redis
+  type: Redis connection
+  required: true
+  sensitive: true
+- name: RetailInstitutionService__Url
+  type: EIS service endpoint
+  required: true
+  sensitive: false
+- name: ConfigCat__SdkKey
+  type: feature flags
+  required: true
+  sensitive: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-hcmrh-organizations
+  observedRuntimeSignals: docker, dotnet, readme, terraform
+  observedManifestPaths: .vscode/launch.json; .vscode/settings.json; .vscode/tasks.json; Dockerfile; Hcmrh.Msvc.Organizations.sln; cd/codefresh-deploy-manual.yml; cd/demo/cm.yml; cd/demo/deploy.yml; cd/demo/hpa.yml; cd/demo/ingress.yml; cd/demo/service.yml; cd/dev/cm.yml
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (2 collections - organization_agency with 21K+ docs, organization_store with 144K+ docs) with complex unique partial indexes
+  caching: Hybrid cache (local + Redis) with 1-hour output caching and tag-based invalidation
+  multiSourceAggregation: Union pattern preventing duplicates from EIS, Platform Org, and Org Unit services
+  externalIntegrations: RetailInstitutionService (HTTP) for institution details
+  serviceAuthentication: Ottoman trusted header (x-sk-userinfo); OAuth 2.0 for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs
+  healthWelfareMonitoring: Kubernetes liveness/readiness probes
+  availabilityModel: Multi-replica with HPA; rolling updates maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via K8s HPA; extensive MongoDB indexing on organizationId, domainId, siteId, retailInstitutionId
+  recoverabilityModel: MongoDB automatic backups; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt, 90s total, 45s circuit breaker sampling
+  eventConsumption: Loveseat OrganizationType and SiteType events for real-time synchronization
+  loveseatEventSubscriptions: Consumes 2 event types from Loveseat Kafka event bus via HTTP POST callbacks - SiteType create/update/delete (site/store changes from Core HR), OrganizationType create/update/delete (organization changes from Platform team). Demo filtering REQUIRED for both - SiteType inherits demo status from parent Agency, OrganizationType must preserve existing IsDemoOrganization flag during updates.
+  loveseatEventEndpoints: /api/institutions/sites/events/sitetype (SiteType create/update/delete), /api/institutions/events/organizationtype (OrganizationType create/update/delete)
+  loveseatDemoFiltering: MEDIUM PRIORITY - SiteType looks up parent Agency demo flag and inherits status, OrganizationType preserves existing IsDemoOrganization flag during updates (never overwrite), new organizations default to false (real orgs), log demo context for audit trail
+  geospatialSupport: GeoJsonPoint for location-based queries
+  externalDependencies:
+    serviceDependencies:
+      - name: TokenService
+        service: SK Identity Gateway
+        purpose: OAuth 2.0 service-to-service authentication
+      - name: FileService
+        endpoint: fileservice.sofaking.example/api/files/
+        purpose: Organization image and document storage
+      - name: FederalOrgService
+        endpoint: retailinstitution.fc.sofaking.example/api/
+        purpose: Federal retail institution data
+      - name: OrgUnitService
+        endpoint: core-hr-organizational-unit.sofaking.example/api/v1/
+        purpose: Organizational unit hierarchy data
+      - name: PlatformOrgService
+        endpoint: organizationservice.sofaking.example/v2/organizations/
+        purpose: Platform organization data
+      - name: OktaTokenService
+        service: Okta federated identity
+        purpose: Okta federated identity authentication
+    internalPackages:
+      - SK.Util.SofaKingModels.DotNet 0.0.156
+      - Hcmrh.Logging 1.0.22
+notes:
+  background: "Production-ready microservice managing 165K+ retail institutions with multi-source data aggregation. Serves both public anonymous discovery and authenticated management endpoints. Processes Loveseat events for real-time synchronization with Core HR and Platform systems. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHN0-MHHX
+type: decision_record
+name: GetHelp (HelpDesk) Platform Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT0M-C1F5
+linkedObject: 01KQQ5JT0M-C1F5
+decisionRationale: 'runtimeRequirement: Current-state runtime spans shared ECS workloads, Lambda background execution, and externalized environment configuration.'

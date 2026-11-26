@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 50CYNKZCEM-5Z3C
+name: Ottoman Passport Core Service → Ottoman Sofa King Admin BFF
+catalogStatus: stub
+source: 01KSM38KFX-9EHD
+label: calls
+target: 01KSM38KFW-W42S
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "ADMIN_BFF_SVC_BASE_URL confirmed in apps/plat-passport-core/.env.example. Already recorded informally in architectureNotes.dependencies; formalized here as a Relationship object."
+capabilities: []

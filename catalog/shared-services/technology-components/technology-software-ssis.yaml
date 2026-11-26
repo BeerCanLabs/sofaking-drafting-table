@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-646V
+type: technology_component
+ownerRole: technology-admin
+name: SQL Server Integration Services (SSIS)
+description: 'Microsoft SQL Server Integration Services. ETL and data integration platform installed on a SQL Server host. Used in SOM Data Integration Services for data pipeline and transformation workflows.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- etl
+- data-integration
+- som
+classification: software
+vendor: Microsoft
+productName: SQL Server Integration Services
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SSIS lifecycle follows the installed SQL Server release lifecycle.
+capabilities:
+- 01KT0XNZEY-DENJ

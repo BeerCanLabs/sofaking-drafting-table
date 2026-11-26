@@ -1,0 +1,48 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-BE0M
+type: product_component
+ownerRole: engineer
+name: Recliner User Service
+description: 'Internal microservice for Project Recliner handling Recliner user records,
+
+  preferences, and user-store interactions. .NET Core 8 on AWS EKS; backed
+
+  by the Recliner global User Profile / User Store SQL database.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- user
+- dotnet-core-8
+- eks
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner User Internal API
+  protocol: REST
+  authenticationModel: oauth
+  description: In-cluster REST API for user records and preferences.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet, docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-backend/SKSOM.UserProfile/SKSOM.UserProfile/SKSOM.UserProfile.csproj;
+    infra/k8s/charts/recliner-user-profile/Chart.yaml;
+    infra/k8s/charts/recliner-user-profile/templates/deployment.yaml
+  provenanceBoundary: >-
+    The current repository groups user-profile behavior in the
+    recliner-user-profile deployment; this logical User Service boundary remains
+    a catalog stub until engineering confirms whether it is independently
+    deployed.

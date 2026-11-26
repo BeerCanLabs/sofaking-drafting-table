@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ9-P5TV
+type: object_patch
+name: Sofa King File Storage capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT File Storage capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-924J
+patch:
+  owner:
+    team: architecture-review-board
+  implementations: []

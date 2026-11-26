@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EA-6642
+name: Recliner Web Shell → Kong Gateway Service
+description: >-
+  Proposed design per the Recliner Infrastructure Architecture Confluence page:
+  browser API calls from the Recliner Angular micro-frontends use the
+  centralized Ottoman/Kong entry point before reaching the Recliner BFF.
+catalogStatus: incomplete
+source: 01KSM38KGE-1JFK
+label: sends authenticated API requests to
+target: 01KQQ5JT1E-SW3X
+technology: HTTPS
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KT0V5MCV-3A6F
+tags:
+  - recliner
+  - kong
+  - ottoman
+  - ingress
+notes: >-
+  Originally confirmed only by the Recliner Infrastructure Architecture
+  Confluence document (title carries a "[DRAFT]" suffix marking it as a
+  proposed design). Repo evidence gathered 2026-08-05 for OPS-306834
+  indicates the web shell more plausibly reaches the BFF's own Traefik-ALB
+  hostname directly, since the BFF itself serves the application's starting
+  index.html (see relationship-traefik-ingress-service-routes-recliner-bff.yaml)
+  and no Kong Gateway reference exists anywhere in the som-recliner
+  repository's infrastructure code. Downgraded to incomplete pending SOM
+  Recliner engineering confirmation of the frontend's actual configured API base
+  URL.

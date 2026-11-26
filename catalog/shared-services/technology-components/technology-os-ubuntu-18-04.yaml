@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-2647
+type: technology_component
+ownerRole: technology-admin
+name: Canonical Ubuntu 18.04 LTS
+description: Stub for Ubuntu 18.04 LTS server workloads still present in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- os
+- linux
+- ubuntu
+- legacy
+classification: operating-system
+vendor: Canonical
+productName: Ubuntu
+productVersion: 18.04 LTS
+vendorLifecycle:
+  mainstreamSupportEnd: 2023-05-31
+  extendedSupportEnd: 2028-04-30
+  notes: Canonical's Ubuntu release cycle lists Ubuntu 18.04 LTS standard security maintenance through May 2023 and Ubuntu Pro expanded security maintenance through April 2028.
+capabilities:
+- 01KQQ4Q026-QM2X

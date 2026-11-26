@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AM-HQ04
+type: decision_record
+name: Codefresh CI/CD Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1D-KJ3A
+decisionRationale: >
+  Codefresh is operated as a vendor-managed SaaS CI/CD platform. Audit visibility and health status visibility have not been confirmed in the source catalog and require vendor documentation or portal access to verify. The failure domain is scoped to the vendor-managed SaaS dependency.

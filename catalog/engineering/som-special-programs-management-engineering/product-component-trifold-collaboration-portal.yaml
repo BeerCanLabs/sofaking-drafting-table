@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KXK8179A-CP17
+type: product_component
+ownerRole: engineer
+name: Trifold Collaboration Portal
+description: >-
+  Public web endpoint (collaborationportal.sofaking.example) for the
+  Trifold product family, discovered via the "Trifold - Key Product
+  Functionality" Confluence page (FPM space, page 995360994). Facilitates
+  communication and secure document sharing with internal and external
+  users. Source repository and architecture relationship to the rest of the
+  Trifold stack not yet confirmed.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - collaboration-portal
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+runtimeRequirement: >-
+  Not yet confirmed — source repository has not been identified for this
+  component.
+notes:
+  sourceRepository: Not yet identified — evidence is a live product endpoint, not a code repository.
+  sourcePage: Trifold - Key Product Functionality (Confluence, FPM space, page 995360994)

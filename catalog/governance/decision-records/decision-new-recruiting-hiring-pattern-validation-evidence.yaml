@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHY4-WSD0
+type: decision_record
+name: New Recruiting & Hiring - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG7-42XD
+linkedObject: 01KSM38KG7-42XD
+decisionRationale: 'deploymentTargets: New Recruiting and Hiring hosted in AWS (us-east). INTRHX hostname pattern confirms AWS VPC (10.111.x.x).'

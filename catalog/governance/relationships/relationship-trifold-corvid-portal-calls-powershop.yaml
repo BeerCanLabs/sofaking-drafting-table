@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T74-CP03
+type: relationship
+name: Corvid Portal ↔ Powershop CIS
+source: 01KX4A2T70-N90K
+externalTarget: Powershop CIS
+label: mutual authentication handshake
+technology: REST/SOAP (Powershop integration API)
+direction: synchronous
+flow: bidirectional
+catalogStatus: incomplete
+notes: >-
+  Discovered from KIOTrifoldStandaloneApplication repo (Corvid.Portal.Powershop,
+  Corvid.Powershop.Integration.Common); no catalog object represents the
+  external Powershop platform. Owner confirmed on 2026-08-11 this is a
+  mutual/two-way authentication flow, not a one-directional call: (1)
+  Powershop calls a Corvid Portal endpoint to authenticate on the
+  Trifold end, and (2) as part of the same call, Trifold (Corvid Portal)
+  calls back to Powershop to authenticate that inbound call. Modeled as
+  bidirectional flow to capture both directions of the handshake.

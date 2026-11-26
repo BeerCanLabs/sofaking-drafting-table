@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG2-Y4KV
+type: product_component
+ownerRole: engineer
+name: Stl Identity
+description: This repo contains the STL-Integration Queue Processor and PG Lambda code
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT05-CT7X
+tags:
+- repository-discovery
+- stl
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-STL-Identity
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at the AWS Lambda
+    Serverless Host (01KQQ5JT03-FGYJ), a host object. Repointed at AWS Lambda
+    Runtime (01KQQ5JT05-CT7X), the runtime service. Lambda is the correct
+    substrate: LambdaFunctions/ contains per-function CDK stacks including
+    ActivityService, ApprovalService, ArtifactImport, BuildingService,
+    BulkResubmit and CSWebRegUserTool. Individual function runtime versions have
+    NOT been read out and are not asserted here.
+  repositoryName: BeerCanLabs/sk-STL-Identity
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: LambdaFunctions/ActivityService/ActivityApi/ActivityApi.csproj; LambdaFunctions/ActivityService/ActivityService.sln; LambdaFunctions/ActivityService/ActivityServiceCDK/ActivityServiceCDK.csproj; LambdaFunctions/ActivityService/ActivityServiceTests/ActivityServiceTests.csproj; LambdaFunctions/ActivityService/ApiAuthorizer/ApiAuthorizer.csproj; LambdaFunctions/ActivityService/ApiAuthorizer/Properties/launchSettings.json; LambdaFunctions/ActivityService/ApiAuthorizer/aws-lambda-tools-defaults.json; LambdaFunctions/ActivityService/cdk.json; LambdaFunctions/ActivityService/codefresh.yml; LambdaFunctions/AiService/Api/Api.csproj; LambdaFunctions/AiService/Cdk/Cdk.csproj; LambdaFunctions/AiService/cdk.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

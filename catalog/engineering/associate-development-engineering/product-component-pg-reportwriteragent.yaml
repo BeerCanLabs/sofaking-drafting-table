@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-2X43
+type: product_component
+ownerRole: engineer
+name: Pg Reportwriteragent
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-PG-ReportWriterAgent.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01M1HJY7E4-V1HG
+tags:
+- repository-discovery
+- pg
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-PG-ReportWriterAgent
+language: C#
+classification: worker
+runtimeRequirement: .NET
+architectureNotes:
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at the Amazon EKS
+    Standard Container Host (01KQQ5JT02-75QN), a host object rather than a
+    runtime service. Repointed at the new PG ASP.NET Core 10 on EKS Application
+    Runtime (01M1HJY7E4-V1HG), matching its Dockerfile
+    (mcr.microsoft.com/dotnet/aspnet:10.0). Note this component has no
+    cd/*-ottoman manifest set, so unlike pg-msvc-plm-eem-api it does not appear
+    to run on the shared Ottoman cluster.
+  repositoryName: BeerCanLabs/sk-PG-ReportWriterAgent
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/dr/cm.yml; cd/dr/deploy.yml; cd/dr/ingress.yml; cd/dr/service.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/ingress.yml; cd/prod/service.yml; cd/qa/cm.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

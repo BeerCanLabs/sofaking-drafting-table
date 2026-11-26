@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-D14E
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft ASP.NET Core 8
+description: ASP.NET Core 8 LTS application framework baseline.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- app-framework
+- dotnet
+classification: software
+vendor: Microsoft Corporation
+productName: ASP.NET Core
+productVersion: '8'
+vendorLifecycle:
+  mainstreamSupportEnd: 2026-11-10
+  extendedSupportEnd: 2026-11-10
+  notes: Microsoft's .NET support policy lists .NET 8 and ASP.NET Core 8 end of support on November 10, 2026.
+capabilities:
+- 01KT0V5MCV-RZV0

@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-N4AK
+type: technology_component
+ownerRole: technology-admin
+name: PostgreSQL 17
+description: PostgreSQL 17 major release baseline.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- postgresql
+classification: software
+vendor: PostgreSQL Global Development Group
+productName: PostgreSQL
+productVersion: '17'
+vendorLifecycle:
+  mainstreamSupportEnd: 2029-11-08
+  extendedSupportEnd: 2029-11-08
+  notes: PostgreSQL versioning policy lists PostgreSQL 17 final release on November 8, 2029.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-postgresql-listener
+  name: Default PostgreSQL Listener
+  description: Default PostgreSQL listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 5432
+    protocol: PostgreSQL
+    direction: inbound
+    description: Default PostgreSQL client listener.

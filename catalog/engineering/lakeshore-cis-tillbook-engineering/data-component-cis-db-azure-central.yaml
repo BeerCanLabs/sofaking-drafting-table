@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SN-SQ01
+type: data_component
+ownerRole: engineer
+name: CIS Db Azure Central
+description: Azure-hosted copy of CIS Db Customerinformation, used by the Cloud Central instance of CIS App Centraladmin. Separate from the per-ITC CustomerInformation/Salesbook databases at LSRCN.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- sis
+- lakeshore
+- tillbook
+- azure
+- data-component
+- drafting-2026-07-28
+- drafting-2026-07-31
+repoUrl: TBD
+targetEngine: mssql
+dataClassification: internal
+containsPII: true
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28, labeled "CIS DB" in the Azure box alongside CloudCentral.
+  resolution: Resolved on 2026-07-31 per product owner — this is a copy of CIS Db Customerinformation, consumed by the Cloud Central instance of CIS App Centraladmin (01KSM38KFP-Z4NW, aliased as CIS Svc CloudCentral). Not a naming overlap with CIS Db LSRCN Pristine, which is the central copy read/written by the DASLSync syncer stack. targetEngine confirmed mssql on 2026-07-31 per product owner. See DraftingSession session-lakeshore-cis-infrastructure-2026-07-28.

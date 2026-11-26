@@ -1,0 +1,86 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-T64V
+type: data_store_service
+ownerRole: technology-admin
+name: MariaDB 10 DBMS Service
+description: Stub DBMS service for MariaDB 10 workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - mariadb
+category: service
+serviceCategory: database
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1S-N4TF
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Database administrators and service identities authenticate through centralized identity and database account governance.
+  scalingApproach: scale-up primaries with clustered replicas for resilience
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: Galera cluster health probe and replication status monitoring
+  healthWelfareMonitoring: Cluster health probes, replication telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: Galera cluster deployment with multiple database nodes.
+  scalabilityModel: Vertical scale-up of primaries with clustered replicas for resilience and read capacity.
+  recoverabilityModel: Failed nodes are rebuilt and rejoined to the cluster while backups support point-in-time recovery.
+  failureDomain: Scoped to the MariaDB cluster serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: MariaDB native backup (mysqldump / XtraBackup) to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: Galera Cluster
+  encryption:
+    atRest: required
+  accessControl:
+    model: Active Directory integrated access with role-based database permissions
+deploymentConfigurations:
+  - id: clustered-availability
+    name: Clustered Availability
+    description: Multiple MariaDB nodes in a Galera cluster provide database availability and recovery tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: scale-up-with-replicas
+    name: Scale Up With Replicas
+    description: Capacity grows through larger primary nodes with clustered replicas for resilience and workload distribution.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1S-N4TF
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ6B-366G
+    key: serviceAuthentication
+  - ref: 01KT16XJ6B-366G
+    key: secretsManagement
+  - ref: 01KT16XJ6B-366G
+    key: serviceLogging
+  - ref: 01KT16XJ6B-366G
+    key: failureDomain
+  - ref: 01KT16XJ6B-366G
+    key: backup.strategy
+  - ref: 01KT16XJ6B-366G
+    key: backup.platform
+  - ref: 01KT16XJ6B-366G
+    key: backup.rto
+  - ref: 01KT16XJ6B-366G
+    key: backup.rpo
+  - ref: 01KT16XJ6B-366G
+    key: ha.mechanism
+  - ref: 01KT16XJ6B-366G
+    key: encryption.atRest
+  - ref: 01KT16XJ6B-366G
+    key: accessControl.model

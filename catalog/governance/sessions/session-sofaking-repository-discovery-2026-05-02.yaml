@@ -1,0 +1,2115 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1G-84A6
+type: drafting_session
+name: Sofa King GitHub Repository Discovery
+description: Read-only Drafting Session created from Sofa King GitHub repository metadata and file-tree evidence. This session records generated stubs and defers lower-confidence repositories for owner review.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: retired
+sessionStatus: resolved
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+- session
+- repository-discovery
+- github
+primaryObjectType: product_component
+sourceArtifacts:
+- name: Sofa King GitHub repository metadata
+  type: repository-inventory
+  location: /Users/dwhitfield/sofaking-repositories-enriched.json
+  notes: GitHub metadata for 1,491 repositories visible to the current authenticated user.
+- name: Sofa King repository tree evidence
+  type: repository-inventory
+  location: /Users/dwhitfield/sofaking-repo-crawl-evidence.json
+  notes: Read-only file-tree crawl of safe manifest and runtime signals. Source file contents were not copied.
+- name: Sofa King repository category inventory
+  type: repository-inventory
+  location: /Users/dwhitfield/sofaking-repository-inventory.json
+  notes: Heuristic categorization used to prioritize candidate Product Services.
+generatedObjects:
+- name: Leave API Availability
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT05-MD2X
+- name: Leave Event Processor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-6F7S
+- name: Leave Ivr Menu Handler API
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-91TW
+- name: Leave Lambdafunctions
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-RTMW
+- name: Leave Svc Availability Loader
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-539N
+- name: Leave Svc Availability Processor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-C97C
+- name: Leave Svc Evp Usersync
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-V9JN
+- name: Leave Svc Permissionsync
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-MGGN
+- name: Leave Web API
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0A-7VKB
+- name: Acl Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-XNH8
+- name: Action Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-P193
+- name: API Dashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-9YFJ
+- name: API Developer Dashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-4QE5
+- name: API Gateway Valet CIS
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-5TBW
+- name: API Recruit
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-RHT4
+- name: API Recruitsearch
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-FEMB
+- name: Leave Time API Leavedashboard
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-SHEB
+- name: Leave Time API Adminuser
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-C0VC
+- name: Leave Time API Employee
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-KA0H
+- name: Leave Time API Eventcalendar
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-X9TJ
+- name: Leave Time API Integration Service
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-1XKD
+- name: Leave Time API Ivrvoiphandler Twilio
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-J8YX
+- name: Leave Time API Platformsync
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-T07Z
+- name: Leave Time API Platformsyncpublic
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-Z0CX
+- name: Leave Time API Referencedata
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-MBWT
+- name: Leave Time API Report
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-AB02
+- name: Leave Time API Temp
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-ZRAA
+- name: Leave Time Msvc Canonicaleventpublisher
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-1NTW
+- name: Leave Time Msvc Twiliowebagent
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-K88Q
+- name: Leave Time Svc Applicationusermodifiedprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-SY5W
+- name: Leave Time Svc Canonicalconsortiaeventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-6C47
+- name: Leave Time Svc Canonicalconsortiumusereventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-0CE3
+- name: Leave Time Svc Canonicalemployeeeventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-RBP9
+- name: Leave Time Svc Canonicaleventpublishing
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-XGZJ
+- name: Leave Time Svc Consecutivedaysanalyzer
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-FSSB
+- name: Leave Time Svc Consecutivedaysprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-N5MJ
+- name: Leave Time Svc Consortiumuser Localstore
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-XWPN
+- name: Leave Time Svc Ivrtts
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-GK9D
+- name: Leave Time Svc Orgpersonprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-2XXW
+- name: Leave Time Svc Platformuser Updatehandler
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-2463
+- name: Leave Time Svc Platformusers Localstore
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-WRHM
+- name: Leave Time Svc Pushnotifications
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-45J2
+- name: Leave Time Svc Pushnotifications Deliveryfailure
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-6DJG
+- name: Leave Time Svc Pushnotifications Enqueuing
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-GQE3
+- name: Leave Time Svc Pushnotifications Platformusercache
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT09-12K4
+- name: BFF Recruitdashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-KYK7
+- name: Consumer Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-A14A
+- name: Elevate Dashboard BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-G7T8
+- name: Email Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-53YN
+- name: ERP Ws Bmfp Agent API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-09XZ
+- name: ERP Ws Dispatch API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-0S7A
+- name: ERP Ws Grizzly API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-VHMC
+- name: ERP Ws Ledgerline API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-6H8Q
+- name: ERP Ws Velocity API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-WNCP
+- name: ERP Consumer Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-KV2T
+- name: Shopstar Account API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGC-DDE9
+- name: Sofa King Central Lambda Bulkfile Zipper
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-9QS4
+- name: Sofa King Central Lambda Deferred Actions
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-WX4G
+- name: Sofa King Central Lambda Exporthandler
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-JQ9N
+- name: Sofa King Central Lambda Forms Workflow
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-TTSP
+- name: Sofa King Central Msvc Canonicaleventhandler
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-F4R8
+- name: Sofa King Central Msvc Chat
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-NTJ6
+- name: Sofa King Central Msvc Deferred Actions
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-VK9V
+- name: Sofa King Central Msvc Forminstance Eventhandler
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-RRP6
+- name: Sofa King Central Msvc Homepage
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-EW4F
+- name: Sofa King Central Msvc Jobprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-HYXS
+- name: Sofa King Central Msvc Preferences
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-VRT2
+- name: Sofa King Central Msvc System Jobs
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-MJV2
+- name: Feedback Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-AX73
+- name: File Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-FF5V
+- name: Haulier API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-A03Y
+- name: HCM RH Fork Util Organization API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-VM7E
+- name: Whm Am API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-XZ3E
+- name: Whm Hd API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-X6P1
+- name: Gigulator BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-4KYZ
+- name: Lambda S3 Object Scanner
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGH-TPY2
+- name: Ldap Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-WZNS
+- name: Legacy Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-V1BQ
+- name: Lti Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-MWDH
+- name: Lx Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-SCKS
+- name: Mc Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-7CNM
+- name: Microcredential Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-94VD
+- name: Platform Msvc Leavetimeinternaltools
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0T-KHQD
+- name: Platform Msvc Accountmigration
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-HH4N
+- name: Platform Msvc Audit Logging
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-4R15
+- name: Platform Msvc Cc Loveseat Connector
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFV-ZCZD
+- name: Platform Msvc Cc Oplog Processor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-7T74
+- name: Platform Msvc Ccplatformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-HK2X
+- name: Platform Msvc Credential
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-X9SK
+- name: Platform Msvc Dataimport
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-CQK3
+- name: Platform Msvc Department
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFG-SYNY
+- name: Platform Msvc Retail Institution
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFG-BJHR
+- name: Platform Msvc Emailservice
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-SGT5
+- name: Platform Msvc Emailvalidation
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-S9ZC
+- name: Platform Msvc Employee
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFG-MYWB
+- name: Platform Msvc Employer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFG-QAVJ
+- name: Platform Msvc Eventlistener
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-PW52
+- name: Platform Msvc Externalapiservice
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-5GBK
+- name: Platform Msvc Fc Credential
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0V-ZZ3J
+- name: Platform Msvc Feature Flag
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-PB2S
+- name: Platform Msvc File
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-DJKY
+- name: Platform Msvc Forminstance
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-DZKV
+- name: Platform Msvc Formsv2
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-6TSZ
+- name: Platform Msvc Hcmrh Ai Prompt Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-X3NQ
+- name: Platform Msvc Hcmrh Applications
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-65T4
+- name: Platform Msvc Hcmrh Dashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-NN6D
+- name: Platform Msvc Hcmrh Job Postings
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-0YP7
+- name: Platform Msvc Hcmrh Job Seeker
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-0W10
+- name: Platform Msvc Hcmrh Organizations
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-B4CV
+- name: Platform Msvc Hcmrh Permissions
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-GGGP
+- name: Platform Msvc IDM Okta Adapter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-2SRB
+- name: Platform Msvc Importprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-HRZ1
+- name: Platform Msvc Interactionservice
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-R53Q
+- name: Platform Msvc Jobtype
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFG-FCFP
+- name: Platform Msvc List
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-7P1C
+- name: Platform Msvc Location
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFH-XBKG
+- name: Platform Msvc Micro Credentials
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-6FDK
+- name: Platform Msvc Notificationinbox
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-JK7R
+- name: Platform Msvc Notificationprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFY-5TKC
+- name: Platform Msvc Notificationqueue
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-JZVM
+- name: Platform Msvc Org Person
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFH-NYK5
+- name: Platform Msvc Org Person Swagger Alb API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFH-JDYM
+- name: Platform Msvc Organization
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFH-HE70
+- name: Platform Msvc Pde Content
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-EABN
+- name: Platform Msvc Pde Userserviceclient
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-A4YZ
+- name: Platform Msvc Pde Userupdatehandlerservice
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-12Z5
+- name: Platform Msvc Pdeplatformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-HDMC
+- name: Platform Msvc Pdfprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-E28N
+- name: Platform Msvc Permissions
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-34QP
+- name: Platform Msvc Pg Activity
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-G2XX
+- name: Platform Msvc Pg Content
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-SDKE
+- name: Platform Msvc Pg Forms
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-8PKZ
+- name: Platform Msvc Plat Announcements
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-KP71
+- name: Platform Msvc Plat Audit
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-4ZFW
+- name: Platform Msvc Plat Permission
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-5GK6
+- name: Platform Msvc Plat Websocket
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-29EE
+- name: Platform Msvc Platformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-CB4T
+- name: Platform Msvc Position
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFH-TM0Y
+- name: Platform Msvc Premiumaccountmanager
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-EF1G
+- name: Platform Msvc Proactivesitemap
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-0KA5
+- name: Platform Msvc Productaccess
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-S2A5
+- name: Platform Msvc Productaccess Lambda
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-5078
+- name: Platform Msvc Recruitfcerrorqueue
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-A2W6
+- name: Platform Msvc Recruitidentityprovider
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-RHBN
+- name: Platform Msvc Recruitnotifications
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-4SDY
+- name: Platform Msvc Recruitplatformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-WV7Z
+- name: Platform Msvc Resourcelibrary
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-17X9
+- name: Platform Msvc Resourcelibrary Lambda
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-YG4N
+- name: Platform Msvc Rl Elasticsync
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-VNVW
+- name: Platform Msvc Rl Eventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-5WAF
+- name: Platform Msvc Rlvideoplayer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-F58M
+- name: Platform Msvc Rubricdesigner
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-GGGG
+- name: Platform Msvc Staff Member
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFJ-5P3W
+- name: Platform Msvc Workflowdefinition
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-C36C
+- name: Platform Msvc Workflowinstance
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-B9ZX
+- name: Platform Msvc Workflowprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-SWRJ
+- name: Platform Msvc Zendesktokenadapter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-SDFY
+- name: Observation Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-REJD
+- name: Pg Msvc Plm Eem API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-P3SC
+- name: Platform BFF Sofa King Tools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-AF27
+- name: Platform BFF Ottoman Muap
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-BNB9
+- name: Platform Ottoman Lambdas
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-907S
+- name: Platform Msvc Orgperson
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-HYKP
+- name: Platform Notification API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-4HE0
+- name: Platform Permission Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-3Z8G
+- name: Platform Svc Auth Lookup Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-5NC8
+- name: Platform API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-YHNB
+- name: Plm Dashboard BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-P5QK
+- name: Report Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-N1TN
+- name: RH Hiring Notification Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-PYGW
+- name: RH Pipelinestage Email Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-ETTY
+- name: RH Svc Canonicalemployeeeventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-26MP
+- name: RH Svc Orgpersonprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-TP4Q
+- name: Saml Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-2NS1
+- name: Scheduler Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-1T18
+- name: Kio Translation Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-GYTE
+- name: Kio Web BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-3Q47
+- name: Session Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-Y0B6
+- name: Shm Backend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-4ACV
+- name: CIS Lib SOM API Clients
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-5HAA
+- name: CIS Msvc Learning Center
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-BX10
+- name: CIS Msvc Notifications
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-NZ4F
+- name: CIS Msvc Platform Identity Event Listener
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-7WZC
+- name: CIS Msvc Platform Migration
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-3K21
+- name: CIS Svc Tillbook Identity Management
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-06YG
+- name: CIS Svc Tillbook Customersearch
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-3H0Q
+- name: CIS Svc Tillbook Web Help
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-4GGC
+- name: CIS Svc Vendorlink
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-1TFV
+- name: Solr Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-QMVD
+- name: SOM Svc Authhub
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-3276
+- name: SOM Svc Dashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-4AFJ
+- name: SOM Svc Platformevent
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-4HEF
+- name: SOM Svc Syndication
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-5AK5
+- name: SSO Utility Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-NRB5
+- name: Sys Audit API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGH-SP80
+- name: Sys Cdk API Proxy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-5BZF
+- name: Sys Cdk Userservice API Proxy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-F9NQ
+- name: Sys Msvc Codefresh Provisioner
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGH-MAYW
+- name: Sys Msvc Provisioner Github
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGH-T5AR
+- name: Sys Msvc Provisioner K8s
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-HRBG
+- name: Sys Msvc Quay Provisioner
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-5A5G
+- name: Sys Self Service Portal
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF0-YGM8
+- name: Trainscape Provisioning API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-8A93
+- name: Trainscape Saba Services
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-82PB
+- name: Util Apiclientlibrarybase
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-VAEE
+- name: Util Platformtools Apicore
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-761A
+- name: Util Serviceauthorization
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-TE2A
+- name: Util Servicechassis
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-AKN0
+- name: Util Servicediscovery
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-Y3X9
+- name: Util Servicediscoverycore
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-KC69
+- name: Util Servicemesh
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-2VYA
+- name: Util Servicemesh Httpclient
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-015R
+- name: Leave Database
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-0KZE
+- name: Data Analytics Bma Sftp Utility
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-KX0F
+- name: Data Analytics Bma Utils
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-3ARY
+- name: Data Analytics Sai Ascent
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-RYT0
+- name: Data Analytics Sai Estoreplus
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-CJEF
+- name: Data Analytics Sai Infinitesite
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-H2GV
+- name: Data Analytics Sai Powershop
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-N28X
+- name: Data Analytics Sai Storetool
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-Q3EH
+- name: Data Analytics Sai Skyline
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-R11X
+- name: Data Analytics Sai Teamssis
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-D2JM
+- name: Data Analytics Sai Utils
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-G4NC
+- name: Data Architecture
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-WZ4X
+- name: Data Center Integration Services Projects
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEV-H6E0
+- name: Data Whm
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-1SMS
+- name: Data Model
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-DBPV
+- name: Database Reset
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-7AAE
+- name: Enterprise Analytics Dbt
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-ABH0
+- name: Enterprise Analytics Powerbi
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-A60E
+- name: Enterprise Analytics Snowflake
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-0FYW
+- name: Enterprise Analytics Ssas
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF4-FXGY
+- name: ERP Ws Abacus Db
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-3RT8
+- name: ERP CIS Database Obfuscation
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-FNV0
+- name: ERP CIS Jasper Server
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-A8RR
+- name: ERP CIS Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-3A6W
+- name: Sofa King Central Postgresql Database
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-46AZ
+- name: Sk Fc Tools Data Tool
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0J-VJSC
+- name: Hackathon Ai 2023 Chat With Data
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEV-52X6
+- name: Hackathon Ai 2023 Data Analysis
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEV-5EMH
+- name: Whm Am Ssis
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-FJX4
+- name: IMR Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-MMQP
+- name: Learning Designer Db
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-RP4P
+- name: Platform Msvc Plat Data Import
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFZ-NA5K
+- name: Pg Reportwriter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-PN95
+- name: Platform Data Exporter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-R9AA
+- name: Prj A2c HCM Dw Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGN-T2GA
+- name: Kio Central Data Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-AF1H
+- name: Kio Central Data Service Client
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-39PY
+- name: Kio Reporting API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-KTQ2
+- name: CIS BFF Exago
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-X2TJ
+- name: CIS Db Salesbook Region
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-YGZ8
+- name: CIS Db Salesbook Master
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-1J9Y
+- name: CIS Db Customerinformation
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-25CX
+- name: CIS Svc Tillbook Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-GHVK
+- name: CIS Util Exago Migrator
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-0GDT
+- name: CIS Util Internal Database Prep
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-BWR2
+- name: CIS Util Customerinformation Data Conversion
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-1C9G
+- name: Sm Analytics
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF5-FGTV
+- name: SOM Analytics
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-TQKF
+- name: SOM Reporting Designer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-C1N8
+- name: SOM Svc Adhoc Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-0RQT
+- name: SOM Svc Reporting
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-5PAF
+- name: Settee UI Module Universal Data Importer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-DG41
+- name: Settee Universal Platform Data Exporter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-3J1S
+- name: Leave Web Mvc
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0A-R0DM
+- name: Rota Frontend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-0R4N
+- name: Rota Frontend Reactjs
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-3KG1
+- name: Dashboard Component
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-Z8KG
+- name: Dev Portal
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-33BQ
+- name: ERP Ws Bmfp Agent UI
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-DMP3
+- name: ERP Ws Ledgerline Web
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-CS25
+- name: ERP Ws Velocity Web
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-PR89
+- name: Sofa King Central UI Common
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-KSXR
+- name: Sofa King Central UI Forms
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-HHQY
+- name: Sofa King Central UI Org Config
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-K8VW
+- name: Sofa King Central UI React Shell
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-G87M
+- name: Sofa King Central UI Settings
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-0H0T
+- name: Sofa King Central UI Shared Components
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0M-53XP
+- name: Sofa King Central UI Staff Member
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0M-Y2G5
+- name: Sofa King Central UI Staff Profile
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0M-4MNA
+- name: Focus Engine UI
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-SDS6
+- name: HCM Util React Components
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFF-2XDH
+- name: IDM UI Common
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-XPR2
+- name: IDM UI Momuap
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-DRHP
+- name: Whm Hd UI
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-FM2A
+- name: Local UI Module Server
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-1JZS
+- name: Pg Plm UI
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-027C
+- name: Pg UI Components
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-MZNS
+- name: Platform Ai Frontend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-X7MB
+- name: Platform UI Sofa King Tools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-P6RD
+- name: Platform UI Ottoman Muap
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG0-1B9E
+- name: Recruiting Hiring UI Hiring
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-FGCD
+- name: RH Lib Shared UI Components
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-TTQT
+- name: Sa Vendorlink Portal
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGA-D3BJ
+- name: Kio Shared Strategy Library Frontend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-CXWW
+- name: Kio Trifold Dashboard Localeventprocessor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-G1N1
+- name: Shm Portal
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-JZRZ
+- name: Shm Portal React
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-MKQ8
+- name: CIS UI Backpack Design
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-PRVB
+- name: CIS Util Tillbook Web Deploy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-5K63
+- name: SOM Dashboard Designer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-NEZJ
+- name: Settee UI Module Absmgmt Institute
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-8KKX
+- name: Settee UI Module Ec Dashboard
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-CZFN
+- name: Settee UI Module Ec Forms
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-N0PA
+- name: Settee UI Module Micro Credentials
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-P6EC
+- name: Settee UI Module Pg Plm
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-4P54
+- name: Settee UI Module Platformtools Announce
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-M2CY
+- name: Settee UI Module Platformtools Content Licensing
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-3VRB
+- name: Settee UI Module Platformtools SofaKingcentral
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-C3Z4
+- name: Settee UI Module Platformtools Organizations
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-1GJA
+- name: Settee UI Module Platformtools Pgcstools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-RVZF
+- name: Settee UI Module Platformtools Users
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-PARP
+- name: Settee UI Module Recruit Institute
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-MW3P
+- name: Settee UI Module Universal Directory
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGK-3PEQ
+- name: Settee UI Module Universal Employee
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-HF7D
+- name: Settee UI Module Universal Overview
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-8DPT
+- name: Settee UI Module Universal Resource Library
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-E3FH
+- name: Settee UI Module Universal Settings
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-365N
+- name: Settee UI Module Universal Useraccess
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-P3CJ
+- name: Trainscape Custom Focus Frontend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-SF7Y
+- name: Ts UI Common
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-E9DM
+- name: Ts UI Common Example
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-8QGX
+- name: Ts UI Common Vendor
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-D0FR
+- name: UI Common
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-N0C8
+- name: UI Components
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-P0AD
+- name: Ums Admin Frontend
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFA-DV8H
+- name: Util Dashboard Types
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-XW6W
+- name: Util Kio Dashboard Types
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG1-WAAE
+- name: Util UI Fluidcomponents
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-8N2P
+- name: Vendorsso UI
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-DMD8
+- name: Android Common
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-DS23
+- name: Android SofaKingmobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-XCKG
+- name: Android Gigulator
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-V2Z7
+- name: Android Tbcis Admin
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-4CPA
+- name: Appium Mobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-CTX7
+- name: Appium Mobile Pa
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-7TP4
+- name: Cw 0575 Quickfitprogress Mobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGC-AFQD
+- name: Cw 0575 Mobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGC-KBJQ
+- name: ERP Tx CIS Android
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-1KZH
+- name: ERP Tx CIS iOS
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGN-F5DD
+- name: Whm Am Mobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-27S3
+- name: Whm Am Mobile API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-D6MJ
+- name: iOS Common
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-HNNT
+- name: iOS SofaKingmobile
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-DNKM
+- name: iOS Gigulator
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFD-11BN
+- name: iOS Tbcis Admin
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-MRVH
+- name: Mobile Recovery
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-V32X
+- name: Mobile Dct
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-0CTE
+- name: Mobile Feedback
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-5H4K
+- name: Mobile Healthoffice
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-ERC1
+- name: Mobile Gigulator
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-BZ47
+- name: Mobile Pb Household Access
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-WM08
+- name: Mobile Walk
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-3EG6
+- name: RH Mobile Retailjobspot Android App
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-3MMY
+- name: RH Mobile Retailjobspot iOS App
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG7-4Y2R
+- name: Platform Sand Mobile BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-JQ4V
+- name: CIS App Mobile CIS Admin
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-WBNG
+- name: CIS Svc Mobile API
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-0HE2
+- name: Ts Mobile Dct Android
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFE-8GSP
+- name: Leave Emailagent
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-KPFG
+- name: Leave Jag
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-KTPA
+- name: Leave Jobapi
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-30GY
+- name: Leave Mosjobchecker
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-YPRZ
+- name: Leave Remap Tool
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT06-P1BK
+- name: Rota Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-11K4
+- name: Rota Ivr
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-15T6
+- name: Rota Legacy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-48YN
+- name: Rota Mosjobchecker
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KER-TT90
+- name: Hiretrack Apphelp
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-H1ST
+- name: Hiretrack Core
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-A1FN
+- name: Hiretrack Customerrorsutil
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-675R
+- name: Hiretrack Filer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-WY0R
+- name: Hiretrack Filestore
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG4-WTZS
+- name: Hiretrack Installationmanager
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-F3Q1
+- name: Hiretrack Integrationservices
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-2RVM
+- name: Hiretrack Ontariocertification
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-GG58
+- name: Hiretrack Legacy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-RHYH
+- name: Hiretrack Replicator
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-98M7
+- name: Hiretrack Resetapppool
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-RC84
+- name: Hiretrack Selection
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-KKEQ
+- name: Hiretrack Utilitiesapi
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-8PF3
+- name: Leave Time Basisobjects
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT07-S7PT
+- name: Leave Time Ivr Voip Spikes
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-0GET
+- name: Leave Time Reactjs Eventcalendar
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-BJD0
+- name: Leave Time Sandbox
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT08-6Z4A
+- name: Cw 0575 Cdp
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGC-X06P
+- name: ERP Ws Agent Tools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-XNG5
+- name: ERP Ws Abacus Escrow
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-7Y2N
+- name: ERP Ws Online5
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KF3-745H
+- name: ERP Flat Image
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-HW2X
+- name: ERP Saasio
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-WX68
+- name: ERP CIS Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGM-ZYY2
+- name: Shopstar Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGC-SGWF
+- name: Shopstar IDM Integration
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-4Q9H
+- name: Shopstar Parent
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-1Q90
+- name: Shopstar Sandbox
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-658F
+- name: Shopstar Scheduler
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-N1E1
+- name: Shopstar User Sync
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-EVQY
+- name: Shopstar V3
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-WYH7
+- name: Shopstarv3 Sb1
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGD-A1F8
+- name: Sofa King Central Tools
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT0K-VM6S
+- name: HCM RH App
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-49X9
+- name: HCM RH Core
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG5-FBRT
+- name: Healthoffice Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEV-VVJV
+- name: Healthoffice Enterprise
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KEW-RTT8
+- name: Whm Am App
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-QFJ1
+- name: Whm Am Buildartifacts
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-4JYM
+- name: Whm Am Etl Msa
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-G3T3
+- name: Whm Am Idcore
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-YGSN
+- name: Whm Am Notifications
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-7ZWT
+- name: Whm Am Reportserver
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-XABQ
+- name: Whm SofaKingsecuritylibrary
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-566V
+- name: Whm SofaKingsecuritylibrary Hd
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-JJ65
+- name: Whm Brannock Etl
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-VK1S
+- name: Whm Brannock Net
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-GX9G
+- name: Whm Hd Clusterconfigure
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-HBSC
+- name: Whm Hd Configuration
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFB-0BDF
+- name: Whm Hd Integrations
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-MPPP
+- name: Whm Hd Login
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-KKH6
+- name: Whm Hd Up
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-WKD2
+- name: Whm Im
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-STJH
+- name: Whm Integrations
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-EN0P
+- name: Whm Zebra Tools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFC-0A26
+- name: Stl Elevate
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-YBRS
+- name: Stl Identity
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-Y4KV
+- name: Stl Formix
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG2-8JV3
+- name: Stl Ldms Legacy
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-2N7T
+- name: Stl Ldms Net
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-05HQ
+- name: Pg Dev Tools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-T15E
+- name: Pg Microcredentiallearning
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-PDSQ
+- name: Pg Npm
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-12C4
+- name: Pg Reportwriteragent
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG3-2X43
+- name: Recruiting Hiring Authorizationopenid
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-4EGD
+- name: Recruiting Hiring Setup
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG6-WPVK
+- name: Platform Sand Quickfitplatformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFS-JSTS
+- name: Platform Sand Credential
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFS-3ZRM
+- name: Platform Sand Department
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFS-0KQ2
+- name: Platform Sand Employee
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-VQP6
+- name: Platform Sand File
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-TS9E
+- name: Platform Sand Form
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-E80B
+- name: Platform Sand Insights
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-KHN8
+- name: Platform Sand Insights RH
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-EZX6
+- name: Platform Sand Jobtype
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-X06Q
+- name: Platform Sand List
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-SV4K
+- name: Platform Sand Location
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-JJ3K
+- name: Platform Sand Notifications
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-N5SH
+- name: Platform Sand Organization
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-ZVFF
+- name: Platform Sand Permission
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-RGK1
+- name: Platform Sand Recruitnavigation
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-SCAJ
+- name: Platform Sand Recruitzendesk
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFT-303M
+- name: Platform Sand Trifoldplatformtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFV-DHBD
+- name: Kio Quickfit Auth Hub
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-BK91
+- name: Kio Ang Client
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-2X1Q
+- name: Kio App Shared Eventhub
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGE-7BVQ
+- name: Shm Buildtools
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-4R52
+- name: Shm Lint
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-XHVZ
+- name: Shm Textcontrol Websocket
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-KY62
+- name: Shmmanagementstudio Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-VF98
+- name: Shmupgrade Application
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KG9-2R4T
+- name: CIS App Centraladmin
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-Z4NW
+- name: CIS App Datamap
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-7MN9
+- name: CIS App Salesbook
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-FTNZ
+- name: CIS App Salesbook Lms App Integration
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFP-9B43
+- name: CIS App Householdaccess
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-247S
+- name: CIS App Reportbuilder
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-Y8PJ
+- name: CIS App Specialservices
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-65XY
+- name: CIS App Specialservices Classic
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-N7HY
+- name: CIS App Customerinformation
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFQ-KQ7G
+- name: CIS Vla Exporter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFR-ASKR
+- name: SOM Configuration Syndication
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-807T
+- name: SOM Hackathon
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-AFWQ
+- name: SOM Image Conversion
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-ZB1J
+- name: SOM Financing Toolkit
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-FJ71
+- name: SOM Migration Tool
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-Y2KJ
+- name: SOM CIS Sync
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-8JR9
+- name: SOM Solo
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-TCWA
+- name: SOM Solo Ftpclient
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-78NP
+- name: SOM Solo Interop
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGF-9TW8
+- name: SOM Soloui Customer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-QVWQ
+- name: SOM Soloui One
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-8DD1
+- name: SOM Tx Tools Lpac Letters
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-T28R
+- name: SOM V3 Quickfit Sisimporter
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGG-0BDX
+- name: Settee Dev
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-P6K5
+- name: Settee Framework Angularjs
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-NQSQ
+- name: Settee Jarvis
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-MRK0
+- name: Settee Plugin Fingerloader
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-99RA
+- name: Settee Plugin Fluidstyles
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-HZB1
+- name: Settee Plugin Formrenderer
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-0VH9
+- name: Settee Plugin Plopgenerators
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-H3G2
+- name: Settee Wingman
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-43SY
+- name: Settee Storm
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KGJ-DJKV
+- name: Clockwise Application
+  type: product_component
+  status: stubbed
+  ref: 01KQQ5JT1C-3WEA
+- name: Leave Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEQ-JS8E
+- name: Leave Time Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KQQ5JT1H-B2YK
+- name: Cw Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-NWYD
+- name: Enterprise Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-QQRC
+- name: ERP Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KGN-7XSH
+- name: ERP CIS Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KGN-BNJ8
+- name: Shopstar Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-DF2H
+- name: HCM RH Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KG7-42XD
+- name: Whm Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KF8-G9FS
+- name: Stl Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-4G72
+- name: Pg Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-PPFZ
+- name: Platform Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KFV-2QAF
+- name: Kio Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KGH-M8P3
+- name: Shm Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KGH-6ZX6
+- name: CIS Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KGN-Y95A
+- name: Settee Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEX-QQFP
+- name: Trainscape Software Deployment Pattern
+  type: software_deployment_pattern
+  status: stubbed
+  ref: 01KSM38KEY-KQK4
+unresolvedQuestions:
+- id: confirm-service-ownership
+  question: Which product teams own each repository-discovered Product Service stub?
+  status: open
+  reason: Ownership was inferred from repository naming conventions and existing Draft patterns, not from authoritative team declarations.
+  impact: Owner metadata must be confirmed before approving these stubs.
+- id: confirm-runtime-standards
+  question: Do the inferred runsOn standards match the actual production runtime for each generated Product Service?
+  status: open
+  reason: Runtime was inferred from language, manifest, Docker, Kubernetes, and serverless file-tree signals.
+  impact: Incorrect runtime mappings would affect host, logging, monitoring, patching, and compliance requirements.
+- id: cluster-deployment-patterns
+  question: Which generated Product Service stubs belong together in true Software Deployment Patterns?
+  status: open
+  reason: Product grouping was inferred from repository naming conventions and should be reviewed with product owners.
+  impact: Deployment topology, data flows, and failure domains remain incomplete until confirmed.
+- id: deferred-repositories
+  question: Which deferred repositories represent runtime services rather than libraries, automation, documentation, or test evidence?
+  status: open
+  reason: 995 repositories were not stubbed because the evidence was lower confidence or supporting-only.
+  impact: Some real services may still need Draft stubs after owner review.
+assumptions:
+- id: no-source-content-copied
+  statement: Repository discovery used metadata and file-tree signals only; it did not copy source file contents into Draft.
+  rationale: This avoids pulling secrets or proprietary implementation content into architecture stubs.
+- id: existing-only-active-repositories
+  statement: Generated Product Service stubs use lifecycleStatus existing-only because the source repositories are active and not archived.
+  rationale: Repository activity does not prove preferred status; existing-only is the conservative catalog disposition for discovered existing workloads.
+- id: deferred-summary
+  statement: already_represented_by_source_repo=3, archived=9, insufficient_runtime_evidence=79, not_high_runtime_candidate=881, supporting_or_non_runtime_name=23
+  rationale: The Draft catalog should model architecture, not every supporting repository as a runtime object.
+nextSteps:
+- id: owner-review
+  action: Review generated stubs with product owners and convert true runtime services from stub to draft.
+  status: open
+  owner: cloud-architecture
+- id: deployment-pattern-review
+  action: Confirm service grouping, deployment targets, external interactions, and data stores for each generated Software Deployment Pattern stub.
+  status: open
+  owner: cloud-architecture
+- id: deferred-repo-triage
+  action: Review deferred repositories for missed runtime services and supporting evidence.
+  status: open
+  owner: cloud-architecture

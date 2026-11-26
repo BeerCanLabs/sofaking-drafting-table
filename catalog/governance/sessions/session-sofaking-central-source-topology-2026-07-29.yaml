@@ -1,0 +1,219 @@
+schemaVersion: '1.0'
+uid: 01KYQ57CQM-GXS4
+type: drafting_session
+ownerRole: engineer
+name: Sofa King Central Source Topology Mapping 2026-07-29
+description: Mapped the Sofa King Central topology from local working copies of the backend repositories and the frontend repositories, then generated the catalog content from the resulting edge list.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+sessionStatus: open
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KQQ5JT1J-DWT1
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+- sofaking-central
+- source-inspection
+- repository-discovery
+- topology
+sourceArtifacts:
+- name: Backend working copies
+  type: repository
+  location: 'C:\Users\npardee\source\repos'
+  notes: '58 repositories. Evidence: *.csproj and packages.config package references, appsettings*.json, Web.config connectionStrings and ServiceDependencyConfiguration.'
+- name: Frontend working copies
+  type: repository
+  location: 'C:\central'
+  notes: package.json dependency graphs, Jarvis src/env-configs/production.json endpoint map, src/utils/ui-module-helper.js module resolution, fc-ui-shell .env and ConfigKeys.ts.
+- name: Sofa King Central Architecture Diagrams
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/DEV/pages/17791970515
+  notes: Confluence page last edited 2026-03-18. Used as the baseline; eight deltas were found against source and are recorded in the session notes.
+generatedObjects:
+- name: sand-Form
+  type: product_component
+  status: created
+  ref: 01KSM38KFT-E80B
+  notes: Re-homed from ottoman-platform-engineering.
+- name: sand-Jobtype
+  type: product_component
+  status: created
+  ref: 01KSM38KFT-X06Q
+  notes: Re-homed from ottoman-platform-engineering.
+- name: msvc-FormInstance
+  type: product_component
+  status: created
+  ref: 01KSM38KFY-DZKV
+  notes: Re-homed from ottoman-platform-engineering.
+- name: msvc-Position
+  type: product_component
+  status: created
+  ref: 01KSM38KFH-TM0Y
+  notes: Re-homed from ottoman-platform-engineering.
+- name: msvc-File
+  type: product_component
+  status: created
+  ref: 01KSM38KFY-DJKY
+  notes: Re-homed from ottoman-platform-engineering.
+- name: msvc-NotificationProcessor
+  type: product_component
+  status: created
+  ref: 01KSM38KFY-5TKC
+  notes: Re-homed from ottoman-platform-engineering.
+- name: msvc-FormTemplate
+  type: product_component
+  status: created
+  ref: 01KYQ4D9RJ-XDT3
+- name: core-hr-position
+  type: product_component
+  status: created
+  ref: 01KYQ4D9RN-XNGS
+- name: core-hr-org-unit
+  type: product_component
+  status: created
+  ref: 01KYQ4D9RR-T700
+- name: core-hr-job-definition
+  type: product_component
+  status: created
+  ref: 01KYQ4D9RV-KPHB
+- name: fc-msvc-export-templates
+  type: product_component
+  status: created
+  ref: 01KYQ4D9RY-A5SX
+- name: fc-msvc-ui-config
+  type: product_component
+  status: created
+  ref: 01KYQ4D9S1-D1J5
+- name: fc-msvc-mesh-bff
+  type: product_component
+  status: created
+  ref: 01KYQ4D9S4-24XM
+- name: fc-common-cloud-infrastructure
+  type: product_component
+  status: created
+  ref: 01KYQ4D9S6-88NN
+- name: fc-lambda-hiretransaction
+  type: product_component
+  status: created
+  ref: 01KYQ4D9S9-2P45
+- name: Util-EventListener-NetCore
+  type: product_component
+  status: created
+  ref: 01KYQ4D9SD-RPM9
+- name: fc-ui-track-forms
+  type: product_component
+  status: created
+  ref: 01KYQ4RP13-40QD
+- name: fc-ui-form-instances
+  type: product_component
+  status: created
+  ref: 01KYQ4RP16-KS6E
+- name: hcm-ui-dashboard
+  type: product_component
+  status: created
+  ref: 01KYQ4RP1A-MNCQ
+- name: hcm-ui-charts-widgets
+  type: product_component
+  status: created
+  ref: 01KYQ4RP1E-T0RS
+- name: hcm-field-renderer
+  type: product_component
+  status: created
+  ref: 01KYQ4RP1K-WWGX
+- name: fc-util-styles
+  type: product_component
+  status: created
+  ref: 01KYQ4RP1R-XTDS
+- name: Sofa King Central EventStore Migration Is Incomplete
+  type: decision_record
+  status: created
+  ref: 01KYQ57CQJ-8W48
+unresolvedQuestions:
+- id: q1
+  status: open
+  question: Do both the .NET Framework and .NET Core variants of sand-Employee and sand-Jobtype serve production traffic simultaneously, or is one dark?
+  reason: Both variants are present in each repository and the .NET Core variants ship Kubernetes manifests.
+  currentBestGuess: Both live, with traffic shifting to the .NET Core variant.
+  impact: Determines whether each repository needs one ProductComponent or two with different hosting and persistence.
+- id: q2
+  status: open
+  question: 'Is the SQL Server dependency in msvc-FormTemplate and sand-Employee''s .NET Core variant live, or an unused transitive reference?'
+  reason: System.Data.SqlClient and Microsoft.Data.SqlClient appear alongside Npgsql with no SQL Server connection string in source.
+  impact: 'Two persistence relationships are currently marked confidence: unconfirmed.'
+- id: q3
+  status: open
+  question: Is the Sofa King Central Event Listener (Util-EventListener-NetCore) the same service as Platform Msvc Eventlistener (msvc-EventListener)?
+  reason: Different repositories and solution names, but overlapping event-listener responsibilities. Modelled separately to avoid a wrong merge.
+  currentBestGuess: 'Distinct: msvc-EventListener updates Permissions ObjectContext, Util-EventListener-NetCore writes the Aurora read model.'
+  relatedObjects:
+  - ref: 01KYQ4D9SD-RPM9
+  - ref: 01KSM38KFY-PW52
+- id: q4
+  status: open
+  question: Should the Platform SDP stop referencing the twelve ProductComponents now homed in sofaking-central-engineering?
+  reason: 'The 2026-07-22 re-homing left the Platform SDP referencing the five it moved; this session followed that precedent for six more rather than editing another team''s SDP.'
+  impact: Both SDPs currently claim the same components.
+  relatedObjects:
+  - ref: 01KQQ5JT1J-DWT1
+- id: q5
+  status: open
+  question: 'Is the residual redisPrefix=hangfire-SandFile key in sand-File''s Web.config dead configuration?'
+  reason: The net8.0 project references no Hangfire package.
+  currentBestGuess: Dead config left from before the .NET 8 rewrite; no Redis relationship was authored.
+- id: q6
+  status: answered
+  question: Which team owns msvc-ProductAccess and at-svc-OrgPersonProcessor?
+  reason: Both are called by Sofa King Central but catalogued elsewhere.
+  currentBestGuess: 'Confirmed 2026-07-29: IDM owns msvc-ProductAccess (its endpoint resolves to login.sofaking.example/api) and Leave/Time owns at-svc-OrgPersonProcessor. Left in place; FC calls edges authored against their existing uids.'
+- id: q7
+  status: answered
+  question: 'Are the api2 List, Location and Organization APIs Sofa King Central''s or Platform''s?'
+  reason: They back endpoint keys the FC frontend consumes but no repository exists locally.
+  currentBestGuess: 'Platform''s: sand-List, sand-Location and sand-Organization all exist under ottoman-platform-engineering. Left in place.'
+- id: q8
+  status: open
+  question: Which modules serve /ec-useraccess/ and is Settee-UI-Module-Universal-Data-Importer the /ec-data-importer/ module?
+  reason: Neither repository is on the inspected device. The Data Importer module exists in the catalog under ottoman-platform-engineering.
+  currentBestGuess: Universal-Data-Importer serves /ec-data-importer/. No candidate found for /ec-useraccess/.
+assumptions:
+- id: a1
+  statement: 'EventStore.Client and MongoDB.Driver entries in the four stateless sand-* proxies are transitive SK.ServiceChassis dependencies, not direct persistence.'
+  rationale: The .NET Core rewrites of JobTypeApi and PermissionApi reference only SK.ServiceChassis and SK.PermissionsClient, and none of the four declares a connection string. No persistence relationships were authored for them.
+  impact: If wrong, four services are missing store edges.
+- id: a2
+  statement: The window.buildConfig endpoint map in Jarvis src/env-configs/production.json is the authoritative endpoint-key-to-service mapping for both shells.
+  rationale: 'fc-ui-shell reproduces the same key shape from .env via CONFIG_KEYS, and the shared React libraries read window.buildConfig.endpoint.<key> in both hosts.'
+  impact: All 40 frontend-to-API relationships derive from this mapping.
+- id: a3
+  statement: Loveseat and Elasticsearch are recorded as externalTarget rather than new shared-service objects.
+  rationale: Neither has a catalog object, and existing relationships elsewhere in this catalog already reference Loveseat Event Bus as an external target.
+  impact: If Shared Services later models either, these edges should be repointed to the new uid.
+nextSteps:
+- id: n1
+  status: open
+  action: Interview the FC service owners to close q1, q2, q3 and q5.
+  owner: sofaking-central-engineering
+- id: n2
+  status: open
+  action: Agree with Platform whether the Platform SDP should drop the twelve re-homed component references (q4).
+  owner: ottoman-platform-engineering
+- id: n3
+  status: open
+  action: Ask Shared Services to model Loveseat and Elasticsearch as first-class shared services so the external-target edges can be repointed.
+  owner: architecture-review-board
+- id: n4
+  status: open
+  action: 'Model the remaining Util-* shared libraries (Util-EventSourcing, Util-ServiceDiscovery, Util-SofaKingModels, Util-JsonApiSerializer, Util-EmployeeAPI, Util-JobtypeApi, core-hr-service-common) if library-level dependency tracking is wanted.'
+  owner: sofaking-central-engineering
+- id: n5
+  status: open
+  action: 'Rotate the two plaintext database credentials found during inspection: msvc-fc-credential src/SK.FC.Credential/appsettings.json and sand-Form source/FormApi/Web.config, both targeting the preprod Aurora cluster.'
+  owner: sofaking-central-engineering
+notes:
+  confluenceDeltas: 'Eight deltas against DEV/36544380944: two live frontend shells rather than one; msvc-fc-credential is PostgreSQL only, not Mongo; four CoreHR services are absent from the page; fc-msvc-mesh-bff is absent; EventStore removal is described as a goal but is incomplete; msvc-Permissions carries Elasticsearch, EventStore, DynamoDB and Mongo in addition to SQL Server; retail-institution search is OpenSearch; and the sand-* tier is not uniformly proxying - sand-Employee and sand-Form own a read model and Hangfire queue in the public tier.'
+  reuseDiscipline: 'An initial pass created duplicate sand-Form and sand-Jobtype components because the inventory scan was scoped to the sofaking-central-engineering folder. The duplicates were deleted before commit and a full-catalog repoUrl scan was run instead, which found 14 edge-list repositories already modelled under other teams'' folders.'
+  relationshipGraph: '301 relationship objects were generated, counted by label: 169 calls (129 declared service dependencies plus 40 frontend-to-API), 69 reads from and writes to, 32 composes, 13 sends events to, 9 loads at runtime, 7 publishes canonical events to, 1 registers event subscriptions with, 1 consumes events from. They are not enumerated individually in generatedObjects.'
+  generationMethod: Catalog content was generated from the section 6 edge list of the topology analysis rather than hand-authored, so every component and relationship traces to a named source-file observation.
+  estateAggregateDisposition: 'Sofa King Central Platform (01KQQ5JT0K-TN7W) was reviewed for deletion once per-service modelling superseded its placeholder role. Deleting it was tested and rejected: it would have introduced 22 validation failures, 9 of them dangling references from the OPS-255153 runtime-mapping session, the 2026-07-22 SDP completion session, and the accepted legacy-runtime-versions decision record. It also carried nine edges nothing else models - three inbound ingress routes, four runs-on runtimes confirmed by the product owner under OPS-255153, Okta authentication, and central logging, none of which the per-service components express. Software deployment patterns are used as a relationship source zero times in this catalog, so the edges had no conventional alternative anchor. Resolution: renamed to Sofa King Central Estate with the former name kept as an alias, description rewritten to state the aggregate role, and only the six now-redundant data-store calls edges removed.'

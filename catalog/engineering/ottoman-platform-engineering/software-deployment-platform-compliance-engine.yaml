@@ -1,0 +1,266 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-RYCC
+type: software_deployment_pattern
+ownerRole: engineer
+name: Platform Compliance Engine
+description: >-
+  Candidate Sofa King Platform deployment for a React/NGINX web frontend and a
+  Node.js/Express compliance-rule API on Amazon EKS, exposed through AWS
+  Application Load Balancer ingress and backed by AWS RDS for PostgreSQL. A
+  one-shot EKS migration Job applies the database schema before API rollout.
+  ArgoCD provides GitOps delivery, and the frontend and API participate in the
+  shared Kong Mesh through Kuma/Envoy data planes. Stage deploys to LE1;
+  production deploys to Chaise.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+businessContext:
+  pillar: business-pillar.platform
+  productFamily: Platform Compliance
+  notes: Pillar and owning team confirmed by the architecture owner on 2026-07-22.
+tags:
+  - software-deployment-pattern
+  - platform-compliance-engine
+  - sofaking-platform
+  - eks
+  - react
+  - nodejs
+  - postgresql
+  - argocd
+  - gitops
+  - kong-mesh
+  - kuma
+  - envoy
+  - service-mesh
+  - repository-discovery
+notes:
+  availabilityRequirement: >-
+    OPS-362835 requires horizontal pod autoscaling for stage and production, but
+    no availability target, replica range, recovery objective, or multi-AZ
+    database posture is yet documented.
+  dataClassification: >-
+    Internal (provisional). The observed schema stores products, policies,
+    immutable rules, compiled decisions, and validation-run context and audit
+    metadata without explicitly named PII fields. Because evaluation context is
+    caller supplied, owner and Information Security confirmation remains open.
+  failureDomain:
+    scope: service-group
+    description: >-
+      Frontend and API pod failures are isolated to their service groups and can
+      be rescheduled by EKS. A cluster-level LE1 or Chaise failure can affect both
+      application groups in that environment; RDS failure affects persistence and
+      database-aware API health. Exact multi-AZ and disaster-recovery posture is
+      unresolved.
+  patternDeviations: >-
+    No exact approved Reference Architecture is asserted. The preferred AWS EKS
+    Service Mesh Platform pattern covers EKS, GitOps, and mesh participation but
+    also assumes a broader gateway, identity, data-service, and serverless
+    platform shape not established for this deployment. The open decision record
+    preserves this gap until the Architecture Review Board confirms conformance
+    or selects a narrower pattern.
+  deploymentTargets: >-
+    All service groups deploy in AWS us-east-1. Staging uses the LE1 EKS cluster
+    in the Sofa King Integrations / Team_Platform_Stage context; production uses
+    the Chaise EKS cluster in Production Microservices. No development target is
+    asserted by this catalog entry.
+  deploymentMethod: >-
+    ArgoCD GitOps, using the preferred shared ArgoCD GitOps Service
+    (01KQQ5JT1E-01JZ), delivers the application workloads to staging on LE1 and
+    production on Chaise. The ArgoCD Application, Project, and environment
+    manifest locations remain to be linked as delivery evidence.
+  serviceMeshModel: >-
+    The frontend and API application pods are planned participants in the shared
+    Kong Mesh Service (01KYAXMZ7H-KJT2), using Kuma control planes and injected
+    Envoy-based data-plane sidecars. The shared standard records Kong Mesh/Kuma
+    2.8.6 for LE1 stage and 1.8.0 for Chaise production. Exact namespace
+    injection policy, mesh name, and workload annotations remain to be linked.
+    Mesh participation is not asserted for the one-shot database migration Job.
+  sourceRepositories:
+    - productService: 01KY5775KP-9YH4
+      repositoryName: BeerCanLabs/sk-platform-compliance-engine
+      sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: >-
+        react, nginx, product-policy-rule workflow, node 22, express,
+        postgresql, docker, eks
+    - productService: 01KY5775KP-FZPJ
+      repositoryName: BeerCanLabs/sk-platform-compliance-engine
+      sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: >-
+        node 22, express, CEL, ZEN engine, immutable rule versions,
+        validation-run audit, postgresql, docker, eks
+    - productService: 01KYJEE22K-42CS
+      repositoryName: BeerCanLabs/sk-platform-compliance-engine
+      sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+      repositoryPrimaryLanguage: SQL
+      observedRuntimeSignals: kubernetes job, dbmate 2, postgresql, eks
+  discoveryBoundary: >-
+    Local main commit 5c391fbe3afc342f0d711e8c768684af9bd15b55 was
+    crawled read-only on 2026-07-27. Jira issues
+    OPS-507039 and OPS-362835, the checked-in architecture diagrams, and
+    Atlassian EKS documentation were used as planned-deployment evidence.
+    Ticket- or diagram-only Python/FastAPI, a separate state service, S3, Lambda,
+    SQS, Bedrock, EventBridge, CloudWatch, and worker claims were not treated as
+    implemented because the current source tree does not contain deployable
+    implementations for them.
+serviceGroups:
+  - name: Service Mesh
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYAXMZ7H-KJT2
+        diagramTier: utility
+        notes: >-
+          Shared Kong Mesh/Kuma service providing Envoy data planes for the
+          frontend and API in LE1 and Chaise.
+  - name: GitOps Delivery
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT1E-01JZ
+        diagramTier: utility
+        notes: >-
+          Preferred shared ArgoCD service used for GitOps delivery to LE1 and
+          Chaise.
+  - name: Ingress
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        notes: Planned ALB ingress and routing boundary for each environment.
+  - name: Web Frontend
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    deployableObjects:
+      - ref: 01KY5775KP-9YH4
+        diagramTier: presentation
+  - name: Compliance API
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    deployableObjects:
+      - ref: 01KY5775KP-FZPJ
+        diagramTier: application
+  - name: Database Migration
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    deployableObjects:
+      - ref: 01KYJEE22K-42CS
+        diagramTier: utility
+        notes: Runs to completion before the API rollout in each environment.
+  - name: Compliance Data
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KY5775KP-YBP0
+        diagramTier: data
+      - ref: 01KY5775KP-AXH7
+        diagramTier: data
+tierVariants:
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Web Frontend
+        autoscaling:
+          enabled: true
+        notes: OPS-362835 requires HPA for stage.
+      - serviceGroup: Compliance API
+        autoscaling:
+          enabled: true
+        notes: OPS-362835 requires HPA for stage.
+    notes: >-
+      Staging deploys to the LE1 EKS cluster. Placement was confirmed by the
+      architecture owner on 2026-07-27.
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Web Frontend
+        autoscaling:
+          enabled: true
+        notes: OPS-362835 requires HPA for production.
+      - serviceGroup: Compliance API
+        autoscaling:
+          enabled: true
+        notes: OPS-362835 requires HPA for production.
+    notes: >-
+      Production deploys to the Chaise EKS cluster. Placement was confirmed by
+      the architecture owner on 2026-07-27.
+decisionRecords:
+  - ref: 01KY5775KP-6HWY
+    key: noApplicablePattern
+  - ref: 01KY5775KP-6HWY
+    key: deploymentTargets
+  - ref: 01KY5775KP-6HWY
+    key: deploymentMethod
+  - ref: 01KY5775KP-6HWY
+    key: serviceMeshModel
+  - ref: 01KY5775KP-6HWY
+    key: availabilityRequirement
+  - ref: 01KY5775KP-6HWY
+    key: externalDependencies
+  - ref: 01KY5775KP-6HWY
+    key: dataClassification
+  - ref: 01KY5775KP-6HWY
+    key: failureDomain
+  - ref: 01KY5775KP-6HWY
+    key: patternDeviations
+  - ref: 01KY5775KP-6HWY
+    key: interServiceConnections
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: decisionRecord
+    key: noApplicablePattern
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: deployment-targets
+    status: satisfied
+    mechanism: decisionRecord
+    key: deploymentTargets
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: availability-requirement
+    status: satisfied
+    mechanism: decisionRecord
+    key: availabilityRequirement
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: additional-interactions
+    status: satisfied
+    mechanism: decisionRecord
+    key: externalDependencies
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: data-classification
+    status: satisfied
+    mechanism: decisionRecord
+    key: dataClassification
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: failure-domain
+    status: satisfied
+    mechanism: decisionRecord
+    key: failureDomain
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: pattern-deviations
+    status: satisfied
+    mechanism: decisionRecord
+    key: patternDeviations
+    ref: 01KY5775KP-6HWY
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: inter-service-connections
+    status: satisfied
+    mechanism: decisionRecord
+    key: interServiceConnections
+    ref: 01KY5775KP-6HWY

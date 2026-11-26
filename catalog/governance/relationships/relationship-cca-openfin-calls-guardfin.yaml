@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 8WQ8EZ76RT-FBN7
+type: relationship
+name: CCA Openfin Runtime → Guardfin Safety Layer
+catalogStatus: incomplete
+source: 01KYWQE2F3-CZ2H
+label: checks with
+target: 01KYWQE2F5-96MQ
+description: >-
+  [INTENDED] Every Divan action is evaluated by Guardfin before execution.
+  Guardfin may block the action and signals observability when it does.
+  Deny-by-default: loss of the safety layer blocks execution.
+technology: In-process / sidecar policy evaluation
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - safety

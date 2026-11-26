@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+
+output/
+.history/
+.claude/worktrees/
+
+# Generated DRAFT browser output.
+# These are built from the catalog at deploy time by .github/workflows/deploy-pages.yml
+# and are deliberately not tracked: when two PRs each committed a regeneration, the
+# one that merged second silently dropped the other's objects from the artifact.
+# Regenerate locally to preview or verify your changes; the output stays untracked.
+docs/index.html
+docs/user-manual.html
+docs/company-vocabulary.html
+docs/assets/browser-data.js
+docs/diagrams/

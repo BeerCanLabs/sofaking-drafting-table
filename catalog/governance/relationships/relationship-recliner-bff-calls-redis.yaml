@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EC-A06A
+name: Recliner BFF API → Redis Caching Service
+catalogStatus: stub
+source: 01KSM38KGD-063V
+label: calls
+target: 01KQQ5JT00-191S
+notes:
+  background: >-
+    Redis is planned for Recliner BFF session management and caching. The deployed
+    service, TTL, persistence, encryption, and failover controls are not yet
+    confirmed; Theo Kane is the implementation SME.
+capabilities: []

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSG6-8N9Y
+type: relationship
+name: 'Sofa King Central Msvc Homepage → MongoDB Atlas'
+catalogStatus: stub
+source: 01KQQ5JT0K-EW4F
+target: 01KQQ5JT05-E3FZ
+label: reads from and writes to
+technology: MongoDB wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Primary document store.

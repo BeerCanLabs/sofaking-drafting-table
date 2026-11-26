@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-T40D
+type: technology_component
+ownerRole: technology-admin
+name: JasperSoft
+description: 'Provisional JasperSoft reporting software baseline for region reporting workloads. Exact edition, version, and deployment substrate need confirmation.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- reporting
+- jaspersoft
+classification: software
+vendor: TIBCO
+productName: JasperReports Server
+productVersion: unknown
+capabilities:
+- 01KT0XNZEY-70Y6

@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZY-G72Z
+name: IIS Standard Web Service → Enterprise DNS
+catalogStatus: stub
+source: 01KQQ5JT1F-HZTZ
+label: calls
+externalTarget: Enterprise DNS
+notes:
+  background: "Service registration and name resolution for web endpoints."

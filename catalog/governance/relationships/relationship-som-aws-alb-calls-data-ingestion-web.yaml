@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-MSWT
+type: relationship
+name: AWS Application Load Balancer -> SOM Data Ingestion Web
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+label: routes requests to
+target: 01KSM38KEW-G59V
+technology: HTTP
+direction: synchronous
+flow: outbound
+notes: A separate import/data-ingestion ALB routes traffic to SOM Data Ingestion targets over TCP 80 after SSL termination.

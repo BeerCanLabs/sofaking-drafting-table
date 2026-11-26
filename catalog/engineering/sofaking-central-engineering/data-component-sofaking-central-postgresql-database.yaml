@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0K-46AZ
+type: data_component
+ownerRole: engineer
+name: Sofa King Central Postgresql Database
+description: Sofa King Central PostgreSQL database
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KYAAZF97-HS3C
+tags:
+- repository-discovery
+- sofaking-central
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-fc-postgresql-database
+targetEngine: postgresql
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-fc-postgresql-database
+  observedRuntimeSignals: readme
+  observedManifestPaths: codeFreshCd/codefresh-deploy-manual.yml; codeFreshCi/codefresh-build.yml;
+    db-changelog.yaml; liquibase.advanced.flowfile.yaml; liquibase.checks-package.yaml;
+    liquibase.flowfile.yaml; liquibase.flowvariables.yaml
+  serviceAuthentication: Sofa King Central uses PostgreSQL username and password
+    authentication; Kerberos is not enabled.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: The Aurora PostgreSQL cluster has one writer and two readers
+    distributed across multiple Availability Zones.
+  scalabilityModel: Two Aurora readers provide read capacity in addition to the
+    writer.
+  recoverabilityModel: AWS Backup protects the cluster and creates immutable backup
+    copies in S3.
+  failureDomain: Scoped to the Sofa King Central Aurora cluster, its AWS account
+    and VPC, and the configured AWS region.

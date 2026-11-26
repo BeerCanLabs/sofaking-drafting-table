@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KT16XHKS-XBZJ
+type: decision_record
+name: Asset Management - Pattern Validation Evidence
+description: Architecture decisions promoted from catalog, repository, logging-strategy, and product-owner evidence so DRAFT validation can trace requirement evidence for Asset Management (Trackweb-IT). Updated 2026-08-06 from the completed AM Product Ownership and Component Verification questionnaire. See DecisionRecord 01KYRT1P14-Y2RH for scope.
+version: 3.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KF8-TKMW
+linkedObject: 01KSM38KF8-TKMW
+decisionRationale: |
+  deploymentTargets: Product ownership confirmed AWS-only deployment in
+  us-east-1. Production uses account 675180657723 and 90+ Windows Server 2022
+  EC2/IIS 10 hosts; non-production uses account 672459384728 and 10+ comparable
+  hosts, with separate accounts and networks. Serverless ETL is also us-east-1.
+  Owner verification reports SQL Server 2016 with 2008 compatibility and
+  production AlwaysOn. The catalog's shared SQL Server 2019 service reference
+  remains an explicitly tracked reconciliation item.
+
+  availabilityRequirement: High availability during the reported store-season
+  operating window of 7:00 AM Pacific through 9:00 PM Eastern. There is no web
+  farm or web-tier failover. An IIS application-pool failure affects one
+  region; a shared server failure affects all regions hosted on that server.
+
+  dataClassification: Restricted. AM stores customer and staff PII including
+  names, emails, phone numbers, addresses, classes, and courses, as well as
+  database, API-key, and SSO credential material.
+
+  failureDomain: TrackwebIT is one database per region; other databases are
+  shared. Production SQL uses AlwaysOn. APIs, mobile, and integrations can fail
+  independently; the serverless ETL stages are separated by MDM provider.
+
+  externalDependencies: The owner questionnaire confirms SAP, Sofa King ERP,
+  Google Workspace, Jamf Pro, Jamf Store, Microsoft Intune, Mosyle, ConfigCat,
+  Pendo, Salesforce mapping, Azure Application Insights, AWS CloudWatch,
+  Secrets Manager, SQS, Lambda, API Gateway, S3, and Delinea. AM-to-HelpDesk is
+  also identified. Per-dependency lifecycle status, Salesforce runtime status,
+  and the HelpDesk direction/authentication details remain open.
+
+  interServiceConnections: The questionnaire confirms the major Web, API,
+  mobile, notifications, ETL, MDM, CloudWatch, and shared-library paths.
+  Brannock ETL transport conflicts with prior repository evidence (SQL/TDS versus
+  HTTP), so that edge remains unresolved rather than silently overwritten.
+
+  source: https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/16800335071/Asset+Management+Product+Ownership+and+Component+Verification+Questions

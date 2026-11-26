@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-QQ9J
+type: technology_component
+ownerRole: technology-admin
+name: EventStoreDB
+description: 'Operational database for Event Sourcing.  Legacy database being decommissioned from Sofa King Central.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- database
+- event-sourcing
+- legacy
+vendor: Event Store Ltd
+productName: EventStoreDB
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Being replaced by AWS DynamoDB in Sofa King Central.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-eventstore-listener
+  name: Default EventStoreDB Listener
+  description: Default EventStoreDB client and HTTP API listener.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 2113
+    protocol: HTTP/gRPC
+    direction: inbound
+    description: Default EventStoreDB HTTP and gRPC listener.

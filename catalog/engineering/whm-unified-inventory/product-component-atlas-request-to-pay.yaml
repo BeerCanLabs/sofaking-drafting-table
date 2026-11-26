@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-WSNT
+type: product_component
+name: Atlas Request-To-Pay
+description: Phase 1, Module 1 of Atlas. Request intake; catalog check in parallel with approval routing; sends
+  the purchasing request to the partnering ERP; receiving creates asset records with partial receipt; surplus transfer
+  to sites. In the code today the request flows live in Atlas Workflow; this module is a scaffold.
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- request-to-pay
+- module
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-modules
+language: C#
+classification: api-service
+architectureNotes:
+  status: 'Source inspection 2026-11-13: whm-unified-modules develop holds Service.App.RequestToPay with a HealthController
+    only (main carries only the README). An ECR repository whm-unified-requesttopay is declared in sys-whm-unified-terraform.
+    C# confirmed by the .csproj.'
+  dependsOn: Workflow, Domain and Integration services per the V1 design; no calls in the code yet.

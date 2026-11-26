@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJDK-112H
+type: decision_record
+name: RabbitMQ Messaging Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-JBCV
+linkedObject: 01KQQ5JT1E-JBCV
+decisionRationale: "serviceAuthentication: Broker administrative and client identities use centralized secret distribution with broker-side authentication policy.\n\nsecretsManagement: credentials stored in a centralized secrets platform\n\nserviceLogging: Broker logs and queue events are forwarded to centralized logging beyond host-level collection.\n\nhealthWelfareMonitoring: Broker health probes, queue-depth telemetry, and platform monitoring track service welfare.\n\nfailureDomain: Scoped to the shared RabbitMQ cluster serving dependent workloads."

@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-TQ84
+type: host
+ownerRole: technology-admin
+name: Ubuntu 22.04 on EC2 Standard Host
+description: Stub host for Ubuntu 22.04 workloads on Amazon EC2 identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- ubuntu
+- aws
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-66EB
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1Q-66EB
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1P-FV8A
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

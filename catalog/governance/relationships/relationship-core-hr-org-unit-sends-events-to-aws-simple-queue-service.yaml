@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHN-B01T
+type: relationship
+name: 'Core HR Org Unit → AWS Simple Queue Service'
+catalogStatus: stub
+source: 01KYQ4D9RR-T700
+target: 01KQQ5JT05-0C4P
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: CoreHR event publication.

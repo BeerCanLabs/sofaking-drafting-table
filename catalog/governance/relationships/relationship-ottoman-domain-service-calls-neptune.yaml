@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DN-Z264
+name: Ottoman Domain Service → Amazon Neptune
+catalogStatus: stub
+source: 01KSM38KFW-WA83
+label: calls
+target: 01KQQ5JT05-TQSS
+notes:
+  background: "Domain Service reads and writes person, domain, and application relationship data to Neptune via WebSocket."
+capabilities: []

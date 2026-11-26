@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KYWPPQ2Q-8AE1
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Opsgenie Alerting Service
+description: Shared Atlassian Opsgenie SaaS service used to receive operational alerts from monitoring platforms such as PRTG.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+tags:
+  - service
+  - alerting
+  - incident-response
+  - opsgenie
+vendor: Atlassian
+productName: Opsgenie
+productVersion: Managed service
+capabilities:
+  - 01KQQ4Q026-98VD
+architectureNotes:
+  serviceAuthentication: Not yet confirmed.
+  serviceLogging: Not yet confirmed.
+  healthWelfareMonitoring: Receives and routes operational alerts from connected monitoring platforms; detailed integration and escalation configuration remains unconfirmed.
+  availabilityModel: Provider-managed SaaS; Sofa King-specific continuity behavior remains unconfirmed.
+  failureDomain: Provider-managed service plus Sofa King integration and routing configuration.
+notes:
+  sourceSession: Stubbed after owner confirmation in the Leave Management DRAFT L1 session that PRTG sends operational alerts to Opsgenie. Ownership and detailed service configuration remain to be completed.
+deliveryModel: saas

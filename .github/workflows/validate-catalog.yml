@@ -1,0 +1,28 @@
+name: Validate DRAFT Workspace
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  merge_group:
+
+jobs:
+  validate:
+    runs-on: [self-hosted, linux, docker]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependency
+        run: python -m pip install pyyaml
+
+      - name: Validate workspace
+        run: python .draft/framework/tools/validate.py --workspace .
+      - name: Check the skills projection is current
+        run: python .draft/framework/tools/validate_skills.py --workspace .

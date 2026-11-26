@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KZ9NXCX5-M6SK
+type: relationship
+name: Traefik Kubernetes Ingress Service → Recliner BFF API
+description: >-
+  A dedicated per-environment internet-facing AWS ALB delivers HTTPS traffic
+  to Traefik, which routes Recliner BFF requests to the BFF ClusterIP Service and
+  EKS pods.
+source: 01KYAXMZ7H-72BR
+target: 01KSM38KGD-063V
+label: routes requests to
+technology: HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - recliner
+  - traefik
+  - ingress
+notes: >-
+  Confirmed 2026-08-05 (OPS-306834) from the som-recliner repository:
+  infra/platform/aws_services.tf defines a Route53 CNAME
+  (recliner-bff-api*.ss.sofaking.example) pointing at a per-environment
+  internet-facing Traefik ALB. Confirmed hostnames: qa —
+  recliner-test-traefik-238087499.us-east-1.elb.amazonaws.com; stage —
+  recliner-stage-traefik-991177033.us-east-1.elb.amazonaws.com; dev retains a
+  bare recliner-bff-api.ss hostname (manually created, pre-dating the
+  per-environment naming convention). No Kong Gateway hop is evidenced
+  between this ALB and the BFF — see
+  relationship-recliner-kong-gateway-calls-bff.yaml for the superseded claim.

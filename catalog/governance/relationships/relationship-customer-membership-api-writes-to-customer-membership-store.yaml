@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-SH4K
+type: relationship
+ownerRole: engineer
+name: Customer Membership Service → Customer Membership Store
+description: The Customer Membership Service reads and writes customer store associations and uniqueness markers in its DynamoDB single-table store (transactional writes).
+source: 01KXR9XAR4-HKKE
+target: 01M5CS4D93-GMYC
+label: reads from and writes to
+technology: DynamoDB
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - planned

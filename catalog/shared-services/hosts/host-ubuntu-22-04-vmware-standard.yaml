@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-AQA9
+type: host
+ownerRole: technology-admin
+name: Ubuntu 22.04 on VMware Standard Host
+description: Ubuntu 22.04 LTS host for VMware-hosted platform workloads.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- ubuntu
+- vmware
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-66EB
+computePlatformComponent: 01KQQ5JT1P-NCBF
+internalComponents:
+- ref: 01KQQ5JT1Q-66EB
+  role: os
+- ref: 01KQQ5JT1P-NCBF
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent
+architectureNotes:
+  logging:
+    retention: Application logs are retained centrally for 90 days or more.

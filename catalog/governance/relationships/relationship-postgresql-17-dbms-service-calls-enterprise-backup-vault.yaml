@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Y8-SXMN
+name: PostgreSQL 17 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT00-X90C
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Off-host backup target and retention management."

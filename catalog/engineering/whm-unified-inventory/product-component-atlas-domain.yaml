@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-GJHM
+type: product_component
+name: Atlas Domain
+description: Core domain service for Atlas. Owns regions, sites, catalog, inventory and matching. Reads sites,
+  departments and warehouses from HCM Core HR and Core Config.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- domain
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-core
+language: C#
+classification: api-service
+architectureNotes:
+  sourcePath: Service.Core.Domain
+  dataOwnership: Reads and writes only its own table prefix in the per-tenant PostgreSQL database.
+  unconfirmed: 'Core HR reads are not implemented yet: the IDM OIDC client-credentials provider is wired and a diagnostic
+    check controller exists, but no Core HR HTTP client is in the repository. Connection to Shared Customer is planned
+    after V1.'
+  sourceInspection: Source inspection 2026-11-13 of whm-unified-core (develop, eece62e).
+  grpcSurface: DomainLookup (ListItemTypes, ListDepartments, ListSites, ListSiteRooms, ListCatalogItems), consumed
+    by Atlas Workflow.
+runtimeSpec:
+  ports:
+  - number: 8083
+    protocol: HTTP
+    direction: inbound
+    name: rest
+    description: REST listener (HTTP/1.1). Port from the local compose table in README.md; deployed ports come from
+      the SERVICE_ENDPOINTS secret.
+  - number: 8093
+    protocol: HTTP/2
+    direction: inbound
+    name: grpc
+    description: gRPC listener for service-to-service calls, guarded by ServiceTokenMiddleware (x-whm-service-token).
+      REST port + 10.
+  dependencies:
+  - ref: 01KWF3RGCF-T2HM
+    purpose: Startup configuration. Library.Shared.GlobalConstants fetches SERVICE_ENDPOINTS, SERVICE_TOKEN, GLOBAL_DATABASE_CONNECTION_STRING,
+      OKTA_TOKEN_* and M2M_OKTA_* under the whm/unified/<env>/ prefix when AWS_REGION is set.
+    interface: AWS SDK (GetSecretValue)

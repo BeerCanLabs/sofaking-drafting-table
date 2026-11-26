@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KZPC4ZXH-0PAM
+type: relationship
+name: CIS Util Customerinformation Syncer -> CIS Svc Syncer
+description: Each per-ITC DASLSyncer console application calls the central DASLSync API to obtain static CustomerInformation data before updating its local region database.
+catalogStatus: incomplete
+source: 01KYT8CCJT-4ARY
+label: obtains static CustomerInformation data from
+target: 01KYNVC9SQ-PAC8
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- sync
+- lsrcn
+notes: The authentication mechanism remains unconfirmed and is intentionally not inferred here.

@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-9P9S
+type: network_service
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Network Load Balancer
+description: 'AWS-managed layer-4 load balancer used for high-throughput TCP and TLS traffic distribution into Kubernetes-managed workloads.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+tags:
+  - aws
+  - load-balancing
+  - networking
+vendor: Amazon Web Services
+productName: Network Load Balancer
+productVersion: managed
+authenticationModel: other
+architectureNotes:
+  resilienceModel: Inherently multi-AZ when configured across multiple subnets.
+  configurableSurface: 'Listeners, target groups, health checks, subnet placement, static IP assignment, and Kubernetes service annotations.
+
+    '
+  failureDomain: Scoped to the AWS region, VPC, and configured target groups.
+  ottomanEvidence: >-
+    OPS-933430 read-only inspection on 2026-08-10 confirmed internet-facing
+    NLBs for Kong proxy TLS 443 to target port 8443 and Kong Mesh ingress TCP
+    10001 in development, stage, and production, plus internal Kong
+    control-plane NLBs. The observed Ottoman VPCs contained 14 load balancers
+    in development, 13 in stage, and 9 in production across NLB and ALB types.
+    Both development test data-plane NLBs were confirmed as necessary current
+    state by the Ottoman owner.
+capabilities:
+  - 01KSWVZSZ5-M0FR
+deliveryModel: paas
+networkFunction: load-balancing
+networkTopology: edge-ingress
+protocols:
+  - tcp
+  - tls
+decisionRecords:
+  - ref: 01KT16XJ93-MMSQ
+    key: resilienceModel
+  - ref: 01KT16XJ93-MMSQ
+    key: configurableSurface
+  - ref: 01KT16XJ93-MMSQ
+    key: failureDomain

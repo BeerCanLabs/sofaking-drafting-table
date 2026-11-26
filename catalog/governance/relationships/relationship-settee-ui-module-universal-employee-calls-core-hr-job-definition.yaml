@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP5Y-8WWA
+type: relationship
+name: 'Settee UI Module Universal Employee → Core HR Job Definition'
+catalogStatus: stub
+source: 01KSM38KGM-HF7D
+target: 01KYQ4D9RV-KPHB
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Resolved from the endpoint key this surface reads out of window.buildConfig.endpoint, mapped to its backing service through the Jarvis production env-config endpoint map.

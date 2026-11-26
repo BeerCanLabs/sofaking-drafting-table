@@ -1,0 +1,345 @@
+schemaVersion: '1.0'
+uid: 01KZ9NXCX5-3BT5
+type: drafting_session
+name: Project Recliner (National SOM) — Turn 1 DRAFT L1 Baseline and Engineering Cleanup (OPS-306834 / OPS-621219)
+description: >-
+  Closure work for OPS-306834 (APEX Turn 1 — DRAFT L1 Baseline Adoption for
+  Recliner), plus the follow-up engineering-domain catalog cleanup required by
+  OPS-621219. Confirms Recliner's L1 Baseline maturity status against the DRAFT
+  Architecture Maturity Rubric, and corrects two Confluence-sourced
+  architecture claims (BFF ingress path, mesh sidecar-injection coverage)
+  against direct evidence from the som-recliner repository, per Sean Holt's
+  request to use the repository as the source of truth for Recliner's current
+  design. The follow-up also records canonical repository provenance, removes
+  an unreferenced aggregate stub, and corrects reversed S3/Snowflake mappings.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - recliner
+  - ops-103055
+  - ops-103056
+  - draft-l1
+  - apex-turn-1
+  - maturity-rubric
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGH-A6GC
+sourceArtifacts:
+  - name: OPS-621219 — Recliner Engineering Domain Inventory and Ownership
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-621219
+    notes: >-
+      Follow-up closure checklist for owner/contact confirmation, component
+      boundaries, canonical repository provenance, correct S3/Snowflake
+      dependencies, cross-boundary posture, and a clean DRAFT validation run.
+  - name: OPS-306834 — Recliner APEX Turn 1 DRAFT L1 Baseline Adoption
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-306834
+    notes: >-
+      P2 Cloud Engineering task. Definition of Done requires the product
+      registered in DRAFT, software_deployment_pattern defined,
+      runtime/data-store/edge dependencies catalogued, ownership and service
+      boundaries explicit, non-standard technology documented, and DRAFT
+      validation run with final L1 status confirmed.
+  - name: BeerCanLabs/sk-som-recliner repository
+    type: other
+    location: https://github.com/BeerCanLabs/sk-som-recliner
+    notes: >-
+      Read directly as the source of truth per the requester's instruction.
+      infra/platform/aws_services.tf, infra/platform/variables.tf, the
+      per-environment infra/platform/{dev,qa,stage,prod}/terraform.tfvars
+      files, docs/Infra.md, and the infra/k8s/charts/*/templates/*.yaml Helm
+      charts were read to verify the BFF ingress path and mesh
+      sidecar-injection coverage.
+  - name: Recliner Infrastructure Architecture [DRAFT]
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/17155479503/Recliner+Infrastructure+Architecture+DRAFT
+    notes: >-
+      Re-read for this session. The page's own title carries a "[DRAFT]"
+      suffix — it documents a proposed design, not confirmed current state,
+      for the Kong/Ottoman gateway and Platform Service Mesh sections.
+  - name: DraftingSession — Recliner Edge and Network L1 Mapping (OPS-749918)
+    type: catalog
+    location: 01KYN60WJC-7D4Z
+    notes: >-
+      Prior session that closed OPS-749918. Its two most speculative
+      unresolved questions (exact-platform-ingress-path,
+      observe-mesh-injection) are answered in this session with direct repo
+      evidence rather than Confluence-only inference.
+generatedObjects:
+  - name: Recliner BFF API repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-063V
+  - name: Recliner Document Sharing and Transferring Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-6BPH
+  - name: Recliner Document Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-TY40
+  - name: Recliner Entity Locking Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-0JQM
+  - name: Recliner Identity Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-ACDC
+  - name: Recliner Report Data Provider Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGD-RFS7
+  - name: Recliner Customer Profile Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGE-BYBV
+  - name: Recliner Translation Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGE-R4FM
+  - name: Recliner User Service repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGE-BE0M
+  - name: Recliner Web Shell repository provenance
+    type: product_component
+    status: stubbed
+    ref: 01KSM38KGE-1JFK
+    notes: >-
+      These ten ProductComponents now point to the canonical
+      BeerCanLabs/sk-som-recliner monorepo and record observed repository
+      paths. The unreferenced SOM Recliner Platform aggregate stub
+      (01KSM38KGF-8N6G) was removed as superseded by this detailed inventory.
+  - name: Recliner Document Service → Amazon S3 Storage
+    type: relationship
+    status: created
+    ref: 01KSR5D4EG-8EW5
+    notes: Corrected the target from Snowflake to Amazon S3 without changing the relationship UID.
+  - name: Recliner Report Data Provider Service → Snowflake Data Cloud
+    type: relationship
+    status: created
+    ref: 01KSR5D4EJ-T14W
+    notes: Corrected the target from Amazon S3 to Snowflake without changing the relationship UID.
+  - name: Traefik Kubernetes Ingress Service → Recliner BFF API
+    type: relationship
+    status: created
+    ref: 01KZ9NXCX5-M6SK
+    notes: >-
+      Reuses the existing shared Traefik Kubernetes Ingress Service object
+      (01KYAXMZ7H-72BR, first authored for HCM RH and Tiers of Intensity)
+      rather than creating a new Recliner-owned copy, per the DRAFT reuse model.
+  - name: Kong Gateway Service → Recliner BFF API
+    type: relationship
+    status: created
+    ref: 01KSR5D4EB-33Q3
+    notes: Downgraded catalogStatus from complete to incomplete; corrected notes.
+  - name: Recliner Web Shell → Kong Gateway Service
+    type: relationship
+    status: created
+    ref: 01KSR5D4EA-6642
+    notes: Downgraded catalogStatus from complete to incomplete; corrected notes.
+  - name: Recliner .NET Core 8 on EKS Application Runtime → Platform Service Mesh
+    type: relationship
+    status: created
+    ref: 01KSKZV5ZK-7ZME
+    notes: Notes corrected to name recliner-loveseat-subscriber as the only chart with sidecar injection enabled.
+  - name: Recliner .NET Core 8 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KRZX0C11-QH66
+    notes: serviceAuthentication architectureNote corrected; version bumped to 1.2.0.
+  - name: Recliner .NET Core 8 on EKS Application Runtime Validation Evidence
+    type: decision_record
+    status: created
+    ref: 01KT16XJAT-51KQ
+    notes: serviceAuthentication decisionRationale corrected to match; version bumped to 1.2.0.
+  - name: Project Recliner (National SOM)
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KGH-A6GC
+    notes: >-
+      edgeNetworkStrategy, serviceMeshStrategy, sourceMaterial, component
+      repository provenance, and data-tier references corrected;
+      Traefik Kubernetes Ingress Service added as a reused deployable object
+      in the BFF & Ingress service group; version bumped to 1.5.0.
+  - name: Recliner Edge and Network L1 Mapping (OPS-749918)
+    type: drafting_session
+    status: created
+    ref: 01KYN60WJC-7D4Z
+    notes: >-
+      Two unresolved questions answered with repo evidence; stale nextSteps
+      corrected to reflect the already-merged PR #109.
+unresolvedQuestions:
+  - id: confirm-diagram-listed-external-integrations
+    question: >-
+      Which diagram-listed integrations are implemented today, and what are
+      their exact Recliner source components and protocols: AI Gateway,
+      DevExpress, Ad-hoc Reporting, AI Goals, Financing, RTI, Collaboration
+      Portal, Cross-Platform Customer Transfer, and SOM Sync?
+    status: deferred
+    reason: >-
+      These names came from architecture material, but this repository pass
+      did not provide enough evidence to create trustworthy first-class
+      relationships for every integration.
+    currentBestGuess: >-
+      DevExpress and ad-hoc reporting consume the Report Data Provider;
+      document transfer uses the Document Sharing and Transferring logical
+      service. The remaining source components and protocols require owner
+      confirmation.
+    impact: >-
+      Does not block L1 Baseline because the integrations are explicitly
+      tracked rather than silently asserted. Confirmed paths should be added
+      later as relationship objects.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+  - id: confirm-waf-posture
+    question: >-
+      Does Recliner's public CloudFront or BFF Traefik-ALB path use a
+      product-specific WAF, or is application-layer filtering entirely
+      provided by the shared platform?
+    status: deferred
+    reason: >-
+      Carried forward from OPS-749918. The som-recliner repository's Terraform
+      does not define a product-specific WAF resource for either path, but
+      that leave does not prove no shared-platform WAF applies upstream.
+    currentBestGuess: >-
+      No Recliner-owned WAF is evidenced in the repository; any filtering is
+      part of shared platform infrastructure until confirmed otherwise.
+    impact: >-
+      Does not block L1 Baseline; a confirmed WAF posture can be linked
+      later without changing the product boundary.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+      - ref: 01KZ9NXCX5-M6SK
+  - id: frontend-api-base-url-confirmation
+    question: >-
+      What API base URL does the built Recliner Angular application actually
+      call in each environment — the BFF's own Traefik-fronted hostname, or
+      some other gateway-fronted hostname?
+    status: deferred
+    reason: >-
+      No environment configuration file exposing a literal API base URL was
+      found during this session's repository review; the conclusion that the
+      web shell calls the BFF's own hostname is inferred from the BFF serving
+      the application's starting index.html, not from a directly observed
+      config value.
+    currentBestGuess: >-
+      The web shell most plausibly calls the BFF's own Traefik-fronted
+      hostname directly, matching the confirmed Traefik-to-BFF ingress path.
+    impact: >-
+      Confirming this would let relationship-recliner-web-shell-calls-kong-gateway.yaml
+      be replaced outright rather than left downgraded to incomplete.
+    relatedObjects:
+      - ref: 01KSR5D4EA-6642
+      - ref: 01KZ9NXCX5-M6SK
+assumptions:
+  - id: repo-supersedes-confluence-for-verified-claims
+    statement: >-
+      Where the som-recliner repository's checked-in infrastructure code and the
+      Recliner Infrastructure Architecture Confluence page disagree on a
+      specific, directly-observable claim, the repository is treated as
+      current source of truth and the Confluence page as a proposed design
+      that has since diverged, per the requester's explicit instruction.
+    rationale: >-
+      The Confluence page's own title carries a "[DRAFT]" suffix, and its
+      content describes itself as "our proposed infrastructure architectural
+      diagram" — it was never asserted as confirmed current state for the
+      specific claims corrected in this session.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+  - id: turn-1-scope-is-baseline-only
+    statement: >-
+      OPS-306834 requires DRAFT L1 Baseline Maturity (rubric level 1) — a
+      valid, schema-passing SDP with explicit unknowns tracked in a
+      DraftingSession — not Established or Apex maturity.
+    rationale: >-
+      The ticket title ("Turn 1 — DRAFT L1 Baseline Adoption") and Definition
+      of Done match the Baseline criteria in ARCHITECTURE_MATURITY.md, not
+      the Established or Apex criteria.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+nextSteps:
+  - id: confirm-diagram-listed-integrations
+    action: >-
+      SOM Recliner engineering to confirm the active diagram-listed integrations,
+      source components, and protocols, then add first-class relationships for
+      the confirmed cross-boundary paths.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+  - id: confirm-frontend-api-base-url
+    action: >-
+      SOM Recliner engineering to confirm the built Angular application's actual
+      configured API base URL per environment, closing
+      frontend-api-base-url-confirmation.
+    status: open
+    owner: som-special-programs-management-engineering
+  - id: confirm-kong-hop-disposition
+    action: >-
+      SOM Recliner engineering or the Architecture Review Board to confirm
+      whether the Kong-to-BFF hop is still planned, already retired, or was
+      never implemented, and update the two Kong relationships from
+      incomplete to their final status.
+    status: open
+    owner: som-special-programs-management-engineering
+  - id: close-ops-306834
+    action: >-
+      Link this merged catalog change and the maturity scorecard below in
+      Jira, then close OPS-306834.
+    status: open
+    owner: cloud-engineering
+  - id: close-ops-621219
+    action: >-
+      Merge the DRAFT-only engineering cleanup, link the pull request and
+      validation result in Jira, and close OPS-621219.
+    status: open
+    owner: cloud-engineering
+notes:
+  maturityScorecard: |
+    ## DRAFT Architecture Maturity Scorecard: Project Recliner (National SOM)
+
+    ### Overall Maturity: Baseline
+
+    | Level | Status | Core Gaps / Action Items |
+    | :--- | :--- | :--- |
+    | **Baseline** | Pass | None blocking. |
+    | **Established** | Not scored | Out of scope for OPS-306834 (Turn 1). |
+    | **Apex** | Not scored | Out of scope for OPS-306834 (Turn 1). |
+
+    #### 1. Baseline Level
+    - [x] Valid `software_deployment_pattern` exists at
+      catalog/engineering/som-special-programs-management-engineering/software-deployment-som-recliner.yaml
+      (uid 01KSM38KGH-A6GC), matching the team's ownership path.
+    - [x] `python .draft/framework/tools/validate.py --workspace .` reports
+      zero Recliner-tagged warnings or failures after this session's
+      corrections (1,946 catalog files validated).
+    - [x] Remaining unknowns (WAF posture, exact platform ingress path
+      upstream of Imperva, frontend API base URL, Kong-hop disposition, and
+      diagram-listed external integrations) are explicitly tracked in this
+      session and in DraftingSession 01KYN60WJC-7D4Z rather than left silent.
+
+    ### Score mapping: 1 — Baseline
+  scoringMethod: >-
+    Ran Phase 1 (Validate & Verify) of the five-phase procedure in
+    ARCHITECTURE_MATURITY.md against the Recliner SDP. Phases 2–3
+    (Established/Apex) were not executed — out of scope for a Turn 1 / L1
+    Baseline ticket.
+  validationStatus: >-
+    python .draft/framework/tools/validate.py --workspace . run 2026-08-06
+    after the OPS-621219 corrections: no blocking failures; no Recliner-tagged
+    warnings; 1,946 catalog files validated successfully.
+  catalogCleanup: >-
+    OPS-621219 follow-up retired the unreferenced SOM Recliner Platform aggregate
+    stub, preserved all referenced object UIDs, corrected the Document Service
+    to Amazon S3 and Report Data Provider to Snowflake relationships, and
+    replaced placeholder component repository URLs with direct som-recliner
+    provenance. Current Traefik and partial-mesh evidence is separated from
+    proposed Kong and broader mesh intent.

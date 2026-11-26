@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SP-QNB7
+type: product_component
+ownerRole: engineer
+name: CIS BFF Householdaccess
+description: Backend-for-frontend API for the Householdaccess mobile app. Deployed separately from the Householdaccess web application, though built from the same repo. Owned/deployed by the CIS team; consumed by the Mobile team's mobile app.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- sis
+- lakeshore
+- tillbook
+- bff
+- parent-access
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-app-householdaccess
+language: C#
+classification: api-service
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Resolved on 2026-07-30 per product owner — this is a separate deployment (Householdaccess.Mobile.Api) built from the same repo as CIS App Householdaccess, not embedded within it and not the same service as CIS BFF Exago. CIS team owns and deploys this API; the Mobile team owns the mobile app that consumes it.
+  repositoryName: BeerCanLabs/sk-cis-app-householdaccess
+  observedManifestPaths: app/Householdaccess.Mobile.Api/Householdaccess.Mobile.Api.csproj
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

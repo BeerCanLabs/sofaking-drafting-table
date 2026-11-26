@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ99-XF91
+type: decision_record
+name: F5 BIG-IP Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT00-Z6WV
+linkedObject: 01KQQ5JT00-Z6WV
+decisionRationale: "resilienceModel: Deployed in HA pairs.\n\nconfigurableSurface: Virtual servers, pools, and iRules.\n\nfailureDomain: Scoped to the ADC cluster."

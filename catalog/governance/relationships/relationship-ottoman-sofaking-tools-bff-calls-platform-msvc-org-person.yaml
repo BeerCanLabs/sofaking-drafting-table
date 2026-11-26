@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: VZE9NDWSGQ-6K3B
+name: Ottoman Sofa King Tools BFF → Platform Msvc Org Person
+catalogStatus: stub
+source: 01KSM38KFX-J6Z2
+label: calls
+target: 01KSM38KFH-NYK5
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via .env.example mesh URL in apps/plat-bff-sofaking-tools (plat-passport-monorepo). Supersedes/corrects a prior dependency-list reference to the legacy Ottoman OrgPerson Service (01KSM38KFX-9EQ8); see architectureNotes.dependencyCorrection on the source ProductComponent."
+capabilities: []

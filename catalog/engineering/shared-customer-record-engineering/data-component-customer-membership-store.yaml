@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D93-GMYC
+type: data_component
+ownerRole: engineer
+name: Customer Membership Store
+description: >-
+  DynamoDB single-table store owned by the Customer Membership service, holding
+  CustomerstoreAssociation items and transactional uniqueness-marker items. Table
+  SS_CustomerMembership_{Environment} uses a pk/sk key schema with one global
+  secondary index (gsi1, list by org and store year), on-demand billing, and
+  DynamoDB Streams (NEW_AND_OLD_IMAGES) feeding an EventBridge Pipe that filters
+  to CustomerstoreAssociation items only. Planned per the service spec.
+version: 0.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+runsOn: 01KQQ5JT04-K58R
+targetEngine: dynamodb
+dataClassification: confidential
+containsPII: true
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - dynamodb
+  - single-table
+  - planned
+  - data-component
+tables:
+  - name: SS_CustomerMembership
+    description: >-
+      Single-table design (pk/sk + gsi1). Item types CUSTOMERSTOREASSOCIATION and
+      UNIQUENESSMARKER (ORG#{orgId}#SITE#...#CUSTOMER#...#ENTRY#...). Streams enabled
+      (NEW_AND_OLD_IMAGES) with an exact-match Pipe filter on
+      sk = CUSTOMERSTOREASSOCIATION so markers are never published.
+    containsPII: true
+retentionPolicy: >-
+  Soft-delete only: records are tombstoned and never hard-deleted by the service;
+  a tombstone releases the uniqueness marker so the business key can be reused.
+  PITR off in dev, on in stage and prod. Formal retention and purge policy not yet
+  defined.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryPrimaryLanguage: C#
+  observedManifestPaths: >-
+    src/deploy/Deploy/Shared/Storage/DynamoDbTableResources.cs;
+    src/deploy/Deploy/CustomerMembershipCoreStack.cs;
+    docs/architecture/membership-service-spec.md
+  keySchema: >-
+    Partition key pk (String), sort key sk (String). gsi1pk = ORG#{orgId}#YEAR#{storeYear},
+    gsi1sk = CUSTOMERSTOREASSOCIATION#{id}, projection ALL, live items only. Only
+    one GSI is provisioned; by-customer, by-site, and cross-year reads are not
+    supported in v1. Encryption AWS-managed.
+  classificationRationale: >-
+    Entry/exit dates and grade level are FERPA directory information and customerId
+    links to PII; treated as confidential pending Data/Security confirmation of
+    confidential vs restricted.
+  throughputNote: Spec records a roughly 500 writes/s ceiling per org and store year; bulk CIS ingestion is deferred.

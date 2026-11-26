@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-WH7R
+type: technology_component
+ownerRole: technology-admin
+name: Amazon SSM Agent
+description: AWS Systems Manager agent used for remote management and patch orchestration.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- management
+classification: agent
+vendor: Amazon
+productName: SSM Agent
+productVersion: current
+platformDependency: external.ops.aws-systems-manager
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Lifecycle is managed by the AWS service.
+capabilities:
+- 01KT0XNZEY-35Y2
+- 01KQQ4Q026-BH6E

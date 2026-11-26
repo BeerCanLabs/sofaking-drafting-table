@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-6F7S
+type: product_component
+ownerRole: engineer
+name: Leave Event Processor
+description: Leave Event Processor
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-event-processor
+language: C#
+classification: worker
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-event-processor
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: SK.Rotaops.EmailTemplates/SK.Rotaops.EmailTemplates.csproj;
+    SK.Rotaops.EventProcessor/SK.Rotaops.EventProcessor.csproj; SK.Rotaops.Test.EventProcessor/SK.Rotaops.Test.EventProcessor.csproj;
+    SK.AppBase.EventProcessor/SK.AppBase.EventProcessor.csproj; SK.EventProcessorService/SK.EventProcessorService.csproj;
+    SK.EventProcessorService/Subscriptions.json; GitVersion.yml; abs-event-processor.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

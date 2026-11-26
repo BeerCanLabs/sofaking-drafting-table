@@ -1,0 +1,345 @@
+schemaVersion: '1.0'
+uid: 01KYMPHRH4-9VP1
+type: software_deployment_pattern
+ownerRole: engineer
+name: Tiers of Intensity
+aliases:
+  - Tier Calculation API
+  - tier-calc-api
+description: >-
+  Standalone Special Orders Management deployment that centralizes
+  TEA-aligned Tiers of Intensity calculations. Product events flow through
+  AWS SNS and SQS to a containerized Lambda adapter, which invokes a stateless
+  ASP.NET Core API through each environment's internal Traefik load balancer
+  on Amazon EKS. The API calculates results and publishes them to
+  product-specific SNS topics. ArgoCD deploys the API to LE1 for
+  non-production and Chaise for production.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Special Orders Management
+  notes: >-
+    Tiers of Intensity is operated by SOM Engineering but is modeled as its own
+    product deployment because it serves SE, shopstar, and SOM integrations rather
+    than being an Recliner-internal service group.
+tags:
+  - software-deployment-pattern
+  - tiers-of-intensity
+  - som
+  - customer-solutions
+  - eks
+  - lambda
+  - sqs
+  - sns
+  - argocd
+  - ferpa
+  - pii
+followsReferenceArchitecture: 01KQQ5JT1D-D614
+scalingUnits:
+  - name: Calculation API pods
+    type: replicable
+    instanceCount: 2
+    notes: >-
+      Every checked-in environment starts two replicas and uses an HPA range of
+      two to four replicas at 70 percent CPU.
+  - name: Queue worker invocations
+    type: replicable
+    instanceCount: 10
+    notes: >-
+      The SQS event-source mapping delivers up to ten messages per invocation;
+      Lambda timeout is 30 seconds, memory is 512 MB, and reserved concurrency
+      is ten.
+  - name: Managed messaging
+    type: shared
+    notes: >-
+      Regional AWS-managed SNS and SQS services provide multi-AZ event delivery,
+      queueing, retry, and dead-letter handling.
+availabilityRequirement: >-
+  High availability for staging and production. The API uses two replicas,
+  health probes, and autoscaling from two to four pods. Lambda, SQS, and SNS
+  use AWS-managed regional availability.
+dataClassification: >-
+  Restricted FERPA-protected customer information and PII. Payloads include
+  customer identifiers, CDP metadata, domain evidence, provider credentials,
+  services, and source references.
+failureDomain:
+  scope: service-group
+  description: >-
+    Individual API pod failures are isolated and rescheduled by EKS. A cluster
+    outage affects the API in that environment: LE1 for development, QA, and
+    staging; Chaise for production. Lambda, SQS, and SNS are regional
+    us-east-1 managed-service dependencies.
+patternDeviations: >-
+  The deployment follows the AWS EKS Multi-Tenant Microservices pattern for
+  EKS, managed messaging, and GitOps, but intentionally has no presentation
+  UI or durable data tier. A serverless Lambda adapter consumes SQS before
+  calling the stateless API.
+deploymentTargets: >-
+  Development, QA, and staging use the LE1 EKS context. Production uses
+  Chaise. Stage enters LE1 through
+  dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com;
+  production enters Chaise through
+  dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com.
+  Both are internal Traefik load-balancer endpoints in us-east-1.
+notes:
+  deploymentMethod: >-
+    ArgoCD GitOps deploys the API Kubernetes resources. Terraform provisions
+    SNS, SQS and DLQ resources, the Lambda worker, IAM, CloudWatch logging, and
+    Cognito resources.
+  dataHandling: >-
+    The calculation API is stateless and performs no database or remote lookup
+    in the calculation path. SQS message retention is four days, DLQ retention
+    is fourteen days, both queues use SQS-managed server-side encryption, and
+    Lambda CloudWatch logs retain records for 365 days.
+  securityPosture: >-
+    AWS messaging access uses IAM. The source supports an optional shared API
+    key on the Lambda queue-batch endpoint, but checked-in deployment evidence
+    does not prove it is enabled. Synchronous calculation endpoints have no
+    application authentication middleware. These current-state risks are
+    preserved in decision record 01KYMPFAPR-YF1D.
+  ingressRouting: >-
+    The Lambda worker reaches the EKS-hosted API over HTTPS through the
+    environment's internal Traefik load balancer. Stage uses
+    dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com
+    on LE1. Production uses
+    dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com
+    on Chaise. Traefik then routes to the calculation API ClusterIP Service,
+    which targets the API pods on container port 8080.
+  sourceRepositories:
+    - productService: 01KX18GPWW-93YA
+      repositoryName: BeerCanLabs/sk-som-tiers-of-intensity
+      sourceRepository: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: >-
+        ASP.NET Core 10, REST API, health probes, stateless deterministic
+        calculation, SNS result publishing, container image
+      observedManifestPaths: >-
+        src/TierCalc.Api, Dockerfile, .github/workflows/tier-calc-api-ci.yml
+    - productService: 01KX18GPWW-8CJS
+      repositoryName: BeerCanLabs/sk-som-tiers-of-intensity
+      sourceRepository: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: >-
+        .NET 10 Lambda container, SQS event mapping, partial batch failure
+        responses, HTTPS queue-batch client
+      observedManifestPaths: >-
+        src/TierCalc.Lambda.SqsWorker, src/TierCalc.Queue.Application,
+        src/TierCalc.Queue.Infrastructure
+  discoveryBoundary: >-
+    Application origin/main commit fc727888dd2bd3be32ccde3363417c20152ac376,
+    k8s-deployments origin/main commit
+    52cfaaaf667e2e4390cd25004fac6577e736048c, and Terraform commit
+    9a133d2a2ed983aecec2a212e01f55149941b1a9 were reviewed read-only on
+    2026-07-28. No source, Kubernetes, or Terraform repository was modified.
+networkZones:
+  - id: ingress
+    name: Cluster Ingress
+    tier: frontend
+    description: >-
+      Internal AWS load-balancer endpoints front Traefik, which routes to the
+      API ClusterIP Service and EKS pods.
+  - id: application
+    name: Calculation Application
+    tier: application
+    description: Stateless API pods running on EKS in LE1 or Chaise.
+  - id: managed-integration
+    name: AWS Managed Integration
+    description: Regional SNS, SQS, DLQ, and Lambda execution boundary in us-east-1.
+  - id: operations
+    name: Deployment Operations
+    description: ArgoCD GitOps reconciliation boundary for the API manifests.
+serviceGroups:
+  - name: Kubernetes Ingress
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYAXMZ7H-72BR
+        networkZone: ingress
+        diagramTier: presentation
+        notes: >-
+          Existing internal load balancers front Traefik ingress. Stage uses
+          dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com
+          on LE1; production uses
+          dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com
+          on Chaise. Traefik routes to the calculation API ClusterIP Service.
+  - name: Calculation API
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    scalingUnit: Calculation API pods
+    deployableObjects:
+      - ref: 01KX18GPWW-93YA
+        networkZone: application
+        diagramTier: application
+        notes: >-
+          Stateless ASP.NET Core 10 API on EKS with two replicas, readiness and
+          liveness probes, resource bounds, and HPA scaling to four pods.
+  - name: Event Queue
+    deploymentTarget: aws-us-east-1
+    scalingUnit: Managed messaging
+    deployableObjects:
+      - ref: 01KQQ5JT05-0C4P
+        networkZone: managed-integration
+        diagramTier: utility
+        notes: >-
+          Per-environment queue with a 300-second visibility timeout, four-day
+          retention, long polling, five receives before redrive, and a
+          fourteen-day DLQ.
+  - name: Queue Worker
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT05-CT7X
+    scalingUnit: Queue worker invocations
+    deployableObjects:
+      - ref: 01KX18GPWW-8CJS
+        networkZone: managed-integration
+        diagramTier: application
+        notes: >-
+          Containerized Lambda worker triggered by SQS with partial batch
+          failure reporting and reserved concurrency of ten.
+  - name: Product Notifications
+    deploymentTarget: aws-us-east-1
+    scalingUnit: Managed messaging
+    deployableObjects:
+      - ref: 01KQQ5JT05-HTRA
+        networkZone: managed-integration
+        diagramTier: utility
+        notes: >-
+          Input ProductEvents topics and product-specific SE-TOI, Shopstar-TOI,
+          and SOM-TOI result topics.
+  - name: GitOps Delivery
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT1E-01JZ
+        networkZone: operations
+        diagramTier: utility
+        notes: ArgoCD reconciles the API manifests into LE1 and Chaise.
+tierVariants:
+  - tier: SZJVW70BTN-V6GX
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Calculation API
+        autoscaling:
+          enabled: true
+          min: 2
+          max: 4
+      - serviceGroup: Queue Worker
+        autoscaling:
+          enabled: true
+          max: 10
+        notes: Lambda reserved concurrency is ten.
+    notes: Development uses the LE1 non-production EKS and AWS account context.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Calculation API
+        autoscaling:
+          enabled: true
+          min: 2
+          max: 4
+      - serviceGroup: Queue Worker
+        autoscaling:
+          enabled: true
+          max: 10
+        notes: Lambda reserved concurrency is ten.
+    notes: The Test tier represents the checked-in QA environment on LE1.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Calculation API
+        autoscaling:
+          enabled: true
+          min: 2
+          max: 4
+      - serviceGroup: Queue Worker
+        autoscaling:
+          enabled: true
+          max: 10
+        notes: Lambda reserved concurrency is ten.
+    notes: >-
+      Staging uses the LE1 non-production EKS and AWS account context. Its
+      internal Traefik load balancer is
+      dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com.
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    serviceGroupVariants:
+      - serviceGroup: Calculation API
+        autoscaling:
+          enabled: true
+          min: 2
+          max: 4
+      - serviceGroup: Queue Worker
+        autoscaling:
+          enabled: true
+          max: 10
+        notes: Lambda reserved concurrency is ten.
+    notes: >-
+      Production uses the Chaise EKS and Production Microservices context.
+      Its internal Traefik load balancer is
+      dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com.
+decisionRecords:
+  - ref: 01KYMPF7PJ-N4Y2
+    key: interServiceConnections
+  - ref: 01KYMPWBAY-JDQ4
+    key: externalDependencies
+  - ref: 01KYMPFAPR-YF1D
+    concern: authentication and deployment configuration
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: field
+    key: followsReferenceArchitecture
+    equals: 01KQQ5JT1D-D614
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: deployment-targets
+    status: satisfied
+    mechanism: field
+    key: deploymentTargets
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: availability-requirement
+    status: satisfied
+    mechanism: field
+    key: availabilityRequirement
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: additional-interactions
+    status: satisfied
+    mechanism: decisionRecord
+    key: externalDependencies
+    ref: 01KYMPWBAY-JDQ4
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: data-classification
+    status: satisfied
+    mechanism: field
+    key: dataClassification
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: failure-domain
+    status: satisfied
+    mechanism: field
+    key: failureDomain
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: pattern-deviations
+    status: satisfied
+    mechanism: field
+    key: patternDeviations
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: inter-service-connections
+    status: satisfied
+    mechanism: decisionRecord
+    key: interServiceConnections
+    ref: 01KYMPF7PJ-N4Y2

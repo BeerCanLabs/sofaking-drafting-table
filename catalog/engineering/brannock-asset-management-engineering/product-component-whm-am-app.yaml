@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-QFJ1
+type: product_component
+ownerRole: engineer
+name: Whm Am App
+aliases:
+  - Legacy Trackweb-IT Platform
+description: Trackweb-IT, the RETAIL asset/inventory management web application (legacy ASP.NET Web Forms + MVC on .NET Framework 4.8, solution TrackwebITApp.sln). Merged into this catalog entry from a duplicate hand-authored stub, "Legacy Trackweb-IT Platform" (former uid 01KSM38KF8-VQ4B, retired) - see DecisionRecord 01KYRT1P14-Y2RH.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- whm
+- product-component
+- asset-management
+- trackweb
+- dotnet-framework
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_App
+language: C#
+classification: api-service
+runtimeRequirement: .NET Framework 4.8 (ASP.NET Web Forms + MVC, IIS-hosted); Unity DI; LINQ-to-SQL ORM.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_App
+  observedRuntimeSignals: cloudformation, dotnet, github_actions, readme
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; .specify/extensions.yml; .specify/extensions/git/config-template.yml; .specify/extensions/git/extension.yml; .specify/extensions/git/git-config.yml; .specify/init-options.json; .specify/integration.json; .specify/integrations/copilot.manifest.json; .specify/integrations/speckit.manifest.json; .specify/workflows/speckit/workflow.yml
+  serviceAuthentication: 'ASP.NET Forms Authentication (web.config); per-user AuthenticationType supports Normal (local credentials), LDAP, or SSO, each configurable per region (SSO IdP label/protocol/domain are Regionsettings keys). Service-to-service and report-server calls use a self-issued JWT (HMAC-SHA256, ~5 min validity) minted by SecurityTokenProviderService.cs. Session state is externalized to Redis (RedisSessionStateProvider), implying multi-instance IIS deployment behind a load balancer. Confirmed via TrackwebIT/web.config, UserManagement.aspx.cs, HelperClasses/Authentication/SecurityTokenProviderService.cs.'
+  secretsManagement: 'Plain XML app-settings config files (WebConnectionStrings.config, WebSiteAppSettings.config) read via a custom ApplicationSettingsReader.cs, not a vault. Dev-tier config has plaintext secrets (JWT secret, AWS keys, SAP password) in WebSiteAppSettings.config. Production connection strings use deploy-time token substitution ({AM_SERVER}, {AM_DATABASE}, etc.) filled in by the release pipeline (TrackwebIT.Releases/BuildScripts/deploy.AM.config.ps1) - no vault/secrets-manager confirmed for the web tier itself (contrast with SSIS/ETL_MSA, which use Delinea Secret Server and AWS Secrets Manager).'
+  serviceLogging: 'NLog (NLog.config): dual sinks - AWS CloudWatch Logs (log group AMIMMApplication, us-east-1) and a file-target FallbackGroup (network share + local temp, returnToFirstOnSuccess). Layout is pipe-delimited text, but call-site convention mandates NLog message templates with named properties for queryability. Log level is overridable per-region from tblUnvRegionPreference.NLOGLoggingMinLevel; startup fails fast if targets are missing (Global.asax.cs ValidateLoggingConfiguration). LoggerProxy.cs wraps NLog behind an ILogger interface for DI.'
+  healthWelfareMonitoring: 'Two health-check endpoints (SiteRenderCheck.aspx, SiteDbCheck.ashx) delegate to SiteHealthCheck.cs, which runs a live SQL query against tblUnvRegionPreferences to prove DB connectivity. Microsoft Application Insights APM is wired in (ApplicationInsights.config, CustomTelemetryInitializer.cs), enabled/disabled per-region via a RegionPreference instrumentation-key setting. Separate AWS-side CloudWatch alarms/metric filters/SNS notifications cover the Lambda/ETL layer (see BuildArtifacts infra).'
+  availabilityModel: 'Web tier deploys to a shared IIS web root over a network share (multiple IIS servers per environment, per deploy.AM.config.ps1), with session externalized to Redis - consistent with a load-balanced IIS pool rather than a single instance. Data tier is per-region single-tenant SQL Server database (naming pattern Trackweb<Env><Region>, e.g. TrackwebNonProdPinecrestregion).'
+  scalabilityModel: 'Web/app tier scales by fixed named IIS web roots with no evidence of autoscaling (traditional IIS deployment, not container/cloud-native). Redis provides distributed session + shared cache (RedisCacheService), with an in-process MemoryCacheService fallback, both configurable per-region. The separate AWS Lambda-based MDM/ETL microservices this app calls out to are serverless and natively autoscaling - a materially different scalability model from this web tier.'
+  recoverabilityModel: 'Thin at the app layer beyond a local backup folder referenced during release deploys (deploy.AM.config.ps1). Database and infrastructure-level recoverability (DB migration rollback scripts, CDK/CloudFormation and Lambda rollback runbooks) is documented and owned by WHM_AM_BuildArtifacts (see 01KSM38KFB-4JYM).'
+  failureDomain: 'Per-region blast-radius isolation at the data layer: each region has its own SQL Server database, and cross-cutting settings (Redis enablement, App Insights key, NLog level) are stored/read per-region via RegionPreference. However the web/app tier itself is a shared multi-tenant IIS deployment serving multiple region databases from the same pool, so an app-tier crash or bad deploy has a blast radius shared across whichever regions are hosted on that instance/pool.'
+  externalDependencies: 'AWS (CloudWatch Logs, S3 for MDM data files); Google Workspace/GSuite and JAMF MDM device sync (via an external ETL server base URL - the AM ETL microservices, 01KSM38KFB-G3T3); SAP via SOAP/WCF (binding zbn_trackweb_asset_chg against SAP NetWeaver [PRO/010]) for asset/location sync; ConfigCat (feature flags, via an internal proxy); Pendo (product analytics); Salesforce (account-ID correlation for Pendo only); Microsoft Application Insights; GrapeCity ActiveReports (in-process reporting library); a Notifications SOAP web service (trackwebhelp.example/TrackwebNotifications/WebService.asmx - the same service modeled as 01KSM38KFB-7ZWT). SFTP client code exists but its own comment marks it unused/superseded by S3.'

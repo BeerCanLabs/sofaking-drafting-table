@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: PK0WKHVVEA-J069
+type: relationship
+name: CCA Console (Front Door) → JSM Service Desk
+catalogStatus: incomplete
+source: 01KYX7W8V9-PABC
+label: creates service requests in
+target: 01KYWQE2EY-55NE
+description: >-
+  [DOCUMENTED] The Console BFF (cca-console server/src/jira.ts) holds its own
+  scoped Atlassian service-account credential and calls the Jira/JSM REST API
+  directly (api.atlassian.com) to create the governing Service Request, add
+  comments, and drive workflow transitions on behalf of the signed-in user --
+  still under the hood, never a user-facing JSM entry. This is the second
+  credentialed JSM writer alongside the JSM Divan's run-lifecycle ticket I/O;
+  consolidation to a single writer is a flagged follow-up (Jordan Hale
+  review, 2026-07-31), not current state.
+technology: HTTPS (Atlassian REST API via api.atlassian.com)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - ticket-io
+  - jsm
+  - front-door

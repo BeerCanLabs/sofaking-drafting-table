@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-18NV
+type: decision_record
+name: HCM RH EKS Runtime Operational Architecture
+description: >-
+  Traceable operational evidence for the Node.js 20 and ASP.NET Core 9 HCM RH
+  application runtimes on Amazon EKS.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - hcm-rh
+  - eks
+  - runtime
+  - adr
+category: decision
+status: open
+affectedComponent: 01KSM38KG7-42XD
+linkedObject: 01KSM38KG7-42XD
+decisionRationale: >-
+  serviceAuthentication: Ottoman provides trusted user context and OAuth 2.0
+  protects service-to-service calls. secretsManagement: Kubernetes secrets
+  and AWS Secrets Manager provide runtime credentials, with non-sensitive
+  settings supplied through ConfigMaps. serviceLogging: Node.js server logs
+  and ASP.NET Core structured Serilog output are collected by the platform
+  logging pipeline. healthWelfareMonitoring: Kubernetes readiness and liveness
+  probes report workload health. recoverabilityModel: Kubernetes replaces
+  failed pods and SQS dead-letter queues preserve failed asynchronous work.
+  failureDomain: Workload failures are isolated to a Kubernetes Deployment
+  inside the regional EKS cluster. Status remains open pending Recruiting &
+  Hiring team and ARB ratification; this does not block recording the observed
+  current-state L1 runtime mapping.

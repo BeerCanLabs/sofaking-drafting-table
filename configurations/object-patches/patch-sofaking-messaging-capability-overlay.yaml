@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJB-4CWP
+type: object_patch
+name: Sofa King Messaging capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Messaging capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-KT72
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1V-Y71K
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the RabbitMQ Messaging Service Standard.

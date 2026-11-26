@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 66B6KHNJHV-P14R
+type: relationship
+name: RT ERP Application Server → Postfix Mail Service
+catalogStatus: incomplete
+source: 01KSM38KEX-PX7B
+label: sends application mail through
+target: 01KQQ5JT1E-TT1N
+technology: SMTP port 25
+direction: asynchronous
+flow: outbound
+notes: >-
+  The RT ERP application and Tomcat workload use the region Gateway-B
+  Postfix relay as the configured SMTP host.
+capabilities:
+  - 01KT0XNZEY-KPTW

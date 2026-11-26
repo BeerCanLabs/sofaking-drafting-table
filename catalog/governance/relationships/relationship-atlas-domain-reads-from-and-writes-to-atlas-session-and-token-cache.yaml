@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: N69JA5SAPK-ZF2J
+type: relationship
+name: Atlas Domain → Atlas Session and Token Cache
+description: IDM client-credentials tokens are cached per tenant in that tenant's Redis under the idmtoken namespace
+  (Cache:Provider=Redis).
+catalogStatus: stub
+source: 01M5WY4E7P-GJHM
+target: 01M7D4BSC5-G81X
+label: reads from and writes to
+technology: Redis protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. IDM client-credentials tokens are cached per tenant in that
+    tenant's Redis under the idmtoken namespace (Cache:Provider=Redis).
+  evidence: 'whm-unified-core develop: Libraries/BuildingBlocks/IdmOidcAuth/Library.Shared.IdmOidcAuth/IdmOidcAuthExtensions.cs,
+    Service.Core.Domain.App/appsettings.json'

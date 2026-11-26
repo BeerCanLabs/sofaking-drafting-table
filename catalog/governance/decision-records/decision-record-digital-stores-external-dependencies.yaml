@@ -1,0 +1,82 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-56TA
+type: decision_record
+name: Digital Stores External Dependencies And Service Connections
+category: decision
+status: accepted
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Enumerates every external dependency and service-to-service connection confirmed for Digital
+  Stores Suite+ as of 2026-09-08, and records which of them are registered as DRAFT objects and which
+  are not. Answers question 7.1 of the DRAFT L1 Baseline Questionnaire and closes the
+  noAdditionalInteractions claim previously carried on the pattern, which asserted Pendo as the only
+  external interaction. That claim was incomplete. External dependencies, confirmed: Pendo product
+  analytics at us1.app.pendo.io, allow-listed in the EntityAPI CORS policy and keyed as PENDO_DS in
+  dshpConfig.service.ts; Imperva WAF, vendor-managed SaaS, fronting *.digital-showrooms.example; a
+  self-hosted Confluence instance at Conf6152.dsh-aws.local serving the client Help Book, also called
+  the Blue Book, on a Digital Stores-operated EC2 host in us-west-1 rather than on the Atlassian
+  Cloud tenant; Jaspersoft, a separately paid custom-report and data-extract service running ten
+  nightly extracts; an SFTP host at ftp.digital-showrooms.example as the extract delivery channel; and
+  Active Directory domain controllers DCW06, DCW08, DCE10 and Saline2. Service connections,
+  confirmed: Web UI to EntityAPI over HTTPS REST, same-origin; Imperva to the AWS load balancer;
+  the load balancer to the shared IIS origin per region; EntityAPI to SQL Server over TDS, resolving
+  a region database per request; EntityAPI to the DS_Admin catalog on every request; and Jaspersoft
+  to SQL Server to build the nightly extracts. The owner confirmed on 2026-09-08 that the Web UI never
+  reaches SQL Server directly, so no presentation-to-data crossing exists. Retired rather than active:
+  the Matillion ETL job set that incrementally loaded AWS Redshift from the applogPR, applogAL,
+  applogQA and applogSU databases, and the AWS Data Pipeline start and stop jobs, both struck through
+  on the Scheduled Tasks page and superseded by AWS Instance Scheduler (corrected 2026-10-20 from Park
+  My Cloud; see SoftwareDeploymentPattern 01KRZ1GCH3-99RF notes.scheduledJobs. Needs Validation.), with
+  the Matillion instance recorded as stopped in the AWS Backup server list. Retired dependencies are
+  recorded here for traceability and are deliberately not modeled as active. The registered-object gap
+  for the confirmed service connections is dispositioned separately on DecisionRecord 01M263WKS2-NR3T,
+  so that each decision record stays 1:1 with the single requirement it disposes.
+version: 1.1.1
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- external-dependencies
+- owner-confirmed
+linkedObject: 01KRZ1GCH3-99RF
+affectedComponent: 01KRZ1GCH3-99RF
+decisionRationale: >-
+  Two authoring decisions were made in preference to guessing or over-modeling. First, this record is
+  the disposition object for the additional-interactions entry of requirement group 01KQQ4Q027-VK45,
+  recorded as satisfied because the interaction set is now enumerated and owner-confirmed. The related
+  inter-service-connections entry is dispositioned separately on DecisionRecord 01M263WKS2-NR3T, as
+  not-compliant, because DRAFT models cross-boundary links as relationship objects and only three
+  exist - Web UI to EntityAPI (01M0GBWMZJ-RC84), Imperva to load balancer (01M12W6R3B-ZHCN) and load
+  balancer to Web UI (01M12W486T-6VP1); keeping the two dispositions on separate records keeps each
+  1:1 with its requirement, per DRAFT's decision-record scoping rule. Second, the newly confirmed
+  dependencies are not modeled as DRAFT objects in this change. Confluence, Jaspersoft, the SFTP host
+  and the domain controllers are real and active, but each needs a type decision that the available
+  evidence does not settle - whether the self-hosted Confluence is a Technology Component on a Host or
+  a Product Service, whether Jaspersoft is a Product Service or a Data-at-Rest consumer, whether the
+  domain controllers belong to Digital Stores or to a shared identity service - and DRAFT's
+  conservative modeling rule is not to mint objects to fill a slot. Registering them is named
+  explicitly as the remaining structural L1 gap on the pattern's notes.l1Readiness. Pendo is not
+  treated as a monitoring or observability dependency for the same reason spelled out there: it is
+  product analytics, and the actual observability stack is CloudWatch and Nagios at the host level
+  with no APM, which is recorded on the pattern rather than here.
+impact: >-
+  Corrects an under-stated dependency picture. The pattern previously asserted Pendo as the only
+  external interaction evidenced in source, which was true of the source read and false of the
+  product: two of the newly confirmed dependencies move Confidential data. Jaspersoft reads region
+  data from the SQL Server estate and writes ten customer extracts nightly to an SFTP host, which is a
+  data egress path that was entirely absent from DRAFT and is not covered by any recorded data
+  classification, retention or access control in the catalog. The self-hosted Confluence Help Book is
+  an internet-adjacent EC2 host inside the Digital Stores account whose patch and access posture is
+  not recorded anywhere. Both should be in scope for the Hearthstone requirement disposition still tracked
+  as open in DraftingSession 01M0GBWMZJ-8XYB, and the Jaspersoft extract path should be reviewed
+  against Sofa King's vendor risk and data classification policies given that it is described as an
+  extra paid third-party service handling customer data.
+mitigationPath: >-
+  Register the confirmed external dependencies as DRAFT objects with the correct taxonomy decisions,
+  prioritizing the Jaspersoft extract path and the SFTP host because they carry Confidential data off
+  the platform. Tracked as the register-external-dependencies next step in DraftingSession
+  01M0GBWMZJ-8XYB. This record should be revised rather than superseded as those objects land. The
+  missing relationship objects for the confirmed service connections are tracked separately on
+  DecisionRecord 01M263WKS2-NR3T.

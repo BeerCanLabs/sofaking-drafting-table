@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KZPGKK4K-S538
+type: relationship
+name: AWS Network Load Balancer → Kong Mesh Service
+description: >-
+  Ottoman Kong Mesh ingress Services expose TCP port 10001 through
+  internet-facing AWS Network Load Balancers in development, stage, and
+  production.
+catalogStatus: complete
+source: 01KQQ5JT05-9P9S
+target: 01KYAXMZ7H-KJT2
+label: forwards mesh ingress traffic to
+technology: TCP
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - aws
+  - nlb
+  - kong-mesh
+  - ottoman
+notes: >-
+  Confirmed by read-only inspection of ottm-dev, ottm-stage, and ottm-prod on
+  2026-08-10 for OPS-933430.

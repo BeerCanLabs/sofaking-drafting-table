@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-VBBS
+type: host
+ownerRole: technology-admin
+name: Red Hat Enterprise Linux 9 Physical Standard Host
+description: Stub host for Red Hat Enterprise Linux 9 workloads on physical Dell PowerEdge infrastructure.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- rhel
+- physical
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-Z3ER
+computePlatformComponent: 01KQQ5JT1P-9G0K
+internalComponents:
+- ref: 01KQQ5JT1Q-Z3ER
+  role: os
+- ref: 01KQQ5JT1P-9G0K
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

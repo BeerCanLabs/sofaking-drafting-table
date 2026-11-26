@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYT8CCJT-4ARY
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation Syncer
+description: DASLSyncer console app deployed at each ITC; calls the DASLSync API (see CIS Svc Syncer) to pull static CustomerInformation data from the Pristine database and update the local region database.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-syncer
+language: Visual Basic .NET
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery while investigating whether this repo was the same component as the whiteboard-captured CIS Svc Syncer. It is not — this is the console app half of the same repo; the API half is cataloged separately as CIS Svc Syncer (DASLSync/).
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-syncer
+  observedManifestPaths: DASLSyncer/DASLSyncer.vbproj
+  serviceAuthentication: Not confirmed; explicitly flagged as an open question by the product owner on 2026-07-31 during a broader auth review — owner was not sure what authentication the syncer uses. Requires follow-up.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

@@ -1,0 +1,110 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF1-Z1SJ
+type: software_deployment_pattern
+ownerRole: engineer
+name: WSERP Desktop Hosted
+aliases: [WSERP Desktop, Abacus OL5, Online 5]
+description: >-
+  Hosted deployment pattern for the WSERP Desktop client/server product. Windows
+  workstation clients connect over an application-specific encrypted TCP protocol
+  to customer-specific Desktop application servers in XCOLO. Desktop uses the same
+  per-customer SQL database as WSERP Portal and Web.
+version: 2.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.ws-erp-abacus-engineering
+  productFamily: WSERP
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, desktop, ol5, windows, vmware, client-server, hosted]
+notes:
+  documentationScope: Infrastructure-evidenced current state; application, network, database, and file-cluster details await owning-team validation.
+  availabilityRequirement: High; no numeric SLO, SLA, RPO, or RTO has been confirmed.
+  dataClassification: Restricted PII exists in the customer database and Documents share.
+  failureDomain:
+    scope: service-group
+    description: Desktop application-server failures are generally isolated to one customer; shared SQL or Documents cluster failures can affect all hosted customers.
+  deploymentTargets: Hosted production and customer Test/UAT run at XCOLO; engineering Dev/QA/Stage run at High Point; customers may also operate on-premises deployments.
+  virtualization: VMware is used in XCOLO and High Point.
+  operatingSystem: Windows Server 2022 is widely deployed, with a few Windows Server 2019 hosts remaining; older versions may remain only on-premises.
+  sizing: 2 vCPU, 8 GB RAM, and 50 GB disk per hosted Desktop application VM.
+  ingress: Internet -> Fortinet FortiGate -> F5 BIG-IP DSR -> Desktop application server; Desktop cannot traverse the Imperva WAF.
+  transport: Default TCP port 7886; ports are assigned per customer deployment. Application-layer proprietary encryption is used rather than TLS.
+  availability: Two active/active production VMs per customer in most cases; one Test/UAT VM; manual scale-out when customer load requires it.
+  fileAccess: Desktop servers access the Documents share over SMB; workstation clients have no direct share access.
+  onlineShopping: WebComm runs on a customer Desktop server on HTTP port 8001 for OL5; it has no general HTTP authentication and uses BuyerCookie correlation.
+  operations: >-
+    VM creation is template-based; Windows setup is manual; Automox patches monthly;
+    Nagios XI and Dynatrace monitor host and service health; capacity management is
+    reactive; no automated drift detection or scheduled resilience testing exists.
+  recoverability: Lost application VMs restore from Veeam; schedule, retention, offsite protection, restore testing, RPO, and RTO remain unconfirmed.
+  noApplicablePattern: No approved reference architecture accurately represents this legacy customer-specific client/server deployment.
+networkZones:
+  - id: public-edge
+    name: Public Edge
+    tier: frontend
+    description: FortiGate and F5 DSR ingress for Desktop clients.
+  - id: desktop-app
+    name: Desktop Application
+    tier: application
+    description: Customer-specific Windows application servers.
+  - id: data
+    name: Shared Customer Data
+    tier: data
+    description: Shared SQL and Documents clusters with customer-specific databases and paths.
+serviceGroups:
+  - name: Desktop Workstation Client
+    deploymentTarget: customer-hosted
+    notes: Installed on Windows capable of running .NET Framework 3.5.
+    deployableObjects:
+      - ref: 01KSM38KF0-QYHD
+        diagramTier: presentation
+        networkZone: public-edge
+  - name: Desktop Application Servers
+    deploymentTarget: xcolo-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: Customer-specific Windows VMware VMs behind F5 Direct Server Return.
+    deployableObjects:
+      - ref: 01KSM38KF3-745H
+        diagramTier: application
+        networkZone: desktop-app
+  - name: Customer Database
+    deploymentTarget: xcolo-datacenter
+    notes: Separate database per customer on shared SQL Server clusters; DMT owns platform details.
+    deployableObjects:
+      - ref: 01KSM38KF3-3RT8
+        diagramTier: data
+        networkZone: data
+tierVariants:
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Desktop Application Servers
+        replicaCount: 2
+        autoscaling: {enabled: false}
+        notes: Typical active/active count per customer; manually scaled further when required.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Desktop Application Servers
+        replicaCount: 1
+        autoscaling: {enabled: false}
+    notes: Test and Training are UAT using unmasked production database restores; production Documents are not copied and production security controls apply.
+  - tier: SZJVW70BTN-V6GX
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering development topology; exact replica counts are unconfirmed.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering QA/staging topology; exact replica counts are unconfirmed.
+decisionRecords:
+  - {ref: 01KT16XHJ0-H0HC, key: noApplicablePattern}
+  - {ref: 01KT16XHJ0-H0HC, key: deploymentTargets}
+  - {ref: 01KT16XHJ0-H0HC, key: availabilityRequirement}
+  - {ref: 01KT16XHJ0-H0HC, key: dataClassification}
+  - {ref: 01KT16XHJ0-H0HC, key: failureDomain}
+  - {ref: 01KT16XHJ0-H0HC, key: patternDeviations}
+  - {ref: 01KT16XHJ0-H0HC, key: externalDependencies}
+  - {ref: 01KT16XHJ0-H0HC, key: interServiceConnections}

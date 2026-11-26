@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-YPRZ
+type: product_component
+ownerRole: engineer
+name: Leave Mosjobchecker
+description: MOS Job Checker
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-mosjobchecker
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-mosjobchecker
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: GitVersion.yml; MosJobChecker/MosJobCheckerConsole.csproj;
+    MosJobCheckerErrorReader/MosJobCheckerErrorReader.csproj; MosJobCheckerService/MosJobCheckerService.csproj;
+    MosJobCheckerTestClient/MosJobCheckerTestClient.csproj; abs-mosjobchecker.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

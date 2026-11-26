@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2EY-55NE
+type: runtime_service
+name: CCA JSM Service Desk (Governance and Ticket I/O)
+description: >-
+  [DOCUMENTED] Jira Service Management service desk that is the governance,
+  approval, and ticket-I/O surface for the Cloud Divan Academy platform -- reached
+  UNDER THE HOOD, not the user's entry point. The human-facing front door is the
+  CCA Console (with a planned Slack side door); the JSM Divan performs the actual
+  ticket I/O. Every governed run is ticket-bound (no JSM ticket = no execution),
+  and approvals, status, and the human-readable audit trail live on the ticket.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - front-door
+  - jsm
+deliveryModel: saas
+vendor: Atlassian
+productName: Jira Service Management
+productVersion: Cloud
+networkPlacement: public-facing
+authenticationModel: saml
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: Atlassian Cloud tenant (US), per corporate Atlassian agreement.
+  dpaNotes: Covered by the existing Sofa King-Atlassian data processing agreement.

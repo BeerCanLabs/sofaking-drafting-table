@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG7-3MMY
+type: product_component
+ownerRole: engineer
+name: RH Mobile Retailjobspot Android App
+description: RETAIL Job Spot Mobile repository
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- rh
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-rh-mobile-retailjobspot-android-app
+language: Kotlin
+classification: api-service
+runtimeRequirement: JVM (Java/Kotlin)
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-rh-mobile-retailjobspot-android-app
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: app/build.gradle.kts; app/src/dev/google-services.json; app/src/prod/google-services.json; app/src/qa/google-services.json; build.gradle.kts
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

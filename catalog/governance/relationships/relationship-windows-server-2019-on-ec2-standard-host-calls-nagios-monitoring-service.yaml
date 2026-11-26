@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z8-B892
+name: Windows Server 2019 on EC2 Standard Host → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT03-C74W
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Legacy infrastructure monitoring for remaining Windows 2019 hosts through the Nagios XI Legacy XI Agent configuration."
+capabilities:
+- 01KQQ4Q026-98VD

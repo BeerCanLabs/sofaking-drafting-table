@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-4060
+type: runtime_service
+ownerRole: technology-admin
+name: Dapr Sidecar Service
+description: 'Standard Dapr sidecar service pattern for microservice communication.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - mesh
+  - sidecar
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1R-B7GP
+architectureNotes:
+  serviceAuthentication: 'Mutual TLS (mTLS) is enforced for all sidecar-to-sidecar communication.
+
+    '
+  secretsManagement: 'Integrates with Kubernetes secrets or external secret stores like  AWS Secrets Manager.
+
+    '
+  serviceLogging: 'Dapr sidecar logs are exported to centralized logging via the  cluster''s logging agent.
+
+    '
+  healthWelfareMonitoring: 'Welfare is monitored via Dapr health endpoints and Prometheus metrics.
+
+    '
+  availabilityModel: 'Availability is tied to the lifecycle of the application pods where  the sidecar is injected.
+
+    '
+  scalabilityModel: 'Scales horizontally with the application pod replicas.
+
+    '
+  recoverabilityModel: 'Automatic sidecar injection and recovery via Kubernetes pod orchestration.
+
+    '
+  failureDomain: 'Impact is scoped to the individual application pod or the cluster.
+
+    '
+internalComponents:
+  - ref: 01KQQ5JT1R-B7GP
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJD9-J9TT
+    key: serviceAuthentication
+  - ref: 01KT16XJD9-J9TT
+    key: secretsManagement
+  - ref: 01KT16XJD9-J9TT
+    key: serviceLogging
+  - ref: 01KT16XJD9-J9TT
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJD9-J9TT
+    key: availabilityModel
+  - ref: 01KT16XJD9-J9TT
+    key: scalabilityModel
+  - ref: 01KT16XJD9-J9TT
+    key: recoverabilityModel
+  - ref: 01KT16XJD9-J9TT
+    key: failureDomain

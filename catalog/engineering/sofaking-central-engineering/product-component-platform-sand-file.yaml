@@ -1,0 +1,52 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFT-TS9E
+type: product_component
+ownerRole: engineer
+name: Platform Sand File
+description: 'Public FileAPI for Sofa King Central. Coarse-grained edge API that authorizes callers and forwards to internal msvc-* services behind the private subnet. Holds its own persistence in the public tier.'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- source-inspection
+- sofaking-central
+- public-api
+- sand-tier
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-sand-File
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: FileAPI
+  protocol: REST
+  path: api2.sofaking.example/FileAPI/api
+  authenticationModel: oauth
+  description: Bearer-token authorized public edge API; accepted scopes skapi.public and skapi.internal.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-sand-File
+  observedProjects: FileApi (net8.0, ASP.NET Core)
+  observedTargetFrameworks: net8.0
+  observedHostingModel: ASP.NET Core
+  observedPersistence: SQS only.
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: FileApi.sln; source/FileApi/FileApi.csproj; tests/FileApi.Tests/FileApi.Tests.csproj
+  serviceAuthentication: Authentication model was not confirmed by source inspection; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by source inspection; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by source inspection; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by source inspection; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by source inspection.
+  scalabilityModel: Scalability model was not confirmed by source inspection.
+  recoverabilityModel: Recoverability model was not confirmed by source inspection.
+  failureDomain: Failure domain was not confirmed by source inspection.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-sand-File
+  repositoryPrimaryLanguage: C#
+  publicApiRoute: api2.sofaking.example/FileAPI/api
+  dotnetMigrationState: 'Migrated - the only sand-* project fully on .NET 8. A residual redisPrefix=hangfire-SandFile key remains in Web.config but the net8.0 project references no Hangfire package; treated as vestigial config.'
+  declaredServiceDependencies: FileService, PermissionsService, DataImportService
+  sourceEvidence: 'Local working-copy inspection 2026-07-29: project files, packages.config/*.csproj package references, and appsettings/Web.config connection strings.'

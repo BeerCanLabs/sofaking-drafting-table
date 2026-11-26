@@ -1,0 +1,347 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHS-4695
+type: drafting_session
+ownerRole: engineer
+name: Ottoman Compute and Runtime L1 Mapping (OPS-433061)
+description: >-
+  Compute and runtime baseline work for OPS-433061. Replaces direct host and
+  generic EC2-backed runtime references on the observed Ottoman workloads with
+  governed Ottoman EKS RuntimeServices and records current cluster evidence
+  from development, stage, and production.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+sessionStatus: resolved
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - session
+  - ottoman
+  - ops-104695
+  - compute-and-runtime
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KG2-ZB6W
+sourceArtifacts:
+  - name: OPS-433061 Compute and Runtime L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-433061
+    notes: >-
+      Defines the Platform (Ottoman) DRAFT L1 compute and runtime review and
+      assigns Cloud Engineering orchestration, validation, and final status.
+  - name: ottm-dev Kubernetes context
+    type: other
+    location: kubecontext:ottm-dev
+    notes: >-
+      Read-only workload, scaling, service, disruption, pod, namespace, and
+      worker-node observations collected on 2026-07-31.
+  - name: ottm-stage Kubernetes context
+    type: other
+    location: kubecontext:ottm-stage
+    notes: >-
+      Read-only workload, scaling, service, disruption, pod, namespace, and
+      worker-node observations collected on 2026-07-31.
+  - name: ottm-prod Kubernetes context
+    type: other
+    location: kubecontext:ottm-prod
+    notes: >-
+      Read-only workload, scaling, service, disruption, pod, namespace, and
+      worker-node observations collected on 2026-07-31.
+  - name: Ottoman Passport monorepo runtime evidence
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+    notes: >-
+      Root and app package manifests plus five image-specific Dockerfiles pin
+      Node.js 24.14.1. Production metadata shows one shared release tag across
+      Passport Core, both BFFs, and both UIs.
+  - name: Ottoman core-service runtime evidence
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-plat-svc-domain
+    notes: >-
+      Domain, Invitation, and Organization service repositories each pin Node.js
+      24.14.1 in package.json and Dockerfile; the other repository URLs are
+      recorded on their ProductComponents.
+  - name: Ottoman org-person runtime evidence
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-msvc-org-person
+    notes: >-
+      package.json and Dockerfile confirm JavaScript on Node.js 24.14.1.
+generatedObjects:
+  - name: Ottoman Node.js 22 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KZ2MRPHN-N022
+  - name: Ottoman EKS Runtime Operational Architecture
+    type: decision_record
+    status: created
+    ref: 01KZ2MRPHR-0PS1
+  - name: Ottoman Platform
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KG2-ZB6W
+  - name: Ottoman Test Application
+    type: product_component
+    status: created
+    ref: 01KZ2MRPHT-TAPP
+  - name: Ottoman Load Test
+    type: product_component
+    status: created
+    ref: 01KZ2MRPH7-10AD
+  - name: Node.js 24
+    type: technology_component
+    status: created
+    ref: 01KZ2MRPH2-N024
+  - name: Node.js 14
+    type: technology_component
+    status: created
+    ref: 01KZ2MRPH1-N014
+  - name: Ottoman Node.js 24 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KZ2MRPHN-N024
+  - name: Ottoman Node.js 14 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KZ2MRPHN-N014
+unresolvedQuestions:
+  - id: auxiliary-workload-classification
+    question: >-
+      Are plat-ottoman-testapp and the production-only, zero-replica
+      plat-ottoman-loadtest deployment governed product components, test
+      tooling, or temporary operational utilities?
+    status: answered
+    reason: >-
+      The user explicitly classified both workloads as ProductComponents.
+    currentBestGuess: >-
+      Model both as governed ProductComponents in the Ottoman product boundary.
+    impact: >-
+      Both workloads are now represented in the catalog and Ottoman SDP as
+      testing and validation workloads.
+  - id: auxiliary-workload-source-and-runtime
+    question: >-
+      Are the provisional JavaScript language and Node.js 22 runtime mappings
+      correct for plat-ottoman-testapp and plat-ottoman-loadtest?
+    status: answered
+    reason: >-
+      The user directed Draftsman to inspect the confirmed repositories.
+      Default-branch package.json and Dockerfile evidence provides exact runtime
+      versions for both components.
+    currentBestGuess: >-
+      Ottoman Test Application uses TypeScript/NestJS 11 on Node.js 24.14.1;
+      Ottoman Load Test uses TypeScript/NestJS 7 on Node.js 14.15.0.
+    impact: >-
+      Each component now maps to a version-specific EKS RuntimeService. Node.js
+      14 is recorded as an end-of-life, non-standard current-state choice.
+  - id: loadtest-nodejs-14-disposition
+    question: >-
+      Should Ottoman Load Test be upgraded from end-of-life Node.js 14.15.0 or
+      retired if the dormant production workload is no longer needed?
+    status: answered
+    reason: >-
+      The user explicitly directed that the component be upgraded rather than
+      retired.
+    currentBestGuess: >-
+      Upgrade Ottoman Load Test to a supported Node.js runtime before activation.
+    impact: >-
+      The catalog preserves Node.js 14.15.0 as observed current state and records
+      an explicit upgrade obligation.
+  - id: loadtest-nodejs-upgrade-target
+    question: >-
+      Should Ottoman Load Test target the preferred Node.js 22 baseline or the
+      candidate Node.js 24 runtime already used by Ottoman Test Application?
+    status: answered
+    reason: >-
+      The user selected Node.js 22 as the upgrade target.
+    currentBestGuess: >-
+      Upgrade the repository and deployed image to the preferred Ottoman
+      Node.js 22 EKS runtime, 01KZ2MRPHN-N022.
+    impact: >-
+      The planned upgrade follows the approved preferred technology path. The
+      ProductComponent remains mapped to Node.js 14 until implementation is
+      verified.
+  - id: passport-awscli-utility
+    question: >-
+      What operational purpose and ownership apply to the running awscli
+      Deployment in the production plat-passport-core namespace?
+    status: answered
+    reason: >-
+      The user explicitly classified it as a temporary workload.
+    currentBestGuess: >-
+      Treat it as a temporary Passport Core operational workload and exclude it
+      from the governed ProductComponent boundary.
+    impact: >-
+      No ProductComponent or RuntimeService is created for it. Its unpinned image
+      and removal timing remain operational follow-up items.
+  - id: passport-awscli-removal
+    question: >-
+      What completion condition or removal date governs the temporary awscli
+      Deployment in the production plat-passport-core namespace?
+    status: deferred
+    reason: >-
+      The user directed Draftsman to ignore this temporary workload for the
+      remainder of OPS-433061.
+    currentBestGuess: >-
+      Keep it outside the product boundary with no removal action in this
+      Drafting Session.
+    impact: >-
+      No ProductComponent, RuntimeService, or OPS-433061 follow-up is created for
+      the temporary Deployment.
+  - id: application-runtime-versions
+    question: >-
+      Do the in-scope images currently use the catalogued Node.js 22 and ASP.NET
+      Core 8 versions in every environment?
+    status: answered
+    reason: >-
+      The user authorized GitHub inspection. Default-branch package manifests
+      and Dockerfiles confirm Node.js 24.14.1 across the nine remaining in-scope
+      components. Production metadata also shows one shared Passport monorepo
+      image release across its five workloads.
+    currentBestGuess: >-
+      Map the nine components and Ottoman Test Application to Node.js 24.14.1,
+      retain Node.js 14.15.0 as current state for Ottoman Load Test, and retain
+      Node.js 22 only as its approved upgrade target.
+    impact: >-
+      The initial ASP.NET Core 8 mapping is withdrawn because no .NET workload
+      was found in the requested namespace scope. Node.js 24 becomes the shared
+      current runtime for the active in-scope product components.
+  - id: production-kubernetes-lifecycle
+    question: >-
+      What completion date is defined by the approved plan to move production
+      Kubernetes 1.31 to the rolling N-1 target?
+    status: deferred
+    reason: >-
+      The user confirmed that an approved upgrade plan exists and selected N-1
+      as its rolling target. The user identified the completion schedule as a
+      dependency on the Platform Engineering team.
+    currentBestGuess: >-
+      Record Kubernetes 1.31 as observed current state and N-1 as the approved
+      target policy without inferring a completion date.
+    impact: >-
+      OPS-433061 records the approved policy but cannot close the schedule
+      evidence gap until Platform Engineering supplies it.
+  - id: nodejs-24-governance-disposition
+    question: >-
+      Should the Architecture Review Board promote Node.js 24 from candidate to
+      preferred for Ottoman, or require alignment to the preferred Node.js 22
+      baseline?
+    status: answered
+    reason: >-
+      The user directed that Node.js 24 remain documented as candidate current
+      state with no promotion proposal and no migration remediation.
+    currentBestGuess: >-
+      Preserve candidate lifecycle status and the observed Node.js 24.14.1
+      mappings without changing the preferred Node.js 22 standard.
+    impact: >-
+      OPS-433061 records the non-preferred current state but creates no action
+      for the active Node.js 24 workloads. The separate loadtest Node.js 14 to
+      Node.js 22 upgrade remains required.
+  - id: ottoman-orgperson-placement
+    question: >-
+      Where does the existing Ottoman OrgPerson Service from
+      plat-svc-orgperson currently run?
+    status: deferred
+    reason: >-
+      The user confirmed that msvc-org-person does not replace this distinct
+      catalog component, but no plat-svc-orgperson namespace was included in the
+      requested Kubernetes scope.
+    currentBestGuess: >-
+      Retain the existing component and runtime mapping without inferring its
+      placement from the separate msvc-org-person workload.
+    impact: >-
+      The Ottoman boundary keeps both components while the older OrgPerson
+      Service placement remains outside this review's evidence.
+assumptions:
+  - id: namespace-scope-is-authoritative
+    statement: >-
+      The eleven namespaces supplied by the user define the Kubernetes workload
+      scope for OPS-433061 across ottm-dev, ottm-stage, and ottm-prod.
+    rationale: >-
+      The user explicitly named the contexts and namespace inventory for this
+      Compute and Runtime L1 review.
+    impact: >-
+      Additional Ottoman namespaces observed in development or stage remain
+      outside this session unless they are required to explain a dependency.
+  - id: preserve-distinct-orgperson-components
+    statement: >-
+      Platform Msvc Org Person and Ottoman OrgPerson Service are distinct
+      ProductComponents and both remain in the catalog.
+    rationale: >-
+      The user explicitly answered that msvc-org-person should not replace the
+      existing Ottoman OrgPerson Service in the SDP boundary.
+  - id: auxiliary-workloads-are-product-components
+    statement: >-
+      Ottoman Test Application and Ottoman Load Test are governed
+      ProductComponents in the Ottoman product boundary.
+    rationale: >-
+      The user explicitly classified both Kubernetes workloads as product
+      components.
+    impact: >-
+      Both components are included in a Testing & Validation Workloads service
+      group in the Ottoman SDP.
+  - id: auxiliary-workload-repositories-confirmed
+    statement: >-
+      Ottoman Test Application is sourced from
+      BeerCanLabs/sk-plat-ottoman-testapp and Ottoman Load Test is sourced
+      from BeerCanLabs/sk-plat-ottoman-loadtest.
+    rationale: >-
+      The user explicitly confirmed both provisional repository URLs on
+      2026-07-31.
+    impact: >-
+      Both ProductComponents now have confirmed source-repository identities;
+      their embedded language and runtime versions remain unresolved.
+  - id: passport-awscli-is-temporary
+    statement: >-
+      The production awscli Deployment in plat-passport-core is a temporary
+      operational workload, not a ProductComponent.
+    rationale: >-
+      The user explicitly classified the workload as temporary.
+    impact: >-
+      It remains outside the governed Ottoman ProductComponent boundary and is
+      tracked only as an operational removal follow-up.
+nextSteps:
+  - id: confirm-runtime-versions-and-auxiliary-workloads
+    action: >-
+      Verify completion of the load-test Node.js 22 upgrade.
+    status: open
+    owner: ottoman-platform-engineering
+  - id: confirm-production-kubernetes-lifecycle
+    action: >-
+      Link the approved ottm-prod Kubernetes N-1 upgrade schedule and evidence
+      location.
+    status: open
+    owner: ottoman-platform-engineering
+  - id: validate-ops-433061-draft
+    action: >-
+      Validate the workspace and regenerate the catalog browser after applying
+      the runtime mappings.
+    status: done
+    owner: cloud-engineering-infrastructure
+resumptionContext:
+  jiraTicket: OPS-433061
+  contexts:
+    - ottm-dev
+    - ottm-stage
+    - ottm-prod
+  scopeDecision: >-
+    Use the user-supplied namespace list for the compute/runtime baseline;
+    preserve the existing Ottoman OrgPerson Service as distinct from
+    msvc-org-person; model the testapp and loadtest workloads as distinct
+    ProductComponents by user direction.
+notes:
+  resolutionSummary: >-
+    Resolved by user direction on 2026-07-31. The scoped Kubernetes workloads
+    are represented as ProductComponents and mapped to repository-confirmed
+    versioned EKS RuntimeServices. Node.js 24.14.1 is accepted candidate current
+    state without remediation; Ottoman Load Test remains on end-of-life
+    Node.js 14.15.0 with Node.js 22 as its approved upgrade target; the temporary
+    Passport awscli workload is excluded; and the production Kubernetes upgrade
+    follows rolling N-1 with its schedule deferred to Platform Engineering.
+  externalFollowUps: >-
+    Verify completion of the Ottoman Load Test Node.js 22 migration, link the
+    Platform Engineering production Kubernetes upgrade schedule, and complete
+    the existing SDP operational evidence gaps for secrets, logging, monitoring,
+    and recovery procedures outside this compute/runtime inventory session.
+  validationStatus: >-
+    Final validation passed on 2026-07-31 using
+    python3 .draft/framework/tools/validate.py --workspace . after resolving the
+    OPS-433061 compute and runtime Drafting Session.

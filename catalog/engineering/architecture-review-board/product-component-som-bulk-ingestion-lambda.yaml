@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-9M3M
+type: product_component
+ownerRole: engineer
+name: SOM Bulk Ingestion Function
+description: 'Serverless function handling bulk data ingestion for SOM. Processes files arriving via the shared AWS Transfer Family SFTP service, staged in customer-partitioned S3 storage, and moves them to customer-specific AWS FSx locations. Contains Sofa King-authored Lambda function code.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- som
+- lambda
+- ingestion
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  serviceAuthentication: AWS IAM roles and service credentials govern access to the bulk ingestion function and its dependencies.
+  secretsManagement: Function secrets and credentials are sourced from centralized AWS secret management.
+  serviceLogging: Function execution logs and workflow events are forwarded to centralized logging beyond the underlying Lambda platform.
+  healthWelfareMonitoring: Invocation success rates, error telemetry, and platform monitoring track function welfare.
+  availabilityModel: AWS Lambda provides multi-AZ serverless execution availability for the function runtime.
+  scalabilityModel: The function scales elastically through Lambda concurrency as demand increases.
+  recoverabilityModel: Failed invocations are retried through the ingestion workflow and the function is redeployed from source if configuration corruption occurs.
+  failureDomain: Scoped to shared AWS bulk import functionality. Transfer Family, S3, or Lambda workflow failure affects bulk imports; FSx failure has wider web-server impact because FSx hosts IIS configuration and site files.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

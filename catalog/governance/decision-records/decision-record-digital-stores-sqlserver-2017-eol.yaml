@@ -1,0 +1,71 @@
+schemaVersion: '1.0'
+uid: 01M0GDHSAM-F64B
+type: decision_record
+name: Digital Stores SQL Server 2017 End Of Support And Patch Currency
+category: risk
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Digital Stores runs SQL Server 2017. Two related exposures follow. First, end of support: SQL
+  Server 2017 mainstream support ended 2022-10-11 and extended support ends 2027-10-12, after which
+  no security updates are issued without Extended Security Updates or migration. Second, patch
+  currency, and the scope of that exposure is now bounded. Question 4.6 of the DRAFT L1 Baseline
+  Questionnaire, answered 2026-09-08, established that the estate runs two builds, not one:
+  production and sandbox are at 14.0.3495.9, which is CU31 + GDR (KB5058714, released 2025-07-08),
+  and QA and alpha are at 14.0.3485.1, one GDR band further behind. This is corroborated host by host
+  against the Digital Stores Environment Guide, which records 14.0.3495.9 on PRAngDB1 and SUDB and
+  14.0.3485.1 on QADB and ALDB. The owner reported the production build as "14.3.3495.9", which is
+  not a released SQL Server build number and is read here as a transcription of 14.0.3495.9. Seven
+  later security GDR builds have shipped above 14.0.3495.9 and are not applied - 14.0.3500.1,
+  14.0.3505.1, 14.0.3515.1, 14.0.3520.4, 14.0.3525.1, 14.0.3530.2 and 14.0.3540.1 (KB5102337,
+  2026-07-14) - leaving roughly thirteen months of accumulated database security updates unapplied on
+  production and sandbox and more than that on QA and alpha. Because the tenancy model is one database
+  per region inside a single instance per tier, the build is per tier rather than per region, so
+  there is no per-region build drift to bound: four instances, two builds. Automox handles operating
+  system patching across production and lower environments; no database engine patching schedule is
+  recorded.
+version: 1.1.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- sqlserver
+- end-of-life
+- patching
+- security
+- owner-confirmed
+linkedObject: 01KRZ1GCH3-99RF
+affectedComponent: 01M25X9W0R-VQJ3
+impact: >-
+  Bears directly on four active Hearthstone Cybersecurity Framework 2026 requirements. HCF.03.3.1 requires
+  periodic end-of-life review and formal termination plans, and no migration plan off SQL Server 2017
+  is recorded for Digital Stores. HCF.03.3.3 requires continuous monitoring and remediation or
+  replacement plans for end-of-life systems. HCF.03.1.2 and HCF.03.2.1 bear on the unapplied security
+  updates. If the 2027-10-12 date passes without migration or Extended Security Updates, HCF.03.3.2
+  additional-hardening and traffic-restriction obligations attach as well. The scope qualifier carried
+  in the previous version of this record is now removed: the build inventory is confirmed across all
+  four tiers. Two facts confirmed in the same round raise the consequence of an unpatched engine.
+  Transparent Data Encryption is not enabled on any of these instances (DecisionRecord
+  01M25X9W0R-4HSX), and the QA, sandbox and alpha instances are refreshed with production data
+  (DecisionRecord 01M25X9W0R-KWXR), so the two instances furthest behind on security updates hold
+  Confidential production data. Patching also cannot be treated as low-risk change: each tier is a
+  single instance with no availability group (DecisionRecord 01M25X9W0R-GKSK), so applying a GDR
+  requires a maintenance window that takes every region in that tier offline, and there is no
+  failover partner to patch first.
+mitigationPath: >-
+  Three steps, in order. First, bring the estate current on the latest SQL Server 2017 GDR
+  (14.0.3540.1, KB5102337) through normal change management, closing the patch-currency exposure
+  without a version migration. Sequence it lowest tier first - alpha, then QA, then sandbox, then
+  production - and note that each application requires a full-tier outage window because no tier has a
+  failover partner. Second, record a formal termination plan against HCF.03.3.1 with a target version
+  and date ahead of 2027-10-12; the catalog's preferred engine is SQL Server 2022 (01KQQ5JT01-950D,
+  extended support to 2033-01-11) and SQL Server 2025 (01KRZVZXDK-7XC1) is a candidate. Third, treat
+  the migration as the opportunity to close the encryption-at-rest and availability findings rather
+  than remediating each separately, since enabling Transparent Data Encryption and introducing a
+  highly available data tier are both cheaper on the target engine than retrofitted onto a platform
+  leaving support. Note that a version migration interacts with the application's no-ORM,
+  hand-written-SQL data layer and its machine-generated view models, so compatibility-level testing is
+  not a formality here, and the lack of any test project in either repository means that testing has
+  no automated safety net.

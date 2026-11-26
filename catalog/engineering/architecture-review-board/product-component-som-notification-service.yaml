@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-M6N9
+type: product_component
+ownerRole: engineer
+name: SOM Notification Service
+description: 'Containerized microservice handling notifications for SOM. Deployed as an EKS pod in the Shared Services build. Contains Sofa King-authored code.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- som
+- notification
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  serviceAuthentication: Service-to-service identities and administrative access use Kubernetes-native identity bindings and centralized secret distribution.
+  secretsManagement: Runtime secrets are sourced from centralized secret storage integrated with the container platform.
+  serviceLogging: Notification-service logs are exported from the container workload to centralized logging beyond cluster-level collection.
+  healthWelfareMonitoring: Pod health probes, delivery telemetry, and platform monitoring track service welfare.
+  availabilityModel: Container replicas can be distributed across the shared EKS deployment for service continuity.
+  scalabilityModel: Replica count scales horizontally within the shared EKS environment as notification demand increases.
+  recoverabilityModel: Failed pods are rescheduled automatically and the service is redeployed from the product build pipeline when needed.
+  failureDomain: Scoped to the shared notification service layer used by SOM workloads.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

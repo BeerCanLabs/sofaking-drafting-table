@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFR-1C9G
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation Data Conversion
+description: Software Answers
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-data-conversion
+language: C#
+classification: api-service
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Runtime corrected by product owner on 2026-07-31 — .NET Framework 4.8, not modern .NET.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-data-conversion
+  observedRuntimeSignals: dotnet, java, readme
+  observedManifestPaths: Boo/boo-plugin-src/ASTMapper/ASTMapper.csproj; Boo/boo-plugin-src/BoocNET35/BoocNET35.csproj; Boo/boo-plugin-src/BoocNET452/BoocNET452.csproj; Boo/boo-plugin-src/MPFProject/Microsoft.VisualStudio.Project.csproj; Boo/boo-plugin-src/MSBuildUtilities/MSBuildUtilities.csproj; Boo/boo-plugin-src/MapperTests/MapperTests.csproj; Boo/boo-plugin-src/VSPackage/VSPackage.csproj; Boo/boo-plugin-src/VSPackage/VSPackage_IntegrationTests/VSPackage_IntegrationTests.csproj; Boo/boo-plugin-src/VSPackage/VSPackage_UnitTests/VSPackage_UnitTests.csproj; Boo/boo-plugin-src/VisualBoo.sln; Boo/boo-src/boo/.travis.yml; Boo/boo-src/boo/build.gradle
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

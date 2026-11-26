@@ -1,0 +1,125 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-MPJQ
+type: runtime_service
+ownerRole: engineer
+name: shopstar AccuRoute 8 AWS Service
+description: >-
+  Candidate replacement for the legacy shopstar AccuRoute appliance, hosted on
+  private Windows Server 2022 EC2 infrastructure and configured through
+  Ansible Automation Platform.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - shopstar-v3
+  - accuroute
+  - aws
+  - windows
+  - document-routing
+  - modernization
+category: service
+serviceCategory: general
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KYRAQ0KC-7ZFS
+capabilities:
+  - 01KT0XNZEY-DENJ
+networkPlacement: vpc-private
+patchingOwner: organization-scheduled
+architectureNotes:
+  environmentModel: >-
+    Separate shopstar dev, stage, and prod AWS accounts in us-east-1. The AAP
+    record dated June 18, 2026 shows one discovered dev host, one stage host,
+    and no prod host.
+  computeModel: >-
+    The active AAP path builds one private Windows Server 2022 EC2 instance
+    per environment with encrypted gp3 root/data volumes and no public IP.
+  configurationModel: >-
+    AAP assumes a target-account role, creates security groups and EC2,
+    bootstraps WinRM, renames and domain-joins the host, applies Windows/IIS
+    baselines, prepares SQL Server and AccuRoute prerequisites, and installs
+    Automox, CrowdStrike, and Nagios.
+  applicationInstallState: >-
+    The active environment variables set automated AccuRoute installation,
+    database configuration, and Windows service configuration to false. The
+    infrastructure is therefore not evidence of a completed application
+    deployment or production cutover.
+  terraformAlternative: >-
+    Unmerged sys-shopstar-terraform feature/accuroute-ec2-only models two logical
+    roles (accuroute-scan-extract and document-fetch-store) with launch
+    templates, Auto Scaling Groups, IAM, encrypted EBS, CloudWatch alarms,
+    S3 object flow, and SQS messages. Whether it is superseded by AAP is open.
+  serviceAuthentication: >-
+    AAP bootstraps a managed Windows account, joins the corporate domain, and
+    resolves the AccuRoute service account through approved credential
+    injection and Delinea lookup. Final application-user authentication is not
+    yet documented.
+  secretsManagement: >-
+    Current AAP jobs inject platform credentials and resolve the service
+    account through Delinea. The alternate Terraform branch creates an AWS
+    Secrets Manager bootstrap secret, so the final authoritative secret path
+    requires confirmation.
+  serviceLogging: >-
+    Dedicated data, backup, log, system, and application-log volumes are
+    prepared. A centralized AccuRoute application-log destination and
+    retention policy are not yet documented.
+  healthWelfareMonitoring: >-
+    The AAP path installs Nagios monitoring. The alternate Terraform path
+    declares EC2/Auto Scaling CloudWatch alarms.
+  availabilityModel: >-
+    Observed AAP and default Terraform settings are single-instance per
+    environment. No active-active pair or application-aware failover is
+    confirmed.
+  scalabilityModel: >-
+    The Terraform design contains Auto Scaling Group primitives but defaults
+    min, max, and desired capacity to one. The AAP implementation currently
+    builds one host.
+  recoverabilityModel: >-
+    Host infrastructure is rebuildable through AAP or Terraform and storage is
+    encrypted, but manual vendor application installation prevents a fully
+    reproducible service recovery claim.
+  failureDomain: >-
+    One AccuRoute instance within one shopstar AWS account and us-east-1 is the
+    currently observed service failure domain.
+internalComponents:
+  - ref: 01KYRAQ0KC-7ZFS
+    role: function
+  - ref: 01KQQ5JT1S-PYY2
+    role: web prerequisites
+  - ref: 01KQQ5JT1S-EHW4
+    role: application prerequisites
+  - ref: 01KQQ5JT1T-92JG
+    role: local database engine
+  - ref: 01KQQ5JT1N-WH7R
+    role: AWS host management
+deploymentConfigurations:
+  - id: aap-single-instance
+    name: AAP Single Instance
+    description: >-
+      Current dev/stage path using AAP to provision and configure one private
+      Windows EC2 host per environment.
+  - id: terraform-two-role-asg-candidate
+    name: Terraform Two-Role ASG Candidate
+    description: >-
+      Unmerged candidate with scan-extract and document-fetch-store Auto
+      Scaling Groups backed by S3 and SQS.
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KYRARNBV-3930
+    key: serviceAuthentication
+  - ref: 01KYRARNBV-3930
+    key: secretsManagement
+  - ref: 01KYRARNBV-3930
+    key: serviceLogging
+  - ref: 01KYRARNBV-3930
+    key: healthWelfareMonitoring
+  - ref: 01KYRARNBV-3930
+    key: availabilityModel
+  - ref: 01KYRARNBV-3930
+    key: scalabilityModel
+  - ref: 01KYRARNBV-3930
+    key: recoverabilityModel
+  - ref: 01KYRARNBV-3930
+    key: failureDomain

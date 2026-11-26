@@ -1,0 +1,46 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E0-7W1T
+name: shopstar v3 Application → MySQL 8 DBMS Service
+catalogStatus: incomplete
+source: 01KSM38KGD-WYH7
+label: reads from and writes to
+target: 01KQQ5JT00-WKWF
+description: >-
+  The shopstar v3 application reads from and writes to the shared Admin DB and
+  active tenant databases. DD_DATASOURCES uses orgID to select the tenant
+  database. The current 2026-08-17 migration inventory records InnoDB complete
+  for RT1, RT2, RT3, RT4, RT7, NI, MA1, and MA2; RT5 and RT6 are pending
+  confirmation or approval for a documented 2026-08-28 through 2026-08-30
+  target window.
+technology: MySQL JDBC
+direction: synchronous
+flow: outbound
+tags:
+  - shopstar-v3
+  - database
+  - source-reconciled
+notes:
+  background: >-
+    Active tenant databases are RT1-RT7, MA1-MA2, and Lakeside NI. PA, IL, NC,
+    and WI are churned and excluded from active topology; NI remains active but
+    is planned to churn. Confirmed primary-to-read-only/reporting-replica
+    mappings are RT1 grrv3db1ppr/ptxcmb1m to grrv3db1prpl/ptxcmb1s; RT2
+    grrv3db2ppr/ptxcmb2m to grrv3db2prpl/ptxcmb2s; RT3
+    grrv3db3ppr/ptxcmb3m to grrv3db3prpl/ptxcmb3s; RT4
+    grrv3db4ppr/ptxcmb4m to grrv3db4prpl/ptxcmb4s; RT5
+    grrv3db5ppr/ptxcmb5m to grrv3db5prpl/ptxcmb5s; RT6
+    grrv3db6ppr/ptxcmb6m to grrv3db6prpl/ptxcmb6s; RT7
+    grrv3db7ppr/ptxcmb7m to grrv3db7prpl/ptxcmb7s; NI
+    grrv3db8ppr/pnicmb1m to grrv3db8prpl/pnicmb1s; and MA1/MA2
+    grrv3db10ppr/pmacmb1m+pmacmb2m to
+    grrv3db10prpl/pmacmb1s+pmacmb2s. This is not MySQL Group Replication. The
+    target shared-service UID identifies the existing MySQL service family
+    only; its generic HA, RPO, RTO, and recovery characteristics do not apply
+    to shopstar.
+  unresolved: >-
+    Exact orgID-to-database mappings, Admin DB schema details, tenant churn
+    dates, and replica engine status are not yet verified. The migration
+    inventory tracks primary host groups and must not be used to claim replica
+    engine status independently.
+capabilities: []

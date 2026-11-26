@@ -1,0 +1,180 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-RP4M
+type: drafting_session
+ownerRole: engineer
+name: HCM RH Edge and Network L1 Mapping (OPS-284008)
+description: >-
+  Closure work for OPS-284008. Uses application manifests, DRAFT inventory,
+  internal architecture documentation, and live read-only cluster evidence to
+  model the HCM RH Kong Gateway, Traefik ingress, Kong Mesh/Kuma, and
+  Envoy-based data-plane dependencies.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - session
+  - hcm-rh
+  - ops-103066
+  - edge-and-network
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KG7-42XD
+sourceArtifacts:
+  - name: OPS-284008 Edge and Network L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-284008
+    notes: >-
+      Tracks the missing governed edge, ingress, and service-mesh dependencies
+      required for HCM RH Architecture L1 closure.
+  - name: HCM RH App ingress manifests
+    type: source-repository
+    location: https://github.com/BeerCanLabs/sk-hcmrh-app
+    notes: >-
+      Employer and job-seeker ingress manifests identify Traefik and the live
+      service ports.
+  - name: HCM RH Core ingress manifests
+    type: source-repository
+    location: https://github.com/BeerCanLabs/sk-hcmrh-core
+    notes: >-
+      Core ingress manifests identify Traefik and the live Core service port.
+  - name: HCM Ottoman Adoption
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/PRODMGMT/pages/18102757702/HCM+Ottoman+Adoption
+    notes: >-
+      States that adopted applications are on Kong Mesh and/or behind Kong
+      Gateway.
+  - name: Live EKS cluster inspection
+    type: other
+    notes: >-
+      Read-only kubectl inspection of chaise, le1, prod-ottm, and stage-ottm
+      on 2026-07-24 confirmed the active versions, mesh membership, shared
+      control-plane pairings, and gateway NLB Services.
+generatedObjects:
+  - name: New Recruiting & Hiring - Pattern
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KG7-42XD
+  - name: Traefik Proxy 3.3.6
+    type: technology_component
+    status: created
+    ref: 01KYAXMZ7H-X6CC
+  - name: Kong Mesh 1.8.0
+    type: technology_component
+    status: created
+    ref: 01KYAXMZ7H-FF39
+  - name: Kong Mesh 2.8.6
+    type: technology_component
+    status: created
+    ref: 01KYAXMZ7H-23W3
+  - name: Envoy Proxy for Kong Mesh
+    type: technology_component
+    status: stubbed
+    ref: 01KYAXMZ7H-4VRV
+  - name: Traefik Kubernetes Ingress Service
+    type: network_service
+    status: created
+    ref: 01KYAXMZ7H-72BR
+  - name: Kong Mesh Service
+    type: network_service
+    status: created
+    ref: 01KYAXMZ7H-KJT2
+  - name: AWS Network Load Balancer → Kong Gateway Service
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-WX76
+  - name: Kong Gateway Service → HCM RH App
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-5XYC
+  - name: Traefik Kubernetes Ingress Service → HCM RH App
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-70YJ
+  - name: Traefik Kubernetes Ingress Service → HCM RH Core
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-TN04
+  - name: HCM RH App → Kong Mesh Service
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-NJ67
+  - name: HCM RH Core → Kong Mesh Service
+    type: relationship
+    status: created
+    ref: 01KYAXMZ7H-66D8
+unresolvedQuestions:
+  - id: exact-kong-route-order
+    question: >-
+      What is the exact ordered hop sequence for each HCM route on the remote
+      hybrid Kong control plane?
+    status: deferred
+    reason: >-
+      The data-plane clusters do not contain the remote control-plane route
+      configuration, and Architecture L1 requires the dependency rather than a
+      complete request-path design.
+    currentBestGuess: >-
+      Kong is the logical Ottoman entry point and Traefik is the confirmed
+      application-cluster ingress boundary.
+    impact: >-
+      The logical relationships are sufficient for L1; a later topology review
+      may refine the ordered path without changing the dependency inventory.
+    relatedObjects:
+      - ref: 01KYAXMZ7H-5XYC
+      - ref: 01KYAXMZ7H-70YJ
+  - id: exact-envoy-builds
+    question: >-
+      Which Envoy builds are bundled in the deployed Kuma 1.8.0 and 2.8.6
+      data-plane images?
+    status: deferred
+    reason: >-
+      Exact embedded build discovery would require deeper image or in-pod
+      inspection and is not required for Architecture L1.
+    currentBestGuess: >-
+      The version is managed as part of the corresponding Kong Mesh/Kuma image.
+    impact: >-
+      The Envoy TechnologyComponent remains a visible stub until the shared
+      platform owner enriches it.
+    relatedObjects:
+      - ref: 01KYAXMZ7H-4VRV
+assumptions:
+  - id: confirmed-l1-product-boundary
+    statement: >-
+      HCM RH App and HCM RH Core are the independently deployed L1 product
+      components requiring edge and mesh dependency mapping.
+    rationale: >-
+      Toby Hanley confirmed the New Recruiting & Hiring product inventory for
+      OPS-598732, and both components have current live ingress and mesh
+      evidence.
+    relatedObjects:
+      - ref: 01KSM38KG5-49X9
+      - ref: 01KSM38KG5-FBRT
+  - id: shared-nlb-ownership
+    statement: >-
+      The AWS NLB is modeled as a shared Ottoman gateway relationship and not
+      as HCM RH-owned infrastructure.
+    rationale: >-
+      The load balancers are created by the Kong proxy Services in prod-ottm
+      and stage-ottm, not by the HCM application clusters.
+    relatedObjects:
+      - ref: 01KYAXMZ7H-WX76
+nextSteps:
+  - id: merge-edge-network-mapping
+    action: >-
+      Obtain review and merge the OPS-284008 edge and network mapping pull
+      request.
+    status: open
+    owner: recruiting-hiring-engineering
+  - id: close-ops-284008
+    action: >-
+      Confirm the merged catalog state and validation evidence in Jira, then
+      close OPS-284008.
+    status: open
+    owner: architecture-review-board
+notes:
+  validationStatus: >-
+    Passed on 2026-07-24 using
+    python3 .draft/framework/tools/validate.py --workspace . --quiet; 1,450
+    catalog files validated successfully.

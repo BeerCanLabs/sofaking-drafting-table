@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFQ-5HAA
+type: product_component
+ownerRole: engineer
+name: CIS Lib SOM API Clients
+description: Client library for connecting to the SOM Document Viewer
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-lib-som-api-clients
+language: C#
+classification: cli
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Runtime corrected by product owner on 2026-07-31 — .NET Framework 4.8, not modern .NET.
+  repositoryName: BeerCanLabs/sk-cis-lib-som-api-clients
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: src/Tillbook.Som.Api.Authentication/Tillbook.Som.Api.Authentication.csproj; src/Tillbook.Som.Api.Emis.Client.Tests/Tillbook.Som.Api.Emis.Client.Tests.csproj; src/Tillbook.Som.Api.Emis.Client/Tillbook.Som.Api.Emis.Client.csproj; src/Tillbook.SomDocumentViewer.Client.Tests/Tillbook.Som.Api.DocumentViewer.Client.Tests.csproj; src/Tillbook.SomDocumentViewer.Client.sln; src/Tillbook.SomDocumentViewer.Client/Tillbook.Som.Api.DocumentViewer.Client.csproj
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

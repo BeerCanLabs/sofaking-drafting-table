@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01M7BNBY4G-329E
+type: data_store_service
+ownerRole: engineer
+name: Atlas Aurora PostgreSQL
+description: 'Relational store for Atlas (Unified Inventory): one global database (whm-unified-global, owned by
+  Atlas TenantDirectory) and one database per region (whm-unified-shard-NN) on the same RDS cluster, resolved
+  per request through TenantDirectory. Dev cluster endpoint read from the Flyway inventory in whm-unified-dbmigration.'
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- whm
+- postgresql
+- aurora
+- aws
+- deployment-specific
+vendor: Amazon Web Services
+productName: Aurora PostgreSQL
+productVersion: unknown
+deliveryModel: paas
+authenticationModel: other
+architectureNotes:
+  provenance: Source inspection 2026-11-13 of whm-unified-core (develop), whm-unified-dbmigration (develop) and
+    sys-whm-unified-terraform (main). Not yet confirmed by the owning team.
+  inferred: Aurora is inferred from the RDS cluster endpoint form (.cluster-<id>.us-east-1.rds.amazonaws.com) and
+    from .agentic/10-connection-topology.md, which plans around Aurora writer and reader endpoints. Engine version
+    is not recorded in any repository read; local compose runs postgres:16.
+  devClusterEndpoint: whm-unified-dev-rds-pgsql-cluster-1 (dev environment, us-east-1), from config/dev/clusters.csv
+    in whm-unified-dbmigration. Test, stage and prod inventories contain headers only.
+  databases: 'Global database whm-unified-global holds the regions directory (TenantDirectory). Each region
+    has its own database (dev: whm-unified-shard-01); every service reads and writes only its own table prefix
+    there, with row-level security on org_id. Connection strings per region are read from AWS Secrets Manager
+    (TENANT_SECRET_<orgId>) by TenantDirectory.'
+  connectionPooling: PgBouncer in local compose only. RDS Proxy versus self-managed PgBouncer, tenants per cluster
+    and MaxPoolSize are recorded as undecided in .agentic/10-connection-topology.md.
+  migrations: Flyway, from whm-unified-dbmigration (global and service migration trees, matching rollback scripts),
+    run by the whm-unified-core image workflow before any image is pushed.
+  dataClassification: Confidential with PII per the Atlas SDP; not re-verified here.
+  backupAndRecoverability: Not confirmed.

@@ -1,0 +1,69 @@
+schemaVersion: '1.0'
+uid: 01KWF246JC-197N
+type: decision_record
+name: SOM Service Management Webloom Legacy Validation Evidence
+description: Architecture decisions captured from Draftsman discussion to split legacy Webloom/Colohub Service Management from the AWS PM & SM current-state pattern.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-evidence
+  - adr
+  - som
+  - webloom
+  - legacy
+category: decision
+status: accepted
+affectedComponent: 01KWF246JB-VNFC
+linkedObject: 01KWF246JB-VNFC
+decisionRationale: |
+  noApplicablePattern: No existing Sofa King ReferenceArchitecture cleanly captures the Webloom/Colohub legacy SOM shape: Service Management only, multi-tenant, shared infrastructure, and a few large shared databases.
+
+  deploymentTargets: Hosted at Colohub Data Center / Webloom in Zeeland, NY. IaaS model, 100% VMware virtual machines managed by Colohub/Webloom.
+
+  computeHostingModel: Webloom SOM runs on VMware virtual machines.
+
+  dnsModel: External DNS for SOM is hosted in AWS Route 53 in the Production Microservices account. Internal DNS uses the rotaprod.example domain and is stored on domain controllers.
+
+  edgeProtection: Imperva WAF fronts all SOM URLs, including Webloom legacy SOM URLs. Webloom legacy load balancing uses Microsoft ARR hosted on Windows Server 2012 R2.
+
+  webloomTrafficPath: Webloom legacy traffic is fronted by Imperva WAF and then load balanced by Microsoft Application Request Routing (ARR) hosted on Windows Server 2012 R2.
+
+  customerConnectivity: Customers do not connect to SOM through VPNs, private circuits, or other private customer connectivity paths.
+
+  observabilityModel: Across SOM, Pingdom provides external uptime monitors and synthetics. Dynatrace provides APM, some system monitoring, and central logging as the Dynatrace logging rollout progresses. SQL and other logs may still be local depending on component rollout status. Nagios is the standard host/service monitoring platform; Zabbix still exists in Webloom but has mostly migrated to Nagios.
+
+  availabilityRequirement: Existing production legacy availability expectation; explicit SLA not yet captured.
+
+  externalDependencies: External dependencies and service-to-service relationships require Development service definition and infrastructure confirmation.
+
+  dataClassification: FERPA-protected customer CDP and special-programs data, including PII and health-adjacent information.
+
+  failureDomain: Shared Webloom infrastructure and large shared databases create broader multi-tenant blast radius than the AWS customer-level single-tenant model. A shared Webloom database can contain roughly 6 to 10 customers, so database failure, restore, or data-mixing risk is multi-customer. Webloom SFTP intake depends on Bitvise and BestSync on Windows Server 2012 R2 plus the central Webloom file server used for customer-specific file locations. Bitvise and BestSync are single-install, single-server services with no HA pair and no standby instance.
+
+  sftpImplementation: Webloom legacy customers use Bitvise SFTP Server 8.48 hosted on Windows Server 2012 R2 in Webloom. BestSync 2018 version 13.0.0.7 is installed locally on the same server and runs jobs that watch local folders, then move files to the correct customer file location on the central Webloom file server. Bitvise SFTP accounts are customer-scoped username/password accounts stored locally in the Bitvise service. Logs are stored locally. Webloom-local Zabbix monitoring exists for these services while broader Webloom monitoring has mostly migrated to Nagios.
+
+  databaseModel: Webloom SOM is a multi-tenant SQL Server 2017 Enterprise database environment running 100% on VMware virtual machines. Customer data follows the same main-database concept as AWS, but Webloom does not follow the standardized per-customer AWS naming pattern; shared database names appear to start with SOM. A shared Webloom database can contain roughly 6 to 10 customers. Exact tenant isolation mechanism requires confirmation.
+
+  databaseInventory: Database categories identified for SOM include multi-tenant Webloom customer application databases; SOM Solo, related to Financing Billing and shared by AWS and Webloom customers; a Webloom setup similar to QuickfitImport for customer upload data and incoming-data transformation; SKDBA on each SQL Server for local system-task/log storage; and SSISDB once per SQL Server. No dedicated reporting database and no Webloom-specific legacy database category were identified.
+
+  databaseAvailabilityAndRecovery: Webloom SQL has no HA, no clustering, and no standby model. Backups include full, differential, and transaction-log backups created with SQL Server DBA Tools and uploaded to S3 through CloudBerry. RPO is 15 minutes. RTO varies by database size. Annual backups are retained for 7 years, monthly backups for 12 months, and full backups for 30 days; local backup copies are retained for roughly one week. S3 backups are encrypted and protected by compliance lock controls, requiring appropriate decryption keys for restore. Customer-level restore is not feasible for Webloom multi-tenant databases.
+
+  ssisIntegrationModel: SSIS service is installed on all SQL Servers. SSISDB exists once per SQL Server. SSIS operates against both AWS and Webloom client databases, reads from and writes to client-specific databases, and supports imports, reporting, warehouse feeds, state reporting, migrations, and Financing/claims extracts. SSIS packages may be scheduled on the SSIS server or through SQL Agent jobs local to the SQL Server. SSIS authentication uses a SQL password service account.
+
+  fileToDatabaseFlow: Webloom has a similar setup to QuickfitImport for customer upload data and incoming-data transformation; Development follow-up is needed for details. Database-side import/export processing uses local SSIS packages and SFTP/customer file locations rather than FSx for most operations. Import status, errors, and audit trails are logged and notifications are sent. Export/import archive handling is manual on database servers. No purge policy exists today; purge automation is in process and the current process is manual. A separate application-data drive pattern is being pushed so import/extract files do not mix with SQL data disks or the C drive.
+
+  sensitiveDataBoundaries: Webloom SOM databases contain FERPA/CDP data, Financing or claims-related data, health-adjacent data, audit records, and file import metadata. Sensitive-table inventory and data-obfuscation scripts are pending from the database team and Development. Churned customer data is archived, and customer-level deletion is constrained by the Webloom multi-tenant database model and the 7-year S3 backup/compliance retention posture.
+
+  databaseRoadmapUncertainty: The database conversation referenced upgrade planning from SQL Server 2017 toward newer SQL Server versions, but target version, target environment, and timeline require confirmation before being modeled as current state.
+
+  databaseRestoreProcessReference: AWS S3 DB Backups Download & Restore Tools: https://sofaking-example.atlassian.net/wiki/spaces/SaaSIO/pages/15477171876
+
+  customerDataDeletionProcessReference: SOM Data Deletion - Churning Clients Process: https://sofaking-example.atlassian.net/wiki/spaces/PRODMGMT/pages/15787982433/SOM+Data+Deletion+-+Churning+Clients+Process
+
+  patternDeviations: Existing-only legacy Webloom hosting remains separate from the preferred AWS PM & SM platform. Shared databases and shared infrastructure must be treated as legacy risk areas.
+
+  interServiceConnections: Network and data flows are not yet modeled as relationship objects. Development-owned service definitions are expected to provide those flows.

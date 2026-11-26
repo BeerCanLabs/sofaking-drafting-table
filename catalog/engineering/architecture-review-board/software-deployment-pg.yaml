@@ -1,0 +1,119 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-PPFZ
+type: software_deployment_pattern
+ownerRole: engineer
+name: Associate Development - Pattern
+aliases:
+- Pg Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Associate Development
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- pg
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KG3-P3SC
+    repositoryName: BeerCanLabs/sk-pg-msvc-plm-eem-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-pg-msvc-plm-eem-api
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, serverless
+  - productService: 01KSM38KG3-PN95
+    repositoryName: BeerCanLabs/sk-PG-ReportWriter
+    sourceRepository: https://github.com/BeerCanLabs/sk-PG-ReportWriter
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KG3-027C
+    repositoryName: BeerCanLabs/sk-pg-plm-ui
+    sourceRepository: https://github.com/BeerCanLabs/sk-pg-plm-ui
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG3-MZNS
+    repositoryName: BeerCanLabs/sk-pg-ui-components
+    sourceRepository: https://github.com/BeerCanLabs/sk-pg-ui-components
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: github_actions, node, readme
+  - productService: 01KSM38KG3-T15E
+    repositoryName: BeerCanLabs/sk-pg-dev-tools
+    sourceRepository: https://github.com/BeerCanLabs/sk-pg-dev-tools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG3-PDSQ
+    repositoryName: BeerCanLabs/sk-PG-MicroCredentialLearning
+    sourceRepository: https://github.com/BeerCanLabs/sk-PG-MicroCredentialLearning
+    repositoryPrimaryLanguage: HTML
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KG3-12C4
+    repositoryName: BeerCanLabs/sk-pg-npm
+    sourceRepository: https://github.com/BeerCanLabs/sk-pg-npm
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KG3-2X43
+    repositoryName: BeerCanLabs/sk-PG-ReportWriterAgent
+    sourceRepository: https://github.com/BeerCanLabs/sk-PG-ReportWriterAgent
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KG3-P3SC
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-PN95
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KG3-027C
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG3-MZNS
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG3-T15E
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-PDSQ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-12C4
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-2X43
+    diagramTier: application
+    networkZone: data

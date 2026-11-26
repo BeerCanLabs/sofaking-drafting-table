@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSGC-JCX4
+type: relationship
+name: 'Sofa King Central Msvc System Jobs → Sofa King Central AWS Aurora PostgreSQL'
+catalogStatus: stub
+source: 01KQQ5JT0K-MJV2
+target: 01KYAAZF97-HS3C
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Relational read model.

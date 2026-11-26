@@ -1,0 +1,112 @@
+schemaVersion: '1.0'
+uid: 73F2M1GSPK-PNGJ
+type: data_component
+ownerRole: engineer
+name: Tailor SQL Server Data
+description: Tailor SQL Server data layer for the legacy Windows/IIS Tailor deployment, modeled from the Tailor SQL Server 2022 and AlwaysOn automation evidence.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-950D
+tags:
+  - tailor
+  - sqlserver
+  - alwayson
+  - data-component
+  - ansible-discovered
+repoUrl: TBD
+targetEngine: mssql
+dataClassification: restricted
+containsPII: true
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/common/win_sql_server/defaults/main.yml
+    - playbooks/roles/common/win_sql_server/tasks/main.yml
+    - playbooks/roles/common/win_sql_server_alwayson_ag/defaults/main.yml
+    - playbooks/roles/common/win_sql_server_alwayson_ag/tasks/main.yml
+  sourceDocuments:
+    - SaaSIO-Tailor DB Architecture-100726-202108.pdf
+  databasePlatform: SQL Server 2022; production uses Enterprise media and lower environments use Developer media in the shared role defaults.
+  availabilityModel: AAP Controller inventory is the operational source of truth. It currently confirms production as four two-host SQL inventory groups, UAT as one two-host SQL inventory group, STG as a two-host SQL inventory group, and QA as a one-host SQL inventory group. AAP did not return any Tailor DEV SQL group or HPTTLRDEV host. The Tailor DB Architecture PDF is retained as historical context and may be stale where it disagrees with AAP.
+  listenerPort: 60173
+  sqlInstancePort: 64121
+  hadrEndpointPort: 5022
+  driveLayout: D for data, L for logs, K for backup, S for system, and T for TempDB in the shared SQL role defaults.
+  classificationRationale: Tailor is tagged as an CDP/special-programs product; restricted classification and PII flag should be confirmed by the product owner.
+  aapClusterEvidence: AAP Tailor job templates and inventory limits were verified through the Controller API on 2026-07-10. Production SQL groups map to GRRTLRPRDDB01/02, GRRTLRPRDDB03/04, GRRTLRPRDDB05/06, and GRRTLRPRDDB07/08. UAT maps to GRRTLRUATDB01/02, STG maps to HPTTLRSTGDB01/02, and QA maps to HPTTLRQADB01.
+  dbArchitecturePdfEvidence: The PDF page titled Tailor - DB Architecture - Prod\UAT shows the promotion path DEV/QA -> STG -> UAT -> Prod, AG listener diagrams, and DEV DB host HPTTLRDEVDB01. Because current AAP inventory has no Tailor DEV host and does not expose current primary/failover state, PDF primary/failover labels and DEV nodes are treated as non-authoritative documentation evidence until owner confirmation.
+  productionSqlClusters:
+    - name: GRRTLRPRDCLU1
+      sqlInstance: TLRPRD
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: grr-tailor-prd-sql-clu1-playbook
+      provisioningTemplate: grr-tailor-prd-sql-cluster1-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU1
+      hosts:
+        - GRRTLRPRDDB01
+        - GRRTLRPRDDB02
+    - name: GRRTLRPRDCLU2
+      sqlInstance: TLRPRD
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: grr-tailor-prd-sql-clu2-playbook
+      provisioningTemplate: grr-tailor-prd-sql-cluster2-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU2
+      hosts:
+        - GRRTLRPRDDB03
+        - GRRTLRPRDDB04
+    - name: GRRTLRPRDCLU3
+      sqlInstance: TLRPRD
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: grr-tailor-prd-sql-clu3-playbook
+      provisioningTemplate: grr-tailor-prd-sql-cluster3-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU3
+      hosts:
+        - GRRTLRPRDDB05
+        - GRRTLRPRDDB06
+    - name: GRRTLRPRDCLU4
+      sqlInstance: TLRPRD
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: grr-tailor-prd-sql-clu4-playbook
+      provisioningTemplate: grr-tailor-prd-sql-cluster4-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU4
+      hosts:
+        - GRRTLRPRDDB07
+        - GRRTLRPRDDB08
+  uatSqlClusters:
+    - name: GRRTLRUATCLU1
+      sqlInstance: TLRUAT
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: grr-tailor-uat-sql-playbook
+      provisioningTemplate: grr-tailor-uat-sql-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_UAT_DB
+      hosts:
+        - GRRTLRUATDB01
+        - GRRTLRUATDB02
+  hptSqlHosts:
+    - environment: hpt_stg
+      architectureRole: aap-two-host-sql-group
+      aapTemplate: hpt-tailor-stg-sql-db-playbook
+      provisioningTemplate: hpt-tailor-stg-sql-db-vsphere
+      inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_DB_STG
+      hosts:
+        - HPTTLRSTGDB01
+        - HPTTLRSTGDB02
+    - environment: hpt_qa
+      architectureRole: aap-one-host-sql-group
+      aapTemplate: hpt-tailor-qa-sql-db-playbook
+      provisioningTemplate: hpt-tailor-qa-sql-db-vsphere
+      inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_DB_QA
+      hosts:
+        - HPTTLRQADB01
+  documentedOnlySqlHosts:
+    - environment: hpt_dev
+      source: SaaSIO-Tailor DB Architecture-100726-202108.pdf
+      status: not-found-in-aap-inventory
+      documentedHosts:
+        - HPTTLRDEVDB01

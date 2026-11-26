@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 95P2BNN7QD-RK2Z
+type: relationship
+name: Atlas Identity → Atlas TenantDirectory
+description: AddTenancy registers the TenantDirectory gRPC client; each tenant's database connection is resolved
+  lazily with ResolveTenantConnection and cached for PositiveCacheTtl.
+catalogStatus: stub
+source: 01M5WY4E7P-JBTC
+target: 01M5WY4E7P-7P1K
+label: calls
+technology: gRPC
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. AddTenancy registers the TenantDirectory gRPC client; each
+    tenant's database connection is resolved lazily with ResolveTenantConnection and cached for PositiveCacheTtl.
+  evidence: 'whm-unified-core develop: Service.Core.Identity.App/Program.cs, Libraries/BuildingBlocks/Tenancy,
+    .agentic/08-tenant-directory-reference.md'

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP5H-FQ1N
+type: relationship
+name: 'Settee UI Module Ec Forms → Core HR Retail Institution'
+catalogStatus: stub
+source: 01KSM38KGK-N0PA
+target: 01KSM38KFG-BJHR
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Resolved from the endpoint key this surface reads out of window.buildConfig.endpoint, mapped to its backing service through the Jarvis production env-config endpoint map.

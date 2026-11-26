@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: MCC5EHQJ3Y-2R5S
+name: Ottoman Organization Service → Ottoman Domain Service
+catalogStatus: stub
+source: 01KSM38KFX-DQGA
+label: calls
+target: 01KSM38KFW-WA83
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via DOMAIN_SVC_BASE_URL env var and src/common/services/domain/domain.service.ts client code (applications, provisioning/deprovisioning, domain persons)."
+capabilities: []

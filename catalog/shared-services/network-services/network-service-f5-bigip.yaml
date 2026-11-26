@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-Z6WV
+type: network_service
+ownerRole: technology-admin
+name: F5 BIG-IP
+description: 'Application delivery controller (ADC) used for load balancing and traffic management. Used in shopstar v3 with sticky sessions.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - load-balancing
+  - networking
+  - appliance
+vendor: F5 Networks
+productName: BIG-IP
+productVersion: unknown
+networkPlacement: public-facing
+patchingOwner: organization-scheduled
+complianceCerts: []
+architectureNotes:
+  resilienceModel: Deployed in HA pairs.
+  configurableSurface: Virtual servers, pools, and iRules.
+  failureDomain: Scoped to the ADC cluster.
+  authenticationAccessModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  logAuditVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  healthStatusVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  patchUpdateModel: Updates follow the recorded patchingOwner field unless a more specific vendor or operations mechanism is confirmed.
+capabilities:
+  - 01KSWVZSZ5-M0FR
+deliveryModel: appliance
+networkFunction: load-balancing
+networkTopology: edge-ingress
+protocols:
+  - http
+  - https
+decisionRecords:
+  - ref: 01KT16XJ99-XF91
+    key: resilienceModel
+  - ref: 01KT16XJ99-XF91
+    key: configurableSurface
+  - ref: 01KT16XJ99-XF91
+    key: failureDomain

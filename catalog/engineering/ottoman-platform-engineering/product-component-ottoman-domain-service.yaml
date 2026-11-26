@@ -1,0 +1,100 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-WA83
+type: product_component
+ownerRole: engineer
+name: Ottoman Domain Service
+description: 'Critical Ottoman service that manages person, domain, and application relationships. It is called on gateway requests to determine access and emits PersonProfile events through Loveseat.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - domain
+  - access
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-svc-domain
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  runtimeRequirement: >-
+    Default-branch package.json and Dockerfile both pin Node.js 24.14.1; the
+    application is a TypeScript NestJS 11 service.
+  serviceAuthentication: >-
+    Incoming requests carry no application-level authentication in this
+    codebase — only a global correlation-ID middleware is applied
+    (src/main.ts, src/common/middleware/correlation-id.middleware.ts); request
+    authentication is delegated to the upstream Kong gateway/mesh. Outbound
+    calls to Neptune use AWS IAM via IRSA (SigV4-signed Gremlin handshake,
+    src/databases/graph/gremlin/gremlin-adapter.factory.ts). Outbound calls to
+    Okta use an SSWS management-API token (src/common/services/okta.service.ts).
+  secretsManagement: >-
+    Kubernetes Secret injected via envFrom.secretRef in cd/dev/deploy.yml and
+    cd/prod/deploy.yml; the ConfigMap (cd/dev/cm.yml) marks CONFIGCAT_SDK_KEY,
+    IDM_CLIENT_SECRET, KONG_ADMIN_API_RBAC_TOKEN, and OKTA_CLIENT_TOKEN as
+    secret-sourced. Neptune access uses IRSA (AWS IAM web identity token), not
+    a static credential. The upstream secret store (AWS Secrets Manager vs.
+    another mechanism) is not confirmed from this repo alone. Flag: a plaintext
+    Contrast Security API key and service key are committed to source at
+    contrast_security.yaml — a secrets-hygiene finding, not remediated here.
+  serviceLogging: >-
+    nestjs-pino + pino-http + pino-pretty (src/common/logger/logger.module.ts),
+    set as the global Nest logger in src/main.ts. Log level and
+    pretty-formatting are env-driven (LOG_LEVEL, LOG_FORMATTING); request and
+    response headers are redacted; a correlation ID is attached to every log
+    line and propagated on outbound HTTP calls; /health* routes are excluded
+    from auto-logging.
+  healthWelfareMonitoring: >-
+    @nestjs/terminus HealthController (src/health/health.controller.ts)
+    exposes GET /health/live, /health/ready, /health/startup, and a full
+    diagnostic GET /health. Readiness/startup check Neptune connectivity via
+    GremlinHealthIndicator; a RedisHealthIndicator exists but is currently
+    commented out of the aggregate check. Kubernetes wires startupProbe,
+    readinessProbe, and livenessProbe directly to these routes on port 3000.
+  availabilityModel: >-
+    Dev: 2 replicas, HPA min 2/max 4 (CPU 70%/mem 80%), PodDisruptionBudget
+    maxUnavailable 1. Prod: 14 replicas, HPA min 14/max 25 (CPU 60%/mem 80%,
+    scale-up burst of 5 pods/30s). RollingUpdate strategy with maxUnavailable
+    0/maxSurge 50% in both environments for zero-downtime deploys.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization; no vertical or queue-depth-based scaling observed.
+  recoverabilityModel: >-
+    Graceful shutdown via app.enableShutdownHooks() plus a Kubernetes preStop
+    hook (sleep 5) and terminationGracePeriodSeconds 60. Neptune connectivity
+    uses exponential backoff with jitter for IAM credential fetch and initial
+    connection; an unrecoverable Neptune connection failure kills the process
+    to force a pod restart. A custom least-loaded Gremlin connection pool
+    (feature-flag gated) adds per-slot exponential-backoff reconnect. Redis
+    client has its own capped-retry reconnect strategy. No general-purpose
+    circuit breaker or HTTP retry logic was found for calls to Organization,
+    Passport Core, Loveseat, or Kong.
+  failureDomain: >-
+    Scoped to the Ottoman access graph and domain relationship service tier.
+    Deployment is namespace/environment-scoped (dev/stage/prod each have
+    independent ConfigMap, Secret, Service, HPA, and PDB manifests) with no
+    cross-environment shared failure domain observed in this repo.
+  persistence:
+    - Amazon Neptune for user access and relationship graph data.
+    - Redis for AuthorizationProfile cache and cache invalidation on changes.
+  publishesEvents: PersonProfile events through Loveseat.
+  configcatDirectCall: >-
+    NON-CONFORMING: calls ConfigCat directly via configcat-node
+    (src/common/services/feature.service.ts) rather than through the Platform
+    Feature Flag Service (01KSM38KFY-PB2S). Same pattern as the Kong Backplane
+    finding recorded on the Ottoman SDP (architectureNotes.configcatNonConformance).
+  dependencies:
+    - 01KQQ5JT1D-SHXD
+  unconfirmedDependencies: >-
+    ORGANIZATION_URL, PASSPORT_SVC_BASE_URL, KONG_ADMIN_API_BASE_URL, and IDM
+    Gateway (IDM_GATEWAY_HOST) are present in config but no corresponding
+    client code was found under src/ — usage is unconfirmed. Also newly
+    observed but not in the current catalog: ProductAccess service
+    (PRODUCT_ACCESS_URL), config-only, unconfirmed usage.
+decisionRecords:
+  - ref: 01KT16XHP8-DSS8
+    key: runtimeRequirement

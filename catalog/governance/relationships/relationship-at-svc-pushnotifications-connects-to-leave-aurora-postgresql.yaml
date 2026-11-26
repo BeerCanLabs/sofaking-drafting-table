@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+uid: 01KZ6ZASW4-J9NT
+type: relationship
+name: at-svc-pushnotifications connects to Leave Aurora PostgreSQL
+description: Observed direct PostgreSQL access from both standard and ML chaise workload instances to the absPushNotifications database.
+source: 01KQQ5JT09-45J2
+target: 01KZZ7APG0-4P8M
+label: connects to
+technology: PostgreSQL wire protocol over port 5432
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+notes: Dynatrace observed the standard workload using Aurora writer and reader endpoints and the ML workload using the reader plus occasional writer connections. Evidence covers four complete, unsampled six-hour windows reviewed on 2026-08-04.
+tags: [leave, database-access, dynatrace-evidence, aurora-postgresql]

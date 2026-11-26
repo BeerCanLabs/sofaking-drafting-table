@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-SP80
+type: product_component
+ownerRole: engineer
+name: Sys Audit API
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-sys-audit-api.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- sys
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-sys-audit-api
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-sys-audit-api
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: .vscode/settings.json; Dockerfile; ci/params.yml; ci/pipeline.yml; ci/pr.yml; keys/config.json; kube/sys-audit-api-deploy.yaml; kube/sys-audit-api-ingress.yaml; kube/sys-audit-api-service.yaml; kube/sys-audit-db-deploy.yaml; kube/sys-audit-db-service.yaml; sys-audit-app/.angular-cli.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

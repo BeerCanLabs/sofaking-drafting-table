@@ -1,0 +1,70 @@
+schemaVersion: '1.0'
+uid: 01KXRSDP02-EVPB
+type: product_component
+ownerRole: engineer
+name: Customer Profile Event Publisher
+description: >-
+  AWS Lambda worker (.NET 10) that consumes customer-change messages from the
+  event-publisher SQS queue (fed by the DynamoDB Streams → EventBridge Pipe → SNS
+  fanout), translates them into customer domain events, and publishes them to the
+  Sofa King Loveseat event bus. Authenticates to Loveseat with Okta client-credentials
+  tokens (scope plat.loveseat).
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+runsOn: 01KQQ5JT05-CT7X
+language: C#
+classification: worker
+runtimeRequirement: .NET 10 (AWS Lambda)
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - worker
+  - lambda
+  - event-driven
+  - loveseat
+  - product-component
+runtimeSpec:
+  dependencies:
+    - ref: 01KQQ5JT05-0C4P
+      purpose: Consumes customer-profile-event-publisher-queue (SNS-subscribed SQS).
+      interface: SQS queue customer-profile-event-publisher-queue
+    - ref: 01KWF3RGCF-T2HM
+      purpose: Retrieve the Loveseat (Okta client) credentials.
+      interface: AWS Secrets Manager
+environmentConfiguration:
+  - name: LoveseatService__BaseUrl
+    description: Loveseat per-service events ingest endpoint.
+    required: true
+    sensitive: false
+  - name: LoveseatService__AuthorityUrl
+    description: Okta authority for client-credentials token exchange (moved from IDM in TBSPS-9834).
+    required: true
+    sensitive: false
+  - name: LoveseatService__Scope
+    description: Okta scope for Loveseat (plat.loveseat).
+    required: true
+    sensitive: false
+  - name: LoveseatService__ClientId
+    description: Okta client id for the publisher.
+    required: true
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (net10.0), aws-lambda, sqs
+  observedManifestPaths: >-
+    src/service/CustomerProfile.EventPublisher/CustomerProfile.EventPublisher.csproj;
+    src/service/CustomerProfile.EventPublisher/Program.cs;
+    src/service/CustomerProfile.EventPublisher/Function.cs;
+    src/deploy/CustomerProfile.Deploy/CustomerProfileEventPublisherStack.cs;
+    src/deploy/CustomerProfile.Deploy/Configuration/EventPublisherConfiguration.cs
+  behavior: >-
+    Handler "CustomerProfile.EventPublisher"; SQSEvent → SQSBatchResponse; 512 MB
+    memory, 15s timeout, batch size 10, DLQ customer-profile-event-publisher-dlq
+    (maxReceiveCount 5).

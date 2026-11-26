@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KYMPFAPR-YF1D
+type: decision_record
+name: Tiers of Intensity Authentication and Configuration Risks
+description: Complete record of current implementation and deployment-configuration gaps found while reconciling the Tiers of Intensity source, Kubernetes manifests, and Terraform with the DRAFT architecture.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- tiers-of-intensity
+- som
+- authentication
+- configuration
+- risk
+category: risk
+status: open
+affectedComponent: 01KYMPHRH4-9VP1
+linkedObject: 01KYMPHRH4-9VP1
+impact: Queue requests or synchronous calculation requests may not receive the intended service authentication, and the deployed worker or API may fail to reach the correct production endpoint or publish result notifications until configuration is reconciled.
+mitigationPath: Reconcile the production API hostname, enable and securely source the shared queue API key on both the Lambda and API, decide and enforce the synchronous API authentication boundary, correct ProductTopics configuration, explicitly enable API-owned SNS publishing, and remove Lambda SNS permissions when the API remains the publisher.
+decisionRationale: 'The current source supports optional X-TierCalc-Queue-Key authentication for the Lambda queue-batch endpoint, but QueueEndpointAuth is disabled by default and the checked-in API manifests do not enable it or source a key. The synchronous calculation endpoints do not install authentication middleware.
+
+
+  The Terraform production worker URL uses som-tiers-of-intensity-prod.ss.sofaking.example while the production Kubernetes Ingress publishes som-tiers-of-intensity.use1.sofaking.example.
+
+
+  Terraform supplies AwsMessaging__PublishTopics__... variables to the Lambda, while the API expects AwsMessaging__ProductTopics__... and requires AwsMessaging__EnableSnsPublishing=true. Terraform also grants sns:Publish to the Lambda even though the source architecture assigns SNS publishing to the API.
+
+
+  Terraform provisions Cognito, but the current API source does not validate Cognito or JWT tokens. These are implementation risks, not missing DRAFT facts; the standalone SDP and relationships document the observed current state without claiming the gaps are remediated.'

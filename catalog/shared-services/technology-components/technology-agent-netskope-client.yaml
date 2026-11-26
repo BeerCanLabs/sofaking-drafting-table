@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-M3XY
+type: technology_component
+ownerRole: technology-admin
+name: Netskope Client
+description: Secure web gateway and private access client for managed endpoints.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- agent
+- network-security
+classification: agent
+vendor: Netskope
+productName: Client
+productVersion: current
+platformDependency: external.security.netskope-platform
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Lifecycle follows the managed Netskope client service.
+capabilities:
+- 01KQQ4Q026-4JR6

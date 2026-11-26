@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-YGSN
+type: product_component
+ownerRole: engineer
+name: Whm Am Idcore
+description: TIPIdentityCore - the identity/SSO web application for Trackweb-IT, packaged with an InstallShield installer. Handles multi-provider SSO (LDAP/IWA/ADFS/SAML/OAuth), user profile, and password-policy management.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+  - whm
+  - product-component
+  - asset-management
+  - identity
+  - sso
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_IDCore
+language: Inno Setup
+classification: api-service
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_IDCore
+  observedRuntimeSignals: dotnet, github_actions
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; .vs/ProjectSettings.json; .vs/VSWorkspaceState.json; TIPIdentityCore/Service References/Application Insights/ConnectedService.json; TIPIdentityCore/TIPIdentityCore.csproj; TIPIdentityCoreApp.sln; TIPIdentityCoreLibrary/TIPIdentityCoreLibrary.csproj
+  serviceAuthentication: 'Multi-modal, configurable per region: SSOCommon.GetSSOType() selects among None (local username/password), LDAP (binds via DirectoryEntry), IWA, SPI, ADFS (WS-Federation via WSFederationAuthenticationModule), SAML (including Google SAML, RSA-SHA256-signed AuthnRequest/response), OAuth1, OAuth2. IIS-level web.config sets Windows auth, but the real user-auth dispatch is the SSOCommon logic above.'
+  secretsManagement: 'No secrets vault; plaintext config (see primaryDataStores connection string). WHM.SofaKingSecurityLibrary (01KSM38KFC-566V) is used here specifically as a password-complexity/history validation helper (PasswordService.ValidatePasswordComplexityHistory in ProfileSettings.aspx.cs) - not a general crypto/auth library. Separately, the app has its own home-grown LVE-875 helper (Encryption64.cs) for encrypting query strings, with the key derived from the machine hostname via SHA-256 - a weak, host-derived key scheme worth flagging.'
+  serviceLogging: 'NLog, with a fallback group of two file targets plus an AWS CloudWatch Logs target (NLog.AWS.Logger extension), log group AMIMMApplication, region us-east-1. Microsoft Application Insights is also wired into the HTTP pipeline (ApplicationInsightsWebTracking + TelemetryCorrelationHttpModule).'
+  healthWelfareMonitoring: 'Application Insights (Web SDK, DependencyCollector, PerfCounterCollector, WindowsServer collectors) registered as HTTP modules; no dedicated health-check endpoint found in this repo.'
+  availabilityModel: 'Per-installation IIS web application, packaged via an InstallShield installer project; per-environment publish profiles (QA, QA-Dept, QA-Automation, Staging, Release, BrannockHelp) imply multiple named/region-specific deployment targets rather than one shared multi-tenant instance per tier. Session state is externalized to SQL Server in QA/Staging (mode="SQLServer"), InProc in local/Debug. A Redis session-state provider package is present but not enabled in any examined config - available as a capability, not confirmed active.'
+  scalabilityModel: 'Not explicitly documented beyond the SQL-Server session-state externalization noted above, which would allow multiple web instances to share session if deployed that way. No load-balancer, autoscale, or web-farm configuration found in the repo.'
+  recoverabilityModel: 'No backup/restore or DR automation found in this repo beyond standard SQL Server schema-migration scripts (TIPIdentityCore.Releases/<version>/sql/). Not determinable beyond standard SQL Server backup assumptions.'
+  failureDomain: 'Single IIS web app per installed instance/region (installed per-target rather than shared multi-tenant), so a failure affects identity/SSO/profile/password management for that instance only. Global.asax.cs/Error.aspx provide app-level custom error handling but no bulkheading/circuit-breaker pattern found.'
+  externalDependencies: 'Active Directory/LDAP; ADFS (WS-Federation); SAML identity providers including Google SAML; AWS CloudWatch Logs; Microsoft Application Insights; SQL Server (see primaryDataStores). Redis package present but not confirmed active.'
+  runtimeRequirement: 'ASP.NET web application (System.Web, .NET Framework), packaged and shipped via an InstallShield installer for per-region/per-environment installation - not merely a build-time-only installer tool.
+
+    '
+  primaryDataStores: 'Microsoft SQL Server via System.Data.SqlClient and a LINQ-to-SQL .dbml (IdentityCore.dbml / TIPIdentityCoreDataContext.cs). Backs the {IDCORE_DATABASE} (TIPIdentityCore) database referenced from 01KSM38KFB-4JYM''s production config template.'
+decisionRecords:
+  - ref: 01KT16XHJY-YBXH
+    key: runtimeRequirement

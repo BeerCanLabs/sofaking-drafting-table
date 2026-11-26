@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-2GGC
+type: product_component
+ownerRole: engineer
+name: SOM Event Processor
+description: 'Event processing service within the SubEnvironment. Handles event-driven workflows for the SOM application tier. Contains Sofa King-authored .NET code.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT1E-HQZ6
+tags:
+- som
+- event-processing
+- product-component
+repoUrl: TBD
+classification: worker
+architectureNotes:
+  serviceAuthentication: Service identities and administrative access use centralized identity and secret distribution for event-processing workflows.
+  secretsManagement: Runtime secrets are sourced from centralized secret storage.
+  serviceLogging: Event-processing logs are forwarded to centralized logging beyond the underlying runtime tier.
+  healthWelfareMonitoring: Workflow telemetry, synthetic processing checks, and runtime monitoring track service welfare.
+  availabilityModel: Designed to run as a multi-instance application service within the sub-environment.
+  scalabilityModel: Horizontal scale-out across additional application instances as event volume increases.
+  recoverabilityModel: Failed instances are rebuilt from the deployment package and rejoin the event-processing tier.
+  failureDomain: Scoped to the SOM event-processing service within a single sub-environment.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-06KC
+type: decision_record
+name: AWS Glue Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-12C2
+decisionRationale: >
+  AWS Glue is operated as a serverless PaaS with managed multi-AZ high availability. Operators configure Glue jobs, crawlers, and triggers; underlying execution infrastructure is fully managed by AWS. The failure domain is scoped to the AWS region.

@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01KYWQZ7C9-R9JV
+type: technology_component
+name: LiteLLM Model Gateway
+vendor: BerriAI
+productName: LiteLLM
+productVersion: 1.55.0-cca1
+classification: software
+catalogStatus: incomplete
+description: >-
+  [INTENDED] Self-hosted, in-VPC model routing and governance proxy (non-root
+  CCA image build) that fronts approved model providers. Provides the runtime
+  behavior of the CCA LLM Gateway service. PoC providers are AWS Bedrock only,
+  merged but gated off.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - llm-gateway
+  - litellm
+  - model-routing
+  - intended

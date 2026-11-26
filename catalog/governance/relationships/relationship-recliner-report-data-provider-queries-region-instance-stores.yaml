@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EK-V9SC
+name: Recliner Report Data Provider Service → Recliner Region Instance Stores
+catalogStatus: stub
+source: 01KSM38KGD-RFS7
+label: queries operational data from
+target: 01KZP9ZZ56-VW85
+notes:
+  background: "Report Data Provider queries operational region data for reporting; Snowflake analytics remains modeled as a separate relationship."
+capabilities: []

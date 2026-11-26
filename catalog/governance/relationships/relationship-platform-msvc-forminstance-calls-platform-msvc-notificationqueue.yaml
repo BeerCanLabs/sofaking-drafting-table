@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS6Y-3M91
+type: relationship
+name: 'Platform Msvc Forminstance → Platform Msvc Notificationqueue'
+catalogStatus: stub
+source: 01KSM38KFY-DZKV
+target: 01KSM38KFZ-JZVM
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.

@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZK-QSV3
+name: Docker Application Service → Container Registry
+catalogStatus: stub
+source: 01KQQ5JT1E-EZJR
+label: calls
+externalTarget: Container Registry
+notes:
+  background: "Container image pull and push dependency for managed workloads."

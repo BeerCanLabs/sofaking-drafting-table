@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YN-CXPX
+name: Amazon ECS Standard Container Host → AWS Application Load Balancer
+catalogStatus: stub
+source: 01KQQ5JT02-KJHA
+label: calls
+target: 01KQQ5JT04-P7QJ
+notes:
+  background: "Ingress traffic management for ECS services."

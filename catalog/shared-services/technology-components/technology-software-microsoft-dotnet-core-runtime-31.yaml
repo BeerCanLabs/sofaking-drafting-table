@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 4PEF0MQPD9-ZMPW
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft .NET Core Runtime 3.1
+description: Legacy .NET Core 3.1 (LTS) application runtime.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - software
+  - app-framework
+  - dotnet
+  - legacy
+classification: software
+vendor: Microsoft Corporation
+productName: .NET Core
+productVersion: '3.1'
+vendorLifecycle:
+  mainstreamSupportEnd: 2022-12-13
+  extendedSupportEnd: 2022-12-13
+  notes: .NET Core 3.1 reached end of support on 2022-12-13.
+capabilities:
+  - 01KT0V5MCV-RZV0
+notes:
+  background: >-
+    Added to represent legacy Sofa King Central workloads identified in
+    OPS-255153. See SKC-47920 for modernization tracking.

@@ -1,0 +1,129 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFH-NYK5
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Org Person
+description: A microservice to manage canonical org-persons at Sofa King.
+version: 1.0.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-org-person
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-org-person
+  observedRuntimeSignals: docker, node, readme, serverless
+  observedManifestPaths: .env/env.dev.json; .env/env.production.json; .env/env.stage.json; Dockerfile; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/ingress.yml; cd/dev/service.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/ingress.yml
+  runtimeEvidence: >-
+    Default-branch package.json pins Node.js 24.14.1 through Volta and requires
+    Node.js 24 or later; the Dockerfile pins node:24.14.1-alpine.
+  serviceAuthentication: >-
+    Passport.js bearer/service/cognito strategies (src/middleware/passport.js)
+    validate tokens against an ID Gateway introspection endpoint or Cognito
+    JWKS; RBAC via the accesscontrol package (src/middleware/roleAccess.js)
+    with validclient/idmadministrator roles. When config.PASSPORT=true (set in
+    both dev and prod ConfigMaps), auth is normally bypassed because "Sofa King
+    Passport (Ottoman) uses Kong Mesh as security layer" (comment in
+    src/middleware/authentication.js) — the request is granted client_id
+    'passport' and superAdmin, except when the Host header matches
+    ORG_PERSON_CLIENT_HOST, which still enforces full auth. A client whitelist
+    (CLIENT_WHITELIST) names trusted internal service callers. The service also
+    self-authenticates to Cognito via OAuth2 client-credentials
+    (src/service/cognitoTokenService.js) to call the Loveseat pub/sub API.
+  secretsManagement: >-
+    Kubernetes Secret objects injected via envFrom in cd/dev/deploy.yml and
+    cd/prod/deploy.yml. ConfigMaps explicitly mark MONGO, APP_AWS_SECRET_ACCESS_KEY,
+    COGNITO_CLIENTSECRET, CLIENT_SECRET, and CONFIGCAT_SDK_KEY as
+    secret-sourced. No AWS Secrets Manager SDK or Vault client dependency
+    found — this differs from the Passport monorepo apps and Invitation
+    Service, which pull secrets dynamically via ExternalSecrets/AWS Secrets
+    Manager.
+  serviceLogging: >-
+    Fragmented across three mechanisms: morgan HTTP request logging
+    (src/app.js), a custom console-wrapper logger (src/logger/logs.js), and
+    pino/pino-pretty declared as a dependency and used in a separate v1 API
+    logger (src/api/v1/utils/logger/logger.js). New Relic APM is also
+    configured (NEW_RELIC_APP_NAME, serverless.yaml) for the Lambda path. This
+    is less consistent than the uniform nestjs-pino pattern used by the other
+    Ottoman Node services.
+  healthWelfareMonitoring: >-
+    GET /health/:delay? (src/routes.js) returns a static {server: 'running'}
+    with no dependency checks. Kubernetes wires only readinessProbe and
+    livenessProbe to this route (port 3300) — unlike its NestJS siblings,
+    there is no startupProbe. A separate mongoCheck.js readiness guard exists
+    but is not wired to the k8s probes and explicitly does not work in Lambda.
+  availabilityModel: >-
+    Dev: 2 replicas, HPA min 2/max 5 (CPU 70%). Prod: 5 replicas, HPA min
+    5/max 50 (CPU 50%/mem 70%, scale-up +100%/15s, scale-down -2 pods/60s
+    after 300s). RollingUpdate maxUnavailable 0/maxSurge 50%. No
+    PodDisruptionBudget manifest exists for this service — a gap compared to
+    its NestJS siblings, which all define one.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization (see availabilityModel for thresholds).
+  recoverabilityModel: >-
+    MongoDB connection retries up to 10 times with increasing delay before
+    process.exit(1) (src/connection.js) — a startup-connection retry, not a
+    per-request circuit breaker. No circuit-breaker library and no explicit
+    SIGTERM/graceful-shutdown handler found, despite terminationGracePeriodSeconds
+    30 being configured at the k8s level. No outbound HTTP retry logic on
+    calls to Domain or Organization Service.
+  failureDomain: >-
+    Scoped to Ottoman organization-person relationship data. Runs both as a
+    long-lived EKS container (primary, per cd/*/deploy.yml) and has a parallel
+    AWS Lambda deployment path via serverless.yaml (runtime nodejs24.x, same
+    Express app via serverless-http). See architectureNotes.lambdaShutdownPlan
+    — the Lambda path is being decommissioned; EKS is the sole authoritative
+    path going forward.
+  persistence: >-
+    MongoDB Atlas (not AWS DocumentDB) — confirmed via mongodb+srv:// SRV
+    connection string to a .mongodb.net cluster and an explicit ATLAS: true
+    config flag (src/connection.js, .env/env.dev.json). This resolves the
+    OPS-433061 drafting session's open "document-database-selection" question.
+    A Ottoman developer confirmed 2026-08-04 the production cluster/database
+    is FC-PROD1-Cluster1/sk-org-person, matching the replica set name observed
+    in cd/prod/cm.yml (FC-PROD1-Cluster1-shard-0). Ownership documented at
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/113994913/Atlas+MongoDB+-+Database+and+Service+Owning+Teams.
+    Modeled as a relationship to the existing shared MongoDB Atlas
+    data_store_service (01KQQ5JT05-E3FZ) rather than a new object, consistent
+    with how other Sofa King products reuse that same catalog entry.
+  atlasInfrastructure: >-
+    sk-org-person is the only Platform Ottoman database for this service and
+    is hosted on the shared Sofa King Central Atlas MongoDB Cluster 1
+    environments. The Data Team manages shared Atlas infrastructure; Platform
+    Ottoman owns the schema, data, and application access. Production backup
+    controls use immutable project-level policy and secondary-region snapshots.
+    Peak-season performance spikes have prompted discussion, including agreement
+    from Kara Keane, to plan a future dedicated cluster; that target is not
+    yet approved or tracked.
+  awsIntegrations: >-
+    KMS (src/service/encryptDecrypt.js, encrypts/decrypts the legalId field),
+    SQS (src/api/v1/pdi/pdiAttemptToSqsHandler.js, publishes to a PDI-attempt
+    queue), and Cognito (both as an inbound token validator and as this
+    service's own OAuth2 client for Loveseat) are all confirmed via direct
+    aws-sdk client instantiation.
+  configcatDirectCall: >-
+    NON-CONFORMING: calls ConfigCat directly via configcat-node
+    (src/api/v1/event/api/feature.service.js) rather than through the Platform
+    Feature Flag Service (01KSM38KFY-PB2S). Same pattern as the Kong Backplane
+    finding recorded on the Ottoman SDP (architectureNotes.configcatNonConformance).
+  dependencies:
+    - 01KSM38KFW-WA83
+    - 01KSM38KFX-DQGA
+  unconfirmedDependencies: >-
+    No code-level reference to Invitation Service, Passport Core, or Okta was
+    found. Newly observed and not yet in the catalog: plat-audit service
+    (AUDIT_SVC_URL, code-confirmed audit logging of legalId lookups).
+  lambdaShutdownPlan: >-
+    RESOLVED 2026-08-04: a Ottoman developer confirmed the parallel AWS
+    Lambda deployment path (serverless.yaml) is scheduled to be shut down by
+    the Data/AI team within the next couple of weeks (target: mid-to-late
+    August 2026). The primary EKS deployment (cd/*/deploy.yml) is unaffected
+    and remains authoritative.

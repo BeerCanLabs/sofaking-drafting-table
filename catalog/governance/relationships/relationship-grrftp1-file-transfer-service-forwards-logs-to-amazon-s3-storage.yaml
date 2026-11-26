@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ05-S3AR
+type: relationship
+name: GRRFTP1 File Transfer Service -> Amazon S3 Storage
+catalogStatus: incomplete
+source: 01KYN1RHK6-FTP1
+label: forwards logs to
+target: 01KQQ5JT05-KT3Z
+technology: HTTPS (Amazon S3 API)
+direction: asynchronous
+flow: outbound
+notes: >-
+  GRRFTP1 authentication and file-transfer logs are retained locally and
+  also transferred to Amazon S3 (owner-confirmed 2026-07-29). Exact bucket
+  name is not required for the conceptual model.
+capabilities: []

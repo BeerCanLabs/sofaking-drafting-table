@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-70YJ
+type: relationship
+name: Traefik Kubernetes Ingress Service → HCM RH App
+description: >-
+  Traefik routes the HCM RH employer and job-seeker ingress hosts to the
+  application Services.
+catalogStatus: complete
+source: 01KYAXMZ7H-72BR
+target: 01KSM38KG5-49X9
+label: routes requests to
+technology: HTTP
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - hcm-rh
+  - traefik
+  - ingress
+notes: >-
+  Confirmed from HCM RH ingress manifests and the live Traefik controller in
+  chaise and le1 on 2026-07-24.

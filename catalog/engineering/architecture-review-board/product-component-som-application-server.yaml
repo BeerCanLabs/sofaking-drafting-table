@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-D1VD
+type: product_component
+ownerRole: engineer
+name: SOM Application Server
+description: 'Core application server for SOM business logic. Contains Sofa King-authored .NET code. Currently single instance — unintentional SPOF. See ard.som.003.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT1E-HQZ6
+tags:
+- som
+- app
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  serviceAuthentication: Product identities and administrative access use the SOM application authentication model and centralized secret distribution.
+  secretsManagement: Product secrets and certificates are sourced from centralized secret storage.
+  serviceLogging: Product application logs are forwarded to centralized logging beyond the underlying runtime tier.
+  healthWelfareMonitoring: Product telemetry, synthetic application checks, and runtime monitoring track service welfare.
+  availabilityModel: Intended to run as a highly available multi-instance application service, though current deployment remains a single instance.
+  scalabilityModel: Horizontal scale-out behind the application load-balancing pattern when HA remediation is completed.
+  recoverabilityModel: Rebuild failed instances from the deployment package and rejoin them to the active service pool.
+  failureDomain: Scoped to the SOM application tier within a single sub-environment.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

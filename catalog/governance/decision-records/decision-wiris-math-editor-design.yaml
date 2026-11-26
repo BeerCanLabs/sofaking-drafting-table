@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AM-VG8W
+type: decision_record
+name: WIRIS Math Editor Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-VER7
+decisionRationale: >
+  WIRIS Math Editor is operated as a vendor-managed platform with vendor-provided high availability. Operators configure license integration and API parameters. The failure domain is scoped to the WIRIS platform.

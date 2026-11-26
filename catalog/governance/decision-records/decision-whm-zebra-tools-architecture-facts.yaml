@@ -1,0 +1,108 @@
+schemaVersion: '1.0'
+uid: 01M0CVDXKH-B9BW
+type: decision_record
+name: WHM Zebra Tools Architecture Facts
+description: Corrects WHM_Zebra_Tools' (01KSM38KFC-0A26) architecture notes with facts confirmed by direct repository read, replacing repository-tree-discovery placeholders and one incorrect inferred claim, per TRK-870 AC item 5 (component stub enrichment). Updated 2026-08-25 to record the build, distribution, platform, and artifact-lifecycle facts supplied by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - tip-279
+  - adr
+  - zebra-tools
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFC-0A26
+linkedObject: 01KSM38KFC-0A26
+decisionRationale: >
+  runtimeRequirement: Supersedes 01KT16XHKB-7GTX's claim that WHM_Zebra_Tools
+  is purely "a Windows installer build tool" with "no application runtime on
+  the hosting service." Direct repository read shows Zebra.vbproj builds a
+  WinForms desktop application (frmMain.vb, global.vb) that connects directly
+  to the region's Trackweb SQL Server at runtime via System.Data.SqlClient to
+  look up book/accession data and print Zebra labels. The "Zebra Tools Setup"
+  project only packages that application for distribution via InstallShield
+  2020 (not Inno Setup, as previously catalogued — the .isproj/.isl file
+  extensions are InstallShield project files). A second prototype form
+  (ZebraNew) exists in the repository but is not referenced by Zebra
+  Tools.sln and is not part of the shipped application.
+
+
+  serviceAuthentication / secretsManagement: The application authenticates to
+  SQL Server using a single hardcoded shared SQL login embedded directly in
+  source (Zebra/global.vb Sub Main, Zebra/frmMain.vb frmMain_Load) and
+  therefore in the compiled binary distributed to every region. There is no
+  per-region credential, no secrets manager, and no rotation mechanism -
+  this is a live security exposure, not just a documentation gap. The
+  credential value itself is intentionally not reproduced in the catalog or
+  in any chat/PR record. Remediation is tracked as TRK-686, owner Kamal
+  Shah, confirmed 2026-08-25 via the IMM DRAFT L1 developer questionnaire; no
+  target date has been set.
+
+
+  serviceLogging: No logging framework, EventLog, or System.Diagnostics.Trace
+  calls exist anywhere in the codebase. Zebra/RawPrinterHelper.vb's
+  SendStringToPrinter silently swallows exceptions in an empty Catch block;
+  SendFileToPrinter has a stale, unimplemented "TODO: Do something with the
+  exception (error logging, message display???)" comment.
+
+
+  healthWelfareMonitoring / availabilityModel / scalabilityModel: Not
+  applicable in the hosted-service sense - this is a locally-installed
+  desktop client, one instance per workstation, with no server-side
+  component of its own. Its real availability dependency is the shared
+  region Trackweb SQL Server it connects to, which is out of this
+  component's control.
+
+
+  recoverabilityModel: No automated retry or recovery exists. The
+  application does handle one specific concurrency case manually - it
+  re-checks a shared accession-number counter in Trackweb via stored procedure
+  and prompts the user to retry if another workstation printed first in the
+  interim - but this is the only recovery behavior present.
+
+
+  failureDomain: Scoped to the local workstation and the shared region
+  Trackweb SQL Server the app connects to directly. A SQL Server outage blocks
+  printing region-wide; a single workstation's install or local printer
+  failure is isolated to that workstation.
+
+
+  deploymentTarget (resolved 2026-08-25): The Trackweb-IM development team
+  confirmed the build and distribution chain via the IMM DRAFT L1 developer
+  questionnaire, superseding this record's earlier "not resolved" position.
+  The installer is built manually with InstallShield inside Visual Studio;
+  there is no pipeline and no automated build, consistent with the leave of
+  .github/workflows in the repository. The completed installer is kept only
+  on the builder's local machine - deliberately not archived or checked in,
+  because it is an executable. Regions receive it by file share or email.
+  Packaging, publishing, versioning, and support are owned by the Trackweb-IM
+  development team. Because the application is deployed to and runs on
+  region-operated workstations, 1G0D's Client Tooling service group is set
+  to customer-hosted, replacing the owner-interview-required sentinel. The
+  legacy CD_ROM/DVD-5/SingleImage build configurations are confirmed history,
+  not current practice.
+
+
+  platformRequirement: The shipped application targets .NET Framework 4.5,
+  which implies Windows 7 SP1 or later. No supported Windows version is
+  stated anywhere in the repository, and none was supplied by the owner, so
+  the client-side OS support matrix is recorded as undocumented rather than
+  confirmed. .NET Framework 4.5 itself is out of Microsoft support, which is
+  a technology-currency concern for Established (2) but not for Baseline (1).
+
+
+  artifactLifecycle (new finding, 2026-08-25): There is no rollback process
+  and no previous-installer process, and no archived copy of any released
+  installer exists. Combined with a manual, local-only build, a previously
+  released version cannot be reliably reproduced or reinstated, and there is
+  no artifact provenance for installers already deployed in regions. This
+  is a supportability risk rather than a documentation gap; it was surfaced
+  by the questionnaire answers rather than asserted by DRAFT, and is tracked
+  in DraftingSession 01M07T82GS-87MN as zebra-tools-artifact-lifecycle. It
+  does not block Baseline (1) now that it is explicitly recorded.
+relatedDecisionRecords:
+  - 01KT16XHKB-7GTX

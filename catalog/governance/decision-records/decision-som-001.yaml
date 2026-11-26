@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-ZQ56
+type: decision_record
+name: Data Ingestion Web Service — Unintentional Single Instance
+description: 'The SOM Data Ingestion Web Service is currently deployed as a single instance with no load balancing or redundancy. This was not an intentional architectural decision — it is historical technical debt.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- som
+category: risk
+status: open
+affectedComponent: 01KSM38KEW-G59V
+impact: 'Loss of data ingestion capability for all tenants in the affected SubEnvironment. Regions relying on automated data feeds would experience ingestion failures until the instance is restored.
+
+  '
+mitigationPath: 'Evaluate whether the ingestion service is stateless. If stateless, add a second instance behind the existing AWS ALB. If session state exists, implement session offloading before scaling horizontally.
+
+  '
+linkedObject: 01KSM38KEX-R400

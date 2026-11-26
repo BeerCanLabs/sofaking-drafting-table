@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-GCD5
+type: product_component
+name: Atlas UI
+description: 'React 19 and TypeScript single-page app for Atlas (Unified Inventory): catalog, requests, receiving
+  and settings. Calls the Atlas Identity and Workflow APIs through Sofa King''s Kong edge with an HttpOnly session
+  cookie, redirects to Sofa King Passport for sign-in, and embeds the Wingman widget.'
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- ui
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-ui
+language: TypeScript
+classification: web-application
+architectureNotes:
+  source: Atlas architecture V1 diagram (Greenfield Backend Architecture v2, checked against the ATL Jira board).
+  sourceInspection: Source inspection 2026-11-13 of whm-unified-ui (develop; main carries only the README). Vite
+    8, TanStack Router and Query, Radix UI with Tailwind v4 (Backpack design system), Vitest and Playwright; container
+    image built to the whm-unified-ui ECR repository in us-east-1.
+  apiPath: VITE_API_BASE_URL for nonprod builds is https://unified-inventory-nonprod.stage-retail.ss.sofaking.example/service/unified-nonprod-api;
+    the workflow README notes this host differs from the LE1 UI ingress host and its routing is to be verified.
+    The UI also calls /api/session/me, which no controller in whm-unified-core serves at the inspected commit.
+runtimeSpec:
+  ports:
+  - number: 8080
+    protocol: HTTP
+    direction: inbound
+    name: web
+    description: nginx serving the static Vite bundle; GET /health returns 200.

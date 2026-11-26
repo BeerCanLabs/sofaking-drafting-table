@@ -1,0 +1,82 @@
+schemaVersion: '1.0'
+uid: 01KZ6K57W5-APKF
+type: decision_record
+name: The CCA Console Is the Front Door; JSM Is the Governance Record
+description: >
+  A product manager enters Cloud Divan Academy (CCA) through the CCA Console and
+  types a plain-English request. The Console backend opens a Jira Service
+  Management (JSM) service request server-side, under a scoped service identity,
+  and that ticket is the governance record for the run -- who asked, when, and
+  for what. The requester never touches the JSM portal.
+
+  Plain language: you still cannot make CCA do anything without a ticket, but you
+  no longer have to file the ticket yourself. The platform files it for you, and
+  refuses to run if it cannot.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- adr
+- decision
+- cca
+- governance
+- jsm
+- console
+- front-door
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+decisionRationale: >
+  This record supersedes, in part, decision record A167KVYYG2-X831 ("JSM Is the
+  Sole Front Door"). That record's governance principle was right and is retained:
+  every action must be ticket-bound, approvable, cancellable, and auditable. Its
+  claim about the ENTRY POINT was wrong -- it stated there is "no direct API, no
+  chat-only entry," which would make a conversational front end a control
+  violation by definition.
+
+  Two things forced the correction. First, requiring a product manager to file a
+  structured JSM ticket before getting any value defeats the product's purpose;
+  the pilot's whole premise is that a PM describes what they want in their own
+  words. Second, the choke point does not actually depend on WHO opens the
+  ticket, only on the ticket existing before execution. Moving ticket creation
+  server-side preserves the control while removing the friction.
+
+  The Console opens the request under a scoped JSM service identity rather than
+  impersonating the requester, so the audit trail attributes the request to a
+  governed identity and records the human requester in the ticket body and the
+  run's audit row.
+
+  Rejected alternative: keep the JSM portal as the PM's entry point and treat the
+  Console as a read-only status surface. Rejected because it preserves the
+  friction the pilot exists to remove, and because it does not improve
+  auditability -- the same ticket is created either way.
+impact: >
+  No governing service request means no execution. The requirement moved from
+  "the human must file a JSM ticket" to "a JSM service request must exist before
+  any dispatch," which the Console enforces by failing closed: if the request
+  cannot be opened, nothing runs and the caller is told so explicitly.
+
+  Consequences: (1) a conversational entry point is now correct architecture, not
+  a control violation; (2) the JSM portal remains a valid secondary intake path
+  and the documented fallback if Console access is unavailable, but it is not the
+  PM's path; (3) any code path that dispatches work without an associated service
+  request is still a control violation and must be removed; (4) a planned Slack
+  side door is governed by this same rule and needs no separate exception.
+mitigationPath: >
+  Continuous: monitor the PostgreSQL run-audit table for any run whose service
+  request reference is null. A null reference means a run executed without a
+  governance record and is a control failure, regardless of which surface
+  originated it.
+
+  Known open item as of 2026-08-04: the Console code that opens the service
+  request is merged but not yet deployed, so runs recorded to date have a null
+  reference. This is a deployment gap, not a design gap, and closing it is the
+  acceptance test for this decision.
+relatedDecisionRecords:
+- A167KVYYG2-X831
+- 62GNEE8S2T-W4GV
+- 4TG85QEKZ3-ZTFS
+- N0X30P3VJ7-42VK

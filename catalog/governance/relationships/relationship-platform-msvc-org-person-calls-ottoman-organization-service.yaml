@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: XQZF2B551D-9RXY
+name: Platform Msvc Org Person → Ottoman Organization Service
+catalogStatus: stub
+source: 01KSM38KFH-NYK5
+label: calls
+target: 01KSM38KFX-DQGA
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via ORGANIZATION_SVC_BASE_URL and src/service/organization.js (referenced from src/service/common.js as orgService) to resolve/validate org IDs."
+capabilities: []

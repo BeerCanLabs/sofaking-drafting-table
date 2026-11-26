@@ -1,0 +1,64 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-HZTZ
+type: runtime_service
+ownerRole: technology-admin
+name: IIS Standard Web Service
+description: Standard IIS-based web service for Sofa King .NET workloads.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- service
+- web
+- iis
+category: service
+serviceCategory: general
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1S-PYY2
+deploymentConfigurations:
+- id: high-availability
+  name: High Availability
+  description: Multiple IIS nodes behind a load balancer provide active web-service redundancy.
+  addressesQualities:
+  - availability
+  - recoverability
+- id: elastic-scale
+  name: Elastic Scale
+  description: IIS node pool scales horizontally based on demand.
+  addressesQualities:
+  - scalability
+internalComponents:
+- ref: 01KQQ5JT04-JKFX
+  role: host
+- ref: 01KQQ5JT1S-PYY2
+  role: function
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: Web identities and administrative access use centralized identity and certificate services.
+  scalingApproach: horizontal autoscaling behind load balancer
+  serviceLogging: IIS and application logs are forwarded to centralized logging beyond host event collection.
+  healthCheck: HTTP 200 endpoint monitored by the load balancer
+  healthWelfareMonitoring: Endpoint probes, synthetic URL checks, and platform telemetry monitor service welfare.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  externalInteractionRationales:
+    Enterprise DNS: Service DNS registration and name resolution are modeled as endpoint support dependencies for IIS web services, even though DNS does not satisfy a DRAFT runtime-service requirement.
+    Certificate Management Platform: TLS certificate issuance and renewal are modeled as endpoint support dependencies for IIS web services; the service-level secrets requirement is documented separately.
+  availabilityModel: Multi-node IIS web tier behind load balancing.
+  scalabilityModel: Horizontal autoscaling behind a load balancer.
+  recoverabilityModel: Replace failed IIS nodes while remaining nodes continue serving traffic.
+  failureDomain: Scoped to the IIS web tier deployment unit behind the load balancer.
+decisionRecords:
+- ref: 01KSNAW2AM-T1PQ
+  key: serviceAuthentication
+- ref: 01KSNAW2AM-T1PQ
+  key: secretsManagement
+- ref: 01KSNAW2AM-T1PQ
+  key: healthWelfareMonitoring
+- ref: 01KSNAW2AM-T1PQ
+  key: failureDomain
+deliveryModel: self-managed

@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-PK8G
+type: host
+ownerRole: technology-admin
+name: Amazon Linux 2023 on EC2 Standard Host
+description: Preferred Linux host for EC2 workloads on Amazon Linux 2023.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- aws
+category: host
+operatingSystemComponent: 01KQQ5JT1P-9ARF
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1P-9ARF
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1P-FV8A
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

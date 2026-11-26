@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: XZ0DPR4JC6-SBMV
+name: F5 BIG-IP -> Tailor Web and Comet Sites
+catalogStatus: incomplete
+source: 01KQQ5JT00-Z6WV
+label: proxies
+target: W6N1TCS8DQ-2WMB
+technology: HTTP/HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: F5 BIG-IP creates HTTP and HTTPS virtual servers, client SSL profiles, pools, and pool members for Tailor web traffic. Evidence comes from ansible_playbooks_sre playbooks/tailor-playbook.yml and roles/common/f5_load_balancer/tasks/main.yml.
+capabilities: []

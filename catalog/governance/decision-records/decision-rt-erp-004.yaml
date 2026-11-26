@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-T523
+type: decision_record
+name: Reporting Services — JasperSoft ECS Runtime Topology
+description: 'JasperSoft is a standalone per-region ECS reporting capability using EC2-backed cluster capacity. Legacy Jasper and Jasper 9 service definitions may coexist during migration. The active-version baseline uses one desired task with repository storage backed by PostgreSQL on EFS; RDS is a migration path.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+- ard
+- rt-erp
+- reporting
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-737K
+impact: 'DRAFT now reflects Jasper as a region-scoped ECS service and does not overstate the current single-task baseline as active-active high availability.
+
+  '
+mitigationPath: 'Revalidate storage, session, and task-count assumptions during the Jasper 9 and RDS migration.
+
+  '
+linkedObject: 01KSM38KEY-JC4K
+decisionRationale: |
+  deploymentModel: The current cloud baseline deploys the active Jasper
+  version with one desired ECS task per region on EC2-backed capacity.
+  Legacy Jasper and Jasper 9 service definitions can coexist during migration.
+  The runtime includes Jasper web application, PostgreSQL repository,
+  ActiveMQ, and buildomatic container roles. Repository storage is EFS-backed
+  in the current runbook; RDS is a migration path. This decision does not claim
+  active-active Jasper availability.

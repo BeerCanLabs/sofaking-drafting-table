@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KZ6F0ZEH-QBMX
+type: product_component
+ownerRole: engineer
+name: Leave Platform Identity Match Processor
+description: Repository-discovered Leave identity-matching processor deployed as a production Kubernetes workload.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+  - repository-discovery
+  - leave
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-at-svc-platform-identity-match-processor
+language: C#
+classification: worker
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-at-svc-platform-identity-match-processor
+  observedRuntimeSignals: docker, dotnet, kubernetes, terraform
+  runtimePlacement: Production Kubernetes manifests and Terraform establish Amazon EKS placement in AWS us-east-1; the product owner confirmed on 2026-08-04 that at-api-* and at-svc-* EKS workloads belong exclusively to Leave, not Time & Attendance.
+  serviceAuthentication: Authentication model remains unconfirmed.
+  secretsManagement: Secrets management approach remains unconfirmed.
+  serviceLogging: Logging approach remains unconfirmed.
+  healthWelfareMonitoring: Health and welfare monitoring remains unconfirmed.
+  availabilityModel: Availability target remains unconfirmed.
+  scalabilityModel: Scalability model remains unconfirmed.
+  recoverabilityModel: Recoverability model remains unconfirmed.
+  failureDomain: Failure-domain detail beyond the production EKS placement remains unconfirmed.

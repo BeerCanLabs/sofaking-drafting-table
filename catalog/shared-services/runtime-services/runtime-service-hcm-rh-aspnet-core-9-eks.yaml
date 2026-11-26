@@ -1,0 +1,87 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-09RG
+type: runtime_service
+ownerRole: technology-admin
+name: HCM RH ASP.NET Core 9 on EKS Application Runtime
+description: >-
+  Application runtime substrate for the HCM Recruiting & Hiring .NET backend
+  workloads. The HCM RH Core containers run on Amazon EKS using the governed
+  Microsoft ASP.NET Core 9 TechnologyComponent.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - runtime
+  - application
+  - dotnet
+  - aspnet-core-9
+  - eks
+  - hcm-rh
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1S-P5KB
+architectureNotes:
+  minNodes: 2
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: >-
+    Ottoman trusted-header authentication is used for user context and OAuth
+    2.0 is used for service-to-service calls.
+  secretsManagement: >-
+    Kubernetes secrets and AWS Secrets Manager provide runtime credentials.
+  serviceLogging: >-
+    Structured JSON logs with correlation identifiers are emitted through
+    Serilog for centralized collection.
+  healthWelfareMonitoring: >-
+    Kubernetes liveness and readiness probes monitor the ASP.NET Core
+    workloads.
+  availabilityModel: >-
+    Multi-replica Kubernetes Deployments use rolling updates with no planned
+    unavailable replicas.
+  scalabilityModel: >-
+    Horizontal Pod Autoscalers scale backend workloads independently.
+  recoverabilityModel: >-
+    Kubernetes replaces failed pods, while SQS dead-letter queues preserve
+    failed asynchronous work for replay.
+  failureDomain: >-
+    Failure is isolated to a backend Deployment within the regional EKS
+    cluster.
+deploymentConfigurations:
+  - id: multi-replica-hpa
+    name: Multi-Replica Deployment with HPA
+    description: >-
+      Run ASP.NET Core workloads as multi-replica Kubernetes Deployments with
+      horizontal pod autoscaling and rolling updates.
+    addressesQualities:
+      - availability
+      - scalability
+  - id: kubernetes-self-healing
+    name: Kubernetes Self-Healing
+    description: >-
+      Use readiness and liveness probes so Kubernetes removes unhealthy pods
+      from service and replaces failed containers.
+    addressesQualities:
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KQQ5JT1S-P5KB
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KYAVGDVV-18NV
+    key: serviceAuthentication
+  - ref: 01KYAVGDVV-18NV
+    key: secretsManagement
+  - ref: 01KYAVGDVV-18NV
+    key: serviceLogging
+  - ref: 01KYAVGDVV-18NV
+    key: healthWelfareMonitoring
+  - ref: 01KYAVGDVV-18NV
+    key: recoverabilityModel
+  - ref: 01KYAVGDVV-18NV
+    key: failureDomain

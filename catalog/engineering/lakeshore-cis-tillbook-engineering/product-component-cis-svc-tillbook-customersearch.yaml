@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFR-3H0Q
+type: product_component
+ownerRole: engineer
+name: CIS Svc Tillbook Customersearch
+description: Tillbook Suite customer search service. Never launched; dead.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-customersearch
+language: C#
+classification: api-service
+runtimeRequirement: .NET Core 3.1
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-cis-svc-tillbook-customersearch
+  origin: Language/runtime confirmed on 2026-07-30 via repository discovery (SK.CIS.Lakeshore.Customersearch.API.csproj targets netcoreapp3.1, ASP.NET Core Web SDK). Flagged for the product owner — this is one of the few sis-svc-* components not on legacy ASP.NET Framework; the naming convention would suggest sis-msvc-* instead. Confirmed by product owner on 2026-07-30 as never launched to production; dead code, retained in the catalog for historical reference only.
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: SK.CIS.Lakeshore.Customersearch.API/.config/dotnet-tools.json; SK.CIS.Lakeshore.Customersearch.API/SK.CIS.Lakeshore.Customersearch.API.csproj; SK.CIS.Lakeshore.Customersearch.API/appsettings.Development.json; SK.CIS.Lakeshore.Customersearch.API/appsettings.json; SK.CIS.Lakeshore.Customersearch.Business/SK.CIS.Lakeshore.Customersearch.Business.csproj; SK.CIS.Lakeshore.Customersearch.Core/SK.CIS.Lakeshore.Customersearch.Core.csproj; SK.CIS.Lakeshore.Customersearch.Data/SK.CIS.Lakeshore.Customersearch.Data.csproj; SK.CIS.Lakeshore.Customersearch.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

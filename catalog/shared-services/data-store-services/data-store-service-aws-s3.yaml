@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-KT3Z
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: Amazon S3 Storage
+description: 'Scalable object storage service for data backup, archival, and analytics.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - storage
+  - serverless
+vendor: Amazon Web Services
+productName: Amazon S3
+productVersion: managed
+authenticationModel: iam
+capabilities:
+  - 01KT0V5MCV-E9TN
+architectureNotes:
+  resilienceModel: Inherently multi-AZ high availability within the AWS region.
+  configurableSurface: Bucket policies, encryption (KMS), and lifecycle rules.
+  failureDomain: Scoped to the AWS region and account.
+decisionRecords:
+  - ref: 01KSNAW2AK-QMZ1
+    key: resilienceModel
+  - ref: 01KSNAW2AK-QMZ1
+    key: configurableSurface
+  - ref: 01KSNAW2AK-QMZ1
+    key: failureDomain
+  - ref: 01KSNAW2AK-QMZ1
+    capability: 01KT0V5MCV-E9TN
+deliveryModel: paas

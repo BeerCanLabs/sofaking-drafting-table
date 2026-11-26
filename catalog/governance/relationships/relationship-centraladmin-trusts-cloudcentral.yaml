@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KYWPDHE5-4KB7
+type: relationship
+name: CIS App Centraladmin -> CIS Svc CloudCentral
+description: Each ITC's CIS App Centraladmin instance stores CIS Svc CloudCentral as a trusted OAuth2 token issuer. This trust data is what CIS Svc Vendorlink validates incoming vendor tokens against.
+catalogStatus: incomplete
+source: 01KSM38KFP-Z4NW
+label: trusts as token issuer
+target: 01KYNVC9SQ-M9SZ
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- vendorlink
+- cloudcentral
+- centraladmin
+- identityserver3
+- authentication
+notes: Confirmed by the product owner on 2026-07-31 during a review of VendorLink and 3rd-party auth.

@@ -1,0 +1,48 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-DJ0J
+type: product_component
+name: Atlas Imports
+description: 'Bulk loads into the Atlas Domain. The importer choice is still open: the current Platform data importer,
+  the coming iPaaS, or neither.'
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- imports
+- planned
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-core
+language: C#
+classification: worker
+architectureNotes:
+  sourcePath: Service.Core.Imports
+  status: Importer choice is an open question.
+  sourceInspection: Source inspection 2026-11-13 of whm-unified-core (develop, eece62e).
+  runtimeEvidence: ASP.NET service in the monorepo with REST and gRPC listeners, downstream identity and tenancy
+    wiring, and Health and ServiceMeta controllers only. No jobs, outbound calls or business endpoints yet.
+  classificationNote: Classified as worker per the V1 design; the scaffold in code is an ASP.NET API service like
+    the others. Revisit when the first job lands.
+  unconfirmed: No importer or iPaaS client in the code.
+runtimeSpec:
+  ports:
+  - number: 8089
+    protocol: HTTP
+    direction: inbound
+    name: rest
+    description: REST listener (HTTP/1.1). Port from the local compose table in README.md; deployed ports come from
+      the SERVICE_ENDPOINTS secret.
+  - number: 8099
+    protocol: HTTP/2
+    direction: inbound
+    name: grpc
+    description: gRPC listener for service-to-service calls, guarded by ServiceTokenMiddleware (x-whm-service-token).
+      REST port + 10.
+  dependencies:
+  - ref: 01KWF3RGCF-T2HM
+    purpose: Startup configuration. Library.Shared.GlobalConstants fetches SERVICE_ENDPOINTS, SERVICE_TOKEN, GLOBAL_DATABASE_CONNECTION_STRING,
+      OKTA_TOKEN_* and M2M_OKTA_* under the whm/unified/<env>/ prefix when AWS_REGION is set.
+    interface: AWS SDK (GetSecretValue)

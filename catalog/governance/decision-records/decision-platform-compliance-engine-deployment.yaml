@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-6HWY
+type: decision_record
+name: Platform Compliance Engine Deployment Decisions
+description: >-
+  Open architecture decisions and requirement evidence for the initial Platform
+  Compliance Engine deployment discovered from the implementation repository and
+  linked Jira infrastructure requests.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - platform-compliance-engine
+  - architecture-review
+  - deployment
+  - decision-record
+category: decision
+status: open
+affectedComponent: 01KY5775KP-RYCC
+linkedObject: 01KY5775KP-RYCC
+decisionRationale: |-
+  noApplicablePattern: No exact approved Reference Architecture is asserted. The preferred AWS EKS Service Mesh Platform pattern covers the confirmed EKS, ArgoCD, and Kong Mesh shape but also assumes a broader gateway, identity, data-service, and serverless platform not established for this deployment.
+
+  deploymentTargets: Staging deploys to LE1; production deploys to Chaise. The architecture owner confirmed the environment-to-cluster mapping on 2026-07-27, and Atlassian EKS documentation places both clusters in AWS us-east-1. No development target is asserted.
+
+  deploymentMethod: ArgoCD is the confirmed GitOps deployment method for Platform Compliance Engine. The SDP reuses the preferred shared ArgoCD GitOps Service (01KQQ5JT1E-01JZ). Exact ArgoCD Application, Project, environment-manifest paths, and migration-Job synchronization ordering remain to be linked as delivery evidence.
+
+  serviceMeshModel: The frontend and API are planned participants in the shared Kong Mesh Service (01KYAXMZ7H-KJT2) through Kuma control planes and injected Envoy-based data-plane sidecars. The shared standard records Kong Mesh/Kuma 2.8.6 for LE1 and 1.8.0 for Chaise. Exact namespace injection policy, mesh name, workload annotations, and observed sidecar evidence remain open. Mesh participation is not asserted for the database migration Job.
+
+  availabilityRequirement: Horizontal pod autoscaling is required for stage and production by OPS-362835. Exact availability target, replica range, recovery objectives, and database HA remain open.
+
+  externalDependencies: The implemented frontend calls the API, the API uses PostgreSQL, the deployment includes a one-shot dbmate migration Job, and the application workloads will participate in the shared Kong Mesh Service. OPS-362835 and the checked-in diagrams additionally propose a separate state service, S3, Lambda, SQS, EventBridge, Bedrock, ECR, Secrets Manager, CloudWatch, and background workers; those remain planned until reconciled with deployable source.
+
+  dataClassification: Internal/no-PII is the current best assessment from the observed PostgreSQL schema and requires owner and Information Security confirmation.
+
+  failureDomain: Application failures are scoped by EKS service group; cluster failure affects the environment, and database failure affects persistence. Exact multi-AZ and DR boundaries remain unresolved.
+
+  patternDeviations: No pattern conformance is claimed until ARB chooses or creates a suitable Reference Architecture.
+
+  interServiceConnections: Repository evidence confirms browser frontend to API calls over HTTP(S), API to PostgreSQL access, and a pre-rollout dbmate migration Job applying the PostgreSQL schema. ALB ingress routing to frontend and API and owner-confirmed frontend/API participation in Kong Mesh are planned and recorded as incomplete relationships. Network-zone elicitation is still pending.

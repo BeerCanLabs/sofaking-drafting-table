@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KYMPKJ23-APV4
+type: relationship
+name: Tiers of Intensity Service → AWS SNS
+description: >-
+  After successful calculation, the API publishes a product-specific result
+  notification to the configured SE-TOI, Shopstar-TOI, or SOM-TOI topic.
+source: 01KX18GPWW-93YA
+target: 01KQQ5JT05-HTRA
+label: publishes calculation results to
+technology: AWS SDK over HTTPS port 443
+direction: event
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KT0V5MCV-KT72
+tags:
+  - tiers-of-intensity
+  - api
+  - sns
+  - messaging
+notes: >-
+  Application source assigns SNS publishing to the API. The current deployment
+  configuration gap that prevents reliable enablement is tracked separately as
+  an open risk.

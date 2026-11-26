@@ -1,0 +1,50 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-TY40
+type: product_component
+ownerRole: engineer
+name: Recliner Document Service
+description: 'Internal microservice for Project Recliner handling document storage,
+
+  retrieval, and metadata management for Recliner-managed documents.
+
+  .NET Core 8 on AWS EKS; backed by AWS S3 (Standard -> Infrequent Access ->
+
+  Glacier lifecycle).
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- document
+- dotnet-core-8
+- eks
+- s3
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner Document Internal API
+  protocol: REST
+  authenticationModel: oauth
+  description: In-cluster REST API for document upload, retrieval, and metadata management.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet, docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-backend/Solutions/Sofa King SOM Recliner/Recliner Backend Services.sln;
+    infra/k8s/charts/recliner-backend/Chart.yaml;
+    infra/k8s/charts/recliner-backend/templates/deployment.yaml
+  provenanceBoundary: >-
+    The architecture inventory identifies this logical service, while the
+    repository currently evidences it within the shared recliner-backend code and
+    deployment boundary rather than as an independently named Helm chart.

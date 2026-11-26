@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-3VGS
+type: relationship
+name: shopstar AccuRoute 8 AWS Service to AWS SQS
+description: The candidate scan-extract role publishes document messages and the fetch-store role consumes them.
+catalogStatus: incomplete
+source: 01KYRAQ0KC-MPJQ
+target: 01KQQ5JT05-0C4P
+label: publishes and consumes scanned-document events
+technology: AWS SDK over HTTPS
+direction: event
+flow: bidirectional
+capabilities:
+  - 01KT0V5MCV-KT72
+tags:
+  - shopstar-v3
+  - accuroute
+  - terraform-candidate
+notes:
+  background: >-
+    This flow is declared by the unmerged Terraform AccuRoute EC2 design and
+    remains candidate until the final AAP/Terraform boundary is confirmed.

@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: YCJHHQFSQG-SR3D
+type: relationship
+name: Atlas UI → Sofa King Wingman widget
+description: 'index.html loads the Wingman script from VITE_WINGMAN_BASE_URL (nonprod: https://wingman.skp-stage.sofaking.example/v1.5.0)
+  and feeds it the left-nav configuration served at /wingman/config.'
+catalogStatus: stub
+source: 01M5WY4E7P-GCD5
+externalTarget: Sofa King Wingman widget
+label: loads at runtime
+technology: HTTPS / dynamic asset load
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. index.html loads the Wingman script from VITE_WINGMAN_BASE_URL
+    (nonprod: https://wingman.skp-stage.sofaking.example/v1.5.0) and feeds it the left-nav configuration
+    served at /wingman/config. Candidate catalog object: Settee Wingman (01KSM38KGJ-43SY); that mapping is
+    inferred from the name and not confirmed.'
+  evidence: 'whm-unified-ui develop: index.html, public/wingman/config, .env.example, .github/workflows/README.md'

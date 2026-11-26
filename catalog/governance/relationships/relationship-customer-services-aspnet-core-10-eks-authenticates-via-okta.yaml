@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01M6RJFQ4C-SS4X
+type: relationship
+ownerRole: engineer
+name: Customer Services ASP.NET Core 10 on EKS Application Runtime → Okta
+description: >-
+  The Shared Customer service APIs on this runtime each validate caller bearer tokens
+  against Okta and enforce their own scopes in-service. The per-service detail is
+  recorded on each service's own Okta relationship. This relationship
+  records the dependency at the runtime level. How cluster operators authenticate to le1
+  is not recorded.
+source: 01M5CS4D96-RT10
+target: 01KQQ5JT1D-SHXD
+label: authenticates callers via
+technology: OIDC / OAuth 2.0
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KQQ4Q026-MHJM
+tags:
+  - customer-services
+  - shared-customer-record
+  - identity

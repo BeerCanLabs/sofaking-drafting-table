@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHTG-K7MS
+type: decision_record
+name: CIS BFF Exago Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFQ-X2TJ
+linkedObject: 01KSM38KFQ-X2TJ
+decisionRationale: 'runtimeRequirement: .NET Framework 4.8 (ExagoBff.Web.Api.csproj targets v4.8; ASP.NET Web API with Global.asax/Web.config/App_Start). Confirmed via direct repository inspection on 2026-07-31, superseding the earlier static-web-assets rationale.'

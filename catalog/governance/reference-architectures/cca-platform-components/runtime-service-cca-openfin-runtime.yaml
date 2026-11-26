@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2F3-CZ2H
+type: runtime_service
+name: CCA Openfin Execution Runtime (Sandboxed)
+description: >-
+  [INTENDED] Openfin is the sandboxed execution runtime that hosts a Divan,
+  loads its scoped IAM identity, and executes the single policy-permitted task.
+  Runs inside the private CCA VPC in aws-us-east-1 with deny-by-default egress,
+  no public inbound, and no public SSH. One Divan equals one IAM identity scoped
+  to the narrowest capability set the task requires.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - execution-runtime
+  - openfin
+  - sandbox
+  - intended
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYWQZ7C1-KEEF
+networkPlacement: vpc-private
+authenticationModel: iam

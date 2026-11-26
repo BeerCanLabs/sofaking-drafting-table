@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGN-F5DD
+type: product_component
+ownerRole: engineer
+name: ERP Tx CIS iOS
+description: RT-ERP/CIS iOS Mobile Application
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- erp
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-rt-cis-ios
+language: Swift
+classification: api-service
+runtimeRequirement: Swift
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-erp-rt-cis-ios
+  observedRuntimeSignals: readme
+  observedManifestPaths: SofaKingERPSIS/Assets.xcassets/AccentColor.colorset/Contents.json; SofaKingERPSIS/Assets.xcassets/AppIcon.appiconset/Contents.json; SofaKingERPSIS/Assets.xcassets/Color/Contents.json; SofaKingERPSIS/Assets.xcassets/Color/buttonBlueColor.colorset/Contents.json; SofaKingERPSIS/Assets.xcassets/Contents.json; SofaKingERPSIS/Assets.xcassets/HomeIcon.imageset/Contents.json; SofaKingERPSIS/Assets.xcassets/Images/Contents.json; SofaKingERPSIS/Assets.xcassets/MenuHelp.imageset/Contents.json; SofaKingERPSIS/Assets.xcassets/MenuSettings.imageset/Contents.json; SofaKingERPSIS/Assets.xcassets/MenuTeams.imageset/Contents.json; SofaKingERPSIS/MockData/login_get_success.json; SofaKingERPSIS/Preview Content/Preview Assets.xcassets/Contents.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

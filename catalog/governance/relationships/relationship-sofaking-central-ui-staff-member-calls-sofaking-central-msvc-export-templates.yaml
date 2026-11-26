@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP72-TZ13
+type: relationship
+name: 'Sofa King Central UI Staff Member → Sofa King Central Msvc Export Templates'
+catalogStatus: stub
+source: 01KQQ5JT0M-Y2G5
+target: 01KYQ4D9RY-A5SX
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Resolved from the endpoint key this surface reads out of window.buildConfig.endpoint, mapped to its backing service through the Jarvis production env-config endpoint map.

@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-EYGD
+type: technology_component
+ownerRole: technology-admin
+name: VMware CloudHealth Agent 18
+description: CloudHealth remote collector agent installed by the Windows base automation for cloud estate visibility.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- cloud-management
+- agent
+classification: agent
+vendor: VMware
+productName: CloudHealth Agent
+productVersion: '18'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Version was inferred from the installer URL path used by SRE automation.
+capabilities: []
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/windows_base/tasks/main.yml and vars/main.yml."

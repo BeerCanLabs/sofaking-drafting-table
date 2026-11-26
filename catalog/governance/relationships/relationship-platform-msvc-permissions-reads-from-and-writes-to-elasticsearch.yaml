@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSJE-RVS9
+type: relationship
+name: 'Platform Msvc Permissions → Elasticsearch'
+catalogStatus: stub
+source: 01KSM38KFA-34QP
+externalTarget: Elasticsearch
+label: reads from and writes to
+technology: HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Context and related-object resolution index. No Elasticsearch catalog object exists; recorded as an external target.
+  primaryStore: msvc-Permissions is the only Sofa King Central service whose primary store is SQL Server.

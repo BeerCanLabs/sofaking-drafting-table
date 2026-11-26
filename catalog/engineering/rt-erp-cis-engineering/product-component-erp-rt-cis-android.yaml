@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGM-1KZH
+type: product_component
+ownerRole: engineer
+name: ERP Tx CIS Android
+description: RT-ERP/CIS Android Application
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- erp
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-rt-cis-android
+language: Kotlin
+classification: api-service
+runtimeRequirement: JVM (Java/Kotlin)
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-erp-rt-cis-android
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: app/build.gradle; app/src/debug/google-services.json; app/src/release/google-services.json; build.gradle; settings.gradle
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

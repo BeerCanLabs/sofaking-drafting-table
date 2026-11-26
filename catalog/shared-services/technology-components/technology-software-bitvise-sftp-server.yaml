@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KWF3QRMF-D43R
+type: technology_component
+ownerRole: technology-admin
+name: Bitvise SFTP Server
+description: 'Bitvise SFTP Server software used for legacy Webloom-hosted SOM Service Management customer file transfer.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - sftp
+  - file-transfer
+  - webloom
+  - legacy
+vendor: Bitvise
+productName: Bitvise SFTP Server
+productVersion: '8.48'
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Bitvise SFTP Server version is 8.48. Support posture requires confirmation from Webloom/SOM operations.
+capabilities:
+  - 01KT0XNZEY-K1J3
+configurations:
+  - id: default-sftp-listener
+    name: Default SFTP Listener
+    description: Default SFTP listener for Webloom SOM customer file-transfer workloads.
+    capabilities:
+      - 01KT0XNZEY-K1J3
+    networkBindings:
+      - port: 22
+        protocol: SFTP
+        direction: inbound
+        description: Customer and integration-partner SFTP file-transfer listener.

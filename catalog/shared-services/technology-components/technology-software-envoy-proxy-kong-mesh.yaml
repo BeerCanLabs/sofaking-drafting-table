@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-4VRV
+type: technology_component
+ownerRole: technology-admin
+name: Envoy Proxy for Kong Mesh
+description: >-
+  Envoy-based data-plane proxy injected into Sofa King application and gateway
+  pods by Kuma/Kong Mesh.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - envoy
+  - proxy
+  - service-mesh
+  - kuma-sidecar
+vendor: Envoy Project / CNCF
+productName: Envoy Proxy
+productVersion: bundled with Kong Mesh; exact build TBD
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    The exact Envoy builds bundled with the deployed Kuma 1.8.0 and 2.8.6
+    images remain a shared-platform enrichment item.
+capabilities:
+  - 01KT0V5MCV-RM8M
+  - 01KSWVZSZ5-M0FR
+notes:
+  sourceEvidence: >-
+    Live HCM pods in chaise and le1 have kuma.io/sidecar-injected=true and a
+    kuma-sidecar container using the environment's versioned kuma-dp image.
+    Exact embedded Envoy build discovery was intentionally deferred because it
+    is not required for Architecture L1.

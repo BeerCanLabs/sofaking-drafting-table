@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJD9-J9TT
+type: decision_record
+name: Dapr Sidecar Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-4060
+linkedObject: 01KQQ5JT1E-4060
+decisionRationale: "serviceAuthentication: Mutual TLS (mTLS) is enforced for all sidecar-to-sidecar communication.\n\nsecretsManagement: Integrates with Kubernetes secrets or external secret stores like  AWS Secrets Manager.\n\nserviceLogging: Dapr sidecar logs are exported to centralized logging via the  cluster's logging agent.\n\nhealthWelfareMonitoring: Welfare is monitored via Dapr health endpoints and Prometheus metrics.\n\navailabilityModel: Availability is tied to the lifecycle of the application pods where  the sidecar is injected.\n\nscalabilityModel: Scales horizontally with the application pod replicas.\n\nrecoverabilityModel: Automatic sidecar injection and recovery via Kubernetes pod orchestration.\n\nfailureDomain: Impact is scoped to the individual application pod or the cluster."

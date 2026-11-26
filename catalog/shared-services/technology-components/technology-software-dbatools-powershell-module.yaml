@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-W4Y4
+type: technology_component
+ownerRole: technology-admin
+name: dbatools PowerShell Module
+description: PowerShell module installed by SQL Server automation to manage SQL Server administration tasks.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- sql-server
+- powershell
+classification: software
+vendor: dbatools
+productName: dbatools PowerShell Module
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Installed from PowerShell Gallery without a pinned version in SRE automation.
+capabilities:
+- 01KT0V5MCV-VD0Y
+- 01KT0XNZEY-35Y2
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/win_sql_server/tasks/configure_skdba.yml."

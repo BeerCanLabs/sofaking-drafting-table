@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6F-ZVRF
+type: data_component
+ownerRole: engineer
+name: Nysdcb Directors Database
+description: >-
+  SQL Server database (Nysdcbdirectors, server CDPINTMISC) backing the NYSE
+  Directors association/member-management application. Discovered from the
+  NysdcbdirectorsCode folder of the KIOTrifoldStandaloneApplication repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+targetEngine: mssql
+dataClassification: internal
+containsPII: true
+tags:
+  - trifold
+  - nyse-directors
+  - repository-discovery
+  - data-component
+repoUrl: TBD
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\NysdcbdirectorsCode"
+  repositoryName: KIOTrifoldStandaloneApplication
+  runsOnAssumption: >-
+    DataStoreService target assumed as SQL Server 2019 (existing-only)
+    pending owner confirmation. Observed server name CDPINTMISC in
+    connection strings; owner believes this is an outdated/retired name for
+    what is now GRRCDPMISCWEB11 (prod) / HPTCDPDEVMISC1 (QA).

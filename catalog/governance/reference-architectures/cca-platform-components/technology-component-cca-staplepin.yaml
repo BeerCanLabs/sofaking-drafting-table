@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYWQZ7BX-EMNY
+type: technology_component
+name: Staplepin Control-Plane Software
+vendor: Sofa King (Cloud Divan Academy)
+productName: Staplepin
+productVersion: '0.1'
+classification: software
+catalogStatus: incomplete
+description: >-
+  [INTENDED] CCA-built orchestration software that converts an approved JSM
+  ticket into a scoped Divan invocation, mediates identity assumption, and writes
+  the audit/lineage record. Provides the runtime behavior of the Staplepin
+  control-plane service.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - staplepin
+  - control-plane
+  - intended

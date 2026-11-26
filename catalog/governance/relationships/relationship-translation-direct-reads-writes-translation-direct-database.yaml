@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T74-TD01
+type: relationship
+name: Translation Direct → Translation Direct Database
+source: 01KX4A2T6Z-3MTP
+target: 01KX4A2T6F-8QEN
+label: reads from and writes to
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifoldStandaloneApplication repo (TranslationDirect/TranslationDirectDB); connection details not yet confirmed by owner interview.

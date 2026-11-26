@@ -1,0 +1,249 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFR-BPTG
+type: software_deployment_pattern
+ownerRole: engineer
+name: LS-CIS
+aliases:
+  - LSCIS (Sofa King CIS - Lakeshore)
+  - LSCIS
+  - Sofa King CIS - Lakeshore (Tillbook)
+description: 'Multi-tenant CIS serving Lakeshore store regions through ITCs.  Each ITC has a dedicated server stack hosted at the LSRCN data center.
+
+  '
+version: 1.1.2
+catalogStatus: stub
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: CIS Lakeshore
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+  - sis
+  - lakeshore
+  - tillbook
+  - lsrcn
+  - hybrid-hosting
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+architectureNotes:
+  noCrossBoundaryConnections: Confirmed data relationships are cataloged for the core per-ITC database access, the LSRCN Pristine sync flow, and the Azure Central/CloudCentral flow. Other cross-boundary connections remain unconfirmed and must not be inferred.
+  availabilityRequirement: high
+  dataClassification: pii
+  failureDomain: per-itc-isolation
+  deploymentTargets: LSRCN Data Center (primary) and Azure (shared services).
+  patternDeviations: 'CentralAdmin is a single host per ITC without load balancing (SPOF).  Hard dependency on external LDAP for authentication with no fallback.
+
+    '
+  itcTenancyModel: 'Each ITC receives a fully dedicated server stack. Multi-tenancy occurs  at the database layer within an ITC.
+
+    '
+  sharedStorageBlastRadius: 'Shared storage at LSRCN creates a larger potential blast radius than  individual server isolation suggests.
+
+    '
+  serviceGroupConsolidation: 'Consolidated on 2026-07-28 from five separate module-level SoftwareDeploymentPatterns (LSCIS - Central, DataMap, Salesbook, Householdaccess, CustomerInformation), which were retired. LSCIS is one product with one dedicated server stack per ITC ("site"), not five independently deployed products; the modules below are service groups within this single pattern. Topology rebuilt from an owner-provided architecture whiteboard diagram of a single ITC. See DraftingSession session-lakeshore-cis-infrastructure-2026-07-28 for source material, assumptions, and open questions.
+
+    '
+  removedGenericReferences: 'The prior serviceGroups referenced Kong Gateway and Amazon Neptune under an "API Gateway & Traffic" group, and a generic "Lakeshore CIS (Tillbook) Suite" placeholder standing in for multiple distinct portals. Amazon Neptune (a graph database) has no evident relationship to this product and does not appear in the 2026-07-28 diagram; it looks like a mismatched auto-discovery artifact and was dropped from the topology rather than carried forward unverified. Flag for cleanup confirmation if genuinely unused. Kong Gateway was also dropped in that same pass, but the product owner corrected this on 2026-07-28: Kong Gateway is real, confirmed infrastructure that hosts LSCIS''s authentication layer, and has been reinstated below as its own service group with supporting relationship objects.
+
+    '
+  authenticationIntegration: 'LSCIS has an external authentication integration with Ottoman (the shared Sofa King identity platform, soon to be rebranded Sofa King ID), fronted by Kong Gateway, confirmed by the product owner on 2026-07-28. How this relates to the "hard dependency on external LDAP for authentication" noted in patternDeviations above (same integration under stale documentation, or a separate still-active dependency) is an open question — see DraftingSession session-lakeshore-cis-infrastructure-2026-07-28.
+
+    '
+  batchUtilityAuthPattern: 'Confirmed by product owner on 2026-07-31, as a general pattern rather than a per-component confirmation: most batch/utility tooling (syncers, patchers, migrators, exporters, and similar sis-util-* components) authenticates by talking directly to the database rather than through IdentityServer3, Okta, or AWS API Keys. Document publishers that write to the Document Vault (CIS Util Salesbook Report Card Publish, CIS Util Salesbook Year End Reports) are a confirmed exception, using AWS API Keys. If a batch utility needs to call a service hosted within its ITC, the owner believes it likely uses a client-credentials OAuth2 flow against that ITC''s CIS App Centraladmin, but this has not been confirmed per component. Individual sis-util-* entries have not been bulk-updated with this generalization; treat it as the default assumption pending per-component confirmation.'
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Ingress / Authentication
+    deploymentTarget: enterprise-shared-services
+    notes: >-
+      Kong Gateway hosts LSCIS's authentication layer and routes web traffic
+      into the per-ITC stack; LSCIS authenticates through the shared Ottoman
+      identity platform (soon to be rebranded Sofa King ID), itself backed by
+      Okta. Confirmed by the product owner on 2026-07-28. See relationship
+      objects relationship-kong-gateway-routes-lscis and
+      relationship-lscis-authenticates-through-okta-ottoman, and the open
+      question about how this relates to the LDAP dependency noted in
+      patternDeviations — DraftingSession session-lakeshore-cis-infrastructure-2026-07-28.
+    deployableObjects:
+      - ref: 01KQQ5JT1E-SW3X
+        diagramTier: application
+        networkZone: web
+      - ref: 01KQQ5JT1D-SHXD
+        diagramTier: application
+        networkZone: ops
+        notes: Okta, the vendor IdP behind Ottoman/Sofa King ID.
+  - name: Web Services
+    deploymentTarget: lsrcn-iaas
+    substrate: 01KQQ5JT1E-9CKW
+    notes: Per-ITC web application tier ("Single ITC" box in the 2026-07-28 architecture diagram).
+    deployableObjects:
+      - ref: 01KSM38KFQ-KQ7G
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KSM38KFP-FTNZ
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KSM38KFP-7MN9
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KSM38KFP-Z4NW
+        diagramTier: presentation
+        networkZone: web
+        notes: Single host per ITC, no load balancing — documented SPOF; see patternDeviations.
+      - ref: 01KSM38KFQ-65XY
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KSM38KFR-1TFV
+        diagramTier: application
+        networkZone: web
+        notes: VendorLink APIs, not a UI website.
+      - ref: 01KSM38KFQ-247S
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KYNVC9SP-QNB7
+        diagramTier: application
+        networkZone: web
+        notes: New stub; relationship to existing CIS BFF Exago (01KSM38KFQ-X2TJ) unconfirmed — see DraftingSession.
+      - ref: 01KYNVC9SP-WPVW
+        diagramTier: application
+        networkZone: web
+        notes: Candidate stub; existence itself unconfirmed (diagram marked it with "?") — see DraftingSession.
+  - name: Utility Services
+    deploymentTarget: lsrcn-iaas
+    substrate: 01KQQ5JT04-A7W8
+    deployableObjects:
+      - ref: 01KYNVC9SQ-7E7G
+        diagramTier: utility
+        networkZone: ops
+      - ref: 01KYT8CCJT-4ARY
+        diagramTier: utility
+        networkZone: ops
+        notes: Per-ITC DASLSyncer console app; calls the central CIS Svc Syncer and updates the local CustomerInformation database.
+  - name: App Services
+    deploymentTarget: lsrcn-iaas
+    substrate: 01KQQ5JT1E-9CKW
+    notes: Per-ITC application services. The retired Calculators/WIRIS pseudo-service is not an independently deployed runtime and is excluded.
+    deployableObjects:
+      - ref: 01KYNVC9SQ-DT28
+        diagramTier: application
+        networkZone: app
+  - name: Redis Caching
+    deploymentTarget: lsrcn-iaas
+    notes: Redis OSS sits between Web Services and Database Services per the 2026-07-28 diagram.
+    deployableObjects:
+      - ref: 01KQQ5JT00-191S
+        diagramTier: data
+        networkZone: app
+  - name: Database Services
+    deploymentTarget: lsrcn-iaas
+    notes: Per-ITC Microsoft SQL Server 2019 on Windows Server 2019. The deployment-specific service is a two-replica Always On availability group with a writable primary, readable secondary, and automatic failover. CustomerInformation, Salesbook Master, and Salesbook Region run on this service.
+    deployableObjects:
+      - ref: 01KYP8DBR0-7H19
+        diagramTier: data
+        networkZone: data
+        notes: Lakeshore CIS SQL Server 2019 Always On Availability Group; two replicas with automatic failover. This is the deployment-specific HA service, not the generic SQL Server catalog entry.
+      - ref: 01KSM38KFP-25CX
+        diagramTier: data
+        networkZone: data
+        notes: CustomerInformation database running on the Lakeshore CIS SQL Server 2019 Always On Availability Group.
+      - ref: 01KSM38KFP-1J9Y
+        diagramTier: data
+        networkZone: data
+        notes: Salesbook Master database running on the Lakeshore CIS SQL Server 2019 Always On Availability Group.
+      - ref: 01KSM38KFP-YGZ8
+        diagramTier: data
+        networkZone: data
+        notes: Salesbook Region database running on the Lakeshore CIS SQL Server 2019 Always On Availability Group.
+  - name: Azure Services
+    deploymentTarget: azure
+    notes: Shared/central Azure footprint outside the per-ITC LSRCN stack.
+    deployableObjects:
+      - ref: 01KYNVC9SQ-M9SZ
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KYNVC9SN-SQ01
+        diagramTier: data
+        networkZone: data
+        notes: Relationship to the three per-ITC databases above (separate database, central aggregate, or naming overlap) unconfirmed — see DraftingSession.
+      - ref: 01KQQ5JT05-VER7
+        diagramTier: application
+        networkZone: ops
+        notes: wiris.tillbook.example; carried forward from prior SDP content, not part of the 2026-07-28 diagram. auth.tillbook.example is also known to run here but has no dedicated catalog object yet.
+  - name: LSRCN Central Sync Services
+    deploymentTarget: lsrcn-iaas
+    notes: Central LSRCN sync boundary, separate from the per-ITC stacks. CIS Svc Syncer reads the Pristine CustomerInformation copy; each ITC's DASLSyncer console app calls that API and updates its local CustomerInformation database.
+    deployableObjects:
+      - ref: 01KYNVC9SQ-PAC8
+        diagramTier: application
+        networkZone: app
+        notes: Central DASLSync API. The earlier LSRCN Sync Website object is a retired duplicate and is not shown as active.
+      - ref: 01KYNVC9SP-9ARM
+        diagramTier: data
+        networkZone: data
+        notes: Central Pristine copy of CustomerInformation used by the sync flow.
+  - name: AWS Services
+    deploymentTarget: aws-us-east-2
+    deployableObjects:
+      - ref: 01KYNVC9SQ-V9F6
+        diagramTier: application
+        networkZone: ops
+  - name: Course Library (HPT)
+    deploymentTarget: high point-datacenter
+    notes: '"HPT" assumed to be the High Point, MI data center. That vocabulary entry is documented as non-production/Sofa King-owned hardware, which is unconfirmed against this appearing to be a production dependency — see DraftingSession.'
+    deployableObjects:
+      - ref: 01KYNVC9SQ-XEM8
+        diagramTier: application
+        networkZone: ops
+  - name: Mobile Clients
+    deploymentTarget: end-user-devices
+    notes: Non-standard deploymentTarget value — distributed end-user devices, not server-side infrastructure. Flagged as a possible vocabulary gap rather than forced into an inaccurate approved value.
+    deployableObjects:
+      - ref: 01KSM38KFP-WBNG
+        diagramTier: presentation
+        networkZone: web
+        notes: Assumed to be the diagram's "CIS Admin Mobile (new)" — unconfirmed.
+      - ref: 01KSM38KFE-MRVH
+        diagramTier: presentation
+        networkZone: web
+        notes: Assumed to be part of the diagram's "CIS Admin Mobile (legacy)" — unconfirmed.
+      - ref: 01KSM38KFD-4CPA
+        diagramTier: presentation
+        networkZone: web
+        notes: Assumed to be part of the diagram's "CIS Admin Mobile (legacy)" — unconfirmed.
+      - ref: 01KYNVC9SP-J1TG
+        diagramTier: presentation
+        networkZone: web
+decisionRecords:
+  - ref: 01KT16XHWM-WRMK
+    key: deploymentTargets
+  - ref: 01KT16XHWM-WRMK
+    key: availabilityRequirement
+  - ref: 01KT16XHWM-WRMK
+    key: dataClassification
+  - ref: 01KT16XHWM-WRMK
+    key: failureDomain
+  - ref: 01KT16XHWM-WRMK
+    key: patternDeviations
+notes:
+  availabilityRequirement: high
+  dataClassification: pii
+  failureDomain:
+    description: Each ITC has a dedicated server stack; data-center, power, network, storage, and site-level failure-domain separation remain unconfirmed.
+    scope: per-itc-isolation
+  dataZoneAvailability: The CustomerInformation, Salesbook Master, and Salesbook Region databases run on a two-replica SQL Server 2019 Always On availability group with a writable primary, readable secondary, and automatic failover.

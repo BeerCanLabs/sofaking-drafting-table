@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KYQ57CQJ-8W48
+type: decision_record
+ownerRole: engineer
+name: Sofa King Central EventStore Migration Is Incomplete
+description: Source inspection of the local working copies on 2026-07-29 found EventStore.Client still referenced in every Sofa King Central event-sourced service alongside AWSSDK.DynamoDBv2. The EventStoreDB catalog objects are therefore retained rather than removed, and each event-sourced service carries persistence relationships to both stores.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+category: risk
+status: open
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+- sofaking-central
+- event-sourcing
+- eventstore
+- migration
+- source-inspection
+affectedComponent: Sofa King Central event-sourced microservice tier
+impact: 'Thirteen services reference EventStore.Client: msvc-Employee, msvc-Position, msvc-Department, msvc-Location, msvc-JobType, msvc-List, msvc-File, msvc-FormTemplate, msvc-FormInstance, msvc-WorkflowDefinition, msvc-WorkflowInstance, msvc-NotificationProcessor and msvc-Permissions. Two of them (msvc-List, msvc-NotificationProcessor) have no DynamoDB reference at all, so they have not started migrating. Removing the EventStoreDB catalog objects would have understated live infrastructure and broken impact analysis for any change touching the event store.'
+mitigationPath: Keep EventStoreDB at lifecycleStatus deprecated with both EventStore and DynamoDB persistence edges modelled per service. Retire the EventStoreDB objects only once the package reference is gone from all thirteen services. Prioritise msvc-List and msvc-NotificationProcessor, which have not begun.
+decisionRationale: 'The CentralUpdates branch had staged deletion of the EventStoreDB data store service, technology component, validation decision record and platform relationship. Package-reference evidence contradicts that removal, so the deletions were reverted on 2026-07-29 with the owner''s agreement. A deprecated lifecycle status communicates intent without asserting the work is finished.'

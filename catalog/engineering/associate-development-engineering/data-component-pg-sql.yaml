@@ -1,0 +1,54 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-TGHY
+type: data_component
+ownerRole: engineer
+name: PG SQL Database Source
+description: >-
+  Source-controlled schema, data scripts, functions, stored procedures, and
+  triggers for Sofa King Associate Development's PLM/EEM database estate. Deploys
+  into the STL SQL Server database service (01M1F8WB4E-MBKA). Added under
+  SKPG-19589 — this repository was missed by the original repository-discovery
+  import and had no catalog object.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01M1F8WB4E-MBKA
+tags:
+  - data-component
+  - associate-development
+  - plm
+  - eem
+  - sqlserver
+  - apex-l1
+  - skpg-50273
+repoUrl: https://github.com/BeerCanLabs/sk-pg-sql
+targetEngine: mssql
+dataClassification: confidential
+containsPII: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-pg-sql
+  discoveryBasis: >-
+    Found in the local engineering working set during the SKPG-19589 boundary
+    review, not by the repository-discovery import. Confirmed present at
+    src/SQL with the layout 01_Schema, 02_DataScripts, 03_Functions,
+    04_StoredProcs, 05_Triggers, plus EnableFeatureScripts, Helpers, and Test
+    directories, and a separate AG2SQL directory.
+  deploymentModel: >-
+    How this repository is deployed to the STL database — the tooling, the
+    promotion path, and whether it also targets the FORMIXFORMS database
+    (01M1F8WB4E-R0RG) — is NOT established. Tracked in DraftingSession
+    01M1F8WB4E-0GSN.
+  ag2sqlPurpose: >-
+    The AG2SQL directory is unexplained by repository structure alone. The name
+    may relate to the SQL Server availability group (tcp:ag1) referenced in the
+    LDMS connection strings, but this is a guess and requires owner
+    confirmation.
+  dataClassificationBasis: >-
+    Classified confidential with PII on the basis that it defines the schema for
+    the STL database, which holds named-associate professional learning and
+    evaluation records. Not reviewed by Information Security.
+  serviceAuthentication: Not confirmed by owner interview.
+  backup: Not applicable — this is a source repository, not a running store.

@@ -1,0 +1,174 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-B95N
+type: drafting_session
+ownerRole: engineer
+name: HCM RH Compute and Runtime L1 Mapping (OPS-263707)
+description: >-
+  Closure work for OPS-263707. Replaces direct EKS-host references on the
+  confirmed HCM RH frontend and backend L1 components with governed
+  runtime_service objects, records the current Node.js and ASP.NET Core
+  TechnologyComponents, and adds the evidenced Redis, SNS/SQS, and Loveseat
+  dependency edges.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - session
+  - hcm-rh
+  - ops-103065
+  - compute-and-runtime
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KG7-42XD
+sourceArtifacts:
+  - name: OPS-263707 Compute and Runtime L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-263707
+    notes: >-
+      Tracks the missing governed EKS runtime-service mappings and the
+      Redis/SNS/SQS/Loveseat dependencies required for L1 closure.
+  - name: OPS-598732 Product and Ownership L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-598732
+    notes: >-
+      Toby Hanley confirmed the HCM RH App, HCM RH Core, and HCM RH Fork Util
+      Organization API inventory is accurate.
+  - name: HCM RH architecture onboarding PR 35
+    type: source-repository
+    location: https://github.com/BeerCanLabs/sk-sofaking-drafting-table/pull/35
+    notes: >-
+      Merged repository-derived evidence for EKS deployment, Node.js 20,
+      ASP.NET Core 9, Redis, SNS/SQS, and Loveseat usage.
+generatedObjects:
+  - name: HCM RH Node.js 20 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KYAVGDVV-EKJ2
+  - name: HCM RH ASP.NET Core 9 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01KYAVGDVV-09RG
+  - name: HCM RH EKS Runtime Operational Architecture
+    type: decision_record
+    status: created
+    ref: 01KYAVGDVV-18NV
+  - name: HCM RH Core → Redis Caching Service
+    type: relationship
+    status: created
+    ref: 01KYAVGDVV-JW3P
+  - name: HCM RH Core → AWS SQS
+    type: relationship
+    status: created
+    ref: 01KYAVGDVV-5Z8W
+  - name: HCM RH Core → Loveseat Event Bus
+    type: relationship
+    status: created
+    ref: 01KYAVGDVV-D7YM
+  - name: HCM RH Job Postings → AWS SNS
+    type: relationship
+    status: created
+    ref: 01KYAVGDVV-4BXK
+  - name: New Recruiting & Hiring - Pattern
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KG7-42XD
+  - name: HCM RH App
+    type: product_component
+    status: created
+    ref: 01KSM38KG5-49X9
+  - name: HCM RH Core
+    type: product_component
+    status: created
+    ref: 01KSM38KG5-FBRT
+  - name: HCM RH Fork Util Organization API
+    type: product_component
+    status: created
+    ref: 01KSM38KG5-VM7E
+unresolvedQuestions:
+  - id: loveseat-shared-service-object
+    question: >-
+      Which governed shared-service object should represent the Loveseat event
+      bus?
+    status: deferred
+    reason: >-
+      The current catalog has no shared Loveseat service object, and creating
+      that cross-product service is outside this product-specific L1 review.
+    currentBestGuess: >-
+      Use externalTarget "Loveseat Event Bus" for the evidenced HCM RH
+      relationship until the shared service is catalogued.
+    impact: >-
+      The dependency is explicit and does not block L1 closure, but it cannot
+      yet inherit lifecycle and capability metadata from a shared object.
+    relatedObjects:
+      - ref: 01KYAVGDVV-D7YM
+  - id: unversioned-repository-components
+    question: >-
+      Which exact runtime versions apply to the remaining repository-discovered
+      HCM RH components that currently record only generic .NET, Node.js,
+      PowerShell, Swift, or host-level EKS signals?
+    status: deferred
+    reason: >-
+      OPS-263707 requires only the confirmed Node.js frontend and ASP.NET Core
+      backend L1 mapping; unversioned component enrichment is a deeper
+      inventory task.
+    currentBestGuess: >-
+      Preserve their existing host/runtime signals until owners confirm exact
+      versions rather than assigning the new version-specific runtimes by
+      inference.
+    impact: >-
+      Those lower-level repository stubs remain candidates for later catalog
+      enrichment but do not change the confirmed L1 product boundary.
+assumptions:
+  - id: confirmed-l1-boundary
+    statement: >-
+      The L1 product boundary uses HCM RH App, HCM RH Core, and HCM RH Fork
+      Util Organization API, as confirmed by Toby Hanley for OPS-598732.
+    impact: >-
+      Runtime mapping focuses on the independently deployed frontend and
+      backend workloads; the Fork Util client library remains catalogued but
+      is not represented as an independent deployment.
+    relatedObjects:
+      - ref: 01KSM38KG5-49X9
+      - ref: 01KSM38KG5-FBRT
+      - ref: 01KSM38KG5-VM7E
+  - id: current-state-lifecycle
+    statement: >-
+      Node.js 20 is recorded as the observed current state even though its
+      governed TechnologyComponent is deprecated.
+    rationale: >-
+      Architecture L1 records the deployed runtime and its lifecycle signal;
+      OPS-263707 explicitly excludes upgrades and remediation dates.
+    relatedObjects:
+      - ref: 01KYAVGDVV-EKJ2
+  - id: fork-util-is-a-library
+    statement: >-
+      HCM RH Fork Util Organization API is a C# client library rather than an
+      independently deployed API service.
+    rationale: >-
+      Its existing description identifies it as an Organization API client
+      library and the repository evidence lists a library csproj and test
+      project, with no independent deployment manifest.
+    impact: >-
+      Its inaccurate EC2-backed runtime link is removed and it is not placed in
+      an SDP deployment service group.
+    relatedObjects:
+      - ref: 01KSM38KG5-VM7E
+nextSteps:
+  - id: merge-runtime-mapping
+    action: >-
+      Obtain review and merge the OPS-263707 runtime mapping pull request.
+    status: open
+    owner: recruiting-hiring-engineering
+  - id: close-ops-263707
+    action: >-
+      Confirm the merged catalog state in Jira and close OPS-263707.
+    status: open
+    owner: architecture-review-board
+notes:
+  validationStatus: >-
+    Passed on 2026-07-24 using
+    python3 .draft/framework/tools/validate.py --workspace . after the runtime
+    mapping changes.

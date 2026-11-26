@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KYWQZ7C1-KEEF
+type: technology_component
+name: Openfin Agent Execution Framework
+vendor: Sofa King (Cloud Divan Academy)
+productName: Openfin
+productVersion: '0.1'
+classification: agent
+catalogStatus: incomplete
+description: >-
+  [INTENDED] Agent execution framework that hosts a Divan, loads its scoped IAM
+  identity, and runs the single policy-permitted task inside the sandbox.
+  Provides the runtime behavior of the Openfin execution-runtime service.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - openfin
+  - agent-runtime
+  - intended

@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-ZD56
+type: product_component
+ownerRole: engineer
+name: Rubric Designer Service
+description: Node.js and TypeScript (Koa) backend API for the Rubric Designer app, built and deployed as a Docker image (repository BeerCanLabs/sk-msvc-RubricDesigner). Serves rubric, rubric indicator and shared-rubric (by organization) endpoints backed by PostgreSQL, plus status/health endpoints.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- rubric-designer
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-RubricDesigner
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-RubricDesigner
+  deploymentPipeline: CodeFresh (owner-confirmed). Repository carries ci/codefresh_build.yml, ci/pull-request.yml and cd/codefresh-deploy-*.yml.
+  runtimeHostEvidence: Kubernetes manifests (Deployment, Service, Ingress) under cd/ for environments prod, prod-ml, qa, stage, stage-ml; container listens on port 5000. Host mapped to Amazon EKS Standard per owner.
+  observedRuntimeSignals: docker, node, typescript, koa, kubernetes-manifests
+  exposedEndpoints: REST routes for rubrics (list by organization, get, create, copy, update, delete), rubric indicators (list, create, update, delete), and shared rubrics by organization, plus /api/status, /api/ready and /api/health. Production ingress hosts msvc-rubricdesiger.use1.sofaking.example and msvc-rubricdesigner-ml.use1.sofaking.example.
+  observedDependencySignals: package.json lists pg and @aws-sdk/client-secrets-manager; the source calls IDM (src/utilities/idm.ts) and reads from AWS Secrets Manager (src/utilities/system-sm.ts). The production ConfigMap does not contain the database host; the owner confirms it uses PostgreSQL cluster pg-prod-rds-pgsql-cluster-01, a regional Aurora PostgreSQL cluster (us-east-1).
+  observedManifestPaths: Dockerfile; package.json; ci/codefresh_build.yml; ci/pull-request.yml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/prod/ingress.yml; cd/prod-ml/deploy.yml; cd/qa/deploy.yml; cd/stage/deploy.yml; cd/stage-ml/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed. The service depends on the AWS Secrets Manager SDK; owner to confirm.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KQQ5JT04-27EP
+    purpose: Stores rubrics, indicators and shared rubrics.
+    interface: PostgreSQL cluster pg-prod-rds-pgsql-cluster-01

@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ01-F5AB
+type: relationship
+name: F5 BIG-IP -> Leave Web API
+catalogStatus: incomplete
+source: 01KQQ5JT00-Z6WV
+label: proxies
+target: 01KQQ5JT0A-7VKB
+technology: HTTPS (client) / HTTP (backend, TLS terminated at F5)
+direction: synchronous
+flow: outbound
+notes: >-
+  Represents the shared F5 BIG-IP ingress for all Grand Rapids Leave
+  Management web and API endpoints, not only Leave Web API. F5 terminates
+  client TLS and forwards unencrypted HTTP to the backend servers
+  (owner-confirmed 2026-07-29). Plain HTTP is a proposed non-standard
+  connectionProtocols value pending vocabulary review.
+capabilities: []

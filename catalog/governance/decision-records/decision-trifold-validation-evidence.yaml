@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ3K-SY65
+type: decision_record
+name: Trifold Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGH-DBFS
+linkedObject: 01KSM38KGH-DBFS
+decisionRationale: >-
+  deploymentTargets: Production hosted at Grand Rapids Data Center
+  (Grand Rapids MI). Sofa King-owned hardware, VMware.
+  externalDependencies: Trifold integrates with external systems beyond its
+  own component deployable objects, documented as relationship objects:
+  Corvid Portal → Powershop CIS (REST/SOAP), Sync Service → region CIS,
+  Batch Processing → Financing Direct (eMedNY EDI), and Zendesk for Intranet
+  (bidirectional with Zendesk).
+  interServiceConnections: Primary connections crossing a tier or network
+  zone boundary are documented as relationship objects, e.g. Corvid Front
+  End Web (presentation) → Director Database (data), Corvid Portal
+  (presentation) → Corvid Portal Database and Director Master Database
+  (data), Maintenance Service (application) → Director Database (data),
+  Report Service (application) → Director Database (data), and Intranet
+  (presentation) → Intranet Database (data).

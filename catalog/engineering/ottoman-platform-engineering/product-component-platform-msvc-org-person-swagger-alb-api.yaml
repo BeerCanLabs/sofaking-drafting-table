@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFH-JDYM
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Org Person Swagger Alb API
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-msvc-org-person-swagger-alb-api.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-org-person-swagger-alb-api
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-org-person-swagger-alb-api
+  observedRuntimeSignals: cloudformation, docker, kubernetes, node, python, readme, serverless
+  observedManifestPaths: cdk.context.json; cdk.json; cdk.out/ApiAlbStack.assets.json; cdk.out/ApiAlbStack.template.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/manifest.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevALB9E243210.assets.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevALB9E243210.template.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevALB9E243210.template.json.config.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevAPI6937242E.assets.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevAPI6937242E.template.json; cdk.out/assembly-msvcorgpersoncdkstack-Dev/msvcorgpersoncdkstackDevAPI6937242E.template.json.config.json; cdk.out/assembly-msvcorgpersoncdkstack-Stage/manifest.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

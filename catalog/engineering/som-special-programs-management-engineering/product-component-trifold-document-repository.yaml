@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KXK81788-D45P
+type: product_component
+ownerRole: engineer
+name: Trifold Document Repository
+description: >-
+  Public web application (docs.cdpdirect.example) for the Trifold product
+  family, discovered via the CDP Direct - WAF Info Confluence page. Likely
+  the front-end application over the DocRepositoryDB shared-services gap
+  already flagged in the KIOTrifoldStandaloneApplication intake session
+  (proposedUid 01KX4JP6P0-0WRQ) — not confirmed by source repository review.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - document-repository
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+notes:
+  sourceRepository: >-
+    Not yet identified — evidence is a live public DNS/WAF entry
+    (docs.cdpdirect.example), not a code repository.
+  sourcePage: CDP Direct - WAF Info (Confluence, SKENG space, page 35904193026)
+  relatedGap: >-
+    Likely front-ends the DocRepositoryDB shared-services gap (see
+    session-seitrifold-standalone-application-2026-07-09.yaml,
+    unresolvedQuestions.docrepositorydb-shared-services-gap). Not modeled as
+    a relationship since DocRepositoryDB is not yet an authored catalog
+    object.

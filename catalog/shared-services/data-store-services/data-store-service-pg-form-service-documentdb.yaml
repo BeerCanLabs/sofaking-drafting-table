@@ -1,0 +1,101 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-3NGA
+type: data_store_service
+ownerRole: technology-admin
+name: PG Form Service DocumentDB Cluster
+description: >-
+  Amazon DocumentDB cluster backing the Associate Development form service
+  (msvc-pg-forms). Catalogued under SKPG-19589. This object corrects an earlier
+  assumption: the repository ships rds-combined-ca-bundle.p7b, which was read as
+  evidence of an AWS RDS dependency, but the CDK provisions DocumentDB — which
+  uses the same RDS certificate bundle for TLS. PRE-PRODUCTION: its only
+  consumer is not believed ever to have been deployed.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - service
+  - documentdb
+  - document-database
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+  - pre-production
+category: service
+serviceCategory: database
+deliveryModel: paas
+patchingOwner: aws-managed
+networkPlacement: public-facing
+authenticationModel: other
+vendor: Amazon Web Services
+productName: Amazon DocumentDB
+productVersion: '4.0'
+primaryTechnologyComponent: 01M1HJY7E4-SKZN
+architectureNotes:
+  preProductionStatus: >-
+    STRENGTHENED under SKPG-19589 review. This cluster is provisioned only by
+    msvc-pg-forms (01KSM38KG3-8PKZ), which has been reclassified
+    lifecycleStatus candidate because five independent signals indicate it
+    never reached production: the repository has no cd/ directory and no
+    codefresh.yml, it is absent from the PG pipeline inventory in "PG Work Left
+    for PG" (Confluence 39199080479), DeletionProtection is commented out
+    pending go-live, the token authorizer's IDM endpoint is hardcoded to a QA
+    host, and the authorizer runs the end-of-life nodejs14.x Lambda runtime.
+    Treat every concern recorded below as pre-production hygiene rather than
+    live exposure until an owner confirms otherwise. See DraftingSession
+    01M1F8WB4E-0GSN, form-service-production-status.
+  discoveryBasis: >-
+    Read from SK.PG.FormService.CDK/FormServiceDbStack.cs: an
+    Amazon.CDK.AWS.DocDB DatabaseCluster named {label}-form-service-db-cluster
+    with a docdb4.0 ClusterParameterGroup, a db.t3.medium CfnDBInstance, and a
+    dedicated VPC and security group created in the same stack.
+  networkPlacementConcern: >-
+    Recorded as public-facing because the CDK places the cluster with
+    VpcSubnets = SubnetType.PUBLIC. A managed database in public subnets is a
+    security concern and is referred to Information Security. The cluster does
+    restrict traffic via AllowDefaultPortInternally on its own security group,
+    which limits but does not remove the exposure. Pre-production while the
+    consumer is unpromoted.
+  deletionProtectionDisabled: >-
+    DeletionProtection is commented out in the stack, annotated "uncomment when
+    we are ready to go live" — one of the signals that the form service never
+    reached production.
+  vpcBoundary: >-
+    The stack creates its OWN VPC rather than joining the PG EKS estate's
+    network, so this cluster sits in a separate network boundary from the rest
+    of the cloud services tier.
+  encryptionInTransit: >-
+    The cluster parameter group sets tls to enabled. Note the stack's own
+    comment describes it as turning TLS off, which contradicts the parameter
+    value — the comment appears stale, and TLS is on.
+  serviceAuthentication: >-
+    SQL-style master user "pgserviceuser" with the password held in AWS Secrets
+    Manager at /pg-form-service-{env}/docdb/masteruser. Using Secrets Manager
+    here is correct and matches the approved pattern.
+  approvalConcern: >-
+    MongoDB Atlas (01KQQ5JT05-E3FZ) is deprecated in this catalog and
+    DocumentDB is MongoDB-compatible, so this would introduce a second
+    Mongo-compatible platform. CROSS-REFERENCE CORRECTED under SKPG-19589
+    review: this note previously pointed at decision record 01M1F8WB4E-9C7X,
+    which covers LaunchDarkly and Avalara. The correct record is
+    01M1F8WB4E-BE9M. That record has since been narrowed to ASP.NET Core 10
+    only, because this cluster belongs to a pre-production service - so the
+    Architecture Review Board question on Mongo-compatible platform direction
+    is deferred rather than an L1 item. Related product context: SKPG-68686 is
+    an active design sketch for moving EEM forms out of the 1.8-million-table
+    FORMIXFORMS database into MongoDB, so a Mongo-compatible direction is under
+    consideration on the product side independently of this cluster.
+  availabilityModel: >-
+    A single CfnDBInstance is declared against the cluster, so no multi-instance
+    replica topology is evidenced. Not confirmed by owner interview.
+  backup: Not confirmed. No backup configuration appears in the CDK stack.
+  recoverabilityModel: >-
+    Not confirmed, and weakened by DeletionProtection being disabled.
+  failureDomain: >-
+    Single cluster in a single dedicated VPC. Its loss removes the form
+    service's persistence entirely; no other PLM/EEM component reads it.

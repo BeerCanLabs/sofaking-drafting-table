@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHE9-M1KC
+type: decision_record
+name: Time & Attendance - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1H-B2YK
+linkedObject: 01KQQ5JT1H-B2YK
+decisionRationale: 'deploymentTargets: Hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware.'

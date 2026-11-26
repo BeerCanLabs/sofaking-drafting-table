@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG4-D0FR
+type: product_component
+ownerRole: engineer
+name: Ts UI Common Vendor
+description: Vendor software for ts-ui-common
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+  - repository-discovery
+  - ts
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-ts-ui-common-vendor
+language: HTML
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-ts-ui-common-vendor
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: bower.json; css/fontello/config.json; package.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHXB-3HR8
+    key: runtimeRequirement

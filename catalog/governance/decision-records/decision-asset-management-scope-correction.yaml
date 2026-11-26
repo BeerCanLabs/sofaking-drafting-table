@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KYRT1P14-Y2RH
+type: decision_record
+name: Asset Management Scope Correction
+description: Corrects the DRAFT model for Asset Management (AM) so it is described by exactly one accurate Software Deployment Pattern, satisfying APEX Architecture-vector L1 / DRAFT rubric Baseline (1). Product ownership reconfirmed on 2026-08-06 that AM and IMM require separate entries and that IMR no longer exists as a current product. See spike TRH-0231 and ticket TRH-9828.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- scope-correction
+- adr
+- tih-5233
+category: decision
+status: accepted
+affectedComponent: 01KSM38KF8-TKMW
+linkedObject: 01KSM38KF8-TKMW
+decisionRationale: 'scopeDecision: Repurpose 01KSM38KF8-TKMW in place (same uid) as the single Software Deployment Pattern describing Asset Management (Trackweb-IT). It previously conflated AM with Display Materials Management (IMM) and the IM Refresh (IMR) cloud rebuild, pointed its service groups at IMR infrastructure (EKS/Aurora/SNS/SQS/Glue), and referenced no real AM product components. Cross-checking TKMW''s prior IMR/IMM service-group refs against 01KSM38KFD-1G0D (Display Materials Management - Pattern) confirmed 1G0D already independently and correctly hosts the same objects (MY47, 6F8T, P7QJ, RRWF, X90C, HCBR, and legacy ref 5642), so removing them from TKMW is not an orphaning risk. Three objects (HTRA, 0C4P - SNS/SQS messaging; CT7X - Glue/Lambda/Step Functions ETL) are not yet duplicated anywhere and are handed off as an open item for the IMM fast-follow ticket rather than silently dropped.
+
+
+  componentMerge: 01KSM38KF8-VQ4B ("Legacy Trackweb-IT Platform", hand-authored stub, repoUrl TBD) and 01KSM38KFB-QFJ1 ("Whm Am App", repository-discovered from BeerCanLabs/sk-WHM_AM_App) describe the same real system, confirmed via that repository''s own documentation identifying it as Trackweb-IT. QFJ1 is retained as the canonical product_component (it carries the real repoUrl); "Legacy Trackweb-IT Platform" is recorded as an alias on QFJ1. VQ4B is retired with this record as the disposition evidence.
+
+
+  bulkDumpDisposition: 01KSM38KF8-G9FS ("Whm Software Deployment Pattern", the bulk repository-discovery dump) has its AM-related sourceRepositories entries and service-group refs removed, since those components are now correctly wired into TKMW. G9FS is NOT retired outright: it also carries HelpDesk (WHM_HD_*) components that have no other SDP home today. HelpDesk''s own SDP disposition is out of scope for TRH-9828 and is tracked as future work.
+
+
+  immRebuildDisposition: 01KSM38KF8-W03W ("IMM Rebuild (IMR)", empty Pendo-discovered stub, "pending owner interview") is retired. Product ownership confirmed on 2026-08-06 that IMR no longer exists as a current product; 01KSM38KFD-1G0D should therefore describe IMM only. Any remaining IMR-labeled infrastructure must be verified as current IMM infrastructure or retired rather than treated as a separate product.
+
+
+  securityLibraryScope: Of the two SofaKingSecurityLibrary variants, only 01KSM38KFC-566V (plain, non-HD) is a real Asset Management dependency, confirmed via a live package reference in WHM_AM_IDCore (packages/WHM.SofaKingSecurityLibrary.1.1.0). 01KSM38KFC-JJ65 (WHM_SofaKingSecurityLibrary_HD) is HelpDesk-scoped - no AM repository references it - and remains out of scope for the AM pattern.'

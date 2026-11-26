@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-P51F
+type: host
+ownerRole: technology-admin
+name: Ubuntu 20.04 on EC2 Standard Host
+description: Stub host for Ubuntu 20.04 workloads on Amazon EC2 identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- ubuntu
+- aws
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-RK3B
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1Q-RK3B
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1P-FV8A
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent
+architectureNotes:
+  healthWelfareMonitoringApproach: Host health and welfare telemetry is monitored through the Nagios Monitoring Service.

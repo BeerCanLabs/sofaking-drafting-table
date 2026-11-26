@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFA-2NS1
+type: product_component
+ownerRole: engineer
+name: Saml Service
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-saml-service.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: identity-management-idm-engineering
+  contact: identity-management-idm-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- saml
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-saml-service
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-saml-service
+  observedRuntimeSignals: dotnet, node, readme
+  observedManifestPaths: Snw.SAMLWindowsService/Snw.SAMLWindowsService.sln; Snw.SAMLWindowsService/Snw.SAMLWindowsService/ConfigurationFile.json; Snw.SAMLWindowsService/Snw.SAMLWindowsService/Snw.SAMLWindowsService.csproj; Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp/Snw.AuthServices.HttpModule/Snw.AuthServices.HttpModule.csproj; Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp/Snw.AuthServices/Snw.AuthServices.csproj; Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp/Snw.Saml.UnitTestProject/Snw.Saml.UnitTestProject.csproj; Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp/Snw.Saml.WebApp/Snw.Saml.WebApp.csproj; Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp/Snw.SamlServiceProvider.WebApp.sln; Snw.SamlServiceProvider/Snw.AuthServices.HttpModule/Snw.AuthServices.HttpModule.csproj; Snw.SamlServiceProvider/Snw.AuthServices/Snw.AuthServices.csproj; Snw.SamlServiceProvider/Snw.Saml.WebApp/Snw.Saml.WebApp.csproj; Snw.SamlServiceProvider/Snw.SamlServiceProvider.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

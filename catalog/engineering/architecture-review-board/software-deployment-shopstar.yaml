@@ -1,0 +1,135 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-DF2H
+type: software_deployment_pattern
+ownerRole: engineer
+name: shopstar - Households Portal - Pattern
+aliases:
+  - Shopstar Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: shopstar
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+  - software-deployment-pattern
+  - repository-discovery
+  - shopstar
+architectureNotes:
+  lifecycleRationale: >-
+    Deprecated 2026-07-29. Superseded by the curated shopstar v3 - Pattern
+    (01KSM38KGG-871T), which is the authoritative, interviewed deployment
+    model for the shopstar product. This repository-discovered pattern is
+    retained for provenance. Of its eight source repositories, shopstar-account-api,
+    shopstar-idm-integration, shopstar-parent, shopstar-user-sync, and shopstar-v3 were
+    folded into the curated pattern's service groups. shopstar-sandbox is
+    explicitly non-deployed experimental code and was not carried forward.
+    shopstar and shopstar-scheduler are shopstar V5 components (per their own
+    descriptions) and were intentionally excluded from this v3-scoped
+    pattern per product-owner decision on 2026-07-29 — see the shopstar v3
+    Infrastructure Source Reconciliation session.
+  supersededBy: 01KSM38KGG-871T
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Production hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+    - productService: 01KSM38KGC-DDE9
+      repositoryName: BeerCanLabs/sk-shopstar-account-api
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-account-api
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGC-SGWF
+      repositoryName: BeerCanLabs/sk-shopstar
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, node, readme
+    - productService: 01KSM38KGD-4Q9H
+      repositoryName: BeerCanLabs/sk-shopstar-idm-integration
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-idm-integration
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-1Q90
+      repositoryName: BeerCanLabs/sk-shopstar-parent
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-parent
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-658F
+      repositoryName: BeerCanLabs/sk-shopstar-sandbox
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-sandbox
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-N1E1
+      repositoryName: BeerCanLabs/sk-shopstar-scheduler
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-scheduler
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-EVQY
+      repositoryName: BeerCanLabs/sk-shopstar-user-sync
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-user-sync
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-WYH7
+      repositoryName: BeerCanLabs/sk-shopstar-v3
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-v3
+      repositoryPrimaryLanguage: HTML
+      observedRuntimeSignals: github_actions, java, node, readme
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Repository Discovered Services
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KSM38KGC-DDE9
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGC-SGWF
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGD-4Q9H
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGD-1Q90
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGD-658F
+        diagramTier: application
+        networkZone: data
+      - ref: 01KSM38KGD-N1E1
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGD-EVQY
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KGD-WYH7
+        diagramTier: application
+        networkZone: app
+decisionRecords:
+  - ref: 01KT16XHG0-CARF
+    key: deploymentTargets

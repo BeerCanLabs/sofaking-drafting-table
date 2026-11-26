@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KX421X4P-S9K4
+type: product_component
+ownerRole: engineer
+name: Trifold Authentication API
+description: >-
+  SKSS.Authentication.Trifold authentication API surface for the Trifold
+  product line, discovered in the WebSolutions folder of the KIOTrifold TFS
+  codebase.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - cdp
+  - authentication
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: api-service
+notes:
+  sourceRepository: "tfs://KIOTrifold/Dev/Source/WebSolutions/SKSS.Authentication.Trifold"
+  repositoryName: KIOTrifold

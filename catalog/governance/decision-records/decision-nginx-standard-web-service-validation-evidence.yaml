@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJFZ-XQQ2
+type: decision_record
+name: NGINX Standard Web Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-7VJE
+linkedObject: 01KQQ5JT1F-7VJE
+decisionRationale: "serviceAuthentication: TLS certificates and administrative access use centralized identity and certificate services.\n\nsecretsManagement: runtime secrets sourced from centralized secret store\n\nhealthWelfareMonitoring: Endpoint probes, synthetic URL monitoring, and platform telemetry monitor service welfare.\n\nfailureDomain: Scoped to the NGINX tier deployment unit behind the load balancer."

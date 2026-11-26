@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: QBRBKV0QST-G0F2
+type: relationship
+name: Digital Stores EntityAPI → Digital Stores SQL Server 2017 Estate (region data)
+catalogStatus: incomplete
+source: 01M0GBWMZJ-E0NF
+label: reads and writes region data in
+target: 01M25X9W0R-VQJ3
+technology: TDS (SQL Server native protocol)
+direction: synchronous
+flow: outbound
+notes: >-
+  Confirmed by direct repository read of entityapi/Framework/DBInteract.cs and DBConnection.cs on
+  2026-08-20: the EntityAPI reads and writes each region's database directly through
+  System.Data.SqlClient with hand-written SQL and no ORM, using the DSGeneric connection string
+  resolved per request from the region subdomain. Registers the first of three service crossings
+  named in DecisionRecord 01M263WKS2-NR3T (inter-service-connections, not-compliant) - EntityAPI to
+  SQL Server - as an explicit relationship object rather than narrative only. Distinct from the
+  EntityAPI-to-DS_Admin crossing, which resolves the tenant rather than reading or writing region
+  business data, even though both crossings terminate on the same data store service.

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJB3-5QPZ
+type: decision_record
+name: Docker Application Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-EZJR
+linkedObject: 01KQQ5JT1E-EZJR
+decisionRationale: "serviceAuthentication: Container platform access and service identities use centralized identity and secret distribution.\n\nsecretsManagement: runtime secrets sourced from centralized secret store\n\nserviceLogging: Container and workload logs are exported to centralized logging beyond host-level collection.\n\nfailureDomain: Scoped to the Docker service deployment pool for a given workload tier."

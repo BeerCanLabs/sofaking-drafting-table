@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: HF31P4X3DA-58C3
+type: relationship
+name: RT ERP Gateway-A → Customer-Hosted stunnel Server
+catalogStatus: incomplete
+source: 01KYT589B4-1XSE
+label: accepts TLS tunnels from
+externalTarget: Customer-Hosted RT ERP stunnel Server
+technology: stunnel TLS over region-assigned TCP port
+direction: synchronous
+flow: inbound
+notes: >-
+  The customer-owned Ubuntu 24 physical server initiates the connection into
+  its region AWS Gateway-A listener. It remains outside the cloud SDP
+  deployment boundary.
+capabilities:
+  - 01KSWVZSZ5-Q6HW
+  - 01KSWVZSZ5-26F1

@@ -1,0 +1,57 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-MY47
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Imperva Web Application Firewall
+description: 'Cloud-based Web Application Firewall. Traffic is routed through Imperva''s infrastructure before reaching Sofa King services. Provides DDoS protection, bot mitigation, and application-layer threat filtering.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - saas
+  - security
+  - waf
+  - som
+vendor: Imperva
+productName: Imperva WAF
+productVersion: TBD
+category: service
+serviceCategory: saas
+primaryTechnologyComponent: 01KQS0TF50-8W8X
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: "TBD — confirm with vendor"
+  dpaNotes: "TBD — confirm DPA status with Legal/Procurement"
+  vendorSLA: TBD
+  incidentNotificationProcess: Vendor status page plus support-driven incident notifications
+complianceCerts: []
+authenticationModel: TBD
+architectureNotes:
+  auditVisibility: 'Audit and operational visibility is limited to the telemetry, event views, and notifications Imperva exposes to Sofa King through the customer-facing management experience.
+
+    '
+  healthStatusVisibility: 'Service health is observed through Imperva''s status communications and customer-visible management signals rather than direct host or runtime telemetry.
+
+    '
+  failureDomain: 'Imperva WAF is a shared vendor-managed dependency in front of the protected application path. A vendor-side degradation or control-plane issue can impact all Sofa King traffic paths routed through the service.
+
+    '
+capabilities:
+  - 01KT0V5MCV-Z079
+  - 01KQQ4Q026-RTWC
+deliveryModel: saas
+networkFunction: web-application-firewall
+networkTopology: edge-ingress
+protocols:
+  - https
+decisionRecords:
+  - ref: 01KT16XJ9G-KC7H
+    key: auditVisibility
+  - ref: 01KT16XJ9G-KC7H
+    key: failureDomain

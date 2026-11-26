@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-VF63
+type: relationship
+name: AWS Application Load Balancer → Platform Compliance Frontend
+source: 01KQQ5JT04-P7QJ
+target: 01KY5775KP-9YH4
+label: routes requests to
+description: >-
+  Planned ALB ingress route for the Platform Compliance web frontend in LE1 and
+  Chaise. Final listener, hostname, and target-group configuration is pending.
+technology: HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - platform-compliance-engine
+  - alb
+  - ingress

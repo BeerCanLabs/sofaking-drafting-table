@@ -1,0 +1,78 @@
+schemaVersion: '1.0'
+uid: 01M07T82GS-FGWX
+type: decision_record
+name: IMM Scope Correction
+description: Corrects the DRAFT model for Display Materials Management (IMM) so it is described by exactly one accurate Software Deployment Pattern, satisfying APEX Architecture-vector L1 / DRAFT rubric Baseline (1). This is the IMM fast-follow to TRH-9828 (Asset Management), per spike TRH-0231 and ticket TRK-870.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- scope-correction
+- adr
+- tip-279
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFD-1G0D
+linkedObject: 01KSM38KFD-1G0D
+decisionRationale: >
+  componentMerge: 01KSM38KFC-5642 ("Legacy Trackweb-IM Platform", hand-authored
+  stub, repoUrl TBD) and 01KSM38KFC-STJH ("Whm Im", repository-discovered from
+  BeerCanLabs/sk-WHM_IM) describe the same real system - both stubs
+  independently agree on the VB6/.NET/ASPX technology stack. STJH is retained
+  as the canonical product_component because it carries the real repoUrl and
+  repository-confirmed facts; "Legacy Trackweb-IM Platform" is recorded as an
+  alias on STJH. 5642 is retired with this record as the disposition evidence.
+
+
+  componentWiring: 01KSM38KFC-STJH, 01KSM38KFC-EN0P (WHM_Integrations), and
+  01KSM38KFC-0A26 (WHM_Zebra_Tools) were repository-discovered stubs sitting
+  undifferentiated inside the bulk whm dump (01KSM38KF8-G9FS), never wired
+  into 01KSM38KFD-1G0D's service groups. 1G0D's own "Legacy Trackweb-IM Web
+  Tier" group additionally carried a stale inline productServices placeholder
+  (name: "Trackweb-IM Monolith") that pointed at no real catalog object. All
+  three components are now wired into 1G0D: STJH replaces the stale
+  placeholder in the Legacy Trackweb-IM Web Tier group (with substrate
+  Q8J31D44E3-F22K); EN0P joins the existing Legacy Integration & ETL group;
+  0A26 gets a new Client Tooling group, since it is a Windows installer with
+  no application runtime rather than a hosted service. G9FS's
+  sourceRepositories and service-group refs for these three are removed to
+  avoid duplicate ownership, mirroring how TRH-9828 removed AM's components
+  from the same bulk dump.
+
+
+  sharedInfraDisposition: TRH-9828's DraftingSession (01KYRVK1NJ-M3CN) left an
+  open item asking whether three objects removed from the AM pattern - HTRA
+  and 0C4P (SNS/SQS messaging) and CT7X (Glue/Lambda/Step Functions ETL,
+  distinct from 1G0D's own 12C2/WX2Z pipeline) - are current IMM
+  infrastructure needing a home in 1G0D, or obsolete IMR artifacts to retire.
+  Cross-referencing the catalog resolves this: 01KQQ5JT05-0C4P is cataloged
+  under catalog/shared-services/runtime-services/ as the generic AWS SQS
+  runtime service, and both it and HTRA/CT7X are consumed via relationship and
+  serviceGroup refs by multiple unrelated SDPs (Tiers of Intensity, Customer
+  Data Platform, Sofa King Central, Core HR, HCM RH Core, and others) and
+  appear generically in the AWS EKS Multi-Tenant Microservices reference
+  architecture (01KQQ5JT1D-D614) that IMR's pattern is modeled on. These are
+  multi-tenant shared AWS platform services, not IMM-exclusive infrastructure
+  - they were only ever present in AM's old conflated pattern as boilerplate
+  carried from the shared reference-architecture template, not because AM or
+  IMM specifically depends on them. Nothing in 1G0D's own service groups
+  claims a messaging tier today, so no relocation into 1G0D is warranted. If
+  IMM's real IMR messaging design is later confirmed to use these shared
+  services, 1G0D can reference them as a consumer the same way Tiers of
+  Intensity and Customer Data Platform do, without claiming ownership.
+
+
+  regionAmbiguityNotResolved: 1G0D's own service groups mix aws-us-east-1
+  (IMR Public Edge & Ingress, IMR Microservices, IMR Observability - matching
+  the pattern's own named account/VPC/subnet facts) and aws-us-east-2 (IMR
+  Presentation, IMR Data Tier/Aurora, Migration ETL Pipeline - matching the
+  generic default in configurations/vocabulary/deployment-targets.yaml and
+  the AWS EKS Multi-Tenant Microservices reference architecture's own
+  template values). This decision deliberately does not resolve that
+  ambiguity in either direction, since neither reading can be confirmed
+  without an infrastructure owner - see DraftingSession 01M07T82GS-87MN.
+relatedDecisionRecords:
+  - 01KYRT1P14-Y2RH

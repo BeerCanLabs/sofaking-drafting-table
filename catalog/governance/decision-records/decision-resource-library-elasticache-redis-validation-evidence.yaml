@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01M720FBTY-26RG
+type: decision_record
+name: Resource Library ElastiCache Redis Validation Evidence
+description: Architecture decisions for the Resource Library ElastiCache Redis stub, recorded from owner-provided AWS console facts so DRAFT validation can trace PaaS requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01M71SSZ2X-R56B
+linkedObject: 01M71SSZ2X-R56B
+decisionRationale: "resilienceModel: The replication group rl-redis-prod runs with cluster mode enabled (3 shards, 6 nodes) with Multi-AZ and automatic failover enabled, per the owner from the AWS console. Backups, snapshots and cross-region disaster recovery were not confirmed.\n\nconfigurableSurface: Shard count, node type, subnet group and network placement are customer-managed within AWS. Parameter group, security group and maintenance settings were not confirmed.\n\nfailureDomain: Scoped to the rl-redis-prod replication group, VPC vpc-af001ecb and region us-east-1 in the Production Microservices account (736016846305). Multi-AZ spans availability zones within the region."

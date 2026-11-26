@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KYN1RHK4-NAPP
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Grand Rapids NetApp Shared File Storage
+description: Shared two-node NetApp FAS2720 file-storage platform in Grand Rapids. Hosts GRRFILES1, the Leave-only SMB Storage VM; the underlying cluster is reusable shared infrastructure for other Grand Rapids products.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - service
+  - storage
+  - netapp
+  - smb
+  - grand rapids
+vendor: NetApp
+productName: FAS2720
+productVersion: ONTAP version not confirmed
+architectureNotes:
+  clusterName: GRRNAP1CLU1 — shared two-node NetApp FAS2720 cluster (owner-confirmed 2026-07-29).
+  storageVM: GRRFILES1 is the Leave-only SMB Storage VM on this cluster. Time & Attendance does not use GRRFILES1 (owner-confirmed 2026-07-29); other Storage VMs on the same cluster may serve other products.
+  protocol: SMB.
+  healthWelfareMonitoring: The self-hosted PRTG Monitoring Service monitors the GRRNAP1CLU1 NetApp cluster and GRRFILES1 Storage VM (owner-confirmed 2026-07-31). Specific checks, thresholds, and alert routing have not yet been documented.
+  availabilityModel: Two-node NetApp FAS2720 cluster; node identities, protection policy, and failover behavior have not been fully confirmed.
+  recoverabilityModel: Not yet confirmed. ONTAP version, protection policy, and recovery behavior remain an open follow-up from the Leave Management DRAFT L1 session.
+  failureDomain: Scoped to the GRRNAP1CLU1 cluster and the Storage VMs it hosts.
+decisionRecords:
+  - ref: 01KT16XHFB-P4A4
+    key: netappPlatformDetails
+notes:
+  ownerRationale: Reuse model — this platform must be authored once and reused by every Grand Rapids product with a Storage VM on GRRNAP1CLU1, per the DRAFT reuse model. Authored by Cloud Engineering / Infrastructure (Shared Services).
+  sourceSession: Confirmed via the Leave Management DRAFT L1 Compute and Runtime Review drafting session (catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml), tracked by OPS-049026.
+deliveryModel: appliance

@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KYSEGRA5-W41Q
+type: decision_record
+name: Asset Management runsOn Correction
+description: Corrects the runsOn assignment for 6 Asset Management product components, previously repository-discovered as 01KQQ5JT1E-9CKW (".NET Core Application Service" stub) despite all 6 being confirmed .NET Framework 4.x IIS-hosted applications (ASP.NET Web Forms or Web API), not .NET Core.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- runson-correction
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFB-QFJ1
+linkedObject: 01KSM38KFB-QFJ1
+decisionRationale: 'runsOn: Changed from 01KQQ5JT1E-9CKW (".NET Core Application Service", a generic stub) to 01KQQ5JT1F-HZTZ ("IIS Standard Web Service" - host 01KQQ5JT04-JKFX, Windows Server 2022 EC2, current/non-deprecated; technology 01KQQ5JT1S-PYY2, Microsoft IIS 10) for 01KSM38KFB-QFJ1 (WHM_AM_App), 01KSM38KFB-XZ3E (WHM_AM_API), 01KSM38KFB-YGSN (WHM_AM_IDCore), 01KSM38KFB-D6MJ (WHM_AM_Mobile_API), 01KSM38KFB-7ZWT (WHM_AM_Notifications), and 01KSM38KFB-XABQ (WHM_AM_ReportServer). All six were confirmed by reading their real repositories to be classic ASP.NET (System.Web, .NET Framework 4.8, ISAPI/IIS-hosted) applications - Web Forms and/or Web API, never .NET Core. The prior 9CKW assignment was a repository-discovery guess that did not match. HZTZ was chosen because it is the same host (JKFX) that the pre-merge hand-authored ''Legacy Trackweb-IT Platform'' stub (former uid 01KSM38KF8-VQ4B, merged into QFJ1 per DecisionRecord 01KYRT1P14-Y2RH) already correctly used, and because it
+  is a non-deprecated, complete IIS pattern - unlike the two deprecated Windows-Server-2016-on-EC2 alternatives considered (01KQQ5JT1E-HQZ6, 01KQQ5JT1F-JCA7). This resolves the ''runsOn-runtime-mismatch'' open item in drafting_session 01KYRVK1NJ-M3CN.'

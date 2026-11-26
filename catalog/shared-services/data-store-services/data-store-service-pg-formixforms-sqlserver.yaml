@@ -1,0 +1,81 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-R0RG
+type: data_store_service
+ownerRole: technology-admin
+name: PG FORMIXFORMS SQL Server Database
+description: >-
+  Microsoft SQL Server database service holding the FORMIX evaluation forms and
+  scores for Sofa King Associate Development's EEM (Employee Evaluation
+  Management) product. Co-located with the main STL database
+  (01M1F8WB4E-MBKA) on availability group GRRPGPRDAG01 at the Grand Rapids data
+  center.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - associate-development
+  - eem
+  - formix
+  - apex-l1
+  - skpg-50273
+category: service
+serviceCategory: database
+deliveryModel: self-managed
+host: 01KQQ5JT04-PGTY
+primaryTechnologyComponent: 01KQQ5JT1T-F6Q1
+architectureNotes:
+  productionHostResolvedSkpg50273: >-
+    RESOLVED under SKPG-19589 review. This object previously recorded that no
+    production host for FORMIXFORMS could be found in any committed
+    configuration, and carried the STL host as an unverified assumption of
+    co-location. The assumption was correct. The PG SQL maintenance plan
+    inventory (Confluence 604045714) lists FORMIXFORMS on availability group
+    GRRPGPRDAG01 alongside STL, FORMIXAUDIT and SSISDB, and the Professional
+    Growth Data Life Cycle Policy (Confluence 640421777) states that two
+    production SQL Server instances host the Associate Development databases.
+    host is repointed from Windows Server 2019 Physical Standard Host to
+    Windows Server 2022 Physical Standard Host (01KQQ5JT04-PGTY) to match the
+    Environment Guide's record of GRRPGDB01/GRRPGDB02. As with the STL object,
+    the physical-versus-VMware question for the GRR estate is still open - see
+    01M1F8WB4E-MBKA and DraftingSession 01M1F8WB4E-0GSN.
+  sqlVersionStillUnconfirmed: >-
+    STILL UNCONFIRMED. SQL Server 2019 is declared only because the schema
+    requires a value and it matches the sibling STL object. The DR pair runs
+    SQL Server 2016 Enterprise Edition, so production may be 2016. Carried
+    identically to 01M1F8WB4E-MBKA; confirm both together.
+  discoveryBasis: >-
+    Originally catalogued from the FORMIX.Utilities.ScoreInserter App.config in
+    the STL-FORMIX repository, which names Initial Catalog=FORMIXFORMS, and from
+    the FH.Core Entity Framework FormModel metadata in the same repository.
+    Production placement was subsequently confirmed from infrastructure
+    documentation rather than from the repositories.
+  productScope: >-
+    Holds evaluation form definitions and inserted scores for FORMIX, EEM's
+    predecessor system. The database is unusually shaped: EEM creates one table
+    per form, and as of 2026-03-02 it contained approximately 1.8 million
+    tables, with a stated concern about reaching SQL Server's per-database
+    object limit (Confluence 39239385090). This is the driver behind the EEM
+    forms-to-MongoDB design work under SKPG-68686, which is a design sketch
+    only and is NOT implemented - recorded here as direction, not architecture.
+  availabilityModel: >-
+    Availability group GRRPGPRDAG01, shared with STL. Replica count,
+    synchronisation mode and failover posture are NOT confirmed.
+  backup: >-
+    Covered by the same Ola Hallengren maintenance plans as the rest of the PG
+    estate: FULL, DIFF and LOG to the local K:\ drive, scraped hourly to an AWS
+    S3 bucket (Confluence 604045714). The Data Life Cycle Policy records that
+    FORMIXFORMS is not archived or purged - all data is retained in the
+    production database until further notice - because the table count makes a
+    data life cycle impractical to manage.
+  recoverabilityModel: >-
+    Manual DR cutover shared with the STL estate; see 01M1F8WB4E-MBKA. No RTO
+    or RPO has been ratified.
+  serviceAuthentication: >-
+    SQL authentication observed in the developer configuration; the production
+    authentication model is not confirmed.

@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T71-MWBT
+type: product_component
+ownerRole: engineer
+name: Zendesk For Corvid Intranet
+description: >-
+  ASP.NET MVC web application bridging the Corvid Intranet help-desk
+  workflow with the external Zendesk ticketing platform. Discovered from
+  the ZendeskForCorvidIntranet folder of the KIOTrifoldStandaloneApplication
+  repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - corvid-intranet
+  - zendesk
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: web-application
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\ZendeskForCorvidIntranet"
+  repositoryName: KIOTrifoldStandaloneApplication

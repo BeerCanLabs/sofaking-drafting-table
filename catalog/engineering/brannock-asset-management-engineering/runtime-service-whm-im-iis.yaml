@@ -1,0 +1,83 @@
+schemaVersion: '1.0'
+uid: Q8J31D44E3-F22K
+type: runtime_service
+ownerRole: engineer
+name: WHM Display Materials IIS Web Service
+description: IIS 10 ASP.NET WebForms web service hosting the WHM_IM Trackweb application on .NET Framework 4.6.1 / VB.NET. Includes Telerik UI for ASP.NET AJAX, AjaxControlToolkit, and GrapeCity ActiveReports as bundled third-party control libraries deployed from the ThirdPartyControls\ vendor directory.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - whm
+  - iis
+  - aspnet-webforms
+  - dotnet-framework
+deliveryModel: self-managed
+networkPlacement: internal
+patchingOwner: organization-scheduled
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1S-PYY2
+internalComponents:
+  - ref: 01KQQ5JT04-JKFX
+    role: host
+  - ref: 01KQQ5JT1S-PYY2
+    role: web-server
+  - ref: TW69MZPMV6-PE36
+    role: ui-controls
+    notes: Telerik UI for ASP.NET AJAX 2015.3.1111.40. CVE-2019-18935 RCE mitigation requires Telerik.AsyncUpload.ConfigurationEncryptionKey and Telerik.Upload.ConfigurationHashKey to be set to unique random 64-character values per environment in WebAppSettings.config; placeholder values are present in the repository and must not be deployed as-is.
+  - ref: R1WPSQEGQ3-WQ6G
+    role: ui-controls
+    notes: AjaxControlToolkit 17.1.0.0 providing supplemental AJAX WebForms controls.
+  - ref: 01KQQ5JT1R-YS4E
+    role: reporting
+    notes: GrapeCity ActiveReports 15 used for report assembly rendering via ReportAssembly project.
+deploymentConfigurations:
+  - id: single-node
+    name: Single Node
+    description: WHM_IM runs on a single IIS host; availability and scalability model requires owner confirmation.
+    addressesQualities:
+      - availability
+      - scalability
+      - recoverability
+architectureNotes:
+  runtimeFramework: .NET Framework 4.6.1 (VB.NET and C# mixed solution targeting net461)
+  webFramework: ASP.NET WebForms
+  serviceAuthentication: Authentication model not confirmed by repository discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach not confirmed by repository discovery; assume central secret store required.
+  serviceLogging: 'Corrected by direct repository read (TRK-680 dev spike) — the prior "forwarded to centralized logging" claim was not accurate. Logging is split across five uncoordinated local mechanisms (tblUnvLog DB table, Windows Event Log, System.Diagnostics.Trace to local file, automatic Application Insights, and tblErrors/error.aspx) with no shared correlation identifier; none is centrally consumable without direct region-database or local-file access. See product-component-whm-im (01KSM38KFC-STJH) for the full call-site inventory. NLog + CloudWatch shipping is planned under TRK-350, reusing AM''s existing AWSSDK/NLog.AWS.Logger configuration, but is not yet implemented.
+
+    '
+  healthCheck: No health-check endpoint exists today; see healthWelfareMonitoring.
+  healthWelfareMonitoring: 'Corrected by direct repository read (TRK-680 dev spike): confirmed no health-check endpoint exists anywhere in the Trackweb tree — only two unrelated .ashx handlers (ImageDisplay.ashx, pdfHandler.ashx) were found, neither a health probe, and no external uptime monitor is configured. TRK-859 will port AM''s SiteDbCheck.ashx / SiteRenderCheck.aspx pattern; blocked on WHM_IM having no RegionName region preference for the DB probe (recommended fix: probe an existing preference such as SessionTimeOutInMinutes instead of adding a new one).
+
+    '
+  availabilityModel: Availability target not confirmed by owner interview.
+  scalabilityModel: Scalability model not confirmed by owner interview.
+  recoverabilityModel: Recoverability model not confirmed by owner interview.
+  failureDomain: Scoped to the IIS application pool and host for WHM_IM.
+  deprecationRationale: Deprecated by company policy — Telerik UI for ASP.NET AJAX 2015.3 (EoL ~2017) and AjaxControlToolkit 17.1 (no active security support) are past vendor end-of-life. Company policy prohibits use of EOL/EOS third-party products. Migration to a supported UI stack is required.
+  securityNote: Telerik CVE-2019-18935 — RadAsyncUpload DialogHandler and WebResource HTTP handlers registered in Web.config expose the RCE attack surface if ConfigurationEncryptionKey and ConfigurationHashKey are not set to unique random values per environment.
+  internalComponentRationales:
+    TW69MZPMV6-PE36: Telerik UI for ASP.NET AJAX is a pervasive UI control library used across all Trackweb WebForms pages for grids, date pickers, windows, upload, and AJAX management. It is a first-class runtime dependency.
+    R1WPSQEGQ3-WQ6G: AjaxControlToolkit supplements Telerik with additional AJAX-enabled WebForms controls registered globally in Web.config.
+    01KQQ5JT1R-YS4E: GrapeCity ActiveReports is used by the ReportAssembly project for report rendering within the WHM_IM application.
+decisionRecords:
+  - ref: 1D2G7SYD94-CKHB
+    key: serviceAuthentication
+  - ref: 1D2G7SYD94-CKHB
+    key: secretsManagement
+  - ref: 01M07T82GS-FGWX
+    key: serviceLogging
+  - ref: 01M07T82GS-FGWX
+    key: healthWelfareMonitoring
+  - ref: 1D2G7SYD94-CKHB
+    key: availabilityModel
+  - ref: 1D2G7SYD94-CKHB
+    key: scalabilityModel
+  - ref: 1D2G7SYD94-CKHB
+    key: recoverabilityModel
+  - ref: 1D2G7SYD94-CKHB
+    key: failureDomain

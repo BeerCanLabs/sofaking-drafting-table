@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-BEFY
+type: host
+ownerRole: technology-admin
+name: Windows Server 2012 R2 Standard Host
+description: Exit-only host for remaining Windows Server 2012 R2 deployments.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: retired
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- legacy
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-X87T
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1Q-X87T
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

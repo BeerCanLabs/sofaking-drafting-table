@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z6-458V
+name: Windows Server 2016 Virtual Machine Host → Central Logging Service
+catalogStatus: stub
+source: 01KQQ5JT03-2NEW
+label: calls
+target: 01KQQ5JT1E-A6M5
+notes:
+  background: "Host logs and Windows event telemetry forwarded to the enterprise logging platform."
+capabilities:
+- 01KQQ4Q026-D04B

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-CFW1
+type: relationship
+name: Corvid Front End Web → Trifold Director Database
+source: 01KX421X4Q-R73N
+target: 01KX421X49-VNRW
+label: reads from and writes to
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifold TFS codebase; connection details not yet confirmed by owner interview.

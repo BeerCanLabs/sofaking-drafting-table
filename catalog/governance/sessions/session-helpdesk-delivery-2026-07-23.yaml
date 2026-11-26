@@ -1,0 +1,781 @@
+schemaVersion: '1.0'
+uid: 01KY4HHDCD-7M2Q
+type: drafting_session
+name: HelpDesk Architecture and Delivery Drafting Session
+description: >-
+  Documentation-scoped session for the HelpDesk / GetHelp deployment pattern.
+  It reconciles current infrastructure, GitHub Actions delivery, environment
+  and tenant inventories, component documentation, customer provisioning,
+  API endpoint/consumer, authorization, KPF detection, release verification,
+  performance, rollback, shared SQL, identity synchronization, Sofa King
+  Central onboarding, and customer-export evidence while preserving unresolved
+  ownership, control, recovery, and validation questions.
+version: 1.11.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+sessionStatus: open
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags: [drafting-session, helpdesk, gethelp, aws, ecs, sql-server, availability-groups, github-actions, ci-cd]
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KQQ5JT1J-BRF4
+sourceArtifacts:
+  - name: Help Desk Infrastructure & Deployment Architecture
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/17036409009/Help+Desk+Infrastructure+Deployment+Architecture
+    notes: >-
+      Version 4, updated July 22, 2026. Documents logical workloads, ECS and
+      Lambda runtime, SQL tenant isolation, S3 configuration, security,
+      observability, environments, and the broader coordinated release unit.
+  - name: Brannock HelpDesk GitHub Actions Based CI and CD Documentation Overview
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~712020ad75da2a319a482bb1065a287d07dd86/pages/13033566895/Brannock+HelpDesk+GitHub+Actions+Based+CI+and+CD+Documentation+Overview
+    notes: >-
+      Version 6, updated July 16, 2026. Documents workflow-dispatch CI,
+      centralized ECS CD, ECR tag and digest handling, enabled environments,
+      OIDC, validation and security controls, and rollback behavior.
+  - name: Brannock - Data - AWS Connectivity
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19452823270/Brannock+-+Data+-+AWS+Connectivity
+    notes: >-
+      Version 54, updated July 1, 2026. Shared Brannock data-platform inventory
+      documenting production and non-production SQL instances, Always On
+      availability groups, listener names and ports, replication modes, AWS
+      availability zones, FSx backup-share locations, and SSIS failover
+      constraints. It is not a HelpDesk ownership or recovery-policy document.
+  - name: HelpDesk 9.2 Deployment
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/18407984305/9.2+Deployment
+    notes: >-
+      Updated July 30, 2025. HelpDesk-specific release evidence that applies SQL
+      scripts to GH-* and HelpDesk* databases through AWSBRSPRDLIST1, 2, 3, 4,
+      and 6, excluding HelpDeskTranslations and backup copies.
+  - name: Design Sketch - Help Desk Migration to Ottoman Native
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/15270485961/Design+Sketch+Help+Desk+Migration+to+Ottoman+Native
+    notes: Proposed target-state architecture only; no element is treated as deployed without independent confirmation.
+  - name: GetHelp Development Environment Setup
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/17418214150/GetHelp+Development+Environment+Setup
+    notes: Historical development setup context; database restore instructions do not establish source-data classification or masking.
+  - name: HelpDesk 8.2.1 Regression Test Plan
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/16685230600/8.2.1+Regression+Test+Plan
+    notes: Historical testing strategy and tooling evidence; not treated as current execution evidence.
+  - name: Help Desk 8.2 Release Readiness
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/FP/pages/13613322715/Help+Desk+8.2+Release+Readiness
+    notes: Historical release-readiness context; named participants do not establish permanent ownership.
+  - name: HelpDesk 10.24.4.1 Deployment
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/15831329706/10.24.4.1+Deployment
+    notes: Current release artifact links SQL scripts, but its test section contains no recorded steps or results.
+  - name: Product List and Product Team Topology
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/FPM/pages/16462255055/Product+List+and+Product+Team+Topology
+    notes: Identifies product management; accountable technical ownership remains unconfirmed.
+  - name: HelpDesk Environments Non-customer
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/19444792381/HelpDesk+Environments+Non-customer
+    notes: >-
+      Updated April 14, 2025. Maps non-customer URLs, HelpDesk databases, linked
+      Asset Management endpoints and databases, and SSO variants. Marks Staging
+      2 as CURRENT STAGING, which conflicts with the CI/CD catalog enabling stg
+      while stg2 is disabled.
+  - name: HelpDesk Production List
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/DEV/pages/13687225387/HelpDesk+Production+List
+    notes: >-
+      Updated July 13, 2026. Maps 332 active site URLs to 328 distinct databases
+      across AWSBRSPRDLIST1, 2, 3, 4, and 6 and records Asset Management links,
+      SSO types, and Salesforce identifiers. Ownership and automated currency
+      are not established.
+  - name: Overview of HelpDesk Projects
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/13541964867/Overview+of+HelpDesk+Projects
+    notes: >-
+      Index to HHD_UI, HHD_UP, HHD_Login, and HHD_API project descriptions.
+      The API page was updated March 11, 2026; UI pages date to September 2024.
+      Supports component boundaries but not repository mapping, current-owner
+      attestation, or governance enforcement.
+  - name: Brannock Help Desk HD Installation Process
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11428146969/Brannock+Help+Desk+HD+Installation+Process
+    notes: >-
+      Updated July 1, 2026. Describes Jira/Salesforce-driven customer provisioning
+      through Jenkins plus database, S3, DFS, IIS, account, survey, and manual
+      user/group configuration. Treated as provisioning evidence requiring
+      reconciliation with the current ECS and GitHub Actions architecture.
+  - name: HelpDesk 10.1.4 Release Recap
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/12329387380/10.1.4+Release+Recap+-+July+21+2026
+    notes: >-
+      Current production-release evidence for database, Lambda, configuration,
+      application, workflow, Application Insights, and CloudWatch verification.
+  - name: HelpDesk 10.24.4.1 Release Recap
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/10824357735/10.24.4.1+Release+Recap+-+July+23+2026
+    notes: >-
+      Current database-only release evidence including region sampling and
+      recovery from a failed conditional update by adding an insert path.
+  - name: HelpDesk 10.1.4 Smoke Test Plan
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/14674044999/Release+Night+Smoke+Test+Plan+for+Hotfix+10.1.4
+    notes: >-
+      Repeatable production smoke coverage for login, navigation, ticket
+      creation and lifecycle, email, integration, dashboard, permissions,
+      performance spot checks, region sampling, and escalation.
+  - name: HelpDesk Performance Testing 10.1.3
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/16553006964/Performance+Testing-+10.1.3
+    notes: >-
+      Below-production load evidence through 30 virtual users with endpoint
+      thresholds, 71 improvements, and six higher-load regressions requiring
+      disposition and production-baseline comparison.
+  - name: HelpDesk 10.1.3 Rollback Post-Mortem
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/16816365405/10.1.3+Rollback+Post-Mortem
+    notes: >-
+      Records rollback of code and database changes after a Google OAuth issue
+      while Lambda remained at 10.1.3, demonstrating practiced rollback and an
+      unresolved coordinated cross-component rollback boundary.
+  - name: HelpDesk API Endpoints List
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/13731027294/HelpDesk+API+Endpoints+List
+    notes: >-
+      Updated March 3, 2026. Maps HHD_API endpoint families to HelpDesk UI,
+      User Portal, Login, Asset Management / Trackweb, HCM onboarding,
+      email-to-ticket, and other service consumers. Confirms health and major
+      functional surfaces but not deployed-route currency or endpoint-level
+      security, tenant, resilience, lifecycle, test, and monitoring controls.
+  - name: WH-5897 Support User / Admin Role Parity Research
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/19576364437/WH-5897+Research+Help+Desk+Support+User+User+Type+0
+    notes: >-
+      Updated June 2, 2026. Documents the JWT roles, four user types,
+      database-driven permissions, controller audit, type-specific discrepancies,
+      refresh-token storage, and proposed local Support SSO-bypass path. Treated
+      as research and current-code analysis, not proof that fixes or break-glass
+      controls are deployed.
+  - name: WH-6035 HelpDesk KPF Endpoint Mapping and Failure Detection Research
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/11955839625/WH-6035+Help+Desk+KPF+Sev-1+Sev-2+Endpoint+Mapping+Failure-Detection+Research
+    notes: >-
+      Updated July 15, 2026. Maps the four Sev-2 KPFs to API, Application
+      Insights, Lambda, CloudWatch, repository dependency, and S3 signals. It is
+      a draft spike with open instrumentation, alarm, permissions, action-group,
+      threshold, and ownership work.
+  - name: WH-5860 HelpDesk KPF alert implementation
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/WH-5860
+    notes: >-
+      In-progress observability work for alerts based on HelpDesk KPFs. This is
+      Turn 2 remediation and does not replace Turn 1 staging-parity evidence.
+  - name: WH-0097 HelpDesk KPF alert development
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/WH-0097
+    notes: >-
+      In Technical Review as of August 5, 2026. Non-production work and open
+      pull requests exist; production shipping alerts are initially disabled.
+      This is remediation progress, not completed Turn 1 evidence.
+  - name: Brannock Key Product Functionality
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/FPM/pages/13363566286/Brannock+-+Key+Product+Functionality
+    notes: >-
+      Version 11, updated August 6, 2026. Defines four HelpDesk Sev-1 and
+      three Sev-2 functions with a 99.9 target; SLA processing is Sev-4. Sev-1
+      endpoint cells are populated, while Sev-2 endpoint cells and
+      cross-functional reviewer approvals remain blank.
+  - name: Help Desk Customer Export SQL Views and Data Extraction Process
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/19734488855/Help+Desk+Customer+Export+SQL+Views+and+Data+Extraction+Process
+    notes: >-
+      Version 1, updated May 12, 2026. Documents a privileged manual tenant
+      database export to Excel plus an Operations-managed S3 attachment export.
+      It excludes Password and Salt but does not establish approval, tenant
+      verification, secure delivery, retention, audit, or reconciliation, and
+      its cleanup SQL omits the ticket view.
+  - name: Syncing Staff and Customers from Asset Management to HelpDesk
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/10045006886/Syncing+Staff+and+Customers+from+Asset+Management+to+HelpDesk+Configuration+and+Challenges
+    notes: >-
+      Version 1, updated May 15, 2026. Documents the nightly CIS to Asset
+      Management to IntegrationMiddleWay to HelpDesk SQL Agent/SSIS flow,
+      tenant-pair configuration, receiving tables, and duplicate-identity risk.
+      It does not establish the exact package/job inventory or operational and
+      data controls, and its customer sync-versus-login flag description requires
+      implementation validation.
+  - name: Sofa King Central Onboarding to WHM - Help Desk Management
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~60edbb2ba211b10069484909/pages/10309483669/Sofa King+Central+Onboarding+to+WHM+-+Help+Desk+Mgmt.
+    notes: >-
+      Version 1, updated July 21, 2026. Documents Swagger-enabled nightly staff
+      and assignment exports, Operations-provisioned AWS SFTP, Secret Server
+      credentials, ordered PII-bearing schemas, and required WHM adjustments.
+      The HelpDesk-side consumer, outcome, tenant mapping, monitoring, replay,
+      reconciliation, retention, schema governance, and ownership are absent.
+  - name: HelpDesk Accountability, Production Deployments, and Application Component Management Queries
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/15294444526/HelpDesk+Accountability+Production+Deployments+and+Application+Component+Management+Queries
+    notes: >-
+      Version 14, updated August 4, 2026. Confirms exactly six production
+      Lambdas and their triggers; documents component, infrastructure, data, and
+      integration ownership boundaries; clarifies BETA/VALIDATION core-flow
+      evidence; and preserves unanswered dependency-registration, owner
+      attestation, KPF approval, and final-validation questions.
+  - name: WH-3463 Validation/Beta smoke testing for 10.1.3
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/WH-3463
+    notes: >-
+      Completed VALIDATION smoke evidence for role-based login, ticket
+      creation/edit/view, grids, routing, administration, pages, and User Portal.
+      Only Google OAuth was tested; email-to-ticket and health checks are not
+      explicit in the result.
+  - name: OPS-87536 HelpDesk 10.1.3 RC1 pre-production deployment
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/OPS-87536
+    notes: >-
+      Completed auditable BETA/VALIDATION deployment record linking the ordered
+      procedure, target databases, four application images, and release tag.
+  - name: WH-9331 HelpDesk API runtime upgrade
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/WH-9331
+    notes: Tracks remediation of the deployed .NET Core 2.1 API runtime.
+  - name: WH-2054 HelpDesk Angular upgrade
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/WH-2054
+    notes: Tracks remediation of the deployed Angular 7 frontend runtimes.
+  - name: OPS-06228 Release 10.1.3 on June 2, 2026
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/OPS-06228
+    notes: >-
+      Production release request assigned to Kai Novak. It links the 10.1.3
+      procedure and records that the deployment was reverted; it is rollback
+      evidence, not a complete successful CR.
+  - name: HelpDesk 10.1.3 Deployment
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/18312590244/10.1.3+Deployment
+    notes: >-
+      Ordered production procedure for tenant SQL migration, configuration,
+      manual Lambda updates, feature flags, BETA-to-PROD image tagging, ECS
+      restart, testing, and component-specific rollback preparation.
+  - name: HelpDesk 10.1.3 Part 2 Release Recap
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/13545266742/10.1.3+part+2+Release+Recap+-+June+9+2026
+    notes: >-
+      Records successful version, SSO, database, email-to-ticket, ticket-cycle,
+      region, page, workflow, Application Insights, and CloudWatch checks.
+generatedObjects:
+  - name: Help Desk - Pattern
+    type: software_deployment_pattern
+    status: created
+    ref: 01KQQ5JT1J-BRF4
+    notes: >-
+      Updated with environment and tenant inventories, component boundaries,
+      customer-provisioning evidence, current smoke and release results,
+      performance evidence, practiced rollback, authorization, KPF detection,
+      identity synchronization, Sofa King Central onboarding, customer-export
+      evidence, the reconciled six-Lambda inventory, documented service
+      boundaries, corrected KPF scope, and only the remaining Turn 1 L1 gaps.
+unresolvedQuestions:
+  - id: api-control-evidence
+    question: >-
+      Is the HelpDesk endpoint inventory generated from the deployed OpenAPI or
+      Swagger definition, and for each production endpoint family what public or
+      internal exposure, authentication, authorization, tenant-isolation,
+      sensitive-data, rate-limit, timeout, retry, idempotency, versioning,
+      security-test, and KPF-monitoring controls apply?
+    status: deferred
+    reason: >-
+      The endpoint page maps consumers and integrations but does not establish
+      deployed-route currency or control effectiveness. Several routes carry
+      tenant, user, ticket, staff/customer, attachment, permission, and reporting
+      identifiers, and some GET routes appear to execute state-changing work.
+    currentBestGuess: >-
+      HHD_API applies shared JWT and tenant-aware authorization patterns, while
+      service integrations use separately configured credentials; exact
+      endpoint-level enforcement requires implementation and runtime evidence.
+    impact: >-
+      API boundaries and candidate KPFs are materially clearer, but authorization,
+      tenant isolation, data protection, resilience, lifecycle, security testing,
+      and monitoring remain incomplete for L1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: support-login-controls
+    question: >-
+      What deployed-route or configuration evidence confirms the WH-5897 local
+      Support login is absent, and what approval and controls will be required
+      before any future SSO-bypass deployment?
+    status: deferred
+    reason: >-
+      The tech-lead response states that the local Support login is not deployed,
+      but no runtime or configuration evidence was supplied.
+    currentBestGuess: The path is not an active production control.
+    impact: >-
+      Current architecture should exclude the path; future privileged
+      authentication controls remain a change-management requirement.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: production-delivery-authority
+    question: >-
+      Can Kai Novak provide one recent complete successful production CR with
+      approvals, exact immutable artifact digests and all release-unit versions,
+      formally attached smoke results, monitoring results, and recovery detail?
+    status: deferred
+    reason: >-
+      Kang is named as production-deployment owner. OPS-06228 and linked
+      deployment/recap pages prove an ordered release, a revert, and later
+      verification, but not one complete successful CR evidence bundle.
+    currentBestGuess: >-
+      DevOps executes production-side promotion under CR control, with QA
+      approval and Development monitoring.
+    impact: Accountability is clearer; complete traceability and approval evidence remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: release-unit-integration
+    question: >-
+      How are SQL, Lambda, S3 configuration, feature flags, and application
+      image digests bound to one immutable manifest, and what owner-approved
+      full-release and partial-tenant recovery procedures apply?
+    status: deferred
+    reason: >-
+      The 10.1.3 procedure supplies release order and manual component steps,
+      while OPS-06228 and the post-mortem show practiced rollback. No single
+      manifest or complete cross-component and partial-tenant recovery procedure
+      is evidenced.
+    currentBestGuess: Release-unit assets remain manually coordinated through DevOps procedures.
+    impact: Version compatibility and complete recoverability remain only partially evidenced.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: service-objectives
+    question: What numeric SLO or SLA applies to HelpDesk / GetHelp?
+    status: deferred
+    reason: >-
+      The architecture records a 24x7 expectation but no numeric SLO or SLA.
+      The August 7 follow-up confirms that HelpDesk has no defined RPO or RTO at
+      this time, so those are answered current-state facts rather than missing
+      documentation.
+    currentBestGuess: The service has a high-availability expectation without committed numeric service objectives.
+    impact: Availability maturity cannot be scored beyond the documented expectation.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: helpdesk-database-mapping
+    question: >-
+      Who owns and generates the HelpDesk Production List, why is listener 5
+      excluded, how does HHD_API select a tenant database, and are the four
+      multi-URL database mappings intentional aliases?
+    status: deferred
+    reason: >-
+      The July 2026 inventory maps 332 active URLs to 328 distinct databases on
+      listeners 1, 2, 3, 4, and 6, but it does not document authority,
+      generation, routing implementation, or alias governance.
+    currentBestGuess: >-
+      HelpDesk tenant databases are distributed across shared listeners 1, 2, 3,
+      4, and 6 and multiple URLs may intentionally represent one tenant.
+    impact: Tenant placement is evidenced, but routing control, currency, alias handling, and listener-specific operational ownership remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: database-failover-policy
+    question: >-
+      What failover mode, decision authority, runbook, and tested cadence apply
+      to the asynchronous cross-region production availability groups?
+    status: deferred
+    reason: >-
+      The connectivity inventory documents asynchronous AG topology but not the
+      HelpDesk failover policy or test evidence. HelpDesk has no defined RPO or
+      RTO at this time.
+    currentBestGuess: Shared SQL AGs provide cross-region redundancy with operationally controlled failover.
+    impact: Failover maturity remains incomplete; no RPO or RTO is currently committed.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: database-backup-policy
+    question: >-
+      What backup schedule, retention, encryption, immutability, offsite
+      protection, alerting, and restore-test evidence apply to HelpDesk databases?
+    status: deferred
+    reason: The connectivity inventory names FSx and non-production backup locations but does not document policy or successful restoration.
+    currentBestGuess: Shared platform backup locations protect the SQL estate under a separate data-team policy.
+    impact: Backup and restoration maturity remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: lower-environment-database-mapping
+    question: >-
+      Which SQL hosts back each documented HelpDesk non-customer database, and
+      does the enabled GitHub Actions stg key deploy to Staging 2 even though
+      stg2 is disabled?
+    status: deferred
+    reason: >-
+      The environment matrix maps URLs to databases and marks Staging 2 as
+      current, while the shared data inventory maps SQL hosts and the CI/CD
+      catalog separately enables stg but disables stg2.
+    currentBestGuess: Staging 2 is the functional staging site, but its deployment-key and SQL-host mappings require owner attestation.
+    impact: Official staging, parity, deployment targeting, and lower-environment failure domains are not fully evidenced.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: ssis-helpdesk-dependency
+    question: >-
+      What exact SQL Server Agent job, SSIS package, stored procedures,
+      repository, credentials, schedule, owner, monitoring, retry/replay,
+      reconciliation, failover sequence, and freshness objective implement the
+      Asset Management to HelpDesk staff/customer sync?
+    status: deferred
+    reason: >-
+      The May 2026 sync page confirms HelpDesk consumes SQL Agent/SSIS through
+      IntegrationMiddleWay, but it does not identify the deployable artifacts or
+      prove operational controls.
+    currentBestGuess: >-
+      A nightly package reads active database pairs from
+      GetHelp.GetHelpEntityIntegration and upserts staff and customers into each
+      tenant's UserAccounts and UserAccountDetails tables.
+    impact: The dependency is confirmed, while ownership, recoverability, tenant isolation, and control effectiveness remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: identity-sync-controls
+    question: >-
+      How are Asset Management and HelpDesk tenant pairs validated, duplicate or
+      changed identities reconciled, deactivations/deletions propagated, PII and
+      credentials protected, and customer synchronization kept independent from
+      login authorization?
+    status: deferred
+    reason: >-
+      The sync page documents database mapping, receiving tables, EntityID and
+      EntityTypeUID matching, and duplicate-account risk, but its explanation of
+      GHCustomerUserActive does not prove separate sync and login flags.
+    currentBestGuess: >-
+      Database-pair configuration and IdP restrictions provide the intended
+      controls, with implementation details and exception handling still open.
+    impact: Cross-tenant identity integrity and customer-access controls remain incomplete for L1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: sofaking-central-ingestion
+    question: >-
+      What consumes Sofa King Central staff and assignment files from AWS SFTP,
+      does it create HelpDesk accounts, onboarding tickets, or both, and how are
+      tenant mapping, schema versions, authorization, retention, monitoring,
+      replay, and record-level reconciliation controlled?
+    status: deferred
+    reason: >-
+      The onboarding procedure documents Central export and SFTP setup but says
+      only that the WHM team makes required HelpDesk adjustments.
+    currentBestGuess: >-
+      A customer-specific WHM process consumes nightly ordered files after
+      Operations provisions the organization-specific SFTP folder.
+    impact: A PII-bearing inbound boundary is confirmed, but its HelpDesk implementation and controls are not L1-ready.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: customer-data-export-controls
+    question: >-
+      Who approves HelpDesk churn exports, how is the selected tenant verified,
+      where are Excel and S3 outputs delivered, and what least-privilege,
+      encryption, access-audit, reconciliation, retention, deletion, and
+      chain-of-custody controls apply?
+    status: deferred
+    reason: >-
+      The customer-export page documents privileged SQL views and manual Excel
+      and S3 handling but not governance controls; its cleanup script omits the
+      ticket view and drops an unexplained reference-data view.
+    currentBestGuess: Support and Operations coordinate an exceptional manual export for a departing customer.
+    impact: Sensitive customer-data egress and production SQL change controls remain incomplete for L1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: application-verification
+    question: >-
+      Which checks in the 10.1.4 smoke plan are mandatory, automated, mapped to
+      approved KPFs, and attached to every deployment PR or CR?
+    status: deferred
+    reason: >-
+      The smoke plan and release recaps provide repeatable and recent production
+      verification, but GitHub Actions does not establish automatic execution,
+      evidence retention, KPF mapping, or release blocking.
+    currentBestGuess: Operators execute risk-based manual smoke checks and review Application Insights and CloudWatch after deployment.
+    impact: Application verification exists, but enforceability, traceability, automation, and KPF coverage remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: scanner-enforcement
+    question: >-
+      Which finding severities must block merge or release, when will Snyk and
+      other scans become required status checks, and who approves documented
+      exceptions?
+    status: deferred
+    reason: >-
+      Linked workflow runs prove scan execution, but the owner response states
+      that findings flag without blocking because required status-check
+      enforcement is not implemented.
+    currentBestGuess: Reviewers manually evaluate findings during pull requests.
+    impact: Automated security quality-gate enforcement remains a Turn 3 L1 gap, not a current Turn 1 blocker.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: accountable-ownership
+    question: >-
+      Who is accountable before Gavin Wells accepts ownership, and who owns
+      the Signal Sciences WAF policy and NGINX-to-ECS handoff?
+    status: answered
+    reason: >-
+      The August 7 follow-up confirms Rob Hartley is the current accountable
+      owner until Gavin Wells starts and accepts accountability. The
+      Networking team owns all WAF policies, including Signal Sciences; DevOps
+      owns NGINX deployment and SRE owns ECS hosting.
+    currentBestGuess: Current ownership and the service handoff are explicit.
+    impact: Turn 1 ownership and service-boundary evidence is satisfied.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: production-runtime-inventory
+    question: >-
+      When will every dependency in Rob Hartley's authoritative production
+      inventory be structurally represented in DRAFT with reused Technology
+      Component references?
+    status: deferred
+    reason: >-
+      The owner-provided inventory confirms six Lambdas and their triggers plus
+      Route53, ElastiCache, SES, S3, queues, schedules, jobs, identity providers,
+      and external integrations. Discovery and owner attestation are complete,
+      but most entries still lack first-class DRAFT references.
+    currentBestGuess: Remaining work is catalog registration, reference reuse, and relationship modeling.
+    impact: Turn 1 architecture dependency coverage remains incomplete until the structural model is committed.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: staging-and-data-controls
+    question: >-
+      When will the team create and link a BETA/VALIDATION parity result for
+      attachment upload, email-to-ticket, and health/outage and approve the
+      seven-function Sev-1/Sev-2 core-flow scope?
+    status: deferred
+    reason: >-
+      The August 7 follow-up confirms this evidence and approval do not exist at
+      this time. WH-3463 covers other login, ticket, routing, administration,
+      page, and User Portal behavior. Lower-environment data strategy and
+      manual-change controls are already answered.
+    currentBestGuess: Maintained staging exists, but the complete core-flow parity packet must be created for Environment L1.
+    impact: This is an Environment L1 gap and does not block DRAFT Architecture L1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: kpf-observability
+    question: >-
+      Who approves and owns each documented Sev-1/Sev-2 KPF, when will the KPF
+      table be updated, and where is tested production evidence for the Azure,
+      CloudWatch, Dynatrace or approved-alternative, synthetic, Pingdom, log,
+      paging, runbook, and release-gate signals?
+    status: deferred
+    reason: >-
+      The KPF table and WH-6035 identify the functions and failure paths, but
+      reviewer approvals and Sev-2 cells remain blank. Routing telemetry is
+      swallowed, the email Lambda alarm and direct S3 coverage are missing,
+      thresholds are placeholders, and alert creation was blocked by permissions.
+    currentBestGuess: >-
+      Application Insights and CloudWatch are the active telemetry foundations;
+      additional instrumentation and alerts are planned but not fully implemented.
+    impact: KPF observability implementation remains a Turn 2 L1 gap; only approved core-flow scope and staging-parity evidence affect current Turn 1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: central-logging-controls
+    question: >-
+      When will Lambda log retention be defined, privileged-action and audit
+      logs be centrally collected, tenant context be standardized, KPF alerts be
+      completed, and a formal observability owner attest the controls?
+    status: deferred
+    reason: >-
+      CloudWatch and Application Insights retention and access are now
+      documented, but Lambda logs have no expiry, audit and privileged-action
+      logs are not centralized, KPF alerts are still being developed, and no
+      formal owner-attestation process exists.
+    currentBestGuess: Application Insights and CloudWatch provide the current telemetry foundation with incomplete governance and coverage.
+    impact: Central logging and auditability remain incomplete for Turn 2 L1, not current Turn 1.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: current-test-evidence
+    question: >-
+      Where are mandatory smoke results formally attached to each production PR
+      or CR, which tickets close the six performance regressions, and what
+      production-scale baseline, coverage, and automated performance/security
+      thresholds block release?
+    status: deferred
+    reason: >-
+      Mandatory smoke checks, a blocker protocol, successful recap results,
+      technical-debt disposition, and lower-environment baselines are documented.
+      Results remain in chat/Confluence instead of formal PR/CR attachments, and
+      no automated performance gate or release-blocking security threshold exists.
+    currentBestGuess: Manual smoke and performance review are required current practices.
+    impact: Test coverage is clearer, while traceability and automated gate evidence remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: production-controls
+    question: >-
+      Can the production owner link a complete successful CR with approvals,
+      exact immutable digests and component versions, formally attached mandatory
+      smoke results, and full-release plus partial-tenant recovery evidence?
+    status: deferred
+    reason: >-
+      OPS-06228, the 10.1.3 procedure, and the part-2 recap prove ordered
+      promotion, a revert, and successful later verification, but they are not
+      one complete successful evidence bundle.
+    currentBestGuess: Production is manually coordinated by Kai Novak and DevOps with QA approval and Development monitoring.
+    impact: Promotion and rollback practice are evidenced; immutable traceability and complete recovery remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: security-and-repository-controls
+    question: >-
+      Where are repository Settings exports or screenshots proving required
+      reviewer counts, direct-push blocking, required status checks, exception
+      handling, and scan coverage for IaC, secrets, dependencies, containers,
+      and images?
+    status: deferred
+    reason: >-
+      CODEOWNERS files, release tags, scan runs, and owner attestation for branch
+      protection and reviews are now linked. Snyk findings still do not block,
+      and Settings-level enforcement and exception evidence were not supplied.
+    currentBestGuess: Baseline repository governance exists, with security gating varying and remaining manual.
+    impact: Repository identity and several controls are evidenced; enforceability remains incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: reference-architecture-applicability
+    question: Does reference architecture 01KQQ5JT1C-AZTH apply to HelpDesk, and what approved deviations cover the current ECS, SQL, S3, Lambda, ingress, delivery, observability, and recovery model?
+    status: deferred
+    reason: The reference is linked but no completed comparison was found.
+    currentBestGuess: Applicability is unverified and compliance must not be claimed.
+    impact: Reference-architecture alignment and exception tracking remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: customer-provisioning-authority
+    question: >-
+      Is the Jenkins Brannock Build Customer Site process current, which steps are
+      HelpDesk-specific, and how are its DFS, IIS, S3, database, Salesforce,
+      Crush, survey, credential, approval, rollback, and deprovisioning controls
+      owned?
+    status: deferred
+    reason: >-
+      The July 2026 installation guide documents a manual and Jenkins-based
+      provisioning path that is not reconciled with the current ECS/GitHub
+      Actions application architecture.
+    currentBestGuess: Jenkins remains a tenant-provisioning workflow separate from application release delivery, with some shared or legacy Asset Management steps.
+    impact: Provisioning boundaries, privileged-change controls, auditability, and legacy infrastructure dependencies remain incomplete.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: ingress-control-path
+    question: >-
+      What is the exact ordered ingress path and ownership relationship among
+      Imperva, Signal Sciences, NGINX, load balancing, and the four ECS
+      workloads?
+    status: deferred
+    reason: >-
+      Current architecture evidence identifies Signal Sciences and NGINX as an
+      active runtime control, while the DRAFT object models Imperva as the
+      region-facing front door.
+    currentBestGuess: Imperva may provide the external front door while Signal Sciences is integrated with NGINX inside the ECS request path.
+    impact: Edge security boundaries, operational ownership, and failure-domain modeling remain unconfirmed.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: component-repository-attestation
+    question: >-
+      When are the Angular and API runtime upgrades deployed, and where are the
+      resulting deployed-version and regression-test records?
+    status: deferred
+    reason: >-
+      WH-2054 tracks the Angular 7 remediation path and WH-9331 tracks the
+      .NET Core 2.1 API upgrade. These Jira records satisfy Turn 1 tracking for
+      retained non-standard technology, while deployed upgrade evidence remains
+      future work.
+    currentBestGuess: The four HHD projects continue to map directly to the four WHM_HD repositories.
+    impact: Non-standard technology tracking is evidenced for Turn 1; completion of the upgrades is not required for the current L1 decision.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+assumptions:
+  - id: documented-current-state
+    statement: >-
+      The reviewed Confluence pages are authoritative current-state sources for
+      HelpDesk architecture, GitHub Actions delivery, and shared SQL platform
+      topology as of July 2026.
+    rationale: They identify implementation references, operational boundaries, and the shared data-platform inventory.
+    impact: Source-controlled workflows, HHD_SERVICES.json, database inventories, and owner-attested runbooks supersede documentation if they diverge.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: mixed-delivery-model
+    statement: >-
+      GitHub Actions is the current application-container CI and lower-environment
+      ECS CD path, while production-side and non-container release assets remain
+      part of a broader manual coordinated release.
+    rationale: This is the consistent interpretation of both documents without discarding either source.
+    impact: The pattern remains incomplete and existing-only rather than claiming fully automated delivery maturity.
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+nextSteps:
+  - id: document-production-release
+    action: Link one complete successful CR, immutable release manifest, mandatory test evidence, and approved full/partial recovery procedure.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: integrate-release-assets
+    action: Define traceable version compatibility and rollback across images, SQL, Lambda, and S3 configuration.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: define-service-objectives
+    action: Record an approved availability objective and decide whether HelpDesk should establish RPO and RTO objectives.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: automate-smoke-tests
+    action: Attach mandatory smoke results to each PR/CR and define approved automated performance and security thresholds.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: validate-database-topology
+    action: Obtain database-team attestation for HelpDesk tenant placement, listener usage, HA/failover, and lower-environment mappings.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: obtain-database-recovery-evidence
+    action: Link the approved HelpDesk backup policy plus the latest restore and failover tests; track RPO/RTO definition as future policy work.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+
+  - id: assign-accountable-owners
+    action: >-
+      Record Rob Hartley as current accountable owner until Gavin Wells
+      accepts ownership, with Networking owning WAF policies, DevOps owning
+      NGINX deployment, and SRE owning ECS hosting.
+    status: done
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: complete-l1-evidence-package
+    action: >-
+      For DRAFT Architecture L1, register every dependency in the owner-attested
+      production inventory with reused Technology Component references and
+      attach final DRAFT validation. Track BETA/VALIDATION parity evidence
+      separately under Environment L1.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: implement-kpf-detection
+    action: >-
+      Obtain KPF approvals, update the source table, instrument swallowed routing
+      failures, create and test API/Lambda/S3 alerts with baselined thresholds,
+      assign owners and runbooks, and document Dynatrace or approved-alternative
+      coverage for every Sev-1/Sev-2 function.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: validate-support-login-controls
+    action: >-
+      Confirm WH-5897 deployment status and link approved break-glass, MFA,
+      credential, audit, refresh-token, tenant-isolation, and regression evidence.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: validate-api-controls
+    action: >-
+      Reconcile the endpoint inventory with deployed OpenAPI/Swagger output and
+      link owner-attested authorization, tenant-isolation, data-protection,
+      resilience, versioning, security-test, and KPF-monitoring evidence.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: validate-reference-architecture
+    action: Compare HelpDesk with reference architecture 01KQQ5JT1C-AZTH and record approved decisions or Jira-tracked exceptions.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: validate-identity-data-flows
+    action: >-
+      Inventory and owner-attest the IntegrationMiddleWay/SSIS and Sofa King
+      Central/SFTP ingestion implementations, tenant mapping, schema,
+      credentials, PII handling, monitoring, replay, reconciliation, freshness,
+      duplicate resolution, deactivation, and login-separation controls.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: govern-customer-data-exports
+    action: >-
+      Correct and review the export SQL, then document approval, tenant
+      verification, least privilege, secure delivery, encryption, access audit,
+      reconciliation, retention, deletion, and chain of custody for database and
+      attachment exports.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: register-helpdesk-dependencies
+    action: >-
+      Map the completed owner inventory into DRAFT runtime, data-store, and
+      edge-gateway dependencies; reuse or create Technology Components as
+      appropriate; record owners and service boundaries; and obtain owner
+      attestation that no active dependency is omitted.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]
+  - id: run-final-draft-validation
+    action: Run DRAFT validation after dependency registration and request Cloud Engineering confirmation of the final Turn 1 L1 status.
+    status: open
+    owner: brannock-asset-management-engineering
+    relatedObjects: [{ref: 01KQQ5JT1J-BRF4}]

@@ -1,0 +1,54 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-063V
+type: product_component
+ownerRole: engineer
+name: Recliner BFF API
+description: 'Public Backend-for-Frontend (BFF) for Project Recliner. .NET Core 8 service
+
+  on AWS EKS. Handles request aggregation, authorization enforcement, and
+
+  API shaping for the Recliner Angular frontend. Backed by Redis for session
+
+  management and caching. Hosts the /<entity>/validate endpoints powering
+
+  the server-driven validation system.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- bff
+- dotnet-core-8
+- eks
+- public-api
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner BFF Public API
+  protocol: REST
+  authenticationModel: oauth
+  description: Public REST API consumed by the Recliner Web Shell SPA through the evidenced Traefik ingress path; any upstream Kong hop remains unconfirmed.
+- name: Recliner BFF Validate Endpoints
+  path: /{entity}/validate
+  protocol: REST
+  authenticationModel: oauth
+  description: Server-driven validation endpoints returning ReclinerResponse<T> with violations and required fields populated by the rules engine.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (.NET 8), docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-bff/Sofa King.SOM.Recliner.BFF/Sofa King.SOM.Recliner.BFF.csproj;
+    src/recliner-bff/Dockerfile; infra/k8s/charts/recliner-bff/Chart.yaml;
+    infra/k8s/charts/recliner-bff/templates/deployment.yaml;
+    infra/k8s/charts/recliner-bff/templates/ingress.yaml

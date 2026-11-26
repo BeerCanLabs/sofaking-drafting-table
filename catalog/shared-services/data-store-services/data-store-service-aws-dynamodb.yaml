@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-K58R
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS DynamoDB
+description: 'AWS-managed serverless NoSQL key-value and document database.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - database
+  - serverless
+  - nosql
+vendor: Amazon Web Services
+productName: DynamoDB
+productVersion: managed
+authenticationModel: iam
+capabilities:
+  - 01KT0V5MCV-VD0Y
+architectureNotes:
+  resilienceModel: Managed multi-AZ high availability.
+  configurableSurface: Tables, indexes, and throughput settings.
+  failureDomain: Scoped to the AWS region.
+decisionRecords:
+  - ref: 01KSNAW2AK-CS5R
+    key: resilienceModel
+  - ref: 01KSNAW2AK-CS5R
+    key: configurableSurface
+  - ref: 01KSNAW2AK-CS5R
+    key: failureDomain
+  - ref: 01KSNAW2AK-CS5R
+    capability: 01KT0V5MCV-VD0Y
+deliveryModel: paas

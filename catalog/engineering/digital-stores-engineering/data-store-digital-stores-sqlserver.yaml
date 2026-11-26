@@ -1,0 +1,159 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-VQJ3
+type: data_store_service
+name: Digital Stores SQL Server 2017 Estate
+aliases:
+- DSHP SQL Server
+- Digital Stores region databases
+description: >-
+  Product-specific SQL Server 2017 data-at-rest service for Digital Stores Suite+. One self-managed
+  SQL Server instance per environment tier on a Windows EC2 host in AWS account 472468972873,
+  us-west-1, each holding one database per store region plus the shared DS_Admin routing catalog.
+  Accessed by the EntityAPI with hand-written SQL and no ORM. Posture facts recorded here were
+  confirmed by the Digital Stores engineering owner on 2026-09-08 through the DRAFT L1 Baseline
+  Questionnaire and corroborated against the Digital Stores Environment Guide, the AWS Backup Service
+  page and the Scheduled Tasks page. Authored in preference to completing the generic SQL Server 2017
+  DBMS Service (01M0GDHSAM-586D), whose posture is Shared Services' to establish on estate-wide
+  evidence rather than on one product's answers.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- sqlserver
+- data-store-service
+- owner-confirmed
+deliveryModel: self-managed
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1T-QKGB
+networkPlacement: vpc-private
+patchingOwner: organization-scheduled
+authenticationModel: other
+internalComponents:
+- ref: 01KQQ5JT1T-QKGB
+  role: function
+  configuration: default-tds-listener
+  notes: >-
+    Microsoft SQL Server 2017 reused rather than duplicated. Engine builds differ by tier: 14.0.3495.9
+    on production and sandbox, 14.0.3485.1 on QA and alpha.
+notes:
+  instanceInventory: >-
+    Four instances, one per environment tier, all Windows on EC2 in us-west-1. Production PRAngDB1,
+    m5.4xlarge, internal 10.73.10.178, engine 14.0.3495.9. Sandbox/SU SUDB, m5.xlarge, internal
+    10.203.15.39, engine 14.0.3495.9. QA QADB, c5.large, internal 10.42.15.38, engine 14.0.3485.1. Alpha
+    ALDB, c5.large, internal 10.198.15.19, engine 14.0.3485.1. The three predecessor production hosts
+    PRDB1, PRDB2 and PRDB3 were decommissioned 2021-02-26 (OPS-85195) and QAANGDB and SBDB on
+    2021-09-20 (DSH-9573). The four EC2 hosts are not yet registered individually as DRAFT host
+    objects, so this service references the shared preferred Windows Server 2022 on EC2 Standard Host
+    (01KQQ5JT04-JKFX) as a stand-in pending per-tier host registration; the exact Windows Server
+    version on each instance is not individually confirmed.
+  hostSubstrate: >-
+    Confirmed by the owner on 2026-09-08: EC2, not RDS and not on-premises, and not uniform across
+    tiers. The 2026-01-28 AWS API discovery of account 472468972873 found zero RDS instances in every
+    region, which independently corroborates the self-managed-on-EC2 model.
+  tenancyModel: >-
+    Database per store region inside a shared instance, with a central DS_Admin catalog mapping
+    RegionId to DatabaseName. DS_Admin is a cross-tenant dependency shared by every region in the
+    tier, not a shard-scoped one. Per-region database counts and names are not recorded in DRAFT.
+  serviceAuthentication: >-
+    Confirmed mixed by the owner on 2026-10-02, resolving the earlier conflict: both SQL
+    authentication and Windows/Integrated Security (SSPI) are legitimately in use on different
+    connection strings, rather than being contradictory reports of a single model. This is consistent
+    with the checked-in entityapi/Framework/Web.config in BeerCanLabs/sk-server-ang, which
+    declares the DSAdmin and DSGeneric connection strings with Integrated Security=SSPI - at least
+    those two use Windows auth, and the owner's 2026-09-08 SQL-auth answer evidently describes a
+    different, not-yet-named connection path. Which specific connections use which model beyond
+    DSAdmin and DSGeneric is not evidenced from source, since the runtime Web.config is gitignored.
+    authenticationModel remains other because the schema's enum (iam, api-key, oauth, saml, other,
+    TBD) has no SQL-auth/Windows-auth values; the real mixed model is recorded here in prose instead.
+    No credential material is recorded in DRAFT.
+  secretsManagement: >-
+    Not confirmed. The runtime Web.config holding the live connection strings and the Fingerprint seed
+    is gitignored, which is the correct posture, but where it is sourced from at deploy time was not
+    determined and no secret store is evidenced.
+  encryptionAtRest: >-
+    Not enabled. Confirmed by the owner on 2026-09-08: Transparent Data Encryption is not enabled on
+    any Digital Stores SQL Server instance. Whether the underlying EBS volumes are encrypted, which
+    would provide the full-disk encryption that Sofa King's Data Classification and Protection Policy
+    sets as the minimum for sensitive data, was not asked and is not evidenced. The data is classified
+    Confidential. See DecisionRecord 01M25X9W0R-4HSX.
+  encryptionInTransit: >-
+    Partially confirmed. Following a 2021 security review, encryption was added to the security list
+    carried in flight between the EntityAPI and the Web UI, to mitigate a man-in-the-middle risk on
+    the cached client-side security list. Whether TDS connections between the EntityAPI and SQL Server
+    enforce TLS is not evidenced.
+  availabilityModel: >-
+    None. Each tier runs a single SQL Server instance with no AlwaysOn availability group, no failover
+    partner, no read replica and no RDS multi-AZ. The loss of a tier's instance takes every region
+    in that tier offline; the loss of PRAngDB1 takes production offline. No availability target is
+    recorded. See DecisionRecord 01M25X9W0R-GKSK.
+  scalabilityModel: >-
+    Vertical only, by EC2 instance type. Production is m5.4xlarge, sandbox m5.xlarge, QA and alpha
+    c5.large. Growth in region count adds databases to the same instance rather than instances, so
+    the per-tier instance is the scaling ceiling. No capacity trend data, connection-count data or
+    storage-growth data is recorded.
+  recoverabilityModel: >-
+    Restore from infrastructure backup only. AWS Backup, provisioned by Terraform in
+    BeerCanLabs/sk-digital-stores-aws-backup, takes EBS snapshots of volumes tagged
+    AWS-Backup:daily Monday through Thursday at 23:00 CST and AMIs of instances tagged
+    AWS-Backup:weekly on Friday at 23:00 CST, retained 30 days and copied to us-west-1 and us-east-1,
+    with SNS notification to the SRE Team B Slack channel on job failure. No SQL Server native full,
+    differential or transaction-log backup schedule is recorded, so there is no evidenced point-in-time
+    recovery inside the snapshot interval and the practical RPO is up to roughly 24 hours. No restore
+    has a tested RTO, and no recovery test is recorded. The page describing this backup design is
+    dated 2023-02-28 and is prospectively worded, so the implemented state should be confirmed against
+    the live account. See DecisionRecord 01M25X9W0R-GKSK.
+  failureDomain: >-
+    Platform-wide for DS_Admin and tier-wide for the region databases. Confirmed by the owner on
+    2026-09-08 that a DS_Admin outage removes access for all regions.
+  serviceLogging: >-
+    Not confirmed at the database level. No SQL Server audit specification, extended-event session or
+    log-shipping-to-aggregation configuration is evidenced. Sofa King's Data Classification and
+    Protection Policy requires the highest level of audit logging for sensitive data in AWS, so this
+    is an open Hearthstone HCF.06.1.1 and HCF.06.1.2 question rather than a satisfied one.
+  healthWelfareMonitoring: >-
+    Host-level only. Per the Environment Guide, production hosts are monitored by AWS CloudWatch in
+    account 472468972873 and by Nagios XI at http://issuse1nagios1/nagiosxi/, with Observium present
+    in the estate. There is no Dynatrace OneAgent and no database-specific monitoring, alerting
+    threshold or SLO recorded.
+  patchCurrency: >-
+    Two GDR bands are in play. Production and sandbox are at 14.0.3495.9 (CU31 + GDR, KB5058714,
+    released 2025-07-08). QA and alpha are at 14.0.3485.1, one band further behind. Seven security GDR
+    builds above 14.0.3495.9 are unapplied, the latest being 14.0.3540.1 (KB5102337, 2026-07-14). OS
+    patching is handled by Automox across production and lower environments; database engine patching
+    has no recorded schedule. Extended support for SQL Server 2017 ends 2027-10-12 and no termination
+    plan is recorded. See DecisionRecord 01M0GDHSAM-F64B.
+  lowerEnvironmentData: >-
+    The alpha, QA and sandbox databases are refreshed from production data on the first and third
+    Monday of each month by scheduled SQL jobs, with success or failure notification to a named
+    engineering distribution list. No obfuscation or de-identification step is recorded, which
+    conflicts with the lower-environment clause of Sofa King's Data Classification and Protection
+    Policy. See DecisionRecord 01M25X9W0R-KWXR.
+  dataConsumers: >-
+    The Digital Stores EntityAPI (01M0GBWMZJ-E0NF) is the application consumer, reading and writing
+    region data and separately resolving tenancy through DS_Admin. Jaspersoft also reads from this
+    estate to produce ten nightly customer data extracts delivered over ftp.digital-showrooms.example. All
+    three crossings are now registered as relationship objects - QBRBKV0QST-G0F2 (EntityAPI region
+    data), NNXSQXP5N1-8S7Y (EntityAPI DS_Admin) and RQ0RVTRRXB-XATG (Jaspersoft) - merged in PR #190
+    on 2026-09-30.
+  provenance: >-
+    Authored 2026-09-10 from the Digital Stores DRAFT L1 Baseline Questionnaire answered 2026-09-08,
+    the Digital Stores Environment Guide (last modified 2026-09-01), the Digital Stores AWS Backup
+    Service page (2023-02-28), the Digital Stores Scheduled Tasks page (2026-09-08), the AWS Account
+    472468972873 resource discovery (2026-01-28), and the 2026-08-20 direct read of
+    BeerCanLabs/sk-server-ang. Updated 2026-10-02 to resolve the service authentication model as
+    confirmed mixed rather than an unresolved conflict. catalogStatus is incomplete rather than
+    complete because encryption at rest, database-level audit logging, secrets sourcing, capacity data
+    and tested recovery are either absent or unevidenced.
+decisionRecords:
+- ref: 01M0GDHSAM-F64B
+  key: patchCurrency
+- ref: 01M25X9W0R-4HSX
+  key: encryptionAtRest
+- ref: 01M25X9W0R-GKSK
+  key: recoverabilityModel
+- ref: 01M25X9W0R-KWXR
+  key: lowerEnvironmentData

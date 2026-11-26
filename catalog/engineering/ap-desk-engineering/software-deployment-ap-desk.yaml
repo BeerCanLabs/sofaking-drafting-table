@@ -1,0 +1,74 @@
+schemaVersion: '1.0'
+uid: 01M7TTVBDD-TKJT
+type: software_deployment_pattern
+ownerRole: engineer
+name: AP Desk Software Deployment Pattern
+description: Planned deployment pattern for the AP Desk wedge (Business Solutions / Procurement), grouping the service, BFF, MCP adapter, web app from the bs-ap-desk repository.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: candidate
+businessContext:
+  pillar: business-pillar.business-solutions
+  productFamily: AP Desk
+owner:
+  team: ap-desk-engineering
+  contact: msorrell@sofaking.example
+tags:
+- software-deployment-pattern
+- ap-desk
+architectureNotes:
+  crossBoundaryConnections: Outbound calls to Sofa King Platform services (Loveseat events, Workflow & Tasks API, Sofa King Identity, AI gateway) cross from the AP Desk EKS cluster to Platform over Sofa King Gateway/Kong internal URLs (owner interview).
+  patternType: repository-derived
+  noApplicablePattern: No approved reference architecture applies yet to an EKS plus RDS PostgreSQL wedge (owner interview).
+  deploymentTargets: Sofa King Integration AWS account; dev is an interim EC2 host plus RDS (infra/dev), production target is EKS. Helm and ArgoCD are not started.
+  availabilityRequirement: Not yet defined; to be set by the Business Solutions tech lead before production.
+  externalDependencies: |
+    Loveseat event backbone (publishes domain events via the factory eventing library; log publisher by default, Loveseat opt-in).
+    Platform Workflow & Tasks API (creates and closes approval tasks through an outbox; client generated from vendored tasks-1.0.yaml).
+    Sofa King Identity (Okta, Kong; x-sk-userinfo header and identity lifecycle events).
+    Platform AI gateway (LLM calls on the agent path).
+    No third-party SaaS outside Sofa King's AWS today (owner interview).
+  interServiceCommunication: |
+    Inbound: browser to BFF to service behind Kong with Sofa King Identity; agents through the MCP adapter, which calls the service.
+    Platform calls are reached over Sofa King Gateway/Kong internal URLs, not public endpoints or AP Desk-owned VPC peering (owner interview).
+  dataClassification: Restricted, contains PII (owner interview).
+  failureDomain: Not yet defined; to be set by the Business Solutions tech lead before production.
+  noPatternDeviations: Owner reported no deviations to record (owner interview).
+  deploymentQualities: Availability, scalability, recoverability and failure-domain targets are not yet defined (owner interview).
+  hostingModel: Application components run in an EKS cluster and the PostgreSQL database on RDS, both in the Sofa King Integration AWS account (owner interview). Region aws-us-east-1 is taken from infra Terraform and is not confirmed for the production EKS cluster.
+  sourceRepositories:
+  - repositoryName: BeerCanLabs/sk-bs-ap-desk
+    sourceRepository: https://github.com/BeerCanLabs/sk-bs-ap-desk
+    repositoryPrimaryLanguage: Java
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+- name: AP Desk
+  deploymentTarget: aws-us-east-1
+  deployableObjects:
+  - ref: 01M7TTVBDD-MQ8A
+    diagramTier: presentation
+    networkZone: web
+  - ref: 01M7TTVBDD-HXT6
+    diagramTier: application
+    networkZone: web
+  - ref: 01M7TTVBDD-WHTQ
+    diagramTier: application
+    networkZone: app
+  - ref: 01M7TTVBDD-4S8V
+    diagramTier: application
+    networkZone: app
+  - ref: 01M7TVNRRW-KE44
+    diagramTier: data
+    networkZone: data

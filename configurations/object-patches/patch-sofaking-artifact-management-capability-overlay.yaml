@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KT16XJHV-497K
+type: object_patch
+name: Sofa King Artifact Management capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Artifact Management capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0XNZEY-7HWQ
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1R-YAD5
+      lifecycleStatus: existing-only
+      notes: Maintained for Windows package and artifact installation workflows identified in SRE automation.
+    - ref: 01KQQ5JT1S-9ACG
+      lifecycleStatus: existing-only
+      notes: Maintained for PowerShell package provider workflows identified in SRE automation.

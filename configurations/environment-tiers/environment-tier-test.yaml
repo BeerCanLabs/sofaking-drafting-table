@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: AYQ5RCPK7C-MK58
+type: environment_tier
+name: Test
+tierId: test
+catalogStatus: complete
+purpose: test
+availabilityExpectation: business-hours
+costPosture: cost-optimized
+description: |
+  Automated integration and QA environment. Continuously deployed from the
+  main branch. Available during business hours. Shared AWS account. Used by
+  automated test suites, QA engineers, and product validation.
+complianceScope:
+- 01KQQ4Q027-T3CA
+parameterSurface:
+- name: awsAccountId
+  description: AWS account ID for the test environment
+  required: true
+  sensitive: false
+- name: awsRegion
+  description: AWS region for the test environment
+  required: true
+  sensitive: false
+- name: vpcId
+  description: VPC ID where services are deployed
+  required: true
+  sensitive: false
+- name: deployRoleArn
+  description: IAM role ARN the pipeline assumes to deploy
+  required: true
+  sensitive: false
+notes: >
+  Availability target is business hours only. Scale-to-zero or minimal
+  replica counts are acceptable. Security controls apply (01KQQ4Q027-T3CA)
+  but SOC 2 and RT-RAMP audit scope does not include this tier.

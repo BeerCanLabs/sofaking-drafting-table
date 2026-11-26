@@ -1,0 +1,125 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF8-G9FS
+type: software_deployment_pattern
+ownerRole: engineer
+name: Whm Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub, originally grouping all 24 first-party services inferred from the bulk WHM GitHub repository dump. As of TRH-9828, the real Asset Management (AM) components have been removed and correctly wired into 01KSM38KF8-TKMW ("Asset Management - Pattern") - see DecisionRecord 01KYRT1P14-Y2RH. As of TRK-870 (2026-08-17), the three Display Materials Management (IMM) components (WHM_IM 01KSM38KFC-STJH, WHM_Integrations -EN0P, WHM_Zebra_Tools -0A26) have likewise been removed and correctly wired into 01KSM38KFD-1G0D ("Display Materials Management - Pattern") - see DecisionRecord 01M07T82GS-FGWX. This pattern remains the home for the HelpDesk (WHM_HD_*) components only - confirmed with the product owner (2026-07-30) that HelpDesk should stay filed under catalog/engineering/brannock-asset-management-engineering/ rather than move to a separate team folder.
+version: 1.3.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.brannock-asset-management-engineering
+  productFamily: WHM
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- whm
+- helpdesk
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  dispositionNote: 'As of TRH-9828 (2026-07-30), the 12 Asset Management components previously listed here (WHM_AM_App, WHM_AM_API, WHM_AM_Mobile, WHM_AM_Mobile_API, WHM_AM_ETL_MSA, WHM_AM_SSIS, WHM_AM_IDCore, WHM_AM_Notifications, WHM_AM_ReportServer, WHM_AM_BuildArtifacts, WHM_Brannock_ETL, WHM_Brannock_NET) and the plain WHM_SofaKingSecurityLibrary have been removed from this pattern and are now correctly wired into 01KSM38KF8-TKMW. WHM_SofaKingSecurityLibrary_HD remains here (HelpDesk-scoped). A same-day follow-up briefly relocated the HelpDesk and IMM component files into separate team folders (helpdesk-engineering/ and a new brannock-display-materials-management-engineering/), but the product owner confirmed both belong here and the move was reverted - see DecisionRecord 01KYRT1P14-Y2RH. As of TRK-870 (2026-08-17), the 3 Display Materials Management components previously listed here (WHM_IM, WHM_Integrations, WHM_Zebra_Tools) have likewise been removed and are now correctly wired into 01KSM38KFD-1G0D - see DecisionRecord 01M07T82GS-FGWX. This pattern is now HelpDesk-only.'
+  sourceRepositories:
+  - productService: 01KSM38KFB-X6P1
+    repositoryName: BeerCanLabs/sk-WHM_HD_API
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_API
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, serverless
+  - productService: 01KSM38KFC-FM2A
+    repositoryName: BeerCanLabs/sk-WHM_HD_UI
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_UI
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, dotnet, node, readme
+  - productService: 01KSM38KFC-JJ65
+    repositoryName: BeerCanLabs/sk-WHM_SofaKingSecurityLibrary_HD
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_SofaKingSecurityLibrary_HD
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFB-HBSC
+    repositoryName: BeerCanLabs/sk-WHM_HD_ClusterConfigure
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_ClusterConfigure
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: cloudformation, docker, dotnet, readme, serverless
+  - productService: 01KSM38KFB-0BDF
+    repositoryName: BeerCanLabs/sk-WHM_HD_Configuration
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_Configuration
+    repositoryPrimaryLanguage: Python
+    observedRuntimeSignals: cloudformation, github_actions, python, readme
+  - productService: 01KSM38KFC-MPPP
+    repositoryName: BeerCanLabs/sk-WHM_HD_Integrations
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_Integrations
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KFC-KKH6
+    repositoryName: BeerCanLabs/sk-WHM_HD_Login
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_Login
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, dotnet, node, readme
+  - productService: 01KSM38KFC-WKD2
+    repositoryName: BeerCanLabs/sk-WHM_HD_UP
+    sourceRepository: https://github.com/BeerCanLabs/sk-WHM_HD_UP
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, dotnet, node, readme
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KFB-X6P1
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFC-FM2A
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFC-JJ65
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFB-HBSC
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFB-0BDF
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFC-MPPP
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFC-KKH6
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFC-WKD2
+    diagramTier: application
+    networkZone: app
+decisionRecords:
+  - ref: 01KYRT1P14-Y2RH
+    key: bulkDumpDisposition
+  - ref: 01M07T82GS-FGWX
+    key: bulkDumpDisposition

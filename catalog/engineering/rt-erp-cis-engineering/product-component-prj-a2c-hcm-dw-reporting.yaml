@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGN-T2GA
+type: product_component
+ownerRole: engineer
+name: Prj A2c HCM Dw Reporting
+description: 2025-Q3-HCM DataReporting POC
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+  - repository-discovery
+  - prj
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-prj-a2c-hcm-dw-reporting
+language: HCL
+classification: api-service
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-prj-a2c-hcm-dw-reporting
+  observedRuntimeSignals: readme, serverless, terraform
+  observedManifestPaths: terraform/configs/table_mapping.json; terraform/modules/dms/main.tf; terraform/modules/dms/outputs.tf; terraform/modules/dms/variables.tf; terraform/modules/eventbridge/data.tf; terraform/modules/eventbridge/main.tf; terraform/modules/eventbridge/outputs.tf; terraform/modules/eventbridge/variables.tf; terraform/modules/glue/main.tf; terraform/modules/glue/outputs.tf; terraform/modules/glue/variables.tf; terraform/modules/iam/data.tf
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Infrastructure configuration (HCL/Terraform); no application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XJ47-THZ9
+    key: runtimeRequirement

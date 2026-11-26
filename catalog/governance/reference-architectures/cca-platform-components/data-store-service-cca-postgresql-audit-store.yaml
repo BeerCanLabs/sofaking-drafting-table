@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2FD-1TW6
+type: data_store_service
+name: CCA PostgreSQL Audit and Lineage Store
+description: >-
+  [INTENDED] PostgreSQL is the authoritative system of record for the Cloud
+  Divan Academy platform: Divans, tool invocations, execution lineage, and
+  outcomes. Staplepin is the sole writer; Divans have no direct database client.
+  Runs as Amazon RDS for PostgreSQL inside the private CCA VPC in aws-us-east-1,
+  encrypted at rest via KMS. AWS-native CloudTrail provides a second, independent
+  audit trail. Schema and retention model are open questions.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - system-of-record
+  - postgresql
+  - audit
+  - intended
+deliveryModel: paas
+vendor: Amazon Web Services
+productName: Amazon RDS for PostgreSQL
+productVersion: '16'
+networkPlacement: vpc-private
+authenticationModel: iam
+patchingOwner: aws-managed

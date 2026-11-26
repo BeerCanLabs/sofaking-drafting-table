@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG0-P6RD
+type: product_component
+ownerRole: engineer
+name: Platform UI Sofa King Tools
+description: Sofa King Tools UI
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-passport-monorepo
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: package.json; Dockerfile.plat-ui-sofaking-tools; apps/plat-ui-sofaking-tools/package.json
+  runtimeEvidence: >-
+    The develop-branch root package and Dockerfile.plat-ui-sofaking-tools pin
+    Node.js 24.14.1. The production image uses the same release tag as Passport
+    Core, both BFFs, and Sofa King Admin UI, confirming monorepo build lineage.
+  supersededRepositoryEvidence: >-
+    The older standalone BeerCanLabs/sk-plat-ui-sofaking-tools repository
+    still pins Node.js 16.16.0, but its build lineage does not match the shared
+    production Passport release observed on 2026-07-31. GitHub's last commit
+    to that repository is 2022-09-06 (matching the same retirement window as
+    the standalone plat-bff-sofaking-tools repo), and a Ottoman developer
+    confirmed 2026-08-04 that plat-passport-monorepo is the only way this
+    service deploys today. No separate catalog object exists for the
+    standalone repo — this note is sufficient provenance.
+  serviceAuthentication: >-
+    No client-side auth logic — a pure SPA relying on the BFF/Kong session.
+    src/interceptor/axios.interceptor.ts redirects to /unauthorized on a
+    403/"Forbidden resource" axios error, the closest thing to a client-side
+    auth guard.
+  secretsManagement: >-
+    None applicable — .env.example explicitly warns not to put secrets in
+    env vars because they are built into the frontend bundle at build time.
+  serviceLogging: None — static SPA served by the `serve` package; no server-side logging framework.
+  healthWelfareMonitoring: >-
+    cd/dev/deploy.yml defines only a startupProbe against a static
+    /health.html file (port 8010, initialDelaySeconds 60, failureThreshold
+    30) — no readinessProbe or livenessProbe are defined, unlike the backend
+    apps in this monorepo.
+  availabilityModel: >-
+    1 replica with no HPA and no PodDisruptionBudget in the dev overlay — a
+    single point of failure per environment, though common for a static SPA
+    behind a CDN/ALB.
+  scalabilityModel: No autoscaling configured.
+  recoverabilityModel: Kubernetes restarts the pod on failure; no application-level recovery logic (static content).
+  failureDomain: Failure domain follows the Ottoman platform's EKS deployment; no independent resilience posture.
+  dependencies:
+    - 01KSM38KFX-J6Z2

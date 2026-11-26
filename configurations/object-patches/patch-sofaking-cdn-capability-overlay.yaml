@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KT16XJHX-22W7
+type: object_patch
+name: Sofa King CDN capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT CDN capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-HZ37
+patch:
+  owner:
+    team: architecture-review-board
+  implementations: []

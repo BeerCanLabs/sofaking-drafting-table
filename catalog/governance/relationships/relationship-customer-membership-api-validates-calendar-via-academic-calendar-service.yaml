@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-G1C7
+type: relationship
+ownerRole: engineer
+name: Customer Membership Service → Academic Calendar Service
+description: >-
+  On create and on every update carrying a calendarId, the Customer Membership
+  Service validates that the calendar exists and that calendar.siteId matches the
+  membership's siteId (GET /api/orgs/{orgId}/store-years/{year}/calendars/{calendarId}).
+  Fails closed; a tombstoned calendar blocks updates. Uses an Okta machine-to-machine
+  client with scope ss.calendar.read. The call goes to the Academic Calendar
+  per-service Traefik hostname (academic-calendar-{env}.ss.sofaking.example),
+  re-entering through the internal ALB and Traefik (owner-confirmed 2026-10-20). The
+  BaseUrl is not yet configured in the membership ConfigMaps (TODO TBSPS-9657).
+source: 01KXR9XAR4-HKKE
+target: 01KXR9XAR4-N2VN
+label: validates calendar via
+technology: REST / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - planned

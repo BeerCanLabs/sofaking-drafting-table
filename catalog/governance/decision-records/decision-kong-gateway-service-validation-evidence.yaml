@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ9Y-JTFK
+type: decision_record
+name: Kong Gateway Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-SW3X
+linkedObject: 01KQQ5JT1E-SW3X
+decisionRationale: "serviceAuthentication: Gateway management and traffic use centralized auth plugins (OIDC, KeyAuth).\n\nsecretsManagement: Secrets are stored in a centralized vault and injected into the Kong configuration.\n\nserviceLogging: Access and error logs are forwarded to centralized logging via the host's logging agent.\n\nhealthWelfareMonitoring: Service welfare is monitored via Kong's status API and Prometheus metrics.\n\navailabilityModel: High availability is achieved via multiple Kong nodes in a cluster.\n\nscalabilityModel: Scales horizontally with additional Kong nodes.\n\nrecoverabilityModel: Nodes are automatically replaced or rebuilt by the orchestration layer.\n\nfailureDomain: Impact is scoped to the Kong cluster serving the traffic path."

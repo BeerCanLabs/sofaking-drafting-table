@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01KZZMDMN1-RT01
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Grand Rapids MDaemon Mail Service
+description: Shared production email-delivery service running MDaemon across six Windows virtual machines in Grand Rapids for Leave & Time, Platform, and IDM.
+version: 1.0.27
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: cloudops-support
+  contact: carter.wynn@sofaking.example
+tags:
+  - service
+  - email
+  - smtp
+  - mdaemon
+  - grand rapids
+  - shared-platform
+host: 01KQQ5JT03-2NEW
+primaryTechnologyComponent: 01KZZMDMN2-TC01
+capabilities:
+  - 01KT0XNZEY-KPTW
+internalComponents:
+  - ref: 01KQQ5JT03-2NEW
+    role: host
+    notes: GRRMAIL1 through GRRMAIL6 are VMware-hosted Windows Server 2016 virtual machines.
+  - ref: 01KZZMDMN2-TC01
+    role: function
+    configuration: grand rapids-production-mail-endpoints
+deploymentConfigurations:
+  - id: high-priority-pool
+    name: High-Priority Mail Pool
+    description: GRRMAIL1, GRRMAIL2, GRRMAIL3, and GRRMAIL6 behind the grrmailhigh.rotaprod.example F5 endpoint.
+    addressesQualities:
+      - availability
+      - scalability
+    addsNotes:
+      poolMembers: GRRMAIL1, GRRMAIL2, GRRMAIL3, and GRRMAIL6
+  - id: low-priority-pool
+    name: Low-Priority Mail Pool
+    description: GRRMAIL4 and GRRMAIL5 behind the grrmaillow.rotaprod.example F5 endpoint.
+    addressesQualities:
+      - availability
+      - scalability
+    addsNotes:
+      poolMembers: GRRMAIL4 and GRRMAIL5
+architectureNotes:
+  serviceFunction: Accepts SMTP connections and raw message files for outbound email delivery; the raw-file path carries most documented volume. GRRMAIL delivers outbound messages directly to recipient mail systems rather than relaying through another SMTP service.
+  serviceConsumers: Shared by Leave & Time, Platform, and IDM rather than dedicated to Leave Management.
+  hostModel: Six VMware virtual machines running Windows Server 2016 in Grand Rapids.
+  availabilityModel: F5 monitors the high- and low-priority multi-node pools, automatically removes a failed GRRMAIL server from its pool, and routes new traffic to the remaining members. Each server stores its mail queue locally; queues are not shared among pool members. Messages already queued on a failed node remain unavailable until that server is restored.
+  scalabilityModel: Pool membership allows horizontal distribution across six production mail servers; provisioning and capacity thresholds remain unconfirmed.
+  configurationManagement: MDaemon configuration is not synchronized across GRRMAIL1 through GRRMAIL6. Chef previously synchronized the servers but is no longer functioning for this platform, so each server may require separate configuration and may drift. No authoritative copy or configuration export exists outside the six servers, and no remediation ticket or plan currently addresses this gap; the current change process remains unconfirmed.
+  recoverabilityModel: GRRMAIL1 through GRRMAIL6 are currently protected by Veeam VM backups; OPS-961456, opened to establish that coverage, is complete. Incremental backups run Sunday through Friday, a full backup runs Saturday, and 13 restore points are retained. Recovery uses a whole-server Veeam restore that includes the MDaemon configuration and locally queued messages, with no post-restore configuration required. No GRRMAIL Veeam restore test has been performed, and no documented recovery-time objective exists. The effective time window represented by the 13 restore points and application-consistency settings remain unconfirmed.
+  serviceAuthentication: F5 applies the mdaemon_smtp_relay iRule and trusted-IP data group; MDaemon accepts trusted traffic through the documented F5 SNAT address. Administrators RDP to GRRMAIL1 through GRRMAIL6 using Active Directory administrative accounts, with server access granted through an AD CloudOps group. Once authenticated to Windows, they can open the MDaemon application without additional application-level authentication. The contributor does not know the exact AD group name; directory evidence is required. The access-review process remains unconfirmed.
+  transportSecurity: Leave Email Agent raw-message delivery over SMB and direct report delivery over SMTP to the GRRMAILLOW and GRRMAILHIGH endpoints are unencrypted within Grand Rapids (owner-confirmed 2026-09-03).
+  outboundTransportSecurity: GRRMAIL delivers directly to recipient mail systems, but whether it uses opportunistic TLS when recipients support it is unknown and requires MDaemon configuration or message-trace evidence.
+  serviceLogging: MDaemon application and mail-processing logs are stored locally on each GRRMAIL server for three months and are not forwarded to a central logging platform. Whether MDaemon records administrator-attributed configuration-change audit events is unknown. Local paths remain unconfirmed; logs on a failed server are unavailable with that server.
+  healthWelfareMonitoring: Nagios monitors MDaemon service health and mail queue depth across GRRMAIL1 through GRRMAIL6 and routes those alerts to the CloudOps-HCM Opsgenie team. Exact check names, thresholds, priority mappings, and detailed escalation rules remain unconfirmed.
+  failureDomain: Grand Rapids mail tier and its shared F5 ingress. Node diversity exists within each priority pool, but every local mail queue is a server-level failure domain; queued messages remain unavailable until the affected server is restored.
+deliveryModel: self-managed
+notes:
+  sourceDocumentation: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/169810502/MDaemon+Mail+Server+Infrastructure
+  sourceSession: catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml
+  backupTrackingTicket: https://sofaking-example.atlassian.net/browse/OPS-961456
+  lifecycleRationale: The reused Windows Server 2016 VM host standard is deprecated, and no active plan or ticket exists to upgrade GRRMAIL1 through GRRMAIL6 from that operating system. No active plan or ticket exists to upgrade MDaemon 19.5.2; vendor support status remains unverified and is not inferred from the version alone.

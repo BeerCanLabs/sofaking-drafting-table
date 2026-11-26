@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-XEVK
+type: technology_component
+ownerRole: technology-admin
+name: Redis
+description: 'In-memory data structure store used as a database, cache, and message broker.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- database
+- cache
+- in-memory
+vendor: Redis
+productName: Redis
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source lifecycle.
+capabilities:
+- 01KT0V5MCV-ECR4
+configurations:
+- id: default-redis-listener
+  name: Default Redis Listener
+  description: Default Redis listener for cache and data-structure client connections.
+  capabilities:
+  - 01KT0V5MCV-ECR4
+  networkBindings:
+  - port: 6379
+    protocol: Redis
+    direction: inbound
+    description: Default Redis client listener.

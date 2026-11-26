@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KYWPDHE1-B5TX
+type: relationship
+name: Lakeshore CIS Azure API Management -> CIS Svc Vendorlink
+description: Azure API Management reads a custom routing claim in the vendor's OAuth2 token (issued by CIS Svc CloudCentral) and routes the call to the correct ITC's CIS Svc Vendorlink. It does not validate the token itself.
+catalogStatus: incomplete
+source: 01KYWB8RS3-6KVB
+label: routes vendor calls to
+target: 01KSM38KFR-1TFV
+technology: HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- vendorlink
+- cloudcentral
+- azure
+- authentication
+notes: Confirmed by the product owner on 2026-07-31 during a review of VendorLink and 3rd-party auth.

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z3-WAWQ
+name: Windows Server 2016 on EC2 Standard Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT03-4A7S
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Domain-based authentication and administrative access."
+capabilities:
+- 01KQQ4Q026-MHJM

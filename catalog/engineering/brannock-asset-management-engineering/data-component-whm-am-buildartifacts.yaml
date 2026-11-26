@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-4JYM
+type: data_component
+ownerRole: engineer
+name: Whm Am Buildartifacts
+description: SQL Server T-SQL migrations (versioned, per-product folder with mirrored rollback scripts), environment configs, SSIS deployment scripts, and AWS CDK infrastructure-as-code for the AM (Trackweb-IT) estate.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- whm
+- data-component
+- asset-management
+- sql-server
+- iac
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_BuildArtifacts
+targetEngine: mssql
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_BuildArtifacts
+  observedRuntimeSignals: github_actions, python, readme
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; .github/workflows/configcat-sync-workflow.yml; DB_Migrations/14.1.1.2/configs/TrackwebAPI/ApplicationSettings.config.json; DB_Migrations/14.1.2.0/configs/TrackwebAPI/ApplicationSettings.config.json; Environments/Dev/TrackwebAPI/ApplicationSettings.config.json; Environments/Dev/TrackwebIT/ApplicationSettings.config.json; Environments/Dev/TrackwebIT/HelpDesk.config.json; Environments/Dev/TrackwebIT/MessageCatalog.config.json; Environments/Dev/TrackwebITMobile-API/HelpDesk.config.json; Environments/Production/Other Files/TrackwebIT/ApplicationSettings.config.json
+  serviceAuthentication: 'Not an app itself. AWS-side automation authenticates via an AWS SSO profile (BrannockSoftwareDev, developer/CLI) and GitHub OIDC (CI deploy roles) - infra/README.md. Deployed IIS sites use anonymousAuthentication at the IIS level; user auth is delegated to the app tier (01KSM38KFB-QFJ1).'
+  secretsManagement: 'Production connection strings use unresolved placeholder tokens ({AM_SERVER}, {AM_DATABASE}, {AM_USER}, {AM_PASSWORD}, plus REPORT_*/IM_*/IDCORE_*/API_*/INTMIDDLEWAY_* variants) in Environments/Production/web.config, resolved at deploy time by the release pipeline - not committed in plaintext. AWS-side tooling uses AWS SSO session credentials rather than long-lived keys; no formal secrets vault (e.g. Secrets Manager/Parameter Store) confirmed backing the {AM_PASSWORD}-style tokens from this repo alone.'
+  serviceLogging: 'Not a logging-config repo itself (NLog specifics live in 01KSM38KFB-QFJ1); this repo''s own operational logging is CI/pipeline run logs plus the CloudWatch monitoring described below.'
+  healthWelfareMonitoring: 'Dedicated HealthCheck IIS site folder deployable per environment (Environments/Production/HealthCheck), alongside per-product folders (TIPIDCore, TrackwebAPI, TrackwebIT, TrackwebITMobile-API, TrackwebITMobile-Logon). AWS-side: CDK-managed CloudWatch alarms, metric filters, and SNS notifications (infra/scripts/deploy-monitoring-resources.ps1, infra/config/mdm-verification-monitoring.json). CI includes automated PR review/validation workflows including a CDK synth/diff validation gate (cdk-pr-validation.yml).'
+  availabilityModel: 'Two topologies: (1) legacy web/app tier deployed per environment folder (Dev/Qa/Staging/Validation/Production) to shared IIS hosting, matching 01KSM38KFB-QFJ1''s IIS network-share deploy model; (2) modern ETL/integration tier - AWS Lambda functions behind API Gateway, managed by CDK v2, with separate nonprod and prod AWS accounts and VPC-scoped Lambdas. Scheduled Lambda invocation is organized into numbered "cluster" slots via EventBridge Scheduler for per-segment isolation.'
+  scalabilityModel: 'ETL/integration tier (the AM_ETL_MSA_* Lambda services) is serverless and natively horizontally scaling via EventBridge-scheduled invocation and API Gateway - no fixed instance count. The legacy IIS web tier has no autoscaling infrastructure in this repo; it deploys to fixed named IIS web roots per environment.'
+  recoverabilityModel: 'The most mature recoverability story in the AM estate. DB migrations: every version folder under DB_Migrations/<version>/<Product>/ has a mirrored _Rollback/<Product>/ folder with matching rollback scripts per forward script. A central dbo.DbMigrationLog table plus stpro_StartDbMigration/stpro_StopDbMigration procedures (README_MIGRATION_APPROACH.md) prevent concurrent migrations and enforce ordering (000_migration_start.sql -> numbered scripts -> 999_migration_stop.sql), run through RedGate. Infra/Lambda rollback is an explicit documented runbook (infra/README.md): CDK/CloudFormation rollback via git revert + cdk diff/deploy; fast Lambda-code-only rollback by redeploying a last-known-good S3 artifact key/version; API Gateway rollback via reverting CDK config; includes a documented incident-recovery pattern for stale S3 artifact references breaking CloudFormation updates.'
+  failureDomain: 'The CDK stack WHMAMExistingResources groups imported AWS resources under one CloudFormation stack per account/environment - nonprod and prod are separate AWS accounts, so a bad deploy is scoped to that stack/environment. Scheduled Lambda "cluster" partitioning (clusters 1,2,3,4,6 in prod) implies per-cluster failure isolation for the MDM verification job specifically. DB migration blast radius is controlled per-database via an explicit @DatabaseName parameter and per-product folder structure.'
+  externalDependencies: 'AWS Lambda, API Gateway, EventBridge Scheduler, S3, CloudWatch, SNS, CloudFormation/CDK, IAM, VPC. Named MDM/identity integrations behind the Lambda services: Google Workspace (GoogleOU), Mosyle, JamfStore, Microsoft Intune (AM_ETL_MSA_InTune_* services) - see infra/LAMBDA_DEPLOYMENT.md. ConfigCat feature-flag values are synced to a Confluence page via a scheduled GitHub Action (Py_Scripts/sync_configcat.py), confirming ConfigCat as the SaaS behind 01KSM38KFB-QFJ1''s FeatureToggle.cs. RedGate (DB migration tooling). SSIS packages deployed to SQL Server via SSIS/DeploySsisToSqlServer.ps1.'
+  primaryDataStores: 'Five distinct SQL Server databases per environment, confirmed via production connection-string template tokens: {AM_DATABASE} (main TrackwebIT), {REPORT_DATABASE} (TrackwebReports), {IM_DATABASE} (IntegrationMiddleWay, Max Pool Size=400), {IDCORE_DATABASE} (TIPIdentityCore, backing 01KSM38KFB-YGSN), {API_DATABASE} (TrackwebAPI, backing 01KSM38KFB-XZ3E). A system-level _TrackwebSystem database hosts the shared DbMigrationLog table.'

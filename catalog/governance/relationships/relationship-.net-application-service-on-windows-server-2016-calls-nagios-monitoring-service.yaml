@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZN-7TBZ
+name: .NET Application Service on Windows Server 2016 → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT1E-HQZ6
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Application and process telemetry captured for health and performance monitoring."
+capabilities:
+- 01KQQ4Q026-98VD

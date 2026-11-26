@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01M6RKS8HS-XRF3
+type: decision_record
+name: Customer Services le1 Health and Welfare Monitoring
+description: Open risk. Per the Customer Services team lead, the readiness and liveness endpoints are about all the health monitoring Customer Services APIs on le1 have. CloudWatch alarms exist but have no recipients configured.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - customer-services
+  - shared-customer-record
+  - le1
+  - monitoring
+  - decision-record
+category: risk
+status: open
+affectedComponent: 01M5CS4D96-RT10
+linkedObject: 01M5CS4D96-RT10
+decisionRationale: >-
+  Per the Customer Services team lead. The readiness and liveness endpoints are about all
+  the health monitoring there is today. CloudWatch alarms are set up, but their
+  recipients are not configured. Dynatrace is not yet configured.
+  Verified in k8s-deployments. The dev Deployment manifests for the three Shared Customer
+  Record services (Customer Profile, Academic Calendar, Customer Membership) each configure
+  a readinessProbe on /health/ready and a livenessProbe on /health/live. The stage
+  manifests were not checked.
+  Not established. Which resources have alarms, what the alarms cover, the plan and
+  timing for configuring recipients, whether any monitoring of the API pods exists beyond
+  the probes and these alarms, and whether production on Chaise, which is not
+  provisioned, needs API-level health monitoring.

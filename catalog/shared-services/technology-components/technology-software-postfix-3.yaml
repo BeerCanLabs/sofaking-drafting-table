@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-R6P2
+type: technology_component
+ownerRole: technology-admin
+name: Postfix 3
+description: Open source mail transfer agent.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- messaging
+- mail
+classification: software
+vendor: Postfix
+productName: Postfix
+productVersion: '3'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: This stub ABB does not declare fixed lifecycle dates because a public Postfix project support lifecycle with end-of-support dates was not identified during catalog update research.
+capabilities:
+- 01KT0XNZEY-KPTW
+configurations:
+- id: default-smtp-listener
+  name: Default SMTP Listener
+  description: Default Postfix SMTP listener for mail transfer.
+  capabilities:
+  - 01KT0XNZEY-KPTW
+  networkBindings:
+  - port: 25
+    protocol: SMTP
+    direction: inbound
+    description: Default SMTP mail transfer listener.

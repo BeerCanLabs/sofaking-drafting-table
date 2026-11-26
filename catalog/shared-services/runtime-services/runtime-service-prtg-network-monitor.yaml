@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KYWJ47V9-F3BJ
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: PRTG Monitoring Service
+description: Reusable distributed self-hosted PRTG service. HPTPRTG2 runs the core server and a local probe; GRRPRTG2 runs the Grand Rapids probe used to monitor infrastructure including GRRNAP1CLU1 and GRRFILES1.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - service
+  - monitoring
+  - observability
+  - prtg
+  - self-hosted
+  - distributed
+host: 01KQQ5JT04-A7W8
+primaryTechnologyComponent: 01KYWJ8SPT-FK9Z
+architectureNotes:
+  serviceAuthentication: Administrators authenticate through the existing Active Directory Authentication Service (owner-confirmed 2026-07-31). Specific group mappings and authorization roles remain unconfirmed.
+  secretsManagement: Credentials used to access and monitor devices are stored within PRTG (owner-confirmed 2026-07-31). Encryption, rotation, access-review, and recovery details remain unconfirmed.
+  serviceLogging: Audit and application logs are retained within PRTG and are not forwarded to a separate central logging platform (owner-confirmed 2026-07-31). Retention duration remains unconfirmed.
+  healthWelfareMonitoring: HPTPRTG2 runs the core server and a local probe; GRRPRTG2 runs the Grand Rapids probe. The Grand Rapids probe monitors GRRNAP1CLU1 and GRRFILES1. Specific checks, thresholds, and alert routing remain unconfirmed.
+  alertRouting: Operational alerts are sent through both the shared Opsgenie Alerting Service and email (owner-corrected 2026-07-31). The SMTP relay or email-delivery platform, priorities, responder teams, schedules, and escalation rules remain unconfirmed.
+  availabilityModel: HPTPRTG2 is the only PRTG core server and has no standby or failover core (owner-confirmed 2026-07-31). HPTPRTG2 and GRRPRTG2 provide local probe roles, but the core server remains a single point of failure for centralized monitoring and alert processing.
+  scalabilityModel: Monitoring coverage is distributed through probes; capacity and scaling procedures remain unconfirmed.
+  recoverabilityModel: HPTPRTG2 is restored from a VM backup after failure (owner-confirmed 2026-07-31). Recovery time, recovery point, backup platform, and recovery-test evidence remain unconfirmed.
+  failureDomain: Loss of HPTPRTG2 removes the sole PRTG core server and its local probe, affecting centralized monitoring and alert processing. Loss of GRRPRTG2 removes the Grand Rapids probe; detailed buffering or degraded-mode behavior remains unconfirmed.
+deploymentConfigurations:
+  - id: single-core-distributed-probes
+    name: Single Core With Distributed Probes
+    description: HPTPRTG2 runs the only PRTG core server plus a local probe, while GRRPRTG2 runs the Grand Rapids probe. There is no standby or failover core server.
+    addressesQualities:
+      - availability
+  - id: vm-backup-recovery
+    name: VM Backup Recovery
+    description: The sole PRTG core server, HPTPRTG2, is restored from a VM backup after failure. Recovery objectives and test evidence remain unconfirmed.
+    addressesQualities:
+      - recoverability
+internalComponents:
+  - ref: 01KYWJ8SPT-FK9Z
+    role: function
+    configuration: local-audit-application-logging
+  - ref: 01KYWJ8SPT-FK9Z
+    role: credential-store
+    configuration: local-monitoring-credential-store
+notes:
+  sourceSession: Topology, self-hosted delivery, Windows Server 2022, VMware placement, and NetApp monitoring use were owner-confirmed in the Leave Management DRAFT L1 session tracked by OPS-049026.
+deliveryModel: self-managed

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSJ3-A7T0
+type: relationship
+name: 'Platform Msvc Department → Loveseat Event Bus'
+catalogStatus: stub
+source: 01KSM38KFG-SYNY
+externalTarget: Loveseat Event Bus
+label: publishes canonical events to
+technology: HTTPS/REST
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: Loveseat is the Sofa King canonical event bus at sc-employee.use1.sofaking.example. No catalog object exists for it, matching existing practice elsewhere in this catalog of recording it as an external target.

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-RTVH
+type: decision_record
+name: Windows Server 2022 EC2 Host Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT04-JKFX
+decisionRationale: >
+  Windows Server 2022 on EC2: EOL is addressed through active lifecycle governance — Windows Server 2022 remains within Microsoft support through October 2031 and is reviewed before support end. Privileged administrative access is reviewed quarterly through enterprise identity and access governance. Windows event and application logs are retained centrally for 90 days or more. EC2 storage retirement and managed host decommissioning follow cloud-provider media handling and enterprise wipe or disposal procedures.

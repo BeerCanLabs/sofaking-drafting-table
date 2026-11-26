@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: BMRKCQRYYP-PV6V
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft .NET Framework 4.8
+description: Legacy .NET Framework application runtime for Windows-hosted IIS/EC2 workloads.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - software
+  - app-framework
+  - dotnet
+  - legacy
+classification: software
+vendor: Microsoft Corporation
+productName: .NET Framework
+productVersion: '4.8'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    .NET Framework 4.8 support follows the underlying Windows OS lifecycle; it
+    is not independently versioned like .NET Core/.NET, but is considered
+    legacy relative to the current .NET (Core) baseline.
+capabilities:
+  - 01KT0V5MCV-RZV0
+notes:
+  background: >-
+    Added to represent Sofa King Central's legacy IIS/EC2 .NET Framework
+    workloads identified in OPS-255153. See SKC-47920 for modernization
+    tracking.

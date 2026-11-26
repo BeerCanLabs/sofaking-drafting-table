@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFT-X06Q
+type: product_component
+ownerRole: engineer
+name: Platform Sand Jobtype
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-sand-Jobtype.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- source-inspection
+- sofaking-central
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-sand-Jobtype
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-sand-Jobtype
+  observedProjects: JobTypeApi (net-fx 4.6.1, IIS); JobTypeApi.NetCore (net6.0, Kubernetes)
+  observedTargetFrameworks: net-fx 4.6.1 + net6.0 (both variants present)
+  observedHostingModel: IIS / System.Web for the net-fx variant; ASP.NET Core on Kubernetes for the .NET Core variant
+  observedPersistence: Stateless proxy - no store of its own. The .NET Core rewrite references only SK.ServiceChassis and SK.PermissionsClient, proving the EventStore.Client / MongoDB.Driver entries in the net-fx packages.config are transitive chassis dependencies.
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; Skapi/skapi.yaml; JobTypeApi.sln; cd/codefresh-deploy-manual.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/hpa.yml; cd/prod/ingress.yml; cd/prod/service.yml; cd/qa/cm.yml; cd/qa/deploy.yml; cd/qa/hpa.yml
+  serviceAuthentication: Authentication model was not confirmed by source inspection; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by source inspection; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by source inspection; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by source inspection; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by source inspection.
+  scalabilityModel: Scalability model was not confirmed by source inspection.
+  recoverabilityModel: Recoverability model was not confirmed by source inspection.
+  failureDomain: Failure domain was not confirmed by source inspection.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-sand-Jobtype
+  repositoryPrimaryLanguage: C#
+  publicApiRoute: fc-api-jobtype.use1.sofaking.example/JobTypeAPI/api
+  dotnetMigrationState: Migration target - .NET Core variant ships Kubernetes manifests alongside the still-deployed net-fx variant.
+  rehomedFrom: ottoman-platform-engineering, 2026-07-29. Missed by the 2026-07-22 re-homing.
+  sourceEvidence: 'Local working-copy inspection 2026-07-29: project files, packages.config/*.csproj package references, and appsettings/Web.config connection strings.'

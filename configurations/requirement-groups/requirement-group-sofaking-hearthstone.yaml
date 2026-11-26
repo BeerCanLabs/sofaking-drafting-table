@@ -1,0 +1,1342 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT20-M5R2
+type: requirement_group
+ownerRole: draft-admin
+name: Hearthstone Cybersecurity Framework 2026 Requirement Group
+description: DRAFT implementation profile for Hearthstone Cybersecurity Framework 2026.
+version: '2026'
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: information-security
+activation: workspace
+appliesTo:
+- software_deployment_pattern
+- host
+- runtime_service
+- network_service
+- data_store_service
+- reference_architecture
+- software_deployment_pattern
+provider:
+  id: provider.sofaking
+  type: company
+  name: Sofa King
+authority:
+  name: Hearthstone Holdings
+  shortName: Hearthstone
+  source: Hearthstone Cybersecurity Framework 2026
+tags:
+- hearthstone
+- internal
+- cybersecurity
+- 2026
+- profile
+- requirement-group
+notes: "Controls excluded from this mapping (no DRAFT surface):\n  HCF.0.x  - Organizational Context (business inventories, regulatory registers)\n  HCF.01.x - Cybersecurity Governance (strategy, meetings, policy lifecycle)\n  HCF.02.1.1 / HCF.02.2.x / HCF.02.4.x / HCF.02.5.x - Asset inventory procedures\n  HCF.07.x - Physical & Environmental Controls\n  HCF.08.2.1 - Email threat filtering (operational, not architectural)\n  HCF.12.x - Service Provider Management (contract and due-diligence processes)\n  HCF.13.x - Security Awareness Training\n  HCF.15.x - Incident Response (process/tabletop, not design-time)\nThe complianceContext fields used in applicability clauses (hasConnectedDevices, hasWirelessInfrastructure, sendsExternalEmail, usesM365, usesGSuite, hasOnPremCustomers, hasHostedCustomers, hasConnectedProducts) are assumed to exist on the SDM complianceContext object; confirm field names against actual DRAFT schema before publishing."
+requirements:
+- id: HCF.03.1.1
+  externalControlId: HCF.03.1.1
+  name: Vulnerability Management Program Definition
+  description: Vulnerability Management Program Definition
+  rationale: Record how this object satisfies HCF.03.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_03_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.1.1'
+  notes: Program-level declaration. Answered as a documented strategy/policy reference captured at SDM level; no per-RBB attestation required.
+- id: HCF.03.1.2
+  externalControlId: HCF.03.1.2
+  name: Automated Vulnerability Scanning - Endpoints and External Assets
+  description: Automated Vulnerability Scanning - Endpoints and External Assets
+  rationale: Record how this object satisfies HCF.03.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-BH6E
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.1.2'
+- id: HCF.03.1.3
+  externalControlId: HCF.03.1.3
+  name: Patch Management Report Review
+  description: Patch Management Report Review
+  rationale: Record how this object satisfies HCF.03.1.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_03_1_3
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.1.3'
+- id: HCF.03.1.4
+  externalControlId: HCF.03.1.4
+  name: Vulnerability Ratio Below 90 (CrowdStrike)
+  description: Vulnerability Ratio Below 90 (CrowdStrike)
+  rationale: Record how this object satisfies HCF.03.1.4 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-BH6E
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.1.4'
+  notes: Metric is measured in CrowdStrike. Answer confirms CrowdStrike deployment and posture monitoring; the numeric threshold is enforced operationally.
+- id: HCF.03.2.1
+  externalControlId: HCF.03.2.1
+  name: OS Patch Deployment - 30-Day SLA for Servers and Workstations
+  description: OS Patch Deployment - 30-Day SLA for Servers and Workstations
+  rationale: Record how this object satisfies HCF.03.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-BH6E
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.2.1'
+- id: HCF.03.2.2
+  externalControlId: HCF.03.2.2
+  name: Container and Image Patching - Quarterly; Automated Patching Solution
+  description: Container and Image Patching - Quarterly; Automated Patching Solution
+  rationale: Record how this object satisfies HCF.03.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.2.2'
+  notes: Covers both quarterly container/image patching and the automated patching solution requirement (including Zero-Day/critical patch capability). Mapped to rbb.service.general as containers and images are service-level concerns.
+- id: HCF.03.2.3
+  externalControlId: HCF.03.2.3
+  name: Network Device Patching - Quarterly (N-1 Acceptable)
+  description: Network Device Patching - Quarterly (N-1 Acceptable)
+  rationale: Record how this object satisfies HCF.03.2.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.2.3'
+- id: HCF.03.3.1
+  externalControlId: HCF.03.3.1
+  name: EOL Management - Periodic Review and Formal Termination Plans
+  description: EOL Management - Periodic Review and Formal Termination Plans
+  rationale: Record how this object satisfies HCF.03.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_03_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.3.1'
+  notes: Cross-cutting EOL governance declared at SDM level; per-RBB EOL tracking is covered by HCF.03.3.2 and HCF.03.3.3.
+- id: HCF.03.3.2
+  externalControlId: HCF.03.3.2
+  name: EOL Systems - Additional Hardening; East/West and North/South Traffic Restriction
+  description: EOL Systems - Additional Hardening; East/West and North/South Traffic Restriction
+  rationale: Record how this object satisfies HCF.03.3.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  - mechanism: decisionRecord
+    key: hcf_03_3_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.3.2'
+- id: HCF.03.3.3
+  externalControlId: HCF.03.3.3
+  name: EOL Systems - Continuous Monitoring and Remediation/Replacement Plans
+  description: EOL Systems - Continuous Monitoring and Remediation/Replacement Plans
+  rationale: Record how this object satisfies HCF.03.3.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_03_3_3
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 03 Vulnerability Management: HCF.03.3.3'
+- id: HCF.02.1.2
+  externalControlId: HCF.02.1.2
+  name: Network and Cloud Platform Diagrams - External Connections; Yearly Validation
+  description: Network and Cloud Platform Diagrams - External Connections; Yearly Validation
+  rationale: Record how this object satisfies HCF.02.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - reference_architecture
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_02_1_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 02 Inventory & Asset Management: HCF.02.1.2'
+  notes: Diagram currency, discovery-tool validation, and external connection documentation are captured as an architectural decision on the Reference Architecture.
+- id: HCF.02.3.1
+  externalControlId: HCF.02.3.1
+  name: External Services Inventory - IaaS, PaaS, SaaS, APIs, AI Tools
+  description: External Services Inventory - IaaS, PaaS, SaaS, APIs, AI Tools
+  rationale: Record how this object satisfies HCF.02.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_02_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 02 Inventory & Asset Management: HCF.02.3.1'
+- id: HCF.02.6.1
+  externalControlId: HCF.02.6.1
+  name: Data Flow Diagrams - Business-Critical Data; Internal and External Storage
+  description: Data Flow Diagrams - Business-Critical Data; Internal and External Storage
+  rationale: Record how this object satisfies HCF.02.6.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - reference_architecture
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_02_6_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 02 Inventory & Asset Management: HCF.02.6.1'
+- id: HCF.04.1.1
+  externalControlId: HCF.04.1.1
+  name: Quarterly Privileged Access Reviews; Admin Account Inventory via Automated Tooling
+  description: Quarterly Privileged Access Reviews; Admin Account Inventory via Automated Tooling
+  rationale: Record how this object satisfies HCF.04.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_04_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.1.1'
+- id: HCF.04.1.2
+  externalControlId: HCF.04.1.2
+  name: Alert on Admin Group Membership Changes - AD, Network, Cloud
+  description: Alert on Admin Group Membership Changes - AD, Network, Cloud
+  rationale: Record how this object satisfies HCF.04.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KQQ4Q026-D04B
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.1.2'
+- id: HCF.04.2.1
+  externalControlId: HCF.04.2.1
+  name: Formal Access Provisioning Process; Access Removal Within 24 Hours
+  description: Formal Access Provisioning Process; Access Removal Within 24 Hours
+  rationale: Record how this object satisfies HCF.04.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_04_2_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.2.1'
+- id: HCF.04.2.2
+  externalControlId: HCF.04.2.2
+  name: Unique Accounts; No Shared Accounts; Guest Disabled; Contractor Auto-Expiry; Stale Account Disable
+  description: Unique Accounts; No Shared Accounts; Guest Disabled; Contractor Auto-Expiry; Stale Account Disable
+  rationale: Record how this object satisfies HCF.04.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.2.2'
+- id: HCF.04.3.1
+  externalControlId: HCF.04.3.1
+  name: Least-Privilege Admin Access; Remove Local Admin; JIT Elevation
+  description: Least-Privilege Admin Access; Remove Local Admin; JIT Elevation
+  rationale: Record how this object satisfies HCF.04.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_04_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.3.1'
+- id: HCF.04.4.1
+  externalControlId: HCF.04.4.1
+  name: Strong Passwords (min 15 chars); Idle Timeout; Account Lockout; MFA for External and Critical Systems
+  description: Strong Passwords (min 15 chars); Idle Timeout; Account Lockout; MFA for External and Critical Systems
+  rationale: Record how this object satisfies HCF.04.4.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.4.1'
+- id: HCF.04.4.2
+  externalControlId: HCF.04.4.2
+  name: MFA App Enforcement; No Root Usage; Password Vaults; LAPS for Local Admin Accounts
+  description: MFA App Enforcement; No Root Usage; Password Vaults; LAPS for Local Admin Accounts
+  rationale: Record how this object satisfies HCF.04.4.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.4.2'
+- id: HCF.04.4.3
+  externalControlId: HCF.04.4.3
+  name: Periodic Reauthentication via MFA Based on Risk; Compromised Password Monitoring
+  description: Periodic Reauthentication via MFA Based on Risk; Compromised Password Monitoring
+  rationale: Record how this object satisfies HCF.04.4.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.4.3'
+- id: HCF.04.5.1
+  externalControlId: HCF.04.5.1
+  name: Encrypted Remote Access; Inactivity Disconnect; Geographic Restriction
+  description: Encrypted Remote Access; Inactivity Disconnect; Geographic Restriction
+  rationale: Record how this object satisfies HCF.04.5.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KQQ4Q026-MHJM
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 04 Identity Management: HCF.04.5.1'
+- id: HCF.05.1.1
+  externalControlId: HCF.05.1.1
+  name: System Hardening - Disable Insecure Services; Remove Defaults; NTP; CIS/NIST Baselines
+  description: System Hardening - Disable Insecure Services; Remove Defaults; NTP; CIS/NIST Baselines
+  rationale: Record how this object satisfies HCF.05.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.1.1'
+  notes: 'Bundles five related sub-requirements: disable insecure services (FTP, Telnet, Print Spooler), remove/modify system defaults (SNMP strings, default accounts), configure NTP from internal source, and harden to CIS/NIST standards.'
+- id: HCF.05.2.1
+  externalControlId: HCF.05.2.1
+  name: Quarterly Configuration Compliance Review - Policy Drift Monitoring
+  description: Quarterly Configuration Compliance Review - Policy Drift Monitoring
+  rationale: Record how this object satisfies HCF.05.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.2.1'
+- id: HCF.05.2.2
+  externalControlId: HCF.05.2.2
+  name: Update Secure Images and Hardening Templates from Vulnerability Scan Results
+  description: Update Secure Images and Hardening Templates from Vulnerability Scan Results
+  rationale: Record how this object satisfies HCF.05.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.2.2'
+- id: HCF.05.3.1
+  externalControlId: HCF.05.3.1
+  name: Change Management Process for Configurations, Hardware, Software, and Security Tools
+  description: Change Management Process for Configurations, Hardware, Software, and Security Tools
+  rationale: Record how this object satisfies HCF.05.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_05_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.3.1'
+- id: HCF.05.4.1
+  externalControlId: HCF.05.4.1
+  name: Cloud Security - Security Contacts; Public Bucket Prevention; Unused Regions Disabled; Billing Alarms
+  description: Cloud Security - Security Contacts; Public Bucket Prevention; Unused Regions Disabled; Billing Alarms
+  rationale: Record how this object satisfies HCF.05.4.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  - data_store_service
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.4.1'
+  applicability:
+    anyOf:
+    - field: deploymentTargets
+      contains: aws
+    - field: deploymentTargets
+      contains: azure
+    - field: deploymentTargets
+      contains: gcp
+    - field: deploymentTargets
+      contains: oci
+- id: HCF.05.4.2
+  externalControlId: HCF.05.4.2
+  name: Cloud Security Posture - CSOM; Threat Detection Findings Review; CIS Benchmark >= 70%
+  description: Cloud Security Posture - CSOM; Threat Detection Findings Review; CIS Benchmark >= 70%
+  rationale: Record how this object satisfies HCF.05.4.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  - data_store_service
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: any
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.4.2'
+  applicability:
+    anyOf:
+    - field: deploymentTargets
+      contains: aws
+    - field: deploymentTargets
+      contains: azure
+    - field: deploymentTargets
+      contains: gcp
+    - field: deploymentTargets
+      contains: oci
+  notes: CIS v1.4 for Azure/AWS is retired from this control in 2026; v3 required for Azure and AWS, v2.0 for GCP, v3 for OCI.
+- id: HCF.05.5.1
+  externalControlId: HCF.05.5.1
+  name: IoT/Connected Device - Default Credential Rotation; Patching; Internet Segmentation
+  description: IoT/Connected Device - Default Credential Rotation; Patching; Internet Segmentation
+  rationale: Record how this object satisfies HCF.05.5.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - data_store_service
+  - network_service
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 05 Configuration Management: HCF.05.5.1'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasConnectedDevices
+      equals: true
+- id: HCF.06.1.1
+  externalControlId: HCF.06.1.1
+  name: Logging Enabled on All Assets - Minimum Requirements per Cyber Policy
+  description: Logging Enabled on All Assets - Minimum Requirements per Cyber Policy
+  rationale: Record how this object satisfies HCF.06.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KQQ4Q026-D04B
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 06 Audit Logging & Monitoring: HCF.06.1.1'
+- id: HCF.06.1.2
+  externalControlId: HCF.06.1.2
+  name: Log Storage Adequacy - Minimum 90-Day Retention (Local or Central)
+  description: Log Storage Adequacy - Minimum 90-Day Retention (Local or Central)
+  rationale: Record how this object satisfies HCF.06.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_06_1_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 06 Audit Logging & Monitoring: HCF.06.1.2'
+- id: HCF.06.2.1
+  externalControlId: HCF.06.2.1
+  name: Cloud API Audit Logging; Alert Thresholds; Identity Risk Alerts; Network Flow Logs
+  description: Cloud API Audit Logging; Alert Thresholds; Identity Risk Alerts; Network Flow Logs
+  rationale: Record how this object satisfies HCF.06.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 06 Audit Logging & Monitoring: HCF.06.2.1'
+  notes: Includes a future 2027 requirement for SIEM/UEBA with AI activity monitoring (queries, agent actions, resource consumption, prompt injection detection). The 2026 obligation is alert thresholds, identity alerts, and network flow logs.
+- id: HCF.06.3.1
+  externalControlId: HCF.06.3.1
+  name: CrowdStrike Agent Deployment - All Supported Assets; Active Posture; Identity Connectors Enabled
+  description: CrowdStrike Agent Deployment - All Supported Assets; Active Posture; Identity Connectors Enabled
+  rationale: Record how this object satisfies HCF.06.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-JW52
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 06 Audit Logging & Monitoring: HCF.06.3.1'
+- id: HCF.06.3.2
+  externalControlId: HCF.06.3.2
+  name: CrowdStrike Console Access - Quarterly Least-Privilege Review; SAML Authentication
+  description: CrowdStrike Console Access - Quarterly Least-Privilege Review; SAML Authentication
+  rationale: Record how this object satisfies HCF.06.3.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 06 Audit Logging & Monitoring: HCF.06.3.2'
+- id: HCF.08.1.1
+  externalControlId: HCF.08.1.1
+  name: CrowdStrike Endpoint Agent - Auto Signature Updates; Container Runtime Protection; Canary Subset
+  description: CrowdStrike Endpoint Agent - Auto Signature Updates; Container Runtime Protection; Canary Subset
+  rationale: Record how this object satisfies HCF.08.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-JW52
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 08 Email, Malware & Web Protection: HCF.08.1.1'
+- id: HCF.08.2.2
+  externalControlId: HCF.08.2.2
+  name: DMARC, SPF, and DKIM - Prevent Spoofed or Modified Email from Valid Domains
+  description: DMARC, SPF, and DKIM - Prevent Spoofed or Modified Email from Valid Domains
+  rationale: Record how this object satisfies HCF.08.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 08 Email, Malware & Web Protection: HCF.08.2.2'
+  applicability:
+    anyOf:
+    - field: complianceContext.sendsExternalEmail
+      equals: true
+  notes: Applies only where the solution sends email from organizational domains. Answered at SDM level as this is a domain-wide DNS/email infrastructure concern.
+- id: HCF.08.2.3
+  externalControlId: HCF.08.2.3
+  name: DNS and Web Filtering - Block Malicious and Unapproved Websites
+  description: DNS and Web Filtering - Block Malicious and Unapproved Websites
+  rationale: Record how this object satisfies HCF.08.2.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: technologyComponent
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - technologyComponent
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 08 Email, Malware & Web Protection: HCF.08.2.3'
+- id: HCF.08.2.4
+  externalControlId: HCF.08.2.4
+  name: M365/GSuite Conditional Access - Geo-Blocking; MFA Requirement; Risky Device Blocking
+  description: M365/GSuite Conditional Access - Geo-Blocking; MFA Requirement; Risky Device Blocking
+  rationale: Record how this object satisfies HCF.08.2.4 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: relationship
+    criteria:
+      capability: 01KQQ4Q026-MHJM
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - relationship
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 08 Email, Malware & Web Protection: HCF.08.2.4'
+  applicability:
+    anyOf:
+    - field: complianceContext.usesM365
+      equals: true
+    - field: complianceContext.usesGSuite
+      equals: true
+- id: HCF.08.2.5
+  externalControlId: HCF.08.2.5
+  name: Browser Isolation and Sandboxing
+  description: Browser Isolation and Sandboxing
+  rationale: Record how this object satisfies HCF.08.2.5 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 08 Email, Malware & Web Protection: HCF.08.2.5'
+- id: HCF.09.1.1
+  externalControlId: HCF.09.1.1
+  name: Network Segmentation by Trust Boundary - IT, IoT, OT, Mobile, Guest; VPC Segmentation
+  description: Network Segmentation by Trust Boundary - IT, IoT, OT, Mobile, Guest; VPC Segmentation
+  rationale: Record how this object satisfies HCF.09.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_09_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 09 Network Security: HCF.09.1.1'
+- id: HCF.09.1.2
+  externalControlId: HCF.09.1.2
+  name: Firewall Least-Privilege Configuration; ACL and Security Group Review Every 6 Months
+  description: Firewall Least-Privilege Configuration; ACL and Security Group Review Every 6 Months
+  rationale: Record how this object satisfies HCF.09.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - data_store_service
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - technologyComponentConfiguration
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 09 Network Security: HCF.09.1.2'
+- id: HCF.09.1.3
+  externalControlId: HCF.09.1.3
+  name: WAF in Front of Critical Servers - Block and Log Unauthorized Traffic
+  description: WAF in Front of Critical Servers - Block and Log Unauthorized Traffic
+  rationale: Record how this object satisfies HCF.09.1.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  relatedCapability: 01KT0V5MCV-Z079
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: technologyComponent
+    criteria:
+      capability: 01KT0V5MCV-Z079
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KT0V5MCV-Z079
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - technologyComponent
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 09 Network Security: HCF.09.1.3'
+- id: HCF.09.2.1
+  externalControlId: HCF.09.2.1
+  name: Network IDS Sensors at Boundaries; Weekly Signature Updates
+  description: Network IDS Sensors at Boundaries; Weekly Signature Updates
+  rationale: Record how this object satisfies HCF.09.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - network_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: technologyComponent
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - technologyComponent
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 09 Network Security: HCF.09.2.1'
+- id: HCF.09.3.1
+  externalControlId: HCF.09.3.1
+  name: Wireless AES Encryption; Guest Network Segregated from Internal Networks
+  description: Wireless AES Encryption; Guest Network Segregated from Internal Networks
+  rationale: Record how this object satisfies HCF.09.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - network_service
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 09 Network Security: HCF.09.3.1'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasWirelessInfrastructure
+      equals: true
+- id: HCF.10.1.1
+  externalControlId: HCF.10.1.1
+  name: Disaster Recovery Procedures; BIA with Cyber Risk; Annual Recovery Testing with RTO/RPO
+  description: Disaster Recovery Procedures; BIA with Cyber Risk; Annual Recovery Testing with RTO/RPO
+  rationale: Record how this object satisfies HCF.10.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_10_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 10 Data Recovery Capabilities: HCF.10.1.1'
+- id: HCF.10.1.2
+  externalControlId: HCF.10.1.2
+  name: Alternative Business Processes and Out-of-Band Communication Channels
+  description: Alternative Business Processes and Out-of-Band Communication Channels
+  rationale: Record how this object satisfies HCF.10.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_10_1_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 10 Data Recovery Capabilities: HCF.10.1.2'
+- id: HCF.10.2.1
+  externalControlId: HCF.10.2.1
+  name: Daily Business-Critical Data Backups; Immutability Against Ransomware
+  description: Daily Business-Critical Data Backups; Immutability Against Ransomware
+  rationale: Record how this object satisfies HCF.10.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KQQ4Q026-7T2H
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 10 Data Recovery Capabilities: HCF.10.2.1'
+- id: HCF.10.2.2
+  externalControlId: HCF.10.2.2
+  name: Quarterly Backup Restoration Testing; 9-Month Retention for Business-Critical Data
+  description: Quarterly Backup Restoration Testing; 9-Month Retention for Business-Critical Data
+  rationale: Record how this object satisfies HCF.10.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_10_2_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 10 Data Recovery Capabilities: HCF.10.2.2'
+- id: HCF.11.1.1
+  externalControlId: HCF.11.1.1
+  name: Physical Asset Disposal Commensurate with Sensitivity; Remote Wipe for Mobile and Laptops
+  description: Physical Asset Disposal Commensurate with Sensitivity; Remote Wipe for Mobile and Laptops
+  rationale: Record how this object satisfies HCF.11.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_11_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.1.1'
+- id: HCF.11.1.2
+  externalControlId: HCF.11.1.2
+  name: Data Retention Policies - Email, Chat, Cloud; Delete Short-Term Use Data After Usage
+  description: Data Retention Policies - Email, Chat, Cloud; Delete Short-Term Use Data After Usage
+  rationale: Record how this object satisfies HCF.11.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  - mechanism: decisionRecord
+    key: hcf_11_1_2
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.1.2'
+- id: HCF.11.2.1
+  externalControlId: HCF.11.2.1
+  name: Whole Disk Encryption - BitLocker/FileVault2/LUKS; VPN LVE-875 Minimum
+  description: Whole Disk Encryption - BitLocker/FileVault2/LUKS; VPN LVE-875 Minimum
+  rationale: Record how this object satisfies HCF.11.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - host
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.2.1'
+- id: HCF.11.2.2
+  externalControlId: HCF.11.2.2
+  name: Password Encryption in Storage and Transit; TLS 1.2+ on External Sites; Cloud Bucket Encryption by Default
+  description: Password Encryption in Storage and Transit; TLS 1.2+ on External Sites; Cloud Bucket Encryption by Default
+  rationale: Record how this object satisfies HCF.11.2.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - runtime_service
+  - network_service
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.2.2'
+- id: HCF.11.2.3
+  externalControlId: HCF.11.2.3
+  name: Encrypt High-Risk Data at Rest on Servers and Databases
+  description: Encrypt High-Risk Data at Rest on Servers and Databases
+  rationale: Record how this object satisfies HCF.11.2.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - data_store_service
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: technologyComponentConfiguration
+    criteria:
+      capability: 01KQQ4Q026-H3B5
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - technologyComponentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.2.3'
+- id: HCF.11.3.1
+  externalControlId: HCF.11.3.1
+  name: Approved Secure Sharing Methods; No Production Data in Non-Production Environments
+  description: Approved Secure Sharing Methods; No Production Data in Non-Production Environments
+  rationale: Record how this object satisfies HCF.11.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_11_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.3.1'
+- id: HCF.11.4.1
+  externalControlId: HCF.11.4.1
+  name: Approved AI Tools List; Shadow AI Monitoring; Sensitive Data Location Audits
+  description: Approved AI Tools List; Shadow AI Monitoring; Sensitive Data Location Audits
+  rationale: Record how this object satisfies HCF.11.4.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_11_4_1
+  - mechanism: field
+    key: complianceContext.dataClassification
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - field
+  externalReference: 'Hearthstone 2026 Framework - 11 Data Protection: HCF.11.4.1'
+- id: HCF.14.1.1
+  externalControlId: HCF.14.1.1
+  name: Secure Code Training for Developers and Reviewers - Including AI Coding Practices
+  description: Secure Code Training for Developers and Reviewers - Including AI Coding Practices
+  rationale: Record how this object satisfies HCF.14.1.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_1_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.1.1'
+- id: HCF.14.1.2
+  externalControlId: HCF.14.1.2
+  name: Secure Coding Practices; Security by Design; Secure Hardware and IP Storage for Connected Products
+  description: Secure Coding Practices; Security by Design; Secure Hardware and IP Storage for Connected Products
+  rationale: Record how this object satisfies HCF.14.1.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_1_2
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.1.2'
+- id: HCF.14.1.3
+  externalControlId: HCF.14.1.3
+  name: Separate Test and Production Environments; SBOM with Risk Review; No Unmonitored Dev Access to Prod
+  description: Separate Test and Production Environments; SBOM with Risk Review; No Unmonitored Dev Access to Prod
+  rationale: Record how this object satisfies HCF.14.1.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_1_3
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.1.3'
+- id: HCF.14.2.1
+  externalControlId: HCF.14.2.1
+  name: Security Testing Across Full SDLC; Code Review; DAST/SAST/SCA; AI Product Attack Testing
+  description: Security Testing Across Full SDLC; Code Review; DAST/SAST/SCA; AI Product Attack Testing
+  rationale: Record how this object satisfies HCF.14.2.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_2_1
+  - mechanism: relationship
+    criteria:
+      capability: any
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - relationship
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.2.1'
+  notes: 'AI product testing specifically requires coverage of: prompt injection, data poisoning, adversarial evasion, model extraction, membership inference, backdoor trigger, and AI plugin attacks.'
+- id: HCF.14.3.1
+  externalControlId: HCF.14.3.1
+  name: On-Prem Customers - No Retained Privileged Access; Root Deployment Accounts Disabled or Transitioned
+  description: On-Prem Customers - No Retained Privileged Access; Root Deployment Accounts Disabled or Transitioned
+  rationale: Record how this object satisfies HCF.14.3.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_3_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.3.1'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasOnPremCustomers
+      equals: true
+- id: HCF.14.3.2
+  externalControlId: HCF.14.3.2
+  name: On-Prem Customers - Secure Password Storage for Required Access; Patch Management for Customer Devices
+  description: On-Prem Customers - Secure Password Storage for Required Access; Patch Management for Customer Devices
+  rationale: Record how this object satisfies HCF.14.3.2 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_3_2
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.3.2'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasOnPremCustomers
+      equals: true
+- id: HCF.14.3.3
+  externalControlId: HCF.14.3.3
+  name: Hosted Customer Environments - Secure Access Mechanisms; Impersonation Logged
+  description: Hosted Customer Environments - Secure Access Mechanisms; Impersonation Logged
+  rationale: Record how this object satisfies HCF.14.3.3 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_3_3
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: availability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.3.3'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasHostedCustomers
+      equals: true
+- id: HCF.14.4.1
+  externalControlId: HCF.14.4.1
+  name: Hosted Product Security - MFA/Identity Integration; Customer Data Encryption at Rest; No Secrets in Code; AI Security Controls
+  description: Hosted Product Security - MFA/Identity Integration; Customer Data Encryption at Rest; No Secrets in Code; AI Security Controls
+  rationale: Record how this object satisfies HCF.14.4.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: mandatory
+  naAllowed: false
+  canBeSatisfiedBy:
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  - mechanism: decisionRecord
+    key: hcf_14_4_1
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - deploymentConfiguration
+  - decisionRecord
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.4.1'
+  notes: "Bundles four distinct sub-requirements: (1) Identity integration and MFA capability for hosted customers. (2) Customer data encrypted at rest using non-deprecated methods. (3) No secrets in code; secret managers required. (4) AI-specific controls: input validation/sanitization, rate limiting on AI features,\n    prompt injection detection for LLM-based capabilities, human-in-the-loop approval\n    for high-risk actions (data modifications, financial transactions), and sandbox/network\n    segmentation for self-hosted models.\nConsider splitting into distinct controls in a future framework revision for finer-grained attestation."
+- id: HCF.14.5.1
+  externalControlId: HCF.14.5.1
+  name: Connected Products - Tamper Evidence; Port Security; Antimalware; Patching
+  description: Connected Products - Tamper Evidence; Port Security; Antimalware; Patching
+  rationale: Record how this object satisfies HCF.14.5.1 for the Hearthstone Cybersecurity Framework 2026.
+  appliesTo:
+  - software_deployment_pattern
+  requirementMode: conditional
+  naAllowed: true
+  canBeSatisfiedBy:
+  - mechanism: decisionRecord
+    key: hcf_14_5_1
+  - mechanism: deploymentConfiguration
+    criteria:
+      quality: recoverability
+  minimumSatisfactions: 1
+  validAnswerTypes:
+  - decisionRecord
+  - deploymentConfiguration
+  externalReference: 'Hearthstone 2026 Framework - 14 Secure Product Development: HCF.14.5.1'
+  applicability:
+    anyOf:
+    - field: complianceContext.hasConnectedProducts
+      equals: true

@@ -1,0 +1,46 @@
+schemaVersion: '1.0'
+uid: 01KY5YYDNN-8YVZ
+type: decision_record
+name: WSERP Portal Pattern Validation Evidence
+description: Current-state WSERP Portal deployment decisions confirmed through the infrastructure interview and internal documentation research.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, portal, velocity, validation-cleanup, adr]
+category: decision
+status: accepted
+affectedComponent: 01KY5YYDNN-4DTD
+linkedObject: 01KY5YYDNN-4DTD
+decisionRationale: >-
+  noApplicablePattern: No approved reference architecture accurately represents
+  this shared active/passive legacy IIS deployment and its Web-tier Proxy
+  dependency.
+
+  deploymentTargets: Hosted production and customer Test/UAT run on VMware in
+  XCOLO; engineering Dev/QA/Stage run on VMware in High Point.
+
+  availabilityRequirement: High, without a confirmed numeric SLO or SLA.
+
+  dataClassification: Restricted PII exists in customer databases and Documents.
+
+  failureDomain: Portal IIS failures can affect all hosted Portal customers;
+  shared SQL, Web Proxy, Grizzly, or Documents failures can also disrupt Portal
+  functions.
+
+  patternDeviations: Portal failover is manual; Windows and IIS configuration is
+  manual; capacity review is reactive; no automated drift detection or scheduled
+  failover exercises are in place; Veeam policy and recovery objectives remain
+  unconfirmed.
+
+  externalDependencies: Imperva, FortiGate, F5 BIG-IP, Pingdom, Dynatrace,
+  Nagios XI, Automox, CrowdStrike Falcon, Tenable Nessus, Veeam, SQL Server,
+  WSERP Web Proxy and Grizzly, SendGrid, Twilio, SFTP partners, and online-shopping
+  vendors are documented dependencies.
+
+  interServiceConnections: Browser traffic uses HTTPS 443. Portal calls Proxy
+  over HTTPS 443 with an encrypted timestamp in the ept header, Dispatch handles
+  OL6 PunchOut, and Portal relays OL5 browser checkout responses to Desktop
+  WebComm over HTTP 8001.

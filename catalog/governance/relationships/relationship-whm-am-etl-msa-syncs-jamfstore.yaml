@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV50CX-DVGA
+type: relationship
+name: AM ETL Microservices → JamfStore
+catalogStatus: complete
+source: 01KSM38KFB-G3T3
+label: syncs with
+externalTarget: JamfStore
+description: Dedicated Lambda microservices sync Apple device data from JamfStore MDM.
+technology: REST/HTTPS
+direction: asynchronous
+flow: outbound
+tags:
+- asset-management
+- mdm
+- etl
+notes:
+  background: Confirmed via named JamfStore-suffixed Lambda services in infra/LAMBDA_DEPLOYMENT.md.
+capabilities: []

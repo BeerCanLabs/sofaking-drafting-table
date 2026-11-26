@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ4R-19E8
+type: decision_record
+name: CCA — Governed Automation Platform Validation Evidence
+description: >-
+  Architecture decisions promoted from existing catalog notes so DRAFT 0.41
+  validation can trace requirement evidence to a committed DecisionRecord.
+  SUPERSEDED IN PART, 2026-08-02 -- the deploymentTargets and
+  externalDependencies text below records Harness as a SaaS validation vendor
+  (saas-harness). That was never accurate. Within CCA, "Harness" means the
+  sofaking-guardfin-harness layer, a validation stage inside Guardfin
+  running in-VPC, and no validation payload leaves Sofa King infrastructure.
+  Ratified 2026-08-02 by Leo Park (Lead Architect); see OPS-177566 and the
+  corrected sdp-cca-automation-platform. The original wording is retained
+  below as the evidence of record for the DRAFT 0.41 validation run.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: deprecated
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+linkedObject: Z8ZEXRM11J-FGJ6
+decisionRationale: "noApplicablePattern: No existing Sofa King ReferenceArchitecture matches this deployment shape. CCA is a novel governed-agentic automation platform (ticket-bound, policy-constrained, validated, audited) with no precedent pattern in the catalog. It is itself intended to become the reference pattern for future governed-automation work, so it does not follow a prior reference architecture.\n\ndeploymentTargets: Five execution contexts. (1) Service-request front door and human-readable audit/runbook surface run in Atlassian Cloud SaaS (JSM + Confluence; saas-atlassian). (2) Control plane (Staplepin) and (3) the sandboxed execution runtime (Openfin) run in AWS us-east-1 (aws-us-east-1) — specifically AWS account 151930920086, VPC vpc-704325323934be3a5 (USE1-DEV-CCA-VPC), CIDR 10.203.8.0/22, a private deny-by-default-egress VPC. Account/VPC/CIDR specifics are environment parameters, not the architecture boundary. (4) Cross-cutting safety and model-routing services (Guardfin,
+  LLM Gateway) run in the enterprise shared-services platform boundary (enterprise-shared-services), owned centrally rather than by CCA. (5) Post-execution validation runs in Harness SaaS (saas-harness). The authoritative audit store (PostgreSQL) and second audit trail (CloudTrail, KMS) live alongside the runtime in AWS us-east-1.\n\nexternalDependencies: External systems CCA interacts with beyond its own deployable components, each declared as an externalInteraction on the relevant service group: Atlassian JSM (front door) and Confluence (runbook/audit) in saas-atlassian; Harness (validation) in saas-harness; Guardfin (safety) and LLM Gateway (model routing/governance) in enterprise-shared-services; and AWS-native CloudTrail and KMS in aws-us-east-1. Per-Divan IAM identity provisioning routes through IT and the SaaS Identity team. No additional undisclosed integrations exist at PoC stage.\n\ndataClassification: Internal / confidential. The platform processes Sofa King corporate operational
+  data: JSM ticket content, Divan tool-invocation records, execution lineage, and outcomes persisted to PostgreSQL. No customer PII is in scope for the Milestone A PoC (read-only, sandbox-only, team-only). Audit records and any credentials/secrets handled by scoped IAM identities are treated as confidential and encrypted at rest via KMS. Data-classification scope will be re-reviewed if Milestone B expands the audience or introduces write actions against systems holding customer records.\n\nfailureDomain: Blast radius is bounded per Divan and per AWS region. Each Divan executes under its own narrowly scoped IAM identity inside the private us-east-1 sandbox VPC, so a compromised or misbehaving Divan cannot exceed its own capability scope (one Divan = one identity = one narrow scope). The runtime, control plane, and audit store are single-region (aws-us-east-1); a regional outage halts all CCA execution but, because runs are human-initiated and sandbox-only, causes no customer-facing impact.
+  Enterprise shared services (Guardfin, LLM Gateway) and SaaS dependencies (Atlassian, Harness) are shared cross-product dependencies whose failure pauses CCA execution rather than corrupting it — deny-by-default behavior means loss of the safety or validation layer blocks execution rather than allowing unsafe action.\n\nnoPatternDeviations: Not applicable in the conventional sense: CCA does not follow a prior ReferenceArchitecture (see noApplicablePattern), so there are no deviations from a selected pattern to document. The architecture conforms fully to its own governance model (ticket-bound, policy-constrained, validated, audited).\n\ninterServiceConnections: Primary cross-boundary paths, all funneled through the governance model: (1) JSM (saas-atlassian) → Staplepin control plane (aws-us-east-1) on ticket approval — the only inbound trigger; (2) Staplepin → Openfin runtime (aws-us-east-1) to launch a scoped Divan; (3) Openfin → LLM Gateway (enterprise-shared-services) for all model
+  calls — no direct model access; (4) Openfin actions evaluated by Guardfin (enterprise-shared-services) before execution; (5) Divan outputs → Harness (saas-harness) for post-execution validation; (6) outcomes → PostgreSQL + CloudTrail (aws-us-east-1) for audit. The sandbox VPC is deny-by-default egress with no public inbound and no public SSH, so the only reachable inbound path is JSM → Staplepin. These connections should be formalized as relationship objects in catalog/relationships/ as the PoC hardens."

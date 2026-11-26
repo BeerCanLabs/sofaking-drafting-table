@@ -1,0 +1,117 @@
+schemaVersion: '1.0'
+uid: 01KSM38KH6-CKMZ
+type: vocabulary
+vocabulary: teams
+name: Sofa King Engineering Teams
+values:
+- id: devops-engineering-platform
+  name: "DevOps Engineering — Platform"
+  contact: kai.novak@sofaking.example
+- id: devops-engineering-hcm
+  name: "DevOps Engineering — HCM"
+  contact: avery.stone@sofaking.example
+- id: devops-engineering-business-solutions
+  name: "DevOps Engineering — Business Solutions"
+  contact: avery.stone@sofaking.example
+- id: devops-engineering-customer-solutions
+  name: "DevOps Engineering — Customer Solutions"
+  contact: blake.gordon@sofaking.example
+- id: devops-engineering-data-analytics
+  name: "DevOps Engineering — Data Analytics"
+  contact: sean.holt@sofaking.example
+- id: data-management-team
+  name: Data Management Team (DMT)
+  contact: data-management-team@sofaking.example
+- id: sre-management
+  name: SRE Management
+  contact: jordan.hale@sofaking.example
+- id: cloud-engineering-infrastructure
+  name: Cloud Engineering / Infrastructure
+  contact: cloud-engineering@sofaking.example
+- id: cloudops-support
+  name: CloudOps Support
+  contact: carter.wynn@sofaking.example
+- id: ap-desk-engineering
+  name: AP Desk Engineering
+  contact: msorrell@sofaking.example
+- id: leave-time-engineering
+  name: Leave & Time Engineering
+  contact: leave-time-eng@sofaking.example
+- id: recruiting-hiring-engineering
+  name: Recruiting & Hiring Engineering
+  contact: recruiting-hiring-eng@sofaking.example
+- id: associate-development-engineering
+  name: Associate Development Engineering
+  contact: associate-development-eng@sofaking.example
+- id: sofaking-central-engineering
+  name: Sofa King Central Engineering
+  contact: dist_development_HCM_FC@sofaking.example
+- id: hcm-cross-solution-hrms
+  name: HCM Cross-Solution / HRMS
+  contact: hcm-cross-solution-hrms-eng@sofaking.example
+- id: rt-erp-cis-engineering
+  name: RT ERP/CIS Engineering (TEAMS/Prologic)
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+- id: ws-erp-abacus-engineering
+  name: WS ERP (Abacus) Engineering
+  contact: abacus-eng@sofaking.example
+- id: digital-stores-engineering
+  name: Digital Stores Engineering
+  contact: digital-stores-eng@sofaking.example
+- id: lakeshore-cis-tillbook-engineering
+  name: Lakeshore CIS (Tillbook) Engineering
+  contact: marcus.bell@sofaking.example
+- id: store-health-management-shm-engineering
+  name: Store Health Management (SHM) Engineering
+  contact: sara.gilmore@sofaking.example
+- id: som-special-programs-management-engineering
+  name: SOM (Special Orders Management) Engineering
+  contact: special-programs-management-som-eng@sofaking.example
+- id: brannock-asset-management-engineering
+  name: Brannock / Asset Management Engineering
+  contact: Group_dev_whm@sofaking.example
+- id: ottoman-platform-engineering
+  name: Ottoman / Platform Engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+- id: identity-management-idm-engineering
+  name: Identity Management (IDM) Engineering
+  contact: identity-management-idm-eng@sofaking.example
+- id: sofaking-mobile-engineering
+  name: Sofa King Mobile Engineering
+  contact: sofaking-mobile-eng@sofaking.example
+- id: foresight5-analytics-engineering
+  name: Foresight5 / Analytics Engineering
+  contact: data-engineering-analytics-eng@sofaking.example
+- id: information-security
+  name: Information Security
+  contact: information-security@sofaking.example
+- id: architecture-review-board
+  name: Architecture Review Board (ARB)
+  contact: architecture-review-board@sofaking.example
+- id: aiops
+  name: AIOps
+  contact: lpark@sofaking.example
+- contact: wmercer@sofaking.example
+  id: shared-customer-engineering
+  name: Shared Customer Engineering
+  status: proposed
+  rationale: The Shared Customer Record (ss-msvc-customer-profile, ss-msvc-customer-membership,
+    ss-msvc-calendar) is authored and maintained by the Shared Customer Record
+    engineering team, which has no value in the teams vocabulary yet. The existing
+    devops-engineering-customer-solutions value is a DevOps team, not the product engineering
+    team that owns these ProductComponents, DataComponents, and the SSR SDP. Proposing
+    shared-customer-engineering so these engineering objects have an accurate owner
+    and CODEOWNERS routing. Teams vocabulary is advisory, so objects using this value
+    validate with a warning until the value is adopted.
+- contact: ltorvik@sofaking.example
+  id: whm-unified-inventory
+  name: WHM Unified Inventory
+  status: proposed
+  rationale: Atlas (Unified Inventory, repos whm-unified-*) is authored and maintained
+    by the WHM Unified Inventory engineering team, which has no value in the teams
+    vocabulary yet. The nearest existing value, brannock-asset-management-engineering,
+    is the Brannock / Asset Management team, not the team that owns Atlas. Proposing
+    whm-unified-inventory so the Atlas SDP and its ProductComponents have an accurate
+    owner and CODEOWNERS routing. Teams vocabulary is advisory, so objects using this
+    value validate with a warning until the value is adopted. Contact is the requesting
+    team member's address and should be replaced with a team distribution list.

@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-NCBF
+type: technology_component
+ownerRole: technology-admin
+name: VMware VM Standard Profile
+description: Standardized VMware virtual machine profile retained for legacy platform support.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- hardware
+- vmware
+- virtual
+classification: compute-platform
+vendor: VMware
+productName: VM Standard
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: VMware estate lifecycle is governed internally and is in deprecatedment.
+capabilities:
+- 01KQQ4Q026-1HZP

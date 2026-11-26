@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-MG67
+type: decision_record
+name: AWS CloudFront Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT04-6F8T
+decisionRationale: >
+  AWS CloudFront is operated as a provider-managed PaaS with a global edge network providing multi-AZ origin redundancy and regional edge failover. Operators configure distributions, origins, behaviors, and cache policies. The failure domain is global with regional edge failover.

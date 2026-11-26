@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS6P-7A88
+type: relationship
+name: 'Platform Sand Permission → Platform Msvc Employee'
+catalogStatus: stub
+source: 01KSM38KFT-RGK1
+target: 01KSM38KFG-MYWB
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.

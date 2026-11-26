@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJC5-XMWA
+type: decision_record
+name: Node.js Application Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-W3TA
+linkedObject: 01KQQ5JT1E-W3TA
+decisionRationale: "serviceAuthentication: Application identities and administrative access use centralized identity and secret distribution.\n\nsecretsManagement: runtime secrets sourced from centralized secret store\n\nfailureDomain: Scoped to the Node.js application tier deployment unit."

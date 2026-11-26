@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-2C2K
+type: product_component
+ownerRole: engineer
+name: External API Service
+description: Node.js microservice, built and deployed as a Docker image, that reaches out to external servers to get data the platform needs and handles authentication for those APIs (repository BeerCanLabs/sk-msvc-externalAPIService).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-externalAPIService
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-externalAPIService
+  deploymentPipeline: CodeFresh (owner-confirmed). Repository carries ci/codefresh-build.yml, ci/cf-pull-request.yaml and cd/codefresh-deploy-*.yml.
+  runtimeHostEvidence: Kubernetes manifests (Deployment, Service, Ingress) under cd/ for environments prod and stage; container listens on port 4000. Host mapped to Amazon EKS Standard per owner.
+  observedRuntimeSignals: docker, node, readme, kubernetes-manifests
+  observedDataStoreEvidence: Production ConfigMap points at PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (us-east-1, read-write and read-only endpoints). The cluster is a regional Aurora PostgreSQL cluster (owner-confirmed).
+  observedDependencySignals: README lists a PostgreSQL database as a prerequisite; package.json lists pg and sequelize. ConfigMap references the Interaction Service and Resource Library domains and a Canvas OAuth redirect (/api/v1/oauthResponse). The full list of external systems it calls was not identified and needs owner input.
+  observedManifestPaths: Dockerfile; package.json; ci/codefresh-build.yml; ci/cf-pull-request.yaml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/prod/ingress.yml; cd/stage/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed. The service stores or uses credentials for external APIs; owner to confirm where.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KQQ5JT04-27EP
+    purpose: Stores the service's data.
+    interface: PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (writer and reader endpoints)

@@ -1,0 +1,89 @@
+schemaVersion: '1.0'
+workspace:
+  name: sofaking-drafting-table
+  displayName: Sofa King DRAFT Workspace
+  companyName: Sofa King
+repository:
+  provider: github
+  owner: BeerCanLabs
+  name: sofaking-drafting-table
+  defaultBranch: main
+framework:
+  source: https://github.com/getdraft/draftsman.git
+  vendoredPath: .draft/framework
+  updatePolicy: explicit
+  updateWorkflow: enabled
+paths:
+  catalog: catalog
+  configurations: configurations
+  catalogFolders:
+    - engineering
+    - shared-services
+    - governance
+requirements:
+  activeRequirementGroups:
+  - 01KQQ5JT20-M5R2
+  requireActiveRequirementGroupDisposition: false
+businessTaxonomy:
+  requireSoftwareDeploymentPatternPillar: true
+  businessUnits:
+    - id: business-pillar.people-solutions
+      name: People Solutions
+    - id: business-pillar.customer-solutions
+      name: Customer Solutions
+    - id: business-pillar.business-solutions
+      name: Business Solutions
+    - id: business-pillar.data-analytics
+      name: D&A
+    - id: business-pillar.platform
+      name: Sofa King Platform
+    - id: business-pillar.enterprise-enablement
+      name: Enterprise & Enablement
+  pillars:
+  - id: business-pillar.people-solutions
+    name: People Solutions
+    description: Workforce, leave, time, recruiting, hiring, associate development, and staff lifecycle products.
+    owner:
+      team: product-people-solutions
+      contact: product-people-solutions@sofaking.example
+  - id: business-pillar.customer-solutions
+    name: Customer Solutions
+    description: Customer information, special orders, health, analytics, and customer-services products.
+    owner:
+      team: product-customer-solutions
+      contact: product-customer-solutions@sofaking.example
+  - id: business-pillar.business-solutions
+    name: Business Solutions
+    description: ERP, finance, asset, inventory, help desk, and shared business operations platforms.
+    owner:
+      team: product-business-solutions
+      contact: product-business-solutions@sofaking.example
+  - id: business-pillar.data-analytics
+    name: D&A
+    description: Data and analytics products and platforms. No Software Deployment Patterns are currently assigned to this LOB.
+    owner:
+      team: product-data-analytics
+      contact: product-data-analytics@sofaking.example
+  - id: business-pillar.platform
+    name: Sofa King Platform
+    description: Shared platform services including identity, sidecar, and foundational infrastructure products.
+    owner:
+      team: product-platform
+      contact: product-platform@sofaking.example
+  - id: business-pillar.enterprise-enablement
+    name: Enterprise & Enablement
+    description: Internal platforms, AI factories, cloud operations infrastructure, and corporate enablement systems supporting Sofa King's engineering and go-to-market workflows.
+    owner:
+      team: architecture-review-board
+      contact: architecture-review-board@sofaking.example
+
+
+browser:
+  defaultMapView: north-america
+
+vocabulary:
+  deploymentTargets:
+    source: configurations/vocabulary/deployment-targets.yaml
+  teams:
+    mode: advisory
+    source: configurations/vocabulary/teams.yaml

@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KSM38KER-15T6
+type: product_component
+ownerRole: engineer
+name: Rota Ivr
+description: IVR Components including Phone Handler, VOIP Phone Handler, Menu Handler, etc
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- rota
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Rota-IVR
+language: Pascal
+classification: api-service
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Rota-IVR
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: AculabDLL/AculabDLL.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Pascal runtime — confirm with component owner.
+
+    '

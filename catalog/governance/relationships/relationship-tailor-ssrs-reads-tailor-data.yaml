@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 50Z1827RGF-XVW0
+name: Tailor SSRS Reporting -> Tailor SQL Server Data
+catalogStatus: incomplete
+source: SEQEZT5ZPD-2NKB
+label: reads from
+target: 73F2M1GSPK-PNGJ
+technology: SQL Server/TDS
+direction: synchronous
+flow: outbound
+notes:
+  background: The Tailor SSRS roles prepare SQL Server Reporting Services hosts. Reporting is modeled as reading from the Tailor SQL Server data tier; report catalog details require owner confirmation.
+capabilities: []

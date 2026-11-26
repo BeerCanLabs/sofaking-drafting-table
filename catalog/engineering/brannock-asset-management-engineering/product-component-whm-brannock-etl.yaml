@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-VK1S
+type: product_component
+ownerRole: engineer
+name: Whm Brannock Etl
+description: Brannock.ETL.Hangfire - a centralized ETL/MDM-sync service for Asset Management, self-hosting Hangfire background job processing (ASP.NET/OWIN Web API + MVC). Integrates GSuite/Google Workspace and JAMF MDM device data across many regions. AM's app tier (01KSM38KFB-QFJ1) calls it over HTTP as an external integration endpoint - it is not a compiled code dependency of AM_App.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+  - whm
+  - product-component
+  - asset-management
+  - etl
+  - hangfire
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_Brannock_ETL
+language: CSS
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_Brannock_ETL
+  observedRuntimeSignals: dotnet, github_actions, node, readme
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; Brannock.ETL.GSuite/Brannock.ETL.GSuite.csproj; Brannock.ETL.Hangfire/Content/kendo/2021.1.224-source/package.json; Brannock.ETL.Hangfire/ETLSpecs/QA/TrackwebHostedPinecrestregion-GSuite-MDMToS3.json; Brannock.ETL.Hangfire/ETLSpecs/QA/TrackwebHostedPinecrestregion-GSuite.json; Brannock.ETL.Hangfire/ETLSpecs/QA/TrackwebHostedPinecrestregion-Gsuite-BatchScheduler.json; Brannock.ETL.Hangfire/ETLSpecs/QA/TrackwebHostedPinecrestregion-MDMDisbale.json; Brannock.ETL.Hangfire/ETLSpecs/QA/TrackwebHostedPinecrestregion-MDMEnable.json; Brannock.ETL.Hangfire/ETLSpecs/QA/all.json; Brannock.ETL.Hangfire/ETLSpecs/Staging/TrackwebHostedPinecrestregion-GSuite-MDMToS3.json
+  serviceAuthentication: 'No end-user authentication for the ETL/Hangfire dashboard tier - access is restricted purely by caller IP allow-list (LocalIPAuthFilter.cs, IDashboardAuthorizationFilter), a network-trust boundary rather than credentials. Its own outbound integrations (GSuite) use OAuth2/service-account auth (Google.Apis.Auth).'
+  secretsManagement: 'Plaintext credentials embedded directly in config/JSON files; no vault/secrets-manager integration found. appsettings.json and Web.config carry plaintext SQL Server connection strings (including embedded passwords) for many customer/region databases.'
+  serviceLogging: 'NLog with an AWS CloudWatch Logs target (log group MDM_ETL, us-east-1) plus a dual file-target fallback group, minlevel Info. An Application Insights NLog-target package is referenced but not confirmed wired up in the examined config.'
+  healthWelfareMonitoring: 'The Hangfire dashboard itself is the operational monitoring surface for ETL job execution/state (succeeded/failed/retried jobs), gated by the IP filter above. A custom ErrorReportingJobFilter hooks failed-job states for error capture.'
+  availabilityModel: 'A single centralized IIS web application (not installed per-region) that self-hosts Hangfire background job processing in-process, pulling/pushing data across many regions'' data stores. WorkerCount=1 is deliberately enforced per instance because shared library code uses singleton DB contexts - only one ETL job may run concurrently per running instance (explicit architectural constraint, ETLServiceConfigurator.cs). Hangfire''s job queue/state store is SQL-Server-backed (UseSqlServerStorage), not in-memory.'
+  scalabilityModel: 'Vertical/serial by design at the job level (WorkerCount=1 per instance); the code comments confirm more than one server instance can run to scale out, even though a single instance cannot parallelize jobs internally. No autoscale/load-balancer configuration found in-repo.'
+  recoverabilityModel: 'Relies on Hangfire''s built-in SQL-Server-backed job retry/durability (default 10 retries per failed job, per ErrorReportingJobFilter.cs comments). No other backup/DR automation found in-repo.'
+  failureDomain: 'Central, shared ETL service touching many customer/region databases (connection strings list 10+ distinct region catalogs in one config file) - a failure or bug here has a blast radius across multiple regions'' asset/MDM data sync, unlike AM''s per-region IDCore installer.'
+  externalDependencies: 'Google Workspace/GSuite Admin SDK (Chromebook/mobile device sync); JAMF MDM (Apple device management); AWS S3 (batch import/export of device inventory data); SFTP (SSH.NET); AWS CloudWatch Logs; SQL Server (Hangfire job store + per-region Trackweb databases + a shared reports DB used to dynamically look up per-region connection strings at runtime). Called over HTTP from 01KSM38KFB-QFJ1 (AM_App) via a configurable ETL-server base URL, not as a compiled dependency.'
+  runtimeRequirement: 'ASP.NET/OWIN Web API + MVC application self-hosting Hangfire background job processing; requires an application runtime (IIS), not merely static assets.
+
+    '
+  primaryDataStores: 'SQL Server: a dedicated Hangfire/job-queue database (Trackweb_MDM_ETL_staging / Trackweb_MDM_ETL), a shared reports database used to resolve per-region connection strings dynamically at runtime (_TrackwebReports), and many per-region target databases.'
+decisionRecords:
+  - ref: 01KT16XHK4-94ZA
+    key: runtimeRequirement

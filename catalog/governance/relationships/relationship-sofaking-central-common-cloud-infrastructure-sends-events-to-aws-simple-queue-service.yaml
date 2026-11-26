@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHA-45YY
+type: relationship
+name: 'Sofa King Central Common Cloud Infrastructure → AWS Simple Queue Service'
+catalogStatus: stub
+source: 01KYQ4D9S6-88NN
+target: 01KQQ5JT05-0C4P
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: 'DynamoDB Streams fan-out: the DynamoDbStreamHandler Lambda forwards stream records to SQS.'

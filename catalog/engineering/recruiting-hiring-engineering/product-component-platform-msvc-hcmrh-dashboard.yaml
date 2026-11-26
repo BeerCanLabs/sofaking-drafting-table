@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-NN6D
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Dashboard
+description: Central Repository to gather HCMRH Dashboard data
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-dashboard
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-hcmrh-dashboard
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: .vscode/launch.json; .vscode/tasks.json; Dockerfile; Hcmrh.Msvc.Dashboard.sln; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/es.yml; cd/dev/hpa.yml; cd/dev/ingress.yml; cd/dev/service.yml; cd/prod/cm.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  externalDependencies:
+    serviceDependencies:
+      - name: PermissionService
+        service: msvc-hcmrh-permissions
+        purpose: Authorization and access control validation
+      - name: JobPostingService
+        service: msvc-hcmrh-job-postings
+        purpose: Job posting data aggregation
+      - name: ApplicationService
+        service: msvc-hcmrh-applications
+        purpose: Application data aggregation
+      - name: TokenService
+        service: SK Identity Gateway
+        purpose: OAuth 2.0 service-to-service authentication
+    purpose: Aggregates data across HCMRH services for analytics dashboards
+    internalPackages:
+      - Hcmrh.Logging 1.0.22

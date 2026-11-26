@@ -1,0 +1,55 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF8-W03W
+type: software_deployment_pattern
+ownerRole: engineer
+name: Display Materials Management Rebuild
+aliases:
+  - IMM Rebuild (IMR)
+description: 'Retired: this pattern was an empty, Pendo-discovered stub for the rebuilt Display Materials Management platform (IMR) that was never filled in. IMR is already fully and more accurately described by 01KSM38KFD-1G0D ("Display Materials Management - Pattern"), which carries real deployment detail (EKS cluster, Aurora Postgres, VPC/subnets, ALB). This pattern is redundant and retired rather than developed further. See DecisionRecord 01KYRT1P14-Y2RH for disposition rationale.'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.brannock-asset-management-engineering
+  productFamily: Display Materials
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- software-deployment-pattern
+- imm
+- imr
+- display-materials
+- rebuild
+- retired
+architectureNotes:
+  retirementRationale: 'Retired as part of TRH-9828 (Asset Management DRAFT correction). This pattern never progressed past an empty owner-interview-pending stub, and its subject matter (IMR) is already correctly and completely modeled in 01KSM38KFD-1G0D. Superseded by that pattern; no content was migrated because there was none to migrate.'
+  noCrossBoundaryConnections: Retired pattern; no cross-boundary connections apply.
+  noApplicablePattern: Retired pattern; Reference Architecture conformance is not applicable.
+  deploymentTargets: Retired pattern; no deployment targets apply. See 01KSM38KFD-1G0D for the active IMR deployment targets.
+  availabilityRequirement: Retired pattern; no availability requirement applies.
+  noAdditionalInteractions: Retired pattern; no external interactions apply.
+  dataClassification: Retired pattern; no data classification applies.
+  failureDomain: Retired pattern; no failure domain applies.
+  noPatternDeviations: Retired pattern; no pattern deviations apply.
+decisionRecords:
+  - ref: 01KYRT1P14-Y2RH
+    key: retirementRationale
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups: []

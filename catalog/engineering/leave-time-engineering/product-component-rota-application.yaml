@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KER-11K4
+type: product_component
+ownerRole: engineer
+name: Rota Application
+description: All applications that comprise Rota
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- rota
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Rota
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Rota
+  observedRuntimeSignals: docker, dotnet, node, readme, teamcity
+  observedManifestPaths: BuildTools/Grunt/package.json; BuildTools/src/ResourceFileProcessor/ResourceFileProcessor.sln; BuildTools/src/ResourceFileProcessor/ResourceFileProcessor/ResourceFileProcessor.csproj; BuildTools/src/ResourceSyncronizer/ResourceSynchronizerConsole/ResourceSynchronizerConsole.csproj; BuildTools/src/ResourceSyncronizer/ResourceSyncronizer.sln; BuildTools/src/ResourceSyncronizer/ResourceSyncronizer/ResourceSynchronizer.csproj; BuildTools/src/ResourceTranslator/ResourceTranslator.sln; BuildTools/src/ResourceTranslator/ResourceTranslator/ResourceTranslator.csproj; SK.Rotaops/API Gateway/API Definition JSON/Phase 1 - Simple Pass Through/rota-api.json; SK.Rotaops/API Gateway/API Definition JSON/Phase 1 - Simple Pass Through/bot-api.json; SK.Rotaops/API Gateway/API Definition JSON/Phase 1 - Simple Pass Through/customersvcs-api.json; SK.Rotaops/API Gateway/API Definition JSON/Phase 1 - Simple Pass Through/import-api.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

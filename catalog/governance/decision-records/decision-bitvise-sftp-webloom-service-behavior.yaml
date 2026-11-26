@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KZW3SFTP-BTVZ
+type: decision_record
+name: Bitvise SFTP Service - Webloom Service Behavior Evidence
+description: >-
+  Minimum service-behavior evidence recorded so DRAFT validation can trace the
+  Bitvise SFTP Service - Webloom (01KWF3QRMF-N3RQ) Service Behavior requirements
+  to a committed DecisionRecord. Owner/SME follow-up is needed to replace
+  unconfirmed recoverability details.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+  - sftp
+  - webloom
+category: decision
+status: accepted
+affectedComponent: 01KWF3QRMF-N3RQ
+linkedObject: 01KWF3QRMF-N3RQ
+decisionRationale: >-
+  availability: Single install on a single Windows Server 2012 R2 host; no HA
+  pair and no standby instance.
+
+
+  scalability: Scales with the underlying single Windows Server 2012 R2 host
+  and Bitvise configuration; customer/file-volume limits require confirmation.
+
+
+  recoverability: Recovery path requires confirmation from Webloom/SOM
+  operations, including Windows host rebuild, Bitvise configuration backup, and
+  BestSync job configuration backup.
+
+
+  failure-domain: Impact is scoped to Webloom legacy SOM customer SFTP/bulk
+  import intake and local file movement unless the Webloom central file server,
+  shared storage, or shared databases are also affected.

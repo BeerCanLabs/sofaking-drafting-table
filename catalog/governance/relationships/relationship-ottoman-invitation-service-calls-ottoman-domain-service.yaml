@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: Q6KZ5C5FY2-H5RZ
+name: Ottoman Invitation Service → Ottoman Domain Service
+catalogStatus: stub
+source: 01KSM38KFX-ETDW
+label: calls
+target: 01KSM38KFW-WA83
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via SVC_DOMAIN_BASE env var and PlatformService client code (src/common/services/platform/platform.service.ts) calling assignUser, unAssignUser, getApplication, getDomainApplications, getPersonProfileById, and related endpoints, with v1/v2 API selection gated by a ConfigCat flag."
+capabilities: []

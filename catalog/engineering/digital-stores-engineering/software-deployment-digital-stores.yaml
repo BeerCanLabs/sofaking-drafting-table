@@ -1,0 +1,489 @@
+schemaVersion: '1.0'
+uid: 01KRZ1GCH3-99RF
+type: software_deployment_pattern
+ownerRole: engineer
+name: Digital Stores
+description: >-
+  Software Deployment Pattern for Digital Stores Suite+ (DSHP): an Angular single-page application
+  and an ASP.NET Web API 2 backend, both served from IIS on one origin per region, over SQL Server
+  with a separate database per region resolved through a central DS_Admin catalog. Composition
+  authored on 2026-08-20 from a direct read of BeerCanLabs/sk-main-ang and
+  BeerCanLabs/sk-server-ang. Infrastructure placement, availability posture, data classification,
+  backup posture, engine patch scope and external dependencies were closed on 2026-09-08 from the
+  Digital Stores DRAFT L1 Baseline Questionnaire and the Confluence evidence it cites. Remaining gaps
+  are tracked in DraftingSession 01M0GBWMZJ-8XYB.
+version: 1.6.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Digital Stores
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- digital-stores
+- source-derived
+- owner-confirmed
+followsReferenceArchitecture: 01KQQ5JT1D-NMRQ
+scalingUnits:
+- name: Shared IIS web tier
+  type: replicable
+  instanceCount: 1
+  notes: >-
+    One shared IIS origin per region subdomain, not one per region. Production runs an AWS Auto
+    Scaling group behind PRLB-155628125.us-west-1.elb.amazonaws.com with PRAngWeb1 as the documented
+    member; sandbox runs SBWeb behind SBLB-3852661381.us-west-1.elb.amazonaws.com. QA (QAWeb) and
+    alpha (ALWeb4) are single web instances with no load balancer recorded. Instance counts beyond
+    the documented members are not recorded, and no autoscaling policy bounds are documented.
+- name: Region SQL Server databases
+  type: replicable
+  instanceCount: 1
+  notes: >-
+    One database per store region inside a single per-tier SQL Server instance. The unit that
+    replicates is the database, not the instance: adding a region adds a database and a DS_Admin
+    row, not a host. instanceCount records the single per-tier SQL Server instance, which is the
+    confirmed scaling ceiling (vertical-only, by EC2 instance type); it does not count regions.
+    Per-region database counts are not recorded in DRAFT.
+- name: DS_Admin routing catalog
+  type: shared
+  instanceCount: 1
+  notes: >-
+    Single central catalog mapping RegionId to DatabaseName, resolved on every request. Shared by
+    every region in every tier, with no replica and no failover partner.
+availabilityRequirement: >-
+  No formal availability target, RTO or RPO is recorded for Digital Stores. The owner's 2026-09-08
+  questionnaire answer to both the product SLA question and the SQL Server RPO/RTO question was
+  "100%", which is not an expressible availability target and is contradicted by the deployed
+  posture, so it is not adopted here as the requirement. Confirmed current-state posture, from the
+  Digital Stores Environment Guide and the AWS Backup Service page: the production and sandbox web
+  tiers are load-balanced (production behind PRLB-155628125.us-west-1.elb.amazonaws.com with an Auto
+  Scaling group, sandbox behind SBLB-3852661381.us-west-1.elb.amazonaws.com), while QA and alpha run
+  a single web host each. Every tier's SQL Server runs on one EC2 instance - PRAngDB1 (m5.4xlarge)
+  for production, SUDB (m5.xlarge) for sandbox, QADB (c5.large) for QA, ALDB (c5.large) for alpha -
+  with no AlwaysOn availability group, no failover partner and no RDS instance in any region of AWS
+  account 472468972873. Recovery is restore-from-backup only, through AWS Backup: EBS snapshots
+  daily Monday through Thursday and AMIs weekly on Friday at 23:00 CST, retained 30 days and copied
+  to us-west-1 and us-east-1. That implies a worst-case RPO of roughly 24 hours and an RTO bounded
+  by snapshot or AMI restore time; neither has a tested figure. Non-production tiers are additionally
+  scheduled off outside business hours through AWS Instance Scheduler, so they are not continuously
+  available by design (corrected 2026-10-20; see notes.scheduledJobs). Setting a formal target and
+  testing recovery is tracked in DecisionRecord 01M25X9W0R-GKSK.
+dataClassification: >-
+  Confidential. Confirmed by the product owner on 2026-09-08: Digital Stores stores personally
+  identifiable information, and source evidence shows region staff, payroll and site records are
+  handled. Under Sofa King's Data Classification and Protection Policy both Customer Data (PII and
+  customer information) and Employee Data (HR files, payroll and benefits) are classified Confidential
+  and regulated. That policy's Data Protection in AWS section requires sensitive data to be encrypted
+  in transit and at rest and the highest level of audit logging to be enabled. Encryption at rest is
+  not enabled on the SQL Server instances - see DecisionRecord 01M25X9W0R-4HSX. The policy's
+  lower-environment clause requires customer data in non-production environments to be obfuscated
+  and de-identified, and the QA, sandbox and alpha databases are refreshed from production data -
+  see DecisionRecord 01M25X9W0R-KWXR.
+failureDomain:
+  scope: platform-wide
+  description: >-
+    Platform-wide. Confirmed by the owner on 2026-09-08: DS_Admin is a single point of failure whose
+    loss removes access for all regions, because every request resolves its region to a database
+    through it. The blast radius is not limited to DS_Admin. Each tier's region databases live on a
+    single SQL Server EC2 instance with no availability group, so the loss of one database host takes
+    every region in that tier offline, and the loss of PRAngDB1 takes production offline entirely.
+    The production and sandbox web tiers are the only components with any redundancy. Recovery from
+    any of these failures is a snapshot or AMI restore with no tested time bound.
+patternDeviations: >-
+  Five deviations from Sharded Multi-Tenant AWS SQL Server (01KQQ5JT1D-NMRQ) are known. First, the
+  application tier is shared across all regions rather than replicated per shard. Second, DS_Admin
+  is a cross-shard data dependency with a platform-wide blast radius, which the pattern's
+  applicable-definition checklist does not permit without an explicit decision record. Third, the
+  data tier is a single SQL Server instance per environment tier with no availability group, where
+  the pattern expects a shard-scoped highly available data tier. Fourth, deployment is manual:
+  MSBuild plus a PowerShell script pushes build output to a separate dshpDeploy repository, one
+  branch per tier (angular, QAAng, Sandbox, PRAng), and a developer triggers the QA to Sandbox to
+  Production branch promotion by hand with no automated validation or approval gate - confirmed by
+  the owner on 2026-08-27 and again on 2026-09-08 - where the pattern expects shard and
+  shared-service release processes to be separately documented. Fifth, no infrastructure-as-code
+  covers the application or data tiers. The owner confirmed on 2026-09-08 that this shape - one
+  shared application tier, one database per region, resolved at request time through DS_Admin - is
+  the intended long-term architecture rather than a transitional state, which converts the deviation
+  from temporary drift into a standing architectural position requiring Architecture Review Board
+  disposition. See DecisionRecord 01M25X9W0R-0Q0X.
+deploymentTargets: >-
+  All four environment tiers run in a single AWS account, 472468972873 (account name Digital
+  Stores), in us-west-1. Confirmed by the owner on 2026-09-08 and corroborated by an AWS API
+  resource discovery of that account dated 2026-01-28: 36 EC2 instances, 8 subnets and 2 load
+  balancers in us-west-1, 2 EC2 instances in us-east-1 that the Environment Guide associates with the
+  DR domain controller DCE10, zero RDS instances in every region, and a single empty VPC in each of
+  ten other regions. Tier separation is by host inside one account, region and VPC rather than by
+  account or region: production PRAngWeb1 and PRAngDB1, sandbox SBWeb and SUDB, QA QAWeb and QADB,
+  alpha ALWeb4 and ALDB, with shared infrastructure (DCW06, DCW08, DCE10, JumpW02, NAT, OpenVPN,
+  Confluence, Jaspersoft, SFTP) alongside them. VPC identifiers were left blank in the questionnaire
+  and remain unconfirmed; per-tier VPC and subnet identifiers belong in the environment_tier
+  parameterSurface rather than on this pattern. No infrastructure-as-code covers the application or
+  data tiers. The owner answered "No" to the infrastructure-as-code question on 2026-09-08, which is
+  correct for those tiers but not for the estate: BeerCanLabs/sk-digital-stores-aws-backup holds
+  Terraform that provisions AWS Backup, with S3 and DynamoDB state backends named
+  digital-stores-aws-backup-terraform-backend in us-west-1.
+notes:
+  tenancyModel: >-
+    Confirmed by direct repository read: database per store region, with per-region subdomains
+    under *.digital-showrooms.example and a central DS_Admin catalog mapping RegionId to DatabaseName.
+    Four environment tiers are evidenced by the CORS allow-list in App_Start/WebApiConfig.cs -
+    production, sandbox, QA and alpha - and corroborated by the Environment Guide's four host groups.
+  dataTierEngine: >-
+    SQL Server 2017. Build scope confirmed by the owner on 2026-09-08 and corroborated host by host
+    against the Environment Guide: production PRAngDB1 and sandbox SUDB are at 14.0.3495.9 (CU31 +
+    GDR, KB5058714, released 2025-07-08); QA QADB and alpha ALDB are at 14.0.3485.1, one GDR band
+    behind. The owner reported production as "14.3.3495.9", which is not a released SQL Server build
+    number and is read here as a transcription of 14.0.3495.9. Extended support ends 2027-10-12 and
+    seven security GDRs above 14.0.3495.9 remain unapplied - see DecisionRecord 01M0GDHSAM-F64B.
+  hostSubstrate: >-
+    Windows on EC2 throughout, not RDS and not on-premises, in us-west-1. Database hosts: PRAngDB1
+    m5.4xlarge (production), SUDB m5.xlarge (sandbox), QADB c5.large (QA), ALDB c5.large (alpha). Web
+    hosts: PRAngWeb1 c5.large, SBWeb c5.xlarge, QAWeb t3.small, ALWeb4 t3.small. The substrate is not
+    uniform across tiers, and non-production database and web hosts are stopped outside scheduled
+    hours through AWS Instance Scheduler (corrected 2026-10-20; see notes.scheduledJobs). The
+    individual EC2 hosts are not yet registered as DRAFT host objects; that is an Apex-maturity
+    concern, not an L1 one.
+  serviceAuthentication: >-
+    Application to database authentication is SQL authentication, per the owner on 2026-09-08. This
+    conflicts with source evidence and is recorded as an unresolved conflict rather than settled -
+    see sourceConflicts.
+  encryptionPosture: >-
+    Transparent Data Encryption is not enabled on any Digital Stores SQL Server instance, confirmed
+    by the owner on 2026-09-08. Whether EBS volume encryption provides full-disk encryption at rest
+    instead was not asked and is not evidenced. In-flight encryption was added to the security list
+    payload following a 2021 security review. See DecisionRecord 01M25X9W0R-4HSX.
+  backupAndRecovery: >-
+    Backup is infrastructure-level, not database-native. AWS Backup, provisioned by Terraform in
+    BeerCanLabs/sk-digital-stores-aws-backup, takes EBS snapshots of volumes tagged
+    AWS-Backup:daily Monday through Thursday at 23:00 CST and AMIs of instances tagged
+    AWS-Backup:weekly on Friday at 23:00 CST, retains both for 30 days, and copies them to us-west-1
+    and us-east-1. Failed backup jobs notify the SRE Team B Slack channel by SNS. No SQL Server
+    native full, differential or log backup schedule is recorded, so no point-in-time recovery within
+    the snapshot interval is evidenced. The AWS Backup Service page describing this is dated
+    2023-02-28 and is written prospectively ("we are planning to implement"), so the implemented state
+    should be confirmed against the live account before this posture is treated as validated. Restore
+    has no tested RTO. See DecisionRecord 01M25X9W0R-GKSK.
+  observability: >-
+    Confirmed by the Environment Guide, last modified 2026-09-01: production hosts are monitored by
+    AWS CloudWatch in account 472468972873 and by Nagios XI at http://issuse1nagios1/nagiosxi/, with
+    Observium also present in the estate. There is no Dynatrace OneAgent and no APM at the runtime or
+    product-service level, which is consistent with the direct repository read finding that neither
+    repository contains a health endpoint, an APM agent or any central log aggregation. Application
+    logging remains the three uncoordinated in-application mechanisms recorded on ProductComponent
+    01M0GBWMZJ-E0NF. Hearthstone HCF.06.1.1 and HCF.06.1.2 dispositions are therefore still open.
+  deploymentMechanism: >-
+    Confirmed by the owner on 2026-08-27 and 2026-09-08. dshpDeploy drives all four tiers by branch
+    (angular, QAAng, Sandbox, PRAng). Production is built manually and pushed to QA, then promoted QA
+    to Sandbox to Production by branch rather than rebuilt per tier. A developer triggers each
+    promotion manually; the same build is exercised in QA, then sandbox, then production, and there
+    is no automated validation or approval gate before a promotion goes live. Cloud Engineering can
+    obtain read access to dshpDeploy through Beanstalk, so the mechanism can now be confirmed by
+    direct read rather than owner statement; that read has not yet been done.
+  scheduledJobs: >-
+    Confirmed by the Digital Stores Scheduled Tasks page, last modified 2026-09-08. Ten Jaspersoft
+    data extracts run nightly between 17:25 and 18:35 PST for Alderton, Cedarton, Birchton, Dogton and San
+    Elmwood, delivered through ftp.digital-showrooms.example. SQL database refreshes reload the alpha, QA
+    and sandbox databases from production data on the first and third Monday of each month. Automox
+    handles OS patching across production and lower environments. DCW06 runs nightly email-log
+    shipping to S3 and bad-mail cleanup, and a WSUS ParentServerID reset daily. The Matillion
+    ETL-to-Redshift job set and the older AWS Data Pipeline start/stop jobs are struck through on that
+    page as retired, superseded by AWS Instance Scheduler; the Matillion and Jaspersoft instances are
+    recorded as stopped in the AWS Backup server list. See DecisionRecord 01M25X9W0R-56TA. Correction,
+    2026-10-20: every reference on this pattern to non-production host scheduling via Park My Cloud was
+    wrong and is changed to AWS Instance Scheduler, per the Scheduled Tasks page re-read 2026-10-20 at
+    its current last-modified date of 2026-10-15, whose Datapipelines row now shows "Park My Cloud
+    (PMC)" struck through and replaced with "AWS Instance Scheduler", linking a SharePoint document for
+    detail. The Environment Guide page (last modified 2026-09-01) still names Park My Cloud in one host
+    note and was not changed by this correction; that page is outside DRAFT's control and may itself be
+    stale. AWS Instance Scheduler's own configuration - schedules, tags, regions, accounts - is not
+    evidenced in either cited page and is not asserted here. Needs Validation: owner to confirm the AWS
+    Instance Scheduler configuration detail and the Environment Guide discrepancy. See DraftingSession
+    01M0GBWMZJ-8XYB.
+  externalDependencies: >-
+    Confirmed as of 2026-09-08. Pendo product analytics (us1.app.pendo.io), allow-listed in the CORS
+    policy and keyed in dshpConfig.service.ts. Imperva WAF, vendor-managed SaaS, fronting
+    *.digital-showrooms.example. A self-hosted Confluence instance, Conf6152.dsh-aws.local, serving the
+    client Help Book (also called the Blue Book) - this is a Digital Stores-operated EC2 host, not
+    the Atlassian Cloud tenant. Jaspersoft (JasperReports) as a separately paid custom-report and
+    data-extract service. An SFTP host, ftp.digital-showrooms.example, as the extract delivery channel.
+    Active Directory domain controllers DCW06, DCW08, DCE10 and Saline2. The owner confirmed on
+    2026-09-08 that the Web UI never reaches SQL Server directly. See DecisionRecord 01M25X9W0R-56TA.
+  sourceConflicts: >-
+    Five conflicts between the 2026-09-08 owner answers and other evidence are recorded unresolved
+    rather than silently reconciled. One, database authentication: the owner reports SQL
+    authentication, but the checked-in entityapi/Framework/Web.config declares its DSAdmin and
+    DSGeneric connection strings with Integrated Security=SSPI, which is Windows authentication, and
+    the runtime Web.config is gitignored so the deployed value is not evidenced either way. Two,
+    infrastructure-as-code: the owner answered "No", but BeerCanLabs/sk-digital-stores-aws-backup
+    contains Terraform for AWS Backup. Three, the edge: the 2026-08-27 owner statement named an AWS
+    Application Load Balancer, while the Environment Guide names
+    PRLB-155628125.us-west-1.elb.amazonaws.com and SBLB-3852661381.us-west-1.elb.amazonaws.com, whose
+    naming is classic-ELB shaped; which load balancer type is deployed, and where TLS terminates, is
+    unconfirmed. Four, web-tier redundancy: the owner answered that the shared application tier is
+    deployed as multiple load-balanced instances, which the Environment Guide supports for production
+    and sandbox but not for QA or alpha. Five, the reported production engine build 14.3.3495.9 does
+    not exist as a released SQL Server build.
+  evidenceFreshness: >-
+    The Environment Guide (2026-09-01), the Scheduled Tasks page (2026-09-08) and the questionnaire
+    itself (2026-09-08) are current. The AWS account resource discovery is dated 2026-01-28. The AWS
+    Backup Service page is dated 2023-02-28 and is the weakest evidence in this set: it is three and a
+    half years old, prospectively worded, and is the sole basis for the backup and retention posture
+    asserted above. It should be revalidated against the live account before the backup posture is
+    marked validated.
+  l1Readiness: >-
+    Against the ARCHITECTURE_MATURITY Baseline rubric this pattern now qualifies: it is a valid
+    software_deployment_pattern in the owning team's catalog path, its unconfirmed elements are
+    declared in DraftingSession 01M0GBWMZJ-8XYB and in decision records rather than left blank, and
+    seven of the nine mandatory pattern requirements carry a satisfied disposition. catalogStatus
+    remains incomplete rather than complete because two mandatory requirements cannot honestly be
+    dispositioned as satisfied. The availability requirement has no recorded target, RTO or RPO
+    (01M25X9W0R-GKSK). Inter-service connections are enumerated narratively in 01M25X9W0R-56TA and
+    dispositioned separately on 01M263WKS2-NR3T, but only three relationship objects exist - Web UI
+    to EntityAPI, Imperva to load balancer, and load balancer to Web UI - so the EntityAPI to SQL
+    Server, EntityAPI to DS_Admin and Jaspersoft to SQL Server crossings are not yet registered as
+    relationship objects. The remaining structural L1 gate is registering the confirmed external and
+    scheduled dependencies as DRAFT objects rather than narrative: the Confluence Help Book host,
+    Jaspersoft, the SFTP host, and the Active Directory domain controllers. Final L1 confirmation is
+    Cloud Engineering's to make, not this pattern's to assert.
+  reuseDiscipline: >-
+    No new infrastructure objects were created for this update. Both ProductComponents continue to
+    reference the existing shared IIS Standard Web Service (01KQQ5JT1F-HZTZ). The Data Tier now
+    references a Digital Stores-specific SQL Server 2017 data store service (01M25X9W0R-VQJ3) rather
+    than the generic stub 01M0GDHSAM-586D, because the 2026-09-08 answers describe the Digital Stores
+    estate specifically and cannot be generalized to every SQL Server 2017 workload at Sofa King. The
+    generic stub remains in the catalog for Shared Services to complete on its own evidence, and the
+    new product-specific service reuses the existing Microsoft SQL Server 2017 TechnologyComponent
+    (01KQQ5JT1T-QKGB) rather than duplicating it.
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+- id: external
+  name: External
+  description: Edge services operated outside the Digital Stores application and data tiers.
+serviceGroups:
+- name: External Edge Security - Imperva
+  deploymentTarget: saas-imperva
+  notes: >-
+    Vendor-managed SaaS WAF outside AWS and the Digital Stores environment. Reported by the workspace
+    owner on 2026-08-27.
+  deployableObjects:
+  - ref: 01KQQ5JT1D-MY47
+    networkZone: external
+    diagramTier: presentation
+    notes: Imperva WAF fronts *.digital-showrooms.example before traffic enters AWS.
+- name: Edge Ingress
+  deploymentTarget: aws-us-west-1
+  notes: >-
+    AWS account 472468972873, us-west-1, confirmed by the owner on 2026-09-08. Two load balancers are
+    present in that region per the 2026-01-28 account discovery, matching
+    PRLB-155628125.us-west-1.elb.amazonaws.com and SBLB-3852661381.us-west-1.elb.amazonaws.com in the
+    Environment Guide. Whether these are Application or Classic load balancers, and where TLS
+    terminates, remains unconfirmed - see notes.sourceConflicts.
+  deployableObjects:
+  - ref: 01KQQ5JT04-P7QJ
+    networkZone: web
+    diagramTier: presentation
+    notes: Routes to the shared IIS origin per region. QA and alpha have no load balancer recorded.
+- name: Presentation Tier
+  deploymentTarget: aws-us-west-1
+  substrate: 01KQQ5JT1F-HZTZ
+  scalingUnit: Shared IIS web tier
+  deployableObjects:
+  - ref: 01M0GBWMZJ-9DNC
+    networkZone: web
+    diagramTier: presentation
+    notes: >-
+      Angular bundles served as static files by IIS from /dist/ on the same origin as the API, per
+      web.config and angular.json baseHref. Production PRAngWeb1 in an Auto Scaling group, sandbox
+      SBWeb, QA QAWeb, alpha ALWeb4.
+- name: Application Tier
+  deploymentTarget: aws-us-west-1
+  substrate: 01KQQ5JT1F-HZTZ
+  scalingUnit: Shared IIS web tier
+  deployableObjects:
+  - ref: 01M0GBWMZJ-E0NF
+    networkZone: app
+    diagramTier: application
+    notes: >-
+      ASP.NET Web API 2 on .NET Framework 4.6.1 under IIS, co-located with the SPA on the same origin
+      and the same hosts. Reuses the shared IIS Standard Web Service runtime rather than declaring a
+      new one.
+- name: Data Tier
+  deploymentTarget: aws-us-west-1
+  scalingUnit: Region SQL Server databases
+  notes: >-
+    SQL Server 2017 on Windows EC2, one instance per environment tier, each holding one database per
+    region plus the shared DS_Admin catalog. No AlwaysOn availability group and no RDS. Now
+    references the Digital Stores-specific data store service rather than the generic 2017 stub.
+  deployableObjects:
+  - ref: 01M25X9W0R-VQJ3
+    networkZone: data
+    diagramTier: data
+    notes: >-
+      PRAngDB1 (production, m5.4xlarge, 14.0.3495.9), SUDB (sandbox, m5.xlarge, 14.0.3495.9), QADB
+      (QA, c5.large, 14.0.3485.1), ALDB (alpha, c5.large, 14.0.3485.1). Accessed with raw SQL and no
+      ORM. TDE is not enabled; extended support ends 2027-10-12.
+tierVariants:
+- tier: WYMZEMZ80T-9Y2B
+  deploymentTarget:
+    provider: aws
+    region: us-west-1
+  serviceGroupVariants:
+  - serviceGroup: Presentation Tier
+    notes: >-
+      PRAngWeb1 sits in an AWS Auto Scaling group behind PRLB-155628125.us-west-1.elb.amazonaws.com.
+      The scaling policy bounds are not documented, so no autoscaling min or max is asserted.
+  - serviceGroup: Data Tier
+    replicaCount: 1
+    notes: PRAngDB1 on m5.4xlarge, single instance, no availability group.
+  notes: >-
+    Production. AWS account 472468972873, us-west-1. SQL Server 14.0.3495.9. Runs continuously and is
+    not subject to AWS Instance Scheduler scheduling (corrected 2026-10-20 from Park My Cloud). Server
+    access is restricted to the jump box jumpw02.dsh-aws.local.
+- tier: FQ696EE1DA-SWEN
+  deploymentTarget:
+    provider: aws
+    region: us-west-1
+  serviceGroupVariants:
+  - serviceGroup: Presentation Tier
+    replicaCount: 1
+    notes: >-
+      SBWeb on c5.xlarge behind SBLB-3852661381.us-west-1.elb.amazonaws.com. This host is also the
+      source of the production AMI.
+  - serviceGroup: Data Tier
+    replicaCount: 1
+    notes: SUDB on m5.xlarge, single instance, no availability group.
+  notes: >-
+    Staging, called Sandbox or SU by the product. AWS account 472468972873, us-west-1. SQL Server
+    14.0.3495.9. Hosts are scheduled 05:00-21:00 PST through AWS Instance Scheduler (corrected
+    2026-10-20 from Park My Cloud), and the database is refreshed from production data on the first
+    and third Monday of each month.
+- tier: AYQ5RCPK7C-MK58
+  deploymentTarget:
+    provider: aws
+    region: us-west-1
+  serviceGroupVariants:
+  - serviceGroup: Presentation Tier
+    replicaCount: 1
+    notes: QAWeb on t3.small. No load balancer is recorded for this tier.
+  - serviceGroup: Data Tier
+    replicaCount: 1
+    notes: QADB on c5.large at 14.0.3485.1, one GDR band behind production.
+  notes: >-
+    Test, called QA by the product. AWS account 472468972873, us-west-1. Hosts are scheduled through
+    AWS Instance Scheduler (corrected 2026-10-20 from Park My Cloud), and the database is refreshed
+    from production data on the first and third Monday of each month.
+- tier: SZJVW70BTN-V6GX
+  deploymentTarget:
+    provider: aws
+    region: us-west-1
+  serviceGroupVariants:
+  - serviceGroup: Presentation Tier
+    replicaCount: 1
+    notes: ALWeb4 on t3.small. No load balancer is recorded for this tier.
+  - serviceGroup: Data Tier
+    replicaCount: 1
+    notes: ALDB on c5.large at 14.0.3485.1, one GDR band behind production.
+  notes: >-
+    Development, called Alpha or AL by the product. AWS account 472468972873, us-west-1. Hosts are
+    scheduled through AWS Instance Scheduler (corrected 2026-10-20 from Park My Cloud), and the
+    database is refreshed from production data on the first and third Monday of each month. Digital
+    Stores has no fifth tier, so UAT (DEBGENPE77-DJ1A) has no variant.
+decisionRecords:
+- ref: 01M0GBWMZJ-AAX4
+- ref: 01M0GBWMZJ-TMGD
+- ref: 01M0GDHSAM-F64B
+- ref: 01M25X9W0R-4HSX
+  concern: encryption at rest
+- ref: 01M25X9W0R-GKSK
+  concern: availability target and tested recovery
+- ref: 01M25X9W0R-KWXR
+  concern: production data in lower environments
+- ref: 01M25X9W0R-0Q0X
+  concern: reference architecture deviation
+- ref: 01M25X9W0R-56TA
+  key: externalDependencies
+- ref: 01M263WKS2-NR3T
+  key: interServiceConnections
+requirementImplementations:
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: reference-architecture-conformance
+  status: satisfied
+  mechanism: field
+  key: followsReferenceArchitecture
+  equals: 01KQQ5JT1D-NMRQ
+  notes: >-
+    Filed against Sharded Multi-Tenant AWS SQL Server with five recorded deviations. The owner
+    confirmed on 2026-09-08 that the deviating shape is the intended long-term architecture, so the
+    deviation is a standing position awaiting Architecture Review Board disposition - see
+    DecisionRecord 01M25X9W0R-0Q0X.
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: service-groups
+  status: satisfied
+  mechanism: field
+  key: serviceGroups
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: deployment-targets
+  status: satisfied
+  mechanism: field
+  key: deploymentTargets
+  notes: >-
+    Account 472468972873 and region us-west-1 confirmed for all four tiers on 2026-09-08. VPC
+    identifiers remain unconfirmed and belong in the environment_tier parameterSurface.
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: availability-requirement
+  status: not-compliant
+  mechanism: decisionRecord
+  ref: 01M25X9W0R-GKSK
+  notes: >-
+    No availability target, RTO or RPO is recorded, and the deployed posture has a single-instance
+    data tier per tier with restore-from-backup recovery and no tested restore time. The owner's
+    "100%" answer is not an expressible target. Recorded as not-compliant rather than as missing
+    evidence, because the posture itself is now confirmed.
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: additional-interactions
+  status: satisfied
+  mechanism: decisionRecord
+  key: externalDependencies
+  ref: 01M25X9W0R-56TA
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: data-classification
+  status: satisfied
+  mechanism: field
+  key: dataClassification
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: failure-domain
+  status: satisfied
+  mechanism: field
+  key: failureDomain
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: pattern-deviations
+  status: satisfied
+  mechanism: field
+  key: patternDeviations
+- requirementGroup: 01KQQ4Q027-VK45
+  requirementId: inter-service-connections
+  status: not-compliant
+  mechanism: decisionRecord
+  key: interServiceConnections
+  ref: 01M263WKS2-NR3T
+  notes: >-
+    All confirmed crossings are enumerated in 01M25X9W0R-56TA, but only three relationship objects
+    exist. EntityAPI to SQL Server, EntityAPI to DS_Admin and Jaspersoft to SQL Server are not yet
+    registered as relationship objects. Tracked by the connection-elicitation next step in
+    DraftingSession 01M0GBWMZJ-8XYB.

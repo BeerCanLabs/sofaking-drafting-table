@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-WE6A
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server 2016
+description: Legacy SQL Server 2016 function kept for workloads not yet upgraded.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- sqlserver
+classification: software
+vendor: Microsoft
+productName: SQL Server
+productVersion: '2016'
+vendorLifecycle:
+  mainstreamSupportEnd: 2021-07-13
+  extendedSupportEnd: 2026-07-14
+  notes: Extended support ends in July 2026.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-tds-listener
+  name: Default TDS Listener
+  description: Default SQL Server Database Engine listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 1433
+    protocol: TDS
+    direction: inbound
+    description: Default SQL Server Database Engine client listener.

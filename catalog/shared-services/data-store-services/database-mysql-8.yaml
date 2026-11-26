@@ -1,0 +1,86 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-WKWF
+type: data_store_service
+ownerRole: technology-admin
+name: MySQL 8 DBMS Service
+description: Stub DBMS service for MySQL 8 workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - mysql
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-TQ84
+primaryTechnologyComponent: 01KQQ5JT1T-Y52T
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Database administrators and service identities authenticate through centralized identity and database account governance.
+  scalingApproach: scale-up primaries with clustered replicas for resilience
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: MySQL cluster health probe and replication status monitoring
+  healthWelfareMonitoring: Cluster health probes, replication telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: MySQL group replication deployment with multiple database nodes.
+  scalabilityModel: Vertical scale-up of primaries with clustered replicas for resilience and read capacity.
+  recoverabilityModel: Failed nodes are rebuilt and rejoined to the cluster while backups support point-in-time recovery.
+  failureDomain: Scoped to the MySQL cluster serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: MySQL native backup (mysqldump / XtraBackup) to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: MySQL Group Replication
+  encryption:
+    atRest: required
+  accessControl:
+    model: Active Directory integrated access with role-based database permissions
+deploymentConfigurations:
+  - id: clustered-availability
+    name: Clustered Availability
+    description: Multiple MySQL nodes in a group replication topology provide database availability and recovery tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: scale-up-with-replicas
+    name: Scale Up With Replicas
+    description: Capacity grows through larger primary nodes with clustered replicas for resilience and workload distribution.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT03-TQ84
+    role: host
+  - ref: 01KQQ5JT1T-Y52T
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ6N-KC0A
+    key: serviceAuthentication
+  - ref: 01KT16XJ6N-KC0A
+    key: secretsManagement
+  - ref: 01KT16XJ6N-KC0A
+    key: serviceLogging
+  - ref: 01KT16XJ6N-KC0A
+    key: failureDomain
+  - ref: 01KT16XJ6N-KC0A
+    key: backup.strategy
+  - ref: 01KT16XJ6N-KC0A
+    key: backup.platform
+  - ref: 01KT16XJ6N-KC0A
+    key: backup.rto
+  - ref: 01KT16XJ6N-KC0A
+    key: backup.rpo
+  - ref: 01KT16XJ6N-KC0A
+    key: ha.mechanism
+  - ref: 01KT16XJ6N-KC0A
+    key: encryption.atRest
+  - ref: 01KT16XJ6N-KC0A
+    key: accessControl.model

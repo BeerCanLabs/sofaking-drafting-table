@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFD-DNKM
+type: product_component
+ownerRole: engineer
+name: iOS SofaKingmobile
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-iOS-SofaKingMobile.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-mobile-engineering
+  contact: sofaking-mobile-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- ios
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-iOS-SofaKingMobile
+language: Swift
+classification: api-service
+runtimeRequirement: Swift
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-iOS-SofaKingMobile
+  observedRuntimeSignals: readme
+  observedManifestPaths: .swiftlint.yml; Assets.xcassets/LeaveIcon.imageset/Contents.json; Assets.xcassets/LeavestatusApprovedIcon.imageset/Contents.json; Assets.xcassets/LeavestatusApprovedIconDark.imageset/Contents.json; Assets.xcassets/LeavestatusDeniedIcon.imageset/Contents.json; Assets.xcassets/LeavestatusPendingIcon.imageset/Contents.json; Assets.xcassets/Accepted.imageset/Contents.json; Assets.xcassets/AcceptedDark.imageset/Contents.json; Assets.xcassets/ActiveSubscription.imageset/Contents.json; Assets.xcassets/AddCommentIcon.imageset/Contents.json; Assets.xcassets/AlertIcon.imageset/Contents.json; Assets.xcassets/Angle.imageset/Contents.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

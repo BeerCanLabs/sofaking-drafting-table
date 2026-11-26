@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KYJEG9DB-EJB9
+type: relationship
+name: Platform Compliance Database Migrator → Platform Compliance Database
+source: 01KYJEE22K-42CS
+target: 01KY5775KP-AXH7
+label: applies schema migrations to
+description: >-
+  Before each API rollout, the EKS dbmate Job connects to PostgreSQL and applies
+  the versioned migrations baked from the repository's db/migrations directory.
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KT0V5MCV-VD0Y
+tags:
+  - platform-compliance-engine
+  - database-migration
+  - dbmate
+  - postgresql
+notes:
+  sourceCommit: 5c391fbe3afc342f0d711e8c768684af9bd15b55
+  implementationStatus: >-
+    The checked-in manifest is a skeleton. The deployment image and pipeline
+    sequence must be implemented before this relationship represents a running
+    workload.

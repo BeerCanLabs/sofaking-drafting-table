@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YB-B4X9
+name: SQL Server 2022 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT01-950D
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Off-host backup target and retention management."

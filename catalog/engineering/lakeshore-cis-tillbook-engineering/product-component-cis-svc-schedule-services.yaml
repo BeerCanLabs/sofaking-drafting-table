@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-DT28
+type: product_component
+ownerRole: engineer
+name: CIS Svc Schedule Services
+description: Legacy integration with the ASC Timetables vendor for building store schedules. Not retired, but not actively developed.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- asc-timetables
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-asc-timetable
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Resolved on 2026-07-30 per product owner — this is a legacy integration with the third-party vendor ASC Timetables, mapped to BeerCanLabs/sk-cis-util-customerinformation-asc-timetable. Currently in maintenance mode; not actively developed. Relationship to customer/course scheduling in Salesbook or CustomerInformation not yet confirmed.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-asc-timetable
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

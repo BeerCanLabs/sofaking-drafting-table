@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-7VJE
+type: runtime_service
+ownerRole: technology-admin
+name: NGINX Standard Web Service
+description: Stub web service for NGINX-based application delivery workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - web
+  - nginx
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1V-632G
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: TLS certificates and administrative access use centralized identity and certificate services.
+  scalingApproach: horizontal autoscaling behind load balancer
+  serviceLogging: Reverse-proxy and application logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: HTTP 200 endpoint monitored by the load balancer
+  healthWelfareMonitoring: Endpoint probes, synthetic URL monitoring, and platform telemetry monitor service welfare.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  availabilityModel: Multi-node NGINX tier behind load balancing for sustained endpoint availability.
+  scalabilityModel: Horizontal autoscaling behind a load balancer.
+  recoverabilityModel: Replace failed NGINX nodes while remaining nodes continue serving traffic.
+  failureDomain: Scoped to the NGINX tier deployment unit behind the load balancer.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple NGINX nodes provide active redundancy behind load balancing.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: elastic-scale
+    name: Elastic Scale
+    description: NGINX nodes scale horizontally based on workload demand.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1V-632G
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJFZ-XQQ2
+    key: serviceAuthentication
+  - ref: 01KT16XJFZ-XQQ2
+    key: secretsManagement
+  - ref: 01KT16XJFZ-XQQ2
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJFZ-XQQ2
+    key: failureDomain

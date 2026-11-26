@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-FH3N
+type: decision_record
+name: Application Server — Unintentional Single Instance
+description: 'The SOM Application Server is deployed as a single instance with no redundancy. This is not an intentional architectural decision — it is historical technical debt.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- som
+category: risk
+status: open
+affectedComponent: 01KSM38KEW-D1VD
+impact: 'Complete loss of SOM application functionality for all tenants in the affected SubEnvironment. As the core business logic server, its failure renders the product unavailable. Given FERPA-protected CDP data, downtime has compliance and legal implications.
+
+  '
+mitigationPath: 'Determine whether SOM application server maintains session state or is stateless. If stateless, horizontal scaling behind an ALB is straightforward. If stateful, session offloading or sticky sessions are prerequisites. This is the highest-priority SPOF in the SubEnvironment.
+
+  '
+linkedObject: 01KSM38KEX-R400

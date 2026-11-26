@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DJ-E4CX
+name: Ottoman Kong Gateway Backplane → Redis Caching Service
+catalogStatus: stub
+source: 01KSM38KFX-QMDW
+label: calls
+target: 01KQQ5JT00-191S
+notes:
+  background: "Kong Backplane reads and writes the Redis authorization profile cache."
+capabilities: []

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHYE-26HV
+type: decision_record
+name: New Retailjobspot Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG7-M6DX
+linkedObject: 01KSM38KG7-M6DX
+decisionRationale: 'deploymentTargets: Hosted in AWS (us-east). All workloads confirmed in AWS from asset inventory.'

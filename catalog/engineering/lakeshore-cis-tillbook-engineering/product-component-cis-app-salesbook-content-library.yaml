@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYT9PCVA-0CGM
+type: product_component
+ownerRole: engineer
+name: CIS App Salesbook Content Library
+description: Management website for the Salesbook Content Library (Plushsoft.Library.Web). Companion API cataloged separately as CIS Svc Course Library.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-F2AX
+tags:
+- sis
+- lakeshore
+- tillbook
+- high point
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-app-salesbook-content-library
+language: C#
+classification: web-application
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery while resolving the whiteboard-captured CIS Svc Course Library entry. Product owner confirmed this repo contains both an API and a management website; this entry covers the website half.
+  repositoryName: BeerCanLabs/sk-cis-app-salesbook-content-library
+  observedManifestPaths: src/Plushsoft.Library.Web/; src/Plushsoft.Library.sln
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

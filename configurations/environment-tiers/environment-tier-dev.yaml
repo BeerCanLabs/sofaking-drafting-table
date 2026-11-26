@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: SZJVW70BTN-V6GX
+type: environment_tier
+name: Development
+tierId: dev
+catalogStatus: complete
+purpose: development
+availabilityExpectation: best-effort
+costPosture: cost-optimized
+description: |
+  Inner-loop developer environment. Deployed on demand by individual engineers
+  or feature branches. No SLA. Scale-to-zero encouraged. Shared AWS account
+  may be used when per-engineer accounts are not yet provisioned.
+parameterSurface:
+- name: awsAccountId
+  description: AWS account ID for the dev environment
+  required: true
+  sensitive: false
+- name: awsRegion
+  description: AWS region for the dev environment (e.g. us-east-1)
+  required: true
+  sensitive: false
+- name: vpcId
+  description: VPC ID where services are deployed
+  required: true
+  sensitive: false
+- name: deployRoleArn
+  description: IAM role ARN the pipeline assumes to deploy
+  required: true
+  sensitive: false
+notes: >
+  Dev tiers are not subject to SOC 2 or RT-RAMP controls. Engineers may
+  use reduced replica counts and skip autoscaling.

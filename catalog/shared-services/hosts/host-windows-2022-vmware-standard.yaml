@@ -1,0 +1,177 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-A7W8
+type: host
+ownerRole: technology-admin
+name: Windows Server 2022 on VMware Standard Host
+description: Windows Server 2022 host for VMware-hosted legacy platform workloads.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- vmware
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-RTYQ
+computePlatformComponent: 01KQQ5JT1P-NCBF
+internalComponents:
+- ref: 01KQQ5JT1Q-RTYQ
+  role: os
+- ref: 01KQQ5JT1P-NCBF
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent
+architectureNotes:
+  eol:
+    remediationPlan: Windows Server 2022 remains within Microsoft support through October 2031 and is reviewed through lifecycle governance before support end.
+  privilegedAccessReview: Privileged administrative access is reviewed quarterly through enterprise identity and access governance.
+  logging:
+    retention: Windows event and application logs are retained centrally for 90 days or more.
+  assetDisposal: VMware virtual host retirement follows enterprise wipe, decommissioning, and disposal procedures appropriate to the backing infrastructure.
+deploymentConfigurations:
+- id: eol-hardening
+  name: EOL Hardening
+  description: Unsupported or end-of-life hosts require additional network restriction and compensating hardening before continued use.
+- id: admin-membership-alerting
+  name: Admin Membership Alerting
+  description: Changes to administrative groups and privileged access paths are monitored through identity and security tooling.
+- id: account-baseline
+  name: Account Baseline
+  description: Host access requires unique accounts, disabled guest access, stale account handling, and no shared administrative accounts.
+- id: least-privilege-admin
+  name: Least Privilege Administration
+  description: Local administrator rights are minimized and privileged elevation is governed through just-in-time or approved elevation paths.
+- id: password-mfa-baseline
+  name: Password And MFA Baseline
+  description: Strong password, lockout, idle timeout, and MFA expectations are applied through enterprise identity policy.
+- id: mfa-vault-laps
+  name: MFA Vault And LAPS Baseline
+  description: Administrative access uses MFA-capable identity flows, password vaulting, and managed local administrator password controls.
+- id: risk-based-reauthentication
+  name: Risk Based Reauthentication
+  description: Administrative sessions can require periodic or risk-based reauthentication and compromised password handling.
+- id: encrypted-remote-access
+  name: Encrypted Remote Access
+  description: Remote administrative access is encrypted and subject to inactivity controls and geographic restrictions.
+- id: system-hardening
+  name: System Hardening
+  description: Windows hosts are hardened by disabling insecure services, removing defaults, configuring time sync, and applying secure baselines.
+- id: configuration-review
+  name: Configuration Compliance Review
+  description: Host configuration drift is reviewed at least quarterly through enterprise configuration and security tooling.
+- id: secure-image-maintenance
+  name: Secure Image Maintenance
+  description: Windows host images and hardening templates are updated from vulnerability scan and patch findings.
+- id: disk-encryption
+  name: Disk Encryption
+  description: Windows host storage uses whole-disk or volume encryption for protected data at rest.
+- id: browser-isolation
+  name: Browser Isolation And Sandboxing
+  description: Browser isolation or sandboxing controls are available for administrative browsing and high-risk access paths.
+requirementImplementations:
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.03.1.2
+  status: satisfied
+  mechanism: relationship
+  ref: Automox Patch Management
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.03.1.4
+  status: satisfied
+  mechanism: relationship
+  ref: CrowdStrike Falcon Platform
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.03.2.1
+  status: satisfied
+  mechanism: relationship
+  ref: Automox Patch Management
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.03.3.2
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: eol-hardening
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.1.2
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: admin-membership-alerting
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.2.2
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: account-baseline
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.3.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: least-privilege-admin
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.4.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: password-mfa-baseline
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.4.2
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: mfa-vault-laps
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.4.3
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: risk-based-reauthentication
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.04.5.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: encrypted-remote-access
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.05.1.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: system-hardening
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.05.2.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: configuration-review
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.05.2.2
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: secure-image-maintenance
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.06.1.1
+  status: satisfied
+  mechanism: technologyComponentConfiguration
+  key: dedicated-log-volume
+  ref: 01KQQ5JT1Q-RTYQ
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.06.3.1
+  status: satisfied
+  mechanism: relationship
+  ref: CrowdStrike Falcon Platform
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.08.1.1
+  status: satisfied
+  mechanism: relationship
+  ref: CrowdStrike Falcon Platform
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.06.3.2
+  status: satisfied
+  mechanism: relationship
+  ref: CrowdStrike Falcon Platform
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.08.2.5
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: browser-isolation
+- requirementGroup: 01KQQ5JT20-M5R2
+  requirementId: HCF.11.2.1
+  status: satisfied
+  mechanism: deploymentConfiguration
+  key: disk-encryption

@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-98H0
+type: technology_component
+ownerRole: technology-admin
+name: Apache HTTP Server 2.4
+description: Apache HTTP Server 2.4.x, actively maintained open source web server.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- web
+- apache
+classification: software
+vendor: Apache Software Foundation
+productName: Apache HTTP Server
+productVersion: '2.4'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: The Apache HTTP Server project maintains the 2.4 branch as the current release line but does not publish a fixed end-of-support date for the branch.
+capabilities:
+- 01KT0V5MCV-RZV0
+configurations:
+- id: standard-web-listener
+  name: Standard Web Listener
+  description: Standard Apache HTTP Server listener profile for HTTP and HTTPS workloads.
+  capabilities:
+  - 01KT0V5MCV-RZV0
+  networkBindings:
+  - port: 80
+    protocol: HTTP
+    direction: inbound
+    description: Default HTTP web listener.
+  - port: 443
+    protocol: HTTPS
+    direction: inbound
+    description: Default HTTPS web listener.

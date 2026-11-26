@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-RTT8
+type: data_component
+ownerRole: engineer
+name: Healthoffice Enterprise
+description: HealthOffice Enterprise Source Code - Visual Basic 6 Code Base
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- repository-discovery
+- healthoffice
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-HealthOffice-Enterprise
+targetEngine: other
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-HealthOffice-Enterprise
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Care 2.0/Source/HIPAA File Translator App.Net/HIPAAHarness.vbproj; Care 2.0/Source/HIPAA File Translator DLL.Net/HIPPATranslator.vbproj; Care 2.0/Source/HIPAA File Translator.sln; Care 2.0/Source/Intermediate/CAREProcess.sln; Care 2.0/Source/Intermediate/CAREProcess.vbproj; Care 2.0/Source/Intermediate/ImportXML/WindowsApplication7.vbproj; Care 2.0/Source/Intermediate/ImportXML2/WindowsApplication9/ImportXML.vbproj; Release 5.7/HO2Designer/Setup/HO2Designer.sln; Release 5.7/HO2Designer/Setup/Login4Designer.sln; Release 5.7/HO2Designer/Setup/MDLControls.sln; Release 5.7/Threads/Threading.root/Threading/Sample/Sample.csproj; Release 5.7/Threads/Threading.root/Threading/Threading.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

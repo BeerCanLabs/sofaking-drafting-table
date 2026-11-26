@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX4HM631-6JE5
+type: relationship
+name: Zendesk For Corvid Intranet → Corvid Intranet
+source: 01KX4A2T71-MWBT
+target: 01KX4A2T6M-BCEY
+label: bridges help-desk workflow with
+technology: HTTPS
+direction: synchronous
+flow: bidirectional
+catalogStatus: stub
+notes: Discovered from KIOTrifoldStandaloneApplication repo; connection details not yet confirmed by owner interview.

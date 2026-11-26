@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFE-BZ47
+type: product_component
+ownerRole: engineer
+name: Mobile Gigulator
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-mobile-Gigulator.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-mobile-engineering
+  contact: sofaking-mobile-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- mobile
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-mobile-Gigulator
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-mobile-Gigulator
+  observedRuntimeSignals: java, node, readme
+  observedManifestPaths: .sencha/app/app.defaults.json; .sencha/app/codegen.json; .sencha_backup/Gigulator/2.3.1.410/.sencha/app/codegen.json; .sencha_backup/Gigulator/2.3.1.410/AnexinetPlugins/com.anexinet.plugins.Core/package.json; .sencha_backup/Gigulator/2.3.1.410/app-test/resources/I18N/Resources_en.json; .sencha_backup/Gigulator/2.3.1.410/app-test/resources/I18N/Resources_es.json; .sencha_backup/Gigulator/2.3.1.410/app-test/resources/I18N/Resources_fr.json; .sencha_backup/Gigulator/2.3.1.410/app-test/resources/config/config_test.json; .sencha_backup/Gigulator/2.3.1.410/app.json; .sencha_backup/Gigulator/2.3.1.410/bootstrap.json; .sencha_backup/Gigulator/2.3.1.410/conf.json; .sencha_backup/Gigulator/2.3.1.410/packager.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

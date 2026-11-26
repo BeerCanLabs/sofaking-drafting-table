@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YC-7M4T
+name: SQL Server 2022 DBMS Service → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT01-950D
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "DB-specific telemetry and alerting beyond base host monitoring."
+capabilities:
+- 01KQQ4Q026-98VD

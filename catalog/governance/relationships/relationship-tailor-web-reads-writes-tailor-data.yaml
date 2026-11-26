@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: J316B41WCV-XNC2
+name: Tailor Web and Comet Sites -> Tailor SQL Server Data
+catalogStatus: incomplete
+source: W6N1TCS8DQ-2WMB
+label: reads/writes
+target: 73F2M1GSPK-PNGJ
+technology: SQL Server/TDS
+direction: synchronous
+flow: outbound
+notes:
+  background: Tailor web sites are modeled as the IIS presentation/application tier backed by the Tailor SQL Server data tier. The Ansible web role and SQL Server roles provide deployment evidence; exact database names and connection strings require owner confirmation.
+capabilities: []

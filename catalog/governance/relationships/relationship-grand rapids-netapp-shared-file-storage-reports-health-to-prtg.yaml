@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: VEPJY2BV73-AC1E
+name: Grand Rapids NetApp Shared File Storage → PRTG Monitoring Platform
+catalogStatus: incomplete
+source: 01KYN1RHK4-NAPP
+label: reports health to
+target: 01KYWJ47V9-F3BJ
+notes:
+  background: Owner-confirmed on 2026-07-31 that the self-hosted PRTG Monitoring Service monitors the GRRNAP1CLU1 NetApp cluster and GRRFILES1 Storage VM. HPTPRTG2 runs the core server and a local probe; GRRPRTG2 is the Grand Rapids probe. Both run Windows Server 2022 on VMware. Specific checks, thresholds, and alert routing remain undocumented.
+capabilities:
+- 01KQQ4Q026-98VD

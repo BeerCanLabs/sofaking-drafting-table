@@ -1,0 +1,91 @@
+id: APXBOT-K9F3NM7P-INT2
+version: v0.1.0
+status: Candidate
+category: SOFTWARE DEPLOYMENT PATTERN
+
+title: "APEX — Interview Automation Bot"
+
+description: >
+  Automates the end-to-end lifecycle of a structured interview. A coordinator-triggered
+  workflow that creates a Zoom meeting, books a Microsoft 365 calendar event, sends Slack
+  notifications, detects invitation acceptance via Microsoft Graph webhook, downloads and
+  AI-cleans the post-meeting transcript using Anthropic Claude, generates a structured
+  interview summary, and publishes it to Confluence. All state persists in Amazon S3 —
+  no relational database is used. Runs as a single Docker container on EC2 t3.medium
+  behind an Application Load Balancer. Items are labeled [DOCUMENTED] when observed in
+  code or AWS, [INTENDED] when target state not yet built, and [OPEN] when a decision
+  is still pending.
+
+businessContext:
+  pillar: business-pillar.enterprise-enablement
+
+metadata:
+  owner: aiops
+  # team alias (per configurations/vocabulary/teams.yaml): lpark@sofaking.example
+  # contact below is the per-entry owner for APEX specifically (intentional)
+  contact: kraman@sofaking.example
+  pillar: enterprise-enablement
+
+architectureNotes:
+  availabilityRequirement: >
+    Single EC2 t3.medium instance behind a multi-AZ ALB. Compute is a single point
+    of failure; the ALB provides no benefit if the instance is down. Acceptable for
+    internal tooling at current interview volume.
+  availabilityTarget: "99.5% monthly uptime (excludes planned maintenance windows)"
+  dataClassification:
+    sensitivity: confidential
+    dataTypes:
+      - candidate full name
+      - interview role and job title
+      - verbatim interview transcript (audio-derived, via Zoom VTT)
+      - AI-generated interview summary including assessments, action items, and risk flags
+    externalProcessors:
+      - name: Anthropic API (claude-sonnet-4-20250514)
+        purpose: transcript cleanup and structured summarization
+        dataShared: full cleaned transcript text
+        retentionByProcessor: per Anthropic API data usage policy — not stored per Anthropic's zero-retention API tier [OPEN — confirm tier in use]
+    storageLocations:
+      - S3 bucket apex-interview-bot-state (us-east-2, encrypted at rest)
+      - Confluence page (permanent record, access controlled by space permissions)
+    retentionPolicy: "[OPEN] Not formally defined. [INTENDED] 90-day S3 lifecycle rule pending."
+    regulatoryScope: "[OPEN] GDPR and CCPA applicability to candidate transcript data not yet assessed. Legal review required before production use at scale."
+    reReviewTrigger: >
+      Re-assess when: (1) interview volume exceeds 500/month, (2) data is used for
+      model training or benchmarking, (3) candidates outside the US are interviewed,
+      or (4) Anthropic API data handling terms change.
+  failureDomain:
+    scope: component
+    blast radius: >
+      Single EC2 instance. A failure takes down all APEX functionality — scheduling,
+      webhook processing, transcript handling, and Confluence publishing — for all
+      in-flight interviews. S3 state is durable; interviews in-progress at failure
+      time can be manually recovered by re-triggering the webhook flow once the
+      instance is restored. ALB health checks detect the outage within 30 seconds.
+    mitigation: "[INTENDED] Auto-recovery via EC2 auto-restart on container failure (Docker --restart=unless-stopped). Full HA requires moving to ECS multi-AZ, which is out of scope for v0.1.0."
+
+serviceGroups:
+  - name: APEX Application Runtime
+    deploymentTarget: aws-us-east-2  # org primary region per deployment-targets.yaml
+    services:
+      - apex-fastapi-app
+      - zoom-integration
+      - graph-integration
+      - slack-integration
+      - anthropic-integration
+      - confluence-integration
+
+stats:
+  services: 6
+  zones: 2
+  connections: 7
+  availability: Single EC2 t3.medium (ALB is multi-AZ)
+  ha_components: Application Load Balancer
+
+docs:
+  acceptable_use: docs/acceptable-use.md
+  topology: docs/topology.md
+  diagrams: docs/diagrams.md
+  object_types: docs/object-types.md
+  onboarding: docs/onboarding.md
+  vocabulary: docs/vocabulary.md
+  user_manual: docs/user-manual.md

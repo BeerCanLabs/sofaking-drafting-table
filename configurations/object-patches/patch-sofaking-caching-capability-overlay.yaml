@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KT16XJHW-DDHW
+type: object_patch
+name: Sofa King Caching capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Caching capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-ECR4
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1V-XEVK
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Redis Caching Database Standard.

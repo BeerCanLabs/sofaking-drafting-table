@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-86S4
+type: product_component
+ownerRole: engineer
+name: CIS Util Householdaccess Alerts
+description: Householdaccess Alert Service. Retired — rolled into CIS Util Tillbook Notifications, which handles notifications more broadly than just Householdaccess alerts.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- parent-access
+- notifications
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-householdaccess-alerts
+classification: worker
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as retired — functionality was rolled into CIS Util Tillbook Notifications. Runtime confirmed by product owner on 2026-07-31 — .NET Framework 4.8.
+  repositoryName: BeerCanLabs/sk-cis-util-householdaccess-alerts

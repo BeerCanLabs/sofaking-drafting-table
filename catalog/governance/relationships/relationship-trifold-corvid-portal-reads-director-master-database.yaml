@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T74-CP02
+type: relationship
+name: Corvid Portal → Trifold Director Master Database
+source: 01KX4A2T70-N90K
+target: 01KX421X49-TV6R
+label: reads from
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifoldStandaloneApplication repo (CorvidConnection); connection details not yet confirmed by owner interview.

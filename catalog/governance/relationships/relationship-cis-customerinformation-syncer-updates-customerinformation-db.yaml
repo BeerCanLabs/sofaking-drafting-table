@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KZPC4E3A-F0RM
+type: relationship
+name: CIS Util Customerinformation Syncer -> CIS Db Customerinformation
+description: The per-ITC DASLSyncer console application updates the local CustomerInformation database with static data obtained from the central DASLSync API.
+catalogStatus: incomplete
+source: 01KYT8CCJT-4ARY
+label: updates
+target: 01KSM38KFP-25CX
+technology: SQL Server TDS
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- sync
+- customerinformation
+- database
+- data-zone
+notes: The target database runs on the Lakeshore CIS SQL Server 2019 Availability Group.

@@ -1,0 +1,76 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-TK06
+type: network_service
+ownerRole: technology-admin
+name: Signal Sciences Security Agent
+description: 'Standard Signal Sciences agent pattern for workload protection and WAF.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - agent
+  - security
+  - waf
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-KJHA
+primaryTechnologyComponent: 01KQQ5JT1N-8E8B
+architectureNotes:
+  serviceAuthentication: 'Agent-to-platform communication uses key-based authentication.
+
+    '
+  secretsManagement: 'Agent keys are managed via host-level secrets injection or  centralized configuration management.
+
+    '
+  serviceLogging: 'Agent logs are forwarded centralized via the host''s logging mechanism.
+
+    '
+  healthWelfareMonitoring: 'Agent status is monitored via the Signal Sciences dashboard and  host-level telemetry.
+
+    '
+  availabilityModel: 'Availability is tied to the host where the agent is deployed.
+
+    '
+  scalabilityModel: 'Scales horizontally with the number of host instances.
+
+    '
+  recoverabilityModel: 'Failed agents are automatically replaced during host or service restarts.
+
+    '
+  failureDomain: 'Impact is scoped to the individual host instance running the agent.
+
+    '
+  agentInteractionExceptions:
+    01KQQ5JT1N-8E8B: 'Agent interaction with the Signal Sciences cloud platform is handled  internally by the agent binary and does not require a separate  external interaction definition.
+
+      '
+internalComponents:
+  - ref: 01KQQ5JT1N-8E8B
+    role: function
+deliveryModel: self-managed
+networkFunction: web-application-firewall
+networkTopology: edge-ingress
+protocols:
+  - https
+decisionRecords:
+  - ref: 01KT16XJ9Q-XETS
+    key: serviceAuthentication
+  - ref: 01KT16XJ9Q-XETS
+    key: secretsManagement
+  - ref: 01KT16XJ9Q-XETS
+    key: serviceLogging
+  - ref: 01KT16XJ9Q-XETS
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJ9Q-XETS
+    key: availabilityModel
+  - ref: 01KT16XJ9Q-XETS
+    key: scalabilityModel
+  - ref: 01KT16XJ9Q-XETS
+    key: recoverabilityModel
+  - ref: 01KT16XJ9Q-XETS
+    key: failureDomain

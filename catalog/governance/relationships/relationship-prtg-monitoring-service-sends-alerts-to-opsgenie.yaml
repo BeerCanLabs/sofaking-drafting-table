@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 3WFQ5QRE67-N1HJ
+name: PRTG Monitoring Service → Opsgenie Alerting Service
+catalogStatus: incomplete
+source: 01KYWJ47V9-F3BJ
+label: sends alerts to
+target: 01KYWPPQ2Q-8AE1
+direction: asynchronous
+flow: outbound
+notes:
+  background: Owner-confirmed on 2026-07-31 that PRTG sends operational alerts to Opsgenie. Alert priorities, responder teams, schedules, and escalation rules remain undocumented.
+capabilities:
+- 01KQQ4Q026-98VD

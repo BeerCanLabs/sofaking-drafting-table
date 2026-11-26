@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KZY1BEP4-F9N0
+type: relationship
+name: Leave Management submits email to Grand Rapids MDaemon
+catalogStatus: incomplete
+source: 01KSM38KEQ-JS8E
+target: 01KZZMDMN1-RT01
+label: submits outbound email to
+technology: SMTP
+direction: asynchronous
+flow: outbound
+capabilities:
+  - 01KT0XNZEY-KPTW
+notes:
+  background: The shared MDaemon service exposes F5-fronted high- and low-priority SMTP endpoints to Leave and other product consumers. The Email Agents page documents that Rota reports configured with a static filename bypass the Email Queue and Email Agent and deliver directly over SMTP. The contributor confirmed on 2026-08-13 that this bypass path uses the low-priority GRRMAILLOW endpoint and confirmed on 2026-09-03 that the SMTP transport is unencrypted within Grand Rapids.

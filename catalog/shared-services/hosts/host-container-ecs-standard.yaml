@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-KJHA
+type: host
+ownerRole: technology-admin
+name: Amazon ECS Standard Container Host
+description: Standard host pattern representing an Amazon ECS task runtime context for Sofa King containerized product services.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- container
+- ecs
+- aws
+category: host
+notes:
+  securityMonitoringApproach: ECS task and cluster telemetry integrated with AWS-native monitoring.
+  patchManagementApproach: Task patching is performed through rolling service updates with new image versions.
+  externalInteractionRationales:
+    Amazon ECS Control Plane: The ECS control plane is modeled to show the managed task scheduling and service-state boundary for container workloads.
+    Amazon ECR: Amazon ECR is modeled because ECS task runtime depends on the container registry for image delivery.
+    Amazon CloudWatch: Amazon CloudWatch is modeled for ECS task and service telemetry in the managed container runtime.
+    AWS Application Load Balancer: The application load balancer is modeled to show the ingress routing dependency for ECS services.
+  internalComponentRationales:
+    01KQQ5JT1P-A24W: Amazon EC2 is modeled as the compute substrate behind the ECS task runtime context.
+internalComponents:
+- ref: 01KQQ5JT1P-A24W
+  role: hardware

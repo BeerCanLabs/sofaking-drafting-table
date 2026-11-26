@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-SKZN
+type: technology_component
+ownerRole: technology-admin
+name: Amazon DocumentDB 4.0
+description: >-
+  Amazon DocumentDB, AWS's MongoDB-compatible managed document database, at
+  engine compatibility 4.0. Added under SKPG-19589 after the Associate Development
+  form service was found to provision a DocumentDB cluster. No DocumentDB object
+  existed in the catalog.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+vendor: Amazon Web Services
+productName: Amazon DocumentDB
+productVersion: '4.0'
+classification: software
+tags:
+  - documentdb
+  - document-database
+  - mongodb-compatible
+  - aws
+  - apex-l1
+  - skpg-50273
+architectureNotes:
+  observedUse: >-
+    SK.PG.FormService.CDK/FormServiceDbStack.cs in BeerCanLabs/sk-msvc-pg-forms
+    constructs an Amazon.CDK.AWS.DocDB DatabaseCluster with a docdb4.0 cluster
+    parameter group and a db.t3.medium instance class.
+  approvalConcern: >-
+    IMPORTANT — this may not be an acceptable direction. MongoDB Atlas
+    (01KQQ5JT05-E3FZ) is recorded in the catalog as deprecated, and DocumentDB is
+    a MongoDB-compatible document store. Introducing a new Mongo-compatible
+    platform while the existing one is deprecated is an architecture decision,
+    not a cataloguing exercise. Recorded as candidate and referred to the
+    Architecture Review Board.
+  lifecycleRationale: >-
+    Candidate, not preferred. The object exists so the dependency is visible in
+    the graph; it is not an endorsement.

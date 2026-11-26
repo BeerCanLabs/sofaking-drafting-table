@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-2X1Q
+type: product_component
+ownerRole: engineer
+name: Kio Ang Client
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-kio-ang-client.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- sei
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-kio-ang-client
+language: TypeScript
+classification: cli
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-kio-ang-client
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: .angular-cli.json; e2e/tsconfig.e2e.json; mock/mock.json; package-lock.json; package.json; proxy.conf.json; src/assets/config/appConfig.dev.json; src/assets/config/appConfig.json; src/tsconfig.app.json; src/tsconfig.spec.json; tsconfig.json; tslint.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

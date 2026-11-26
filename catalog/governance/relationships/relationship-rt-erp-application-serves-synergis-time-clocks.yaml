@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 8FFDVVWYKB-G92S
+type: relationship
+name: RT ERP Application Server → Region Synergis Time Clocks
+catalogStatus: incomplete
+source: 01KSM38KEX-PX7B
+label: exposes the teamsws clock endpoint to
+externalTarget: Region Synergis Time Clocks
+technology: HTTPS with TLS 1.2
+direction: synchronous
+flow: inbound
+notes: >-
+  Region-owned physical clocks initiate requests to the public
+  /teamsws/Clock/SY7000 endpoint. The devices are external to the cloud SDP;
+  older clock models that cannot negotiate TLS 1.2 require region follow-up.
+capabilities:
+  - 01KSWVZSZ5-Q6HW

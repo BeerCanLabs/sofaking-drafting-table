@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-HK7Z
+type: decision_record
+name: PG PLM/EEM Legacy - External Dependencies
+description: >-
+  Additional-interactions decision for the PLM/EEM legacy deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - legacy
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-RWQB
+linkedObject: 01M1F8WB4E-RWQB
+decisionRationale: >-
+  externalDependencies: The legacy estate integrates with the New Brunswick Department of Retail (STLI.Shared.Integration.Nhdcb) and a credit-card payment path (STLI.Shared.Integration.CreditCards), both observed as projects in STL-LDMS.Net. FORMIX additionally reaches AWS SQS from its ArchiveFilesExport utility and provisions AWS resources through the EemEvaluationRightsAutomation CDK application. The legacy tier is also read by the PLM/EEM cloud pattern 01M1F8WB4E-8WVS. This list is derived from repository evidence only - no owner interview has confirmed it, the payment processor is unidentified, and further region or state integrations may exist. Status open pending Associate Development engineering ratification. Unconfirmed items are tracked in DraftingSession 01M1F8WB4E-0GSN.

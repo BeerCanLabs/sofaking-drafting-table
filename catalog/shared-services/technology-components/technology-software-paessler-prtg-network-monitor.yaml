@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYWJ8SPT-FK9Z
+type: technology_component
+name: Paessler PRTG Network Monitor
+description: Self-hosted monitoring software used to observe infrastructure health, including the GRRNAP1CLU1 NetApp cluster and GRRFILES1 Storage VM.
+vendor: Paessler
+productName: PRTG Network Monitor
+productVersion: 26.1.118.1380+
+classification: software
+catalogStatus: stub
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - monitoring
+  - observability
+  - prtg
+  - self-hosted
+capabilities:
+  - 01KQQ4Q026-98VD
+configurations:
+  - id: local-audit-application-logging
+    name: Local Audit And Application Logging
+    description: PRTG audit and application logs are retained within the self-hosted PRTG platform and are not forwarded to a separate central logging service.
+    capabilities:
+      - 01KQQ4Q026-D04B
+  - id: local-monitoring-credential-store
+    name: Local Monitoring Credential Store
+    description: Credentials used by PRTG to access and monitor managed devices are stored within the self-hosted PRTG platform.
+    capabilities:
+      - 01KQQ4Q026-DTJJ
+notes:
+  sourceSession: Self-hosted delivery, NetApp monitoring use, and product version 26.1.118.1380+ were owner-confirmed in the Leave Management DRAFT L1 session tracked by OPS-049026. The PRTG Topology/Service Docs page identifies GRRPRTG2 and HPTPRTG2 but does not state their PRTG server roles. Lifecycle details remain unconfirmed.
+  deploymentTopology: HPTPRTG2 runs both the PRTG core server and a local probe; GRRPRTG2 is the Grand Rapids probe (owner-corrected 2026-07-31). Both systems run Windows Server 2022 on VMware.

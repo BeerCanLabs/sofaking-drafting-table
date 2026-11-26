@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJCV-8GQC
+type: decision_record
+name: ArgoCD GitOps Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-01JZ
+linkedObject: 01KQQ5JT1E-01JZ
+decisionRationale: "serviceAuthentication: Integrated with Sofa King identity provider.\n\nsecretsManagement: Integrated with External Secrets (AWS Secrets Manager).\n\nserviceLogging: Logs forwarded to centralized logging.\n\nhealthWelfareMonitoring: Monitored via ArgoCD health status and EKS telemetry.\n\navailabilityModel: High availability deployment on EKS.\n\nscalabilityModel: Scales with the number of managed applications and clusters.\n\nrecoverabilityModel: Rebuilt from Git repository state and Helm charts.\n\nfailureDomain: Scoped to the EKS cluster or the managed application fleet."

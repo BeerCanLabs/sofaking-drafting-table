@@ -1,0 +1,50 @@
+schemaVersion: '1.0'
+uid: 01KT16XJAT-51KQ
+type: decision_record
+name: Recliner .NET Core 8 on EKS Application Runtime Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.2.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KRZX0C11-QH66
+linkedObject: 01KRZX0C11-QH66
+decisionRationale: |
+  clusterInventory: Recliner owns four environment-specific EKS clusters in
+  AWS us-east-1: recliner-dev, recliner-test, recliner-stage, and recliner-prod. ArgoCD
+  is the GitOps deployment method for these clusters.
+
+  computeBoundary: The Recliner BFF and core services run on EKS. Recliner does not
+  use AWS Fargate. Tiers of Intensity is a standalone product boundary, so its
+  Lambda worker is not an Recliner runtime exception.
+
+  serviceAuthentication: The BFF's public ingress is a dedicated
+  internet-facing Traefik ALB, not Kong Gateway — confirmed 2026-08-05 for
+  OPS-306834 against the som-recliner repository's infra code. Caller identity
+  is derived application-side from Ottoman-issued request context; the
+  exact upstream token-validation boundary for the public hostname is
+  deferred. In-cluster service-to-service traffic is documented as intending
+  to use the Platform Service Mesh, though mesh sidecar injection is
+  currently evidenced only for the recliner-loveseat-subscriber workload.
+
+  secretsManagement: Runtime secrets are injected from centralized secret
+  storage at pod start.
+
+  serviceLogging: Application logs are forwarded to centralized logging beyond
+  the EKS host runtime.
+
+  healthWelfareMonitoring: Pod readiness, VictoriaMetrics platform monitoring,
+  and APM telemetry track service welfare.
+
+  recoverabilityModel: EKS replaces failed pods automatically; node failures
+  are handled by the cluster autoscaler.
+
+  failureDomain: Workload failures are scoped to a single Recliner microservice
+  Deployment. Cluster-level failures are isolated to one environment.

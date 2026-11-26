@@ -1,0 +1,65 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D93-EWK0
+type: data_component
+ownerRole: engineer
+name: Academic Calendar Store
+description: >-
+  DynamoDB single-table store owned by the Academic Calendar service, holding
+  Calendar (with embedded CalendarDate), Session (with embedded pricing-period
+  links), and PricingPeriod items. Table SS_Calendar_{Environment} uses a pk/sk
+  key schema with two global secondary indexes (gsi1 list by org/year, gsi2 list
+  by site), on-demand billing, and DynamoDB Streams (NEW_AND_OLD_IMAGES) enabled
+  for change-data-capture fanout.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+runsOn: 01KQQ5JT04-K58R
+targetEngine: dynamodb
+dataClassification: internal
+containsPII: false
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - dynamodb
+  - single-table
+  - data-component
+tables:
+  - name: SS_Calendar
+    description: >-
+      Single-table design (pk/sk + gsi1/gsi2). Item types CALENDAR, SESSION, and
+      PRICINGPERIOD, all keyed by ORG#{orgId}#YEAR#{year}. CalendarDate and the
+      session/pricing-period association are embedded in their parent items.
+      Streams enabled (NEW_AND_OLD_IMAGES) feeding an EventBridge Pipe → SNS
+      fanout topic → SQS publisher queue.
+    containsPII: false
+retentionPolicy: >-
+  Soft-delete only: records are tombstoned (meta.tombstone / tombstoneAt) and are
+  never hard-deleted by the service. Formal retention and purge policy is not yet
+  defined. PITR setting per environment not confirmed for this table.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+  repositoryName: BeerCanLabs/sk-ss-msvc-calendar
+  repositoryPrimaryLanguage: C#
+  observedManifestPaths: >-
+    src/deploy/Deploy/Shared/Storage/DynamoDbTableResources.cs;
+    src/deploy/Deploy/CalendarCoreStack.cs;
+    docs/architecture/dynamodb-key-design-v3.md;
+    docs/architecture/calendar-service-spec.md
+  keySchema: >-
+    Partition key pk (String), sort key sk (String). gsi1: ORG#{orgId}#YEAR#{year}
+    / ENTITY#{id}. gsi2: ORG#{orgId}#YEAR#{year}#SITE#{siteId} / ENTITY#{id};
+    used for by-site listing and the pricing-period delete reference check.
+    Encryption AWS-managed.
+  classificationRationale: >-
+    Structural/reference scheduling data with no customer PII per the repo's
+    data-classification.md; classified internal. The platform treats all customer
+    data as protected regardless of tier, so confirm with Data/Security whether
+    internal is sufficient.
+  envelope: >-
+    Items carry a platform envelope (meta.entityVersion, dataHash, tombstone) and
+    a state object; optimistic concurrency and unchanged-write suppression apply.
+    Envelope fields are never exposed through the API.

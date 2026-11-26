@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV600-CNZ1
+name: IIS Web Service on Windows Server 2016 → Application Load Balancer
+catalogStatus: stub
+source: 01KQQ5JT1F-JCA7
+label: calls
+externalTarget: Application Load Balancer
+notes:
+  background: "Fronts multiple IIS instances in HA deployments."

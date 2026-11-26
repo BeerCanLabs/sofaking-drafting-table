@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YY-Z1KF
+name: Ubuntu 22.04 on EC2 Standard Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT03-TQ84
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Authentication dependency for enterprise access and administration."
+capabilities:
+- 01KQQ4Q026-MHJM

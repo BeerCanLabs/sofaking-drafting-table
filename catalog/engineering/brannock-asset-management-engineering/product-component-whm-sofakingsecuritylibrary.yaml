@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-566V
+type: product_component
+ownerRole: engineer
+name: Whm SofaKingsecuritylibrary
+description: A password-complexity and password-history validation helper library (PasswordService, PasswordComplexityDto/PasswordHistoryDto/PasswordSaltDto types), not a general crypto or identity/auth library. Confirmed real compile-time dependency of WHM_AM_IDCore (01KSM38KFB-YGSN). Distinct from WHM_SofaKingSecurityLibrary_HD (01KSM38KFC-JJ65), which is HelpDesk-scoped and out of Asset Management's scope.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- whm
+- product-component
+- asset-management
+- shared-library
+- security
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_SofaKingSecurityLibrary
+language: C#
+classification: library
+runtimeRequirement: .NET (class library; no hosting model of its own - consumed as a compiled reference).
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_SofaKingSecurityLibrary
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: WHM.SofaKingSecurityLibrary.sln; WHM.SofaKingSecurityLibrary/WHM.SofaKingSecurityLibrary.csproj
+  serviceAuthentication: Not applicable - a password-policy helper library, not an authentication service itself.
+  secretsManagement: Not applicable - handles password complexity/history validation logic, not secrets storage.
+  serviceLogging: Not determinable from the consuming repository alone.
+  healthWelfareMonitoring: Not applicable - a compiled library, not a runtime service.
+  availabilityModel: Distributed as a compiled reference (v1.1.0.0 confirmed via WHM_AM_IDCore's packages.config), consumed by other applications rather than deployed/run independently.
+  scalabilityModel: Not applicable - a library, not a runtime service.
+  recoverabilityModel: Not applicable - no persistence or state of its own.
+  failureDomain: Contained to whatever call the consuming app makes into PasswordService - a failure here is scoped to the consumer's password-validation flow.
+  externalDependencies: None found in the consuming code beyond the PasswordService.ValidatePasswordComplexityHistory API surface.
+  primaryDataStores: None - no database access code observed from the consumer side.

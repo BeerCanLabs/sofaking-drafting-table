@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YK-6XK2
+name: Amazon Linux 2023 Physical Standard Host → Automox Patch Management
+catalogStatus: stub
+source: 01KQQ5JT02-5B7C
+label: calls
+externalTarget: Automox Patch Management
+notes:
+  background: "Patch orchestration and remediation workflow."
+capabilities:
+- 01KQQ4Q026-BH6E

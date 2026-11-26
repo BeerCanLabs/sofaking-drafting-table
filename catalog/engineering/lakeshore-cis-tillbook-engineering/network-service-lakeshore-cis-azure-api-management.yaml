@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KYWB8RS3-6KVB
+type: network_service
+ownerRole: engineer
+name: Lakeshore CIS Azure API Management
+description: Deployment-specific Azure API Management instance for LS CIS VendorLink. Routes inbound 3rd-party vendor API calls to the correct ITC's copy of CIS Svc Vendorlink based on a custom claim in the caller's OAuth2 token.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+- sis
+- lakeshore
+- tillbook
+- azure
+- vendorlink
+- api-management
+- deployment-specific
+- drafting-2026-07-31
+category: service
+serviceCategory: paas
+vendor: Microsoft Azure
+productName: Azure API Management
+productVersion: managed
+deliveryModel: paas
+networkFunction: api-gateway
+protocols:
+- https
+architectureNotes:
+  origin: Captured on 2026-07-31 per product owner during a conversation about VendorLink and 3rd-party auth. Previously unmodeled — the routing hop between CIS Svc CloudCentral and each ITC's CIS Svc Vendorlink had no catalog representation.
+  role: 'Vendor calls carry an OAuth2 token issued by CIS Svc CloudCentral (01KYNVC9SQ-M9SZ). This gateway reads a custom routing claim in that token to route the call to the correct ITC''s CIS Svc Vendorlink — it does not itself validate the token; validation happens at CIS Svc Vendorlink against trust data held in the ITC''s CIS App Centraladmin. Also hosts the actual live vendor developer portal via Azure API Management''s built-in developer-portal functionality. A separate custom-built portal, Sa Vendorlink Portal (01KSM38KGA-D3BJ), was attempted but never launched to production.'
+  serviceAuthentication: Reads the routing claim from the OAuth2 token issued by CIS Svc CloudCentral; does not validate the token and does not itself issue tokens.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

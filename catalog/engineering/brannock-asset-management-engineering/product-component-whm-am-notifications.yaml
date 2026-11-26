@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-7ZWT
+type: product_component
+ownerRole: engineer
+name: Whm Am Notifications
+description: A database-backed in-app "banner/announcement" notification service (not email/SMS/push) serving effective-dated, targeted notifications to client apps via a SOAP-style ASMX web service. Called by 01KSM38KFB-QFJ1 (AM_App) via a SOAP client endpoint at trackwebhelp.example.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- whm
+- product-component
+- asset-management
+- notifications
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_Notifications
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_Notifications
+  observedRuntimeSignals: dotnet
+  observedManifestPaths: TrackwebNotifications.sln; TrackwebNotifications/TrackwebNotifications.csproj
+  serviceAuthentication: 'None found. Global.asax.cs/FilterConfig.cs registers only HandleErrorAttribute globally - no [Authorize] filter anywhere in NotificationController.cs or WebService.asmx.cs. Consumers call the ASMX GetNotifications web method unauthenticated at the app layer.'
+  secretsManagement: 'Plaintext SQL credentials committed directly in Web.config connection string (also duplicated in the Production publish profile). No vault/secret-manager usage found.'
+  serviceLogging: 'Not determinable from repo alone - no NLog/log4net config or logging call found in NotificationController.cs, WebService.asmx.cs, or Global.asax.cs beyond the default MVC HandleErrorAttribute.'
+  healthWelfareMonitoring: 'Not determinable from repo alone - no health-check controller/endpoint found (unlike 01KSM38KFB-XABQ).'
+  availabilityModel: 'IIS via MSDeploy (Production publish profile targets trackwebhelp.example / Default Web Site/TrackwebNotifications).'
+  scalabilityModel: 'Not determinable from repo alone (no session-state or scale-out configuration present beyond default IIS/MVC).'
+  recoverabilityModel: 'Not determinable from repo alone.'
+  failureDomain: 'Single shared SQL Server database (TrackwebNotifications) serving all consuming apps'' banner notifications - one service instance/DB for potentially many client apps.'
+  externalDependencies: 'None found beyond the SOAP consumers themselves (e.g. 01KSM38KFB-QFJ1) - confirmed NOT an email/SMS/push service: no SmtpClient/Twilio/SendGrid/MailMessage/push-notification API usage found anywhere in the repository.'
+  primaryDataStores: 'SQL Server via Entity Framework 5 (EDMX model-first), database TrackwebNotifications.'

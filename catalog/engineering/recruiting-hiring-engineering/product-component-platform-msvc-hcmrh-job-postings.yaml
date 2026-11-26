@@ -1,0 +1,130 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-0YP7
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Job Postings
+description: Job posting lifecycle management microservice providing CRUD operations for employers, advanced search for job seekers, visibility scheduling, Google indexing integration, and Loveseat event processing for job opening synchronization
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- recruiting-hiring
+- job-postings
+- microservice
+- dotnet
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-job-postings
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: Job Posting Employer API
+  protocol: REST
+  path: /api/jobs/employers/{orgId}
+  authenticationModel: oauth
+  description: Employer job posting management (CRUD, visibility, archiving)
+- name: Job Posting Job Seeker API
+  protocol: REST
+  path: /api/jobs/jobseekers/{personId}
+  authenticationModel: oauth
+  description: Authenticated job seeker search and job viewing with tracking
+- name: Job Posting Anonymous API
+  protocol: REST
+  path: /api/jobs/anonymous
+  authenticationModel: TBD
+  description: Public anonymous job search and viewing
+- name: Loveseat Event Ingestion
+  protocol: REST
+  path: /api/jobs/events/jobopeningtype
+  authenticationModel: TBD
+  description: Consumes job opening create/update/delete events from Loveseat
+- name: Organization Setup
+  protocol: REST
+  path: /api/jobs/setup
+  authenticationModel: oauth
+  description: Organization initialization endpoint
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  description: MongoDB connection string for job postings database
+  required: true
+  sensitive: true
+- name: MongoDB__DatabaseName
+  description: MongoDB database name (e.g., hcmrh_prod)
+  required: true
+  sensitive: false
+- name: ConnectionStrings__Redis
+  description: Redis connection string for distributed caching
+  required: true
+  sensitive: true
+- name: JobPostingEvents__TopicArn
+  description: AWS SNS topic ARN for publishing job posting events
+  required: true
+  sensitive: false
+- name: ConfigCat__SdkKey
+  description: ConfigCat SDK key for feature flags
+  required: true
+  sensitive: true
+architectureNotes:
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (4 collections - jobPostings, archive, counters, jobSeekerInfo) with Atlas Search for synonyms
+  caching: Hybrid caching with Redis distributed cache and local L1 cache
+  eventPublishing: AWS SNS for job posting events (created, updated, deleted)
+  eventConsumption: Loveseat JobOpeningType events via HTTP POST callbacks
+  externalIntegrations: RhOrganizationService (HTTP), JobSeekerService (HTTP), ApplicationService (HTTP), PermissionService (HTTP), Google Indexing API
+  serviceAuthentication: Ottoman trusted header injection (x-sk-userinfo) for user context; OAuth 2.0 client credentials for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs and request context enrichment
+  healthWelfareMonitoring: Kubernetes liveness and readiness probes; health check endpoints
+  availabilityModel: Multi-replica deployment with horizontal pod autoscaling; rolling updates with maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via Kubernetes HPA; MongoDB indexing for search performance
+  recoverabilityModel: MongoDB automatic backups; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt timeout, 90s total timeout, 45s circuit breaker sampling
+  loveseatEventSubscriptions: Consumes 1 event type from Loveseat Kafka event bus via HTTP POST callbacks - JobOpeningType create/update/delete (job postings from legacy Recruit system). Demo filtering REQUIRED - must query Organizations service to check IsDemoOrganization flag and tag job posting with IsDemoPosting to prevent data leakage between demo and real job seekers.
+  loveseatEventEndpoints: /api/jobs/events/jobopeningtype (JobOpeningType create/update/delete)
+  loveseatEnvironmentConstraints: QA environment=qa, Production/Staging no constraints
+  loveseatDemoFiltering: HIGH PRIORITY - Check source organization demo status via Organizations service, set IsDemoPosting flag, propagate demo status to internal SNS events, log demo context for monitoring
+  authorization: Permission-based with Major Actions (PostJobs, ReviewApplications) and Scope-of-View filtering
+  externalDependencies:
+    serviceDependencies:
+      - name: PermissionService
+        service: msvc-hcmrh-permissions
+        purpose: Authorization and access control validation
+      - name: JobSeekerService
+        service: msvc-hcmrh-job-seeker
+        purpose: Job seeker profile data and tracking
+      - name: RhOrganizationService
+        service: msvc-hcmrh-organizations
+        purpose: Retail institution data
+      - name: ApplicationService
+        service: msvc-hcmrh-applications
+        purpose: Application count aggregation
+      - name: TokenService
+        service: SK Identity Gateway
+        purpose: OAuth 2.0 service-to-service authentication
+      - name: EmailService
+        endpoint: emailqueueservice.sofaking.example
+        purpose: Email notifications for job postings
+    externalAPIs:
+      - name: Google Indexing API v3
+        package: Google.Apis.Indexing.v3 1.68.0.3191
+        purpose: Job posting SEO and search indexing
+    awsServices:
+      - name: SNS Topic JobPostingUpdated
+        resource: JobPostingUpdated-{env}
+        purpose: Event publishing for job posting lifecycle events
+    internalPackages:
+      - SK.Util.SofaKingModels.DotNet 0.0.156
+      - Hcmrh.Logging 1.0.22
+      - Hcmrh.Events 1.0.12
+notes:
+  background: "Production-ready microservice managing job posting lifecycle for HCMRH Recruit & Hire platform. Handles employer job management, job seeker search with geolocation, and external job posting synchronization from legacy Recruit system via Loveseat events. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

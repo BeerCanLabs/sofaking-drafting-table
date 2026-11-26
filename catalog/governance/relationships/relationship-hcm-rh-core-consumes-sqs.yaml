@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-5Z8W
+type: relationship
+name: HCM RH Core → AWS SQS
+source: 01KSM38KG5-FBRT
+target: 01KQQ5JT05-0C4P
+label: consumes notification events from
+technology: AWS SDK over HTTPS
+direction: asynchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - hcm-rh
+  - messaging
+  - aws
+notes: >-
+  HCM RH Core long-polls the configured SQS queue for JobPostingUpdated
+  events and relies on a dead-letter queue after repeated failures.

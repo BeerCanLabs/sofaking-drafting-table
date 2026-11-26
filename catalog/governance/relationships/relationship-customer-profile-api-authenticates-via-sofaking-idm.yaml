@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01M5CT6KT0-CR2N
+type: relationship
+ownerRole: engineer
+name: Customer Profile Service → Sofa King IDM
+description: >-
+  The Customer Profile Service obtains OAuth client-credentials bearer tokens from
+  Sofa King IDM to call the Ottoman OrgPerson service, which uses IDM auth.
+source: 01KXR9XAR4-BES0
+target: 01KXK7BD4N-8Z19
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - shared-customer-record
+  - identity

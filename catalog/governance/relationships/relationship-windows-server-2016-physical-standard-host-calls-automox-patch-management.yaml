@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z4-4EV1
+name: Windows Server 2016 Physical Standard Host → Automox Patch Management
+catalogStatus: stub
+source: 01KQQ5JT03-RNZ0
+label: calls
+externalTarget: Automox Patch Management
+notes:
+  background: "Patch orchestration for Windows estate management."
+capabilities:
+- 01KQQ4Q026-BH6E

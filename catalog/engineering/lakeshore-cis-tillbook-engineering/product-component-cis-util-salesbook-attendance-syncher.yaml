@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-DA8X
+type: product_component
+ownerRole: engineer
+name: CIS Util Salesbook Attendance Syncher
+description: Console app invoked by SQL Server (via xp_cmdshell) to reconcile attendance data after the nightly CustomerInformation-to-Salesbook integration completes.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- salesbook
+- attendance
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-salesbook-attendance-syncher
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a console app invoked by SQL Server xp_cmdshell to reconcile attendance data post-nightly-integration. Related to CIS Util Salesbook Nightly Integration.
+  repositoryName: BeerCanLabs/sk-cis-util-salesbook-attendance-syncher
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

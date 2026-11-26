@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-FMR5
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS FSx File System
+description: 'AWS FSx for Windows File Server managed file storage service.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - storage
+vendor: Amazon Web Services
+productName: FSx
+productVersion: managed
+authenticationModel: other
+capabilities:
+  - 01KT0V5MCV-924J
+architectureNotes:
+  filesystemType: AWS FSx for Windows File Server.
+  resilienceModel: FSx for Windows is deployed in a Multi-AZ configuration.
+  directoryIntegration: FSx is Active Directory integrated by default in this deployment.
+  permissionModel: Mount points, folder access, and file permissions use Active Directory-integrated folder and permission controls.
+  backupPosture: No FSx backup configuration is currently configured for this service.
+  configurableSurface: File system capacity and throughput settings.
+  failureDomain: Scoped to the AWS region and VPC.
+decisionRecords:
+  - ref: 01KSNAW2AK-PTVG
+    key: filesystemType
+  - ref: 01KSNAW2AK-PTVG
+    key: resilienceModel
+  - ref: 01KSNAW2AK-PTVG
+    key: directoryIntegration
+  - ref: 01KSNAW2AK-PTVG
+    key: permissionModel
+  - ref: 01KSNAW2AK-PTVG
+    key: backupPosture
+  - ref: 01KSNAW2AK-PTVG
+    key: configurableSurface
+  - ref: 01KSNAW2AK-PTVG
+    key: failureDomain
+  - ref: 01KSNAW2AK-PTVG
+    capability: 01KT0V5MCV-924J
+deliveryModel: paas

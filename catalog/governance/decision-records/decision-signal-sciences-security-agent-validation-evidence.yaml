@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ9Q-XETS
+type: decision_record
+name: Signal Sciences Security Agent Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1D-TK06
+linkedObject: 01KQQ5JT1D-TK06
+decisionRationale: "serviceAuthentication: Agent-to-platform communication uses key-based authentication.\n\nsecretsManagement: Agent keys are managed via host-level secrets injection or  centralized configuration management.\n\nserviceLogging: Agent logs are forwarded centralized via the host's logging mechanism.\n\nhealthWelfareMonitoring: Agent status is monitored via the Signal Sciences dashboard and  host-level telemetry.\n\navailabilityModel: Availability is tied to the host where the agent is deployed.\n\nscalabilityModel: Scales horizontally with the number of host instances.\n\nrecoverabilityModel: Failed agents are automatically replaced during host or service restarts.\n\nfailureDomain: Impact is scoped to the individual host instance running the agent."

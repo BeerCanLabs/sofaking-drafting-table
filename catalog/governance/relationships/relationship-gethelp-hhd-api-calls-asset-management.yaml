@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KT0XSJE1-3G7F
+name: HelpDesk HHD_API → WHM Asset Management API
+catalogStatus: stub
+source: 01KSM38KFB-X6P1
+label: calls
+target: 01KSM38KFB-XZ3E
+notes:
+  background: "HHD_API integrates with Sofa King Asset Management / Trackweb for asset-linked
+workflows and ticket context enrichment. Evidence: the WHM_HD_API repository
+declares a TrackwebNotifications connected service. Target endpoint within the
+asset-management product is unconfirmed; modeled against the WHM Asset
+Management API as the representative entry point.
+"
+capabilities: []

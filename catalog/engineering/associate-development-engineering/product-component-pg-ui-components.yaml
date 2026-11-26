@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-MZNS
+type: product_component
+ownerRole: engineer
+name: Pg UI Components
+description: 'to house all common UI components which will be used for various PG products (e.g. RL and PLM) '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- pg
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-pg-ui-components
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-pg-ui-components
+  observedRuntimeSignals: github_actions, node, readme
+  observedManifestPaths: .github/workflows/storybook-check.yml; .github/workflows/storybook-deploy.yml; lerna.json; nx.json; package-lock.json; package.json; packages/pg-dashboard-tiles/package.json; packages/pg-dashboard-tiles/tsconfig.json; packages/pg-react-components/package.json; packages/pg-react-components/tsconfig.json; packages/pg-react-resourcelibrary/package.json; packages/pg-react-resourcelibrary/tsconfig.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

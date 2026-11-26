@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6M-BCEY
+type: product_component
+ownerRole: engineer
+name: Corvid Intranet
+description: >-
+  ASP.NET web application (Intranet.csproj) providing Windows-authenticated
+  internal staff functionality: help desk support, call escalation
+  (Corvid.SEGEscalatedCallCenter.Server), agreements, commitments, parking
+  lot tasks, escalation matrices, and training/customer renewal tracking.
+  Discovered from the IntranetCode folder of the KIOTrifoldStandaloneApplication
+  repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - corvid-intranet
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: web-application
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\IntranetCode"
+  repositoryName: KIOTrifoldStandaloneApplication

@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-2FWS
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS OpenSearch Service
+description: 'Managed OpenSearch/Elasticsearch cluster used for centralized logging, search, and analytics.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- paas
+- logging
+- search
+- elasticsearch
+vendor: Amazon Web Services
+productName: OpenSearch Service
+productVersion: managed
+authenticationModel: iam
+capabilities:
+- 01KQQ4Q026-D04B
+- 01KT0XNZEY-A7GK
+architectureNotes:
+  resilienceModel: Multi-AZ deployment.
+  configurableSurface: Domain configuration, access policies, encryption, and index settings.
+  failureDomain: Scoped to the AWS region and account.
+  dataEncryption: Encrypted at rest and in transit.
+decisionRecords:
+- ref: 01KSNAW2AK-GM3Q
+  key: resilienceModel
+- ref: 01KSNAW2AK-GM3Q
+  key: configurableSurface
+- ref: 01KSNAW2AK-GM3Q
+  key: failureDomain
+deliveryModel: paas

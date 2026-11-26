@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-4BXK
+type: relationship
+name: HCM RH Job Postings → AWS SNS
+source: 01KSM38KG6-0YP7
+target: 01KQQ5JT05-HTRA
+label: publishes job-posting events to
+technology: AWS SDK over HTTPS
+direction: event
+flow: outbound
+catalogStatus: complete
+tags:
+  - hcm-rh
+  - messaging
+  - aws
+notes: >-
+  The Job Postings service publishes create, update, and delete lifecycle
+  events to the configured SNS topic.

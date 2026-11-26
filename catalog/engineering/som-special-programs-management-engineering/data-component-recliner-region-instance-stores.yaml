@@ -1,0 +1,59 @@
+schemaVersion: '1.0'
+uid: 01KZP9ZZ56-VW85
+type: data_component
+ownerRole: engineer
+name: Recliner Region Instance Stores
+description: >-
+  Proposed set of single-tenant Recliner region databases containing each
+  customer's application and customer records. The architecture groups region
+  databases into regional clusters while preserving region-level isolation.
+version: 0.3.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - recliner
+  - region-data
+  - single-tenant
+  - sqlserver
+  - data-component
+  - ferpa
+  - pii
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+runsOn: 01KRZVZXDK-7XC1
+targetEngine: mssql
+dataClassification: restricted
+containsPII: true
+retentionPolicy: TBD - customer-record retention, deletion, legal-hold, and region offboarding behavior require data-owner confirmation.
+notes:
+  accountableDataDomainApprovers:
+    - Theo Kane
+    - Reid Sumner
+    - Sunil Pradhan
+  logicalBoundary: >-
+    Per-region Instance Stores identified by the Recliner Infrastructure
+    Architecture draft. Each customer receives a separate logical database,
+    and the proposed regional database clusters group those single-tenant
+    databases without removing region isolation.
+  repositoryPath: src/recliner-database/ReclinerRegionInstanceStore/
+  sourceDocuments:
+    - title: Recliner Infrastructure Architecture [DRAFT]
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/17155479503/Recliner+Infrastructure+Architecture+DRAFT
+      lastModified: '2026-06-24'
+      authority: Proposed architecture; operational confirmation remains required.
+    - title: Reid Sumner data-domain response in Slack
+      lastModified: '2026-08-14'
+      authority: Recliner SME confirmation of the SQL Server Database Project path.
+  repositoryEvidence: >-
+    SQL Server Database Project in BeerCanLabs/sk-som-recliner at
+    src/recliner-database/ReclinerRegionInstanceStore/.
+  governanceGaps: >-
+    Backup and restore testing, region-level restore boundaries, encryption
+    and KMS ownership, access controls, residency, RTO/RPO, and deletion
+    evidence are not documented by the source page.
+  platformDecision: >-
+    SQL Server 2025 is the page's stated direction, while Aurora PostgreSQL is
+    also described as under consideration. The final engine and managed RDS
+    service mapping remain open.

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHJM-VBYB
+type: decision_record
+name: Sofa King Central - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1J-DWT1
+linkedObject: 01KQQ5JT1J-DWT1
+decisionRationale: "deploymentTargets: AWS US-EAST-1 (Production) using EC2 for legacy APIs and EKS for modern services.\n\navailabilityRequirement: high\n\ndataClassification: pii\n\nfailureDomain: multi-tenant-shared-infrastructure\n\npatternDeviations: EventStore cluster is single-AZ (us-east-1c), presenting a DR risk.  Public/Internal API split creates proxying overhead."

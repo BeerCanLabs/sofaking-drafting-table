@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-M1PQ
+type: product_component
+ownerRole: engineer
+name: Universal Resource Library UI Module
+description: Settee UI module (TypeScript and AngularJS front end) that lets Sofa King customers find all their learning resources in a single location from within other Sofa King products such as PLM. Loaded inside Settee; not a standalone service (repository BeerCanLabs/sk-Settee-UI-Module-Universal-Resource-Library).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- associate-development
+- lcr
+- resource-library
+- settee
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Resource-Library
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Resource-Library
+  deploymentPipeline: Build in TeamCity, deploy with Octopus Deploy (owner-confirmed). The repository packages build output as a NuGet package (ui-module.nuspec). The TeamCity configuration lives on the TeamCity server, not in the repository.
+  runtimeHostEvidence: Static UI bundle loaded by Settee (per CONTRIBUTING.md). runsOn is set to the Node.js Application Service, the same value the other Settee UI module components use. The owner confirmed this value matches the one shared with the other Settee modules, and that the TeamCity Node.js version is 20.19.4.
+  octopusDeploymentTargets: Owner-provided from Octopus Deploy. Environment aws_prod, target tags Settee and UIModules, Listening Tentacle, Default Machine Policy. Three EC2 instances i-018c324649c925c22, i-043d9335babb6d9c6 and i-06551c41de4d54219 in AWS account Production Microservices (736016846305), region us-east-1. Private endpoints (port 10935) deliberately omitted.
+  observedRuntimeSignals: node, readme, nuspec
+  observedManifestPaths: ui-module.nuspec; package.json; src/ui-module-config.json; tsconfig.json; gulpfile.js; cypress.json
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed; owner interview required.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.

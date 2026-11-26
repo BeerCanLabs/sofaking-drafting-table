@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-8PKZ
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Pg Forms
+description: PG Microservice for PLM/EEM Forms
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT05-CT7X
+tags:
+- repository-discovery
+- platform
+- product-component
+- pre-production
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-pg-forms
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  notInProductionSkpg50273: >-
+    RECLASSIFIED under SKPG-19589 review. lifecycleStatus moved from
+    existing-only to candidate: this service has almost certainly never reached
+    production, on five independent signals. (1) The repository has no cd/
+    directory and no codefresh.yml - its root holds only cdk.json,
+    windowsBuild.cmd, src/, README.md and the CA bundle - so it has no
+    deployment pipeline, where every other claimed PLM/EEM component has one.
+    (2) It does not appear in the PG pipeline inventory in "PG Work Left for
+    PG" (Confluence 39199080479, live page, 2026-02), which lists
+    STL-LDMS-Legacy, STL-LDMS.Net, STL-FORMIX, plm-Dashboard-BFF,
+    pg-msvc-plm-eem-api, STL-Identity, pg-plm-ui, msvc-ResourceLibrary and
+    PG-ReportWriter. (3) FormServiceDbStack.cs leaves DeletionProtection
+    commented out, annotated "uncomment when we are ready to go live".
+    (4) FormServiceLambdaStack.cs hardcodes the token authorizer's idmUrl to
+    idgatewayawsstage.skqa.example, a QA endpoint, with a TODO, in a stack that
+    deploys to every environment. (5) Its authorizer runs the nodejs14.x Lambda
+    runtime, which AWS no longer supports, so the stack may not deploy at all
+    today. CONSEQUENCE: this component and its two exclusive dependencies -
+    API Gateway (01M1HJY7E4-RPTG) and the DocumentDB cluster
+    (01M1HJY7E4-3NGA) - are recorded as pre-production work rather than
+    production architecture. They are kept in the catalog for visibility, are
+    NOT treated as production non-standard-technology exceptions, and the
+    security findings on them are pre-production hygiene rather than live
+    exposure. An owner still needs to confirm; see DraftingSession
+    01M1F8WB4E-0GSN, form-service-production-status.
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at the AWS Lambda
+    Serverless Host (01KQQ5JT03-FGYJ), a host object. Repointed at AWS Lambda
+    Runtime (01KQQ5JT05-CT7X). Lambda is confirmed from
+    SK.PG.FormService.CDK/FormServiceLambdaStack.cs, which declares five
+    Runtime.DOTNET_6 handlers (get, post, getById, delete, patchById) plus one
+    Runtime.NODEJS_14_X token authorizer. NOTE the runtimes are .NET 6 and
+    Node.js 14 - NOT the .NET 10 used by the EKS services - and the Node.js 14
+    Lambda runtime is end-of-life and no longer supported by AWS.
+  repositoryName: BeerCanLabs/sk-msvc-pg-forms
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: cdk.json; src/SK.PG.FormService.CDK/SK.PG.FormService.CDK.csproj; src/SK.PG.FormService.CDK/Properties/launchSettings.json; src/SK.PG.FormService.Entities/SK.PG.FormService.Entities.csproj; src/SK.PG.FormService.FormController/SK.PG.FormService.FormController.csproj; src/SK.PG.FormService.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

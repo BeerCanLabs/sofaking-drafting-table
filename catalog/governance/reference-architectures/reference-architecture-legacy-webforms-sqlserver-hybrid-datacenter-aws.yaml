@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-VFBP
+type: reference_architecture
+name: Legacy Web Forms SQL Server Hybrid Datacenter and AWS
+description: Reference Architecture for legacy ASP.NET Web Forms or IIS applications hosted in a primary datacenter with AWS non-production or DR footprints and SQL Server data services.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- legacy
+- webforms
+- iis
+- sqlserver
+- hybrid
+patternType: legacy-webforms-sqlserver-hybrid
+serviceGroups:
+- name: Web Edge and Routing
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT1F-HZTZ
+    diagramTier: presentation
+  - ref: 01KQQ5JT00-Z6WV
+    diagramTier: utility
+- name: Application Web Tier
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT1F-HZTZ
+    diagramTier: presentation
+- name: Identity and Authentication
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT1F-HZTZ
+    diagramTier: application
+- name: Database Services
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT01-QFN5
+    diagramTier: data
+- name: File Storage and Replication
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT1F-HZTZ
+    diagramTier: data
+notes:
+  lifecycleRationale: Maintain as an explicit exception for existing Web Forms and SQL Server systems while referenced SQL Server Technology Components remain in extended support. This pattern should not be expanded for new target-state architecture.
+  availabilityModel: Web tier scaling can tolerate individual node loss; SQL and shared storage failure modes require product-specific documentation.
+  tenancyModel: Single-tenant customizations and per-client deployment boundaries must be explicit.
+  deploymentModel: Datacenter primary, AWS non-production, and AWS DR roles must be separately described.
+  patternRisks: Deprecated replication, custom tenant drift, and shared file models must be explicitly governed.

@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KZ441KFJ-3PJQ
+type: product_component
+ownerRole: engineer
+name: Trifold My Insights Dashboard
+description: >-
+  Feature area of the Trifold product family, discovered via the "Trifold -
+  Key Product Functionality" Confluence page (FPM space, page 995360994).
+  Provides users with metrics, alerts, and actionable data insights. No
+  distinct URL/endpoint listed on the source page; may be a feature within
+  Corvid Front End Web rather than a standalone component — not yet
+  confirmed by source repository review.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - my-insights-dashboard
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+runtimeRequirement: >-
+  Not yet confirmed — source repository has not been identified for this
+  component.
+notes:
+  sourceRepository: Not yet identified.
+  sourcePage: Trifold - Key Product Functionality (Confluence, FPM space, page 995360994)

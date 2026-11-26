@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 7QMR3VXH9C-N24T
+type: relationship
+name: 'Platform Msvc Org Person → MongoDB Atlas'
+catalogStatus: stub
+source: 01KSM38KFH-NYK5
+target: 01KQQ5JT05-E3FZ
+label: reads from and writes to
+technology: MongoDB wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- ottoman
+notes:
+  background: >-
+    Confirmed 2026-08-04 by a Ottoman developer: production cluster/database
+    is FC-PROD1-Cluster1/sk-org-person (mongodb+srv:// connection string,
+    src/connection.js, .env/env.dev.json; replica set FC-PROD1-Cluster1-shard-0
+    in cd/prod/cm.yml matches). Ownership documented at
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/113994913/Atlas+MongoDB+-+Database+and+Service+Owning+Teams.
+    Reuses the existing shared MongoDB Atlas data_store_service rather than
+    creating a new object, per DRAFT's reuse model — that object's
+    lifecycleStatus is deprecated for new adoption (set for a different
+    product's use), which does not block this existing, already-running
+    dependency from being modeled.

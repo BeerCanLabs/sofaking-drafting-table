@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01M25TBAXZ-50A4
+type: relationship
+name: Corvid Portal → Trifold Document Repository
+source: 01KX4A2T70-N90K
+target: 01KXK81788-D45P
+label: calls
+technology: REST (assumed; not confirmed by owner interview)
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+notes: >-
+  Owner confirmed on 2026-09-10 that Corvid Portal (Household Portal) is a
+  sub-application of Trifold Document Repository — it calls the Document
+  Repository API to pull documents for parents. Auth for this call is
+  handled via the identity servers GRRCDPIDNTWEB11, GRRCDPIDNTWEB12, and
+  GRRCDPIDNTWEB13 — likely the hosts backing the Trifold Identity Hub
+  product component (identity.cdpdirect.example), though that link is not yet
+  confirmed. Data protocol still assumed as REST, not independently
+  confirmed.

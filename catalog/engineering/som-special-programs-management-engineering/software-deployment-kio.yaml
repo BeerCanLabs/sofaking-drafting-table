@@ -1,0 +1,133 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-M8P3
+type: software_deployment_pattern
+ownerRole: engineer
+name: Kio Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: KIO
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- sei
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KGE-GYTE
+    repositoryName: BeerCanLabs/sk-kio-translation-service
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-translation-service
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KGF-3Q47
+    repositoryName: BeerCanLabs/sk-kio-web-bff
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-web-bff
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KGE-AF1H
+    repositoryName: BeerCanLabs/sk-kio-central-data-service
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-central-data-service
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, node, readme
+  - productService: 01KSM38KGE-39PY
+    repositoryName: BeerCanLabs/sk-kio-central-data-service-client
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-central-data-service-client
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KGE-KTQ2
+    repositoryName: BeerCanLabs/sk-kio-reporting-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-reporting-api
+    repositoryPrimaryLanguage: Java
+    observedRuntimeSignals: docker, java, readme
+  - productService: 01KSM38KGE-CXWW
+    repositoryName: BeerCanLabs/sk-kio-shared-strategy-library-frontend
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-shared-strategy-library-frontend
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, dotnet, node, readme
+  - productService: 01KSM38KGE-G1N1
+    repositoryName: BeerCanLabs/sk-kio-trifold-dashboard-localeventprocessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-trifold-dashboard-localeventprocessor
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KGE-BK91
+    repositoryName: BeerCanLabs/sk-kio-quickfit-auth-hub
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-quickfit-auth-hub
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KGE-2X1Q
+    repositoryName: BeerCanLabs/sk-kio-ang-client
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-ang-client
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGE-7BVQ
+    repositoryName: BeerCanLabs/sk-kio-app-shared-eventhub
+    sourceRepository: https://github.com/BeerCanLabs/sk-kio-app-shared-eventhub
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KGE-GYTE
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGF-3Q47
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGE-AF1H
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGE-39PY
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGE-KTQ2
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGE-CXWW
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGE-G1N1
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGE-BK91
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGE-2X1Q
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGE-7BVQ
+    diagramTier: application
+    networkZone: app

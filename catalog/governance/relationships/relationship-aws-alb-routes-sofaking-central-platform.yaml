@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYAFQQJB-FE31
+type: relationship
+name: AWS Application Load Balancer -> Sofa King Central Platform
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+label: routes requests to
+target: 01KQQ5JT0K-TN7W
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: AWS ALB is the confirmed production customer/UI ingress path for Sofa King Central. Confirmed by Sofa King Central engineering; whether the same ALB fronts legacy EC2/IIS versus EKS API paths is not yet confirmed.
+tags:
+  - sofaking-central-engineering
+  - alb
+  - ingress

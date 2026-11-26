@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJD-YKV9
+type: object_patch
+name: Sofa King Reporting capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Reporting capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0XNZEY-70Y6
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1R-SAS6
+      lifecycleStatus: existing-only
+      notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+    - ref: 01KQQ5JT1R-CA33
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only from the Eclipse BIRT Reporting Service Standard.
+    - ref: 01KQQ5JT1R-T40D
+      lifecycleStatus: candidate
+      notes: Assumed candidate from the JasperSoft Reporting Service Standard.
+    - ref: 01KQQ5JT1R-YS4E
+      lifecycleStatus: existing-only
+      notes: Maintained for ActiveReports workloads identified in SRE automation.
+    - ref: 01KQQ5JT1T-Z9BG
+      lifecycleStatus: retired
+      notes: SRE automation uses the Microsoft Report Viewer 2012 runtime, which is past vendor support.
+    - ref: 01KQQ5JT1T-E7EQ
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server Reporting Services 2022 workloads identified in SRE automation.
+    - ref: 01KQQ5JT1T-VQD5
+      lifecycleStatus: retired
+      notes: SRE automation uses SQL Server 2012-era System CLR Types, which are past vendor support.

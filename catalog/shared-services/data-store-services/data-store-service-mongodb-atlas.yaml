@@ -1,0 +1,63 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-E3FZ
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: MongoDB Atlas
+description: >-
+  Fully managed MongoDB database platform. New Recruiting & Hiring uses
+  separate Sofa King Atlas projects for non-production and production, with a
+  multi-region production cluster.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: data-management-team
+  contact: data-management-team@sofaking.example
+tags:
+  - database
+  - mongodb
+  - mongodb-atlas
+  - nosql
+vendor: MongoDB Inc.
+productName: MongoDB Atlas
+productVersion: managed
+authenticationModel: other
+patchingOwner: vendor-managed
+architectureNotes:
+  resilienceModel: Managed multi-region/multi-AZ availability.
+  configurableSurface: Cluster instances, storage scaling, and backup policies.
+  failureDomain: Scoped to the Atlas project and cloud provider region.
+capabilities:
+  - 01KT0V5MCV-VD0Y
+internalComponents:
+  - ref: 01KYMVEMEY-KN81
+    role: managed-database-platform
+    configuration: atlas-mongodb-srv-tls
+    notes: >-
+      MongoDB Atlas provides the managed MongoDB database engine and TLS client
+      connectivity for the Sofa King Atlas projects.
+deliveryModel: paas
+notes:
+  operationalEvidence: >-
+    Tom Sandoval is the confirmed R&H 2.0 data SME. The internal HCM-RH
+    connectivity documentation directs access requests through Data Ops and
+    identifies separate SK-Non-Prod and SK-Prod Atlas projects.
+  existingUseDisposition: >-
+    Lifecycle remains deprecated because this object is not approved for new
+    adoption. OPS-435884 records the confirmed existing New Recruiting &
+    Hiring use; Architecture L1 does not require a redesign or remediation
+    date.
+  sourceDocumentation: >-
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14381964054/HCM+-+RH+2.0+-+Data
+decisionRecords:
+  - ref: 01KT16XJ5J-H6ZS
+    key: resilienceModel
+  - ref: 01KT16XJ5J-H6ZS
+    key: configurableSurface
+  - ref: 01KT16XJ5J-H6ZS
+    key: failureDomain
+  - ref: 01KT16XJ5J-H6ZS
+    capability: 01KT0V5MCV-VD0Y

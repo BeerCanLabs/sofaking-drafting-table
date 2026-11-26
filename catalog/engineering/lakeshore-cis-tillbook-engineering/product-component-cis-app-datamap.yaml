@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFP-7MN9
+type: product_component
+ownerRole: engineer
+name: CIS App Datamap
+description: Tillbook DataMap Website
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-app-datamap
+language: C#
+classification: web-application
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Corrected by product owner on 2026-07-31 — this is a .NET Framework 4.8 application. It has Node-built frontend components, but they compile to static assets referenced from ASPX pages/MVC views, not a standalone Node.js runtime; the earlier "Node.js" runtimeRequirement was a misread of that frontend tooling.
+  repositoryName: BeerCanLabs/sk-cis-app-datamap
+  observedRuntimeSignals: dotnet, node, readme
+  observedManifestPaths: src/DataMap.sln; src/Plushsoft.DataMap.Builds/Plushsoft.DataMap.Builds.csproj; src/Plushsoft.DataMap.Business/Plushsoft.DataMap.Business.csproj; src/Plushsoft.DataMap.Core/Plushsoft.DataMap.Core.csproj; src/Plushsoft.DataMap.Infrastructure/Plushsoft.DataMap.Infrastructure.csproj; src/Plushsoft.DataMap.Log/Plushsoft.DataMap.Log.csproj; src/Plushsoft.DataMap.TestProject/Plushsoft.DataMap.TestProject.csproj; src/Plushsoft.DataMap.Website.Client/dev/mock-data/calendarDays.json; src/Plushsoft.DataMap.Website.Client/dev/mock-data/customerAttendanceMarkers.json; src/Plushsoft.DataMap.Website.Client/dev/mock-data/customerDailyAttendance.json; src/Plushsoft.DataMap.Website.Client/dev/mock-data/customers.json; src/Plushsoft.DataMap.Website.Client/package-lock.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-Z2TD
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft URL Rewrite 2
+description: IIS URL Rewrite module installed for Windows web server and legacy LDMS workloads.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- iis
+- web
+classification: software
+vendor: Microsoft
+productName: URL Rewrite
+productVersion: '2'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Exact minor version is not recorded in SRE automation; installer filename is rewrite_amd64_en-US.msi.
+capabilities:
+- 01KT0V5MCV-RZV0
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/webserver_windows/tasks/main.yml and sk_apps/ldms/urlrewrite/tasks/main.yml."

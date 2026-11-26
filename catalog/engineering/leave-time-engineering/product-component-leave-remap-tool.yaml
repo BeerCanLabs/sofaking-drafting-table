@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-P1BK
+type: product_component
+ownerRole: engineer
+name: Leave Remap Tool
+description: Utilty for processing Remap Requests
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-remap-tool
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  runtimePlacement: Owner-confirmed on 2026-08-04 that this EKS workload runs in AWS rather than Grand Rapids; AWS region, account, and cluster remain unconfirmed.
+  repositoryName: BeerCanLabs/sk-abs-remap-tool
+  observedRuntimeSignals: docker, dotnet, node, readme
+  observedManifestPaths: Dockerfile; Properties/launchSettings.json; Remap.csproj;
+    Remap.sln; appsettings.Development.json; appsettings.json; bin/Debug/netcoreapp2.2/Remap.deps.json;
+    bin/Debug/netcoreapp2.2/Remap.runtimeconfig.dev.json; bin/Debug/netcoreapp2.2/Remap.runtimeconfig.json;
+    bin/Debug/netcoreapp2.2/publish/wwwroot/lib/signalr/package.json; bin/Release/netcoreapp2.2/publish/wwwroot/lib/signalr/package.json;
+    cd/codefresh-deploy-manual.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

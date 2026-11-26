@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-DXHG
+type: technology_component
+ownerRole: technology-admin
+name: Chef Infra Client 16
+description: Supported Chef Infra client baseline for configuration management on legacy-managed hosts.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- config-management
+classification: agent
+vendor: Chef
+productName: Infra Client
+productVersion: '16'
+platformDependency: external.ops.chef-server
+vendorLifecycle:
+  mainstreamSupportEnd: '2021-04-30'
+  extendedSupportEnd: '2023-04-30'
+  notes: Chef Infra Client 16 reached end-of-life April 2023 per Progress/Chef upstream release policy. Company policy requires migration to a supported Chef Infra Client version.
+capabilities:
+- 01KT0XNZEY-35Y2

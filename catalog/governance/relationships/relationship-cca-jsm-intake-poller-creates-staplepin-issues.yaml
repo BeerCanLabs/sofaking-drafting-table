@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: HC3ZTXWT2Y-BC99
+type: relationship
+name: CCA JSM Intake Poller → Staplepin Control Plane
+catalogStatus: incomplete
+source: 01KYXH0DG6-XEYW
+label: creates work items in
+target: 01KYWQE2F1-14MN
+description: >-
+  [DOCUMENTED] For each matched JSM service request the poller creates a
+  Staplepin work item via the plugin API with an explicit todo status and wakeup
+  request, so a governed run dispatches without operator action -- the automated
+  third entry into Staplepin alongside the Console front door and the planned
+  Slack side door. Merged but gated off (enable_jsm_intake_poller = false);
+  go-live planned 2026-08-04.
+technology: HTTPS (Staplepin plugin API)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - intake
+  - front-door

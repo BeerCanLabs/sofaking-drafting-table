@@ -1,0 +1,412 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-8XYB
+type: drafting_session
+name: Digital Stores Source-Derived Composition 2026-08-20
+description: Replaces the empty Pending Owner Interview stub on the Digital Stores SoftwareDeploymentPattern (01KRZ1GCH3-99RF) with an evidenced composition authored from a direct read of BeerCanLabs/sk-main-ang and BeerCanLabs/sk-server-ang. Records the infrastructure, engine-version and posture facts that source material could not confirm. Extended 2026-09-10 with the answers to the Digital Stores DRAFT L1 Baseline Questionnaire, returned by the engineering owner on 2026-09-08, and with the Confluence evidence that questionnaire cites.
+version: 1.7.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+sessionStatus: open
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- drafting-session
+- digital-stores
+- source-derived
+- owner-confirmed
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KRZ1GCH3-99RF
+sourceArtifacts:
+- name: BeerCanLabs/sk-main-ang
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-main-ang
+  notes: Angular 14 SPA for Digital Stores Suite+. Read directly on 2026-08-20. Confirmed the header-based auth scheme, the leave of any CI pipeline, the leave of frontend logging, and the cross-repo call path into the EntityAPI.
+- name: BeerCanLabs/sk-server-ang
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-server-ang
+  notes: ASP.NET Web API 2 EntityAPI. Read directly on 2026-08-20. Confirmed the tenancy model, the three logging mechanisms, the leave of any health endpoint, and the disabled server-side per-screen authorization check.
+- name: catalog/engineering/digital-stores-engineering/software-deployment-digital-stores.yaml
+  type: catalog-object
+  location: uid 01KRZ1GCH3-99RF
+  notes: 'Prior state: a Pendo-discovered stub with one Pending Owner Interview service group and no deployable objects.'
+- name: Digital Stores SQL Server engine build, reported by the workspace owner
+  type: owner-statement
+  location: Draftsman session, 2026-08-20
+  notes: Build 14.0.3495.9. Verified against the Microsoft SQL Server 2017 build-versions article (KB4047329) as CU31 + GDR, KB5058714, released 2025-07-08, and against the Microsoft product lifecycle page for SQL Server 2017 for the support dates. The environment tier the build was read from was not specified.
+- name: Digital Stores edge topology, reported by the workspace owner
+  type: owner-statement
+  location: Draftsman session, 2026-08-27
+  notes: Imperva WAF forwards to an AWS Application Load Balancer in front of *.digital-showrooms.example. No AWS account, region, or infrastructure-as-code detail was provided.
+- name: Digital Stores authorization-gap intent, reported by the workspace owner
+  type: owner-statement
+  location: Draftsman session, 2026-08-27
+  notes: The commented-out per-screen check in BaseController.IsAuthorized() was disabled deliberately. Screen-list construction moved to SecurityAL::GetSecurityList(), called separately. Not yet confirmed by direct repository read. Superseded by the 2026-09-08 questionnaire answer to 5.1, which describes GetSecurityList() as a sign-in-time front-end call rather than a per-request server-side check.
+- name: Digital Stores non-alpha deployment mechanism, reported by the workspace owner
+  type: owner-statement
+  location: Draftsman session, 2026-08-27
+  notes: dshpDeploy drives all four tiers by branch (angular, QAAng, Sandbox, PRAng). Production is built manually and pushed to QA, then promoted QA -> Sandbox -> Production by branch. Not yet confirmed by direct read of dshpDeploy.
+- name: 'Digital Stores DRAFT L1 Baseline Questionnaire: Closing Gaps for Confirmation'
+  type: owner-statement
+  location: https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/15927299035
+  notes: Eight-section questionnaire authored to close every open item blocking L1, answered inline by the Digital Stores engineering owner and last modified 2026-09-08. Supplied the AWS account and region for all four tiers, the availability and data-classification answers, the SQL Server backup, encryption, authentication, host and build-scope answers, the authorization-gap verification, the deployment-promotion mechanics, three previously unknown external dependencies, and the long-term architecture intent. Five answers conflict with other evidence and are recorded as conflicts on the pattern rather than adopted; see notes.answerQuality.
+- name: Digital Stores - Environment Guide
+  type: documentation
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/108027811
+  notes: Last modified 2026-09-01. Per-tier host inventory with instance names, internal and external IPs, OS, functions, load-balancer DNS names, Park My Cloud schedules and SQL Server builds, plus the infrastructure host list and the monitoring statement (AWS CloudWatch plus Nagios XI). The single strongest infrastructure evidence source in this session and the corroboration for most of the questionnaire's answers.
+- name: Digital Stores - AWS Backup Service
+  type: documentation
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18410474827
+  notes: Dated 2023-02-28. Cited by the owner as the answer to the backup question (4.1) and the host-substrate question (4.5). Describes AWS Backup provisioned by Terraform from BeerCanLabs/sk-digital-stores-aws-backup, daily EBS snapshots Monday to Thursday and weekly Friday AMIs, 30-day retention, copies to us-west-1 and us-east-1, and carries the server list with instance types. Weakest evidence in the set - three and a half years old and prospectively worded ("we are planning to implement") - so the implemented state is not confirmed.
+- name: 2 - Data Classification and Protection Policy
+  type: documentation
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/165399675
+  notes: Version 1.8, approved 2026-05-22 by Bryce Bowman, VP Information Security. Cited by the owner as the basis for the Confidential classification. Also supplies the two obligations the confirmed posture now fails - encryption at rest for sensitive data in AWS, and de-identification of customer data in non-production environments - and names security@sofaking.example as the exception path.
+- name: AWS Account 472468972873 - Digital Stores
+  type: documentation
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13955728101
+  notes: 'Live AWS API resource discovery via AssumeRole, dated 2026-01-28. Independent corroboration of the deployment target: 36 EC2 instances, 8 subnets and 2 load balancers in us-west-1, 2 EC2 instances in us-east-1, and zero RDS instances in every one of the twelve regions scanned.'
+- name: Digital Stores - Scheduled Tasks
+  type: documentation
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/155140537
+  notes: Last modified 2026-09-08 as originally cited; re-read 2026-10-20 at its current last-modified date of 2026-10-15. Cited by the owner as the answer to the batch-job question (7.1). Supplies the ten nightly Jaspersoft extracts and their SFTP delivery, the monthly refreshes of the alpha, QA and sandbox databases from production data, Automox OS patching, and the retired Matillion-to-Redshift ETL and AWS Data Pipeline job sets. The 2026-10-15 revision strikes through its prior "Park My Cloud (PMC)" text in the Datapipelines row and replaces it with "AWS Instance Scheduler", linking a SharePoint document for configuration detail. That correction is the basis for the 2026-10-20 Park My Cloud to AWS Instance Scheduler correction applied across this session's generated objects; see unresolvedQuestions.aws-instance-scheduler-configuration.
+generatedObjects:
+- name: Digital Stores Suite+ Web UI
+  type: product_component
+  status: created
+  ref: 01M0GBWMZJ-9DNC
+  notes: New 2026-08-20 from main-ang. Updated 2026-09-10 with confirmed availability, scalability, recoverability and failure-domain posture.
+- name: Digital Stores EntityAPI
+  type: product_component
+  status: created
+  ref: 01M0GBWMZJ-E0NF
+  notes: New 2026-08-20 from server-ang. Updated 2026-09-10 with confirmed posture fields plus a databaseAuthentication conflict note.
+- name: Digital Stores Suite+ Web UI calls Digital Stores EntityAPI
+  type: relationship
+  status: created
+  ref: 01M0GBWMZJ-RC84
+  notes: New. HTTPS REST, synchronous, same-origin in deployed environments.
+- name: Digital Stores Architecture Facts From Direct Repository Read
+  type: decision_record
+  status: created
+  ref: 01M0GBWMZJ-AAX4
+  notes: New. Captures the three authoring decisions made in preference to guessing. Its no-deployment-target decision is now superseded by the confirmed account and region.
+- name: Digital Stores Server-Side Per-Screen Authorization Is Disabled
+  type: decision_record
+  status: created
+  ref: 01M0GBWMZJ-TMGD
+  notes: New 2026-08-20. Moved open -> mitigated 2026-08-27 on an owner-asserted mitigation, then mitigated -> open 2026-09-10 because the 2026-09-08 answer to question 5.1 does not support the mitigation.
+- name: Digital Stores
+  type: software_deployment_pattern
+  status: created
+  ref: 01KRZ1GCH3-99RF
+  notes: Updated in place, uid unchanged. Stub service group replaced with Presentation, Application and Data tiers 2026-08-20. Updated 2026-09-10 with real deployment targets, four tierVariants, top-level requirement fields, scaling units and nine requirement dispositions.
+- name: SQL Server 2017 DBMS Service
+  type: data_store_service
+  status: stubbed
+  ref: 01M0GDHSAM-586D
+  notes: New 2026-08-20. Fills the only gap in the generic database-sqlserver-* series. Remains a stub and remains Shared Services' to complete; the Digital Stores Data Tier no longer references it, so it no longer blocks this product.
+- name: Digital Stores SQL Server 2017 End Of Support And Patch Currency
+  type: decision_record
+  status: created
+  ref: 01M0GDHSAM-F64B
+  notes: New 2026-08-20. Updated 2026-09-10 with the confirmed two-build estate inventory, which removes the scope qualifier it previously carried.
+- name: Digital Stores Imperva WAF forwards to AWS Application Load Balancer
+  type: relationship
+  status: created
+  ref: 01M12W6R3B-ZHCN
+  notes: New. Reuses the existing shared Imperva WAF (01KQQ5JT1D-MY47) and AWS ALB (01KQQ5JT04-P7QJ) network services.
+- name: Digital Stores AWS Application Load Balancer routes to Digital Stores Suite+ Web UI
+  type: relationship
+  status: created
+  ref: 01M12W486T-6VP1
+  notes: New. Models the load balancer's entry point into the shared IIS origin per region.
+- name: Digital Stores SQL Server 2017 Estate
+  type: data_store_service
+  status: created
+  ref: 01M25X9W0R-VQJ3
+  notes: New 2026-09-10. Product-specific data-at-rest service carrying the four per-tier instances and the posture the 2026-09-08 answers confirmed. Authored in preference to completing the generic 2017 stub, whose posture is Shared Services' to establish on estate-wide evidence. Reuses TechnologyComponent 01KQQ5JT1T-QKGB.
+- name: Digital Stores Encryption At Rest Is Not Enabled On Confidential Data
+  type: decision_record
+  status: created
+  ref: 01M25X9W0R-4HSX
+  notes: New 2026-09-10. Confirmed noncompliance rather than missing evidence, from answer 4.3 read against the Data Classification and Protection Policy.
+- name: Digital Stores Has No Recorded Availability Target And No Tested Recovery
+  type: decision_record
+  status: created
+  ref: 01M25X9W0R-GKSK
+  notes: New 2026-09-10. Records why the "100%" answers to 2.1 and 4.2 were not adopted as the availability requirement, and the confirmed single-instance data tier and untested restore behind that.
+- name: Digital Stores Lower Environments Are Refreshed With Production Data
+  type: decision_record
+  status: created
+  ref: 01M25X9W0R-KWXR
+  notes: New 2026-09-10. Derived from the Scheduled Tasks page rather than asserted by the owner, so an unrecorded masking step inside the refresh jobs has not been excluded.
+- name: Digital Stores Database-Per-Region Pattern Is The Intended Long-Term Architecture
+  type: decision_record
+  status: created
+  ref: 01M25X9W0R-0Q0X
+  notes: New 2026-09-10 from answer 8.1. Raises the reference-architecture deviation to the Architecture Review Board as a standing position rather than transitional drift.
+- name: Digital Stores External Dependencies And Service Connections
+  type: decision_record
+  status: created
+  ref: 01M25X9W0R-56TA
+  notes: New 2026-09-10 from answer 7.1. Replaces the noAdditionalInteractions claim, which asserted Pendo as the only external interaction and was incomplete. Scoped 2026-09-10 to the additional-interactions disposition only, after the inter-service-connections disposition was split out to 01M263WKS2-NR3T so each accepted DecisionRecord stays 1:1 with its requirement.
+- name: Digital Stores Inter-Service Connections Are Not Fully Registered As Relationship Objects
+  type: decision_record
+  status: created
+  ref: 01M263WKS2-NR3T
+  notes: New 2026-09-10, split out from 01M25X9W0R-56TA. Carries the inter-service-connections disposition (not-compliant) on the same pattern so that record and this one each stay 1:1 with the single requirement they dispose.
+- name: configurations/vocabulary/deployment-targets.yaml
+  type: vocabulary
+  status: created
+  proposedUid: aws-us-west-1
+  notes: New vocabulary value 2026-09-10. Required because the confirmed Digital Stores region is us-west-1 and the approved list carried only us-east-2 and us-east-1. Marked in its notes as legacy and not a target for new workloads. This is the one governance change in this session that needs a reviewer's assent rather than an owner's. Recorded with proposedUid rather than ref because this is a vocabulary value, not a catalog object with a resolvable UID.
+assumptions:
+- id: containers-are-dev-tooling
+  statement: The Dockerfile and docker-compose.yml in server-ang are development tooling and are not used in any deployed environment.
+  rationale: 'No deployed-environment container evidence was found in either repository, and the build and deploy path that does exist is MSBuild plus a PowerShell script to an IIS file layout. Strengthened 2026-09-08: the Environment Guide records plain Windows EC2 hosts running IIS across all four tiers and names no container runtime anywhere.'
+  impact: If containers are in fact used in production, the Application Tier substrate and the whole hosting model change. The 2026-09-08 evidence makes this materially less likely.
+  relatedObjects:
+  - ref: 01M0GBWMZJ-E0NF
+- id: single-iis-origin
+  statement: The SPA and the API are served from a single IIS site per region subdomain, with the SPA under /dist/.
+  rationale: 'web.config rewrites non-file requests to /dist/, angular.json sets baseHref to /dist/, the API base URL is derived from window.location.hostname, and build-alpha.ps1 copies both build outputs into one deploy root. Corroborated 2026-09-08: the Environment Guide lists exactly one web host per tier, not a web host and a separate API host.'
+  impact: Both ProductComponents reference the same IIS runtime service. If they are actually separate sites or separate hosts, the service groups need different substrates.
+  relatedObjects:
+  - ref: 01M0GBWMZJ-9DNC
+  - ref: 01M0GBWMZJ-E0NF
+- id: sandbox-maps-to-staging
+  statement: The Digital Stores sandbox or SU tier maps to the Staging environment tier (FQ696EE1DA-SWEN), QA maps to Test (AYQ5RCPK7C-MK58), and alpha maps to Development (SZJVW70BTN-V6GX).
+  rationale: The Environment Guide titles the section "Sandbox/SU Environment (Stage)", which is the product's own equation of sandbox with stage. Sandbox is also the tier from which the production AMI is built, which is staging behaviour. Alpha is the lowest tier, is refreshed alongside QA, and carries the smallest instances. Digital Stores has no fifth tier, so UAT (DEBGENPE77-DJ1A) has no variant.
+  impact: If the mapping is wrong the four tierVariants attach to the wrong environment_tier objects, and any tier-scoped requirement evaluation inherits that error. The product's four bands do not map one-to-one onto the workspace's five tiers, so this is a modelling choice rather than a confirmed fact. Note also that the Staging tier object declares availabilityExpectation high-availability and expects staging to mirror production replica counts, which the Digital Stores sandbox tier does not do.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+unresolvedQuestions:
+- id: reference-architecture-fit
+  question: Should Digital Stores be filed against the Sharded Multi-Tenant AWS SQL Server reference architecture with a recorded deviation, or does database-per-tenant-with-central-catalog warrant its own reference architecture?
+  status: open
+  reason: 'The referenced pattern defines a shard as a replicated sub-environment with a shard-scoped data tier. Digital Stores has one shared application tier and shards only the database, and its DS_Admin catalog is an explicit cross-shard data dependency that the pattern''s checklist disallows without a decision record. Answered in part 2026-09-08: the owner confirmed in answer 8.1 that this shape is the intended long-term architecture, not a transitional state, which settles the intent but not the disposition. The remaining question is the Architecture Review Board''s.'
+  currentBestGuess: File against the existing pattern with the deviation recorded, which is what this session did, and let the Architecture Review Board choose between accepting the deviation and commissioning a database-per-tenant reference architecture. Now tracked as DecisionRecord 01M25X9W0R-0Q0X.
+  impact: Does not block L1 - the questionnaire itself flagged 8.1 as informational. Should be settled before Digital Stores is used as a conformance example, and should be dispositioned alongside the failure-domain risk in 01M25X9W0R-GKSK so the two decisions stay consistent.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-0Q0X
+- id: deployment-target-unconfirmed
+  question: Which deployment target hosts Digital Stores - AWS account, region and VPC for each of the four environment tiers?
+  status: answered
+  reason: 'Answered 2026-09-08 by the engineering owner in answer 1.1: all four tiers run in AWS account 472468972873 in us-west-1. Corroborated independently by the 2026-01-28 AWS API resource discovery of that account, which found 36 EC2 instances, 8 subnets and 2 load balancers in us-west-1 and zero RDS instances in any region, and by the Environment Guide''s per-tier host inventory. Tier separation is by host inside one account and region rather than by account or region. VPC identifiers were left blank in the questionnaire and remain unconfirmed, but per-tier VPC and subnet identifiers belong in the environment_tier parameterSurface rather than on the pattern, so they do not block the pattern. Answer 1.2 stated that no infrastructure-as-code exists; that is correct for the application and data tiers but not for the estate, since BeerCanLabs/sk-digital-stores-aws-backup holds Terraform for AWS Backup.'
+  currentBestGuess: Not applicable - resolved. A new deployment-targets vocabulary value, aws-us-west-1, was required because the approved list carried only us-east-2 and us-east-1.
+  impact: All four AWS service groups now carry aws-us-west-1 instead of the owner-interview-required sentinel, which unblocked the four tierVariants and the deployment-targets requirement disposition. Supersedes the do-not-assign-a-deployment-target decision recorded in DecisionRecord 01M0GBWMZJ-AAX4.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GBWMZJ-AAX4
+- id: sqlserver-engine-version
+  question: Which SQL Server engine version backs Digital Stores, and should the Data Tier reference the shared SQL Server 2019 (01KQQ5JT01-QFN5) or SQL Server 2022 (01KQQ5JT01-950D) service, or a product-specific object?
+  status: answered
+  reason: 'Answered 2026-08-20 by the workspace owner: engine build 14.0.3495.9, which is SQL Server 2017 CU31 + GDR (KB5058714). Neither of the two services proposed when this question was raised was correct - SQL Server 2019 (01KQQ5JT01-QFN5) and 2022 (01KQQ5JT01-950D) are both the wrong major version. The catalog had no generic 2017 service, only three SOM-specific ones, so a generic SQL Server 2017 DBMS Service (01M0GDHSAM-586D) was stubbed and referenced. Revised 2026-09-10: the product-specific answer the question also offered is now the one taken, because the 2026-09-08 posture answers describe the Digital Stores estate specifically and cannot be generalized. The Data Tier now references Digital Stores SQL Server 2017 Estate (01M25X9W0R-VQJ3).'
+  currentBestGuess: Not applicable - resolved.
+  impact: The Data Tier references a product-specific service carrying real posture rather than a generic stub. Two follow-on risks remain open; see DecisionRecords 01M0GDHSAM-F64B, 01M25X9W0R-4HSX and 01M25X9W0R-GKSK.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GDHSAM-586D
+  - ref: 01M25X9W0R-VQJ3
+- id: edge-and-waf
+  question: Is there a WAF, CDN or load balancer in front of *.digital-showrooms.example, and if so which one?
+  status: answered
+  reason: 'Answered 2026-08-27 by the workspace owner: Imperva WAF forwards to an AWS Application Load Balancer in front of *.digital-showrooms.example. Partly corroborated and partly complicated 2026-09-08: the Environment Guide names PRLB-155628125.us-west-1.elb.amazonaws.com in front of the production web tier and SBLB-3852661381.us-west-1.elb.amazonaws.com in front of sandbox, and the 2026-01-28 account discovery counts exactly two load balancers in us-west-1, which matches. But that DNS naming is classic-ELB shaped rather than ALB shaped, and QA and alpha have no load balancer recorded at all. Whether the balancers are Application or Classic, and where TLS terminates, is unconfirmed.'
+  currentBestGuess: Two load balancers exist in us-west-1, fronting production and sandbox only. Type and TLS termination point unconfirmed and recorded as a conflict on the pattern.
+  impact: Unblocks a satisfied disposition on Hearthstone HCF.09.1.3 for the production and sandbox tiers. QA and alpha are internet-reachable per the CORS allow-list but have no recorded balancer, which the Hearthstone disposition work should address rather than assume.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01KQQ5JT1D-MY47
+  - ref: 01KQQ5JT04-P7QJ
+- id: authorization-gap-intent
+  question: Was the server-side per-screen authorization check in BaseController.IsAuthorized() disabled deliberately, and does it need to be restored?
+  status: open
+  reason: 'Answered as to intent 2026-08-27 - deliberate - and this question was closed at that time on the owner''s statement that the check had moved to SecurityAL::GetSecurityList(). Reopened 2026-09-10. Question 5.1 asked for the GetSecurityList() implementation by file and line and for confirmation that it runs on every per-screen request path. The 2026-09-08 answer supplies no file or line and describes the opposite arrangement: IsAuthorized() runs on every incoming REST request, GetSecurityList() is called by the front end only once at sign-in, and the security list is cached client-side. Read against the 2026-08-20 direct finding that the per-screen block inside IsAuthorized() is commented out and isScreenEnabled() returns true unconditionally, per-screen authorization is enforced only by the Angular route guard against a client-cached list. The in-flight encryption added after the 2021 security review protects that list in transit; it does not restore server-side enforcement.'
+  currentBestGuess: No equivalent server-side per-screen check exists on the request path. This needs a direct read of server-ang to confirm or refute, and then an Information Security disposition, not another owner statement.
+  impact: DecisionRecord 01M0GBWMZJ-TMGD returned from mitigated to open. Does not block the catalog composition, but it is the most consequential finding in this round and should not travel with the L1 packet as a closed item.
+  relatedObjects:
+  - ref: 01M0GBWMZJ-E0NF
+  - ref: 01M0GBWMZJ-TMGD
+- id: deployment-mechanism-nonalpha
+  question: How are the production, QA and sandbox tiers built and deployed, given that build-alpha.ps1 targets alpha only and neither repository has a CI pipeline?
+  status: answered
+  reason: 'Answered 2026-08-27 by the workspace owner: dshpDeploy drives all four tiers the same way build-alpha.ps1 drives alpha, one branch per tier (angular, QAAng, Sandbox, PRAng). Production is built manually and pushed to QA, then promoted QA -> Sandbox -> Production by branch rather than rebuilt per tier. Completed 2026-09-08 by answers 6.1 and 6.2: a developer triggers each promotion manually, the same build is exercised in QA then sandbox then production, there is no validation or approval gate before a promotion goes live, and Cloud Engineering can obtain read access to dshpDeploy through Beanstalk.'
+  currentBestGuess: Not applicable - resolved at the process level. The dshpDeploy repository has still not been read directly, but access is now available, so this can be confirmed by evidence rather than statement.
+  impact: Resolves the shape of the pattern deviation - manual build-and-promote with no gate - and records it on the pattern's patternDeviations field. The leave of any promotion gate is a finding in its own right for the Hearthstone disposition work, given that the same artifact reaches production without an approval step.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: hearthstone-requirement-disposition
+  question: Which Hearthstone Cybersecurity Framework 2026 requirements does Digital Stores claim, and with what evidence?
+  status: open
+  reason: 'The workspace activates requirement group 01KQQ5JT20-M5R2 against software_deployment_pattern. Substantially more evidence is now available than when this was raised, and it points in both directions. HCF.09.1.3 (WAF) can move to satisfied for production and sandbox but not obviously for QA and alpha. HCF.03.3.1 and HCF.03.3.3 (end-of-life) remain blocked on the missing SQL Server 2017 termination plan. HCF.03.1.2 and HCF.03.2.1 (security updates) are now bounded rather than unbounded - two builds across four instances - but still unremediated. HCF.06.1.1 and HCF.06.1.2 (logging and retention) are now clearly not satisfied: there is no central log aggregation, no database-level audit specification, and the application''s own LoggingEngine writes per-host flat files deleted after 31 days. The encryption findings in 01M25X9W0R-4HSX also attach here.'
+  currentBestGuess: A first pass can now be attempted with real dispositions rather than blanks, and several will be not-compliant rather than satisfied. That is a better outcome than deferral, but it is requirement-catalog work rather than composition work and it needs the Hearthstone requirement owner, not the product owner.
+  impact: Blocks a complete catalog status for the pattern independently of the two mandatory-requirement gaps already recorded. Does not block the L1 Baseline rubric, which asks for declared unknowns rather than satisfied controls.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: sqlserver-patch-scope
+  question: Which Digital Stores environment tiers and region database instances are at build 14.0.3495.9, and is any instance further behind than that?
+  status: answered
+  reason: 'Answered 2026-09-08 by the engineering owner in answer 4.6 and corroborated host by host against the Environment Guide: production PRAngDB1 and sandbox SUDB are at 14.0.3495.9, and QA QADB and alpha ALDB are at 14.0.3485.1, one GDR band further behind. The owner wrote production as "14.3.3495.9", which is not a released SQL Server build and is read as a transcription of 14.0.3495.9. Because the tenancy model puts every region database inside one instance per tier, the build is per tier rather than per region, so there is no per-region drift to bound: four instances, two builds.'
+  currentBestGuess: Not applicable - resolved.
+  impact: Removes the scope qualifier from DecisionRecord 01M0GDHSAM-F64B and gives the remediation a concrete sequence - alpha and QA are two bands behind current, production and sandbox one. It also shows that the two instances furthest behind are the ones refreshed with production data.
+  relatedObjects:
+  - ref: 01M25X9W0R-VQJ3
+  - ref: 01M0GDHSAM-F64B
+- id: sqlserver-2017-termination-plan
+  question: What is the target version and date for migrating Digital Stores off SQL Server 2017 before extended support ends on 2027-10-12?
+  status: open
+  reason: Hearthstone HCF.03.3.1 requires a formal termination plan for end-of-life systems and none is recorded. The questionnaire did not ask for one, so this round produced no movement. Roughly thirteen months remain. Answer 8.1 makes the surrounding architecture a settled long-term position, which means the engine migration is a discrete upgrade rather than something a re-platforming would absorb.
+  currentBestGuess: None recorded. The catalog's preferred engine is SQL Server 2022 (01KQQ5JT01-950D, extended support to 2033-01-11); SQL Server 2025 (01KRZVZXDK-7XC1) is a candidate. The migration is the natural point to close the encryption-at-rest and data-tier availability findings too.
+  impact: Blocks a satisfied disposition on Hearthstone HCF.03.3.1 and HCF.03.3.3 for this pattern. The leave of any test project in either repository means compatibility testing against the hand-written-SQL data layer has no automated safety net.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GDHSAM-F64B
+- id: sqlserver-2017-shared-service-completion
+  question: What are the real availability, backup, encryption, authentication and logging postures of the SQL Server 2017 estate, so the generic service object can move from stub to complete?
+  status: answered
+  reason: 'Answered 2026-09-08 for the Digital Stores estate, which is what this session needed, and deliberately not answered for the generic service. Answers 4.1 through 4.6 supplied backup (AWS Backup EBS snapshots and AMIs, 30-day retention, cross-region copies), encryption at rest (TDE not enabled), authentication (reported as SQL auth, conflicting with the checked-in SSPI connection strings), host substrate (four EC2 instances, per-tier types, not RDS) and build scope. Availability and recoverability were derived from that evidence rather than stated: single instance per tier, no availability group, no RDS anywhere in the account, restore-from-snapshot only, no tested RTO. Rather than pour one product''s answers into the generic 2017 service, a product-specific data store service (01M25X9W0R-VQJ3) was authored and the Data Tier repointed to it.'
+  currentBestGuess: Not applicable for Digital Stores - resolved. The generic SQL Server 2017 DBMS Service (01M0GDHSAM-586D) remains a stub and remains Shared Services' to complete on estate-wide evidence; that is now a separate concern rather than a Digital Stores blocker.
+  impact: The Data Tier no longer resolves to a stub, which removes the blocker this question named. The new service is itself catalogStatus incomplete, because database-level audit logging, secrets sourcing, capacity data and tested recovery remain absent or unevidenced.
+  relatedObjects:
+  - ref: 01M0GDHSAM-586D
+  - ref: 01M25X9W0R-VQJ3
+- id: availability-target-not-expressible
+  question: What is the Digital Stores production availability target, RTO and RPO, expressed as measurable figures?
+  status: open
+  reason: 'Asked twice in the questionnaire - as the product SLA in 2.1 and as the SQL Server tier RPO and RTO in 4.2 - and answered "100%" both times on 2026-09-08. That is not an expressible target: it names no measurement window, no allowance and no recovery objective, and it is contradicted by the confirmed posture of a single-instance data tier per tier, restore-from-snapshot recovery, and non-production tiers deliberately powered off outside scheduled hours. It was therefore not adopted as the availability requirement.'
+  currentBestGuess: None. The confirmed posture supports an RPO of up to roughly 24 hours and an RTO bounded by snapshot or AMI restore time, but neither is a target and the restore time has never been measured.
+  impact: 'The availability-requirement entry of mandatory requirement group 01KQQ4Q027-VK45 is recorded as not-compliant, which is one of the two reasons the pattern keeps catalogStatus incomplete. Tracked as DecisionRecord 01M25X9W0R-GKSK. This question is deliberately separated from the closed deployment-target question because it needs a different answerer: a product and business owner setting a commitment, not an engineer reporting a configuration.'
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-GKSK
+- id: backup-posture-implemented-state
+  question: Is the AWS Backup design described on the 2023-02-28 Digital Stores AWS Backup Service page actually implemented as written, and are the SQL Server volumes tagged into it?
+  status: open
+  reason: The backup and retention posture now asserted on the pattern and on data store service 01M25X9W0R-VQJ3 rests entirely on a page dated 2023-02-28 that is written prospectively - "we are planning to implement the AWS Backup Service" - and that describes tag-driven selection (AWS-Backup:daily on volumes, AWS-Backup:weekly on instances) without listing which resources carry those tags. The owner cited it as the answer to the backup question rather than describing the live state.
+  currentBestGuess: Probably implemented, since the page records the CPM tool it replaced as decommissioned and the Environment Guide's infrastructure table marks CPM as decommissioned in favour of it. Whether PRAngDB1, SUDB, QADB and ALDB carry the selection tags is a separate matter and is not evidenced.
+  impact: If the SQL Server volumes are not tagged, the product has no recorded backup at all rather than a 30-day snapshot chain, and the recoverability posture on both the pattern and the data store service is wrong rather than merely untested. This should be confirmed before the L1 packet is signed off.
+  relatedObjects:
+  - ref: 01M25X9W0R-VQJ3
+  - ref: 01M25X9W0R-GKSK
+- id: aws-instance-scheduler-configuration
+  question: What schedules, resource tags, regions and AWS accounts does AWS Instance Scheduler actually use for the Digital Stores non-production hosts, now that it is confirmed as the scheduling tool in place of Park My Cloud?
+  status: open
+  reason: 'Corrected 2026-10-20. The Digital Stores Scheduled Tasks page (re-read 2026-10-20, current last-modified date 2026-10-15) strikes through its prior "Park My Cloud (PMC)" text for the Datapipelines row and replaces it with "AWS Instance Scheduler", confirming the tool identity, and links a SharePoint document for further detail that was not opened as part of this correction. That page gives the tool name only; it does not give AWS Instance Scheduler''s own configuration. The specific start/stop windows previously attributed to Park My Cloud on this pattern''s tierVariants (sandbox 05:00-21:00 PST, QA and alpha unspecified) and in the Environment Guide''s per-host Data Pipeline Schedule column have not been re-confirmed as AWS Instance Scheduler''s actual configuration, and no tag, region or account detail for AWS Instance Scheduler is evidenced anywhere cited in this session.'
+  currentBestGuess: None. The tool identity is corrected; its configuration is not evidenced and must not be assumed to match the previously recorded Park My Cloud schedule exactly.
+  impact: Does not block L1 on its own, since the prior Park My Cloud scheduling fact was already recorded narratively rather than as a structured requirement. Should be confirmed by the owner before this correction is treated as fully validated, and before any new schedule-dependent fact is added to the pattern.
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GBWMZJ-9DNC
+  - ref: 01M25X9W0R-GKSK
+  - ref: 01M25X9W0R-56TA
+nextSteps:
+- id: validate-and-open-pr
+  action: Run validate.py, regenerate the browser, and open a pull request for the Digital Stores composition.
+  status: done
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: infra-owner-interview
+  action: Interview the Digital Stores infrastructure owner to settle deployment target per tier, the edge and WAF question, and availability, scalability and recoverability posture.
+  status: done
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: security-review-authorization-gap
+  action: Confirm by direct read of BeerCanLabs/sk-server-ang whether any server-side per-screen authorization check exists on the request path, recording file and line either way, then refer the confirmed posture to Sofa King Information Security at security@sofaking.example for disposition. The 2026-09-08 answer to question 5.1 does not support the mitigation claim, so DecisionRecord 01M0GBWMZJ-TMGD has been returned to open and should not be closed on another owner statement.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01M0GBWMZJ-TMGD
+  - ref: 01M0GBWMZJ-E0NF
+- id: arb-reference-architecture-decision
+  action: 'Take DecisionRecord 01M25X9W0R-0Q0X to the Architecture Review Board together with 01M25X9W0R-GKSK: accept the recorded deviation against 01KQQ5JT1D-NMRQ, or commission a database-per-tenant-with-central-catalog reference architecture. The board should state its position on the DS_Admin platform-wide failure domain, which is the checklist item the deviation turns on.'
+  status: open
+  owner: architecture-review-board
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-0Q0X
+- id: connection-elicitation
+  action: Run the Network Zone and Connection Elicitation procedure with the Digital Stores engineering owner and author the missing relationship objects - EntityAPI to SQL Server, EntityAPI to DS_Admin, and Jaspersoft to SQL Server. All confirmed crossings are enumerated in DecisionRecord 01M25X9W0R-56TA and dispositioned not-compliant on 01M263WKS2-NR3T; until they are registered as relationship objects the inter-service-connections requirement stays not-compliant.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-56TA
+  - ref: 01M263WKS2-NR3T
+- id: register-external-dependencies
+  action: Register the external dependencies confirmed in answer 7.1 as DRAFT objects with correct taxonomy decisions - the self-hosted Confluence Help Book host Conf6152.dsh-aws.local, Jaspersoft, the SFTP host ftp.digital-showrooms.example, and the Active Directory domain controllers. Prioritize the Jaspersoft extract path and the SFTP host, which carry Confidential data off the platform and were absent from DRAFT entirely. This is the remaining structural L1 gate named on the pattern's notes.l1Readiness.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-56TA
+- id: set-availability-target
+  action: Have the Digital Stores product and business owners state a production availability target with a measurement window, an RTO and an RPO, distinguishing production from the scheduled lower environments, then perform and time an actual restore of a region database and of DS_Admin and record the measured RTO. "100%" cannot be recorded in DRAFT as a target.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M25X9W0R-GKSK
+- id: confirm-backup-implemented-state
+  action: Confirm against the live AWS account that the AWS Backup plans described on the 2023-02-28 page are implemented as written and that the PRAngDB1, SUDB, QADB and ALDB volumes carry the AWS-Backup selection tags. The recoverability posture now asserted on the pattern and on 01M25X9W0R-VQJ3 rests on that page alone.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01M25X9W0R-VQJ3
+  - ref: 01M25X9W0R-GKSK
+- id: security-referral-encryption-and-lower-environments
+  action: 'Refer two confirmed findings to Sofa King Information Security at security@sofaking.example for disposition, either as a remediation requirement or as a documented time-bounded exception with compensating controls, an owner and a review date: Transparent Data Encryption is not enabled on Confidential data (01M25X9W0R-4HSX), and the alpha, QA and sandbox databases are refreshed from production data with no recorded de-identification step (01M25X9W0R-KWXR). Establish first whether EBS volume encryption is enabled, and read the refresh scripts to confirm whether an unrecorded masking step exists.'
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01M25X9W0R-4HSX
+  - ref: 01M25X9W0R-KWXR
+- id: apply-sqlserver-gdrs
+  action: Bring the Digital Stores SQL Server 2017 estate current on the latest GDR (14.0.3540.1, KB5102337) through normal change management, sequencing alpha and QA first since they are two bands behind at 14.0.3485.1, then sandbox and production at 14.0.3495.9. Each application requires a full-tier outage window because no tier has a failover partner.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01M0GDHSAM-F64B
+  - ref: 01M25X9W0R-VQJ3
+- id: sqlserver-2017-service-completion
+  action: 'Shared Services to complete the stubbed generic SQL Server 2017 DBMS Service (01M0GDHSAM-586D) on estate-wide evidence. This no longer blocks Digital Stores: the Data Tier now references the product-specific service 01M25X9W0R-VQJ3.'
+  status: open
+  owner: architecture-review-board
+  relatedObjects:
+  - ref: 01M0GDHSAM-586D
+- id: record-sqlserver-termination-plan
+  action: Record a formal termination plan for SQL Server 2017 against Hearthstone HCF.03.3.1 with a target version and date, ahead of the 2027-10-12 support end. Treat the migration as the point to close the encryption-at-rest and data-tier availability findings rather than remediating each separately.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GDHSAM-F64B
+- id: hearthstone-requirement-first-pass
+  action: Attempt a first pass of Hearthstone requirement dispositions against requirement group 01KQQ5JT20-M5R2 with the Hearthstone requirement owner, now that infrastructure, encryption, logging, edge and patch evidence exists. Expect several not-compliant dispositions rather than blanks, particularly HCF.06.1.1 and HCF.06.1.2.
+  status: open
+  owner: architecture-review-board
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: confirm-dshpdeploy-by-direct-read
+  action: Read the dshpDeploy repository directly, now that Cloud Engineering can obtain access through Beanstalk per answer 6.2, and confirm the four-branch promotion mechanism and the leave of a validation gate by evidence rather than owner statement.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+- id: validate-aws-instance-scheduler-correction
+  action: Confirm with the Digital Stores engineering owner that AWS Instance Scheduler is the correct replacement for every prior Park My Cloud reference corrected on 2026-10-20, and supply its actual schedule windows, resource tags, regions and AWS account scope for the non-production hosts. Mark the corrected fields Validated once confirmed; they are currently Needs Validation.
+  status: open
+  owner: digital-stores-engineering
+  relatedObjects:
+  - ref: 01KRZ1GCH3-99RF
+  - ref: 01M0GBWMZJ-9DNC
+  - ref: 01M25X9W0R-GKSK
+  - ref: 01M25X9W0R-56TA
+notes:
+  reuseDiscipline: 'No new infrastructure objects were created in either round. Both ProductComponents reference the existing shared IIS Standard Web Service (01KQQ5JT1F-HZTZ, catalogStatus complete, lifecycleStatus existing-only, host Windows Server 2022 on EC2). The deprecated IIS on Windows Server 2016 service (01KQQ5JT1F-JCA7) was rejected because no WS2016 evidence exists, and the .NET Core Application Service (01KQQ5JT1E-9CKW) was rejected because this is .NET Framework 4.6.1, not .NET Core. Data tier: the existing Microsoft SQL Server 2017 TechnologyComponent (01KQQ5JT1T-QKGB) was reused rather than duplicated, first by the generic 2017 service stubbed on 2026-08-20 and now by the product-specific service authored on 2026-09-10. The individual EC2 hosts named in the Environment Guide were deliberately not minted as host objects: that is Apex-maturity resolution, not an L1 requirement, and the questionnaire produced instance types and IPs rather than the ownership and lifecycle facts a host object needs. The new data store service instead references the existing shared preferred Windows Server 2022 on EC2 Standard Host (01KQQ5JT04-JKFX) as a stand-in, the same reuse pattern already used by other self-managed SQL Server data-store-services in shared-services, so that deliveryModel self-managed can declare a host without minting a new, unprecedented host object for four non-uniform instances.'
+  generationMethod: Two rounds. Direct repository read of main-ang and server-ang via the GitHub API on 2026-08-20, requested explicitly by the workspace owner. Then a targeted questionnaire authored against the gaps this session had recorded, answered inline by the engineering owner and last modified 2026-09-08, read together with the five Confluence pages it cites. Every architecture note distinguishes facts confirmed by file or page citation from facts that remain unconfirmed, and derived facts are labelled as derived.
+  answerQuality: 'The questionnaire closed six of the ten questions it targeted, and its value was not limited to what it asserted. Three of the most consequential findings in this round came from reading the cited evidence rather than from the answers themselves: the Jaspersoft extract path to SFTP, the monthly refresh of lower environments from production data, and the per-tier SQL Server build split. Five answers conflict with other evidence and were recorded as conflicts on the pattern rather than adopted - database authentication reported as SQL auth against checked-in SSPI connection strings, infrastructure-as-code reported as absent against an existing Terraform repository, an Application Load Balancer reported against classic-ELB-shaped DNS names, load-balanced redundancy reported for a tier set where QA and alpha have one host each, and a production engine build reported as 14.3.3495.9 which does not exist. Two answers - "100%" to both availability questions - were not usable and generated a new open question rather than closing one. One answer, 5.1, refuted the mitigation it was asked to confirm and reopened a security finding. None of that makes the round unsuccessful: it moved the pattern from asserting almost nothing to asserting a defensible current state with its uncertainties named.'
+  scopeBoundary: The 2026-08-20 round covered composition and provenance and did not attempt requirement dispositions, tier variants or connection elicitation. The 2026-09-10 round added tier variants, the mandatory requirement dispositions and the confirmed infrastructure and data-tier posture. It did not attempt Hearthstone requirement dispositions, did not author the missing relationship objects, and did not register the newly confirmed external dependencies as objects. Those three remain the substantive DRAFT work outstanding for this product.

@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KT16XJHQ-DZBJ
+type: object_patch
+name: Sofa King API Gateway capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT API Gateway capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-3A6F
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1S-Z984
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Kong Gateway Service Standard.

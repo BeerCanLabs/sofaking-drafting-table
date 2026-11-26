@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-1JFK
+type: product_component
+ownerRole: engineer
+name: Recliner Web Shell
+description: 'Angular micro-frontend shell and remote MFEs for Project Recliner. Single Nx
+
+  monorepo with Webpack Module Federation for independently deployable MFEs.
+
+  Static assets are served via CloudFront from S3; the application entry
+
+  point (index.html) is served from the Recliner BFF. The frontend''s exact API
+
+  base URL and any upstream gateway hop remain explicitly unconfirmed.
+
+  '
+version: 1.2.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- recliner
+- frontend
+- angular
+- nx-monorepo
+- mfe
+- module-federation
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js
+runtimeSpec:
+  dependencies:
+    - ref: 01KQQ5JT04-6F8T
+      purpose: Deliver the built Angular micro-frontend assets through the CDN.
+    - ref: 01KQQ5JT05-KT3Z
+      purpose: Store the built static assets used as the CloudFront origin.
+    - ref: 01KSM38KGD-063V
+      purpose: Serve the application entry point and provide the Web Shell BFF APIs.
+interfaces:
+- name: Recliner SPA
+  protocol: REST
+  authenticationModel: oauth
+  description: Browser SPA consuming Recliner BFF REST APIs; the configured API base URL and any upstream Kong hop remain deferred for owner confirmation.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: TypeScript
+  observedRuntimeSignals: angular, nx, node, s3, cloudfront
+  observedManifestPaths: >-
+    src/recliner-frontend/package.json; src/recliner-frontend/nx.json;
+    infra/product/modules/s3-spa/main.tf;
+    infra/product/modules/cloudfront/main.tf
+  hostingBoundary: >-
+    The Web Shell is a build-time Node.js application whose deployed static
+    assets are stored in Amazon S3 and delivered through CloudFront. It does
+    not run directly on the EKS Host. The application entry point is served by
+    the Recliner BFF, which runs on the Recliner EKS RuntimeService.

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHC-VKKS
+type: relationship
+name: 'Sofa King Central Common Cloud Infrastructure → AWS SNS'
+catalogStatus: stub
+source: 01KYQ4D9S6-88NN
+target: 01KQQ5JT05-HTRA
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: DynamoDB Streams fan-out to SNS for subscriber services.

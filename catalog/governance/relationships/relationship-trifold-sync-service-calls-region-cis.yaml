@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-CFW6
+type: relationship
+name: Trifold Sync Service → Region CIS (SIF)
+source: 01KX421X4R-0KCD
+externalTarget: Region CIS Platform (Powershop / Chaise via SIF Update Portal)
+label: synchronizes customer demographic data with
+technology: SIF (SOAP)
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifold TFS codebase (SIF Integration 2.x / TempServiceHost, SIF Update Portal SOAP endpoint); no catalog object represents the region-side CIS platform.

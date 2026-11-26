@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-AQ54
+type: relationship
+name: Pingdom Uptime and Synthetic Monitoring -> Imperva WAF
+catalogStatus: incomplete
+source: 01KXK7BD4N-FV9X
+label: monitors public URLs through
+target: 01KQQ5JT1D-MY47
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: External Pingdom monitors and synthetic checks exercise public SOM URLs through the Imperva WAF path.

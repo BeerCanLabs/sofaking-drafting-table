@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ03-FTP2
+type: relationship
+name: Leave Web API -> GRRFTP1 File Transfer Service
+catalogStatus: incomplete
+source: 01KQQ5JT0A-7VKB
+label: transfers files via
+target: 01KYN1RHK6-FTP1
+technology: FTP / FTPS / SFTP
+direction: synchronous
+flow: outbound
+notes: >-
+  Represents the Leave Management dependency on GRRFTP1, which hosts the
+  shares used by GRRLVEUTIL1 for the Sofa King Central-to-Leave file
+  transformation workflow (owner-confirmed 2026-07-29). GRRFTP1 is a single
+  server with no HA partner and is a single point of failure for this flow.
+capabilities: []

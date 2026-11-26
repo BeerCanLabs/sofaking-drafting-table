@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: CEJBPG8TAJ-7VFQ
+type: relationship
+name: Atlas Workflow → Atlas Domain
+description: DomainLookup reference data (ListItemTypes, ListDepartments, ListSites, ListSiteRooms, ListCatalogItems)
+  for approval workflows and request submission.
+catalogStatus: stub
+source: 01M5WY4E7P-YC9P
+target: 01M5WY4E7P-GJHM
+label: calls
+technology: gRPC
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. DomainLookup reference data (ListItemTypes, ListDepartments,
+    ListSites, ListSiteRooms, ListCatalogItems) for approval workflows and request submission.
+  evidence: 'whm-unified-core develop: Service.Core.Workflows.Infrastructure/ReferenceData/GrpcWorkflowReferenceData.cs,
+    Service.Core.Domain.Contract/Protos/domain_lookup.proto'

@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 61Z334J4CV-FMFJ
+type: relationship
+name: CCA Openfin Runtime → Harness Validation (Guardfin)
+catalogStatus: incomplete
+source: 01KYWQE2F3-CZ2H
+label: sends output to
+target: 01KYWQE2FA-XVTG
+description: >-
+  [INTENDED] Divan outputs are submitted for post-execution validation against
+  the declared expected outcome. A run is not successful until validation
+  accepts the output; failed validation aborts persistence. The validation
+  stage is the sofaking-guardfin-harness layer inside Guardfin, reached
+  in-VPC over the existing Divan-to-Guardfin path -- NOT a call out to a
+  third-party validation vendor. Terminology ratified 2026-08-02 (Leo Park);
+  see OPS-177566.
+technology: HTTP (in-VPC, Guardfin guardrail port)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - validation
+  - guardfin

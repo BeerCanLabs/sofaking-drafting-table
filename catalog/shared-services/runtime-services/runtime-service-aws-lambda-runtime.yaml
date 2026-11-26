@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-CT7X
+type: runtime_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Lambda Runtime
+description: 'Serverless execution environment for Sofa King-authored functions.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- lambda
+- serverless
+vendor: Amazon Web Services
+productName: AWS Lambda
+productVersion: managed
+authenticationModel: iam
+capabilities:
+- 01KQQ4Q026-3ZWJ
+architectureNotes:
+  resilienceModel: Inherently multi-AZ high availability within the AWS Lambda fabric.
+  configurableSurface: Memory, timeout, environment variables, and IAM roles.
+  failureDomain: Scoped to the AWS region and function.
+decisionRecords:
+- ref: 01KSNAW2AK-H3NK
+  key: resilienceModel
+- ref: 01KSNAW2AK-H3NK
+  key: configurableSurface
+- ref: 01KSNAW2AK-H3NK
+  key: failureDomain
+deliveryModel: paas

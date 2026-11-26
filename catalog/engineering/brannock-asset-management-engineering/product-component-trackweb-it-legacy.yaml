@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF8-VQ4B
+type: product_component
+ownerRole: engineer
+name: Legacy Trackweb-IT Platform
+description: 'Legacy monolithic asset management platform.  C# / .NET Framework architecture.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT04-JKFX
+tags:
+- trackweb
+- asset-management
+- legacy
+- dotnet-framework
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  technologyStack: Built on C# and .NET Framework.
+  deploymentModel: Single-tenant per-region EC2 instances and SQL databases.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

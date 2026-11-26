@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG5-VM7E
+type: product_component
+ownerRole: engineer
+name: HCM RH Fork Util Organization API
+description: Organization API client library
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+- repository-discovery
+- hcm-rh
+- product-component
+- rh
+repoUrl: https://github.com/BeerCanLabs/sk-hcmrh-fork-util-organization-api
+language: C#
+classification: library
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-hcmrh-fork-util-organization-api
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: OrganizationApiClient.sln; source/OrganizationApiClient/OrganizationApiClient.csproj; tests/OrganizationApiClient.Tests/OrganizationApiClient.Tests.csproj
+  deploymentModel: >-
+    Referenced by consuming applications as a .NET client library; no
+    independent workload or runtime deployment was found in repository
+    discovery.

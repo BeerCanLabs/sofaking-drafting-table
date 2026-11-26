@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01M6RM03Q0-ZVDT
+type: decision_record
+name: Customer Services le1 Recoverability Model
+description: Recoverability model for Customer Services APIs on the le1 EKS runtime. DynamoDB point-in-time recovery is enabled in the CDK outside development. No recovery targets, restore procedure, or backup schedule are recorded.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - customer-services
+  - shared-customer-record
+  - le1
+  - recoverability
+  - decision-record
+category: decision
+status: open
+affectedComponent: 01M5CS4D96-RT10
+linkedObject: 01M5CS4D96-RT10
+decisionRationale: >-
+  Verified in k8s-deployments. Each service runs as a Kubernetes Deployment, and the dev
+  manifests set replicas to 1. Each service's Argo CD Application for le1 dev and stage
+  uses automated sync with prune and selfHeal enabled and the CreateNamespace sync
+  option. Manifests and the container image are the deployment source.
+  Verified in the CDK code of ss-msvc-customer-profile, ss-msvc-calendar, and
+  ss-msvc-customer-membership (src/deploy). DynamoDbTableResources sets
+  PointInTimeRecoveryEnabled = !props.IsDevelopment, and each repo's environment
+  configuration defines IsDevelopment as the Dev environment only. By that code, point-in-time
+  recovery is on for stage and prod and off for dev. The same code sets the table removal
+  policy to RETAIN. The deployed tables were not checked.
+  From the catalog. Each service keeps its data in its own DynamoDB single-table store.
+  Change events flow through DynamoDB Streams, an EventBridge Pipe, SNS, and SQS queues
+  with dead-letter queues. Customer Profile writes unprocessable identity-match events to
+  a quarantine queue. No replay procedure is recorded.
+  Not established. None of the following is recorded in the catalog or in the CDK code
+  that was read: a recovery time or recovery point objective, a restore procedure or
+  restore test, a point-in-time recovery retention period (the CDK sets only the enabled
+  flag), scheduled or cross-region backups, how le1 itself is restored, or a production
+  recoverability requirement. Production on Chaise is not provisioned.
+  Scope: development and stage on le1.

@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 62GNEE8S2T-W4GV
+type: decision_record
+name: One Divan, One Scoped IAM Identity
+description: >
+  Each Divan runs under a dedicated AWS IAM identity scoped to the narrowest
+  capability set the Divan's task requires. Sensitive capabilities are not
+  collapsed into a single shared identity. Plain language: every agent gets
+  its own keycard, and that keycard only opens the doors it actually needs.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- adr
+- decision
+- cca
+- identity
+- iam
+- least-privilege
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+decisionRationale: >
+  Least privilege is the strongest defense available against blast-radius
+  failures, lateral movement, and prompt-injection-driven scope expansion.
+  Collapsing multiple Divans behind one overly broad identity would mean a
+  single compromised Divan could perform actions the other Divans were never
+  authorized to perform. Per-Divan identities also make audit attribution
+  exact: every CloudTrail event is bound to the Divan that produced it, with
+  no ambiguity. Identity provisioning flow is being coordinated with IT and
+  the SaaS Identity team.
+impact: >
+  Identity provisioning becomes a per-Divan process. New Divan onboarding
+  must include identity creation, scope definition, and JSM-backed approval
+  before the Divan may run. Identity scopes are versioned and reviewed.
+mitigationPath: >
+  [INTENDED] Establish a 90-day recertification cadence for Divan identity
+  scopes (aligned with the Platform PM's factory-feature spec). Any scope
+  that has not been recertified is auto-suspended pending review.
+relatedDecisionRecords:
+- A167KVYYG2-X831
+- 4TG85QEKZ3-ZTFS

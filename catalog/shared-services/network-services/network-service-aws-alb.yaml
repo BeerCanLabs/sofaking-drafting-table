@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-P7QJ
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Application Load Balancer
+description: 'AWS-managed layer-7 load balancer for traffic distribution.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- load-balancing
+- networking
+vendor: Amazon Web Services
+productName: Application Load Balancer
+productVersion: managed
+authenticationModel: other
+networkFunction: load balancing
+networkTopology: layer-7 load balancer for traffic distribution across VPC subnets and target groups
+protocols:
+- HTTPS
+- HTTP
+capabilities:
+- 01KSWVZSZ5-M0FR
+architectureNotes:
+  resilienceModel: Inherently multi-AZ within the AWS region.
+  configurableSurface: Listeners, routing rules, and target groups.
+  failureDomain: Scoped to the AWS region and VPC.
+decisionRecords:
+- ref: 01KSNAW2AK-Z9BV
+  key: resilienceModel
+- ref: 01KSNAW2AK-Z9BV
+  key: configurableSurface
+- ref: 01KSNAW2AK-Z9BV
+  key: failureDomain
+deliveryModel: paas

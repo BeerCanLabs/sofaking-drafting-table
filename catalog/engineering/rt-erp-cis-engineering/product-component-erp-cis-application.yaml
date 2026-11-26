@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGM-ZYY2
+type: product_component
+ownerRole: engineer
+name: ERP CIS Application
+description: ERP CIS HRMS Code
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- erp-cis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-cis
+language: Java
+classification: api-service
+runtimeRequirement: Java
+architectureNotes:
+  lifecycleRationale: 'Deprecated 2026-06-17. Superseded by the curated RT-ERP Application Server (01KSM38KEX-PX7B), which is the authoritative model of the erp-sis monolith. This discovery-generated stub is retained for repository provenance only and should not be referenced by active patterns.'
+  supersededBy: 01KSM38KEX-PX7B
+  repositoryName: BeerCanLabs/sk-erp-cis
+  observedRuntimeSignals: java, readme, serverless
+  observedManifestPaths: .claude/settings.json; .claude/skills/viz/graph-data.json; .claude/skills/viz/security/fortrg-security-graph.json; .mcp.json; .vscode/mcp.json; TEAMS_COMMON/AutomationFramework/pom.xml; TEAMS_COMMON/CybersourceJBossWSUtil/pom.xml; TEAMS_COMMON/CybersourceTomcatWSUtil/pom.xml; TEAMS_COMMON/EdFi-ODS-java-sdk/pom.xml; TEAMS_COMMON/ExternalDocumentManager/pom.xml; TEAMS_COMMON/TeamsAPIModel/pom.xml; TEAMS_COMMON/TeamsAPIModel/src/main/resources/PlatformToolsApplicationSwagger.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-TMGD
+type: decision_record
+name: Digital Stores Server-Side Per-Screen Authorization Is Disabled
+category: risk
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  In entityapi/entityapi/Controllers/BaseController.cs the block inside IsAuthorized() that would call
+  SecurityBL.GetListOfEnabledScreens(), decrypt the ds-context header and check isScreenEnabled() is
+  commented out, and the live isScreenEnabled(context, screens) method unconditionally returns true.
+  Found by direct repository read on 2026-08-20. On 2026-08-27 the workspace owner reported that this
+  was deliberate and that the screen-list construction had moved to SecurityAL::GetSecurityList(),
+  and this record was moved from open to mitigated pending confirmation of that call path. Question
+  5.1 of the DRAFT L1 Baseline Questionnaire asked for the SecurityAL::GetSecurityList()
+  implementation by file and line and for confirmation that it is invoked on every per-screen request
+  path in the EntityAPI. The answer received on 2026-09-08 does not confirm that and instead describes
+  the opposite arrangement: IsAuthorized() is called on every incoming REST request, whereas
+  GetSecurityList() is called by the front end only once during the initial sign-in process, and the
+  resulting security list is cached on the front end. No file or line reference was supplied. Taken
+  together with the direct read, the effective posture is that the per-screen check inside the
+  per-request server-side path remains disabled and the only per-screen enforcement is the Angular
+  route guard isAuthorizedToActivate in main-ang evaluating a client-cached list. This record is
+  therefore returned from mitigated to open. The owner also reported that following a 2021 security
+  review, encryption was added to the security list while in flight to mitigate a possible
+  man-in-the-middle attack; that control protects the list in transit and does not restore server-side
+  enforcement. Session authentication and the SHA-256 request fingerprint check are unaffected and
+  remain enforced server-side regardless.
+version: 1.2.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- security
+- authorization
+- source-derived
+- owner-confirmed
+linkedObject: 01M0GBWMZJ-E0NF
+affectedComponent: 01M0GBWMZJ-E0NF
+impact: >-
+  A caller holding a valid session GUID and a correctly computed request fingerprint can reach
+  controller actions for screens their security group does not grant, because the server no longer
+  evaluates the per-screen check and the client-side route guard is not an access control the server
+  enforces. Authorization is one security group per user in tblsecuritygroup granting view, edit, new,
+  fy, fyedit and draft per resource, so the bypass surface is the whole per-resource permission model
+  across roughly 140 controllers, not a single screen. Two qualifiers matter. First, tenant resolution
+  and the fingerprint check are unaffected, so this is a horizontal privilege-escalation risk inside a
+  region rather than a cross-region data-access risk. Second, the in-flight encryption added after
+  the 2021 review means the cached list cannot be trivially rewritten in transit, which raises the
+  effort required but does not change the fact that the authoritative decision is made client-side.
+  The data behind those endpoints is classified Confidential and includes region staff and payroll
+  records. Bears on Hearthstone HCF.09.1.3 and on the access-control expectations of Sofa King's Data
+  Classification and Protection Policy, whose principle-of-least-privilege section requires access to
+  be limited to what a role needs.
+mitigationPath: >-
+  The 2026-09-08 answer resolves the intent question and removes the basis for the mitigated status,
+  so treat this as an open finding rather than a documentation task. Three steps. First, confirm by
+  direct read of server-ang - Cloud Engineering does not need owner mediation for this - whether any
+  server-side per-screen authorization exists on the request path at all, and record the file and line
+  either way; the questionnaire asked for this and it was not supplied. Second, refer the finding to
+  Sofa King Information Security at security@sofaking.example with the confirmed posture, since the
+  disposition is a security judgment about accepted risk versus required remediation and not an
+  architecture one. Third, if remediation is required, the fix is to restore an equivalent per-screen
+  check inside the per-request server-side path rather than to harden the client cache further; a
+  cached client-side list with encrypted transport is still a client-side authorization decision. Do
+  not return this record to mitigated on the strength of the in-flight encryption control alone.

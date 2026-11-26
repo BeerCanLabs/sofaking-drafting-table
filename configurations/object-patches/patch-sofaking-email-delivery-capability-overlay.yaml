@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ8-M62Z
+type: object_patch
+name: Sofa King Email Delivery capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Email Delivery capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0XNZEY-KPTW
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1V-R6P2
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only from the Postfix Mail Service Standard.
+    - ref: 01KZZMDMN2-TC01
+      lifecycleStatus: existing-only
+      notes: Shared Grand Rapids MDaemon 19.5.2 implementation used by Leave & Time, Platform, and IDM; hosted on deprecated Windows Server 2016 virtual machines.

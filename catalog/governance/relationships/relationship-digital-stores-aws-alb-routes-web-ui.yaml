@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01M12W486T-6VP1
+type: relationship
+name: Digital Stores AWS Application Load Balancer → Digital Stores Suite+ Web UI
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+label: routes requests to
+target: 01M0GBWMZJ-9DNC
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: >-
+  AWS Application Load Balancer routes requests to the shared IIS origin serving
+  both the Angular SPA and the EntityAPI for a region. Modeled to the Web UI
+  ProductComponent as the entry point; the EntityAPI is reached from the same
+  origin per the single-iis-origin assumption in DraftingSession 01M0GBWMZJ-8XYB.
+  TLS termination (Imperva vs ALB) is not yet confirmed.

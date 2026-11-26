@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-XJWH
+type: object_patch
+name: Sofa King capability.log-management implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.log-management.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-D04B
+patch:
+  owner:
+    team: sre-management
+    contact: jordan.hale@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1P-11K0
+    lifecycleStatus: preferred
+    notes: Preferred log forwarding agent for workloads that send logs to the central logging service standard.
+    configuration: opensearch-forwarding
+  - ref: 01KQQ5JT1N-W022
+    lifecycleStatus: existing-only
+    notes: Maintained where AWS-native host log forwarding is required by existing automation.

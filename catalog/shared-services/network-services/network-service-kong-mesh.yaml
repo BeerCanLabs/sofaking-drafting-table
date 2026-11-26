@@ -1,0 +1,85 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-KJT2
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Kong Mesh Service
+aliases:
+  - Kuma Service Mesh
+description: >-
+  Shared multizone service mesh that connects Sofa King application and
+  Ottoman gateway clusters through Kuma control planes and Envoy-based
+  data-plane sidecars.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - kong-mesh
+  - kuma
+  - envoy
+  - service-mesh
+  - multizone
+deliveryModel: self-managed
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KYAXMZ7H-FF39
+capabilities:
+  - 01KT0V5MCV-RM8M
+networkFunction: >-
+  Service-to-service routing, workload identity, mutual TLS, and traffic
+  policy enforcement.
+networkTopology: >-
+  Multizone mesh pairing chaise with prod-ottm through the production global
+  control plane, and le1 with stage-ottm through the stage global control
+  plane.
+protocols:
+  - mTLS
+  - gRPC
+  - TCP
+internalComponents:
+  - ref: 01KYAXMZ7H-FF39
+    role: production control plane and data plane
+  - ref: 01KYAXMZ7H-23W3
+    role: stage and lower-environment control plane and data plane
+  - ref: 01KYAXMZ7H-4VRV
+    role: injected Envoy-based data-plane proxy
+notes:
+  sourceEvidence: >-
+    Read-only inspection on 2026-07-24 confirmed the shared global
+    control-plane endpoints, default mesh membership, ca-1 mesh mTLS, and
+    injected kuma-sidecar containers across chaise, le1, prod-ottm, and
+    stage-ottm. OPS-933430 read-only inspection on 2026-08-10 additionally
+    confirmed Ottoman zone control planes at 3/3 replicas and mesh ingress
+    and egress workloads in ottm-dev, ottm-stage, and ottm-prod. Internet-facing
+    NLB Services expose mesh ingress on TCP 10001.
+  environmentVersions:
+    production: Kong Mesh/Kuma 1.8.0 in chaise and prod-ottm.
+    stage: Kong Mesh/Kuma 2.8.6 in le1 and stage-ottm.
+    development: Kong Mesh/Kuma 2.8.8 in ottm-dev.
+  lifecycleObservation: >-
+    Production remains on Kong Mesh 1.8.0 while development runs 2.8.8 and
+    stage runs 2.8.6. The Ottoman owner confirmed on 2026-08-10 that this
+    production drift should be reconciled. No implementation ticket was
+    created at the user's direction.
+  gatewayApiObservation: >-
+    ottm-dev has an accepted kuma GatewayClass but no Gateway or HTTPRoute
+    objects. Gateway API resource types were not available in ottm-stage or
+    ottm-prod. The owner confirmed that stage and production adoption is
+    planned; no implementation ticket was created at the user's direction.
+  securityObservation: >-
+    le1 and stage-ottm currently set
+    KUMA_MULTIZONE_ZONE_KDS_TLS_SKIP_VERIFY=true. This is current-state
+    provenance and a shared-platform follow-up, not an HCM Architecture L1
+    closure blocker.
+  internalComponentRationales:
+    01KYAXMZ7H-FF39: >-
+      Represents the production versioned Kong Mesh implementation observed in
+      both production zones.
+    01KYAXMZ7H-23W3: >-
+      Represents the stage and lower-environment versioned Kong Mesh
+      implementation observed in both non-production zones.
+    01KYAXMZ7H-4VRV: >-
+      Makes the Envoy-based data-plane role explicit while its exact bundled
+      build remains deferred.

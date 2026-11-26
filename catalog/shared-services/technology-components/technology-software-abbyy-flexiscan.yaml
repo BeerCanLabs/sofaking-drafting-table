@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-ZK2J
+type: technology_component
+ownerRole: technology-admin
+name: ABBYY FlexiScan
+description: 'Third-party document scanning and OCR software installed on a Sofa King-managed Windows host. Provides document capture and recognition capabilities for the SOM scanning workflow.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- scanning
+- ocr
+- som
+classification: software
+vendor: ABBYY
+productName: FlexiScan
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Vendor lifecycle date not yet documented in the catalog.
+capabilities: []

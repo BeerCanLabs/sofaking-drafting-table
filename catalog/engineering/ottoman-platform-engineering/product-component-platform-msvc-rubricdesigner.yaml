@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG0-GGGG
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Rubricdesigner
+description: Microservice for the Rubric Designer app
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-RubricDesigner
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-RubricDesigner
+  observedRuntimeSignals: docker, node, readme, terraform
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod-ml/cm.yml; cd/prod-ml/deploy-automation.yml; cd/prod-ml/deploy.yml; cd/prod-ml/es.yml; cd/prod-ml/ingress.yml; cd/prod-ml/namespace.yml; cd/prod-ml/sa.yml; cd/prod-ml/service.yml; cd/prod/cm.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

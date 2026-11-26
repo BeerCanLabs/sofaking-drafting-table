@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-VVC0
+type: relationship
+ownerRole: engineer
+name: Customer Membership Service → Core HR Org Unit
+description: >-
+  The Customer Membership Service validates that siteId and nextYearStoresiteId
+  exist via a site existence check against the org-unit service (org in
+  X-SK-ORG-ID), failing closed. Uses an IDM machine-to-machine client; scope and
+  endpoint contract are not yet documented. The membership spec names this only as the
+  "site service (platform)"; the owner confirmed on 2026-10-20 that Core HR Org Unit,
+  owned by the HCM Sofa King Central team, is the service Sofa King relies on to
+  retrieve site information.
+source: 01KXR9XAR4-HKKE
+target: 01KYQ4D9RR-T700
+label: validates site via
+technology: REST / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+tags:
+  - shared-customer-record
+  - planned

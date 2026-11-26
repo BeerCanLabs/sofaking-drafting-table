@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Y-AV2K
+type: object_patch
+name: Sofa King capability.authentication implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.authentication.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-MHJM
+patch:
+  owner:
+    team: identity-management-idm-engineering
+    contact: identity-management-idm-eng@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1S-MZP6
+    lifecycleStatus: preferred
+    notes: Active Directory Domain Services aligned to the preferred Windows Server 2022 baseline.
+    configuration: domain-integrated-authentication

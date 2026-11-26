@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DR-HSCQ
+name: Ottoman Invitation Service → AWS Aurora PostgreSQL
+catalogStatus: stub
+source: 01KSM38KFX-ETDW
+label: calls
+target: 01KQQ5JT04-27EP
+notes:
+  background: "Invitation Service persists invitation and organization data to Aurora PostgreSQL via SQL."
+capabilities: []

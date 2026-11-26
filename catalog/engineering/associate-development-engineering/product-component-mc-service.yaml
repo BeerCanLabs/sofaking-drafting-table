@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG2-7CNM
+type: product_component
+ownerRole: engineer
+name: Mc Service
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-mc-service.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- mc
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-mc-service
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-mc-service
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: .circleci/config.yml; Dockerfile; package-lock.json; package.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

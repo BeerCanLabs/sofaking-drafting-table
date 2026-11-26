@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-14HC
+type: relationship
+name: SOM Frontend Web -> Tri-State CommWeb Authentication Proxy
+catalogStatus: incomplete
+source: 01KSM38KEW-Q2SE
+label: authenticates via
+target: 01KXK7BD4N-4ART
+direction: synchronous
+flow: outbound
+notes: AWS SOM web servers use the Tri-State-owned CommWeb server group in Grand Rapids as their authentication broker/proxy.

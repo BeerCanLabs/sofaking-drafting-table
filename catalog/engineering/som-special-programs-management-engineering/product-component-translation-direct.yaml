@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6Z-3MTP
+type: product_component
+ownerRole: engineer
+name: Translation Direct
+description: >-
+  ASP.NET MVC web application integrating with the One Hour Translation
+  (Oht) API (sandbox and production endpoints) for document translation
+  workflows, with CDP Identity Federation (SAML/WS-Federation) for external
+  STS authentication. Discovered from the TranslationDirect folder of the
+  KIOTrifoldStandaloneApplication repo.
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - translation-direct
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: web-application
+supersededBy: 01KSM38KGE-GYTE
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\TranslationDirect"
+  repositoryName: KIOTrifoldStandaloneApplication
+  supersession: >-
+    Owner confirmed on 2026-09-10 this legacy app is superseded by
+    sei-translation-service (01KSM38KGE-GYTE), a modern .NET microservice
+    on EKS.

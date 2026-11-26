@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-4R15
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Audit Logging
+description: 'Audit Logging Service (maintained by #tm-plat-af)'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-audit-logging
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-audit-logging
+  observedRuntimeSignals: docker, node, readme, serverless
+  observedManifestPaths: Dockerfile; ci/codefresh-build.yml; ci/handlers.yml; ci/resources.yml; docker-compose.yml; package.json; resources/serverless.yml; src/events/api-gateway.json; src/events/sqs.json; src/serverless.yml; src/validator/events/ApplicationAccessGranted.json; src/validator/events/ApplicationAccessRevoked.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

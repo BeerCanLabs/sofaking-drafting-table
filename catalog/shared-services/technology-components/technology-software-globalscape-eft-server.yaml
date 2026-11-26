@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KYN1RHK7-EFT6
+type: technology_component
+ownerRole: technology-admin
+name: Globalscape EFT Server 6.5.0.40
+description: Managed file-transfer server software hosting FTP, FTPS, and SFTP endpoints for Grand Rapids file-transfer workloads.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - software
+  - file-transfer
+  - ftp
+  - ftps
+  - sftp
+  - globalscape
+  - legacy
+vendor: Globalscape
+productName: EFT Server
+productVersion: 6.5.0.40
+classification: software
+vendorLifecycle:
+  notes: Vendor mainstream/extended support end dates have not been confirmed. There is no active plan to upgrade or retire this installation (owner-confirmed 2026-07-29).
+configurations:
+  - id: grrftp1-transfer-endpoints
+    name: GRRFTP1 Transfer Endpoints
+    description: FTP, FTPS, and SFTP over SSH listeners used for Grand Rapids file-transfer workloads on GRRFTP1.
+    capabilities: []
+    networkBindings:
+      - port: 21
+        protocol: FTP
+        direction: inbound
+        description: Traditional unencrypted FTP listener.
+      - port: 990
+        protocol: FTPS
+        direction: inbound
+        description: FTP protected with TLS. Exact port requires confirmation; recorded as the Globalscape EFT default.
+      - port: 22
+        protocol: SFTP
+        direction: inbound
+        description: SFTP over SSH listener.
+architectureNotes:
+  hostOperatingSystem: Runs on the existing Microsoft Windows Server 2008 R2 technology component (01KQQ5JT1Q-E6ZM); host operating system is owner-confirmed and carries an active end-of-support production risk.
+  accountIdentityStore: User accounts are managed locally within Globalscape EFT rather than Active Directory (owner-confirmed 2026-07-29).
+  authenticationMethods: Supports both username/password and SSH public-key authentication (owner-confirmed 2026-07-29).
+  auditLogging: Authentication and file-transfer logs are retained locally on GRRFTP1 and also forwarded to the existing Amazon S3 Storage service (01KQQ5JT05-KT3Z).
+  retirementPlan: No active upgrade or retirement plan exists for this Globalscape EFT Server installation (owner-confirmed 2026-07-29).
+notes:
+  sourceSession: Confirmed via the Leave Management DRAFT L1 Compute and Runtime Review drafting session (catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml), tracked by OPS-049026.

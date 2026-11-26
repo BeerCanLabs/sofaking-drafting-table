@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQS0TF50-8W8X
+type: technology_component
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Imperva Web Application Firewall
+description: Vendor-managed cloud web application firewall used to inspect and protect application-layer traffic before it reaches Sofa King services.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- security
+- waf
+classification: software
+vendor: Imperva
+productName: Web Application Firewall
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Lifecycle is tied to the vendor-managed Imperva cloud platform.
+capabilities:
+- 01KT0V5MCV-Z079

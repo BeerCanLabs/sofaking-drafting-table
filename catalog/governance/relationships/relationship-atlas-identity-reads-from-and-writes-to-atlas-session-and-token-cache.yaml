@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 6VH3DV1EYY-H4A6
+type: relationship
+name: Atlas Identity → Atlas Session and Token Cache
+description: Sessions (StoredUserContext) live in each tenant's Redis under the usercontext namespace; a tenant
+  without a redis_connection_string uses the in-process cache.
+catalogStatus: stub
+source: 01M5WY4E7P-JBTC
+target: 01M7D4BSC5-G81X
+label: reads from and writes to
+technology: Redis protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Sessions (StoredUserContext) live in each tenant's Redis
+    under the usercontext namespace; a tenant without a redis_connection_string uses the in-process cache.
+  evidence: 'whm-unified-core develop: Service.Core.Identity.App/Program.cs (AddTenantCache), appsettings.json
+    Cache:Provider=Redis; Libraries/BuildingBlocks/Cache'

@@ -1,0 +1,62 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-KWXR
+type: decision_record
+name: Digital Stores Lower Environments Are Refreshed With Production Data
+category: risk
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  The Digital Stores alpha, QA and sandbox databases are reloaded from production data on a standing
+  schedule. Per the Digital Stores Scheduled Tasks page, last modified 2026-09-08, three SQL jobs run
+  on the first and third Monday of each month - sandbox at 05:20, QA at 07:20 and alpha at 08:20 - each
+  described as refreshing that tier's databases with production data, with success or failure
+  notification to a named engineering distribution list. The Environment Guide links the same refresh
+  schedule from the ALDB, QADB and SUDB host rows. No obfuscation, masking or de-identification step
+  appears anywhere in the recorded refresh process. Sofa King's Data Classification and Protection
+  Policy states, in its Lower Environment Data Protection section, that for all non-production
+  environments the Development, Data, QA and Support teams are required to obfuscate and de-identify
+  all customer data so that it cannot be correlated back to individuals, that sensitive information
+  cannot be exposed in any way, and that all data in non-production environments will be
+  non-production, non-customer-identifiable data. The product was confirmed by its owner on 2026-09-08
+  to handle personally identifiable information and to be classified Confidential. This finding was
+  not asserted by the owner; it was derived from Sofa King's own operational documentation while
+  closing the L1 questionnaire, so the possibility that an unrecorded masking step exists inside the
+  refresh scripts has not been excluded.
+version: 1.0.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- security
+- data-classification
+- lower-environments
+- derived-finding
+linkedObject: 01M25X9W0R-VQJ3
+affectedComponent: 01M25X9W0R-VQJ3
+impact: >-
+  If the refresh carries production data unmasked, Confidential region staff, payroll, site and
+  customer records are resident on three additional SQL Server instances - ALDB, QADB and SUDB - that
+  are not production and are not governed as production. Those three hosts share the exposures
+  confirmed elsewhere in this round: Transparent Data Encryption is not enabled on any of them
+  (DecisionRecord 01M25X9W0R-4HSX), no database-level audit logging is evidenced, and the same 30-day
+  EBS snapshot and AMI retention copies their volumes to us-west-1 and us-east-1. Access is also
+  broader by design in lower environments than in production, where the Environment Guide records that
+  server access must go through the jumpw02.dsh-aws.local jump box. QADB and ALDB are additionally one
+  SQL Server GDR band further behind than production, at 14.0.3485.1. The compliance surface is
+  Sofa King's own Data Classification and Protection Policy rather than a Hearthstone catalog requirement,
+  and that policy names the Development, Data, QA and Support teams as accountable, so the disposition
+  is not Digital Stores engineering's alone to make.
+mitigationPath: >-
+  Three steps. First, read the refresh scripts and the SQL jobs behind the AL, QA and Sandbox refresh
+  entries and confirm whether any masking or de-identification runs as part of them; if it does,
+  record it here and close this record as resolved, because the finding is then documentation drift
+  rather than a control gap. Second, if no masking runs, refer the finding to Sofa King Information
+  Security at security@sofaking.example for disposition, since the policy provides an exception path
+  and names accountable teams beyond Digital Stores engineering. Third, if masking is required, scope
+  it against the refresh mechanism rather than the environments: the refresh is a scheduled SQL job
+  that copies production databases wholesale, so a de-identification pass has to run inside that job
+  or immediately after it, and the hand-written-SQL, no-ORM, machine-generated-view-model data layer
+  means the column inventory to be masked is not derivable from an ORM schema and has to be
+  established explicitly.

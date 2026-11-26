@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01M263WKS2-NR3T
+type: decision_record
+name: Digital Stores Inter-Service Connections Are Not Fully Registered As Relationship Objects
+category: decision
+status: accepted
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Records the disposition of the inter-service-connections entry of requirement group
+  01KQQ4Q027-VK45 against the Digital Stores SoftwareDeploymentPattern (01KRZ1GCH3-99RF), separately
+  from the related additional-interactions disposition on DecisionRecord 01M25X9W0R-56TA so that each
+  decision record stays 1:1 with the single requirement it disposes. Every service-to-service
+  crossing confirmed as of 2026-09-08 is enumerated in 01M25X9W0R-56TA: Web UI to EntityAPI, Imperva
+  to the AWS load balancer, the load balancer to the shared IIS origin per region, EntityAPI to SQL
+  Server, EntityAPI to the DS_Admin catalog, and Jaspersoft to SQL Server. Only three of those
+  crossings are registered as DRAFT relationship objects - Web UI to EntityAPI (01M0GBWMZJ-RC84),
+  Imperva to load balancer (01M12W6R3B-ZHCN) and load balancer to Web UI (01M12W486T-6VP1). EntityAPI
+  to SQL Server, EntityAPI to DS_Admin, and Jaspersoft to SQL Server are enumerated narratively but
+  not yet registered as relationship objects.
+version: 1.0.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- inter-service-connections
+- owner-confirmed
+linkedObject: 01KRZ1GCH3-99RF
+affectedComponent: 01KRZ1GCH3-99RF
+decisionRationale: >-
+  DRAFT models cross-boundary links as relationship objects, not as narrative enumeration. Recording
+  inter-service-connections as satisfied on the strength of the prose in 01M25X9W0R-56TA alone would
+  overstate the catalog's actual state, so this entry is recorded not-compliant rather than satisfied
+  even though every crossing is now confirmed and named. This record is split out from
+  01M25X9W0R-56TA, which carries the additional-interactions disposition for the same pattern, because
+  DRAFT's decision-record scoping rule requires an accepted DecisionRecord to be 1:1 with its
+  affectedComponent and requirement rather than reused across multiple requirement dispositions.
+impact: >-
+  Three confirmed service connections - EntityAPI to SQL Server, EntityAPI to the DS_Admin catalog,
+  and Jaspersoft to SQL Server - are not registered as relationship objects, which is the remaining
+  structural gate blocking a satisfied disposition on inter-service-connections and, with the
+  availability-requirement gap tracked on DecisionRecord 01M25X9W0R-GKSK, one of the two reasons the
+  pattern's catalogStatus stays incomplete rather than complete.
+mitigationPath: >-
+  Run the Network Zone and Connection Elicitation procedure with the Digital Stores engineering
+  owner to author the missing relationship objects - EntityAPI to SQL Server, EntityAPI to DS_Admin,
+  and Jaspersoft to SQL Server - at which point this requirement can move to satisfied. Tracked as the
+  connection-elicitation next step in DraftingSession 01M0GBWMZJ-8XYB.

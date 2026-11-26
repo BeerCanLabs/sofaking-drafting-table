@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1C-AZTH
+type: reference_architecture
+name: AWS ECS Multi-Tenant SQL Server and Lambda
+description: Reference Architecture for a shared multi-tenant AWS ECS application with frontend/API workloads, Lambda background processing, and tenant isolation primarily at the SQL Server database layer.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- aws
+- ecs
+- multitenant
+- sqlserver
+- lambda
+patternType: aws-ecs-multitenant
+serviceGroups:
+- name: Web Edge Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1D-MY47
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-P7QJ
+    diagramTier: presentation
+- name: Application Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1E-9CKW
+    diagramTier: application
+- name: Background Processing Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT03-FGYJ
+    diagramTier: utility
+- name: Data Services
+  deploymentTarget: grr-datacenter
+  deployableObjects:
+  - ref: 01KQQ5JT01-Z39K
+    diagramTier: data
+- name: Runtime Security
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1D-TK06
+    diagramTier: utility
+architectureNotes:
+  lifecycleRationale: Disinvest by default because the pattern resolves to extended-support Technology Components, including Windows Server 2016 and SQL Server 2016. It should move to existing-only only if a documented exception is approved before replacement.
+  availabilityModel: Shared ECS application tier with separately governed tenant database isolation.
+  tenancyModel: Multi-tenant application runtime with tenant separation at the database layer.
+  backgroundProcessing: Lambda handles asynchronous and scheduled workloads outside the primary ECS service path.
+  patternRisks: Database-per-tenant operations, configuration management, and coordinated application/database releases must be explicitly designed.

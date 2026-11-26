@@ -1,0 +1,46 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-0JQM
+type: product_component
+ownerRole: engineer
+name: Recliner Entity Locking Service
+description: 'Internal microservice for Project Recliner providing distributed entity
+
+  locking primitives used across Recliner microservices to coordinate
+
+  concurrent edits to shared domain entities (e.g., customer CDPs).
+
+  .NET Core 8 on AWS EKS.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- entity-locking
+- dotnet-core-8
+- eks
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner Entity Locking Internal API
+  protocol: REST
+  authenticationModel: oauth
+  description: In-cluster REST API for distributed locking primitives.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet, docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-backend/SKSOM.EntityLocking/SKSOM.EntityLocking/Sofa King.SOM.Recliner.EntityLocking.csproj;
+    infra/k8s/charts/recliner-entity-locking/Chart.yaml;
+    infra/k8s/charts/recliner-entity-locking/templates/deployment.yaml;
+    infra/k8s/charts/recliner-entity-locking/templates/ingress.yaml

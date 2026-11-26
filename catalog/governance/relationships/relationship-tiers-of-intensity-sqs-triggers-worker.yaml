@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KYMPKC21-5ZFC
+type: relationship
+name: AWS SQS → Tiers of Intensity SQS Poller Lambda
+description: >-
+  The SQS event-source mapping invokes the containerized Lambda worker with
+  queued calculation requests.
+source: 01KQQ5JT05-0C4P
+target: 01KX18GPWW-8CJS
+label: triggers
+technology: AWS Lambda SQS event-source mapping
+direction: event
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KT0V5MCV-KT72
+  - 01KQQ4Q026-3ZWJ
+tags:
+  - tiers-of-intensity
+  - sqs
+  - lambda
+notes: >-
+  Batch size is ten, partial batch failure reporting is enabled, maximum
+  receives is five before DLQ redrive, and reserved Lambda concurrency is ten.

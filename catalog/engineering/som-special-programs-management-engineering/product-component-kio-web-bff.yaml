@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGF-3Q47
+type: product_component
+ownerRole: engineer
+name: Kio Web BFF
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-kio-web-bff.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- sei
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-kio-web-bff
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-kio-web-bff
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: Dockerfile; ci/params.yml; ci/pipeline.yml; istanbul.yml; kube/elevate-dashboard-bff-cm.yml; kube/elevate-dashboard-bff-dep.yml; kube/elevate-dashboard-bff-ingress.yml; kube/elevate-dashboard-bff-svc.yml; kube/elevate-dashboard-bff-users.yml; package.json; src/config/default.json; src/config/production.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

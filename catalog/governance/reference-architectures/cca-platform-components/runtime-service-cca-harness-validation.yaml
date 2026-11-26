@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2FA-XVTG
+type: runtime_service
+name: CCA Harness Validation Layer (Guardfin)
+description: >-
+  [INTENDED] Post-execution validation of Divan outputs against the declared
+  expected outcome. A Divan run is not considered successful until validation
+  accepts the output; failed validation aborts persistence and writes a failure
+  record. TERMINOLOGY (ratified 2026-08-02, Leo Park, Lead Architect): within
+  CCA, "Harness" means the sofaking-guardfin-harness layer -- the
+  Sofa King-governed private mirror of cisco-ai-defense/guardfin, described in
+  its own repository as the "primary harness layer for all openfin AI-agent
+  instances orchestrated via Staplepin." It does NOT mean Harness.io,
+  harness-engineering.ai, or any third-party validation platform, and no such
+  vendor is to be procured. This is a validation STAGE inside Guardfin, on the
+  completion and tool-call surfaces, running in-VPC on the existing
+  cca-guardfin ECS service -- not a separately deployed binary. It is modeled
+  as its own runtime_service only to keep the validation responsibility legible
+  in the catalog. No Divan output leaves Sofa King infrastructure to be
+  validated. Tracked as OPS-177566.
+version: 0.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - validation
+  - harness
+  - guardfin
+  - intended
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYWQZ7C5-YQG0
+networkPlacement: internal
+authenticationModel: iam

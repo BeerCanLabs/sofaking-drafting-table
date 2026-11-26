@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-632G
+type: technology_component
+ownerRole: technology-admin
+name: NGINX Open Source
+description: Standard NGINX open source function for Linux-hosted web serving workloads.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- web
+- nginx
+classification: software
+vendor: NGINX
+productName: Open Source
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source lifecycle is governed by upstream releases rather than a fixed support date.
+capabilities:
+- 01KT0V5MCV-RZV0
+configurations:
+- id: standard-web-listener
+  name: Standard Web Listener
+  description: Standard NGINX listener profile for HTTP and HTTPS workloads.
+  capabilities:
+  - 01KT0V5MCV-RZV0
+  networkBindings:
+  - port: 80
+    protocol: HTTP
+    direction: inbound
+    description: Default HTTP web listener.
+  - port: 443
+    protocol: HTTPS
+    direction: inbound
+    description: Default HTTPS web listener.

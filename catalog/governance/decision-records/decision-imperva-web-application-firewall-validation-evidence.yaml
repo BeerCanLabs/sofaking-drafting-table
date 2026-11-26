@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ9G-KC7H
+type: decision_record
+name: Imperva Web Application Firewall Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1D-MY47
+linkedObject: 01KQQ5JT1D-MY47
+decisionRationale: "auditVisibility: Audit and operational visibility is limited to the telemetry, event views, and notifications Imperva exposes to Sofa King through the customer-facing management experience.\n\nfailureDomain: Imperva WAF is a shared vendor-managed dependency in front of the protected application path. A vendor-side degradation or control-plane issue can impact all Sofa King traffic paths routed through the service."

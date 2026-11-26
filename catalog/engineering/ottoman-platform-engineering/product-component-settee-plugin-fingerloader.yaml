@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGJ-99RA
+type: product_component
+ownerRole: engineer
+name: Settee Plugin Fingerloader
+description: FingerLoader Plugin
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+  - repository-discovery
+  - settee
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Settee-Plugin-FingerLoader
+language: CSS
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Settee-Plugin-FingerLoader
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: package.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHRB-XJFM
+    key: runtimeRequirement

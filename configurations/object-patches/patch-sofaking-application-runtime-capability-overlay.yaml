@@ -1,0 +1,73 @@
+schemaVersion: '1.0'
+uid: 01KT16XJHR-KSHC
+type: object_patch
+name: Sofa King Application Runtime capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Application Runtime capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-RZV0
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1R-X6MC
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Apache Tomcat Application Service Standard.
+    - ref: 01KQQ5JT1R-98H0
+      lifecycleStatus: existing-only
+      notes: Apache HTTP Server remains an existing-only application runtime for legacy web-service workloads.
+    - ref: 01KQQ5JT1R-2JS3
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only from the Docker Application Service Standard.
+    - ref: 01KQQ5JT1S-PYY2
+      lifecycleStatus: existing-only
+      notes: Microsoft IIS remains an existing-only application runtime for Windows-hosted web workloads.
+    - ref: 01KQQ5JT1S-D14E
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the .NET Core Application Service Standard.
+    - ref: 01KQQ5JT1S-P5KB
+      lifecycleStatus: candidate
+      notes: Assumed candidate as the next ASP.NET Core major version without an approved Service Standard.
+    - ref: 01KQQ5JT1S-HZ2Q
+      lifecycleStatus: deprecated
+      notes: Assumed deprecated legacy .NET runtime.
+    - ref: 01KQQ5JT1S-EHW4
+      lifecycleStatus: preferred
+      notes: Assumed preferred as the runtime aligned with the .NET Core Application Service Standard.
+    - ref: 01KQQ5JT1V-J38E
+      lifecycleStatus: deprecated
+      notes: Node.js 20 reached vendor end of support on 2026-04-30; keep only for existing workloads while migrating to Node.js 22 or a supported runtime.
+    - ref: 01KQQ5JT1V-83GS
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Node.js Application Service Standard.
+    - ref: 01KZ2MRPH2-N024
+      lifecycleStatus: candidate
+      notes: >-
+        Supported LTS runtime observed in Ottoman. Candidate status records
+        current use without replacing the approved Node.js 22 baseline.
+    - ref: 01KZ2MRPH1-N014
+      lifecycleStatus: retired
+      notes: >-
+        Node.js 14 reached vendor end of life on 2023-04-30. Retain only to
+        identify and remediate the observed Ottoman Load Test runtime.
+    - ref: 01KQQ5JT1V-632G
+      lifecycleStatus: preferred
+      notes: NGINX Open Source is the preferred web-serving runtime implementation where NGINX is the selected application runtime.
+    - ref: 01KQQ5JT1V-5MTB
+      lifecycleStatus: deprecated
+      notes: Assumed deprecated legacy Java runtime.
+    - ref: 01KQQ5JT1V-KSVC
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Java Application Service Standard.
+    - ref: 01KQQ5JT1S-R1DR
+      lifecycleStatus: retired
+      notes: Microsoft Office 2007 support ended in 2017; remove this legacy Access database engine from acceptable use.
+    - ref: 01KQQ5JT1S-M0RD
+      lifecycleStatus: retired
+      notes: Microsoft Office 2010 support ended in 2020; remove this legacy Access database engine from acceptable use.
+    - ref: 01KQQ5JT1T-FVFC
+      lifecycleStatus: existing-only
+      notes: Maintained for Windows application runtime dependencies identified in SRE automation.
+    - ref: 01KQQ5JT1T-Z2TD
+      lifecycleStatus: existing-only
+      notes: Maintained as an IIS application runtime extension for URL rewrite dependencies identified in SRE automation.

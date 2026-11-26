@@ -1,0 +1,56 @@
+schemaVersion: '1.0'
+uid: 01KZP9ZZ56-R5MT
+type: data_component
+ownerRole: engineer
+name: Recliner Global User Store
+description: >-
+  Proposed global Recliner user-profile data boundary. The Recliner architecture
+  identifies this store separately from application-instance configuration and
+  region customer records, with initial placement in a US East database
+  cluster.
+version: 0.3.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - recliner
+  - user-profile
+  - sqlserver
+  - data-component
+  - pii
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+runsOn: 01KRZVZXDK-7XC1
+targetEngine: mssql
+dataClassification: restricted
+containsPII: true
+retentionPolicy: TBD - retention, deletion, and region offboarding behavior are not documented in the source architecture.
+notes:
+  accountableDataDomainApprovers:
+    - Theo Kane
+    - Reid Sumner
+    - Sunil Pradhan
+  logicalBoundary: >-
+    Global User Profile / User Store identified by the Recliner Infrastructure
+    Architecture draft. Exact schemas, migration ownership, and whether the
+    store contains authentication data in addition to profile data require
+    engineering confirmation.
+  repositoryPath: src/recliner-database/ReclinerUserProfileStore/
+  sourceDocuments:
+    - title: Recliner Infrastructure Architecture [DRAFT]
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/17155479503/Recliner+Infrastructure+Architecture+DRAFT
+      lastModified: '2026-06-24'
+      authority: Proposed architecture; operational confirmation remains required.
+    - title: Reid Sumner data-domain response in Slack
+      lastModified: '2026-08-14'
+      authority: Recliner SME confirmation of the SQL Server Database Project path.
+  repositoryEvidence: >-
+    SQL Server Database Project in BeerCanLabs/sk-som-recliner at
+    src/recliner-database/ReclinerUserProfileStore/. The project name uses User
+    Profile Store while the architecture catalog names the logical boundary
+    Global User Store.
+  platformDecision: >-
+    SQL Server 2025 is the page's stated direction, while Aurora PostgreSQL is
+    also described as under consideration. The final engine and managed RDS
+    service mapping remain open.

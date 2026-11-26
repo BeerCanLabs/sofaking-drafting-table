@@ -1,0 +1,70 @@
+schemaVersion: '1.0'
+uid: 01KYAFQQJB-FF30
+type: network_service
+ownerRole: technology-admin
+category: service
+serviceCategory: appliance
+name: HAProxy
+description: 'Self-managed HAProxy load balancer used alongside AWS ALBs in Sofa King Central staging environments.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - haproxy
+  - load-balancing
+  - networking
+  - appliance
+vendor: HAProxy Technologies
+productName: HAProxy
+productVersion: unknown
+deliveryModel: appliance
+networkFunction: load balancing
+networkTopology: layer-7 load balancer for staging traffic distribution alongside AWS ALBs
+protocols:
+  - HTTPS
+  - HTTP
+complianceCerts: []
+patchingOwner: organization-scheduled
+architectureNotes:
+  serviceAuthentication: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  serviceLogging: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  availabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  scalabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  recoverabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  failureDomain: Scoped to the staging environment where this instance runs.
+  authenticationAccessModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  logAuditVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  healthStatusVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  patchUpdateModel: Updates follow the recorded patchingOwner field unless a more specific vendor or operations mechanism is confirmed.
+  resilienceModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+  configurableSurface: Not confirmed in the source catalog; requires follow-up during the next drafting interview.
+capabilities:
+  - 01KSWVZSZ5-M0FR
+decisionRecords:
+  - ref: 01KYAFY78H-CEF8
+    key: serviceAuthentication
+  - ref: 01KYAFY78H-CEF8
+    key: serviceLogging
+  - ref: 01KYAFY78H-CEF8
+    key: availabilityModel
+  - ref: 01KYAFY78H-CEF8
+    key: scalabilityModel
+  - ref: 01KYAFY78H-CEF8
+    key: recoverabilityModel
+  - ref: 01KYAFY78H-CEF8
+    key: failureDomain
+  - ref: 01KYAFY78H-CEF8
+    key: authenticationAccessModel
+  - ref: 01KYAFY78H-CEF8
+    key: logAuditVisibility
+  - ref: 01KYAFY78H-CEF8
+    key: healthStatusVisibility
+  - ref: 01KYAFY78H-CEF8
+    key: resilienceModel
+  - ref: 01KYAFY78H-CEF8
+    key: configurableSurface

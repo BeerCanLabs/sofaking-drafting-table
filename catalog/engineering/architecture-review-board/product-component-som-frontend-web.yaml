@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-Q2SE
+type: product_component
+ownerRole: engineer
+name: SOM Frontend Web Service
+description: 'Primary region-facing web portal for SOM. Enables administrators to create, manage, and track customer CDPs. Contains Sofa King-authored ASP.NET code on an IIS WS2016 host.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT1F-JCA7
+tags:
+- som
+- web
+- product-component
+repoUrl: TBD
+classification: web-application
+architectureNotes:
+  serviceAuthentication: Region users and administrators authenticate through the SOM product identity flows and centralized certificate management.
+  secretsManagement: Product secrets and certificates are sourced from centralized secret storage.
+  serviceLogging: Frontend application logs are forwarded to centralized logging beyond the underlying IIS runtime tier.
+  healthWelfareMonitoring: Endpoint monitoring, synthetic user checks, and runtime telemetry track service welfare.
+  availabilityModel: Designed to run as a multi-instance web tier behind load balancing.
+  scalabilityModel: Horizontal scale-out across additional frontend instances as user demand increases.
+  recoverabilityModel: Failed instances are rebuilt from the deployment package and rejoin the active frontend pool.
+  failureDomain: Scoped to the SOM frontend web tier within a single sub-environment.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

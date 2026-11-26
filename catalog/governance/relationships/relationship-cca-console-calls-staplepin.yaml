@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: DN1R2VCQ71-8MHP
+type: relationship
+name: CCA Console (Front Door) → Staplepin Control Plane
+catalogStatus: incomplete
+source: 01KYX7W8V9-PABC
+label: calls
+target: 01KYWQE2F1-14MN
+description: >-
+  [DOCUMENTED] The Console BFF is the human front-door path into the platform: it
+  proxies the browser to the Staplepin control plane -- REST on the board key,
+  events over a WebSocket on the agent key. This is the primary inbound entry;
+  JSM is reached under the hood, not by the user directly.
+technology: HTTPS (REST + WebSocket) to staplepin.cca.local:3100
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - front-door

@@ -1,0 +1,74 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-4Q9H
+type: product_component
+ownerRole: engineer
+name: Shopstar IDM Integration
+description: >-
+  Separately deployed Java integration service that provides a common Sofa King
+  IdM integration boundary for shopstar and synchronizes organization, user,
+  permission, and enable-user changes asynchronously through RabbitMQ.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- repository-discovery
+- shopstar
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar-idm-integration
+language: Java
+classification: api-service
+runtimeRequirement: Java
+runtimeSpec:
+  ports:
+    - number: 8889
+      protocol: HTTP
+      name: application-listener
+      direction: inbound
+      description: >-
+        Production listener monitored through an F5 HTTP health monitor. The
+        exact health-check URI remains unresolved.
+  dependencies:
+    - ref: 01KQQ5JT1E-JBCV
+      purpose: Publishes and consumes asynchronous identity synchronization messages.
+      notes: >-
+        Covers organization, user, permission, and enable-user synchronization.
+        The shared-service reference identifies RabbitMQ only; its generic
+        three-node quorum topology and host binding are not confirmed for shopstar.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstar-idm-integration
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: pom.xml
+  serviceAuthentication: >-
+    Service authentication and the exact RabbitMQ credential injection
+    mechanism remain unresolved.
+  secretsManagement: >-
+    Secret Server is the confirmed store for operational, server, and database
+    credentials, and Ansible Vault is used by infrastructure automation. The
+    exact runtime injection mechanism for RabbitMQ credentials remains
+    unresolved.
+  serviceLogging: >-
+    Centralized V3 application-log aggregation or SIEM handling is not
+    established by current V3-only evidence.
+  healthWelfareMonitoring: >-
+    An F5 HTTP health monitor covers the IDM Integration service pool. The
+    exact health-check URI remains unresolved.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  deploymentModel: >-
+    Deployed separately from the main shopstar v3 Tomcat application on
+    grrshs3idm01 and grrshs3idm02 on port 8889. RabbitMQ is also installed on
+    both production IDM hosts, and an F5 service pool exists for IDM
+    Integration. The exact RuntimeService catalog binding and current broker
+    cluster membership remain unresolved, so no generic Java runtime binding
+    is asserted.
+  synchronizationScope: >-
+    RabbitMQ carries asynchronous organization, user, permission, and
+    enable-user synchronization. Historical V3 documentation defines a
+    two-node cluster with mirrored user-sync queues, but current cluster
+    membership, mirroring policy, exchanges, exact queues, routing keys,
+    retry behavior, and dead-letter behavior remain unresolved.

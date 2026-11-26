@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSES-F079
+type: relationship
+name: 'Platform Msvc File → Amazon S3 Storage'
+catalogStatus: stub
+source: 01KSM38KFY-DJKY
+target: 01KQQ5JT05-KT3Z
+label: reads from and writes to
+technology: AWS SDK / HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Declared by source inspection 2026-07-29.

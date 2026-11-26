@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KYT8HNHX-Y51W
+type: product_component
+ownerRole: engineer
+name: CIS Msvc Document Vault
+description: LS CIS Document Vault microservice (Tillbook.DocumentVault). Replaces the retired CIS Svc Document Vault; AWS CDK-deployed .NET service.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- sis
+- lakeshore
+- tillbook
+- aws
+- cdk
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-msvc-document-vault
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery while investigating the retirement of CIS Svc Document Vault. Confirmed by product owner as its replacement.
+  role: Document vault service (Tillbook.DocumentVault), CDK-deployed to AWS. Supersedes the legacy Lambda/S3-based CIS Svc Document Vault.
+  repositoryName: BeerCanLabs/sk-cis-msvc-document-vault
+  observedManifestPaths: src/Tillbook.DocumentVault.sln; src/Tillbook.DocumentVault/; src/Tillbook.DocumentVault.ApiClient/; src/Tillbook.DocumentVault.Deployment/; cdk.json
+  serviceAuthentication: AWS API Keys. Confirmed by product owner on 2026-07-31 — this is an AWS-hosted service, and AWS-hosted services authenticate via AWS API Keys rather than the suite's IdentityServer3 (CIS App Centraladmin).
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

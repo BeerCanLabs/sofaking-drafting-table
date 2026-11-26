@@ -1,0 +1,75 @@
+schemaVersion: '1.0'
+uid: SEQEZT5ZPD-2NKB
+type: product_component
+ownerRole: engineer
+name: Tailor SSRS Reporting
+description: Tailor SQL Server Reporting Services deployment unit prepared by the Tailor SSRS and SSRS UAT roles.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+runtimeRequirement: 'SQL Server Reporting Services 2022 on Windows Server.'
+tags:
+  - tailor
+  - ssrs
+  - reporting
+  - sqlserver
+  - ansible-discovered
+repoUrl: TBD
+classification: other
+runtimeSpec:
+  dependencies:
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Reads Tailor SQL Server data for reporting workloads.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_ssrs/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_ssrs/vars/main.yml
+    - playbooks/roles/sk_apps/som/tailor_ssrs_uat/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_ssrs_uat/vars/main.yml
+  reportingRuntime: 'The playbook uses the shared SQL Server role in reporting-services mode and prepares an S: drive labeled SYSTEM.'
+  dbArchitecturePdfEvidence: AAP inventory is the operational source of truth for SSRS hosts. The Tailor DB Architecture PDF also shows DEV SSRS host HPTTLRDEVSSRS01, but AAP did not return any Tailor DEV SSRS group or HPTTLRDEVSSRS host, so that PDF-only node is retained as non-authoritative documentation evidence.
+  aapHostInventory:
+    production:
+      aapTemplate: grr-tailor-prd-ssrs-playbook
+      provisioningTemplate: grr-tailor-prd-sql-ssrs-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_SSRS
+      hosts:
+        - GRRTLRPRDSSRS01
+        - GRRTLRPRDSSRS02
+        - GRRTLRPRDSSRS03
+        - GRRTLRPRDSSRS04
+    uat:
+      aapTemplate: grr-tailor-uat-ssrs-playbook
+      provisioningTemplate: grr-tailor-uat-ssrs-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_UAT_SSRS
+      hosts:
+        - GRRTLRUATSSRS01
+        - GRRTLRUATSSRS02
+    hptNonProduction:
+      - environment: hpt_qa
+        aapTemplate: hpt-tailor-qa-sql-ssrs-db-playbook
+        provisioningTemplate: hpt-tailor-qa-sql-ssrs-vsphere
+        inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_SSRS_QA
+        hosts:
+          - HPTTLRQASSRS01
+      - environment: hpt_stg
+        aapTemplate: hpt-tailor-stg-sql-ssrs-db-playbook
+        provisioningTemplate: hpt-tailor-stg-sql-ssrs-vsphere
+        inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_SSRS_STG
+        hosts:
+          - HPTTLRSTGSSRS01
+          - HPTTLRSTGSSRS02
+  documentedOnlyReportingHosts:
+    - environment: hpt_dev
+      source: SaaSIO-Tailor DB Architecture-100726-202108.pdf
+      status: not-found-in-aap-inventory
+      documentedHosts:
+        - HPTTLRDEVSSRS01
+  ownerInterviewNeeded: Confirm report catalog boundaries, report-server URLs, and whether SSRS is dedicated to Tailor or shared with adjacent SOM workloads.

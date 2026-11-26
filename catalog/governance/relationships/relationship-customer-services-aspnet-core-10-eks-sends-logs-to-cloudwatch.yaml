@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01M6RKHWNN-WD4W
+type: relationship
+ownerRole: technology-admin
+name: Customer Services ASP.NET Core 10 on EKS Application Runtime sends logs to Amazon CloudWatch Logs
+description: >-
+  Per the Customer Services team lead, the Shared Customer services write logs to STDOUT and a node-level or
+  cluster-level agent forwards them to Amazon CloudWatch Logs. This forwarding is not
+  verified. No agent, log group, or destination has been identified. Verified in
+  ss-msvc-customer-profile (Api.csproj, appsettings.json, Program.cs): the API uses the .NET
+  console logger with the JSON formatter in single-line mode, has no logging SDK or sink
+  package, and an audit-logging middleware writes through the same logger. The same
+  behavior in the other Shared Customer services is per the team lead and was not checked.
+source: 01M5CS4D96-RT10
+externalTarget: Amazon CloudWatch Logs
+label: sends logs to
+technology: STDOUT container logs
+direction: event
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KQQ4Q026-D04B
+tags:
+  - customer-services
+  - shared-customer-record
+  - logging
+  - cloudwatch
+  - observability
+notes: >-
+  The forwarding details should be owned by a DevOps team member, per the Customer Services
+  team lead. The owning team is not yet named. A path search of k8s-deployments found no
+  log-forwarder Application under apps/clusters/le1. Fluent Bit Applications exist there
+  for other clusters. That search covered file paths only. The team lead states Dynatrace
+  is not yet configured.

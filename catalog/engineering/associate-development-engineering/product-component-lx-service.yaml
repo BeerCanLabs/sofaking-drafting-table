@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG2-SCKS
+type: product_component
+ownerRole: engineer
+name: Lx Service
+description: This service is to be used primarily for LX to store and retrieve data to be used in the LX Courses.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- lx
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-lx-service
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-lx-service
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: .circleci/config.yml; Dockerfile; package-lock.json; package.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

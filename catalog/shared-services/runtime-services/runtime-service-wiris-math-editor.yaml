@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-VER7
+type: runtime_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: WIRIS Math Editor
+description: 'Managed math equation editor platform integrated via API.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- retail
+- content
+vendor: WIRIS
+productName: Wiris Math Editor
+productVersion: TBD
+authenticationModel: api-key
+architectureNotes:
+  resilienceModel: Vendor-managed high availability.
+  configurableSurface: License integration and API parameters.
+  failureDomain: Scoped to the WIRIS platform.
+  capabilityMapping: Specialized vendor math editor capability remains unresolved pending owner review.
+decisionRecords:
+- ref: 01KSNAW2AM-VG8W
+  key: resilienceModel
+- ref: 01KSNAW2AM-VG8W
+  key: configurableSurface
+- ref: 01KSNAW2AM-VG8W
+  key: failureDomain
+deliveryModel: paas

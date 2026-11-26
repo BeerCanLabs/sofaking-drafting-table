@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-92JG
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server 2022
+description: Strategic SQL Server 2022 database engine baseline for new services.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- sqlserver
+classification: software
+vendor: Microsoft
+productName: SQL Server
+productVersion: '2022'
+vendorLifecycle:
+  mainstreamSupportEnd: 2028-01-11
+  extendedSupportEnd: 2033-01-11
+  notes: Extended support ends in January 2033.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-tds-listener
+  name: Default TDS Listener
+  description: Default SQL Server Database Engine listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 1433
+    protocol: TDS
+    direction: inbound
+    description: Default SQL Server Database Engine client listener.

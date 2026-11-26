@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-2ND0
+type: decision_record
+name: PG PLM/EEM - New Relic Agent Is a Non-Standard Observability Choice
+description: >-
+  Records New Relic as a non-standard technology choice in the PLM/EEM estate against Sofa King's Dynatrace observability standard, per APEX Architecture L1 criterion 5.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - non-standard-technology
+  - associate-development
+  - plm
+  - eem
+  - observability
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  nonStandardTechnology: pg-msvc-plm-eem-api vendors a New Relic .NET Core agent (newrelic/newrelic-netcore20-agent_8.16.567.0_amd64.deb), and STL-LDMS-Legacy carries a New Relic Web.config under src/asp/SysAdmin/NewRelic. The APEX framework names Dynatrace as Sofa King's central observability and logging solution, with Dynatrace OneAgent (01KQQ5JT1N-RSE4) as the approved Technology Component; New Relic is not an approved Technology Component and has no object in the DRAFT catalog. UPDATED after Trevor Lane's review: New Relic is CONFIGURED IN PRODUCTION, not a vestige. NEW_RELIC_APP_NAME is set in all five of the API's deployment manifests - cd/dr, cd/prod, cd/prod-ottoman, cd/stage and cd/stage-ottoman - so the agent is deliberately wired into the running deployment spec rather than merely vendored. STL-LDMS-Legacy additionally references New Relic from application code (src/asp/SysAdmin/NewRelic/Web.config and DBHelper.cs), so the choice spans BOTH deployment patterns, not only the cloud tier this record is linked to. The precise limit of the evidence: an environment variable proves deliberate configuration, not that telemetry is currently flowing, since a license key would be supplied from a secret - confirm in the New Relic or Dynatrace console. This is therefore an exception requiring an Architecture Review Board conversation rather than a simple removal, and it will also be assessed against APEX Observability L1, which requires logs shipped to Dynatrace as the central logging solution. No remediation target is set; APEX L1 does not require one. ACTION REQUIRED: APEX Architecture L1 criterion 5 requires a Jira tracking item for each non-standard technology choice. No dedicated exception ticket exists yet; SKPG-19589 is the only tracking item, and a specific ticket should be raised before this record is ratified. Status open.

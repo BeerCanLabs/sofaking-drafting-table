@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF4-H2GV
+type: data_component
+ownerRole: engineer
+name: Data Analytics Sai Infinitesite
+description: All files needed for an Infinite Site implementation for Customer Analytics
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: foresight5-analytics-engineering
+  contact: data-engineering-analytics-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- repository-discovery
+- data
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-data-analytics-sai-infinitesite-
+targetEngine: mssql
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-data-analytics-sai-infinitesite-
+  observedRuntimeSignals: readme
+  observedManifestPaths: No safe manifest paths recorded.
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

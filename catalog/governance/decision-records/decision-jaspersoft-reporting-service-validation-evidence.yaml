@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01KT16XJEQ-EXVC
+type: decision_record
+name: JasperSoft Reporting Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-737K
+linkedObject: 01KQQ5JT1F-737K
+decisionRationale: |
+  serviceAuthentication: Jasper administrative access and JDBC datasource
+  authentication are configured per region.
+
+  secretsManagement: Administrative and datasource credentials use the
+  approved secret-management workflow and are injected into region
+  configuration rather than container images.
+
+  serviceLogging: ECS and container telemetry is sent to CloudWatch; Jasper
+  logs are available to region troubleshooting and centralized logging.
+
+  availabilityModel: The current baseline uses one desired task for the active
+  Jasper service version. ECS replaces failed tasks, but active-active HA is
+  not claimed.
+
+  scalabilityModel: Legacy Jasper and Jasper 9 are distinct ECS service
+  definitions that can coexist during migration. Desired count and EC2
+  capacity can be adjusted operationally; horizontal Jasper scaling requires
+  storage and session validation.
+
+  recoverabilityModel: ECS rebuilds failed tasks from versioned images.
+  Repository recovery stops Jasper capacity, restores the EFS-backed
+  PostgreSQL repository, and restarts the service.
+
+  failureDomain: Jasper runtime and repository failures are scoped to one
+  region environment.
+
+  Evidence:
+  https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19112059945
+  https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211
+  AWS ECS console observation for lakerg-pd-ecs on 2026-07-29.

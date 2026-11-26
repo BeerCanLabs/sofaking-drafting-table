@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHXS-03DB
+type: decision_record
+name: 'PG: LCR & Resource Library Validation Evidence'
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG4-R1NA
+linkedObject: 01KSM38KG4-R1NA
+decisionRationale: 'deploymentTargets: Hosted in AWS us-east-1 (Production Microservices account 736016846305). Resource Library services run on Amazon EKS, the Learning Designer App runs on Windows EC2 with IIS, and the Settee UI module is deployed by Octopus to EC2 targets. Updated per the product owner. History: this record previously said "Hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware." which is obsolete for this product.'

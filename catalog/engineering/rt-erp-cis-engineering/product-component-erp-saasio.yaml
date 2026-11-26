@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGM-WX68
+type: product_component
+ownerRole: engineer
+name: ERP Saasio
+description: ERP SaaSIO Scripts
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- erp
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-saasio
+language: Python
+classification: api-service
+runtimeRequirement: Python 3
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-erp-saasio
+  observedRuntimeSignals: cloudformation, python, readme, serverless, terraform
+  observedManifestPaths: ansible/inventory-task/playbook.yml; ansible/standalone_playbooks/nagios_database_servers/group_vars/all.yml; ansible/standalone_playbooks/nagios_database_servers/playbook.yml; ansible/standalone_playbooks/nagios_database_servers/tasks/main.yml; ansible/standalone_playbooks/nagios_gateway_servers/playbook.yml; ansible/standalone_playbooks/nagios_gateway_servers/vars.yml; cf/ECS/ecs-nested/alb.yaml; cf/ECS/ecs-nested/cloudwatch-dashboards.yaml; cf/ECS/ecs-nested/ecs-cluster.yaml; cf/ECS/ecs-nested/ecs-services.yaml; cf/ECS/ecs-nested/ecs-ssm-parametrs.yaml; cf/ECS/ecs-nested/ecs-tasks.yaml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

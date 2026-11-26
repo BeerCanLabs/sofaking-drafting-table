@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-KTPA
+type: product_component
+ownerRole: engineer
+name: Leave Jag
+description: JAG Repo
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-jag
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-jag
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: SK.Rotaops.AvailabilityGenerator/SK.Rotaops.AvailabilityGenerator.csproj;
+    SK.Rotaops.AvailabilityGeneratorBackingStore/SK.Rotaops.AvailabilityGeneratorBackingStore.csproj;
+    SK.Rotaops.AvailabilityGeneratorService/SK.Rotaops.AvailabilityGeneratorService.csproj;
+    SK.Rotaops.EventAnalyzer/SK.Rotaops.EventAnalyzer.csproj; SK.Rotaops.EventAnalyzerCachePrimer/EventAnalyzerCachePrimer.csproj;
+    SK.Rotaops.EventAnalyzerService/SK.Rotaops.EventAnalyzerService.csproj; SK.Rotaops.Test.AvailabilityGenerator/SK.Rotaops.Test.AvailabilityGenerator.csproj;
+    SK.CacheServerServiceRemoting/SK.CacheServerServiceRemoting.csproj; SK.DevOpsTools/App_Data/serviceKiSpecification.json;
+    SK.DevOpsTools/SK.DevOpsTools.csproj; GitVersion.yml; abs-jag.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

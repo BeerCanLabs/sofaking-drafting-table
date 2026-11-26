@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-Z1SS
+type: product_component
+ownerRole: engineer
+name: Resource Library Elasticsearch Sync
+description: Node.js sidecar importer that copies data from PostgreSQL into Elasticsearch for the Resource Library, as an alternative to adding a JDBC driver to Elasticsearch (repository BeerCanLabs/sk-msvc-rl-elasticsync).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- elasticsearch
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-rl-elasticsync
+language: JavaScript
+classification: worker
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-rl-elasticsync
+  deploymentPipeline: CodeFresh (owner-confirmed). Repository carries ci/codefresh-build.yml and cd/codefresh-deploy-*.yml.
+  runtimeHostEvidence: Kubernetes manifests (Deployment with 1 replica, Service, Ingress) under cd/ for prod and stage; container listens on port 4000. Host mapped to Amazon EKS Standard per owner.
+  classificationNote: Classified as worker (owner-confirmed). It runs a cron job every minute that syncs resources from PostgreSQL into Elasticsearch and purges archived and deleted resources, plus a daily cron job (00:00:50) that removes the index. It also exposes two HTTP endpoints (index.js).
+  exposedEndpoints: GET /api/v1/status returns 200 while the last indexing run was within 2 minutes, otherwise 500 (it does not confirm indexing succeeded). GET /api/v1/index triggers an on-demand index run and returns 204 immediately; the run also purges archived and deleted resources. No endpoint clears the whole index; the index is only removed by the daily cron job.
+  observedDataStoreEvidence: Production ConfigMap points at the read-only endpoint of PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (us-east-1) as the source and at the AWS OpenSearch domain rl-opensearch-prod (us-east-1) as the target. The PostgreSQL cluster is a regional Aurora PostgreSQL cluster (owner-confirmed). The OpenSearch type is inferred from the domain name and was not confirmed with the owner.
+  observedRuntimeSignals: docker, node, readme, kubernetes-manifests
+  observedDependencySignals: README and package.json show a PostgreSQL source (pg, sequelize) and an Elasticsearch target (elasticsearch client), configured through inputs/configuration.json.
+  observedManifestPaths: Dockerfile; package.json; ci/codefresh-build.yml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/prod/ingress.yml; cd/stage/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed; owner interview required.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KQQ5JT04-27EP
+    purpose: Source of resource records to index (read-only endpoint).
+    interface: PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (reader endpoint)
+  - ref: 01KQQ5JT05-2FWS
+    purpose: Target search index that is updated and purged.
+    interface: OpenSearch domain rl-opensearch-prod

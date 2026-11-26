@@ -1,0 +1,430 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG2-ZB6W
+type: software_deployment_pattern
+ownerRole: engineer
+name: Ottoman Platform
+description: 'Sofa King''s next-generation application framework providing unified identity, secure service mesh, API gateway, and application access management for Sofa King RETAIL products.
+
+  '
+version: 1.0.2
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.platform
+  productFamily: Ottoman Platform
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - sdm
+  - ottoman
+  - identity
+  - service-mesh
+  - api-gateway
+  - eks
+  - kong
+  - kuma
+followsReferenceArchitecture: 01KQQ5JT1D-5SV6
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary (tier and zone) service connections are documented in serviceGroups[].connections entries across the Administration & UI Tier, Gateway & Service Mesh Tier, Identity & Authentication Tier, Platform Core Services, and Serverless Functions service groups. Same-zone connections (Kong Backplane → microservices, Lambda-to-Lambda) have not been enumerated and are deferred to a follow-up session.
+  configcatNonConformance: 'Kong Backplane featureflag.lua calls ConfigCat directly per-request via HTTP POST with no caching, bypassing the Platform Feature Flag Service abstraction layer. This is a non-conforming pattern flagged as a high-priority stabilization surface in the Ottoman stability audit (Finding #5). ConfigCat bandwidth already exceeded the Enterprise subscription limit by an order of magnitude in 2025. Remediation: route the Kong hot path through the Platform Feature Flag Service (01KQQ5JT0V-H0P5), which centralizes and caches ConfigCat calls. UPDATE 2026-08-03: repository discovery during the Dev-team repo linking pass confirms the same direct-call, no-caching pattern (via the configcat-node SDK) in Ottoman Domain Service, Ottoman Invitation Service, Ottoman Organization Service, and Platform Msvc Org Person — this is a platform-wide pattern affecting at least five services, not an isolated Kong Backplane issue. See each component''s architectureNotes.configcatDirectCall.'
+  selectedPatternRationale: 'This deployment follows the AWS EKS Service Mesh Platform pattern because it combines EKS, gateway, mesh, identity, platform data services, serverless functions, and GitOps delivery.
+
+    '
+  noPatternDeviations: 'No deviations from the selected Reference Architecture are recorded yet. Kong Gateway, Kong Mesh, Traefik ingress, and their AWS load-balancer paths are modeled as reusable network services.
+
+    '
+  availabilityRequirement: high-availability
+  dataClassification: confidential PII and identity data; CCPA and SOC II scoped.
+  failureDomain: 'Multi-AZ primary operation in AWS us-east-1 with disaster recovery and failover infrastructure in us-east-2. Shared identity, gateway, mesh, and data services create platform-level dependencies for products adopting Ottoman.
+
+    '
+  deploymentTargets: 'Production runs in AWS us-east-1 VPC USE1-PRD-MORPH-VPC (vpc-0d49f0e96ba662130) with disaster recovery and failover in AWS us-east-2 VPC USE2-PRD-MORPH-VPC (vpc-0a917ec697c46280d). Stage runs in AWS us-east-1 VPC USE1-STG-MORPH-VPC (vpc-01245ba9b96afbcce) and AWS us-east-2 VPC USE2-STG-MORPH-VPC (vpc-09e23f06442f45af7). Development runs in AWS us-east-1 VPC USE1-DEV-MORPH-VPC (vpc-0c7d07d0dd293cf3e).
+
+    '
+  availabilityModel: 'Multi-AZ within us-east-1 for primary production operation, with us-east-2 disaster recovery infrastructure, Aurora read replicas, duplicate VPC and subnet infrastructure, Kong Gateway hybrid mode across clusters, and ArgoCD HA mode.
+
+    '
+  serviceMeshModel: 'Kong Gateway and Kong Mesh form the Ottoman gateway and service-mesh tier. Kong Mesh models the Kuma control planes and injected Envoy data planes as internal components; Traefik models the intentional Kubernetes Ingress path.
+
+    '
+  tenancyModel: 'Ottoman handles shared identity and application access management across Sofa King RETAIL products. Detailed tenant isolation and data partitioning semantics are unresolved in the source materials.
+
+    '
+  hcf_03_1_1: Vulnerability management is not yet documented at the Ottoman Software Deployment Pattern level. Add the approved vulnerability management program, scan ownership, and exception process reference before approving this SDP.
+  hcf_03_1_3: Patch management report review is not yet documented for Ottoman. Add the review cadence, reviewing team, evidence location, and escalation path before approving this SDP.
+  hcf_03_3_1: EOL management is not yet documented for Ottoman. Add periodic EOL review ownership and formal termination or upgrade plan handling for Ottoman technology components.
+  hcf_04_2_1: Formal access provisioning and 24-hour access removal evidence is not yet documented for Ottoman. Confirm the authoritative access workflow and removal SLA evidence before approving this SDP.
+  hcf_05_3_1: Ottoman infrastructure and application changes are represented as GitOps and IaC-driven through ArgoCD, GitHub repositories, and Terraform-managed AWS infrastructure. Confirm the formal change-management workflow and approval evidence before approving this SDP.
+  hcf_09_1_1: Ottoman is segmented across AWS VPCs and environments, with production and disaster-recovery boundaries documented in the deployment target and failure-domain decisions. Network ACL/security group review evidence remains a lower-level runtime or edge-service responsibility.
+  hcf_10_1_1: Ottoman has multi-AZ primary operation in us-east-1 and disaster-recovery infrastructure in us-east-2. Formal DR procedure, BIA linkage, annual recovery testing evidence, RTO, and RPO remain unresolved.
+  hcf_10_1_2: Alternative business processes and out-of-band communication channels are not yet documented for Ottoman outage scenarios. Add or link the operational continuity plan before approving this SDP.
+  hcf_11_3_1: Secure sharing and non-production production-data restrictions are not yet documented for Ottoman. Confirm whether production identity data is excluded from lower environments or protected through approved masking/synthetic-data controls.
+  hcf_11_4_1: Ottoman is classified as processing confidential PII and identity data. Approved AI tool usage, shadow AI monitoring, and sensitive-data location audit evidence are not yet documented for this SDP.
+  hcf_14_1_1: Secure code training evidence for Ottoman developers and reviewers is not yet documented at the SDP level.
+  hcf_14_1_3: Ottoman has distinct development, stage, production, and disaster-recovery deployment targets. SBOM risk review and no-unmonitored-dev-access-to-production evidence are not yet documented.
+  dataDomainInfrastructureBaseline: >-
+    OPS-825852 evidence captured 2026-08-07 and clarified 2026-08-11. The Data
+    Team owns and operates database infrastructure in every production and
+    non-production environment; Ottoman application teams own the schemas,
+    data, data models, and application access inside those databases. Aurora PostgreSQL and Neptune are
+    Sofa King-hosted AWS services. Development uses us-east-1 only. Stage and
+    production use global clusters with a us-east-1 primary and read-only
+    us-east-2 secondary that requires manual failover; this is global-cluster
+    DR topology, not a Multi-AZ designation. Current development clusters are
+    morph-dev-rds-pgsql-cluster-1 (Aurora PostgreSQL 15.15, serverless, one
+    instance, seven-day native retention) and morph-dev-neptune-cluster-1
+    (Neptune 1.4.5.1, db.t3.medium, one-day native retention). Stage uses
+    morph-stg-rds-pgsql-cluster-1 (Aurora PostgreSQL 15.17, two serverless
+    instances per region, seven-day native retention) and
+    morph-stg-neptune-cluster-1/2 (Neptune 1.4.6.3, two db.r6g.4xlarge
+    instances per region, three-day native retention). Production uses
+    morph-prod-rds-pgsql-cluster-1 (Aurora PostgreSQL 15.17, two serverless
+    instances per region, 31-day native retention) and production Neptune
+    global clusters (Neptune 1.4.6.3, two instances per region; db.r6g.4xlarge
+    in us-east-1 and db.r6g.xlarge in us-east-2; 31-day native retention).
+    Production Aurora PostgreSQL and Neptune follow daily 31-day, monthly
+    13-month, and annual seven-year retention; AWS Backup is used for RDS
+    across Sofa King solutions. Redis holds a Neptune-derived data cache:
+    development and stage are on Data-Team-managed Redis Cloud, production
+    remains on ElastiCache because its Redis Cloud target has not been created.
+    Redis Cloud is outside Sofa King AWS accounts. No migration Jira exists;
+    Dev-team discussions are planned. Org Person uses sk-org-person on shared
+    Sofa King Central Atlas MongoDB Cluster 1 environments. Production Atlas
+    backups use immutable project-level compliance policy and secondary-region
+    snapshots; Data Team owns shared Atlas infrastructure while Platform
+    Ottoman owns application data. Peak-season performance spikes motivate a
+    proposed future dedicated Atlas cluster, but no approved migration or
+    tracking ticket exists. Database infrastructure is manually managed without
+    automation. Deletion protection is unintentionally disabled after an
+    upgrade; the Data Team plans a future OPS ticket. The two
+    morph-dev-iam-neptune-cluster test clusters and the postgress-pps/testing
+    PostgreSQL resources are excluded because they are not active Ottoman
+    dependencies. Neptune TLS is expected but requires Data Team verification.
+    Brett Ames is the Ottoman Application SME responsible for confirming
+    authoritative records across Neptune and MongoDB Atlas, Redis cache
+    producers and consumers, cross-service database access, and approving data
+    classifications.
+  auroraPostgresqlDatabaseInventory: >-
+    Production application databases: api_gateway_app, skadminservice,
+    invitationservice, kong, organizationservice, and passportcoreservice.
+    Stage contains those databases plus ai_gateway_db. Development contains
+    the common application databases plus ai_gateway_db,
+    erp_budget_monitorin (name truncated in supplied evidence), usersntest,
+    platforms_dev, platcompliance_dev, plattasks_dev, platworkflow_dev, and
+    platnotification_dev. Standard PostgreSQL administration/template
+    databases are not application stores. The Data Team owns the database
+    infrastructure for all listed environments, while the Ottoman application
+    team owns the data inside the databases. Namesake service usage is the
+    current mapping; Brett Ames must confirm cross-service access.
+  dataDomainEvidence: >-
+    Data Team workbook Ottoman DB Infra.xlsx; contributor-provided database
+    inventories; FC IDM - Atlas MongoDB Environment; Atlas MongoDB Alerts;
+    Atlas MongoDB Performance Monitoring; Atlas MongoDB Multi-Region Air-Gapped
+    Backup Snapshots; and Atlas MongoDB Database Backup Snapshot Retention and
+    Compliance.
+  openQuestions:
+    - The Platform Engineering team has not yet supplied the completion schedule for moving ottm-prod Kubernetes 1.31 to the approved rolling N-1 target.
+    - Monitoring dashboards and alerting thresholds are not documented.
+    - Runbooks for authentication outage, mesh connectivity, and deployment failure are not documented.
+    - Specific production gateway URLs and service endpoints are not documented.
+    - Tenancy implementation details and data partitioning semantics are unresolved.
+  temporaryOperationalWorkloads: >-
+    The production awscli Deployment in plat-passport-core was identified by
+    the user as temporary. It is intentionally excluded from the governed
+    ProductComponent boundary and from further OPS-433061 follow-up by user
+    direction.
+  productionKubernetesLifecycle: >-
+    Kubernetes 1.31 was observed in ottm-prod on 2026-07-31. The user confirmed
+    that an approved upgrade plan exists and targets the rolling Kubernetes N-1
+    position. The completion schedule is a Platform Engineering team dependency
+    and remains deferred until that team supplies evidence.
+  edgeNetworkBaseline: >-
+    OPS-933430 read-only evidence captured 2026-08-10 from AWS profiles
+    Team_Platform_Dev, Team_Platform_Stage, and Team_Platform_Prod and
+    kubecontexts ottm-dev, ottm-stage, and ottm-prod. The us-east-1 EKS
+    clusters use VPCs vpc-0c7d07d0dd293cf3e (development, 10.117.96.0/19),
+    vpc-01245ba9b96afbcce (stage, 10.105.0.0/19), and
+    vpc-0d49f0e96ba662130 (production, 10.82.96.0/19). All three clusters
+    span us-east-1a and us-east-1b, expose both public and private Kubernetes
+    API endpoints, permit public API network reachability from 0.0.0.0/0,
+    use CONFIG_MAP authentication, and have all EKS control-plane log types
+    enabled. The owner confirmed that AWS SSO controls user authentication and
+    that the public endpoint posture is intentional; SSO authentication does
+    not itself narrow public network reachability. No Kubernetes NetworkPolicy
+    objects were observed, and the owner confirmed that the current
+    segmentation model is intentional. Internet-facing NLB Services expose
+    Kong proxy TLS 443 to target port 8443 and Kong Mesh ingress TCP 10001;
+    internal NLBs serve Kong control-plane paths. Development and stage also
+    have named public and internal Traefik ALBs. The owner confirmed that the
+    Traefik arrangement and both development test data-plane NLBs are
+    intentional. Development has an accepted kuma GatewayClass but no Gateway
+    or HTTPRoute objects; Gateway API types were not available in stage or
+    production. The owner confirmed that stage and production adoption is
+    planned. Production EKS 1.31 and Kong Mesh 1.8.0 trail development
+    (EKS 1.35, Kong Mesh 2.8.8) and stage (EKS 1.34, Kong Mesh 2.8.6); the owner
+    confirmed that production drift should be reconciled. At the user's
+    direction, no new Jira implementation tickets were created; both planned
+    changes remain deferred follow-up obligations.
+  nodejs24Disposition: >-
+    Node.js 24.14.1 is the repository-confirmed current runtime for the active
+    scoped product components. It remains a candidate rather than preferred
+    implementation; the user directed OPS-433061 to accept this current state
+    without a promotion proposal or migration remediation.
+  externalDependencies: 'External interactions are declared in serviceGroups[].externalInteractions: ConfigCat, MongoDB Atlas, Loveseat Platform Event Bus, AWS SQS, AWS KMS, AWS Cognito, Prometheus, Velero, Terraform. Kuma control planes and Envoy data planes are internal components of the reusable Kong Mesh network service rather than external gaps.'
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Gateway & Service Mesh Tier
+    deploymentTarget: aws-us-east-2
+    notes: 'Kong Gateway hybrid mode, Kong Mesh Kuma control planes and Envoy data planes, and the intentional Traefik Kubernetes Ingress path form the Ottoman edge and service-mesh tier. Reusable network-service objects carry the lowest-responsible-level details.
+
+      '
+    externalInteractions:
+      - name: ConfigCat
+        type: external
+        notes: NON-CONFORMING direct call. Kong Backplane featureflag.lua calls ConfigCat per-request with no caching, bypassing the Platform Feature Flag Service. See architectureNotes.configcatNonConformance. Remediation is to route this path through 01KQQ5JT0V-H0P5 (Platform Feature Flag Service).
+    deployableObjects:
+      - ref: 01KQQ5JT05-9P9S
+        diagramTier: presentation
+        networkZone: web
+        notes: Managed through Kubernetes annotations on Kong Helm charts.
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: web
+        notes: Managed by AWS Load Balancer Controller addon.
+      - ref: 01KQQ5JT1E-SW3X
+        diagramTier: application
+        networkZone: app
+        notes: Closest existing catalog RBB for Kong Gateway; Ottoman uses Kong in hybrid mode.
+      - ref: 01KYAXMZ7H-KJT2
+        diagramTier: application
+        networkZone: app
+        notes: Reusable Kong Mesh service containing the Kuma control-plane and injected Envoy data-plane roles observed across Ottoman environments.
+      - ref: 01KYAXMZ7H-72BR
+        diagramTier: presentation
+        networkZone: web
+        notes: Intentional Kubernetes Ingress route represented by Traefik-tagged ALBs and Ingress resources in current read-only evidence.
+      - ref: 01KSM38KFX-QMDW
+        diagramTier: application
+        networkZone: app
+        notes: Sofa King-managed Kong configuration, plugins, and prepared-header routing logic.
+  - name: Identity & Authentication Tier
+    deploymentTarget: aws-us-east-2
+    notes: 'Okta integration, Passport Core, and Redis-backed authorization profile cache provide unified SSO and identity orchestration.
+
+      '
+    deployableObjects:
+      - ref: 01KQQ5JT1D-SHXD
+        diagramTier: application
+        networkZone: ops
+        notes: Primary external identity provider for authentication and SSO.
+      - ref: 01KQQ5JT00-191S
+        diagramTier: application
+        networkZone: data
+        notes: Distributed authorization profile cache used by Ottoman identity flows.
+      - ref: 01KSM38KFX-9EHD
+        diagramTier: application
+        networkZone: app
+        notes: BFF and API for invitation acceptance, migration flows, and identity workflow orchestration.
+  - name: Platform Core Services
+    deploymentTarget: aws-us-east-2
+    notes: 'First-party microservices implementing Ottoman domains, persons, organizations, invitations, and platform relationship data.
+
+      '
+    externalInteractions:
+      - name: MongoDB Atlas
+        type: external
+        notes: 'RESOLVED 2026-08-04: OrgPerson Service (msvc-org-person) persists to MongoDB Atlas cluster FC-PROD1-Cluster1, database sk-org-person, via Mongoose. Modeled as a relationship to the existing MongoDB Atlas data_store_service (01KQQ5JT05-E3FZ); see relationship-platform-msvc-org-person-reads-from-and-writes-to-mongodb-atlas.yaml. Ownership documented at https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/113994913/Atlas+MongoDB+-+Database+and+Service+Owning+Teams.'
+        capabilities:
+          - 01KT0V5MCV-VD0Y
+      - name: Loveseat Platform Event Bus
+        type: external
+        notes: Publishes IdentityMatch, PersonProfile, and OrgService events via HTTP POST (REST proxy in front of Kafka). Auth uses OAuth2 Bearer token.
+        capabilities:
+          - 01KT0V5MCV-KT72
+      - name: ConfigCat
+        type: external
+        notes: Feature flag SaaS. Canonical access path is through Platform Feature Flag Service (01KQQ5JT0V-H0P5), which centralizes and caches ConfigCat calls. Called by plat-svc-domain, plat-svc-organization, plat-svc-invitation, plat-passport-core, and msvc-org-person through this service.
+    deployableObjects:
+      - ref: 01KSM38KFW-WA83
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KFX-ETDW
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KFX-DQGA
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KFH-NYK5
+        diagramTier: application
+        networkZone: app
+        notes: Observed as the msvc-org-person Kubernetes workload in ottm-dev, ottm-stage, and ottm-prod for OPS-433061. The legacy plat-svc-orgperson component (01KSM38KFX-9EQ8) was removed from this service group 2026-08-04 after a Ottoman developer confirmed it retired (repo no longer exists on GitHub); msvc-org-person is the sole org-person implementation.
+      - ref: 01KSM38KFY-PB2S
+        diagramTier: application
+        networkZone: app
+        notes: Platform Feature Flag Service — Ottoman-owned microservice centralizing ConfigCat access. Adoption across platform services is partial as of 2026-05-20.
+      - ref: 01KQQ5JT04-27EP
+        diagramTier: data
+        networkZone: data
+        notes: Relational persistence for Kong, Passport Core, Invitation Service, and Organization Service.
+      - ref: 01KQQ5JT05-TQSS
+        diagramTier: data
+        networkZone: data
+        notes: Graph database for person, domain, and application relationship data.
+      - ref: 01KQQ5JT00-191S
+        diagramTier: data
+        networkZone: data
+        notes: AuthorizationProfile cache and cache invalidation path.
+  - name: Administration & UI Tier
+    deploymentTarget: aws-us-east-2
+    notes: 'Internal Sofa King Tools and customer-facing Sofa King Admin management consoles for Ottoman operations and access administration. UI SPAs and BFFs live in plat-passport-monorepo.
+
+      '
+    deployableObjects:
+      - ref: 01KSM38KG0-P6RD
+        diagramTier: presentation
+        networkZone: web
+        notes: Sofa King Tools SPA (plat-ui-sofaking-tools). Calls plat-bff-sofaking-tools via axios.
+      - ref: 01KSM38KFW-2FQW
+        diagramTier: presentation
+        networkZone: web
+        notes: Sofa King Admin SPA (plat-ui-sofaking-admin). Calls plat-bff-sofaking-admin via axios.
+      - ref: 01KSM38KFX-J6Z2
+        diagramTier: presentation
+        networkZone: web
+        notes: Internal management console BFF. Routes requests through Kong Backplane to platform microservices.
+      - ref: 01KSM38KFW-W42S
+        diagramTier: presentation
+        networkZone: web
+        notes: Customer-facing administration BFF. Routes requests through Kong Backplane to platform microservices.
+  - name: Serverless Functions
+    deploymentTarget: aws-us-east-2
+    notes: 'AWS Lambda functions perform asynchronous platform operations, including Loveseat event publishing and Okta/Domain synchronization.
+
+      '
+    externalInteractions:
+      - name: AWS SQS
+        type: external
+        notes: OrgPerson Service Lambda (msvc-org-person) publishes to SQS for async fan-out operations.
+      - name: AWS KMS
+        type: external
+        notes: OrgPerson Service Lambda uses KMS for encryption key operations.
+      - name: AWS Cognito
+        type: external
+        notes: OrgPerson Service Lambda integrates with Cognito for user pool operations.
+    deployableObjects:
+      - ref: 01KQQ5JT05-CT7X
+        diagramTier: application
+        networkZone: ops
+        notes: AWS-managed Lambda runtime for Ottoman asynchronous functions.
+      - ref: 01KSM38KFS-ZR7Y
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KSM38KFS-487E
+        diagramTier: application
+        networkZone: ops
+  - name: Testing & Validation Workloads
+    deploymentTarget: aws-us-east-2
+    notes: >-
+      Ottoman-owned product components used for platform validation. The test
+      application was observed in development, stage, and production. The load
+      test Deployment was observed only in production and was scaled to zero.
+      Repository evidence confirms Node.js 24.14.1 for the test application and
+      end-of-life Node.js 14.15.0 for load test. The load-test runtime is a
+      non-standard current-state choice; the user directed that it be upgraded
+      to the preferred Node.js 22 Ottoman EKS runtime.
+    deployableObjects:
+      - ref: 01KZ2MRPHT-TAPP
+        diagramTier: utility
+        networkZone: ops
+        notes: >-
+          User-confirmed ProductComponent represented by the
+          plat-ottoman-testapp workload.
+      - ref: 01KZ2MRPH7-10AD
+        diagramTier: utility
+        networkZone: ops
+        notes: >-
+          User-confirmed ProductComponent represented by the production-only,
+          zero-replica plat-ottoman-loadtest Deployment.
+  - name: Observability & Operations
+    deploymentTarget: aws-us-east-2
+    notes: 'Monitoring, logging, and backup infrastructure identified in the source material. Central logging is modeled through the Central Logging Service. Prometheus and Velero still need reusable catalog objects if they remain part of the target pattern.
+
+      '
+    externalInteractions:
+      - name: Prometheus
+        type: external
+        notes: Metrics collection deployed as an EKS cluster addon.
+        capabilities:
+          - 01KQQ4Q026-98VD
+      - name: Velero
+        type: external
+        notes: Kubernetes cluster backup deployed as an EKS addon.
+        capabilities:
+          - 01KQQ4Q026-7T2H
+    deployableObjects:
+      - ref: 01KQQ5JT1E-A6M5
+        diagramTier: application
+        networkZone: ops
+        notes: Modeled logging standard for Fluent Bit forwarding into AWS OpenSearch Service.
+  - name: CI/CD & Deployment
+    deploymentTarget: aws-us-east-2
+    notes: 'GitOps-based deployment infrastructure with a central ArgoCD installation and Terraform-managed EKS, VPC, Aurora PostgreSQL, and Neptune resources.
+
+      '
+    externalInteractions:
+      - name: Terraform
+        type: external
+        notes: Infrastructure as Code for EKS cluster provisioning, VPC and subnet networking, Aurora PostgreSQL, and Neptune.
+        capabilities:
+          - 01KT0XNZEY-Q2TF
+    deployableObjects:
+      - ref: 01KQQ5JT1E-01JZ
+        diagramTier: application
+        networkZone: ops
+        notes: Central ArgoCD installation spanning dev, stage, and production clusters in HA mode.
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: field
+    key: followsReferenceArchitecture
+    ref: 01KQQ5JT1D-5SV6
+    notes: Ottoman references the AWS EKS Service Mesh Platform Reference Architecture.
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+    notes: The SDP declares gateway/mesh, identity, core platform services, administration/UI, serverless functions, observability/operations, and CI/CD service groups.
+decisionRecords:
+  - ref: 01KT16XHSV-NVYC
+    key: deploymentTargets
+  - ref: 01KT16XHSV-NVYC
+    key: availabilityRequirement
+  - ref: 01KT16XHSV-NVYC
+    key: dataClassification
+  - ref: 01KT16XHSV-NVYC
+    key: failureDomain
+  - ref: 01KT16XHSV-NVYC
+    key: noPatternDeviations
+  - ref: 01KT16XHSV-NVYC
+    key: noCrossBoundaryConnections
+  - ref: 01KT16XHSV-NVYC
+    key: externalDependencies

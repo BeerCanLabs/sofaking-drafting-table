@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ8P-VVY8
+type: decision_record
+name: AWS Lambda Serverless Host Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT03-FGYJ
+linkedObject: 01KQQ5JT03-FGYJ
+decisionRationale: "authenticationApproach: IAM-based invocation and execution roles managed by AWS\n\nhealthWelfareMonitoringApproach: AWS CloudWatch metrics, log streams, and AWS X-Ray tracing provide platform health and execution observability.\n\nsecurityMonitoringApproach: AWS-native monitoring and audit integration for the managed runtime\n\npatchManagementApproach: Runtime patching is handled by AWS as part of the managed platform"

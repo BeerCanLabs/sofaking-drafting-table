@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 7G96W89HBB-TCQE
+type: relationship
+name: Atlas Identity → Okta
+description: JWT bearer validation against OKTA_TOKEN_AUTHORITY (https://login.stage-retail.ss.sofaking.example/oauth2/default,
+  audience api://default) through OpenID discovery and the JWKS signing keys.
+catalogStatus: stub
+source: 01M5WY4E7P-JBTC
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OIDC / OAuth 2.0
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. JWT bearer validation against OKTA_TOKEN_AUTHORITY (https://login.stage-retail.ss.sofaking.example/oauth2/default,
+    audience api://default) through OpenID discovery and the JWKS signing keys. The org comes from the x-sk-userinfo
+    header, not the token.
+  evidence: 'whm-unified-core develop: Service.Core.Identity.App/Program.cs, appsettings.json, Service.Core.Identity.Core/Services/TokenValidationService.cs'

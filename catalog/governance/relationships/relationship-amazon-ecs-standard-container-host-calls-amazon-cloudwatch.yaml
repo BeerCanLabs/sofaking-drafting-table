@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YN-G2AZ
+name: Amazon ECS Standard Container Host → Amazon CloudWatch
+catalogStatus: stub
+source: 01KQQ5JT02-KJHA
+label: calls
+externalTarget: Amazon CloudWatch
+notes:
+  background: "Task and service telemetry exported to CloudWatch."

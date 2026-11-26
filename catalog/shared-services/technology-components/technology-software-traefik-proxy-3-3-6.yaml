@@ -1,0 +1,52 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-X6CC
+type: technology_component
+ownerRole: technology-admin
+name: Traefik Proxy 3.3.6
+description: >-
+  Traefik reverse proxy and Kubernetes ingress controller used by Sofa King EKS
+  application clusters to route HTTP and HTTPS traffic to product workloads.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - traefik
+  - ingress-controller
+  - reverse-proxy
+  - kubernetes
+vendor: Traefik Labs
+productName: Traefik Proxy
+productVersion: 3.3.6
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    Lifecycle dates were not assessed during the HCM RH L1 current-state
+    review.
+capabilities:
+  - 01KSWVZSZ5-M0FR
+configurations:
+  - id: kubernetes-ingress
+    name: Kubernetes Ingress Controller
+    description: >-
+      DaemonSet-based ingress controller selected by the active Traefik
+      NodePort Service in the chaise and le1 EKS clusters.
+    capabilities:
+      - 01KSWVZSZ5-M0FR
+    networkBindings:
+      - port: 80
+        protocol: HTTP
+        direction: inbound
+        description: Kubernetes web ingress listener.
+      - port: 443
+        protocol: HTTPS
+        direction: inbound
+        description: Kubernetes secure web ingress listener.
+notes:
+  sourceEvidence: >-
+    Read-only inspection of chaise and le1 on 2026-07-24 confirmed that each
+    active Traefik Service selects a four-pod DaemonSet running Traefik
+    v3.3.6.

@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 5M7KEDJ5ED-8V3P
+type: relationship
+name: Atlas Workflow → Atlas Region Databases
+description: Approval-workflow (rtp_) tables, catalog requests and request tracking in the per-region database.
+catalogStatus: stub
+source: 01M5WY4E7P-YC9P
+target: 01M7D4BSC5-EJC5
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Approval-workflow (rtp_) tables, catalog requests and request
+    tracking in the per-region database.
+  evidence: 'whm-unified-core develop: Service.Core.Workflows.Infrastructure/DbContext/WorkflowDbContext.cs, Repositories'

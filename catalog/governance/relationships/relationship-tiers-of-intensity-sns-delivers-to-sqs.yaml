@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KYMPK92Q-Y8BN
+type: relationship
+name: Tiers of Intensity SNS → AWS SQS
+description: >-
+  Product event SNS topic subscriptions deliver Tiers of Intensity requests to
+  the per-environment SQS queue.
+source: 01KQQ5JT05-HTRA
+target: 01KQQ5JT05-0C4P
+label: delivers product events to
+technology: AWS SNS-to-SQS subscription
+direction: event
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KT0V5MCV-KT72
+tags:
+  - tiers-of-intensity
+  - sns
+  - sqs
+  - messaging
+notes: >-
+  The queue policy allows only configured SNS topic ARNs, denies insecure
+  transport, and both the queue and DLQ use SQS-managed encryption.

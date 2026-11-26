@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-72BP
+type: decision_record
+name: PG PLM/EEM Cloud Services - External Dependencies
+description: >-
+  Additional-interactions decision for the PLM/EEM cloud services deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  externalDependencies: Enumerated from the production ConfigMap at cd/prod-ottoman/cm.yml in pg-msvc-plm-eem-api. Internal Sofa King dependencies: the IDM login gateway and token authority (login.sofaking.example), Platform Organization Service, Platform List API, OrgPerson Service, Sofa King Central Employee API (fc-api-employee.use1), Employee Service, the Settee module host, the PG Permissions Service, the PG User Activity Service, the PG Emailer, and the Report Writer. Third-party SaaS: LaunchDarkly (feature management), Salesforce (SSO and API, including a PDEval community site), and Avalara (tax). The three SaaS dependencies are not present as objects in the DRAFT catalog - see decision record 01M1F8WB4E-9C7X. Criticality has not been assigned to any dependency and no owner interview has confirmed this list. Status open pending Associate Development engineering ratification.

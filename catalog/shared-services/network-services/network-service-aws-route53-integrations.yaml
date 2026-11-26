@@ -1,0 +1,90 @@
+schemaVersion: '1.0'
+uid: 01KZRK2CA9-TD4P
+type: network_service
+ownerRole: technology-admin
+name: Amazon Route 53 DNS - Integrations Account
+description: >-
+  AWS-managed authoritative and private DNS service for child zones under
+  sofaking-int.example in the Sofa King Integrations AWS account.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - aws
+  - route53
+  - dns
+  - integrations
+  - hosted-zones
+deliveryModel: paas
+vendor: Amazon Web Services
+productName: Amazon Route 53
+productVersion: managed
+patchingOwner: aws-managed
+authenticationModel: iam
+capabilities:
+  - 01KT0V5MCV-GJBH
+networkFunction: Authoritative public DNS and VPC-scoped private DNS
+networkTopology: >-
+  The Integrations account contains seven child hosted zones beneath
+  sofaking-int.example: one public apex zone and six private zones associated
+  with internal VPC resolution boundaries. The parent sofaking-int.example zone
+  is not hosted in this account and currently delegates to parked.example
+  nameservers. The public apex child zone exists in Route 53 but is not
+  delegated by the external parent, so public queries still resolve through
+  Above/Trellian rather than the configured AWS nameservers.
+protocols:
+  - DNS/UDP
+  - DNS/TCP
+configurations:
+  - id: sofakingedint-public-apex-zone
+    name: sofaking-int.example Public Apex Child Zone
+    description: >-
+      Public Route 53 hosted zone apex.sofaking-int.example. The zone contains
+      Route 53 NS and SOA records plus the assessment.apex.sofaking-int.example
+      CNAME, but the external parent does not currently delegate the child to
+      the AWS nameservers.
+    capabilities:
+      - 01KT0V5MCV-GJBH
+  - id: sofakingedint-private-child-zones
+    name: sofaking-int.example Private Child Zones
+    description: >-
+      Six Route 53 private hosted zones provide VPC-scoped DNS for CCA, DNA,
+      and Ottoman Lite development, QA, staging, and production environments.
+    capabilities:
+      - 01KT0V5MCV-GJBH
+notes:
+  sourceTicket: https://sofaking-example.atlassian.net/browse/OPS-651904
+  verificationDate: '2026-08-11'
+  awsEvidence: >-
+    Read-only AWS CLI inspection confirmed account 238905734186 as the
+    Integrations account and found seven matching hosted zones. The public
+    apex.sofaking-int.example zone contains 3 records. Private zones are
+    cca.sofaking-int.example (4 records), dev.dna.sofaking-int.example
+    (4 records), dev.ottoman-lite.sofaking-int.example (23 records),
+    qa.ottoman-lite.sofaking-int.example (2 records),
+    stg.ottoman-lite.sofaking-int.example (109 records), and
+    prd.ottoman-lite.sofaking-int.example (410 records).
+  publicDelegationEvidence: >-
+    Live NS and SOA queries on 2026-08-11 returned
+    ns11.parkeddns.example, ns12.parkeddns.example, and an Above/Trellian SOA for
+    both sofaking-int.example and apex.sofaking-int.example. The Route 53 public
+    zone is configured with ns-799.awsdns-35.net,
+    ns-1814.awsdns-34.co.uk, ns-303.awsdns-37.com, and
+    ns-1265.awsdns-30.org, but those servers are not delegated by the parent.
+  registrationEvidence: >-
+    Public WHOIS identifies Example Registrar Inc. as registrar, with creation on
+    2025-09-25 and expiration on 2026-09-25. The OPS-651904 GoDaddy review
+    found no Sofa King registration or order history for the root domain.
+  operationalDisposition: >-
+    The private zones remain valid within their associated VPC boundaries.
+    Public delegation cannot be corrected from Route 53 without control of the
+    root registration or parent DNS. No DNS records, hosted zones, or
+    nameserver delegations were changed during the investigation.
+  ownershipStatus: >-
+    Cloud Engineering ownership is used for this account-specific service
+    record. Registrar ownership and the intended long-term disposition of the
+    externally registered parent remain unresolved, so catalog status remains
+    incomplete.

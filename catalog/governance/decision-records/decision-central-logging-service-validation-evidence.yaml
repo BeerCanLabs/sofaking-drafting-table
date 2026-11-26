@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJE1-81BG
+type: decision_record
+name: Central Logging Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-A6M5
+linkedObject: 01KQQ5JT1E-A6M5
+decisionRationale: "serviceAuthentication: Access to the managed logging destination is controlled through AWS IAM and workload identity.\n\nsecretsManagement: Log forwarding endpoint and credential material are supplied through managed cluster secret delivery when required.\n\nhealthWelfareMonitoring: Fluent Bit forwarder health, delivery errors, and AWS OpenSearch domain health are monitored through the observability stack.\n\nfailureDomain: Scoped to the EKS cluster logging plane and the AWS OpenSearch domain and region."

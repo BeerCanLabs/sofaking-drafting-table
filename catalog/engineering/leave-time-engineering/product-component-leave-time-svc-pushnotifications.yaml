@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT09-45J2
+type: product_component
+ownerRole: engineer
+name: Leave Svc Pushnotifications
+description: Service for registering and un-registering for Push Notifications; Hosted
+  Service to send push notifications
+version: 1.0.1
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-at-svc-pushnotifications
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  deploymentInstances: at-svc-pushnotifications and at-svc-pushnotifications-ml run in chaise. Dynatrace observed both connecting directly to Rota SQL Server and the absPushNotifications Aurora PostgreSQL database; the ML variant used the Aurora reader and occasionally the writer.
+  runtimePlacement: Production Kubernetes manifests and Terraform establish Amazon EKS placement in AWS us-east-1; the product owner confirmed on 2026-08-04 that at-api-* and at-svc-* EKS workloads belong exclusively to Leave, not Time & Attendance.
+  repositoryName: BeerCanLabs/sk-at-svc-pushnotifications
+  observedRuntimeSignals: docker, dotnet, readme, terraform
+  observedManifestPaths: Dockerfile; at-svc-pushnotifications.sln; cd/codefresh-deploy-manual.yml;
+    cd/codefresh-deploy-triggered.yml; cd/codefresh-deploy-with-tests-manual.yml;
+    cd/codefresh-deploy-with-tests-triggered.yml; cd/prod-ml/cm.yml; cd/prod-ml/deploy.yml;
+    cd/prod-ml/es.yml; cd/prod-ml/hpa.yml; cd/prod-ml/ingress.yml; cd/prod-ml/namespace.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

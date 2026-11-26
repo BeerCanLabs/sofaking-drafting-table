@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-5XYC
+type: relationship
+name: Kong Gateway Service → HCM RH App
+description: >-
+  Kong Gateway is the logical Ottoman entry point for authenticated New
+  Recruiting & Hiring application traffic.
+catalogStatus: incomplete
+source: 01KQQ5JT1E-SW3X
+target: 01KSM38KG5-49X9
+label: routes requests to
+technology: HTTPS
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KT0V5MCV-3A6F
+tags:
+  - hcm-rh
+  - kong
+  - ottoman
+  - ingress
+notes: >-
+  HCM Ottoman configuration and internal adoption documentation confirm the
+  gateway dependency. The exact remote hybrid-control-plane route and ordered
+  hop placement relative to Traefik are deferred because they are not required
+  for Architecture L1.

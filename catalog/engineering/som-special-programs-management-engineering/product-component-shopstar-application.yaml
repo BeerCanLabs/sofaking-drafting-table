@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGC-SGWF
+type: product_component
+ownerRole: engineer
+name: Shopstar Application
+description: shopstar V5
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- shopstar
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar
+language: Java
+classification: api-service
+runtimeRequirement: Java
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstar
+  observedRuntimeSignals: java, node, readme
+  observedManifestPaths: frontend/package-lock.json; frontend/package.json; pom.xml; src/main/resources/com/cusord/dashboards/OH/processStepsSeedData.json; src/main/resources/com/cusord/dashboards/PA/processStepsSeedData.json; src/main/resources/com/cusord/dashboards/dashboards-user-configuration-template.json; src/main/resources/com/cusord/navigation/model.json; src/main/resources/com/cusord/process/OH/processSteps.json; src/main/resources/com/cusord/process/PA/processSteps.json; src/main/webapp/js/dashboards/appConfig.json; src/test/resources/com/cusord/api/tillbook/ContactDtoTest/Address.json; src/test/resources/com/cusord/api/tillbook/ContactDtoTest/Email1.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

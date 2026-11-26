@@ -1,0 +1,116 @@
+schemaVersion: '1.0'
+uid: 01KZZ7APG0-4P8M
+type: data_store_service
+ownerRole: engineer
+name: Leave Aurora PostgreSQL
+aliases:
+  - Leave PostgreSQL Production Cluster
+description: Deployment-specific AWS Aurora PostgreSQL service supporting Leave application metadata workloads.
+version: 16.11
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - leave
+  - aws
+  - aurora
+  - postgresql
+  - database
+  - deployment-specific
+vendor: Amazon Web Services
+productName: Aurora PostgreSQL
+productVersion: '16.11'
+deliveryModel: paas
+patchingOwner: aws-managed
+authenticationModel: other
+architectureNotes:
+  relatedGenericCatalogEntry: 01KQQ5JT04-27EP
+  genericEntryApplicability: The existing generic AWS Aurora PostgreSQL entry describes a Ottoman deployment. Its IAM-only authentication, cross-region reader, backup-retention, and customer-managed-key claims must not be inherited by this Leave deployment.
+  operationalOwner: DBRE team
+  productionTopology:
+    region: us-east-1
+    engineVersion: '16.11'
+    instances:
+      - role: writer
+        instanceClass: db.r6g.large
+      - role: reader
+        instanceClass: db.r6g.large
+    availabilityZones: Writer and reader are hosted in different availability zones.
+    crossRegionReplica: None.
+  databases:
+    - name: lvaplatformuserlocalstore
+      approximateSize: 34.02 GB
+      likelyConsumer: Platform Users Local Store
+      mappingStatus: Inferred from the database name; Engineering confirmation required.
+    - name: absPushNotifications
+      approximateSize: 789 MB
+      likelyConsumer: at-svc-pushnotifications and at-svc-pushnotifications-ml
+      mappingStatus: Direct PostgreSQL client spans observed in Dynatrace on 2026-08-04.
+      observedEndpoints:
+        writer: abs-prod-aurora-postgres-cluster.cluster-obiaalbgobho.us-east-1.rds.amazonaws.com:5432
+        reader: abs-prod-aurora-postgres-cluster.cluster-ro-obiaalbgobho.us-east-1.rds.amazonaws.com:5432
+  dataAssessment:
+    pii: A DBRE review of column names indicates that both databases appear to contain application metadata rather than PII.
+    confidence: Preliminary assessment, not a formal data-classification determination.
+  applicationAuthentication:
+    model: PostgreSQL username and password service accounts.
+    credentialStores:
+      - AWS Secrets Manager
+      - Octopus variables
+      - Secret Server
+    rotation: Application passwords are not currently rotated.
+  humanAccess:
+    model: DBRE and Engineering personnel use individually attributable PostgreSQL username and password accounts following the AD ADM naming convention.
+    example: admasandoval
+    privilegeModel: Engineering accounts receive fewer permissions than DBRE accounts.
+    reviewAndOffboarding: Accounts are generally reviewed and removed through access-review and offboarding processes, but coverage was not characterized as comprehensive.
+    rotation: Administrative passwords do not currently have a rotation or expiration policy.
+  encryption:
+    atRest: AWS-managed KMS key.
+    plannedChange: Migration to a customer-managed KMS key is planned, with no confirmed schedule.
+    inTransit: TLS enforcement has not been confirmed.
+  monitoring:
+    platform: AWS CloudWatch
+    routing: Alerts route to email, Slack, and OpsGenie/Jira Service Management according to severity.
+    exactMetricsAndThresholds: Not yet documented.
+  recoverability:
+    rpo: Unknown.
+    rto: Unknown.
+    disasterRecoveryReplica: No cross-region database replica is configured.
+    awsBackup:
+      daily:
+        schedule: Daily at 11:30 UTC.
+        startWindow: 2 hours
+        completionWindow: 4 hours
+        retention: 31 days
+        continuousBackup: Enabled
+        localVault: sk-db-bkup-prd-local-vault-daily
+      monthly:
+        schedule: Day 2 of each month at 13:30 UTC.
+        startWindow: 2 hours
+        completionWindow: 4 hours
+        retention: 390 days (13 months)
+        continuousBackup: Disabled
+        localVault: sk-db-bkup-prd-local-vault-monthly
+      annual:
+        schedule: July 2 at 15:30 UTC.
+        startWindow: 2 hours
+        completionWindow: 4 hours
+        retention: 2555 days (7 years)
+        continuousBackup: Disabled
+        localVault: sk-db-bkup-prd-local-vault-annual
+      crossRegionCopies:
+        destinationRegion: us-east-2
+        scope: Daily, monthly, and annual recovery points are copied to cross-region AWS Backup vaults.
+        retention: The cross-region copies are believed to match their respective local retention periods; monthly and annual retention matching is SME-reported but not independently verified.
+        immutability: The SME reported cross-region immutable backup storage. AWS Backup screenshots confirm cross-region vault copies but do not independently establish the immutability mechanism.
+      storageBehavior: Cold-storage transition and backup indexing are disabled for the reviewed daily, monthly, and annual rules.
+      restoreTesting: Backups were reportedly restored several times during the preceding year under a quarterly Hearthstone backup-testing compliance policy. The exact source vaults and detailed test results remain unconfirmed.
+  maintenanceModel: Autovacuum, auto-analyze, and any scheduled manual maintenance behavior have not yet been confirmed.
+  knownOperationalRisks:
+    - Application credentials are duplicated across three secret stores and are not routinely rotated.
+    - Individual administrative passwords have no rotation or expiration policy.
+    - No cross-region database replica is configured; regional recovery depends on backups.
+    - Aurora-specific RPO, RTO, TLS enforcement, and maintenance behavior remain unknown.

@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-B7GP
+type: technology_component
+ownerRole: technology-admin
+name: Dapr (Distributed Application Runtime)
+description: 'Event-driven, portable runtime for building microservices on cloud and edge.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- microservices
+- sidecar
+- dapr
+vendor: CNCF / Dapr
+productName: Dapr
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source lifecycle.
+capabilities:
+- 01KT0V5MCV-RM8M

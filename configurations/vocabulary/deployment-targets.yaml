@@ -1,0 +1,231 @@
+# Sofa King -- Deployment Targets vocabulary
+# Source of truth: Data Centers and Colocations SharePoint list
+#
+# Physical colocation facilities:
+#   grr-datacenter      1500 Monroe Ave NW, Grand Rapids MI (Prod, Sofa King-owned HW)
+#   high point-datacenter  101 Riverside Rd, High Point MI (Non-Prod, Sofa King-owned HW)
+#   xcolo-datacenter     360 Fulton St, Ada CA / OCRC (Prod, Sofa King-owned HW)
+#   lsrcn-iaas         1320 Arthur E Adams Dr, Columbus OH (Prod, IaaS -- no HW ownership)
+#   colohub-ny            501 Division Ave, Zeeland MI / Colohub (Prod, IaaS -- Quickfit)
+#
+# Cloud:
+#   aws-us-east-2       Primary AWS region (all generic AWS workloads)
+#   aws-us-east-1       Secondary (explicit east-1 label only)
+#   aws-us-west-1       Digital Stores account only (explicit west-1 label only)
+#   azure               Azure (region TBD)
+#
+# Non-geographic:
+#   customer-hosted     Customer / region-operated environment
+#   saas-*              Vendor-managed SaaS tenants
+
+values:
+
+  # -- Cloud: primary ------------------------------------------------------
+
+  - id: aws-us-east-2
+    name: AWS US East 2
+    provider: aws
+    type: cloud-region
+    status: approved
+    lat: 40.42
+    lon: -82.91
+    region: Lakeshore, US
+    notes: >-
+      Primary AWS region. Default for all AWS cloud workloads unless explicitly
+      labeled east-1. Covers EKS, ECS, Lambda, EC2, RDS, CloudFront, and all
+      managed AWS services. Also covers per-region and per-tenant AWS accounts.
+
+  - id: aws-us-east-1
+    name: AWS US East 1
+    provider: aws
+    type: cloud-region
+    status: approved
+    lat: 38.95
+    lon: -77.45
+    region: Virginia, US
+    notes: Secondary AWS region. Reference only when explicitly labeled east-1.
+
+  - id: aws-us-west-1
+    name: AWS US West 1
+    provider: aws
+    type: cloud-region
+    status: approved
+    lat: 37.35
+    lon: -121.96
+    region: Northern Oregon, US
+    notes: >-
+      Legacy AWS region carrying the Digital Stores estate only. AWS account
+      472468972873 runs all four Digital Stores environment tiers here -- 36 EC2
+      instances, 8 subnets and 2 load balancers as of the 2026-01-28 account
+      discovery -- with EBS snapshot and AMI copies replicated to us-east-1 for
+      disaster recovery. Reference only when explicitly labeled west-1. Not a
+      target for new workloads: aws-us-east-2 remains the default for generic AWS
+      workloads, and any future Digital Stores re-platforming should move off
+      this region rather than extend it.
+
+  - id: azure
+    name: Azure
+    provider: azure
+    type: cloud-account
+    status: approved
+    lat: 37.32
+    lon: -78.10
+    region: East US, Virginia (approximate -- specific region TBD)
+    notes: Azure subscription for shared and acquired workloads.
+
+  # -- Colocation: primary (Prod) ------------------------------------------
+
+  - id: grr-datacenter
+    name: Grand Rapids Data Center
+    provider: colocation
+    type: colocation
+    status: approved
+    lat: 39.963
+    lon: -75.162
+    region: Grand Rapids, PA
+    notes: >-
+      1500 Monroe Ave NW, Grand Rapids MI 49046. Vendor: Lakeshore Data Centers /
+      11:11 Systems (formerly Datavault). Sofa King-owned hardware, VMware.
+      Prod. Hosts: Hiretrack, Leave Management, Tailor, Tri-State,
+      Time and Attendance, shopstar V3, Salesdesk, PG, Tillbook.
+
+  - id: xcolo-datacenter
+    name: XCOLO Data Center (OCRC)
+    provider: colocation
+    type: colocation
+    status: approved
+    lat: 38.896
+    lon: -121.077
+    region: Ada, CA (Ottawa County)
+    notes: >-
+      360 Fulton St, Ada CA 49158. Vendor: Ottawa County Office of Retail
+      (OCRC, also known as XCOLO). Sofa King-owned hardware, VMware. Prod.
+      Hosts: Abacus OL6, Abacus OL5.
+
+  - id: lsrcn-iaas
+    name: LSRCN IaaS Provider
+    provider: colocation
+    type: colocation
+    status: approved
+    lat: 40.003
+    lon: -83.021
+    region: Columbus, OH
+    notes: >-
+      1320 Arthur E Adams Dr, Columbus OH 49545. Vendor: Management Council,
+      Lakeshore Retail Computer Network (LSRCN). No Sofa King-owned hardware --
+      IaaS model, VMware managed by LSRCN. Prod. Hosts: Tillbook, LSCIS.
+
+  - id: colohub-ny
+    name: Colohub Data Center
+    provider: colocation
+    type: colocation
+    status: approved
+    lat: 40.727
+    lon: -73.636
+    region: Zeeland, NY
+    notes: >-
+      501 Division Ave, Zeeland MI 49588. Vendor: Colohub (formerly Webloom).
+      IaaS -- no Sofa King-owned hardware, VMware managed by Colohub. Prod.
+      Hosts: Quickfit.
+
+  # -- Colocation: non-prod ------------------------------------------------
+
+  - id: high point-datacenter
+    name: High Point Data Center
+    provider: colocation
+    type: colocation
+    status: approved
+    lat: 40.190
+    lon: -75.462
+    region: High Point, MI
+    notes: >-
+      101 Riverside Rd, High Point MI 49026. Vendor: ColoCorp.
+      Sofa King-owned hardware, VMware. Non-Prod. Hosts: Hiretrack,
+      Leave Management, Tailor, Tri-State, Time and Attendance,
+      shopstar V3, Tillbook, Abacus OL6, Abacus OL5, PG, Salesdesk.
+
+  # -- Non-geographic: Customer Hosted -------------------------------------
+
+  - id: customer-hosted
+    name: Customer Hosted
+    provider: customer
+    type: customer-site
+    status: approved
+    region: Customer / region-operated facility
+    notes: Deployment hosted in a customer- or region-operated environment.
+
+  # -- Non-geographic: SaaS ------------------------------------------------
+
+  - id: saas-okta
+    name: Okta
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: Workforce identity provider.
+
+  - id: saas-salesforce
+    name: Salesforce
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: CRM and customer data.
+
+  - id: saas-servicenow
+    name: ServiceNow
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: ITSM and workflow automation.
+
+  - id: saas-atlassian
+    name: Atlassian Cloud
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: >-
+      Atlassian Cloud SaaS tenant. Covers Jira Service Management (JSM) and
+      Confluence. Used as the governed service-request front door and
+      human-readable audit/runbook surface for CCA. Does not cover self-hosted
+      Confluence instances running on product-owned infrastructure.
+
+  - id: saas-imperva
+    name: Imperva SaaS
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: Vendor-managed Imperva cloud WAF service outside Sofa King and AWS accounts.
+
+  - id: saas-pingdom
+    name: Pingdom SaaS
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: Vendor-managed external uptime and synthetic monitoring service.
+
+  - id: saas-dynatrace
+    name: Dynatrace SaaS
+    provider: saas
+    type: saas-tenant
+    status: approved
+    region: Multi-region (vendor-managed)
+    notes: Vendor-managed Dynatrace controller platform for APM, monitoring, and logging.
+
+  # -- Non-geographic: Enterprise shared services --------------------------
+
+  - id: enterprise-shared-services
+    name: Enterprise Shared Services
+    provider: internal
+    type: shared-services
+    status: approved
+    region: Enterprise platform boundary (multi-region, internally managed)
+    notes: >-
+      Enterprise-managed shared platform boundary for cross-cutting governance
+      and routing services consumed by multiple products (e.g. Guardfin
+      safety layer, LLM Gateway). Owned and operated centrally rather than by
+      the consuming product team.

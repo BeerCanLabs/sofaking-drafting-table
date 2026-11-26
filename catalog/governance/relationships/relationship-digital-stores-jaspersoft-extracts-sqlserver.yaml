@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: RQ0RVTRRXB-XATG
+type: relationship
+name: Digital Stores Jaspersoft → Digital Stores SQL Server 2017 Estate
+catalogStatus: incomplete
+source: 01M3SCXAH0-AQ06
+label: reads region data from for nightly extracts
+target: 01M25X9W0R-VQJ3
+technology: TDS (SQL Server native protocol)
+direction: synchronous
+flow: outbound
+notes: >-
+  Confirmed by the owner on 2026-09-08 (answer 7.1 of the DRAFT L1 Baseline Questionnaire): Jaspersoft
+  runs ten nightly extracts against the Digital Stores SQL Server estate and delivers them over
+  ftp.digital-showrooms.example. Registers the third of three service crossings named in DecisionRecord
+  01M263WKS2-NR3T (inter-service-connections, not-compliant). Source is the Jaspersoft stub
+  (01M3SCXAH0-AQ06) authored alongside this relationship - Jaspersoft's own hosting and access
+  posture are unconfirmed and tracked separately; this relationship only registers that the crossing
+  exists and what it does.

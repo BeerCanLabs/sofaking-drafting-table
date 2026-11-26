@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T74-TD02
+type: relationship
+name: Translation Direct → One Hour Translation API
+source: 01KX4A2T6Z-3MTP
+externalTarget: One Hour Translation (Oht) API
+label: submits translation jobs to
+technology: REST (One Hour Translation API)
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifoldStandaloneApplication repo (TranslationDirect, sandbox and production Oht endpoints); no catalog object represents the external translation vendor.

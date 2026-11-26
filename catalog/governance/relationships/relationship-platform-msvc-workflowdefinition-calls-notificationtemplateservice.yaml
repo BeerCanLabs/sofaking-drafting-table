@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSB0-9M2W
+type: relationship
+name: 'Platform Msvc Workflowdefinition → NotificationTemplateService'
+catalogStatus: stub
+source: 01KSM38KG0-C36C
+externalTarget: NotificationTemplateService
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.
+  unmodelledTarget: NotificationTemplateService is a declared dependency with no catalog object; recorded as an external target rather than stubbing a component for another team.

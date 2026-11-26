@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-E2CC
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Nagios Monitoring Service
+description: Reusable Sofa King monitoring service standard for host health, welfare, reachability, and alerting.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - observability
+  - monitoring
+  - nagios
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1T-QVSE
+architectureNotes:
+  serviceAuthentication: Nagios administrative access is governed through the enterprise identity standard.
+  secretsManagement: Monitoring credentials and notification secrets are managed through the enterprise secret-control process.
+  serviceLogging: Nagios platform logs and alert history are forwarded to the Central Logging Service.
+  healthWelfareMonitoring: Nagios monitors host reachability, service state, resource health, and alert thresholds.
+  availabilityModel: Nagios is operated as the authoritative health and welfare monitoring platform for host standards.
+  scalabilityModel: Monitoring coverage scales by adding monitored hosts, checks, and poller capacity.
+  recoverabilityModel: Nagios configuration and monitoring state are recoverable through platform backup and rebuild procedures.
+  failureDomain: Scoped to the Nagios monitoring platform and its configured monitoring zones.
+deploymentConfigurations:
+  - id: host-health-monitoring
+    name: Host Health Monitoring
+    description: Nagios checks host reachability, service health, capacity thresholds, and alert delivery.
+    addressesQualities:
+      - availability
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1T-QVSE
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJE9-TPQ0
+    key: secretsManagement
+  - ref: 01KT16XJE9-TPQ0
+    key: scalabilityModel
+  - ref: 01KT16XJE9-TPQ0
+    key: failureDomain

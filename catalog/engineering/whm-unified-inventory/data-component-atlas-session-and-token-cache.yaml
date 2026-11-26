@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01M7D4BSC5-G81X
+type: data_component
+ownerRole: engineer
+name: Atlas Session and Token Cache
+description: >-
+  The per-region Redis key spaces Atlas keeps: usercontext (Atlas Identity
+  user sessions, 59 minute sliding window) and idmtoken (Atlas Domain's IDM
+  client-credentials token cache). They deploy onto Atlas Tenant Redis; a
+  region without a redis_connection_string falls back to an in-process cache.
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-core
+runsOn: 01M7BNBY4G-2M0B
+targetEngine: other
+dataClassification: confidential
+containsPII: true
+tags:
+- atlas
+- unified-inventory
+- whm
+- redis
+- cache
+- data-component
+retentionPolicy: >-
+  Session entries expire on a 59 minute sliding window; token cache entries follow the token lifetime. No durable
+  retention.
+notes:
+  provenance: Source inspection 2026-11-13 of whm-unified-core (Library.Shared.Cache, Identity and Domain
+    appsettings); added 2026-11-14 so the Atlas pattern places a data component and the Redis service is reached
+    through runsOn, as the 1.4 framework model expects. Not yet confirmed by the owning team.
+  inferred: targetEngine other stands for Redis, which the schema enum does not list. dataClassification and
+    containsPII are inferred from the content (user session context and service tokens) and not confirmed.
+  keyNamespaces: usercontext (Identity sessions), idmtoken (Domain IDM token cache).

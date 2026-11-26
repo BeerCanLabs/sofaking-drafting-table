@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGF-TCWA
+type: product_component
+ownerRole: engineer
+name: SOM Solo
+description: SOM Solo business library
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- som
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-som-solo
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-som-solo
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Upholstr.Apps.Bll.Mappers/Upholstr.Apps.Bll.Mappers.csproj; Upholstr.Apps.Bll.Solo/Upholstr.Apps.Bll.Solo.csproj; Upholstr.Apps.Bll/Upholstr.Apps.Bll.csproj; Upholstr.Apps.Financing.Billeo/Upholstr.Apps.Financing.Billeo.csproj; Upholstr.Apps.Financing.Validatera/Upholstr.Apps.Financing.Validatera.csproj; Upholstr.Apps.Web.Solo.Models/Upholstr.Apps.Web.Solo.Models.csproj; Upholstr.Apps.Web.Solo.UI.Tests/Upholstr.Apps.Web.Solo.UI.Tests.csproj; Upholstr.Apps.Web.Solo.UI/Upholstr.Apps.Web.Solo.UI.csproj; Upholstr.Apps.Web.Solo.UI/Upholstr.Apps.Web.Solo.UI.old.csproj; Upholstr.Apps.Web.Solo.UI/bower.json; Upholstr.Apps.Web.Solo.UI/bower_components/fastclick/.bower.json; Upholstr.Apps.Web.Solo.UI/bower_components/fastclick/bower.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

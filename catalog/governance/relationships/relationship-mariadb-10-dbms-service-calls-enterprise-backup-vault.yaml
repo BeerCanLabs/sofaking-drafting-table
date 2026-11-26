@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Y6-6JR8
+name: MariaDB 10 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT00-T64V
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Off-host backup target and retention management."

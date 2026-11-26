@@ -1,0 +1,89 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-WYH7
+type: product_component
+ownerRole: engineer
+name: shopstar v3 Application
+description: >-
+  Main Java/Tomcat web application for the shopstar v3 special-programs platform.
+  Every production Tomcat pool runs this same application; tenant selection is
+  performed from the organization context rather than from the requested URL.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CDM
+tags:
+  - repository-discovery
+  - shopstar
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar-v3
+language: Java
+classification: web-application
+runtimeRequirement: Java 8 on Apache Tomcat; the target server estate is Ubuntu 22.04 on VMware.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstar-v3
+  observedRuntimeSignals: github_actions, java, node, readme
+  observedManifestPaths: .github/workflows/jira-check.yml; .github/workflows/playwright-tests.yml; .github/workflows/smoke-test.yml; cusord-api/pom.xml; cusord-api/src/main/resources/application-dev.yml; cusord-api/src/main/resources/application-prod.yml; cusord-api/src/main/resources/application-rc.yml; cusord-api/src/main/resources/application-test.yml; cusord-api/src/main/resources/application.yml; itconfig/FlatFileExports/Templates/TSBS_CustomerDemo/DATA_FILTER_CustomerDemographics.json; itconfig/FlatFileExports/Templates/TSBS_CustomerDemo/DATA_SPECS_CustomerDemographics.json; playwright-tests/package-lock.json
+  serviceAuthentication: >-
+    Sofa King Identity users authenticate through the Sofa King IdM gateway
+    using OIDC. Ottoman users authenticate through the Ottoman/Okta OIDC
+    flow. Legacy and pass-through users are validated from FE-prefixed PBKDF2
+    password hashes in PRI_USERS.
+  secretsManagement: >-
+    Secret Server is the confirmed store for operational, server, and database
+    credentials, and Ansible Vault is used by infrastructure automation. Exact
+    runtime injection for OIDC client secrets, LDAP credentials, SMTP
+    credentials, RabbitMQ credentials, and application JDBC credentials
+    remains unresolved.
+  serviceLogging: >-
+    Centralized V3 application-log aggregation or SIEM handling is not
+    established by current V3-only evidence.
+  healthWelfareMonitoring: >-
+    Current Ubuntu hosts run Nagios agent and Dynatrace OneAgent. Exact
+    application-level health-check behavior remains unresolved.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  hostingEvidence: >-
+    All production Tomcat servers run this same shopstar v3 application. The
+    current Tomcat estate uses GRRSHS3TC* Ubuntu 22.04 VMware hosts with PRC,
+    PRT, and PRS role segmentation. Older RHEL/CentOS Tomcat inventories are
+    historical and are not asserted as current infrastructure.
+  tenancyModel: >-
+    All states and production Tomcat pools share this codebase. F5 routes
+    login.cusord.example, tx.cusord.example, and cobblestone.cusord.example to preferred pools,
+    but those URLs do not enforce tenant isolation. DD_DATASOURCES uses orgID
+    to select the tenant database, and PRI_ORGS_PLATFORM_MAP maps Sofa King
+    platform organizations to shopstar organizations.
+  databaseRouting: >-
+    Every production Tomcat pool connects to the same shared Admin DB.
+    DD_DATASOURCES then selects the tenant database by orgID. Active tenant
+    databases are RT1-RT7, MA1-MA2, and Lakeside NI. PA, IL, NC, and WI are
+    churned and excluded from active topology; NI remains active but is planned
+    to churn. The current migration inventory, updated 2026-08-17, records
+    InnoDB complete for RT1, RT2, RT3, RT4, RT7, NI, MA1, and MA2. RT5 and RT6
+    are pending migration confirmation or approval, with a documented target
+    window of 2026-08-28 through 2026-08-30. Production replication uses a
+    primary with a read-only/reporting replica, not MySQL Group Replication.
+    The migration inventory tracks primary host groups and does not establish
+    replica engine status independently.
+  databasePrimaryReplicaMappings: >-
+    RT1 grrv3db1ppr/ptxcmb1m -> grrv3db1prpl/ptxcmb1s; RT2
+    grrv3db2ppr/ptxcmb2m -> grrv3db2prpl/ptxcmb2s; RT3
+    grrv3db3ppr/ptxcmb3m -> grrv3db3prpl/ptxcmb3s; RT4
+    grrv3db4ppr/ptxcmb4m -> grrv3db4prpl/ptxcmb4s; RT5
+    grrv3db5ppr/ptxcmb5m -> grrv3db5prpl/ptxcmb5s; RT6
+    grrv3db6ppr/ptxcmb6m -> grrv3db6prpl/ptxcmb6s; RT7
+    grrv3db7ppr/ptxcmb7m -> grrv3db7prpl/ptxcmb7s; NI
+    grrv3db8ppr/pnicmb1m -> grrv3db8prpl/pnicmb1s; MA1/MA2
+    grrv3db10ppr/pmacmb1m+pmacmb2m ->
+    grrv3db10prpl/pmacmb1s+pmacmb2s.
+  sharedLibraryBoundary: >-
+    util-idm-auth4j is a shared Java library, not an independently deployed
+    service. Its consuming components and deployed version remain unresolved.
+decisionRecords:
+  - ref: 01KT16XHZJ-CSR2
+    key: runtimeRequirement

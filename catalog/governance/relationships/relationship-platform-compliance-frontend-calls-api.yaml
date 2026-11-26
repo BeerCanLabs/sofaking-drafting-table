@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-N717
+type: relationship
+name: Platform Compliance Frontend → Platform Compliance API
+source: 01KY5775KP-9YH4
+target: 01KY5775KP-FZPJ
+label: calls
+description: >-
+  The browser application calls relative /api routes to list compliance checks and
+  create, approve, retrieve, validate, and evaluate compliance rules.
+technology: HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - platform-compliance-engine
+  - frontend
+  - api

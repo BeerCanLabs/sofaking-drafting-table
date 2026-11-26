@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP7R-3EKQ
+type: relationship
+name: 'Sofa King Central UI Forms → Platform Sand Employee'
+catalogStatus: stub
+source: 01KQQ5JT0K-HHQY
+target: 01KSM38KFT-VQP6
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Resolved from the endpoint key this surface reads out of window.buildConfig.endpoint, mapped to its backing service through the Jarvis production env-config endpoint map.

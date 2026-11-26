@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ40-J3NZ
+type: decision_record
+name: ERP CIS Jasper Server Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGM-A8RR
+linkedObject: 01KSM38KGM-A8RR
+decisionRationale: 'runtimeRequirement: XSLT transformation — runs inside the calling application runtime.'

@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KYMPKRFA-ER3G
+type: relationship
+name: ArgoCD GitOps Service → Tiers of Intensity Service
+description: >-
+  ArgoCD reconciles the environment-specific Kubernetes manifests that deploy
+  the calculation API to LE1 and Chaise.
+source: 01KQQ5JT1E-01JZ
+target: 01KX18GPWW-93YA
+label: deploys manifests for
+technology: ArgoCD GitOps and Kubernetes API
+direction: asynchronous
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KT0XNZEY-Q2TF
+tags:
+  - tiers-of-intensity
+  - argocd
+  - gitops
+  - eks
+notes: >-
+  Development, QA, and staging use LE1; production uses Chaise. Operational
+  account and cluster identifiers remain in access-controlled deployment
+  configuration rather than DRAFT.

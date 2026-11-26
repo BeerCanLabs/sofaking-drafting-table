@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-QMDW
+type: product_component
+ownerRole: engineer
+name: Ottoman Kong Gateway Backplane
+description: 'Sofa King-managed Kong configuration, plugins, and backplane logic that decorates authenticated requests with prepared headers and routes traffic to Ottoman application and service instances on the mesh.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+  - ottoman
+  - gateway
+  - kong
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-gateway-kong
+classification: api-service
+architectureNotes:
+  runtimeRequirement: Deployed as a containerized .NET Core / Node.js / Lambda service within the Ottoman AWS EKS/Lambda environment.
+  serviceAuthentication: Authenticated requests are decorated with prepared headers before routing to mesh services.
+  secretsManagement: Runtime secrets and Kong configuration are expected to be managed through the platform GitOps and Kubernetes secret path.
+  serviceLogging: Gateway access and application logs are expected to be forwarded through the Ottoman observability stack.
+  healthWelfareMonitoring: Gateway health is expected to be monitored through Kong, EKS, and mesh telemetry.
+  availabilityModel: Kong is deployed in hybrid mode with separated control-plane and data-plane responsibilities.
+  scalabilityModel: Gateway capacity scales horizontally on EKS.
+  recoverabilityModel: Configuration is recovered from GitOps-managed Kong artifacts and Aurora PostgreSQL-backed state.
+  failureDomain: Scoped to the Ottoman gateway and mesh entry path.
+  persistence: Aurora PostgreSQL database kong, schema public.
+decisionRecords:
+  - ref: 01KT16XHPZ-QNS8
+    key: runtimeRequirement

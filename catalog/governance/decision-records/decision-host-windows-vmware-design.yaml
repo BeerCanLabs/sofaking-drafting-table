@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-C96E
+type: decision_record
+name: Windows Server 2022 VMware Host Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT04-A7W8
+decisionRationale: >
+  Windows Server 2022 on VMware: EOL is addressed through active lifecycle governance — Windows Server 2022 remains within Microsoft support through October 2031 and is reviewed before support end. Privileged administrative access is reviewed quarterly through enterprise identity and access governance. Windows event and application logs are retained centrally for 90 days or more. VMware virtual host retirement follows enterprise wipe, decommissioning, and disposal procedures appropriate to the backing infrastructure.

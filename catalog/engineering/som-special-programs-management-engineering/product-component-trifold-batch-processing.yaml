@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KX421X4P-FE7F
+type: product_component
+ownerRole: engineer
+name: Trifold Batch Processing
+description: >-
+  Scheduled batch executables for the Trifold product line: DemographicNotify
+  / DemographicNotifyBatch (customer demographic change notification) and
+  MDClaimService / MDClaimServiceBatch (Financing claim processing). Invoked by
+  Windows Task Scheduler / service install scripts rather than running as
+  always-on services. Discovered from the ServiceSolutions folder of the
+  KIOTrifold TFS codebase.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - cdp
+  - batch
+  - financing
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: worker
+notes:
+  sourceRepository: "tfs://KIOTrifold/Dev/Source/ServiceSolutions"
+  repositoryName: KIOTrifold
+  observedManifestPaths:
+    - DemographicNotify.txt
+    - DemographicNotifyBatch.txt
+    - MDClaimService.txt
+    - MDClaimServiceBatch.txt

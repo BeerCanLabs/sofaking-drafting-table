@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: R1WPSQEGQ3-WQ6G
+type: technology_component
+ownerRole: technology-admin
+name: AjaxControlToolkit 17.1
+description: Microsoft ASP.NET AJAX Control Toolkit providing server controls for ASP.NET WebForms applications. Used by WHM Display Materials Management for supplemental AJAX-enabled UI controls alongside Telerik UI for ASP.NET AJAX.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - whm
+  - aspnet-webforms
+  - ui-controls
+  - ajax
+  - third-party
+classification: software
+vendor: Microsoft
+productName: ASP.NET AJAX Control Toolkit
+productVersion: 17.1.0.0
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: AjaxControlToolkit 17.1.0.0 (2017 Q1 release) targets .NET Framework 4.6.1. The toolkit transitioned from Microsoft to community/DevExpress maintenance; 17.x is a legacy branch with no active security support. Deployed from ThirdPartyControls\AjaxControlToolkit.dll (PublicKeyToken 28f01b0e84b6d53e).
+notes: Source-confirmed from BeerCanLabs/sk-WHM_IM Trackweb/packages.config and Trackweb/Trackweb.vbproj.

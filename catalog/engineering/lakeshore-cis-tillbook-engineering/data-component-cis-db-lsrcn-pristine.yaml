@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SP-9ARM
+type: data_component
+ownerRole: engineer
+name: CIS Db LSRCN Pristine
+description: '"Pristine" database — a central copy of CIS Db Customerinformation, hosted at LSRCN separately from all per-ITC region databases. Read by CIS Svc Syncer (DASLSync API) and pushed out to per-ITC databases by CIS Util Customerinformation Syncer (DASLSyncer). Data only; no separate codebase.'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- data-component
+- drafting-2026-07-30
+repoUrl: 'N/A — database only, no associated codebase'
+targetEngine: mssql
+dataClassification: internal
+containsPII: true
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28, labeled "pristine DB" under "Server at LSRCN — Separate Service" with the explicit note "need to locate." Resolved on 2026-07-30 per product owner — hosted centrally at LSRCN, separate from all per-ITC hosting, and is a copy of CIS Db Customerinformation. Has no separate codebase of its own; it is read/written by CIS Svc Syncer and CIS Util Customerinformation Syncer.

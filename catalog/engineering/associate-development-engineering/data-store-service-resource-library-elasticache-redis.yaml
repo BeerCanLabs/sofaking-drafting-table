@@ -1,0 +1,50 @@
+schemaVersion: '1.0'
+uid: 01M71SSZ2X-R56B
+type: data_store_service
+ownerRole: engineer
+name: Resource Library ElastiCache Redis
+description: Production AWS ElastiCache for Redis OSS replication group (rl-redis-prod) used as the Redis cluster for the Resource Library.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - associate-development
+  - lcr
+  - resource-library
+  - redis
+  - elasticache
+  - aws
+  - deployment-specific
+vendor: Amazon Web Services
+productName: ElastiCache for Redis OSS
+productVersion: 6.2.6
+deliveryModel: paas
+architectureNotes:
+  provenance: All facts below were provided by the owner from the AWS console (ElastiCache) and are not yet reviewed by Shared Services.
+  clusterName: rl-redis-prod
+  awsAccount: Production Microservices (736016846305)
+  awsRegion: us-east-1
+  status: Available
+  configurationEndpoint: rl-redis-prod.85c0f9.clustercfg.use1.cache.amazonaws.com:6379
+  topology: Cluster mode enabled, 3 shards, 6 nodes, node type cache.t3.medium.
+  availability: Multi-AZ enabled with automatic failover enabled.
+  networkPlacement: VPC vpc-af001ecb, subnet group redis-prod.
+  consumers: Resource Library Service (msvc-ResourceLibrary). The application's Redis dependencies are ioredis and redis in package.json; the Redis host is not in the repository ConfigMap.
+  dataClassification: Not confirmed.
+  authenticationAndEncryption: Not confirmed (authentication, encryption in transit and at rest).
+  backupAndRecoverability: Not confirmed (snapshots, RPO, RTO, disaster recovery).
+  monitoring: Not confirmed.
+  persistenceModel: Not confirmed whether the data is a rebuildable cache or a system of record.
+authenticationModel: TBD
+capabilities:
+  - 01KT0V5MCV-ECR4
+decisionRecords:
+  - ref: 01M720FBTY-26RG
+    key: resilienceModel
+  - ref: 01M720FBTY-26RG
+    key: configurableSurface
+  - ref: 01M720FBTY-26RG
+    key: failureDomain

@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01KT16XHZJ-CSR2
+type: decision_record
+name: Shopstar V3 Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGD-WYH7
+linkedObject: 01KSM38KGD-WYH7
+decisionRationale: >-
+  runtimeRequirement: The shopstar v3 Application is the main Java 8 web
+  application deployed on the Apache Tomcat Application Service. The current
+  production Tomcat estate uses GRRSHS3TC* Ubuntu 22.04 VMware hosts with PRC,
+  PRT, and PRS role segmentation.

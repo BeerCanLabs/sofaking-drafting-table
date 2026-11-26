@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 0KGBNPHABC-X5YX
+type: relationship
+name: Codefresh → Leave Management
+description: Codefresh participates in production deployment of the Leave EKS workloads.
+catalogStatus: incomplete
+source: 01KQQ5JT1D-KJ3A
+target: 01KSM38KEQ-JS8E
+label: deploys workloads for
+direction: asynchronous
+flow: outbound
+capabilities:
+- 01KT0XNZEY-Q2TF
+notes:
+  background: Owner-confirmed on 2026-08-05 that Codefresh is one of the platforms used to deploy production Leave EKS workloads. Its exact responsibility relative to ArgoCD and whether any additional deployment platforms participate remain unconfirmed.

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01M25XS8D9-345E
+type: relationship
+name: Corvid Front End Web → Kio App Shared Eventhub
+source: 01KX421X4Q-R73N
+target: 01KSM38KGE-7BVQ
+label: calls
+technology: Not yet confirmed by owner interview.
+direction: event
+flow: outbound
+catalogStatus: incomplete
+notes: >-
+  Owner confirmed on 2026-09-10 that the CDP application (Corvid Front End
+  Web, the main Trifold CDP portal) depends on sei-app-shared-eventhub, the
+  common event delegation handler shared across all KIO implementations
+  (shopstar, Tri-State). Protocol/technology details not yet confirmed.

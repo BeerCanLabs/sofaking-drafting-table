@@ -1,0 +1,110 @@
+schemaVersion: '1.0'
+uid: 01KY5YYDNN-5DEA
+type: software_deployment_pattern
+ownerRole: engineer
+name: WSERP Web Hosted
+aliases: [WSERP Web, Ledgerline, Online 6, OL6]
+description: >-
+  Hosted deployment pattern for the WSERP Web product. Ledgerline Web and API,
+  Proxy, and Grizzly/CrystalReports run on a shared Windows IIS virtual machine in
+  XCOLO. Web implements a subset of Desktop functionality and uses the same
+  per-customer SQL database as WSERP Desktop and Portal.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.ws-erp-abacus-engineering
+  productFamily: WSERP
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, web, ledgerline, ol6, windows, vmware, iis, hosted]
+notes:
+  documentationScope: Infrastructure-evidenced current state; application, network, database, and file-cluster details await owning-team validation.
+  availabilityRequirement: High; no numeric SLO, SLA, RPO, or RTO has been confirmed.
+  dataClassification: Restricted PII exists in the customer database and Documents share.
+  failureDomain:
+    scope: service-group
+    description: The single Web IIS VM is a shared failure domain affecting all hosted Web customers and Portal functions that depend on Proxy or Grizzly.
+  deploymentTargets: Hosted production and customer Test/UAT run at XCOLO; engineering Dev/QA/Stage run at High Point.
+  virtualization: VMware is used in XCOLO and High Point.
+  operatingSystem: Windows Server 2022 is widely deployed, with a few Windows Server 2019 hosts remaining.
+  sizing: Production 8 vCPU/64 GB RAM/100 GB disk; Test/UAT 4 vCPU/16 GB RAM/100 GB disk.
+  ingress: Internet -> Imperva WAF -> Fortinet FortiGate -> F5 BIG-IP -> Web IIS.
+  availability: One Web node in production and one in Test/UAT; no current redundancy or autoscaling.
+  portalDependency: Proxy serves Portal report and attachment requests over HTTPS 443 using the ept header.
+  reporting: Ledgerline calls Grizzly directly over HTTPS 443; Proxy also calls Grizzly. Grizzly has no HTTP-level authentication and relies on internal network placement.
+  fileAccess: Ledgerline and Proxy directly access the Documents share over SMB; Proxy performs access for Portal.
+  onlineShopping: Ledgerline calls Dispatch in the separate Portal tier for OL6 PunchOut; WebComm is not in the OL6 runtime call chain.
+  operations: >-
+    VM creation is template-based; Windows/IIS setup is manual; Automox patches
+    monthly; Nagios XI, Dynatrace, and Pingdom monitor infrastructure and URLs;
+    capacity is reactive; no drift detection or scheduled recovery testing exists.
+  recoverability: Lost VMs restore from Veeam; schedule, retention, offsite protection, restore testing, RPO, and RTO remain unconfirmed.
+  noApplicablePattern: No approved reference architecture accurately represents this shared single-node legacy IIS deployment and cross-product dependencies.
+networkZones:
+  - id: public-edge
+    name: Public Edge
+    tier: frontend
+    description: Imperva, FortiGate, and F5 ingress.
+  - id: web-app
+    name: Web Application
+    tier: application
+    description: Shared Web IIS tier, separate from Portal IIS VMs.
+  - id: data
+    name: Shared Customer Data
+    tier: data
+    description: Customer-specific database and Documents path on shared clusters.
+serviceGroups:
+  - name: Web IIS Server
+    deploymentTarget: xcolo-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: Shared single-node IIS VM hosting Ledgerline, Proxy, and Grizzly; Proxy lacks its own ProductComponent.
+    deployableObjects:
+      - ref: 01KSM38KF3-CS25
+        diagramTier: presentation
+        networkZone: web-app
+      - ref: 01KSM38KF3-6H8Q
+        diagramTier: application
+        networkZone: web-app
+      - ref: 01KSM38KF3-VHMC
+        diagramTier: application
+        networkZone: web-app
+  - name: Customer Database
+    deploymentTarget: xcolo-datacenter
+    notes: Separate database per customer on shared SQL Server clusters; DMT owns platform details.
+    deployableObjects:
+      - ref: 01KSM38KF3-3RT8
+        diagramTier: data
+        networkZone: data
+tierVariants:
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Web IIS Server
+        replicaCount: 1
+        autoscaling: {enabled: false}
+        notes: Single node with no current redundancy.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Web IIS Server
+        replicaCount: 1
+        autoscaling: {enabled: false}
+    notes: Test is true UAT using unmasked production database restores; production Documents are not copied and production security applies.
+  - tier: SZJVW70BTN-V6GX
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering development topology; exact replica counts are unconfirmed.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering QA/staging topology; exact replica counts are unconfirmed.
+decisionRecords:
+  - {ref: 01KY5YYDNN-P9A4, key: noApplicablePattern}
+  - {ref: 01KY5YYDNN-P9A4, key: deploymentTargets}
+  - {ref: 01KY5YYDNN-P9A4, key: availabilityRequirement}
+  - {ref: 01KY5YYDNN-P9A4, key: dataClassification}
+  - {ref: 01KY5YYDNN-P9A4, key: failureDomain}
+  - {ref: 01KY5YYDNN-P9A4, key: patternDeviations}
+  - {ref: 01KY5YYDNN-P9A4, key: externalDependencies}
+  - {ref: 01KY5YYDNN-P9A4, key: interServiceConnections}

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV67KS-61ZY
+type: relationship
+name: Brannock.ETL.Hangfire → Google Workspace
+catalogStatus: complete
+source: 01KSM38KFC-VK1S
+label: syncs with
+externalTarget: Google Workspace (GSuite)
+description: Hangfire background jobs sync Chromebook/mobile device data from Google Workspace Admin SDK, per-region, on a scheduled basis.
+technology: REST/HTTPS
+direction: asynchronous
+flow: outbound
+tags:
+- asset-management
+- mdm
+- etl
+notes:
+  background: Confirmed via Google.Apis.Admin.Directory.directory_v1 usage in GSuiteEntityImporter.cs / GSuiteActions.cs, and per-region ETLSpecs JSON job definitions (e.g. TrackwebHostedPinecrestregion-GSuite.json).
+capabilities: []

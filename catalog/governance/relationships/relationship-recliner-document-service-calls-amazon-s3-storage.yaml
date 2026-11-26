@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EG-8EW5
+name: Recliner Document Service → Amazon S3 Storage
+catalogStatus: stub
+source: 01KSM38KGD-TY40
+label: writes documents to
+target: 01KQQ5JT05-KT3Z
+notes:
+  background: >-
+    Document Service writes Recliner-managed documents to a single Amazon S3
+    bucket. Reid Sumner confirmed SSE-S3 encryption, public access blocked,
+    and versioning disabled. Only the staging/ prefix has a lifecycle rule
+    (one-day expiry); final document paths have no retention rule.
+capabilities: []

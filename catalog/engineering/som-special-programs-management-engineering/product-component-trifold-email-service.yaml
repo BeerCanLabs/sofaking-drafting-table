@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KX421X4Q-MZW2
+type: product_component
+ownerRole: engineer
+name: Trifold Email Service
+description: >-
+  EmailService.exe Windows Service for the Trifold product line, handling
+  outbound transactional email. Discovered from the ServiceSolutions folder
+  of the KIOTrifold TFS codebase.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - cdp
+  - windows-service
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: worker
+notes:
+  sourceRepository: "tfs://KIOTrifold/Dev/Source/ServiceSolutions/EmailService"
+  repositoryName: KIOTrifold
+  observedManifestPaths:
+    - EmailService.txt

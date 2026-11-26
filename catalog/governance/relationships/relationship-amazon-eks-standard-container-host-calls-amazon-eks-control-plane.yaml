@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YP-0DYZ
+name: Amazon EKS Standard Container Host → Amazon EKS Control Plane
+catalogStatus: stub
+source: 01KQQ5JT02-75QN
+label: calls
+externalTarget: Amazon EKS Control Plane
+notes:
+  background: "Managed Kubernetes control plane orchestrating workload scheduling and cluster state."
+capabilities:
+- 01KQQ4Q026-GW5D

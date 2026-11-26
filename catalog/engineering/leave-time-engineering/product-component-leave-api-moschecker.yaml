@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KZ6GWG11-EBV8
+type: product_component
+ownerRole: engineer
+name: Leave API MOS Checker
+description: Leave MOS Checker API deployed as a production EKS workload.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+  - repository-discovery
+  - leave
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-api-moschecker
+language: C#
+classification: api-service
+runtimeRequirement: .NET 7
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-api-moschecker
+  observedRuntimeSignals: docker, dotnet
+  observedManifestPaths: Dockerfile; abs-api-moschecker.sln; src/abs.api.moschecker/abs.api.moschecker.csproj
+  runtimePlacement: The active GitHub repository and container build validate the component; the product owner identified abs-api-moschecker as a production Leave EKS workload on 2026-08-04.
+  serviceAuthentication: Authentication model remains unconfirmed.
+  secretsManagement: Secrets management approach remains unconfirmed.
+  serviceLogging: Logging approach remains unconfirmed.
+  healthWelfareMonitoring: Health and welfare monitoring remains unconfirmed.
+  availabilityModel: Availability target remains unconfirmed.
+  scalabilityModel: Scalability model remains unconfirmed.
+  recoverabilityModel: Recoverability model remains unconfirmed.
+  failureDomain: Failure-domain detail beyond the production EKS placement remains unconfirmed.

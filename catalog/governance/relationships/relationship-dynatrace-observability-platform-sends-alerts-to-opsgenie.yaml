@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: VNMCEW0N1P-QVRJ
+name: Dynatrace Observability Platform → Opsgenie Alerting Service
+catalogStatus: incomplete
+source: 01KXK7BD4N-93KS
+label: sends alerts to
+target: 01KYWPPQ2Q-8AE1
+direction: asynchronous
+flow: outbound
+notes:
+  background: Owner-confirmed on 2026-08-03 that Dynatrace sends operational alerts for Grand Rapids Leave Management to the CloudOps-HCM Opsgenie team, shared with Nagios Leave alerts. On 2026-08-05, the contributor reported observing Dynatrace multi-service problem alerts that mention the leave-prod and chaise cluster names on the same CloudOps-HCM route; alert routing for individual EKS workloads remains unconfirmed. During daylight time, weekday routing uses CloudOps_HCM_Office_In_Schedule from 12:00 AM through 6:00 PM EDT and CloudOps_HCM_Office_Out_Schedule afterward. During standard time, Office-In runs 11:00 PM through 6:00 PM EST and Office-Out runs 6:00 PM through 11:00 PM EST; start times can vary with offshore staffing. Office-Out provides continuous weekend coverage from Friday 6:00 PM through Monday 12:00 AM. Alert priorities and detailed escalation rules remain undocumented.
+capabilities:
+- 01KQQ4Q026-98VD

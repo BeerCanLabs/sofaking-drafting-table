@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2F1-14MN
+type: runtime_service
+name: CCA Staplepin Control Plane
+description: >-
+  [INTENDED] Staplepin is the CCA control plane. It turns an approved JSM ticket
+  into a scoped Divan invocation, mediates identity assumption, orchestrates the
+  Divan lifecycle, and is the sole writer of audit, lineage, and outcome records
+  to the PostgreSQL system of record. Runs in the private CCA VPC in
+  aws-us-east-1. Implementation surface and integration contracts are still open.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - control-plane
+  - staplepin
+  - intended
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYWQZ7BX-EMNY
+networkPlacement: vpc-private
+authenticationModel: iam

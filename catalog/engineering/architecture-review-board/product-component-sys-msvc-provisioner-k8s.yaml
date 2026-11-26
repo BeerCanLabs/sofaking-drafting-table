@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGJ-HRBG
+type: product_component
+ownerRole: engineer
+name: Sys Msvc Provisioner K8s
+description: Service to provision namespace, service, and ingress
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- sys
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-sys-msvc-provisioner-k8s
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-sys-msvc-provisioner-k8s
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; Sk.Sys.Provisioner.K8s.sln; cd/deploy.yml; cd/ingress.yml; cd/service.yml; ci/codefresh-build.yml; codefresh.yml; src/Sk.Sys.Provisioner.K8s/Sk.Sys.Provisioner.K8s.csproj; src/Sk.Sys.Provisioner.K8s/Properties/launchSettings.json; src/Sk.Sys.Provisioner.K8s/Resources/AddIngress.json; src/Sk.Sys.Provisioner.K8s/Resources/AddNamespace.json; src/Sk.Sys.Provisioner.K8s/Resources/AddService.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

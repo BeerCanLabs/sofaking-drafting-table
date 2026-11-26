@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+type: vocabulary_proposal
+name: Add SFTP connection protocol
+vocabulary: connectionProtocols
+proposalKind: non-standard-value
+status: proposed
+proposedId: SFTP
+proposedName: SFTP
+description: SSH File Transfer Protocol used for encrypted file-transfer connections over SSH.
+fieldRefs:
+- object: 01KYN1REHT-6YRN
+  path: notes.nonStandardVocabularyValues[3].value
+  value: SFTP
+rationale: >-
+  GRRFTP1 supports SFTP over SSH, and reusable SFTP services already exist in
+  the Sofa King catalog. SFTP is not currently available in the approved
+  connectionProtocols vocabulary, preventing relationships from using the
+  real protocol without a non-standard value.
+relatedObjects:
+- ref: 01KYN1REHT-6YRN
+- ref: 01KSM38KEQ-JS8E

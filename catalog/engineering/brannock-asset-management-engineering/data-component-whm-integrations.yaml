@@ -1,0 +1,70 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-EN0P
+type: data_component
+ownerRole: engineer
+name: Whm Integrations
+aliases:
+  - WHM Integrations
+description: Heterogeneous per-region CIS integration and ETL system for RETAIL regions. Not a single application — comprises ~126 per-region SSIS/SSDT projects run as SQL Server Agent jobs on 4 named shared production hosts, 2 always-on Windows Services, newer Python ETL pipelines (including an LLM-based post-job log monitor), and an AWS Lambda/Node.js microservice stack ("Brannock" integrator). Enriched from a direct repository read; corrects the prior "TSQL primary / containsPII false" repository-discovery assumptions.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- repository-discovery
+- whm
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_Integrations
+targetEngine: mssql
+dataClassification: internal
+containsPII: true
+tables:
+  - name: Kestrelregion.StagingCustomers
+    description: 'Staging table for Kestrelregion customer roster sync — FirstName, LastName, MiddleName, Grade, HomeRoom, Phone, ParentPhone, Email, ParentEmail, and full address, keyed by CustomerID. Confirmed by direct read of KestrelregionIT/CustomersIntegration/Create_StagingCustomersKestrelregion.sql.'
+    containsPII: true
+  - name: Per-region charges/payments staging tables (e.g. BTSD MyStoreBucks, Millbrookregion)
+    description: Multiple regions stage CustomerID-linked financial charge and payment records (e.g. BTSD/MyStoreBucks_ChargesPayments/CreateTable_Staging_FeesPayments_Audit.sql, Millbrookregion/Millbrookregion_ChargesAndPayments/CreateTable_Staging_ChargeImport.sql). Representative sample, not an exhaustive list — dozens of similar per-region staging tables exist across the repo.
+    containsPII: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_Integrations
+  observedRuntimeSignals: dotnet, node, python, readme, serverless
+  observedManifestPaths: .vscode/settings.json; API_Packages/API_Packages.sln; Arbor/Arbor Integration Services.sln; Riverbendregion/Riverbendregion.sln; Mesaregion/Mesaregion.sln; Millbrookregion/Millbrookregion.sln; Bayfieldregion/Bayfieldregion.sln; Canyonregion/Canyonregion.sln; Oakviewregion/Oakviewregion.sln; OakRegion/OakRegion.sln; AustinIFAS/Austin IFAS_Solution.sln; BTSD/BTSD.sln; BrannockIntegratorAws/Lambda/launchInstanceTemplateFromS3Event.js; Data Integration Service/Data Integration Service/Program.cs; Brannock Integration Service/Brannock Integration Service/Service1.cs; SQL Server Agent/Jobs/
+  repositoryShape: 'Corrected by direct repository read: this is not a shared library or a single TSQL codebase. File-extension census (git ls-files): 456 .sql, 346 .dtsx (SSIS, embeds C# Script Tasks), 166 .database (SSDT), 164 .dtproj, 130 .sln, 95 .py, 78 .cs, 25 .js, 15 .ts. API_Packages/ is structurally identical to a per-region folder (one SSIS project, not a shared library). 130 .sln files across 126 top-level folders confirm the dominant pattern is one SSIS+SSDT project pair per region/vendor. T-SQL/SSIS is the largest single bucket, but C#, Python, and JS/TS are current, first-class parts of the codebase, not vestigial — "TSQL" alone understated it.'
+  serviceAuthentication: 'Confirmed by direct repository read — heterogeneous per source system, not a single pattern. Internal DB access uses Windows Integrated Security (Arbor/Arbor Integration Services/ArborImport.dtsx, Integrated Security=SSPI). Arbor'' own API is called via a vendor-specific ARBOR-CERT header (_Python_Integration/CIS_ETLPipeLine/Arbor/src/api_client.py). OneRoster (OneRoster/OneRoster/OneRoster.dtsx) implements OAuth 1.0 HMAC-SHA1 request signing plus a client-credentials/Basic-to-Bearer token exchange, with credentials sourced from SSIS project variables rather than literals in the code read.'
+  secretsManagement: 'Confirmed by direct repository read, mixed maturity. SSIS projects use ProtectionLevel="EncryptSensitiveWithUserKey" (Arbor Integration Services.dtproj) — a real, non-trivial control. However, six Python ETL config.yaml files are tracked in git, not gitignored (_Python_Integration/AI_Log_Monitor, CommonOps_ETLPipeline/PullRemoteSTFPFile, Custom_Integrations/ChargesPayments_MyStoreBucks, Custom_Integrations/Export_ETLPipeline, Custom_Integrations/MDM_ETLPipeline, CIS_ETLPipeLine/Arbor) despite one of them (AI_Log_Monitor/config.yaml.example line 3) claiming they are gitignored — that comment is false for this repo. Contents were not opened (workspace secrets-handling rule); the fact of being tracked is itself the finding, and needs developer review/rotation. Separately, _Python_Integration/CIS_ETLPipeLine/Arbor/src/api_client.py logs the Arbor API certificate value on every call — a credential-in-logs defect independent of the value itself. No AWS Secrets Manager, Parameter Store, or Key Vault usage was found anywhere in the tree. As of 2026-08-25 no remediation ticket has been filed for either finding, unlike the analogous Zebra Tools credential (TRK-686). Tracked as a security follow-up in DraftingSession 01M07T82GS-87MN, not detailed further here.'
+  serviceLogging: 'Confirmed by direct repository read — multiple independent, inconsistent mechanisms, no single standard. Windows Event Log + optional DB write (Data Integration Service/EventLogs/EventLogs.cs). SQL Server Database Mail failure reports embedded in SSIS packages (ArborImport.dtsx, "Email Report - Failure(s)" task, sp_send_dbmail). Python stdlib logging to local files (AI_Log_Monitor/main.py, Custom_Integrations/MDM_ETLPipeline/src/logging_setup.py). File-based logging in the Node stack (BrannockIntegratorAws/DataMapper/lib/log-to-file.js). No CloudWatch or other cloud-logging SDK usage found in the sampled AWS/Node code.'
+  healthWelfareMonitoring: 'Confirmed by direct repository read — no pollable health-check endpoint exists (no equivalent to Trackweb-IM''s SiteDbCheck.ashx/SiteRenderCheck.aspx was found anywhere in the tree). Monitoring is reactive/failure-triggered instead: a purpose-built post-job tool, _Python_Integration/AI_Log_Monitor, is triggered by SQL Server Agent after each ETL job (main.py docstring), runs LLM-based log analysis, and emails alerts on ERROR/CRITICAL severity; it can also run standalone in a continuous --watch mode. Separately, 216-218 of 238 exported SQL Server Agent jobs set notify_level_email=2 routed to operator Intg_Alerts, and Data Integration Service/Messaging/AlertMessaging.cs sends ad hoc high-priority SMTP alerts.'
+  availabilityModel: 'Confirmed by direct repository read — no single model; three deployment patterns coexist. Scheduled batch via SQL Server Agent is dominant: 238 exported job scripts across 4 named shared production hosts (AWSBRSPRDLIST1-4.brannocksoft.local), running 45/70/50/73 jobs respectively, each covering many regions. Two always-on Windows Services (Data Integration Service, Brannock Integration Service) run continuously via ServiceBase. The AWS "Brannock" stack is event-driven — BrannockIntegratorAws/Lambda/launchInstanceTemplateFromS3Event.js is a real Lambda handler triggered by an S3 ObjectCreated:Put event, launching an EC2 instance from a template; no serverless.yml/SAM template exists in-repo, so its actual deployment/IaC could not be confirmed from this codebase.'
+  runtimeHostMapping: 'Partially confirmed 2026-08-25 by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire, with the AWS Console named as the authoritative source. Both always-on Windows Services (Data Integration Service and Brannock Integration Service) run on the same SQL Server instances per environment: prod BRSSSISPRDDB1\BRSSSISPRDDB1,58776; stage AWSBRSPRDLIST6.brannocksoft.local\AWSBRSPRDLIST6,60173; dev BRSDEVDB1.brannocksoft.local\BRSDEVDB1,64121 and BRSDEVDB2.brannocksoft.local\BRSDEVDB2,64121. Environment labels were supplied as Production/Staging/Development and are mapped here to the DRAFT standard prod/stage/dev; no test environment was reported. The AWS Lambda/Node "Brannock" stack runs in AWS account 675180657723, us-east-1; it is deployed from outside this repository (no serverless.yml, SAM/CloudFormation template, or .github/workflows exists in WHM_Integrations), so the deploying repository or pipeline is still unidentified and needs CloudOps. The four shared SQL Server Agent hosts (AWSBRSPRDLIST1-4) still have no DRAFT or CMDB identifiers recorded, so runsOn is deliberately left unchanged at its single-host value rather than pointed at an invented reference — see DraftingSession 01M07T82GS-87MN, question whm-integrations-runson-host-mapping.'
+  scalabilityModel: 'Confirmed by direct repository read — the SQL-Agent-hosted majority scales by adding another job to one of the 4 shared hosts per new region, not by isolated per-region infrastructure. No repo-internal Task Scheduler XML or cron config was found; schedule cadence lives entirely in the exported SQL Server Agent job scripts (sp_add_schedule calls) rather than anywhere independently confirmable from this repo alone.'
+  recoverabilityModel: 'Confirmed by direct repository read — inconsistent by generation. All 268 checked job-step configurations across the 238 exported SQL Server Agent jobs set retry_attempts=0 (no scheduler-level auto-retry); recovery there is alert-and-manual-intervention (Intg_Alerts operator emails) or explicit T-SQL TRY/CATCH-and-rollback (e.g. SQL Server Agent/Jobs/.../CedarRegion_Process_Audit_Archive.sql). The newer Python layer does implement real retry-with-backoff (_Python_Integration/CIS_ETLPipeLine/Arbor/src/api_client.py, configurable retry_attempts/retry_delay_seconds, default 3 attempts / 5s).'
+  failureDomain: 'Confirmed by direct repository read — the shared SQL Server host, not the individual region, is the effective blast radius for the SQL-Agent-hosted majority: each of the 4 named hosts runs dozens of unrelated regions'' jobs side by side, and jobs write into a shared IntegrationMiddleWay database using per-region schemas rather than per-region databases. Within a single SSIS package some isolation exists (ArborImport.dtsx loops per-customer and aggregates failures into one report rather than aborting the whole run on one customer), but a host- or shared-database-level failure would affect every region scheduled there. The AWS/Node stack and the two Windows Services are architecturally separate runtimes from the SQL-Agent jobs, so a failure in one does not directly cascade to the others, though true infrastructure-level independence could not be confirmed from this repo alone.'
+  classificationFitNote: 'This repo''s true shape (2 always-on Windows Services plus an AWS Lambda/Node application stack, alongside the SSIS/SQL-Agent/schema majority) sits awkwardly under data_component''s definition ("first-party data structure code... the data-layer peer of ProductComponent"). The 2026-08-25 questionnaire records the team answering "Yes" to splitting the Windows Services and the Brannock AWS stack into separate product_component records while SSIS/SQL remains the data_component, but no decision owner or date was captured against that answer, so it is carried as a direction rather than an accepted decision. Left as one data_component object for now; tracked as an open architectural question in DraftingSession 01M07T82GS-87MN.'
+decisionRecords:
+  - ref: 01M0DH79Q9-B3AP
+    key: repositoryShape
+  - ref: 01M0DH79Q9-B3AP
+    key: serviceAuthentication
+  - ref: 01M0DH79Q9-B3AP
+    key: secretsManagement
+  - ref: 01M0DH79Q9-B3AP
+    key: serviceLogging
+  - ref: 01M0DH79Q9-B3AP
+    key: healthWelfareMonitoring
+  - ref: 01M0DH79Q9-B3AP
+    key: availabilityModel
+  - ref: 01M0DH79Q9-B3AP
+    key: runtimeHostMapping
+  - ref: 01M0DH79Q9-B3AP
+    key: scalabilityModel
+  - ref: 01M0DH79Q9-B3AP
+    key: recoverabilityModel
+  - ref: 01M0DH79Q9-B3AP
+    key: failureDomain
+  - ref: 01M0DH79Q9-B3AP
+    key: containsPII
+  - ref: 01M0DH79Q9-B3AP
+    key: targetEngine

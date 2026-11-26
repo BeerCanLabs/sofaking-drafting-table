@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF4-0FYW
+type: product_component
+ownerRole: engineer
+name: Enterprise Analytics Snowflake
+description: enterprise-analytics-snowflake
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: foresight5-analytics-engineering
+  contact: data-engineering-analytics-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- enterprise
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-enterprise-analytics-snowflake
+language: Python
+classification: api-service
+runtimeRequirement: Python 3
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-enterprise-analytics-snowflake
+  observedRuntimeSignals: github_actions, readme
+  observedManifestPaths: .github/workflows/snowflake-ddl.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

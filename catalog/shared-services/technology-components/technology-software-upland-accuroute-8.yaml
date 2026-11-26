@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-7ZFS
+type: technology_component
+ownerRole: technology-admin
+name: Upland AccuRoute 8
+description: >-
+  Candidate document-routing software baseline for the shopstar v3 AccuRoute
+  modernization from the legacy OmTool appliance.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - software
+  - document-routing
+  - accuroute
+  - shopstar
+  - candidate
+classification: software
+vendor: Upland Software
+productName: AccuRoute
+productVersion: '8.0'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Vendor lifecycle dates and the licensed production baseline are not yet documented.
+capabilities:
+  - 01KT0XNZEY-DENJ
+notes:
+  background: >-
+    Version 8.0 is declared by the ansible_playbooks_sre
+    roles/sk_apps/shopstar/v3_accuroute defaults. The current checked-in
+    environment configuration disables automated vendor application install,
+    so this catalog entry is a candidate rather than confirmed production
+    software.

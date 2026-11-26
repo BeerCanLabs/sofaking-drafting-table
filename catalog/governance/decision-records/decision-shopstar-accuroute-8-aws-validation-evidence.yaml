@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KYRARNBV-3930
+type: decision_record
+name: shopstar AccuRoute 8 AWS Candidate Evidence
+description: >-
+  Source-backed but still-open architecture evidence for the AccuRoute AWS
+  modernization runtime.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - shopstar-v3
+  - accuroute
+  - aws
+  - migration
+category: decision
+status: open
+affectedComponent: 01KYRAQ0KC-MPJQ
+linkedObject: 01KYRAQ0KC-MPJQ
+decisionRationale: >-
+  serviceAuthentication: AAP bootstraps a managed Windows account, joins the
+  corporate domain, and resolves an approved service account; final
+  application-user access remains open.
+
+  secretsManagement: Current AAP uses injected credentials and Delinea, while
+  an alternate Terraform branch declares AWS Secrets Manager bootstrap data.
+
+  serviceLogging: Dedicated log volumes are configured, but centralized
+  AccuRoute application-log delivery and retention are not documented.
+
+  healthWelfareMonitoring: AAP installs Nagios; the Terraform alternative
+  declares CloudWatch EC2 and Auto Scaling alarms.
+
+  availabilityModel: Current evidence is single-instance per environment.
+
+  scalabilityModel: Terraform contains ASG controls but defaults capacity to
+  one; AAP currently creates one host.
+
+  recoverabilityModel: Infrastructure can be rebuilt, but vendor application
+  installation remains manual.
+
+  failureDomain: One instance in one account and us-east-1.

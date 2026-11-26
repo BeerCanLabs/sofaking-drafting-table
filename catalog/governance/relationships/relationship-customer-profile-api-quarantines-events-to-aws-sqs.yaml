@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01M5D0EPG0-PZ3F
+type: relationship
+ownerRole: engineer
+name: Customer Profile Service → AWS SQS (events quarantine)
+description: >-
+  The Customer Profile Service writes inbound Loveseat identity-match events that it cannot
+  process to the customer-profile-events-quarantine SQS queue (Events:QuarantineQueueUrl).
+source: 01KXR9XAR4-BES0
+target: 01KQQ5JT05-0C4P
+label: quarantines unprocessable events to
+technology: AWS SDK / HTTPS
+direction: asynchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - messaging

@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-658F
+type: product_component
+ownerRole: engineer
+name: Shopstar Sandbox
+description: Sandbox repo for user sandbox/experimental code. Code in this repository is never deployed or built.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- shopstar
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar-sandbox
+language: Java
+classification: api-service
+runtimeRequirement: Java
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstar-sandbox
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: users/userew/shopstar-user-sync/pom.xml; users/userew/shopstaraccounts/pom.xml; users/userew/idm-integration-example/pom.xml; users/usermm/selenium/pom.xml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

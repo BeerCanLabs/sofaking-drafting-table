@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV602-6VSZ
+name: NGINX Standard Web Service → Central Logging Service
+catalogStatus: stub
+source: 01KQQ5JT1F-7VJE
+label: calls
+target: 01KQQ5JT1E-A6M5
+notes:
+  background: "Application and reverse-proxy logs forwarded beyond host-level logging."
+capabilities:
+- 01KQQ4Q026-D04B

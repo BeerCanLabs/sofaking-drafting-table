@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: HSDGMB3QDX-FT9J
+type: relationship
+name: RT ERP AWS Application Load Balancer → Application Server
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+label: routes HTTPS requests to
+target: 01KSM38KEX-PX7B
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: >-
+  The region ALB routes accepted web traffic to the RT ERP application
+  service targets defined by the region ECS CloudFormation stack.
+capabilities:
+  - 01KSWVZSZ5-M0FR

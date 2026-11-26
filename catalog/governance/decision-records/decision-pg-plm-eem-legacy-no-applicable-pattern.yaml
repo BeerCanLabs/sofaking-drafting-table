@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-B6GF
+type: decision_record
+name: PG PLM/EEM Legacy - No Applicable Reference Architecture
+description: >-
+  Reference-architecture conformance decision for the PLM/EEM legacy deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - legacy
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-RWQB
+linkedObject: 01M1F8WB4E-RWQB
+decisionRationale: >-
+  noApplicablePattern: No reference architecture has been selected for this pattern. Two candidates in the catalog are plausible and neither has been verified: reference-architecture-sharded-multitenant-aws-sqlserver matches the observed STL hub-and-spoke topology, and reference-architecture-legacy-webforms-sqlserver-hybrid-datacenter-aws matches the Classic ASP and .NET Framework surfaces. Selecting between them requires resolving where the database estate physically runs - the AWSPGDB01S.corp.flp hostname conflicts with the grr-datacenter deployment target recorded in the vocabulary. Pattern alignment is an APEX L2 Established criterion, not L1 Baseline, so this pattern is registered without a selected reference architecture and the choice is tracked as an unresolved question in DraftingSession 01M1F8WB4E-0GSN. Status open pending Architecture Review Board input.

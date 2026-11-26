@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYRV1VC4-7C3G
+type: relationship
+name: Trackweb-IT App → AM Notifications
+catalogStatus: complete
+source: 01KSM38KFB-QFJ1
+label: calls
+target: 01KSM38KFB-7ZWT
+description: Trackweb-IT calls the Notifications SOAP web service (WebService.asmx) to retrieve in-app banner/announcement notifications for display.
+technology: SOAP
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- notifications
+notes:
+  background: Confirmed via a SOAP client endpoint in Trackweb-IT's web.config pointing at http://www.trackwebhelp.example/TrackwebNotifications/WebService.asmx.
+capabilities: []

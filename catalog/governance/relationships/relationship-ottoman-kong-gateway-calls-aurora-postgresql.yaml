@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DG-475H
+name: Kong Gateway Service → AWS Aurora PostgreSQL
+catalogStatus: stub
+source: 01KQQ5JT1E-SW3X
+label: calls
+target: 01KQQ5JT04-27EP
+notes:
+  background: "Kong Gateway persists routing and plugin configuration data to Aurora PostgreSQL via SQL."
+capabilities: []

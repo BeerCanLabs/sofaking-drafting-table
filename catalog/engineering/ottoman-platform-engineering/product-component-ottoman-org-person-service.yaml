@@ -1,0 +1,48 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-9EQ8
+type: product_component
+ownerRole: engineer
+name: Ottoman OrgPerson Service
+description: 'Ottoman service that stores organization-specific information about a person and powers administrator search in Sofa King Admin.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: retired
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+  - ottoman
+  - person
+  - organization
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-svc-orgperson
+classification: api-service
+architectureNotes:
+  runtimeRequirement: Deployed as a containerized .NET Core / Node.js / Lambda service within the Ottoman AWS EKS/Lambda environment.
+  serviceAuthentication: Service access uses Ottoman service-to-service identity and gateway-mediated request context.
+  secretsManagement: Runtime secrets are expected to be managed through the platform Kubernetes and GitOps secret path.
+  serviceLogging: Service logs are expected to be forwarded through the Ottoman logging stack.
+  healthWelfareMonitoring: Service health is expected to be tracked through EKS workload probes and platform telemetry.
+  availabilityModel: Service replicas run on EKS for service continuity.
+  scalabilityModel: Service scales horizontally on EKS.
+  recoverabilityModel: Failed pods are rescheduled by Kubernetes and redeployed through GitOps.
+  failureDomain: Scoped to Ottoman organization-person relationship data.
+  persistence: MongoDB or DocumentDB for person-organization relationship documents; exact service is unresolved.
+  retirementEvidence: >-
+    Confirmed retired 2026-08-04: the plat-svc-orgperson repository returns a
+    404 on GitHub (BeerCanLabs/sk-plat-svc-orgperson no longer exists), and
+    a Ottoman developer confirmed msvc-org-person (01KSM38KFH-NYK5) is the
+    only currently deployed/maintained org-person service. Removed from the
+    Ottoman SDP's active service groups and from the dependency lists of
+    Passport Core, Sofa King Tools BFF, and Sofa King Admin BFF. Left in place
+    as a retired catalog record rather than deleted. The one live relationship that
+    targeted this UID from the Shared Customer Record team (the former Customer
+    Profile OrgPerson Worker sync) no longer exists: the worker was removed
+    (ADR-006, TBSPS-4319), and the Customer Profile Service now validates orgPersonId
+    against msvc-org-person (01KSM38KFH-NYK5) instead.
+decisionRecords:
+  - ref: 01KT16XHQJ-MVX5
+    key: runtimeRequirement

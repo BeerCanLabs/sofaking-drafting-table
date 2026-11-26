@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ5R-BDGS
+type: decision_record
+name: EventStoreDB Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT00-1KK0
+linkedObject: 01KQQ5JT00-1KK0
+decisionRationale: "serviceAuthentication: Authentication is managed via EventStore's internal user manager or  integrated identity provider.\n\nsecretsManagement: Credentials and connection strings are stored in a centralized secrets store.\n\nserviceLogging: Database logs are forwarded centrally via the host's logging agent.\n\nhealthWelfareMonitoring: Service welfare is monitored via EventStore's health API and host metrics.\n\navailabilityModel: Availability is achieved via clustered nodes in a primary-secondary topology.\n\nscalabilityModel: Scales vertically with host resources or through addition of cluster nodes.\n\nrecoverabilityModel: Failed nodes are rebuilt and rejoined to the cluster; support for  backups and snapshots.\n\nfailureDomain: Impact is scoped to the EventStore cluster serving the dependent workloads.\n\nbackup.strategy: daily full snapshots\n\nbackup.platform: EventStoreDB native backup to managed storage\n\nbackup.rto: 4h\n\nbackup.rpo: 1h\n\nha.mechanism: Clustered
+  Replication\n\nencryption.atRest: required\n\naccessControl.model: Internal RBAC or integrated authentication."

@@ -1,0 +1,95 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D96-RT10
+type: runtime_service
+ownerRole: technology-admin
+name: Customer Services ASP.NET Core 10 on EKS Application Runtime
+description: >-
+  Application runtime substrate for Customer Services ASP.NET Core 10 microservice
+  APIs hosted on Amazon EKS and delivered by Argo CD. First used by the Shared
+  Customer Record services. Replaces their previous placeholder runsOn to the generic .NET Core Application
+  Service stub, which names ASP.NET Core 8 as its function and does not match the
+  net10.0 services.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - runtime
+  - application
+  - dotnet
+  - aspnet-core-10
+  - eks
+  - customer-services
+  - shared-customer-record
+  - le1
+category: service
+serviceCategory: general
+deliveryModel: self-managed
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01M1HJY7E4-WE6B
+decisionRecords:
+  - ref: 01M5CS4D95-QH7A
+    key: availabilityModel
+  - ref: 01M5CS4D95-QH7A
+    key: scalabilityModel
+  - ref: 01M6RKS8HS-XRF3
+    key: healthWelfareMonitoring
+  - ref: 01M6RM03Q0-ZVDT
+    key: recoverabilityModel
+  - ref: 01M6RM4N4Y-D5ZZ
+    key: failureDomain
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01M1HJY7E4-WE6B
+    role: function
+architectureNotes:
+  runtimeEvidence: >-
+    The ss-msvc-customer-profile, ss-msvc-calendar, and ss-msvc-customer-membership
+    repositories target net10.0 and build ASP.NET Core controller APIs in Docker
+    images (crawled 2026-10-20).
+  clusterInventory: >-
+    Development and stage run on the le1 EKS cluster, one namespace per service.
+    Production is intended for Chaise and is not yet provisioned.
+  deploymentMethod: >-
+    Argo CD reconciles each service's Kubernetes manifests from k8s-deployments
+    into le1.
+  ingressBoundary: >-
+    Inbound traffic reaches each API through the Traefik Kubernetes Ingress Service
+    (01KYAXMZ7H-72BR) by per-service hostname. Kong is not in the request path.
+  secretsManagement: >-
+    The Customer Profile and Customer Membership APIs read client secrets from AWS Secrets
+    Manager, per their catalog relationships. The k8s-deployments service accounts for all
+    three services in dev and stage carry an eks.amazonaws.com/role-arn annotation. The
+    role grants were not checked, and what the Academic Calendar API reads is an open
+    discrepancy recorded on its own relationship.
+  scalingApproach: >-
+    Each service is its own Kubernetes Deployment. Development and stage currently
+    run a single replica with no autoscaler; see the Customer Services le1 Dev and
+    Stage Availability decision record (01M5CS4D95-QH7A).
+  availabilityModel: >-
+    EKS reschedules a failed pod. No redundant capacity exists in development or
+    stage today. Production availability is not yet defined.
+  serviceAuthentication: >-
+    The three APIs validate caller bearer tokens against Okta and enforce scopes
+    in-service, per their Okta relationships. How cluster operators authenticate to le1
+    (kubectl, Argo CD) is not established.
+  serviceLogging: >-
+    Per the team lead, the services write logs to STDOUT and a node-level or cluster-level
+    agent forwards them to Amazon CloudWatch Logs. This is not verified. No agent or log
+    group has been identified. Dynatrace is not yet configured, per the team lead.
+  healthWelfareMonitoring: >-
+    Per the team lead, the readiness and liveness endpoints (/health/ready and
+    /health/live) are about all there is. CloudWatch alarms exist with no recipients
+    configured. See decision record 01M6RKS8HS-XRF3.
+  recoverabilityModel: >-
+    Argo CD automated sync with selfHeal reconciles each service's manifests. DynamoDB
+    point-in-time recovery is enabled outside development in the CDK code. No recovery
+    targets or restore procedure are recorded. See decision record 01M6RM03Q0-ZVDT.
+  failureDomain: >-
+    Workload failures scope to a single service Deployment. A le1 cluster or Traefik
+    outage takes every Customer Services API on le1 down together. Shared external
+    dependencies (Okta, Sofa King IDM, Loveseat, Secrets Manager) reach every service that
+    uses them, per the catalog. See decision record 01M6RM4N4Y-D5ZZ.

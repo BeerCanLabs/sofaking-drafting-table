@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EJ-T14W
+name: Recliner Report Data Provider Service → Snowflake Data Cloud
+catalogStatus: stub
+source: 01KSM38KGD-RFS7
+label: queries analytics from
+target: 01KQQ5JT1D-NR4R
+notes:
+  background: >-
+    Snowflake is planned for Recliner reporting and analytics, including the
+    Report Data Provider boundary, but implementation details are not
+    finalized. Bharat Menon is the implementation SME.
+capabilities: []

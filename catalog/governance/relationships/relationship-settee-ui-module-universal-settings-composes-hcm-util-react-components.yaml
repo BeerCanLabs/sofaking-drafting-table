@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP30-9X11
+type: relationship
+name: 'Settee UI Module Universal Settings → HCM Util React Components'
+catalogStatus: stub
+source: 01KSM38KGM-365N
+target: 01KSM38KFF-2XDH
+label: composes
+technology: npm package
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: npm dependency observed in package.json 2026-07-29.

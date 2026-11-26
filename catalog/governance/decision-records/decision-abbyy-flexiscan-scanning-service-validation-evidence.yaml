@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJEY-Z75B
+type: decision_record
+name: ABBYY FlexiScan Scanning Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-1YGS
+linkedObject: 01KQQ5JT1F-1YGS
+decisionRationale: "serviceAuthentication: Scanning service accounts and workflow credentials use centralized secret distribution.\n\nsecretsManagement: Runtime credentials sourced from centralized secret storage\n\nserviceLogging: Scanning workflow logs are exported to centrally managed logging and retained with operational telemetry.\n\navailabilityModel: Single-instance scanning service with no built-in active redundancy.\n\nscalabilityModel: Vertical scale-up on the assigned host.\n\nrecoverabilityModel: Rebuild the service on a replacement host and restore configuration and workflow dependencies.\n\nfailureDomain: Scoped to the scanning workflow service for the deployment that consumes it."

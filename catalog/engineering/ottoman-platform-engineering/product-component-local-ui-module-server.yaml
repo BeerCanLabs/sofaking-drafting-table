@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-1JZS
+type: product_component
+ownerRole: engineer
+name: Local UI Module Server
+description: Tool to serve UI modules pulled from Artifactory
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- local
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-local-ui-module-server
+language: Go
+classification: web-application
+runtimeRequirement: Go
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-local-ui-module-server
+  observedRuntimeSignals: github_actions, go, readme
+  observedManifestPaths: .github/workflows/main-build.yml; .github/workflows/pr-build.yml; go.mod
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP2M-AKTG
+type: relationship
+name: 'Settee UI Module Universal Employee → Sofa King Central UI Track Forms'
+catalogStatus: stub
+source: 01KSM38KGM-HF7D
+target: 01KYQ4RP13-40QD
+label: composes
+technology: npm package
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: npm dependency observed in package.json 2026-07-29.

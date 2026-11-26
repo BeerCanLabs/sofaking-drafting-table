@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DK-P40J
+name: Ottoman Passport Core Service → AWS Aurora PostgreSQL
+catalogStatus: stub
+source: 01KSM38KFX-9EHD
+label: calls
+target: 01KQQ5JT04-27EP
+notes:
+  background: "Passport Core persists identity and invitation workflow data to Aurora PostgreSQL via SQL."
+capabilities: []

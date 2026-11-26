@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01KWF3QRMF-N3RQ
+type: runtime_service
+ownerRole: technology-admin
+name: Bitvise SFTP Service - Webloom
+description: >-
+  Self-managed Bitvise SFTP Server hosted on Windows Server 2012 R2 in Webloom
+  for legacy SOM Service Management customer file-transfer workloads. BestSync
+  is installed locally on the same host and moves incoming files to
+  customer-specific locations on the Webloom central file server. Zabbix
+  provides local health and welfare monitoring for this host and service.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - sftp
+  - file-transfer
+  - webloom
+  - legacy
+host: 01KQQ5JT03-BEFY
+primaryTechnologyComponent: 01KWF3QRMF-D43R
+architectureNotes:
+  serviceAuthentication: Bitvise SFTP accounts are customer-scoped username/password accounts local to the Bitvise service.
+  secretsManagement: Bitvise SFTP usernames and passwords are stored locally in the Bitvise service.
+  serviceLogging: Bitvise logs are stored locally on the Webloom Windows Server 2012 R2 host.
+  healthWelfareMonitoring: Webloom-local Zabbix monitoring exists for this host/service; Webloom monitoring has mostly migrated to Nagios across SOM.
+  availabilityModel: Single install on a single Windows Server 2012 R2 host; no HA pair and no standby instance.
+  scalabilityModel: Scales with the underlying single Windows Server 2012 R2 host and Bitvise configuration; customer/file-volume limits require confirmation.
+  recoverabilityModel: Recovery path requires confirmation from Webloom/SOM operations, including Windows host rebuild, Bitvise configuration backup, and BestSync job configuration backup.
+  failureDomain: Impact is scoped to Webloom legacy SOM customer SFTP/bulk import intake and local file movement unless the Webloom central file server, shared storage, or shared databases are also affected.
+internalComponents:
+  - ref: 01KWF3QRMF-D43R
+    role: function
+    configuration: default-sftp-listener
+  - ref: 01KWF4ASYJ-YNSW
+    role: file-mover
+    configuration: folder-watch-file-mover
+    notes: BestSync jobs watch local Bitvise folders and move files to customer-specific locations on the Webloom central file server.
+  - ref: 01KWF4MDGM-PQ49
+    role: monitoring-agent
+    configuration: webloom-local-monitoring
+    notes: Zabbix is the Webloom-local monitoring path for this host/service; Webloom monitoring has mostly migrated to Nagios across SOM.
+notes:
+  internalComponentRationales:
+    01KWF4ASYJ-YNSW: BestSync is installed on the same Windows Server 2012 R2 host as Bitvise and performs the local file-mover role for Webloom SOM SFTP imports.
+    01KWF4MDGM-PQ49: Zabbix provides the Webloom-local health and welfare monitoring path for this single-server Bitvise/BestSync deployment, while broader Webloom monitoring has mostly migrated to Nagios across SOM.
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KZW3SFTP-BTVZ
+    key: availability
+  - ref: 01KZW3SFTP-BTVZ
+    key: scalability
+  - ref: 01KZW3SFTP-BTVZ
+    key: recoverability
+  - ref: 01KZW3SFTP-BTVZ
+    key: failure-domain

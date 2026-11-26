@@ -1,0 +1,69 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-NXJ3
+type: product_component
+ownerRole: engineer
+name: Customer Membership Event Publisher
+description: >-
+  AWS Lambda worker (.NET 10) that consumes change messages from the
+  customer-membership-event-publisher SQS queue (fed by the DynamoDB Streams →
+  EventBridge Pipe → SNS fanout), translates CustomerstoreAssociation changes into
+  canonical customer-domain events (create, update, delete on tombstone), and
+  publishes them to the Sofa King Loveseat event bus. Outbound-only. Planned per the
+  service spec; the CDK stacks exist in the repo.
+version: 0.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+runsOn: 01KQQ5JT05-CT7X
+language: C#
+classification: worker
+runtimeRequirement: .NET 10 (AWS Lambda)
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - worker
+  - lambda
+  - event-driven
+  - loveseat
+  - planned
+  - product-component
+runtimeSpec:
+  dependencies:
+    - ref: 01KQQ5JT05-0C4P
+      purpose: Consumes customer-membership-event-publisher-queue (SNS-subscribed SQS).
+      interface: SQS queue customer-membership-event-publisher-queue
+    - ref: 01KWF3RGCF-T2HM
+      purpose: Retrieve the Loveseat client secret.
+      interface: AWS Secrets Manager, namespace customer-membership/event-publisher/loveseat-service
+environmentConfiguration:
+  - name: EventsUri
+    description: Loveseat events ingest endpoint ({LoveseatService:BaseUrl}/api/Events). Value open.
+    required: true
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryPrimaryLanguage: C#
+  observedManifestPaths: >-
+    src/service/EventPublisher/Function.cs;
+    src/deploy/Deploy/CustomerMembershipEventPublisherStack.cs;
+    docs/architecture/membership-service-spec.md
+  eventContract: >-
+    EventType-03.03 envelope; event.content is the full canonical
+    CustomerstoreAssociationTypeV01 with revision = meta.entityVersion. Source is
+    { application: ss, service: customer-membership }. Envelope id is a UUIDv5 of
+    the stream eventID so redeliveries match; consumers dedupe updates on
+    (content.id, content.revision) and take delete unconditionally.
+  deadLetter: >-
+    Two DLQs: customer-membership-dynamo-fanout-pipe-dlq (Pipe to SNS, 3 retries)
+    and customer-membership-event-publisher-dlq (Lambda, maxReceiveCount 5), each
+    with 14-day retention. 512 MB, 15s timeout, batch 10.
+  authentication: >-
+    Okta client credentials with scope plat.loveseat and a dedicated Okta client for
+    membership, modeled as an authenticates-via relationship to Okta
+    (01KQQ5JT1D-SHXD). Okta is the Loveseat auth provider for every Shared Customer
+    Record service (owner-confirmed 2026-10-20). Loveseat client, authority, and base
+    URL values are still open provisioning inputs.

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z7-XC4T
+name: Windows Server 2016 Virtual Machine Host → Patch Orchestration
+catalogStatus: stub
+source: 01KQQ5JT03-2NEW
+label: calls
+externalTarget: Patch Orchestration
+notes:
+  background: "Patch deployment coordinated through the standard Windows patching workflow."
+capabilities:
+- 01KQQ4Q026-BH6E

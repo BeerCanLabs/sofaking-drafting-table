@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-KTQ2
+type: product_component
+ownerRole: engineer
+name: Kio Reporting API
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-kio-reporting-api.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- sei
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-kio-reporting-api
+language: Java
+classification: api-service
+runtimeRequirement: Java
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-kio-reporting-api
+  observedRuntimeSignals: docker, java, readme
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/ingress.yml; cd/dev/service.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/ingress.yml; cd/prod/service.yml; cd/qa/cm.yml; cd/qa/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

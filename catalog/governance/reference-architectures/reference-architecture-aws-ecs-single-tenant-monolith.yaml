@@ -1,0 +1,65 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1C-HM5H
+type: reference_architecture
+name: AWS ECS Single-Tenant Monolith
+description: Reference Architecture for a replicated per-customer AWS deployment where each tenant receives an isolated ECS application boundary and dedicated data services.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- aws
+- ecs
+- single-tenant
+- monolith
+patternType: aws-ecs-single-tenant
+scalingUnits:
+- name: tenant-deployment
+  type: replicable
+  instanceCount: 1
+  notes: Each customer or region receives an isolated deployment boundary.
+serviceGroups:
+- name: Web Edge Services
+  deploymentTarget: aws-us-east-2
+  scalingUnit: tenant-deployment
+  deployableObjects:
+  - ref: 01KQQ5JT1D-MY47
+    diagramTier: presentation
+- name: Application Runtime
+  deploymentTarget: aws-us-east-2
+  scalingUnit: tenant-deployment
+  deployableObjects:
+  - ref: 01KYQN2WDV-223J
+    diagramTier: application
+- name: Data Services
+  deploymentTarget: aws-us-east-2
+  scalingUnit: tenant-deployment
+  deployableObjects:
+  - ref: 01KQQ5JT00-5TYB
+    diagramTier: data
+  - ref: 01KQQ5JT01-QFN5
+    diagramTier: data
+  - ref: 01KQQ5JT00-X90C
+    diagramTier: data
+- name: Reporting Services
+  deploymentTarget: aws-us-east-2
+  scalingUnit: tenant-deployment
+  deployableObjects:
+  - ref: 01KQQ5JT1F-737K
+    diagramTier: utility
+notes:
+  lifecycleRationale: Disinvest by default because the pattern includes SQL Server 2019, which is past mainstream support and in extended support. This single-tenant monolith pattern should not be treated as target-state architecture without an explicit existing-only exception.
+  availabilityModel: Each tenant boundary must define its own runtime, data, observability, and recovery design.
+  tenancyModel: Single-tenant isolation is the primary control; shared services are external dependencies.
+  deploymentModel: The same EC2-backed ECS deployment pattern is repeated for each tenant or region. AWS Fargate is not part of this pattern.
+  patternRisks: Operational scale, tenant drift, and shared observability dependencies must be explicitly governed.
+applicableDefinitionChecklist:
+  - Each region or tenant runs inside its own AWS account and ECS cluster failure boundary.
+  - Java application workloads run as ECS services on EC2-backed capacity; this pattern does not use Fargate.
+  - An Application Load Balancer performs health-checked routing to the application services.
+  - ECS desired counts and the EC2 Auto Scaling Group capacity provider define application and cluster scalability.
+  - CloudFormation and versioned ECR images provide repeatable replacement and recovery of runtime infrastructure.
+  - Each deployment selects one supported region database engine and documents its backup, recovery, and availability posture.

@@ -1,0 +1,320 @@
+schemaVersion: '1.0'
+uid: 61D7RV8H76-CFSX
+type: drafting_session
+ownerRole: engineer
+name: Sofa King Central SDP Completion Interview
+description: >-
+  SDP Completion Interview run against the existing Sofa King Central - Pattern
+  SDP (01KQQ5JT1J-DWT1). Resolved the two service groups that pointed at a
+  single umbrella placeholder into the 24 already-modeled catalog components,
+  authored coarse tier-boundary connections, and captured deployment targets
+  for the Staging and Test environment tiers. Also re-homed 26 components from
+  ottoman-platform-engineering and identity-management-idm-engineering into
+  sofaking-central-engineering at the product owner's direction, removing
+  them from the Platform and Settee SDPs and attaching them to Sofa King
+  Central instead.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - session
+  - sofaking-central
+  - sdp-completion-interview
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KQQ5JT1J-DWT1
+sourceArtifacts:
+  - name: Sofa King Central - Pattern SDP
+    type: catalog-object
+    location: catalog/engineering/sofaking-central-engineering/software-deployment-sofaking-central.yaml
+    notes: Pre-existing incomplete SDP; scored 8/10 on the completeness rubric at intake (gaps DO and CN).
+generatedObjects:
+  - name: Sofa King Central - Pattern (service groups + notes field rename + tierVariants)
+    type: software_deployment_pattern
+    status: created
+    ref: 01KQQ5JT1J-DWT1
+  - name: Sofa King Central AWS Aurora PostgreSQL
+    type: data_store_service
+    status: created
+    ref: 01KYAAZF97-HS3C
+  - name: Sofa King Central Platform → Okta
+    type: relationship
+    status: created
+    ref: K3AGNNAP7D-E2MB
+  - name: Sofa King Central Platform → Central Logging Service
+    type: relationship
+    status: created
+    ref: 8W88N98KRD-ZWDK
+  - name: Platform Msvc Credential (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFA-X9SK
+  - name: Platform Msvc Department (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFG-SYNY
+  - name: Platform Msvc Retail Institution (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFG-BJHR
+  - name: Platform Msvc Employee (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFG-MYWB
+  - name: Platform Msvc Importprocessor (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFY-HRZ1
+  - name: Platform Msvc Jobtype (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFG-FCFP
+  - name: Platform Msvc List (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFY-7P1C
+  - name: Platform Msvc Location (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFH-XBKG
+  - name: Platform Msvc Pdfprocessor (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFZ-E28N
+  - name: Platform Msvc Permissions (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFA-34QP
+  - name: Platform Msvc Plat Audit (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFZ-4ZFW
+  - name: Platform Msvc Workflowdefinition (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KG0-C36C
+  - name: Platform Msvc Workflowprocessor (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KG0-SWRJ
+  - name: Platform Msvc Workflowinstance (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KG0-B9ZX
+  - name: Platform Sand Credential (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFS-3ZRM
+  - name: Platform Sand Department (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFS-0KQ2
+  - name: Platform Sand Employee (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFT-VQP6
+  - name: Platform Sand File (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFT-TS9E
+  - name: Platform Sand Location (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFT-JJ3K
+  - name: Platform Sand Notifications (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFT-N5SH
+  - name: Platform Sand Permission (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KFT-RGK1
+  - name: Settee UI Module Ec Dashboard (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KGJ-CZFN
+  - name: Settee UI Module Ec Forms (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KGK-N0PA
+  - name: Settee UI Module Universal Settings (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KGM-365N
+  - name: Settee UI Module Universal Employee (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KGM-HF7D
+  - name: Settee UI Module Universal Overview (re-homed)
+    type: product_component
+    status: created
+    ref: 01KSM38KGM-8DPT
+unresolvedQuestions:
+  - id: cross-team-notification-required
+    question: >-
+      26 ProductComponents previously owned by ottoman-platform-engineering
+      (24) and identity-management-idm-engineering (2) were re-homed to
+      sofaking-central-engineering at the Sofa King Central EM's direction,
+      removing them from the Platform SDP and the Settee SDP. Have Ottoman
+      Platform, IDM, and Architecture Review Board been notified?
+    status: open
+    currentBestGuess: Not yet notified — this happened in an authoring session, not a cross-team conversation.
+    impact: >-
+      CODEOWNERS will route the PR to sofaking-central-engineering based on
+      new file paths, but the diff also shrinks two other teams' SDPs; those
+      teams should see this before merge, not just via automated review routing.
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+  - id: hearthstone-disposition-not-claimed
+    question: >-
+      The Production environment tier's complianceScope includes the active
+      Sofa King HEARTHSTONE RequirementGroup (01KQQ5JT20-M5R2), but this SDP does not
+      claim any requirementGroups. Should Sofa King Central claim and
+      disposition HEARTHSTONE now?
+    status: open
+    currentBestGuess: Yes — this is a production, PII-handling, multi-tenant platform and should claim HEARTHSTONE.
+    impact: RA completeness dimension will remain a gap until requirementGroups + requirementImplementations are added.
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+  - id: presentation-application-connection-granularity
+    question: >-
+      The Presentation→Application and Application→Data connections were
+      authored as coarse tier-boundary relationships (one representative pair
+      per crossing/data-store) rather than exact per-service pairs. Should
+      these be refined to specific UI-module-to-microservice mappings later?
+    status: open
+    currentBestGuess: Refine when someone with direct repository/architecture knowledge is available.
+    impact: Topology diagrams will show aggregate crossings rather than precise per-service call graphs.
+    notes: >-
+      Formerly pointed at relationship 1C8VC0TVJP-QNTM (React Root Application
+      → Platform), removed when the React Root Application product component
+      was retired.
+  - id: sand-star-remainder-count
+    question: >-
+      "Sofa King Central Platform" (01KQQ5JT0K-TN7W) is kept as a remainder
+      placeholder for legacy sand-* services beyond the 24 now individually
+      modeled, based on its own "30+ services" description. The exact
+      remaining count and identity of those services is unconfirmed.
+    status: open
+    currentBestGuess: Roughly 6+ legacy sand-* services still un-modeled.
+    impact: Catalog under-represents the true legacy surface area until decomposed further.
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+  - id: postgresql-data-component-target-engine-mismatch
+    question: >-
+      "Sofa King Central Postgresql Database" (data component 01KQQ5JT0K-46AZ)
+      had targetEngine set to mssql and ran on the generic PostgreSQL 17 DBMS
+      Service. Should it instead target the confirmed Sofa King Central Aurora
+      PostgreSQL service?
+    status: answered
+    reason: >-
+      Confirmed during OPS-561258 follow-up: production uses Aurora PostgreSQL
+      16.11 with username/password authentication, one writer, two readers,
+      Multi-AZ deployment, and immutable AWS Backup copies in S3.
+    currentBestGuess: >-
+      Corrected to targetEngine postgresql and runsOn Sofa King Central AWS
+      Aurora PostgreSQL (01KYAAZF97-HS3C).
+    impact: >-
+      Data classification and engine-specific requirement checks now resolve
+      against the confirmed PostgreSQL engine and FC-specific service.
+    relatedObjects:
+      - ref: 01KQQ5JT0K-46AZ
+      - ref: 01KYAAZF97-HS3C
+  - id: uat-dev-tier-deployment-targets
+    question: What are the deployment targets for the UAT and Dev environment tiers?
+    status: open
+    reason: Session scoped to Staging and Test only this round per user direction.
+    currentBestGuess: Likely same AWS account/region pattern as Staging and Test; unconfirmed.
+    impact: tierVariants block is incomplete for 2 of 5 declared environment tiers.
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+assumptions:
+  - id: umbrella-as-tier-representative-source
+    statement: >-
+      "Sofa King Central Platform" is used as the source/target for all coarse
+      tier-boundary and external-dependency relationships, standing in for the
+      undifferentiated application-tier service pool rather than any one
+      specific microservice.
+    rationale: >-
+      Avoids falsely attributing a specific outbound call (e.g. to Okta or
+      DynamoDB) to one named microservice when the actual caller is unconfirmed.
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+nextSteps:
+  - id: notify-ottoman-idm-arb
+    action: >-
+      Notify ottoman-platform-engineering, identity-management-idm-engineering,
+      and architecture-review-board that 26 components they previously owned
+      were re-homed to sofaking-central-engineering, before the PR merges.
+    status: open
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+  - id: disposition-hearthstone
+    action: Disposition the active Sofa King HEARTHSTONE RequirementGroup (01KQQ5JT20-M5R2) against the SDP and its components.
+    status: open
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+  - id: refine-connection-granularity
+    action: Replace the coarse tier-boundary relationships with exact per-service pairs once repository-level evidence is available.
+    status: open
+    owner: sofaking-central-engineering
+    notes: Formerly pointed at relationship 1C8VC0TVJP-QNTM, removed when the React Root Application product component was retired.
+  - id: decompose-legacy-remainder
+    action: Identify and individually model the remaining legacy sand-* services currently represented by the Sofa King Central Platform umbrella stub.
+    status: open
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+  - id: fix-postgresql-data-component-engine
+    action: >-
+      Confirm and correct the targetEngine and runsOn fields on the Sofa King
+      Central Postgresql Database data component.
+    status: done
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT0K-46AZ
+      - ref: 01KYAAZF97-HS3C
+  - id: capture-uat-dev-tier-targets
+    action: Capture deployment targets for the UAT and Dev environment tiers.
+    status: open
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+  - id: run-validation
+    action: >-
+      Run python3 .draft/framework/tools/validate.py --workspace . after the
+      Sofa King Central Aurora PostgreSQL correction.
+    status: done
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT1J-DWT1
+resumptionContext:
+  matchedReferenceArchitecture: 01KQQ5JT1D-DAAM
+  rubricScoreAtIntake: 8/10 (gaps DO, CN)
+  rubricScoreAtClose: 10/10 by strict binary rubric; RA dimension scores 1 only because no requirementGroups are claimed yet — see hearthstone-disposition-not-claimed
+  scopeDecision: >-
+    Ran Phase 1 (deployable objects), Phase 3 (connections, zone steps skipped
+    since networkZones was already declared), and a partial Phase 5 (tier
+    variants for Staging and Test only). Phase 6 (requirement implementations)
+    not run this session.
+notes:
+  supersededRelationships: >-
+    Five aggregate data-store relationships generated by this session were removed on
+    2026-07-29 and are no longer listed in generatedObjects above: Sofa King Central
+    Platform to MongoDB Atlas, AWS DynamoDB, Sofa King Central AWS Aurora PostgreSQL,
+    SQL Server 2019 DBMS Service, and AWS Simple Queue Service. Source inspection
+    replaced them with per-service persistence edges on the individual Sofa King
+    Central components, making the aggregate edges redundant. The component itself was
+    retained and renamed to Sofa King Central Estate, keeping uid 01KQQ5JT0K-TN7W and
+    the former name as an alias, because it still carries the ingress, runtime, Okta
+    and central-logging edges. This also resolves the sand-star-remainder-count
+    question recorded below.
+  validationStatus: >-
+    Passed on 2026-07-24 using
+    python3 .draft/framework/tools/validate.py --workspace . after the
+    OPS-561258 Aurora PostgreSQL mapping correction.

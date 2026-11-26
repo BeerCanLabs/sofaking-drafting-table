@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG5-X3NQ
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Ai Prompt Service
+description: A .net core api (microservice) that wraps AWS Bedrock using Semantic Kernel to provide safe and secure user facing ai prompt wrapper
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-ai-prompt-service
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-hcmrh-ai-prompt-service
+  observedRuntimeSignals: docker, dotnet, node, readme, terraform
+  observedManifestPaths: .vscode/settings.json; Dockerfile; Hcmrh.Msvc.AiPromptService.sln; Infrastructure_cdk/Infrastructure_cdk.csproj; Infrastructure_cdk/cdk.json; cd/codefresh-deploy-anybranch.yml; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/es.yml; cd/dev/hpa.yml; cd/dev/ingress.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  externalDependencies:
+    awsServices:
+      - name: AWS Bedrock Runtime
+        package: AWSSDK.BedrockRuntime 4.0.16.6
+        purpose: LLM API access for AI-powered prompt processing
+    aiFramework:
+      - name: Microsoft Semantic Kernel 1.74.0
+        purpose: Prompt orchestration with Liquid prompt templates
+    internalPackages:
+      - Hcmrh.Logging 1.0.22

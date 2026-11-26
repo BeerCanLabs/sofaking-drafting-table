@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHRQ-ZD6E
+type: decision_record
+name: Settee UI Module Universal Overview Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGM-8DPT
+linkedObject: 01KSM38KGM-8DPT
+decisionRationale: 'runtimeRequirement: Static web assets served by the hosting runtime; no standalone application runtime.'

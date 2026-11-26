@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KT16XHJ0-H0HC
+type: decision_record
+name: WSERP Desktop Pattern Validation Evidence
+description: Current-state WSERP Desktop deployment decisions confirmed through the infrastructure interview and internal documentation research.
+version: 2.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, desktop, validation-cleanup, adr]
+category: decision
+status: accepted
+affectedComponent: 01KSM38KF1-Z1SJ
+linkedObject: 01KSM38KF1-Z1SJ
+decisionRationale: >-
+  noApplicablePattern: No approved reference architecture accurately represents
+  this legacy customer-specific Windows client/server deployment.
+
+  deploymentTargets: Hosted production and customer Test/UAT run on VMware in
+  XCOLO; engineering Dev/QA/Stage run on VMware in High Point; on-premises
+  customers operate their own infrastructure.
+
+  availabilityRequirement: High, without a confirmed numeric SLO or SLA.
+
+  dataClassification: Restricted PII exists in customer databases and Documents.
+
+  failureDomain: Desktop application-server failures are generally isolated to
+  one customer; shared SQL or Documents cluster failures can affect all hosted
+  customers.
+
+  patternDeviations: Windows configuration is manual; capacity review is
+  reactive; no automated drift detection or scheduled resilience exercises are
+  in place; Veeam policy and recovery objectives remain unconfirmed.
+
+  externalDependencies: FortiGate, F5 BIG-IP, Dynatrace, Nagios XI, Automox,
+  CrowdStrike Falcon, Tenable Nessus, Veeam, SQL Server, clustered Documents
+  storage, and OL5 online-shopping vendors are documented dependencies.
+
+  interServiceConnections: Workstation clients connect to Desktop application
+  servers on customer-assigned TCP ports, default 7886, using application-layer
+  encryption. Desktop servers use SQL and SMB, and WebComm serves OL5 online
+  shopping on HTTP port 8001.

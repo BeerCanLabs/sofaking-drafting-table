@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ0Y-KZ9C
+type: decision_record
+name: shopstar v3 - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGG-871T
+linkedObject: 01KSM38KGG-871T
+decisionRationale: >-
+  deploymentTargets: Production application and data workloads run in GRR on
+  VMware, non-production runs in High Point, and the AccuRoute candidate
+  targets isolated shopstar AWS accounts in us-east-1.
+
+  availabilityRequirement: high-availability
+
+  dataClassification: pii
+
+  failureDomain: State-partitioned MySQL primary/replica topology, with
+  product-tier and single-service failure domains documented separately.
+
+  patternDeviations: Mixed legacy and target generations coexist. Terraform,
+  Ansible, AAP, the operator-triggered shopstar-v3-production Jenkins pipeline,
+  and manual operational steps all participate in delivery; geographic
+  failover and a fully automated application rebuild are not documented.
+
+  noCrossBoundaryConnections: Primary application, database, printing,
+  document-routing, load-balancing, and IDM messaging paths are modeled as
+  relationship objects. Exact F5 GRRSHS3TC* pool membership, F5 IDM health
+  checks, same-zone utility, SMTP, and batch paths remain open.
+
+  externalDependencies: F5 BIG-IP, Mimecast/Exchange, Jenkins, AAP/Ansible,
+  Delinea Secret Server, VMware vSphere, AWS S3/DynamoDB state services, AWS
+  Systems Manager/Fleet Manager, Nagios, Dynatrace, MySQL Enterprise Monitor,
+  and environment-specific shopstar AWS accounts.

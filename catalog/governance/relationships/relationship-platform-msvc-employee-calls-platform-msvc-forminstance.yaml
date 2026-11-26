@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS8R-1X0Q
+type: relationship
+name: 'Platform Msvc Employee → Platform Msvc Forminstance'
+catalogStatus: stub
+source: 01KSM38KFG-MYWB
+target: 01KSM38KFY-DZKV
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.

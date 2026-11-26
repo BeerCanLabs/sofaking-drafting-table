@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DW-AF6G
+name: Ottoman Sofa King Admin BFF → Ottoman Kong Gateway Backplane
+catalogStatus: stub
+source: 01KSM38KFW-W42S
+label: calls
+target: 01KSM38KFX-QMDW
+notes:
+  background: "Sofa King Admin BFF routes customer-facing administration requests through Kong Backplane to platform microservices via HTTPS."
+capabilities: []

@@ -1,0 +1,62 @@
+schemaVersion: '1.0'
+uid: M2K1CTVHYE-GGXG
+type: product_component
+ownerRole: engineer
+name: Tailor SSIS Integration Host
+description: Tailor SSIS-oriented integration host deployment unit surfaced by the Tailor AAP SSIS playbook templates and shared SSIS role path.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+runtimeRequirement: 'Windows Server host prepared for Tailor SSIS integration workloads; AAP SSIS templates use the tailor_ssis role path and shared SQL/SSRS flags.'
+tags:
+  - tailor
+  - ssis
+  - integrations
+  - sqlserver
+  - ansible-discovered
+  - aap-discovered
+repoUrl: TBD
+classification: worker
+runtimeSpec:
+  dependencies:
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Runs Tailor SSIS-oriented integration workloads against the Tailor SQL Server data tier.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_ssis/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_ssis/vars/main.yml
+  aapTemplates:
+    - grr-tailor-prd-ssis-playbook
+    - grr-tailor-prd-sql-ssis-vsphere
+    - grr-tailor-uat-ssis-playbook
+    - grr-tailor-uat-sql-ssis-vsphere
+  productionInventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_SSIS
+  uatInventoryLimit: Datacenters_GRR_vm_Tailor_2022_UAT_SSIS
+  dbArchitecturePdfEvidence: AAP inventory is the operational source of truth for SSIS hosts and resolves UAT SSIS to GRRTLRUATSIS01 through GRRTLRUATSIS04. The PDF labels around UAT CIS and non-prod CIS are retained only as documentation context and are treated as stale where they differ from AAP inventory.
+  aapHostInventory:
+    production:
+      aapTemplate: grr-tailor-prd-ssis-playbook
+      provisioningTemplate: grr-tailor-prd-sql-ssis-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_SSIS
+      hosts:
+        - GRRTLRPRDSIS01
+        - GRRTLRPRDSIS02
+        - GRRTLRPRDSIS03
+        - GRRTLRPRDSIS04
+    uat:
+      aapTemplate: grr-tailor-uat-ssis-playbook
+      provisioningTemplate: grr-tailor-uat-sql-ssis-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_UAT_SSIS
+      hosts:
+        - GRRTLRUATSIS01
+        - GRRTLRUATSIS02
+        - GRRTLRUATSIS03
+        - GRRTLRUATSIS04
+  ownerInterviewNeeded: Confirm SSIS package/catalog ownership, scheduling, and whether SSIS flows should be modeled as separate integration relationships.

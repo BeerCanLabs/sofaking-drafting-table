@@ -1,0 +1,252 @@
+schemaVersion: '1.0'
+uid: 01KYN60WJC-7D4Z
+type: drafting_session
+ownerRole: engineer
+name: Recliner Edge and Network L1 Mapping (OPS-749918)
+description: >-
+  Closure work for OPS-749918. Reconciles Recliner's CloudFront delivery,
+  authenticated Kong ingress, Okta/Ottoman identity boundary, and planned
+  Kong Mesh participation with the existing DRAFT catalog.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - recliner
+  - ops-103059
+  - edge-and-network
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGH-A6GC
+sourceArtifacts:
+  - name: OPS-749918 Edge and Network L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-749918
+    notes: >-
+      Tracks the Recliner edge and network dependency review needed for DRAFT
+      Architecture L1 closure.
+  - name: Recliner Infrastructure Architecture
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/17155479503/Recliner+Infrastructure+Architecture+DRAFT
+    notes: >-
+      Confirms CloudFront/S3 frontend delivery, the Web Shell to Kong to BFF
+      authenticated request path, Okta/Ottoman identity, and intended Platform
+      Service Mesh participation.
+  - name: Recliner Developer Onboarding Plan
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/15412114332/Recliner+Developer+Onboarding+Plan
+    notes: >-
+      Confirms the active stage entry point and Recliner engineering ownership
+      context.
+  - name: DRAFT shared network-service inventory
+    type: catalog
+    notes: >-
+      Reuses the existing AWS CloudFront, Kong Gateway, Okta, AWS Network Load
+      Balancer, and Kong Mesh objects rather than creating Recliner-owned copies.
+  - name: Recliner EKS read-only inspection attempt
+    type: other
+    notes: >-
+      Local contexts for recliner-dev, recliner-test, and recliner-stage were present on
+      2026-07-28, but the read-only inspection could not run because the AWS SSO
+      token had expired. No live cluster state is asserted by this session.
+generatedObjects:
+  - name: Project Recliner (National SOM)
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KGH-A6GC
+    notes: >-
+      Updated the edge/network strategy, provenance, and catalog maturity.
+  - name: Project Recliner (National SOM) Validation Evidence
+    type: decision_record
+    status: created
+    ref: 01KT16XJ29-8QG9
+    notes: >-
+      Added external-dependency and cross-boundary relationship evidence.
+  - name: Recliner Web Shell → Kong Gateway Service
+    type: relationship
+    status: created
+    ref: 01KSR5D4EA-6642
+  - name: Kong Gateway Service → Recliner BFF API
+    type: relationship
+    status: created
+    ref: 01KSR5D4EB-33Q3
+  - name: Recliner .NET Core 8 on EKS Application Runtime → Okta (Ottoman)
+    type: relationship
+    status: created
+    ref: 01KSKZV5ZJ-0NNN
+  - name: Recliner .NET Core 8 on EKS Application Runtime → Platform Service Mesh
+    type: relationship
+    status: created
+    ref: 01KSKZV5ZK-7ZME
+  - name: Traefik Kubernetes Ingress Service → Recliner BFF API
+    type: relationship
+    status: created
+    ref: 01KZ9NXCX5-M6SK
+    notes: >-
+      Added 2026-08-05 for OPS-306834. Reuses the existing shared Traefik
+      Kubernetes Ingress Service object rather than modeling a new one.
+unresolvedQuestions:
+  - id: exact-platform-ingress-path
+    question: >-
+      What is the exact ordered load-balancer, ingress-controller, DNS, and TLS
+      certificate path between the shared Kong Gateway and each Recliner
+      environment?
+    status: answered
+    reason: >-
+      Answered in part on 2026-08-05 for OPS-306834 by reading the som-recliner
+      repository directly. The BFF's own public hostname does not go through
+      Kong at all — see relationship 01KZ9NXCX5-M6SK. What remains
+      genuinely unresolved is narrower: whether Kong (or another gateway)
+      still sits upstream of the separate Imperva-fronted browser app-route
+      hostname, which this repository does not control or define.
+    currentBestGuess: >-
+      The BFF's public API hostname (recliner-bff-api*.ss.sofaking.example)
+      is a Route53 CNAME resolving directly to a dedicated internet-facing
+      Traefik ALB per environment — confirmed in
+      infra/platform/aws_services.tf and the per-environment
+      terraform.tfvars files in github.com/BeerCanLabs/sk-som-recliner. No
+      Kong Gateway reference exists anywhere in that repository's
+      infrastructure code. The Imperva-fronted browser app-route hostname
+      (customer*.stage-retail.ss...) is a separate naming scheme whose upstream
+      path is owned outside this repository and remains unconfirmed.
+    impact: >-
+      Corrects the SDP's edgeNetworkStrategy and the two Kong relationships
+      (now catalogStatus: incomplete) to stop asserting a Kong-to-BFF hop as
+      settled fact. The narrower app-route-ingress question is preserved
+      below as a new deferred item.
+    relatedObjects:
+      - ref: 01KQQ5JT1E-SW3X
+      - ref: 01KSR5D4EB-33Q3
+      - ref: 01KZ9NXCX5-M6SK
+  - id: imperva-app-route-upstream-path
+    question: >-
+      Does Kong Gateway (or another gateway) sit between Imperva and the
+      Recliner Angular app shell on the browser-facing app-route hostname
+      (customer*.stage-retail.ss.sofaking.example), given that the BFF's
+      own hostname bypasses Kong entirely?
+    status: deferred
+    reason: >-
+      That hostname and its upstream path are owned by the shared platform
+      team outside the som-recliner repository, so repo-only evidence cannot
+      answer this.
+    currentBestGuess: >-
+      Unknown. The BFF hostname evidence in this session does not extend to
+      the separate Imperva-fronted app-route hostname.
+    impact: >-
+      Does not block Architecture L1 for Recliner; the product-owned ingress
+      boundary (Traefik ALB to BFF) is confirmed. Route to the platform team
+      for the shared-platform portion of the path.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+  - id: confirm-waf-posture
+    question: >-
+      Does Recliner's public CloudFront or Kong path use a product-specific WAF,
+      or is application-layer filtering entirely provided by the shared
+      platform?
+    status: deferred
+    reason: >-
+      The reviewed Recliner sources do not identify Imperva, AWS WAF, or another
+      product-specific WAF dependency.
+    currentBestGuess: >-
+      No Recliner-owned WAF is asserted; any filtering is part of the shared edge
+      platform until confirmed otherwise.
+    impact: >-
+      A confirmed WAF can be linked later without blocking the currently
+      evidenced CloudFront and Kong L1 dependencies.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+      - ref: 01KQQ5JT04-6F8T
+      - ref: 01KQQ5JT1E-SW3X
+  - id: observe-mesh-injection
+    question: >-
+      Which Recliner namespaces and workloads have Kuma sidecar injection enabled,
+      and which mesh and traffic policies apply?
+    status: answered
+    reason: >-
+      Answered in part on 2026-08-05 for OPS-306834 by reading the Helm
+      charts in the som-recliner repository directly. Live traffic-policy and
+      control-plane detail remains deferred (still no live cluster access),
+      but which charts opt into sidecar injection is now directly evidenced
+      from checked-in chart source rather than assumed from Confluence intent.
+    currentBestGuess: >-
+      Only the recliner-loveseat-subscriber chart sets
+      `kuma.io/sidecar-injection: enabled`. The recliner-bff, recliner-backend,
+      recliner-user-profile, and recliner-entity-locking charts carry no mesh
+      sidecar-injection annotations, so the BFF and core-service runtime is
+      not currently a mesh participant.
+    impact: >-
+      Corrects the SDP's serviceMeshStrategy and relationship 01KSKZV5ZK-7ZME
+      to stop asserting mesh participation as the current state for the
+      primary Recliner runtime; it remains accurate only for
+      recliner-loveseat-subscriber. Live traffic policy and control-plane
+      configuration for that one workload remain deferred.
+    relatedObjects:
+      - ref: 01KRZX0C11-QH66
+      - ref: 01KYAXMZ7H-KJT2
+      - ref: 01KSKZV5ZK-7ZME
+assumptions:
+  - id: shared-edge-ownership
+    statement: >-
+      Kong Gateway, its AWS load balancer, CloudFront, Okta, and Kong Mesh are
+      shared platform dependencies rather than Recliner-owned infrastructure.
+    rationale: >-
+      Matching reusable DRAFT services already exist and the Recliner architecture
+      consumes them as platform capabilities.
+    relatedObjects:
+      - ref: 01KQQ5JT04-6F8T
+      - ref: 01KQQ5JT1E-SW3X
+      - ref: 01KQQ5JT1D-SHXD
+      - ref: 01KYAXMZ7H-KJT2
+  - id: l1-design-evidence
+    statement: >-
+      Documented target-state relationships are sufficient for Recliner
+      Architecture L1 when planned or unobserved dependencies remain marked
+      incomplete and their operational details are explicitly deferred.
+    rationale: >-
+      Recliner is pre-production, and OPS-749918 requires the dependency inventory
+      and service boundaries rather than a complete production route audit.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+nextSteps:
+  - id: merge-edge-network-mapping
+    action: >-
+      Obtain review and merge the OPS-749918 edge and network mapping pull
+      request.
+    status: done
+    owner: som-special-programs-management-engineering
+    notes: Merged 2026-07-28 (PR #109, fix/ops-103059-recliner-edge-network).
+  - id: close-ops-749918
+    action: >-
+      Link the merged catalog change and validation evidence in Jira, then
+      close OPS-749918.
+    status: open
+    owner: architecture-review-board
+  - id: refresh-live-network-evidence
+    action: >-
+      Refresh AWS SSO and inspect Recliner ingress and Kuma injection when
+      deployment-level operational evidence is needed.
+    status: open
+    owner: cloud-engineering-infrastructure
+    notes: >-
+      This is a post-L1 enrichment item and does not block OPS-749918 closure.
+      Partially superseded 2026-08-05: chart-level sidecar-injection coverage
+      is now confirmed from source (see observe-mesh-injection); live
+      control-plane and traffic-policy state for recliner-loveseat-subscriber is
+      still deferred.
+notes:
+  completenessAssessment: >-
+    Architecture L1 dependencies and primary cross-zone connections are
+    represented. Operational DNS, TLS/WAF, ingress-hop, and live sidecar
+    details remain explicitly deferred. Updated 2026-08-05 for OPS-306834:
+    the BFF-to-Kong hop and mesh-participation claims are now corrected
+    against som-recliner repository source rather than left as unverified
+    Confluence-sourced assertions.
+  validationStatus: >-
+    Passed on 2026-07-28 using
+    python3 .draft/framework/tools/validate.py --workspace . --quiet; 1,469
+    catalog files validated successfully. Re-validated 2026-08-05 for
+    OPS-306834 after the Kong/mesh corrections — see session
+    01KZ9NXCX5-3BT5.

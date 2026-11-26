@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGC-X06P
+type: data_component
+ownerRole: engineer
+name: Cw 0575 Cdp
+description: Quickfit
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+tags:
+- repository-discovery
+- cw
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-CSW-8609-CDP
+targetEngine: other
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-CSW-8609-CDP
+  observedRuntimeSignals: docker, dotnet, github_actions, node, readme, teamcity
+  observedManifestPaths: .github/workflows/auto-assign-reviewer.yml; .github/workflows/cherrypick.yml; .github/workflows/commit-msg.yml; .github/workflows/main-verified-cherry-pick.yml; Docs/Database/Demo-data/GUI Test Data Tool Prototype/GUITestDataCreationTool.sln; Docs/Ruby/Linkchecker/SK_dev_userad.yaml; Docs/Ruby/Linkchecker/SK_dev_userja.yaml; Docs/Ruby/Linkchecker/SK_prod_userad.yaml; Docs/Ruby/Linkchecker/SK_prod_userja.yaml; Docs/Ruby/Linkchecker/config.yaml; Docs/Ruby/Linkchecker/skdemo_dev_userad.yaml; Docs/Ruby/Linkchecker/skdemo_dev_userja.yaml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

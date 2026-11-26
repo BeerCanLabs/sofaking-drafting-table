@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 3P6PM9WWG2-P36R
+name: Ottoman Passport Core Service → Platform Msvc Org Person
+catalogStatus: stub
+source: 01KSM38KFX-9EHD
+label: calls
+target: 01KSM38KFH-NYK5
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "ORGPERSON_SVC_BASE_URL resolves to a msvc-org-person-service mesh hostname (apps/plat-passport-core/.env.example, cd/dev/cm.yml in plat-passport-monorepo). Supersedes/corrects a prior dependency-list reference to the legacy Ottoman OrgPerson Service (01KSM38KFX-9EQ8); see architectureNotes.dependencyCorrection on the source ProductComponent."
+capabilities: []

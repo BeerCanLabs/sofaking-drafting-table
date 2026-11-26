@@ -1,0 +1,46 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-QVSE
+type: technology_component
+ownerRole: technology-admin
+name: Nagios XI
+description: Nagios monitoring platform used for host health, availability, and welfare monitoring.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- monitoring
+- nagios
+- health-welfare
+vendor: Nagios Enterprises
+productName: Nagios XI
+productVersion: current
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Version-specific support dates are not recorded yet; verify during the next Nagios platform catalog update.
+capabilities:
+- 01KQQ4Q026-98VD
+configurations:
+- id: ncpa-agent
+  name: NCPA Agent Monitoring
+  description: Uses the Nagios Cross-Platform Agent pattern for host reachability, service state, resource health, and alert thresholds.
+  capabilities:
+  - 01KQQ4Q026-98VD
+  networkBindings:
+  - port: 5693
+    protocol: NCPA/HTTPS
+    direction: outbound
+    description: Nagios XI polling to NCPA agents on monitored hosts.
+- id: legacy-xi-agent
+  name: Legacy XI Agent Monitoring
+  description: Uses the legacy Nagios XI agent pattern for older hosts that have not migrated to NCPA.
+  capabilities:
+  - 01KQQ4Q026-98VD
+  networkBindings:
+  - port: 5666
+    protocol: NRPE
+    direction: outbound
+    description: Nagios XI polling to legacy NRPE-compatible agents on monitored hosts.

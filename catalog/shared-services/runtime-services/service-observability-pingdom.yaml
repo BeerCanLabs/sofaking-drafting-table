@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-FV9X
+type: runtime_service
+ownerRole: technology-admin
+name: Pingdom Uptime and Synthetic Monitoring
+description: Vendor-managed external monitoring service that checks public SOM URLs for uptime and synthetic availability.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - saas
+  - observability
+  - uptime
+  - synthetics
+  - pingdom
+category: service
+serviceCategory: saas
+vendor: Pingdom
+productName: Pingdom
+productVersion: managed
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: Not confirmed.
+  dpaNotes: Monitoring requests are directed at public SOM URLs; vendor-governance details require confirmation.
+  vendorSLA: Not confirmed.
+  incidentNotificationProcess: Vendor status and support process require confirmation.
+authenticationModel: other
+architectureNotes:
+  auditVisibility: Monitor configuration, alerting, and test results are available through the vendor-managed platform.
+  healthStatusVisibility: Pingdom observes public URL availability and synthetic transaction results from outside Sofa King and AWS.
+  failureDomain: Loss of Pingdom affects external monitoring visibility rather than the SOM application runtime.
+deliveryModel: saas

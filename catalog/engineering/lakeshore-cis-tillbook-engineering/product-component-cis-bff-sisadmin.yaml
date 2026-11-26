@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SP-WPVW
+type: product_component
+ownerRole: engineer
+name: CIS BFF CISAdmin
+description: Duplicate whiteboard entry — this is the same component as CIS Svc Mobile API. Retired in favor of that entry.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- sis
+- lakeshore
+- tillbook
+- bff
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-svc-mobile-api
+classification: api-service
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28, where it was marked with a question mark by the diagram author. Resolved on 2026-07-30 per product owner — this is the same component as CIS Svc Mobile API (BeerCanLabs/sk-cis-svc-mobile-api). Retired here as a duplicate; see CIS Svc Mobile API for the maintained entry. Runtime corrected on 2026-07-31 to match CIS Svc Mobile API — .NET Framework 4.8, not modern .NET.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01M25XSN2V-A261
+type: relationship
+name: Trifold My Insights Dashboard → Kio Trifold Dashboard Localeventprocessor
+source: 01KZ441KFJ-3PJQ
+target: 01KSM38KGE-G1N1
+label: calls
+technology: Not yet confirmed by owner interview.
+direction: event
+flow: outbound
+catalogStatus: incomplete
+notes: >-
+  Owner confirmed on 2026-09-10 that Trifold production depends on this
+  component. sei-trifold-dashboard-localeventprocessor
+  (SK.KIO.Trifold.EventProcessingService) is explicitly named as the KIO
+  Trifold Event Processing service for My Insight Dashboard, runs on EKS.
+  Was previously orphaned — not referenced by the main Trifold SDP at all.

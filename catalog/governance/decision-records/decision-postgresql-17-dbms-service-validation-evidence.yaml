@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ74-3PYV
+type: decision_record
+name: PostgreSQL 17 DBMS Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT00-X90C
+linkedObject: 01KQQ5JT00-X90C
+decisionRationale: "serviceAuthentication: Database administrators and service identities authenticate through centralized identity and database account governance.\n\nsecretsManagement: service accounts and connection secrets stored centrally\n\nserviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.\n\nfailureDomain: Scoped to the PostgreSQL cluster serving the dependent application estate.\n\nbackup.strategy: daily full plus hourly WAL backup\n\nbackup.platform: pg_dump / pg_basebackup to managed storage\n\nbackup.rto: 1h\n\nbackup.rpo: 1h\n\nha.mechanism: Streaming Replication\n\nencryption.atRest: required\n\naccessControl.model: Active Directory integrated access with role-based database permissions"

@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-BE9M
+type: decision_record
+name: PG PLM/EEM - ASP.NET Core 10 Is Not in the Approved Technology Catalog
+description: >-
+  Records ASP.NET Core 10 as a production platform technology used by the
+  PLM/EEM cloud tier with no approved Technology Component behind it, per APEX
+  Architecture L1 criterion 5. Narrowed from four technologies to one after the
+  other three were found to belong to a pre-production service.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - non-standard-technology
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  nonStandardTechnology: ASP.NET Core 10 is in production without an approved
+  Technology Component. Both EKS services, pg-msvc-plm-eem-api and
+  PG-ReportWriterAgent, build from mcr.microsoft.com/dotnet/sdk:10.0 and run on
+  mcr.microsoft.com/dotnet/aspnet:10.0, while the catalog topped out at ASP.NET
+  Core 9. An object has been authored (Microsoft ASP.NET Core 10,
+  01M1HJY7E4-WE6B) as lifecycleStatus candidate so the dependency is visible;
+  candidate is not an endorsement. This is NOT a Associate Development exception:
+  SOM Tiers of Intensity and the Customer Data Platform are already recorded on
+  .NET 10 in this catalog, so it is a company-wide gap and the remedy is a
+  Technology Component promoted by the Architecture Review Board with three
+  product families as precedent, not a PG deviation. NARROWED under SKPG-19589
+  review: this record previously also covered Amazon DocumentDB, AWS API
+  Gateway and the Node.js 14 Lambda runtime. All three are exclusive to
+  msvc-pg-forms (01KSM38KG3-8PKZ), which has been reclassified
+  lifecycleStatus candidate on five independent signals that it never reached
+  production - no cd/ directory, no Codefresh pipeline, leave from the PG
+  pipeline inventory in Confluence 39199080479, DeletionProtection commented
+  out pending go-live, and a QA-hardcoded authorizer endpoint. They are
+  therefore recorded as pre-production work on their own objects
+  (01M1HJY7E4-3NGA, 01M1HJY7E4-RPTG) and on the component, and are NOT carried
+  here as production exceptions requiring exception tickets. Two consequences
+  worth stating: the ARB questions on DocumentDB versus the deprecated MongoDB
+  Atlas object, and on API Gateway as an approved edge standard, leave the L1
+  path entirely; and the end-of-life nodejs14.x runtime becomes a remediation
+  item on unpromoted work rather than a live production exception. If an owner
+  confirms the form service IS in production, restore all three to this record
+  and raise tickets for them. See DraftingSession 01M1F8WB4E-0GSN,
+  form-service-production-status. No remediation target is set; APEX L1 does not
+  require one. ACTION REQUIRED: APEX Architecture L1 criterion 5 requires a Jira
+  tracking item per non-standard technology choice; none exists yet beyond
+  SKPG-19589. Status open pending Architecture Review Board direction on
+  promoting ASP.NET Core 10.

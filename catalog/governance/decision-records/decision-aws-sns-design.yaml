@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-MHJ2
+type: decision_record
+name: AWS SNS Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-HTRA
+decisionRationale: >
+  AWS SNS is operated as a regional managed PaaS with high availability. Operators configure topics, subscriptions, access policies, delivery retries, and encryption settings. Data is encrypted at rest using KMS. The failure domain is scoped to the AWS region.

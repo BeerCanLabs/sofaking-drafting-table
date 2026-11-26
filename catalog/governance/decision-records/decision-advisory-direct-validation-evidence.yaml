@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KZPK2KV0-5Y2P
+type: decision_record
+name: Advisory Direct Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KXK822CN-M74S
+linkedObject: 01KXK822CN-M74S
+decisionRationale: >-
+  deploymentTargets: Owner confirmed hosted on the same servers as NYSE
+  Directors, Translation Direct, and Corvid Intranet: GRRCDPMISCWEB11
+  (prod, grr-datacenter) / HPTCDPDEVMISC1 (QA, high point-datacenter).
+  noAdditionalInteractions: No external system interactions have been
+  identified for Advisory Direct beyond its own deployable object; none
+  confirmed at this time.
+  noCrossBoundaryConnections: No cross-tier or cross-zone connections have
+  been identified for Advisory Direct; it currently has a single Web Tier
+  service group with no other components to connect to.

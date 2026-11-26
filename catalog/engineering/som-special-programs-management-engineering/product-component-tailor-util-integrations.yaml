@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: JZ5P3J7CM4-WM1F
+type: product_component
+ownerRole: engineer
+name: Tailor Utility Integrations
+description: Production Tailor utility worker host for file watchers, inbound and outbound CIS integrations, custom reports, and scheduled integration jobs.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+runtimeRequirement: 'Microsoft .NET Runtime 8.0.14 plus Windows scheduled tasks and Windows services.'
+tags:
+  - tailor
+  - integrations
+  - windows-service
+  - scheduled-task
+  - file-transfer
+  - ansible-discovered
+repoUrl: TBD
+classification: worker
+runtimeSpec:
+  dependencies:
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Runs scheduled jobs and services that exchange Tailor data with SQL Server-backed integrations.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_util/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_util/vars/main.yml
+  supportedEnvironment: The role currently supports grr_prod only.
+  artifactSource: TailorUtil-GRRTLRUTIL1.zip from Sofa King Artifactory.
+  windowsServices:
+    - TailorFTPFileWatcher
+    - TailorSFTPSISFileWatcher
+    - TailorSISFileWatcher
+  aapHostInventory:
+    production:
+      aapTemplate: grr-tailor-prd-util-playbook
+      provisioningTemplate: grr-tailor-prd-util-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_UTIL
+      hosts:
+        - GRRTLRPRDUTIL1
+  scheduledWorkloads: Includes TailorProcessSFTPFiles, inbound CIS and test-score jobs, outbound SQL integration jobs, Trifold outbound jobs, file-watcher restarts, and custom report execution.
+  prerequisites: Installs Microsoft .NET Runtime 8.0.14 and Microsoft Visual C++ 2015-2022 redistributables when prerequisites are enabled.

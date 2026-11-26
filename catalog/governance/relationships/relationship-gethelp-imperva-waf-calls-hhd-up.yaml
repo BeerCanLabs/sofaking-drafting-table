@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KT0XSJE1-J91Y
+name: Imperva Web Application Firewall → HelpDesk HHD_UP
+catalogStatus: stub
+source: 01KQQ5JT1D-MY47
+label: calls
+target: 01KSM38KFC-WKD2
+notes:
+  background: "Imperva WAF fronts region-facing browser traffic to the HHD_UP end-user portal SPA on port 443."
+capabilities: []

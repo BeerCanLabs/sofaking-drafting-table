@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D95-QH7A
+type: decision_record
+name: Customer Services le1 Dev and Stage Availability
+description: Accepted standalone posture for Customer Services workloads deployed to the le1 EKS cluster in development and stage, which run without redundancy.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - customer-services
+  - shared-customer-record
+  - le1
+  - availability
+  - decision-record
+category: decision
+status: accepted
+approver: shared-customer-engineering
+approvalDate: '2026-10-21'
+affectedComponent: 01KXR9XAR5-K0FT
+linkedObject: 01KXR9XAR5-K0FT
+decisionRationale: >-
+  Customer Services microservice APIs deployed to the le1 EKS cluster in development
+  and stage run as a single replica with no autoscaler, behind Traefik and reconciled
+  by ArgoCD. EKS reschedules a failed pod, but there is no redundant capacity. This
+  decision covers the Customer Services API Deployments only. Traefik and Argo CD are
+  listed in the catalog as owned by the Architecture Review Board, and their
+  availability is outside this decision. This is
+  accepted for non-production environments, and any Customer Services service
+  onboarded to le1 dev or stage with the same deployment shape may reference this
+  decision as the basis for its standalone intent. First applied to the Shared
+  Customer Record services.
+  Managed AWS services (DynamoDB, SNS, SQS, Lambda, Secrets Manager, ALB) are
+  multi-AZ or regionally available by platform design and are marked highly available
+  on the pattern rather than covered by this decision.
+  Scope: development and stage on le1 only. This decision does not apply to any
+  other environment. A service that adds replicas or autoscaling in dev or stage
+  should stop referencing this decision.

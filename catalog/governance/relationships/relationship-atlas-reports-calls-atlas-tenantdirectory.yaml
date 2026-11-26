@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: MT2VE8GC4B-ETXG
+type: relationship
+name: Atlas Reports → Atlas TenantDirectory
+description: AddDownstreamIdentity includes AddTenancy, so the service resolves each region's database through
+  TenantDirectory's ResolveTenantConnection gRPC call.
+catalogStatus: stub
+source: 01M5WY4E7P-66ZP
+target: 01M5WY4E7P-7P1K
+label: calls
+technology: gRPC
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. AddDownstreamIdentity includes AddTenancy, so the service
+    resolves each region's database through TenantDirectory's ResolveTenantConnection gRPC call.
+  evidence: 'whm-unified-core develop: Service.Core.Reporting/Service.Core.Reporting.App/Program.cs; Libraries/BuildingBlocks/Tenancy/Library.Shared.Tenancy/TenancyExtensions.cs'

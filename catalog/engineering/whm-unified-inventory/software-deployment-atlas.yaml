@@ -1,0 +1,195 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-AWVD
+type: software_deployment_pattern
+name: Atlas
+aliases:
+- WHM Unified Inventory
+- Unified Inventory
+description: >-
+  Atlas is Sofa King's greenfield Unified Inventory product. Phase 1, Module 1 is
+  Request-To-Pay: request intake, catalog check in parallel with approval routing,
+  purchasing request to the partnering ERP, receiving that creates asset records
+  (with partial receipt), and surplus transfer to sites. A set of .NET microservices
+  (Identity front door, TenantDirectory, Workflow, Domain, Integration and planned
+  Scheduler, Reports, Notifications, Imports) sits behind a React UI. Each region
+  has its own PostgreSQL database, routed through TenantDirectory. Atlas depends on
+  Sofa King Platform (Identity, Tasks and Workflows, Loveseat event bridge), HCM Core
+  HR and Core Config, and the partnering ERPs. Source: Atlas architecture V1
+  diagram (Greenfield Backend Architecture v2, checked against the ATL Jira board).
+version: 0.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- whm
+- request-to-pay
+- eks
+- greenfield
+businessContext:
+  pillar: business-pillar.business-solutions
+  productFamily: Unified Inventory
+  notes: Pillar confirmed by the requesting team member (Lena Torvik) on 2026-10-26; confirm with the pillar owner before approval.
+followsReferenceArchitecture: 01KQQ5JT1D-D614
+architectureNotes:
+  selectedPatternRationale: Atlas follows the AWS EKS Multi-Tenant Microservices reference architecture (01KQQ5JT1D-D614) because it is a set of per-service deployables on EKS with per-region databases.
+  noPatternDeviations: No deviations from the selected reference architecture are recorded yet. Runtime details (EKS cluster, ingress, service mesh, GitOps) have not been captured and need a follow-up drafting session.
+  availabilityRequirement: Business-hours critical. Must be available during region business hours; brief maintenance windows outside those hours are acceptable.
+  dataClassification: Confidential, includes PII. Region purchasing, vendor and PO data, inventory and asset records, and identity data (Person ID, org and domain ID, roles and site scopes).
+  failureDomain: >-
+    Per-region database isolation limits a data-tier failure to one region.
+    TenantDirectory (global database) is a platform-wide dependency: every Atlas
+    service caches its region-to-database routing, so a TenantDirectory outage
+    blocks first-use resolution for uncached regions. The Identity front door,
+    Sofa King Identity (Okta), Platform Tasks and Workflows, and the partnering ERPs
+    are cross-product dependencies. Multi-AZ distribution and recovery objectives
+    are not yet documented.
+  deploymentTargets: >-
+    All Atlas service groups are recorded against aws-us-east-2 on EKS from the V1 design. Code evidence read on
+    2026-11-13 points to us-east-1 for the dev environment: the dev RDS cluster endpoint, the UI image workflow
+    (region fixed to us-east-1) and the Terraform default region. The core workflow README describes Kubernetes
+    deployments through a k8s-deployments GitOps repository with ArgoCD (LE1 dev); EKS is not named in the
+    repositories read, and .agentic/10-connection-topology.md lists ECS versus EKS as undecided. Confirm the
+    production region and platform before approval.
+  externalDependencies: >-
+    Declared in serviceGroups[].externalInteractions: Sofa King Identity (Okta),
+    Sofa King Platform Tasks and Workflows, Loveseat Kafka event bridge, HCM Core HR and
+    Core Config, RT ERP, Oracle ERP, WS ERP, Sofa King National ERP, AP Desk, the
+    Sofa King Platform notification service, the Platform data importer or iPaaS, and
+    Shared Customer.
+  interServiceConnections: >-
+    Modeled as relationship objects from a source inspection of the whm-unified-* repositories on 2026-11-13
+    (see the drafting session of that date). Confirmed in code: UI to Identity and Workflow over HTTPS through
+    Sofa King's Kong edge; every service except TenantDirectory to Identity (IdentityValidator) and to
+    TenantDirectory (ResolveTenantConnection) over gRPC; Workflow to Domain (DomainLookup) over gRPC; Workflow
+    to the Platform Tasks and Workflows APIs; Integration to and from Loveseat over HTTPS; Identity and Domain to
+    the tenant Redis; every service to its own table prefix in the per-region database. Not yet in code:
+    Request-To-Pay module calls, Domain to HCM Core HR and Core Config (only the IDM token provider exists),
+    Integration to the ERPs and AP Desk, Notifications to Wingman, Imports to an importer. A local YARP gateway
+    in the monorepo stands in for the edge and is not deployed.
+  dataTier: >-
+    Modeled on 2026-11-13 as Atlas Aurora PostgreSQL (01M7BNBY4G-329E: global database whm-unified-global plus one
+    database per region on one RDS cluster, dev endpoint in us-east-1) and Atlas Tenant Redis (01M7BNBY4G-2M0B:
+    per-region Redis for sessions and token caches, hosting unconfirmed). Engine version, Aurora versus RDS,
+    connection proxy and read-replica approach remain open (whm-unified-core .agentic/10-connection-topology.md).
+    Schemas and migrations are owned by whm-unified-dbmigration (Flyway, run by the core image workflow).
+  openQuestions:
+  - Is the Scheduler in V1, or sliced out?
+  - Timing of Reports (V2?) and Notifications (V3) is not confirmed.
+  - Importer choice is open: current Platform importer, the coming iPaaS, or neither.
+  - WS ERP and Sofa King National ERP adapters have unconfirmed owners or are not built.
+  - Owner of the Platform notification service (Wingman) is unconfirmed.
+  - Shared Customer connects after V1.
+  - EKS, ingress, service mesh and environment details are not captured.
+  - Production AWS region and platform: code evidence shows us-east-1 and Kubernetes via ArgoCD for dev; the pattern records aws-us-east-2 on EKS.
+  - Aurora versus RDS PostgreSQL and the engine version in each environment.
+  - Hosting of the per-region Redis (ElastiCache or other).
+  - Request-To-Pay request flows live in Atlas Workflow today; is the separate module still the plan?
+  - The UI calls /api/session/me, which no core service serves at the inspected commit.
+  - Which catalog objects represent the Platform Tasks API, the Platform Workflows API and the Kong edge?
+  sourceRepositories: >-
+    whm-unified-core (backend monorepo), whm-unified-ui, whm-unified-modules,
+    whm-unified-dbmigration, whm-unified-artifacts, whm-unified-automation,
+    sys-whm-unified-terraform.
+serviceGroups:
+- name: Front Door and UI
+  deploymentTarget: aws-us-east-2
+  externalInteractions:
+  - name: Sofa King Identity (Okta)
+    type: external
+    notes: Okta sign-in, Person ID, org and domain ID. Atlas keeps its own authorization (roles, site scopes, session).
+  deployableObjects:
+  - ref: 01M5WY4E7P-GCD5
+    diagramTier: presentation
+    notes: React UI.
+  - ref: 01M5WY4E7P-JBTC
+    diagramTier: application
+    notes: Token and region check, roles, site scopes, session.
+- name: Request-To-Pay Module
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01M5WY4E7P-WSNT
+    diagramTier: application
+    notes: Phase 1, Module 1.
+- name: Core Services
+  deploymentTarget: aws-us-east-2
+  externalInteractions:
+  - name: Sofa King Platform Tasks and Workflows
+    type: external
+    notes: Tasks, task templates, workflows and workflow templates. Called by the Workflow service.
+  - name: HCM Core HR and Core Config
+    type: external
+    notes: Sites, departments and warehouses, consumed by the Domain service. Only the IDM OIDC token provider for these calls exists in code at the 2026-11-13 source inspection.
+  - name: Loveseat Kafka event bridge
+    type: external
+    notes: Two-way by design. In code Integration manages its Loveseat subscription over HTTPS and receives PersonProfile events on a webhook; publishing and the outbox are not implemented yet.
+  - name: RT ERP
+    type: external
+    notes: Creates the PO and returns the PO number. Not found in code at the 2026-11-13 source inspection.
+  - name: Oracle ERP
+    type: external
+    notes: Creates the PO and returns the PO number. Not found in code at the 2026-11-13 source inspection.
+  - name: WS ERP
+    type: external
+    notes: Creates the PO and returns the PO number. Owner unconfirmed or not built. Not found in code at the 2026-11-13 source inspection.
+  - name: Sofa King National ERP
+    type: external
+    notes: Creates the PO and returns the PO number. Owner unconfirmed or not built. Not found in code at the 2026-11-13 source inspection.
+  - name: AP Desk
+    type: external
+    notes: Consumes item-received events. Not found in code at the 2026-11-13 source inspection.
+  - name: Shared Customer
+    type: external
+    notes: Separate shared service in Customer Solutions. Connects after V1. Not found in code at the 2026-11-13 source inspection.
+  deployableObjects:
+  - ref: 01M5WY4E7P-7P1K
+    diagramTier: application
+    notes: Region to database routing, cached by every service.
+  - ref: 01M5WY4E7P-YC9P
+    diagramTier: application
+    notes: Maps requests to Platform workflows; R2P template and routing rules.
+  - ref: 01M5WY4E7P-GJHM
+    diagramTier: application
+    notes: Regions, sites, catalog, inventory, matching.
+  - ref: 01M5WY4E7P-C0VE
+    diagramTier: application
+    notes: ERP adapters and Loveseat events.
+- name: Planned Services
+  deploymentTarget: aws-us-east-2
+  notes: Not confirmed for V1. Scaffolded in the core monorepo.
+  externalInteractions:
+  - name: Sofa King Platform notification service (Wingman)
+    type: external
+    notes: Future functionality. Called by Atlas Notifications (V3). Not found in code at the 2026-11-13 source inspection.
+  - name: Platform data importer or iPaaS
+    type: external
+    notes: Current Platform importer, the coming iPaaS, or neither. Open question. Not found in code at the 2026-11-13 source inspection.
+  deployableObjects:
+  - ref: 01M5WY4E7P-BKF2
+    diagramTier: utility
+    notes: Escalation and auto-close timers. May be sliced out of V1.
+  - ref: 01M5WY4E7P-66ZP
+    diagramTier: application
+    notes: Search, dashboards, audit export. V2, timing not confirmed.
+  - ref: 01M5WY4E7P-R6X5
+    diagramTier: application
+    notes: In-app and email, throttled. V3.
+  - ref: 01M5WY4E7P-DJ0J
+    diagramTier: application
+    notes: Bulk loads into Domain. Importer choice open.
+- name: Data Tier
+  deploymentTarget: aws-us-east-1
+  notes: Added from the 2026-11-13 source inspection; places the two Atlas data components, which reach the Aurora cluster and the tenant Redis through runsOn. aws-us-east-1 is the dev RDS cluster's region; the production region is unconfirmed and may differ from the service groups above.
+  deployableObjects:
+  - ref: 01M7D4BSC5-EJC5
+    diagramTier: data
+    intent: ha
+    notes: Global directory database plus one database per region.
+  - ref: 01M7D4BSC5-G81X
+    diagramTier: data
+    intent: sa
+    notes: Per-region sessions and token caches; in-process fallback when a region has none.
+requirementImplementations: []

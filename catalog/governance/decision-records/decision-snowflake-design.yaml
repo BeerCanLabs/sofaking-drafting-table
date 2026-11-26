@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-59AB
+type: decision_record
+name: Snowflake Data Cloud Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1D-NR4R
+decisionRationale: >
+  Snowflake is operated as a vendor-managed SaaS. Audit visibility is provided through Snowflake query history and access logs available via account usage views. Health status visibility is provided through the Snowflake vendor status page and automated alerts. The failure domain is scoped to the Snowflake account and regional cloud deployment.

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: C56GMGFS3P-756M
+name: Leave Management - Pattern → Dynatrace Observability Platform
+catalogStatus: incomplete
+source: 01KSM38KEQ-JS8E
+label: reports telemetry to
+target: 01KXK7BD4N-93KS
+notes:
+  background: Owner-confirmed on 2026-08-03 that Dynatrace provides application observability for Grand Rapids Leave workloads, including application performance, transaction traces, and application errors. Owner confirmation on 2026-08-05 extends that monitoring coverage to workloads in both the leave-prod and chaise production EKS clusters and confirms EKS cluster, node, and pod health monitoring. Whether CloudWatch or another platform also monitors EKS health is unknown. The supplied database-span analysis remains a narrower, time-bounded evidence set and does not define the limit of monitoring coverage.
+capabilities:
+- 01KQQ4Q026-98VD

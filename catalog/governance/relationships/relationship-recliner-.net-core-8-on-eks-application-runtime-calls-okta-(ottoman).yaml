@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZJ-0NNN
+name: Recliner .NET Core 8 on EKS Application Runtime → Okta (Ottoman)
+description: >-
+  Recliner uses the shared Okta/Ottoman identity service for authentication and
+  token issuance; Kong validates those tokens before requests reach the BFF.
+catalogStatus: incomplete
+source: 01KRZX0C11-QH66
+label: authenticates through
+target: 01KQQ5JT1D-SHXD
+technology: OIDC / OAuth 2.0
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KQQ4Q026-MHJM
+tags:
+  - recliner
+  - okta
+  - ottoman
+  - authentication
+notes: >-
+  The architecture and identity boundary are confirmed. Exact client, issuer,
+  audience, and gateway-plugin configuration remains shared-platform
+  operational detail. The transitional in-cluster Recliner Identity Service is
+  retired after full Ottoman integration.

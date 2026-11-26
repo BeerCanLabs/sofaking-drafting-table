@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KT16XHHG-CNGQ
+type: decision_record
+name: RT ERP & CIS - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KEY-JC4K
+linkedObject: 01KSM38KEY-JC4K
+decisionRationale: |
+  deploymentTargets: Cloud-hosted scope only. Each region deployment runs in
+  its own AWS account with separate production and non-production ECS clusters.
+  On-premise deployments are out of scope for this SDM.
+
+  dataClassification: Highly regulated customer, employee, and financial data.
+  FERPA-adjacent customer records, HR/personnel records, payroll data, and
+  cardholder/PHI handling concerns require explicit control treatment.
+
+  failureDomain: The intended failure domain is per-region, single-tenant
+  isolation. Shared observability platforms remain external dependencies.
+
+  externalDependencies: External interactions include Imperva and ALB ingress,
+  ECR image delivery, CloudWatch, Glowroot, central logging, Sofa King IDM,
+  region LDAP, database authentication, Nagios, SES/Postfix, and
+  Stunnel/Netskope.
+
+  interServiceConnections: The region ALB routes to ECS application and
+  reporting services. Application and Jasper tasks connect to the selected
+  region database. ECS pulls images from ECR and exports telemetry to
+  CloudWatch; application traffic also reaches the documented identity,
+  observability, email, and region-connectivity dependencies.

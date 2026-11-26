@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG0-5NC8
+type: product_component
+ownerRole: engineer
+name: Platform Svc Auth Lookup Service
+description: Plat auth-lookup-servic
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-svc-auth-lookup-service
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-svc-auth-lookup-service
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/service.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/stage/cm.yml; cd/stage/deploy.yml; cd/stage/service.yml; ci/codefresh-build.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

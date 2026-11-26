@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-4SDA
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation ActiveReports EndUser Designer
+description: Designer UI (built on GrapeCity ActiveReports) that allows ITC admins to customize reports. Rarely used.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- customerinformation
+- reporting
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-activereports-enduser-designer
+language: C#
+classification: web-application
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a report-customization designer UI for ITC admins (ActiveReports End-User Designer), rarely used in practice.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-activereports-enduser-designer
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

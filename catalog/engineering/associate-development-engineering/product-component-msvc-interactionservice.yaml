@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-4Z7N
+type: product_component
+ownerRole: engineer
+name: Interaction Service
+description: Node.js and TypeScript (Hapi.js) microservice, built and deployed as a Docker image (repository BeerCanLabs/sk-msvc-InteractionService). Receives interaction events from the Resource Library (xAPI statements) and stores them in PostgreSQL, then forwards them to Kafka through a sidecar API. Also exposes callback endpoints for third-party integrations (SCORM Cloud, Canvas, GCN/LTI).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-InteractionService
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-InteractionService
+  deploymentPipeline: CodeFresh (owner-confirmed). README documents a Codefresh PR build, and a merge to master that builds, pushes the image to Quay (quay.io/sofaking/msvc-interactionservice) and tags the release.
+  runtimeHostEvidence: Kubernetes manifests (Deployment, Service, Ingress) under cd/ for environments prod and stage; container listens on port 4100. Host mapped to Amazon EKS Standard per owner.
+  observedRuntimeSignals: docker, node, typescript, kubernetes-manifests, quay-image-registry
+  exposedEndpoints: POST /v1/experiences (xAPI statements from the Resource Library), POST /v1/scorm/postback (SCORM Cloud postback), POST /v1/canvas/event (Canvas), POST /v1/gcn/lti/callback (GCN LTI callback), plus uris and status routes. Swagger at /xAPI/documentation.
+  kafkaPublishing: Owner states the service publishes interaction events to Kafka. In the code a scheduled job (handle-process-queue.ts) posts queued events over HTTP to a Kafka sidecar API (config kafka_sidecar_api, in production http://loveseat-interactionsvc.insights-engine.svc.cluster.local:5000/api/events) using a token from the IDM token endpoint. The service has no direct Kafka client in package.json. No Kafka broker or cluster address exists in this repository or the other Resource Library repositories. Per the Resource Library investigation docs, the sidecar is loveseat-interactionsvc (a Kafka-producer sidecar in the insights-engine Kubernetes namespace), and events continue downstream to msvc-pde-content, which consumes them through its own sidecar instance (loveseat-pde-content, same namespace) and receives them at POST api/EventSubscriptions/v2/ConsumerCallback. The sidecar source is the BeerCanLabs/sk-Util-KafkaSidecarDotNet repository ("Loveseat"); broker settings live there or in the sidecar deployment, not in these repositories. The Kafka cluster itself was not identified. The owner checked AWS MSK in the Production Microservices account (736016846305, us-east-1) and found no MSK clusters, so the cluster likely belongs to another platform account or is configured inside the Loveseat workload.
+  observedDataStoreEvidence: Production ConfigMap points at PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (us-east-1), read-write and read-only endpoints. The cluster is a regional Aurora PostgreSQL cluster (owner-confirmed).
+  observedDependencySignals: package.json lists pg, sequelize and aws-sdk. ConfigMap also references the Resource Library API (rl_api) and the SCORM Cloud service msvc-pg-scormcloud.
+  observedManifestPaths: Dockerfile; package.json; ci/code-fresh/master-merge.yaml; ci/code-fresh/pull-request.yaml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/prod/ingress.yml; cd/stage/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed; owner interview required.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KQQ5JT04-27EP
+    purpose: Stores interaction events and the process queue.
+    interface: PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (writer and reader endpoints)

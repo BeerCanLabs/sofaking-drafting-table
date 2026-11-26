@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS9B-JQ2S
+type: relationship
+name: 'Platform Msvc Position → Platform Msvc Permissions'
+catalogStatus: stub
+source: 01KSM38KFH-TM0Y
+target: 01KSM38KFA-34QP
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.

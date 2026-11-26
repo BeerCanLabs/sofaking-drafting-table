@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSGT-PFEY
+type: relationship
+name: 'Core HR Job Definition → Sofa King Central AWS Aurora PostgreSQL'
+catalogStatus: stub
+source: 01KYQ4D9RV-KPHB
+target: 01KYAAZF97-HS3C
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Relational read model.

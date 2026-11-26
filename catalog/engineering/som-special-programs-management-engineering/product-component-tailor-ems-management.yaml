@@ -1,0 +1,75 @@
+schemaVersion: '1.0'
+uid: W8QA2W732F-1TQA
+type: product_component
+ownerRole: engineer
+name: Tailor EMS Management Sites
+description: IIS-hosted Tailor EMS management, hub, query, services, and extranet sites managed by the Tailor EMS role.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+runtimeRequirement: 'Microsoft IIS 10 and Tailor EMS application runtime; exact application framework version requires owner confirmation.'
+tags:
+  - tailor
+  - ems
+  - iis
+  - windows-service
+  - ansible-discovered
+repoUrl: TBD
+classification: web-application
+interfaces:
+  - name: EMS web endpoints
+    protocol: other
+    path: /
+    authenticationModel: TBD
+    description: Tailor EMS IIS sites for services, hub, management, query, and extranet functions.
+networkBindings:
+  - port: 80
+    protocol: HTTP
+    direction: inbound
+    description: Host-header IIS bindings for EMS sites.
+  - port: 8081
+    protocol: HTTP
+    direction: inbound
+    description: Direct EMS hub listener configured by the role.
+  - port: 8082
+    protocol: HTTP
+    direction: inbound
+    description: Direct EMS management listener configured by the role.
+  - port: 8083
+    protocol: HTTP
+    direction: inbound
+    description: Direct EMS query listener configured by the role.
+  - port: 8084
+    protocol: HTTP
+    direction: inbound
+    description: Direct EMS services listener configured by the role.
+  - port: 8085
+    protocol: HTTP
+    direction: inbound
+    description: Direct EMS extranet listener configured by the role.
+runtimeSpec:
+  dependencies:
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Reads and writes Tailor EMS data in SQL Server.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_ems/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_ems/vars/main.yml
+  managedSites: seiservices, seihub, seimanagement, seiquery, and seiextranet IIS sites are generated in production.
+  managedApplications: The seiservices site includes querytool and Hub web applications.
+  managedService: The role configures a VC3 Task Scheduler Windows service from the EMS task-service directory.
+  aapHostInventory:
+    production:
+      aapTemplate: grr-tailor-prd-ems-web-playbook
+      provisioningTemplate: grr-tailor-prd-ems-web-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_EMS
+      hosts:
+        - GRRTLREMSWEB01
+        - GRRTLREMSWEB02

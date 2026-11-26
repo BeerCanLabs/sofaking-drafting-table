@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-Z3ER
+type: technology_component
+ownerRole: technology-admin
+name: Red Hat Enterprise Linux 9
+description: Strategic RHEL 9 baseline for supported Linux workloads requiring Red Hat support.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- linux
+- os
+- redhat
+classification: operating-system
+vendor: Red Hat
+productName: RHEL
+productVersion: '9'
+vendorLifecycle:
+  mainstreamSupportEnd: 2027-05-31
+  extendedSupportEnd: 2032-05-31
+  notes: Red Hat support dates follow the RHEL 9 lifecycle policy.
+capabilities:
+- 01KQQ4Q026-QM2X

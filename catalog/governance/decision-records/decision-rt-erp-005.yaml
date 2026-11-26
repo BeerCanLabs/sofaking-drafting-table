@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-DHQV
+type: decision_record
+name: Observability Services — Runtime Artifact Model Incomplete
+description: 'CloudWatch and Glowroot are clearly part of the runtime observability story, but the current SDM captures them as group-level dependencies rather than as fully cataloged runtime artifacts with resolved ABB and RBB relationships.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- rt-erp
+- observability
+category: risk
+status: open
+affectedComponent: Observability Services
+impact: 'The SDM reflects the needed observability capabilities, but it does not yet fully express the lowest-level ABB and runtime artifact model for those components.
+
+  '
+mitigationPath: 'Add the missing CloudWatch and Glowroot runtime artifacts, including the ABBs or agent relationships required to satisfy host and service monitoring concerns cleanly in DRAFT.
+
+  '
+linkedObject: 01KSM38KEY-JC4K

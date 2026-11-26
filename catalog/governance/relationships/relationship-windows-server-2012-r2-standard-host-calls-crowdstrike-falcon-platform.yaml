@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z0-ZDX7
+name: Windows Server 2012 R2 Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT03-BEFY
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Endpoint protection retained until workload retirement."
+capabilities:
+- 01KQQ4Q026-JW52

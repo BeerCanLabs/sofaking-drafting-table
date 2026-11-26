@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KYX7W8V9-PABC
+type: runtime_service
+name: CCA Console (Front Door)
+description: >-
+  [DOCUMENTED] The CCA Console is the human-facing front door of the platform: an
+  Express BFF plus a served React single-page app. A person makes a plain-English
+  request here; the BFF holds the Staplepin credentials and proxies the browser to
+  the Staplepin control plane (REST on the board key, events over a WebSocket on
+  the agent key). JSM/Atlassian is reached UNDER THE HOOD (the JSM Divan performs
+  ticket I/O and JSM carries approvals + the human-readable audit trail) -- the
+  user does not enter through JSM. Runs as an ECS service on the CCA sandbox
+  cluster; reached privately over an SSM port-forward today (internal ALB + Okta
+  OIDC is a later milestone), no public inbound.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - front-door
+  - console
+  - interaction-surface
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYX7W8VG-J2C2
+networkPlacement: vpc-private
+authenticationModel: oauth

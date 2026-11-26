@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGC-KBJQ
+type: product_component
+ownerRole: engineer
+name: Cw 0575 Mobile
+description: Quickfit
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- cw
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-CSW-8609-Mobile
+language: Swift
+classification: api-service
+runtimeRequirement: Swift
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-CSW-8609-Mobile
+  observedRuntimeSignals: readme
+  observedManifestPaths: Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/763-arrow-up_white.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/795-gauge-selected.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/810-document-2-selected.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/822-photo-2-selected.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/822-photo-2.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/856-lightning-bolt-selected.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/856-lightning-bolt.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/873-magic-wand.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/auto.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/capturePhoto.imageset/Contents.json; Pods/IRLDocumentScanner/IRLCameraMedia.xcassets/closeCamera.imageset/Contents.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

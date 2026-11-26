@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YS-ADRW
+name: AWS Lambda Serverless Host → AWS Lambda Service
+catalogStatus: stub
+source: 01KQQ5JT03-FGYJ
+label: calls
+externalTarget: AWS Lambda Service
+notes:
+  background: "The Lambda service itself provides the execution environment."

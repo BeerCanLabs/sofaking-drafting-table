@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-BZDP
+type: relationship
+name: shopstar AccuRoute 8 AWS Service to Nagios Monitoring
+description: AAP installs and registers Nagios monitoring on the candidate AccuRoute Windows host.
+catalogStatus: incomplete
+source: 01KYRAQ0KC-MPJQ
+target: 01KQQ5JT1F-E2CC
+label: reports host and service health to
+technology: Nagios agent and API
+direction: event
+flow: outbound
+capabilities:
+  - 01KQQ4Q026-98VD
+tags:
+  - shopstar-v3
+  - accuroute
+  - monitoring
+  - ansible
+notes:
+  background: The active shopstar-aws-playbook.yml includes the common Nagios role during host configuration.

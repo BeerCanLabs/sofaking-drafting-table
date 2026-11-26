@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: FZJZGAPNTM-Y084
+type: relationship
+name: Atlas Domain → Atlas Region Databases
+description: Departments, sites, site rooms, item types and catalog items in the per-region database.
+catalogStatus: stub
+source: 01M5WY4E7P-GJHM
+target: 01M7D4BSC5-EJC5
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Departments, sites, site rooms, item types and catalog items
+    in the per-region database.
+  evidence: 'whm-unified-core develop: Service.Core.Domain.Infrastructure/DbContext/DomainDbContext.cs'

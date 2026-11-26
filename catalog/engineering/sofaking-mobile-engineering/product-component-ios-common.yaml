@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFD-HNNT
+type: product_component
+ownerRole: engineer
+name: iOS Common
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-iOS-Common.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-mobile-engineering
+  contact: sofaking-mobile-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- ios
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-iOS-Common
+language: Swift
+classification: api-service
+runtimeRequirement: Swift
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-iOS-Common
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: Sources/SKCommon/Assets.xcassets/GigulatorAppIcon.appiconset/Contents.json; iOS-Build/bots/Common.json; iOS-Build/bots/SofaKingMobile.json; iOS-Build/bots/Gigulator.json; iOS-Build/bots/PullRequest.json; iOS-Build/package-lock.json; iOS-Build/package.json; iOS-Build/src/github_authentication.json; iOS-Build/src/last_run.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

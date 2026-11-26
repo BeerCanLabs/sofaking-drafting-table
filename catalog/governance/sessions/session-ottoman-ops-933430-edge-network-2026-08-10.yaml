@@ -1,0 +1,168 @@
+schemaVersion: '1.0'
+uid: 01KZPGKK4K-9HHR
+type: drafting_session
+ownerRole: engineer
+name: Ottoman Edge and Network L1 Mapping (OPS-933430)
+description: >-
+  Resolved edge and network discovery for the Ottoman DRAFT L1 baseline.
+  Records read-only AWS and Kubernetes evidence across development, stage, and
+  production, owner confirmations, reusable network-service references, and
+  implementation obligations that remain outside this cataloging session.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+sessionStatus: resolved
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - session
+  - ottoman
+  - ops-104696
+  - edge-and-network
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KG2-ZB6W
+sourceArtifacts:
+  - name: OPS-933430 Edge and Network L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-933430
+    notes: >-
+      Defines the Ottoman edge and network review and contains the discovery
+      summary plus the six owner confirmations used by this session.
+  - name: Team_Platform_Dev AWS profile
+    type: other
+    location: aws-profile:Team_Platform_Dev
+    notes: Read-only AWS evidence collected in us-east-1 on 2026-08-10.
+  - name: Team_Platform_Stage AWS profile
+    type: other
+    location: aws-profile:Team_Platform_Stage
+    notes: Read-only AWS evidence collected in us-east-1 on 2026-08-10.
+  - name: Team_Platform_Prod AWS profile
+    type: other
+    location: aws-profile:Team_Platform_Prod
+    notes: Read-only AWS evidence collected in us-east-1 on 2026-08-10.
+  - name: ottm-dev Kubernetes context
+    type: other
+    location: kubecontext:ottm-dev
+    notes: Read-only cluster and workload evidence collected on 2026-08-10.
+  - name: ottm-stage Kubernetes context
+    type: other
+    location: kubecontext:ottm-stage
+    notes: Read-only cluster and workload evidence collected on 2026-08-10.
+  - name: ottm-prod Kubernetes context
+    type: other
+    location: kubecontext:ottm-prod
+    notes: Read-only cluster and workload evidence collected on 2026-08-10.
+generatedObjects:
+  - name: Ottoman Platform
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KG2-ZB6W
+    notes: Added current edge/network baseline and reusable service references.
+  - name: AWS Network Load Balancer
+    type: network_service
+    status: created
+    ref: 01KQQ5JT05-9P9S
+    notes: Added current Ottoman NLB evidence.
+  - name: Kong Gateway Service
+    type: network_service
+    status: created
+    ref: 01KQQ5JT1E-SW3X
+    notes: Added environment versions, replicas, and NLB exposure evidence.
+  - name: Kong Mesh Service
+    type: network_service
+    status: created
+    ref: 01KYAXMZ7H-KJT2
+    notes: Added current versions, topology, and Gateway API evidence.
+  - name: Traefik Kubernetes Ingress Service
+    type: network_service
+    status: created
+    ref: 01KYAXMZ7H-72BR
+    notes: Added current Ottoman Ingress and ALB evidence with uncertainty retained.
+  - name: AWS Network Load Balancer to Kong Mesh Service
+    type: relationship
+    status: created
+    ref: 01KZPGKK4K-S538
+  - name: AWS Application Load Balancer to Traefik Kubernetes Ingress Service
+    type: relationship
+    status: created
+    ref: 01KZPGKK4K-3H3T
+unresolvedQuestions:
+  - id: public-eks-api-posture
+    question: Is public EKS API reachability from 0.0.0.0/0 intentional?
+    status: answered
+    reason: The owner confirmed the posture is intentional and that user authentication is controlled through AWS SSO.
+    currentBestGuess: >-
+      Record the current posture as accepted evidence while distinguishing AWS
+      SSO authentication from public network reachability.
+    impact: No architecture uncertainty remains for this L1 discovery.
+  - id: network-policy-posture
+    question: Is the leave of Kubernetes NetworkPolicy objects intentional?
+    status: answered
+    reason: The owner confirmed that the current segmentation model is intentional.
+    currentBestGuess: Record zero observed NetworkPolicy objects as accepted current state.
+    impact: No NetworkPolicy implementation is inferred by the catalog.
+  - id: production-version-drift
+    question: Should production EKS and Kong Mesh version drift be reconciled?
+    status: answered
+    reason: The owner confirmed that production drift should be reconciled.
+    currentBestGuess: Preserve observed versions and track implementation outside this session.
+    impact: Production remains on EKS 1.31 and Kong Mesh 1.8.0 until an approved rollout completes.
+  - id: traefik-arrangement
+    question: Is the observed Traefik Ingress and ALB arrangement intentional?
+    status: answered
+    reason: The owner confirmed the arrangement is intentional.
+    currentBestGuess: Model Traefik as an existing network service while retaining incomplete object-level mapping evidence.
+    impact: No topology not supported by read-only evidence is inferred.
+  - id: development-test-dataplane-nlbs
+    question: Are both development test data-plane NLBs necessary?
+    status: answered
+    reason: The owner confirmed both are necessary.
+    currentBestGuess: Retain both as intentional current-state infrastructure.
+    impact: No cleanup action is proposed by this session.
+  - id: gateway-api-adoption
+    question: Is Gateway API adoption planned for stage and production?
+    status: answered
+    reason: The owner confirmed adoption is planned.
+    currentBestGuess: >-
+      Preserve development's accepted kuma GatewayClass and the leave of
+      Gateway API types in stage and production as current state.
+    impact: Rollout remains an implementation obligation outside this session.
+assumptions:
+  - id: read-only-evidence-boundary
+    statement: >-
+      AWS and Kubernetes observations are point-in-time evidence from
+      2026-08-10 and did not change cloud or cluster resources.
+    rationale: The user explicitly restricted AWS and EKS access to read-only.
+    impact: Catalog claims are scoped to observed state and owner confirmations.
+nextSteps:
+  - id: reconcile-production-versions
+    action: Plan and execute production EKS and Kong Mesh version alignment through normal change management.
+    status: open
+    owner: ottoman-platform-engineering
+    notes: No Jira ticket was created at the user's direction; no target date is inferred.
+    relatedObjects:
+      - ref: 01KSM38KG2-ZB6W
+      - ref: 01KYAXMZ7H-KJT2
+  - id: adopt-gateway-api-stage-prod
+    action: Plan and execute Gateway API adoption for stage and production through normal change management.
+    status: open
+    owner: ottoman-platform-engineering
+    notes: No Jira ticket was created at the user's direction; no target date is inferred.
+    relatedObjects:
+      - ref: 01KSM38KG2-ZB6W
+      - ref: 01KYAXMZ7H-KJT2
+notes:
+  environmentSummary:
+    development: >-
+      AWS account 816578033902; EKS use1-dev-ottm-ottm-eks 1.35; 12 Ready
+      t3a.xlarge AL2023 nodes across us-east-1a/1b; VPC
+      vpc-0c7d07d0dd293cf3e 10.117.96.0/19; 14 VPC load balancers.
+    stage: >-
+      AWS account 626528098649; EKS use1-stage-ottm-ottm-eks 1.34; 13 Ready
+      m6a.2xlarge AL2023 nodes across us-east-1a/1b; VPC
+      vpc-01245ba9b96afbcce 10.105.0.0/19; 13 VPC load balancers.
+    production: >-
+      AWS account 350714213106; EKS use1-prod-ottm-ottm-eks 1.31; 12 Ready
+      m6a.2xlarge AL2023 nodes across us-east-1a/1b; VPC
+      vpc-0d49f0e96ba662130 10.82.96.0/19; 9 VPC load balancers.

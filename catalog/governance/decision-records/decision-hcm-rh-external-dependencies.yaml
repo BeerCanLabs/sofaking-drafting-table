@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KTGG6XFP-H8HA
+type: decision_record
+name: New Recruiting & Hiring - External Dependencies
+description: Additional-interactions (external dependencies) decision for the New Recruiting & Hiring deployment pattern, promoted from catalog architecture notes to a committed DecisionRecord so DRAFT requirement evidence is traceable.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: open
+affectedComponent: 01KSM38KG7-42XD
+linkedObject: 01KSM38KG7-42XD
+decisionRationale: 'externalDependencies: Integrates with Textkernel (resume parsing), FileService (document storage), Google Indexing API (job-search visibility), EIS (retail institution details), and the Platform notification service. Status open pending recruiting-hiring team / ARB ratification.'

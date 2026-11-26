@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-RSE4
+type: technology_component
+ownerRole: technology-admin
+name: Dynatrace OneAgent
+description: Application performance monitoring and tracing agent for Dynatrace observability.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- agent
+- apm
+- tracing
+classification: agent
+vendor: Dynatrace
+productName: OneAgent
+productVersion: current
+platformDependency: external.monitoring.dynatrace-platform
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SaaS-managed agent lifecycle follows the Dynatrace service model.
+capabilities:
+- 01KQQ4Q026-NB1W

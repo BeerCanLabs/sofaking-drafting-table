@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: YQ4VE2EB9A-PTH1
+type: relationship
+name: Atlas Scheduler → Atlas Region Databases
+description: AddTenantDbContext over the per-region database; today the only mapped table is the service_meta
+  scaffold.
+catalogStatus: stub
+source: 01M5WY4E7P-BKF2
+target: 01M7D4BSC5-EJC5
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. AddTenantDbContext over the per-region database; today
+    the only mapped table is the service_meta scaffold.
+  evidence: 'whm-unified-core develop: Service.Core.Scheduler.App/Program.cs (AddTenantDbContext)'

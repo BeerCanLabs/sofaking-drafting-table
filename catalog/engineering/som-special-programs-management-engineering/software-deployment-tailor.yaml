@@ -1,0 +1,326 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGG-MAEX
+type: software_deployment_pattern
+ownerRole: engineer
+name: Tailor
+description: Legacy Windows/IIS and SQL Server deployment pattern for Tailor, modeled from the Tailor SRE Ansible playbook and roles.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Special Orders
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - tailor
+  - cdp
+  - windows
+  - iis
+  - sqlserver
+  - f5
+  - vmware
+  - ansible-discovered
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+architectureNotes:
+  interServiceConnections: Cross-boundary service connections are now modeled as Relationship objects for F5 to web traffic and Tailor web, EMS, utility, SSIS, and SSRS access to the Tailor SQL Server data tier. Additional same-tier and external CIS/SFTP partner flows require owner interview.
+  patternType: ansible-discovered
+  sourceEvidence: AAP Controller /api/v2 job-template and inventory host-membership evidence is the operational source of truth for active Tailor infrastructure. The BeerCanLabs/sk-ansible_playbooks_sre Tailor_Servers branch and vSphere templates explain automation intent. The SaaSIO Tailor DB Architecture PDF is retained as historical architecture context and may be stale where it disagrees with AAP.
+  hostInventoryEvidence: AAP inventory limits were verified through the Controller API on 2026-07-10 and identify active deployment hosts. AAP returned no Tailor DEV inventory groups or HPTTLRDEV hosts. AAP vSphere companion templates identify provisioned VM names, including future placeholder web nodes GRRTLRPRDWEB11 through GRRTLRPRDWEB14 for cluster_06 and cluster_07.
+  dbArchitectureEvidence: The Tailor DB Architecture PDF shows historical or intended SQL topology, including DEV/QA -> STG -> UAT -> Prod flow and a Prod To UAT Refresh view using read-only backup drive file shares plus rewrite/restore of legacy stored procedures. AAP inventory takes precedence for current hosts and does not confirm current primary/failover roles or any Tailor DEV host.
+  deploymentTargets: Production and UAT Tailor templates target GRR vmware in AAP. QA and stage Tailor templates target HPT vmware. The web role defines a hpt_dev alias, but AAP returned no Tailor DEV job template, inventory group, or HPTTLRDEV host. Sofa King-owned hardware, VMware.
+  availabilityRequirement: >-
+    AAP exposes production web cluster_01 through cluster_05 templates and UAT
+    web cluster_01. cluster_06 and cluster_07 in the role vars are placeholders
+    for future expansion. AAP inventory confirms production SQL as four two-host
+    SQL groups, UAT SQL as one two-host SQL group, STG SQL as one two-host SQL
+    group, and QA SQL as one single-host SQL group. No active Tailor DEV SQL
+    inventory was found in AAP. Formal SLA, RTO, and RPO require owner
+    confirmation.
+  dataClassification: Tailor is modeled as restricted because it is an CDP/special-programs product; classification requires owner confirmation.
+  failureDomain: Web failure domains are Tailor web clusters by environment. SQL failure domains are the AAP-confirmed SQL inventory groups GRRTLRPRDDB01/02, GRRTLRPRDDB03/04, GRRTLRPRDDB05/06, GRRTLRPRDDB07/08, GRRTLRUATDB01/02, HPTTLRSTGDB01/02, and single-host QA group HPTTLRQADB01. No active DEV SQL failure domain was found in AAP. Tenant-to-SQL-group and database-shard boundaries require owner confirmation.
+  patternDeviations: Legacy Windows/IIS/SQL Server deployment with Ansible and Artifactory-driven provisioning, F5 traffic management, SMB-backed web content for clustered environments, and no container orchestration observed in the source evidence.
+  securityControlsObserved: Common server roles include domain join, DNS configuration, Windows base hardening, Automox, CrowdStrike, Nagios, Windows audit/security/password policies, and optional Dynatrace hooks.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational, reporting, integration, and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Traffic Edge
+    deploymentTarget: grr-datacenter
+    notes: F5 BIG-IP fronts Tailor web traffic. The F5 role creates client SSL profiles, HTTP and HTTPS virtual servers, pools, pool members, and backend node definitions.
+    deployableObjects:
+      - ref: 01KQQ5JT00-Z6WV
+        diagramTier: presentation
+        networkZone: web
+  - name: Tailor Production Web Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT1F-HZTZ
+    notes: AAP exposes production web playbook templates for cluster_01 through cluster_05 against GRR vmware. Active hosts are cluster_01 GRRTLRPRDWEB01/02, cluster_02 GRRTLRPRDWEB03/04, cluster_03 GRRTLRPRDWEB05/06, cluster_04 GRRTLRPRDWEB07/08, and cluster_05 GRRTLRPRDWEB09/10. cluster_06 and cluster_07 are future-expansion placeholders with provisioned-name evidence for GRRTLRPRDWEB11/12 and GRRTLRPRDWEB13/14, not active AAP-orchestrated production clusters.
+    deployableObjects:
+      - ref: W6N1TCS8DQ-2WMB
+        instance: grr_prod-web-cluster_01_to_cluster_05
+        diagramTier: presentation
+        networkZone: web
+  - name: Tailor UAT Web Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT1F-HZTZ
+    notes: AAP template grr-tailor-uat-web-playbook targets GRR vmware inventory group Datacenters_GRR_vm_Tailor_2022_UAT_WEB with env grr_uat and cluster_01 hosts GRRTLRUATWEB01 and GRRTLRUATWEB02.
+    deployableObjects:
+      - ref: W6N1TCS8DQ-2WMB
+        instance: grr_uat-web-cluster_01
+        diagramTier: presentation
+        networkZone: web
+  - name: Tailor HPT Non-Prod Web Tier
+    deploymentTarget: high point-datacenter
+    substrate: 01KQQ5JT1F-HZTZ
+    notes: AAP exposes HPT QA and STG web playbook and F5 templates. Active lower-environment web hosts are HPTTLRQAWEB01 for QA and HPTTLRSTGWEB01 for STG. The role vars also define a hpt_dev alias, but no hpt-tailor-dev AAP template was found.
+    deployableObjects:
+      - ref: W6N1TCS8DQ-2WMB
+        instance: hpt_qa_and_hpt_stg-web
+        diagramTier: presentation
+        networkZone: web
+  - name: Tailor EMS Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT1F-HZTZ
+    notes: IIS-hosted Tailor EMS management, hub, query, services, and extranet sites plus a VC3 Task Scheduler service. AAP exposes grr-tailor-prd-ems-web-playbook for GRR vmware hosts GRRTLREMSWEB01 and GRRTLREMSWEB02.
+    deployableObjects:
+      - ref: W8QA2W732F-1TQA
+        diagramTier: application
+        networkZone: app
+  - name: Tailor Utility and Integration Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: Production utility host GRRTLRPRDUTIL1 runs Tailor file watchers, SFTP/CIS jobs, outbound integrations, Trifold outbound jobs, and custom report tasks. AAP exposes grr-tailor-prd-util-playbook for GRR vmware.
+    deployableObjects:
+      - ref: JZ5P3J7CM4-WM1F
+        diagramTier: utility
+        networkZone: ops
+  - name: Tailor CIS Import Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: CIS importer/support host pattern installs Tailor installer payloads, SQL Server Express 2022, Oracle Client 19c, FileZilla, Chrome, and F5 VPN client automation. AAP exposes grr-tailor-prd-cis-playbook for GRR vmware hosts GRRTLRSIS21 through GRRTLRSIS25.
+    deployableObjects:
+      - ref: 3PMDBQGRN1-SM3X
+        diagramTier: utility
+        networkZone: ops
+  - name: Tailor Production SSIS Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: AAP template grr-tailor-prd-ssis-playbook targets Datacenters_GRR_vm_Tailor_2022_PRD_SSIS with application ssis on hosts GRRTLRPRDSIS01 through GRRTLRPRDSIS04.
+    deployableObjects:
+      - ref: M2K1CTVHYE-GGXG
+        instance: grr_prod-ssis
+        diagramTier: utility
+        networkZone: ops
+  - name: Tailor UAT SSIS Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: AAP template grr-tailor-uat-ssis-playbook targets Datacenters_GRR_vm_Tailor_2022_UAT_SSIS with env grr_uat and application ssis on hosts GRRTLRUATSIS01 through GRRTLRUATSIS04.
+    deployableObjects:
+      - ref: M2K1CTVHYE-GGXG
+        instance: grr_uat-ssis
+        diagramTier: utility
+        networkZone: ops
+  - name: Tailor Production Reporting Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: AAP template grr-tailor-prd-ssrs-playbook targets GRR vmware hosts GRRTLRPRDSSRS01 through GRRTLRPRDSSRS04. The SSRS role prepares SQL Server Reporting Services hosts and an S drive for reporting-system files.
+    deployableObjects:
+      - ref: SEQEZT5ZPD-2NKB
+        instance: grr_prod-ssrs
+        diagramTier: application
+        networkZone: app
+  - name: Tailor UAT Reporting Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: AAP template grr-tailor-uat-ssrs-playbook targets Datacenters_GRR_vm_Tailor_2022_UAT_SSRS hosts GRRTLRUATSSRS01 and GRRTLRUATSSRS02. Its AAP vars use application ssrs_uat.
+    deployableObjects:
+      - ref: SEQEZT5ZPD-2NKB
+        instance: grr_uat-ssrs
+        diagramTier: application
+        networkZone: app
+  - name: Tailor Production SQL Clusters
+    deploymentTarget: grr-datacenter
+    notes: >-
+      AAP templates grr-tailor-prd-sql-clu1-playbook through
+      grr-tailor-prd-sql-clu4-playbook target production SQL provisioning
+      clusters GRRTLRPRDCLU1 through GRRTLRPRDCLU4 with SQL instance TLRPRD. AAP
+      inventory confirms two hosts in each group: GRRTLRPRDDB01/02,
+      GRRTLRPRDDB03/04, GRRTLRPRDDB05/06, and GRRTLRPRDDB07/08. The historical
+      DB Architecture PDF labels primary/failover roles, but current
+      primary/failover state is not inferred from that document.
+    deployableObjects:
+      - ref: 73F2M1GSPK-PNGJ
+        instance: GRRTLRPRDCLU1
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU1 resolves hosts GRRTLRPRDDB01 and GRRTLRPRDDB02.
+      - ref: 73F2M1GSPK-PNGJ
+        instance: GRRTLRPRDCLU2
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU2 resolves hosts GRRTLRPRDDB03 and GRRTLRPRDDB04.
+      - ref: 73F2M1GSPK-PNGJ
+        instance: GRRTLRPRDCLU3
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU3 resolves hosts GRRTLRPRDDB05 and GRRTLRPRDDB06.
+      - ref: 73F2M1GSPK-PNGJ
+        instance: GRRTLRPRDCLU4
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_GRR_vm_Tailor_2022_PRD_DB_CLU4 resolves hosts GRRTLRPRDDB07 and GRRTLRPRDDB08.
+      - ref: 01KQQ5JT01-950D
+        instance: TLRPRD
+        diagramTier: data
+        networkZone: data
+  - name: Tailor UAT SQL Cluster
+    deploymentTarget: grr-datacenter
+    notes: AAP template grr-tailor-uat-sql-playbook targets provisioning cluster GRRTLRUATCLU1 with SQL instance TLRUAT and inventory group Datacenters_GRR_vm_Tailor_2022_UAT_DB, which resolves hosts GRRTLRUATDB01 and GRRTLRUATDB02. Current primary/failover state is not inferred from the historical DB Architecture PDF.
+    deployableObjects:
+      - ref: 73F2M1GSPK-PNGJ
+        instance: GRRTLRUATCLU1
+        diagramTier: data
+        networkZone: data
+      - ref: 01KQQ5JT01-950D
+        instance: TLRUAT
+        diagramTier: data
+        networkZone: data
+  - name: Tailor HPT Non-Prod SQL Tier
+    deploymentTarget: high point-datacenter
+    notes: AAP exposes HPT QA and STG SQL DB plus SQL SSRS DB templates. STG resolves to HPTTLRSTGDB01 and HPTTLRSTGDB02. QA resolves to HPTTLRQADB01. AAP returned no Tailor DEV SQL job template, group, or host.
+    deployableObjects:
+      - ref: 73F2M1GSPK-PNGJ
+        instance: hpt_stg-sql-group
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_Holland_vm_Development_KIO_Tailor_2022_DB_STG resolves hosts HPTTLRSTGDB01 and HPTTLRSTGDB02.
+      - ref: 73F2M1GSPK-PNGJ
+        instance: hpt_qa-sql
+        diagramTier: data
+        networkZone: data
+        notes: AAP limit Datacenters_Holland_vm_Development_KIO_Tailor_2022_DB_QA resolves host HPTTLRQADB01.
+tierVariants:
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget:
+      provider: on-premises
+      region: grr-datacenter
+    serviceGroupVariants:
+      - serviceGroup: Tailor Production Web Tier
+        replicaCount: 10
+        autoscaling:
+          enabled: false
+        notes: AAP currently exposes five production web cluster templates, each representing a paired web-node cluster. cluster_06 and cluster_07 are placeholders for future expansion.
+      - serviceGroup: Tailor Production SQL Clusters
+        replicaCount: 4
+        autoscaling:
+          enabled: false
+        notes: AAP exposes four production SQL cluster playbook templates for GRRTLRPRDCLU1 through GRRTLRPRDCLU4.
+    notes: grr_prod is the production environment alias in the Tailor roles and AAP templates.
+  - tier: DEBGENPE77-DJ1A
+    deploymentTarget:
+      provider: on-premises
+      region: grr-datacenter
+    serviceGroupVariants:
+      - serviceGroup: Tailor UAT Web Tier
+        replicaCount: 2
+        autoscaling:
+          enabled: false
+        notes: UAT web cluster_01 maps to GRRTLRUATWEB01 and GRRTLRUATWEB02 in the role vars.
+      - serviceGroup: Tailor UAT SQL Cluster
+        replicaCount: 1
+        autoscaling:
+          enabled: false
+        notes: AAP exposes GRRTLRUATCLU1 as the UAT SQL cluster with SQL instance TLRUAT.
+    notes: AAP confirms UAT as GRR-hosted through grr-tailor-uat web, sql, ssrs, and ssis templates.
+  - tier: SZJVW70BTN-V6GX
+    deploymentTarget:
+      provider: on-premises
+      region: high point-datacenter
+    notes: hpt_dev is a lower-environment alias in the Tailor web role, but AAP returned no Tailor DEV job template, inventory group, or HPTTLRDEV host. PDF-only DEV DB/SSRS nodes are retained as non-authoritative documentation evidence outside the active service groups.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget:
+      provider: on-premises
+      region: high point-datacenter
+    serviceGroupVariants:
+      - serviceGroup: Tailor HPT Non-Prod Web Tier
+        replicaCount: 1
+        autoscaling:
+          enabled: false
+        notes: AAP exposes hpt-tailor-qa-web-playbook and hpt-tailor-qa-web-f5-playbook.
+      - serviceGroup: Tailor HPT Non-Prod SQL Tier
+        replicaCount: 1
+        autoscaling:
+          enabled: false
+        notes: AAP exposes hpt-tailor-qa-sql-db-playbook and hpt-tailor-qa-sql-ssrs-db-playbook. AAP inventory resolves DB host HPTTLRQADB01 and SSRS host HPTTLRQASSRS01.
+    notes: hpt_qa is a lower-environment alias in the Tailor web role and AAP templates.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget:
+      provider: on-premises
+      region: high point-datacenter
+    serviceGroupVariants:
+      - serviceGroup: Tailor HPT Non-Prod Web Tier
+        replicaCount: 1
+        autoscaling:
+          enabled: false
+        notes: AAP exposes hpt-tailor-stg-web-playbook and hpt-tailor-stg-web-f5-playbook.
+      - serviceGroup: Tailor HPT Non-Prod SQL Tier
+        replicaCount: 2
+        autoscaling:
+          enabled: false
+        notes: AAP exposes hpt-tailor-stg-sql-db-playbook and hpt-tailor-stg-sql-ssrs-db-playbook. AAP inventory resolves DB hosts HPTTLRSTGDB01/HPTTLRSTGDB02 and SSRS hosts HPTTLRSTGSSRS01/02.
+    notes: hpt_stg is the staging environment alias in the Tailor web role and AAP templates.
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: field
+    key: followsReferenceArchitecture
+    ref: 01KQQ5JT1D-N9DB
+    notes: Tailor now references the closest existing Windows and SQL Server hosted-suite ReferenceArchitecture; exact conformance should be confirmed with the owner.
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+    notes: The SDP declares traffic edge, production and UAT web, HPT non-prod web, EMS, utility/integration, CIS import, production and UAT SSIS, production and UAT reporting, production SQL inventory groups, UAT SQL inventory group, and HPT QA/STG SQL service groups from AAP Controller inventory and playbook evidence. PDF-only DEV nodes are not modeled as active service groups.
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: deployment-targets
+    status: satisfied
+    mechanism: decisionRecord
+    key: deploymentTargets
+    ref: 01KT16XJ0D-EE4D
+    notes: Deployment target evidence is captured in the Tailor validation evidence DecisionRecord.
+decisionRecords:
+  - ref: 01KT16XJ0D-EE4D
+    key: deploymentTargets
+  - ref: 01KT16XJ0D-EE4D
+    key: availabilityRequirement
+  - ref: 01KT16XJ0D-EE4D
+    key: dataClassification
+  - ref: 01KT16XJ0D-EE4D
+    key: failureDomain
+  - ref: 01KT16XJ0D-EE4D
+    key: patternDeviations
+  - ref: 01KT16XJ0D-EE4D
+    key: serviceGroups
+  - ref: 01KT16XJ0D-EE4D
+    key: externalDependencies
+  - ref: 01KT16XJ0D-EE4D
+    key: interServiceConnections

@@ -1,0 +1,242 @@
+schemaVersion: '1.0'
+uid: 01KX4HK5D3-00Y0
+type: drafting_session
+name: KIOTrifoldStandaloneApplication Repository Intake
+description: >-
+  Drafting session covering the C:\Workspaces\KIOTrifoldStandaloneApplication\
+  repo — a companion suite of mostly separate products related to the
+  Trifold/Corvid product family. Folds CorvidSyncService/CorvidPortal
+  evidence into the existing Trifold SDP, and creates four new
+  SoftwareDeploymentPatterns (Corvid Intranet, Nysdcb Directors, Translation
+  Direct, CT Data Extraction Tool) for the functionally distinct products
+  found in the repo.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - trifold
+  - repository-discovery
+  - drafting
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGH-DBFS
+sourceArtifacts:
+  - name: KIOTrifoldStandaloneApplication repository
+    type: repository
+    location: C:\Workspaces\KIOTrifoldStandaloneApplication\
+    notes: >-
+      Companion repo to the KIOTrifold TFS codebase, surveyed folder-by-folder:
+      CorvidPortal, CorvidSyncService, CorvidSyncServiceDB,
+      CTDataExtractionTool, DocRepositoryDB, AdvisoryCode, IntranetCode,
+      IntranetDB, NysdcbdirectorsCode, TranslationDirect, TranslationDirectDB,
+      ZendeskForCorvidIntranet.
+generatedObjects:
+  - name: Corvid Portal
+    type: product_component
+    status: created
+    ref: 01KX4A2T70-N90K
+  - name: Corvid Portal Database
+    type: data_component
+    status: created
+    ref: 01KX4A2T6F-MG8N
+  - name: Trifold CorvidSyncService Database
+    type: data_component
+    status: created
+    ref: 01KX4A2T6G-KGEP
+    notes: New evidence folded into the existing Trifold Sync Service ProductComponent (ref 01KX421X4R-0KCD) rather than creating a duplicate component.
+  - name: Corvid Intranet
+    type: product_component
+    status: created
+    ref: 01KX4A2T6M-BCEY
+  - name: Zendesk For Corvid Intranet
+    type: product_component
+    status: created
+    ref: 01KX4A2T71-MWBT
+  - name: Corvid Intranet Database
+    type: data_component
+    status: created
+    ref: 01KX4A2T6F-JF2C
+  - name: Corvid Intranet
+    type: software_deployment_pattern
+    status: created
+    ref: 01KX4A2T71-8YPE
+  - name: Nysdcb Directors
+    type: product_component
+    status: created
+    ref: 01KX4A2T6M-PJ5C
+  - name: Nysdcb Directors Database
+    type: data_component
+    status: created
+    ref: 01KX4A2T6F-ZVRF
+  - name: Nysdcb Directors
+    type: software_deployment_pattern
+    status: created
+    ref: 01KX4A2T72-0MXK
+  - name: Translation Direct
+    type: product_component
+    status: created
+    ref: 01KX4A2T6Z-3MTP
+  - name: Translation Direct Database
+    type: data_component
+    status: created
+    ref: 01KX4A2T6F-8QEN
+  - name: Translation Direct
+    type: software_deployment_pattern
+    status: created
+    ref: 01KX4A2T73-AHA1
+  - name: CT Data Extraction Tool
+    type: product_component
+    status: created
+    ref: 01KX4A2T6G-F0WV
+  - name: PPT Data Extraction UI
+    type: product_component
+    status: deferred
+    proposedUid: 01KX4A2T6P-FDYE
+    notes: >-
+      Originally created with this uid as a separate web-UI component
+      calling the CT Data Extraction Service. Owner confirmed on 2026-08-11
+      that CT Data Extraction Tool is actually a single obsolete/retired
+      console application, not a web UI + Windows Service + RabbitMQ setup;
+      this component and its calls relationship were deleted as incorrect.
+  - name: CT Data Extraction Tool
+    type: software_deployment_pattern
+    status: created
+    ref: 01KX4A2T71-YMWR
+  - name: AdvisoryCode legacy libraries
+    type: product_component
+    status: created
+    ref: 01KX4JP6P0-F5TY
+    notes: >-
+      CORRECTION (2026-07-15): originally deferred here as
+      retired/reference-only, based on the .NET 4.0 COM adapter code in this
+      repo (MidTierResume, MidTierCareerAdmin, MidTierOccupSearch,
+      AdvisoryEmailCOMAdapter). The CDP Direct WAF Info Confluence page
+      showed www.guidedirect.example live behind the WAF today, contradicting
+      that assumption. Re-authored as "Advisory Direct" (same uid, reused
+      from this proposedUid) in
+      session-trifold-service-composition-2026-07-09.yaml — see that
+      session for the live ProductComponent and new SoftwareDeploymentPattern.
+      Whether this repo's AdvisoryCode is actually what serves the live site
+      is still unconfirmed (see that session's
+      advisory-direct-source-unconfirmed question).
+  - name: DocRepositoryDB
+    type: data_component
+    status: deferred
+    proposedUid: 01KX4JP6P0-0WRQ
+    notes: >-
+      Flagged as a Shared Services gap rather than authored here — appears
+      to be shared document-storage infrastructure (FILESTREAM-enabled,
+      access-audited) potentially consumed by multiple applications
+      (CorvidPortal's DocumentViewerAPI references it), which should be
+      modeled as a proper shared DataStoreService rather than a
+      per-product DataComponent.
+unresolvedQuestions:
+  - id: new-sdps-deployment-target
+    question: >-
+      Where do Corvid Intranet, Nysdcb Directors, Translation Direct, and CT
+      Data Extraction Tool actually deploy (datacenter/host)? Connection
+      strings reference a server named CDPINTMISC for Nysdcb Directors and
+      Translation Direct, which was not previously seen in the Trifold
+      family's evidence.
+    status: answered
+    reason: >-
+      No direct evidence of datacenter placement was found in the repo for
+      these four products; grr-datacenter and the existing Windows Server
+      2022 physical host were assumed by extrapolation from the rest of the
+      Trifold family, not confirmed. ANSWERED 2026-09-10: owner confirmed
+      Nysdcb Directors, Translation Direct, Advisory Direct, and Corvid
+      Intranet all run on GRRCDPMISCWEB11 (prod, grr-datacenter) /
+      HPTCDPDEVMISC1 (QA, high point-datacenter). CDPINTMISC believed to
+      be an outdated/retired server name, not a distinct host. CT Data
+      Extraction Tool separately confirmed as grr-datacenter / Windows
+      Server 2022 (now retired).
+    currentBestGuess: >-
+      Nysdcb Directors, Translation Direct, Advisory Direct, Corvid
+      Intranet: GRRCDPMISCWEB11 (prod) / HPTCDPDEVMISC1 (QA). CT Data
+      Extraction Tool: grr-datacenter / Windows Server 2022 (retired).
+    impact: Wrong deployment target would misstate the failure domain and physical topology for these four SDPs.
+    relatedObjects:
+      - ref: 01KX4A2T71-8YPE
+      - ref: 01KX4A2T72-0MXK
+      - ref: 01KX4A2T73-AHA1
+      - ref: 01KX4A2T71-YMWR
+      - ref: 01KXK822CN-M74S
+  - id: docrepositorydb-shared-services-gap
+    question: >-
+      Should Shared Services model DocRepositoryDB as a proper shared
+      DataStoreService, since it appears to serve document storage for
+      multiple applications rather than being owned by a single product?
+    status: open
+    reason: Not authored in this session per owner direction to flag it as a gap instead.
+    currentBestGuess: Treat as a Shared Services catalog gap; do not author from an Engineering session.
+    impact: >-
+      CorvidPortal's DocumentViewerAPI dependency on document storage is
+      currently undocumented as a relationship target. UPDATE (2026-07-15):
+      a live public web app, "Trifold Document Repository"
+      (docs.cdpdirect.example, ref 01KXK81788-D45P in
+      session-trifold-service-composition-2026-07-09.yaml), was discovered
+      and is likely the front-end over this same gap — increases confidence
+      this is shared, actively-used infrastructure, not dormant.
+    relatedObjects:
+      - ref: 01KX4A2T70-N90K
+      - ref: 01KXK81788-D45P
+  - id: zendesk-vocabulary-gap
+    question: Should "Zendesk" be added as an approved SaaS vocabulary entry in deployment-targets.yaml, similar to saas-okta/saas-salesforce/saas-servicenow?
+    status: open
+    reason: Zendesk is referenced as an externalTarget on a relationship rather than a declared deploymentTargets vocabulary value, since it is not currently in the approved list.
+    currentBestGuess: Leave as externalTarget until a vocabulary proposal is submitted.
+    impact: Minor — does not block validation, but means Zendesk is not filterable/groupable the way other approved SaaS vendors are.
+    relatedObjects:
+      - ref: 01KX4A2T71-MWBT
+assumptions:
+  - id: same-pillar-as-trifold
+    statement: >-
+      Corvid Intranet, Nysdcb Directors, Translation Direct, and CT Data
+      Extraction Tool are all assigned business-pillar.customer-solutions
+      and productFamily "Trifold", consistent with the rest of the family.
+    rationale: Owner confirmed Customer Solutions for all four during this session's scoping questions.
+    impact: If ownership actually differs per product, businessContext.pillar/productFamily need per-SDP correction.
+    relatedObjects:
+      - ref: 01KX4A2T71-8YPE
+      - ref: 01KX4A2T72-0MXK
+      - ref: 01KX4A2T73-AHA1
+      - ref: 01KX4A2T71-YMWR
+  - id: corvidsync-same-system
+    statement: >-
+      The CorvidSyncService found in this repo is the same logical system
+      as the Trifold Sync Service already modeled from the TFS repo, not a
+      separate/parallel product.
+    rationale: Owner confirmed this during this session's scoping questions.
+    impact: Evidence was folded into the existing ProductComponent (ref 01KX421X4R-0KCD) rather than creating a duplicate.
+    relatedObjects:
+      - ref: 01KX421X4R-0KCD
+      - ref: 01KX4A2T6G-KGEP
+nextSteps:
+  - id: confirm-new-sdp-deployment-targets
+    action: Confirm the actual datacenter/host for Corvid Intranet, Nysdcb Directors, Translation Direct, and CT Data Extraction Tool, including the CDPINTMISC server.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KX4A2T71-8YPE
+      - ref: 01KX4A2T72-0MXK
+      - ref: 01KX4A2T73-AHA1
+      - ref: 01KX4A2T71-YMWR
+  - id: route-docrepositorydb-to-shared-services
+    action: Raise DocRepositoryDB with Shared Services as a candidate shared DataStoreService.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KX4A2T70-N90K
+resumptionContext:
+  matchedReferenceArchitecture: 01KQQ5JT1D-N9DB
+  scopeDecision: >-
+    One new SDP per functionally distinct product (Corvid Intranet, NYSE
+    Directors, Translation Direct, CT Data Extraction Tool); CorvidPortal
+    and CorvidSyncService folded into the existing Trifold SDP.
+    AdvisoryCode and DocRepositoryDB intentionally excluded from catalog
+    authoring this session.
+notes: {}

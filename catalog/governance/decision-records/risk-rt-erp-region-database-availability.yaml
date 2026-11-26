@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KZ9A3RR6-NA48
+type: decision_record
+name: RT-ERP Region Database Availability Gap
+description: >-
+  Each RT-ERP region selects one database engine from Db2, SQL Server, or
+  PostgreSQL and operates one writable primary with a read-only replica.
+  Engineering confirmation in OPS-188334 on 2026-08-04 establishes that the
+  replica is not a true HA partner and does not provide automatic promotion or
+  failover. This product-specific deployment posture overrides any generic HA
+  capability described by the reusable shared database service definitions.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - rt-erp
+  - database
+  - availability
+  - risk
+  - single-point-of-failure
+category: risk
+status: open
+affectedComponent: Data Services
+impact: >-
+  Loss of the writable primary interrupts database writes and can make RT-ERP
+  workflows unavailable for the affected region. The read-only replica and
+  backup/restore controls do not provide automatic service continuity.
+  Per-region isolation limits the failure blast radius to one region.
+mitigationPath: >-
+  Define and approve a true HA implementation for each supported engine,
+  including an eligible failover target, health detection, tested promotion,
+  application reconnection, and recovery objectives, or explicitly accept the
+  current risk with a tested recovery plan. Until that work is complete, do
+  not count the read-only replica or backup/restore controls as database HA.
+relatedDecisionRecords:
+  - 01KTM7D5BT-P86A
+linkedObject: 01KSM38KEY-JC4K

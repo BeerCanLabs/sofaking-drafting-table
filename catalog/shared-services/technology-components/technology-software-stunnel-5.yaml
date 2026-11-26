@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KYT589B4-ETSP
+type: technology_component
+ownerRole: technology-admin
+name: stunnel 5
+description: >-
+  Open-source TLS tunneling software used by RT ERP region connectivity to
+  wrap client TCP traffic in TLS before it reaches the region AWS gateway.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - software
+  - stunnel
+  - tls
+  - rt-erp
+classification: software
+vendor: stunnel project
+productName: stunnel
+productVersion: 5.x with OpenSSL 3.x
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    The RT ERP implementation runbook specifies the stunnel 5 release family
+    with OpenSSL 3.x; no fixed support end date is asserted here.
+capabilities:
+  - 01KSWVZSZ5-Q6HW
+  - 01KSWVZSZ5-26F1
+configurations:
+  - id: rt-erp-client-tunnel
+    name: RT ERP Client Tunnel
+    description: >-
+      TLS client tunnel configured per region. Listener ports and destination
+      routes are region-specific rather than fixed in the reusable component.
+    capabilities:
+      - 01KSWVZSZ5-Q6HW
+      - 01KSWVZSZ5-26F1
+      - 01KQQ4Q026-MHJM
+notes:
+  sourceEvidence: >-
+    RT ERP operational documentation specifies stunnel4 installation on
+    Ubuntu 24, stunnel 5.x with OpenSSL 3.x, protected stunnel.conf
+    permissions, OpenSSL connectivity tests, and service logging through
+    journalctl and /var/log/stunnel4/stunnel.log.

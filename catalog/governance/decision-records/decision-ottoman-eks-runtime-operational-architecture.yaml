@@ -1,0 +1,67 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHR-0PS1
+type: decision_record
+name: Ottoman EKS Runtime Operational Architecture
+description: >-
+  Traceable current-state compute, scaling, service-mesh, and recovery evidence
+  for the Ottoman workloads reviewed under OPS-433061.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - ottoman
+  - eks
+  - runtime
+  - ops-104695
+  - decision
+category: decision
+status: open
+affectedComponent: 01KSM38KG2-ZB6W
+linkedObject: 01KSM38KG2-ZB6W
+decisionRationale: >-
+  OPS-433061 uses the existing Amazon EKS Standard Container Host and creates
+  Ottoman-specific versioned Node.js RuntimeServices instead of duplicating a
+  Host per cluster or per workload. GitHub repository reconciliation confirms
+  Node.js 24.14.1 for the nine remaining in-scope components and Ottoman Test
+  Application; it found no ASP.NET Core workload in the requested namespace
+  scope. The initial ASP.NET Core 8 mapping was therefore withdrawn. Repository
+  evidence confirms Node.js 14.15.0 for Ottoman Load Test. Node.js 14 is end of life and outside the preferred
+  Node.js 22 baseline, so its continued presence is recorded as a non-standard
+  current-state choice. The user directed that Ottoman Load Test be upgraded
+  to the preferred Node.js 22 Ottoman EKS runtime. Node.js 14.15.0 remains the
+  observed current state until implementation evidence confirms the migration.
+  Node.js 24 is supported LTS but remains a candidate in the Sofa King
+  Application Runtime capability rather than the preferred Node.js 22 baseline;
+  its broad current use across Ottoman is recorded as accepted candidate
+  current state. The user directed OPS-433061 to create neither a promotion
+  proposal nor a Node.js 22 migration remediation for these workloads.
+  The user classified the production plat-passport-core awscli Deployment as a
+  temporary operational workload, so it is excluded from the governed Ottoman
+  ProductComponent boundary and from further OPS-433061 follow-up.
+  The user confirmed that an approved upgrade plan exists for the observed
+  ottm-prod Kubernetes 1.31 environment and that the target is the rolling
+  Kubernetes N-1 position. The user identified the completion schedule as a
+  Platform Engineering team dependency, so that evidence remains deferred.
+  Kubernetes observations on
+  2026-07-31 confirm separate development, stage, and production clusters;
+  Amazon Linux 2023 worker nodes across us-east-1a and us-east-1b; independent
+  RollingUpdate Deployments; environment-specific replica profiles; HPAs for
+  core services; workload-specific PodDisruptionBudgets; and Kuma sidecars on
+  every running in-scope application pod. serviceAuthentication: the observed
+  Kuma sidecars and the Ottoman SDP establish the mesh and platform identity
+  boundary, but the precise service authentication policy still requires owner
+  confirmation. secretsManagement: secret values were deliberately excluded
+  from inspection, so the delivery mechanism remains unresolved. serviceLogging:
+  namespace metadata confirms Dynatrace association, while application-log
+  forwarding remains unresolved. healthWelfareMonitoring: all observed app and
+  Kuma containers were ready and the namespaces were associated with Dynatrace.
+  recoverabilityModel: Kubernetes pod replacement, RollingUpdate strategy, and
+  configured PodDisruptionBudgets provide the observed recovery mechanisms.
+  failureDomain: deployments are isolated by namespace and environment, with
+  worker capacity across two availability zones. Status remains open pending
+  product and Cloud Engineering confirmation of load-test upgrade completion,
+  secret delivery, logging, and the production
+  Kubernetes upgrade schedule.

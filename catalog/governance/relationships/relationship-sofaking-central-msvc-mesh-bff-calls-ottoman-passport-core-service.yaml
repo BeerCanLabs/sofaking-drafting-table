@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSBM-BZX5
+type: relationship
+name: 'Sofa King Central Msvc Mesh BFF → Ottoman Passport Core Service'
+catalogStatus: stub
+source: 01KYQ4D9S4-24XM
+target: 01KSM38KFX-9EHD
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Direct base URL configuration.

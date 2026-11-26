@@ -1,0 +1,79 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGM-3A6W
+type: product_component
+ownerRole: engineer
+name: ERP CIS Reporting Artifacts
+description: 'Sister project to erp-cis. Stores product and custom JasperReports artifacts for
+  RT-ERP/CIS/HRMS. Each report is a self-contained tar package deployed on demand to
+  per-region JasperSoft instances. Deployment lifecycle is independent of the main
+  erp-sis application release.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT1F-737K
+classification: worker
+runtimeRequirement: Java
+tags:
+- repository-discovery
+- erp-cis
+- reporting
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-cis-reporting
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  classificationRationale: 'Reclassified from data_component to product_component
+    (2026-08-05): this object is first-party JasperReports artifact code deployed
+    onto a RuntimeService (JasperSoft Reporting Service, 01KQQ5JT1F-737K), not
+    database schema/code deployed onto a DataStoreService. runsOn therefore
+    validates against product_component semantics, not data_component''s
+    DataStoreService-only constraint. classification is set to worker because
+    deployment is operator-initiated, on-demand artifact delivery rather than an
+    always-listening service; confirm with the object owner if a different
+    classification fits better.
+
+    '
+  repositoryName: BeerCanLabs/sk-erp-cis-reporting
+  deploymentModel: 'Report deployment is initiated by Sofa King personnel via Rundeck
+    (https://deployment.ops360.example/). An operator selects the report(s), region(s),
+    and version(s) in the Rundeck UI. Rundeck invokes an HTTPS endpoint on the target
+    region site, passing the report URL. The region endpoint pulls the TAR artifact,
+    unpacks it, and routes it to one of two install paths: (1) reports destined for the
+    JasperSoft client library are written to the region EFS mount and executed via the
+    jasper client library inside the erp-sis Tomcat process; (2) dashboardable reports
+    are installed on the region JasperSoft Server via a REST API POST to the /reporting
+    endpoint. Deployments are operator-initiated, not fully automated CI/CD, and are
+    independent of the main erp-sis application release.
+
+    '
+  reportScope: 'Contains both product (standard Sofa King-authored) and custom
+    (client-specific) report artifacts. Reports query region database content; the
+    applicable database platform per region is Db2, SQL Server 2019, or PostgreSQL 17.
+
+    '
+  runtimePaths: 'Two distinct runtime paths exist per report type. (1) Standard reports:
+    TAR artifacts written to the region EFS mount and executed via the jasper client
+    library inside the erp-sis Tomcat process (01KSM38KEX-PX7B). (2) Dashboardable
+    reports: installed on the region JasperSoft Server (01KQQ5JT1F-737K) via REST
+    API. runsOn points to the JasperSoft server as the primary interactive reporting
+    runtime; Tomcat-hosted EFS reports are the secondary path.
+
+    '
+  observedRuntimeSignals: docker, github_actions, java, readme
+  observedManifestPaths: .claude/settings.json; .github/workflows/validate-reports.yml; .mcp.json; .pre-commit-config.yaml; .vscode/mcp.json; buildspec.yml; code-docs/agent-definitions/_agent-schema.yaml; code-docs/agent-definitions/generated/agent-summary.yaml; code-docs/agent-definitions/report-deployment-agent.agent.yaml; code-docs/agent-definitions/report-developer-agent.agent.yaml; code-docs/agent-definitions/report-sql-agent.agent.yaml; code-docs/agent-definitions/report-troubleshooter-agent.agent.yaml
+  serviceAuthentication: Not confirmed; Draftsman must interview the owner.
+  secretsManagement: Not confirmed; Draftsman must interview the owner.
+  serviceLogging: Not confirmed; Draftsman must interview the owner.
+  healthWelfareMonitoring: Not applicable to a report artifact store; monitoring
+    concern belongs to the JasperSoft Reporting Service (01KQQ5JT1F-737K).
+  availabilityModel: Not confirmed; artifact delivery is on-demand rather than
+    always-on service availability.
+  scalabilityModel: Not confirmed.
+  recoverabilityModel: Not confirmed; Draftsman must interview the owner.
+  failureDomain: Per-region at deployment time; a failed report push affects one
+    region. Artifact store failure would block all on-demand deployments.

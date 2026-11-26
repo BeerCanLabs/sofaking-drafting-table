@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+type: vocabulary_proposal
+name: Add HTTP connection protocol
+vocabulary: connectionProtocols
+proposalKind: non-standard-value
+status: proposed
+proposedId: HTTP
+proposedName: HTTP
+description: Plain HTTP used for unencrypted service connections, including trusted proxy-to-backend traffic after TLS termination.
+fieldRefs:
+- object: 01KYN1REHT-6YRN
+  path: notes.nonStandardVocabularyValues[0].value
+  value: HTTP
+rationale: >-
+  Grand Rapids Leave Management endpoints receive HTTPS through F5 BIG-IP.
+  F5 terminates TLS and forwards unencrypted HTTP to the backend web and API
+  servers. The architecture relationship must preserve that real transport
+  boundary, but plain HTTP is not currently available in the approved
+  connectionProtocols vocabulary.
+relatedObjects:
+- ref: 01KYN1REHT-6YRN
+- ref: 01KSM38KEQ-JS8E
+- ref: 01KQQ5JT00-Z6WV

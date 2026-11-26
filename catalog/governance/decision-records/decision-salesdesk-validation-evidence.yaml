@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ33-HW6Z
+type: decision_record
+name: Salesdesk Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGH-6CH6
+linkedObject: 01KSM38KGH-6CH6
+decisionRationale: 'deploymentTargets: Hosted at the Grand Rapids data center (grr-datacenter). Corrected from an earlier Pendo-discovered stub that incorrectly recorded Colohub/Zeeland MI; corrected during the SE-SEM repository discovery session on 2026-07-28.'

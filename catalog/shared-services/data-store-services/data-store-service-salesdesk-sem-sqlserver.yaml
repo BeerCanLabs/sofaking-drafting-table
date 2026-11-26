@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KYMYCJTS-JTNW
+type: data_store_service
+ownerRole: technology-admin
+name: Salesdesk SEM SQL Server Database
+description: >-
+  Dedicated Microsoft SQL Server database service backing the Salesdesk
+  (SEM) SEMWeb3 application and its companion Household Portal, on the same
+  grr-datacenter Windows Server host pattern used by the rest of the
+  Special Orders Management engineering family. Discovered from the
+  SE-SEM repository; not yet confirmed by owner interview.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - salesdesk
+  - sem
+  - repository-discovery
+category: service
+serviceCategory: database
+deliveryModel: self-managed
+host: 01KQQ5JT04-PGTY
+primaryTechnologyComponent: 01KQQ5JT1T-92JG
+architectureNotes:
+  tenancyModel: >-
+    Dedicated database for the Salesdesk/SEM product family; assumed to be
+    separate from the shared Trifold/Tailor/Translation-Direct SQL Server
+    DataStoreService (01KQQ5JT01-QFN5) per owner confirmation during the
+    SE-SEM repository discovery session on 2026-07-28.
+  sqlPlatform: Microsoft SQL Server 2022, build 16.0.4255.1.
+  hostModel: >-
+    Assumed to run on the same grr-datacenter Windows Server 2022 physical
+    host pattern (01KQQ5JT04-PGTY) as sibling SOM-family products; exact
+    database host inventory requires confirmation.
+  sharedWithHouseholdportal: >-
+    Assumed to be shared by both SEMWeb3 and the Household Portal based on the
+    shared SEMData data-access project name observed in the Householdportal
+    website folder; not yet confirmed by owner interview.
+  serviceAuthentication: Not yet confirmed by owner interview.
+  availabilityModel: Not yet confirmed by owner interview.
+  backup: Not yet confirmed by owner interview.

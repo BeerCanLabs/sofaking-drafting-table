@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KZ4EXN71-VVRD
+type: decision_record
+name: Lakeshore CIS LSRCN Network Boundary Validation Evidence
+description: Confirmed ownership, access, and connectivity boundaries for the third-party-managed network hosting the Lakeshore CIS production environment.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+  - lakeshore-cis
+  - lsrcn
+  - network-boundary
+  - third-party-hosting
+  - validation-evidence
+category: risk
+status: open
+affectedComponent: 01KSM38KFR-BPTG
+linkedObject: 01KSM38KFR-BPTG
+impact: Sofa King does not administer or have direct visibility into the LSRCN network infrastructure and cannot rely on private or internal network connectivity between Sofa King-managed environments and the LSRCN-hosted Lakeshore CIS production environment.
+mitigationPath: Obtain network topology, control, monitoring, and connectivity evidence from the third-party LSRCN infrastructure team when those details are required; do not infer Sofa King ownership, administrative access, or private connectivity in related DRAFT records.
+decisionRationale: >-
+  hosting.boundary: The Lakeshore CIS production environment is hosted in the
+  LSRCN data center.
+
+
+  network.ownership: The network infrastructure supporting the Lakeshore CIS
+  production environment is fully managed by a third-party IT team. Sofa King
+  does not own or administer that network infrastructure.
+
+
+  network.access: Sofa King does not have administrative access to the LSRCN
+  network infrastructure. Network configuration, topology, controls,
+  monitoring, and change evidence must therefore be supplied or confirmed by
+  the managing third-party team rather than inferred as Sofa King-operated.
+
+
+  network.connectivity: There is no private or internal network connectivity
+  between Sofa King-managed environments and the LSRCN-hosted environment.
+  Any application-level communication path that crosses this boundary must be
+  documented separately from, and must not be treated as, internal network
+  connectivity.
+
+
+  evidence.scope: This record confirms the management and connectivity
+  boundary only. It does not establish the specific LSRCN network topology,
+  security controls, monitoring coverage, ingress or egress paths, or
+  operational service levels; those remain dependent on evidence from the
+  third-party infrastructure team.

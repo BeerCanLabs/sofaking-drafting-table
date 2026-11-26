@@ -1,0 +1,159 @@
+schemaVersion: '1.0'
+uid: 01KZ8MDB1N-4694
+type: drafting_session
+name: Ottoman Data Domain Infrastructure L1 Session
+description: Evidence and decisions captured for the OPS-825852 Ottoman Data Domain Review.
+version: 1.0.1
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+- session
+- ottoman
+- data-domain
+- OPS-825852
+primaryObjectType: software_deployment_pattern
+sourceArtifacts:
+- name: OPS-825852
+  type: document
+  location: https://sofaking-example.atlassian.net/browse/OPS-825852
+- name: Ottoman DB Infra.xlsx
+  type: spreadsheet
+  notes: Data Team evidence for Aurora PostgreSQL and Neptune topology, versions, sizing, encryption, public access, and native retention.
+- name: Data Team ownership and retention clarification
+  type: interview
+  notes: >-
+    Contributor clarification received 2026-08-11: the Data Team owns database
+    infrastructure in every production and non-production environment; the
+    application team owns the data stored in those databases. Brett Ames is
+    the Ottoman Application SME for application data semantics, cache flows,
+    cross-service database access, and data-classification approval. The
+    confirmed production Aurora retention baseline is daily backups for 31
+    days, monthly backups for 13 months, and annual backups for seven years.
+- name: FC IDM - Atlas MongoDB Environment
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/195448239/FC+IDM+-+Atlas+MongoDB+Environment
+- name: Atlas MongoDB Alerts
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13146756105/Atlas+MongoDB+Alerts
+- name: Atlas MongoDB Performance Monitoring
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13785874750/Atlas+MongoDB+Performance+Monitoring
+- name: Atlas MongoDB Multi-Region Air-Gapped Backup Snapshots
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15739186341/Atlas+MongoDB+Multi-Region+Air-Gapped+Backup+Snapshots
+- name: Atlas MongoDB Database Backup Snapshot Retention and Compliance
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19821140118/Atlas+MongoDB+Database+Backup+Snapshot+Retention+and+Compliance
+generatedObjects:
+- name: Ottoman Platform SDM
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KG2-ZB6W
+- name: Platform Msvc Org Person
+  type: product_component
+  status: created
+  ref: 01KSM38KFH-NYK5
+unresolvedQuestions:
+- id: authoritative-domain-stores
+  question: Which domain-service records are authoritative in Neptune versus MongoDB Atlas?
+  status: open
+  reason: Infrastructure evidence cannot establish application data semantics; only the Ottoman Application SME, Brett Ames, can answer this question.
+  currentBestGuess: Neptune stores graph relationships and sk-org-person stores Org Person data.
+  impact: Brett Ames's confirmation is required for final data-flow accuracy.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: redis-producers-consumers
+  question: Which Ottoman services populate and consume the Neptune-derived Redis cache?
+  status: open
+  reason: The Data Team owns the cache infrastructure but not application cache behavior; only the Ottoman Application SME, Brett Ames, can answer this question.
+  currentBestGuess: Domain Service participates; exact producer and consumers are unconfirmed.
+  impact: Brett Ames's confirmation is required for exact dependency relationships.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: nonproduction-database-scope
+  question: Who owns Ottoman production and non-production database infrastructure and the data stored inside it?
+  status: answered
+  reason: The Data Team contributor clarified the ownership boundary on 2026-08-11.
+  currentBestGuess: The Data Team owns all database infrastructure in production and non-production; the Ottoman application team owns the data inside every database.
+  impact: Infrastructure and application-data accountability are now explicit for all environments.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: cross-service-database-access
+  question: Do any Ottoman services access a database other than their namesake database?
+  status: open
+  reason: Infrastructure inventory does not reveal application access paths; only the Ottoman Application SME, Brett Ames, can answer this question.
+  currentBestGuess: Namesake mapping is used provisionally.
+  impact: Brett Ames's confirmation may require relationship catalog refinements.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: data-classification
+  question: What is the approved classification for each Ottoman store and non-production data set?
+  status: open
+  reason: Classification approval belongs to the application data owner; only the Ottoman Application SME, Brett Ames, can answer this question.
+  currentBestGuess: The SDP-level confidential PII and identity classification remains provisional.
+  impact: Final L1 validation needs Brett Ames's approval.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: neptune-tls-verification
+  question: Is TLS enforced on every current Ottoman Neptune environment?
+  status: open
+  reason: The contributor expects TLS but could not confirm it.
+  currentBestGuess: TLS is enabled.
+  impact: Data Team verification is required for the security baseline.
+  relatedObjects:
+  - ref: 01KQQ5JT05-TQSS
+assumptions:
+- id: service-database-name-mapping
+  statement: Application database names identify the namesake consuming service unless an application SME identifies shared access.
+  rationale: This is the best mapping supported by the supplied inventory.
+  impact: Service relationships remain provisional.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: application-sme
+  statement: Brett Ames is the Ottoman Application SME for the remaining application-owned data-domain details.
+  rationale: The contributor identified Brett Ames as the authoritative Application SME on 2026-08-11.
+  impact: The four application-owned questions must be routed to Brett Ames, not the Data Team.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+nextSteps:
+- id: application-sme-review
+  action: Brett Ames confirms authoritative stores, Redis producers and consumers, cross-service database access, and data classifications.
+  status: open
+  owner: brett-ames
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: verify-neptune-tls
+  action: Data Team verifies TLS enforcement on current Neptune clusters.
+  status: open
+  owner: data-team
+  relatedObjects:
+  - ref: 01KQQ5JT05-TQSS
+- id: track-deletion-protection
+  action: Data Team creates a future OPS Jira to restore unintended disabled deletion protection.
+  status: open
+  owner: data-team
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: plan-production-redis-cloud
+  action: Dev and Data teams define and track the production Redis Cloud migration.
+  status: open
+  owner: data-team
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: decide-dedicated-atlas-cluster
+  action: Decide whether to move sk-org-person to a dedicated Atlas cluster and create a ticket if approved.
+  status: open
+  owner: ottoman-platform-engineering
+  relatedObjects:
+  - ref: 01KSM38KFH-NYK5
+- id: run-final-validation
+  action: Run DRAFT validation after application-SME answers are incorporated, then confirm OPS-825852 L1 completion.
+  status: open
+  owner: cloud-engineering-infrastructure
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+primaryObjectUid: 01KSM38KG2-ZB6W

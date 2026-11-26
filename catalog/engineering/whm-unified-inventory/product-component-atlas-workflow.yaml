@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-YC9P
+type: product_component
+name: Atlas Workflow
+description: 'Maps Atlas requests to Sofa King Platform workflows and owns the Request-To-Pay request flows in the
+  code today: approval workflows, Submit Request (one Platform workflow per sub-request), request tracking and workflow
+  conditions. Calls the Platform Tasks and Workflows APIs with OAuth2 client credentials; read and write clients
+  hold separate least-privilege scopes (plat.ss.tasks.read, plat.ss.tasks.write) minted by one Atlas M2M Okta client.'
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- workflow
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-core
+language: C#
+classification: api-service
+architectureNotes:
+  sourcePath: Service.Core.Workflows
+  platformDependency: Sofa King Platform Tasks and Workflows (tasks, task templates, workflows, workflow templates).
+    Outbound auth through Platform's Okta authorization server.
+  sourceInspection: Source inspection 2026-11-13 of whm-unified-core (develop, eece62e).
+  requestToPayLocation: CatalogRequestsController, ApprovalWorkflowsController, CatalogRequestTrackingController
+    and WorkflowConditionsController live here, not in whm-unified-modules.
+runtimeSpec:
+  ports:
+  - number: 8084
+    protocol: HTTP
+    direction: inbound
+    name: rest
+    description: REST listener (HTTP/1.1). Port from the local compose table in README.md; deployed ports come from
+      the SERVICE_ENDPOINTS secret.
+  - number: 8094
+    protocol: HTTP/2
+    direction: inbound
+    name: grpc
+    description: gRPC listener for service-to-service calls, guarded by ServiceTokenMiddleware (x-whm-service-token).
+      REST port + 10.
+  dependencies:
+  - ref: 01KWF3RGCF-T2HM
+    purpose: Startup configuration. Library.Shared.GlobalConstants fetches SERVICE_ENDPOINTS, SERVICE_TOKEN, GLOBAL_DATABASE_CONNECTION_STRING,
+      OKTA_TOKEN_* and M2M_OKTA_* under the whm/unified/<env>/ prefix when AWS_REGION is set.
+    interface: AWS SDK (GetSecretValue)

@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-7E7G
+type: product_component
+ownerRole: engineer
+name: CIS Svc JAMS Scheduler
+description: Not custom code — this is the third-party JAMS job scheduler product (MVPSI), not a Sofa King-owned application.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- scheduler
+- third-party
+- drafting-2026-07-28
+repoUrl: 'N/A — third-party COTS product (JAMS Scheduler), no Sofa King-owned repository'
+classification: other
+runtimeRequirement: 'N/A — third-party COTS product'
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Confirmed by product owner on 2026-07-30 — this is the third-party JAMS job scheduler application, not Sofa King-authored code. No repository exists or is expected.
+  role: Utility-tier job scheduler (JAMS) shared across LSCIS application services within an ITC.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+type: vocabulary_proposal
+name: Add Shared Customer Engineering team
+vocabulary: teams
+proposalKind: non-standard-value
+status: proposed
+proposedId: shared-customer-engineering
+proposedName: Shared Customer Engineering
+fieldRefs:
+  - object: 01KXR9XAR5-K0FT
+    path: owner.team
+    value: shared-customer-engineering
+entry:
+  contact: wmercer@sofaking.example
+rationale: >-
+  The Shared Customer Record (ss-msvc-customer-profile, ss-msvc-customer-membership,
+  ss-msvc-calendar) is authored and maintained by the Shared Customer Record
+  engineering team, which has no value in the teams vocabulary yet. The existing
+  devops-engineering-customer-solutions value is a DevOps team, not the product
+  engineering team that owns these ProductComponents, DataComponents, and the SSR SDP.
+  Proposing shared-customer-engineering so these engineering objects have an
+  accurate owner and CODEOWNERS routing. Teams vocabulary is advisory, so objects
+  using this value validate with a warning until the value is adopted.
+relatedObjects:
+  - ref: 01KXR9XAR5-K0FT

@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-P3SC
+type: product_component
+ownerRole: engineer
+name: Pg Msvc Plm Eem API
+description: API Solution for PG Teams
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01M1HJY7E4-V1HG
+tags:
+- repository-discovery
+- pg
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-pg-msvc-plm-eem-api
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at the AWS Lambda
+    Serverless Host (01KQQ5JT03-FGYJ), which was wrong on two counts: it is a
+    host object rather than a runtime service, and this component is not
+    serverless. Every deployment manifest is Kubernetes
+    (cd/prod-ottoman/{cm,deploy,hpa}.yml, cd/dr/{ingress,service}.yml) and the
+    Dockerfile runs on mcr.microsoft.com/dotnet/aspnet:10.0. Repointed at the
+    new PG ASP.NET Core 10 on EKS Application Runtime (01M1HJY7E4-V1HG). This
+    closes the component-defects-from-discovery item for this object.
+  repositoryName: BeerCanLabs/sk-pg-msvc-plm-eem-api
+  observedRuntimeSignals: docker, dotnet, readme, serverless
+  observedManifestPaths: Dockerfile; SK.PG.PLM_EEM_API.sln; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/dr/cm.yml; cd/dr/deploy.yml; cd/dr/hpa.yml; cd/dr/ingress.yml; cd/dr/service.yml; cd/prod-ottoman/cm.yml; cd/prod-ottoman/deploy.yml; cd/prod-ottoman/hpa.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

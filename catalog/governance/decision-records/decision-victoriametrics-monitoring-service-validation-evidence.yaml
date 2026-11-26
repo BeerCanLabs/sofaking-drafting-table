@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJDT-5QQQ
+type: decision_record
+name: VictoriaMetrics Monitoring Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-HCBR
+linkedObject: 01KQQ5JT1E-HCBR
+decisionRationale: "serviceAuthentication: mTLS within the service mesh.\n\nsecretsManagement: Integrated with External Secrets (AWS Secrets Manager).\n\navailabilityModel: Clustered deployment for HA.\n\nscalabilityModel: Scales horizontally by adding additional nodes/replicas.\n\nrecoverabilityModel: Automatic pod restart and persistent volume management.\n\nfailureDomain: Scoped to the EKS cluster."

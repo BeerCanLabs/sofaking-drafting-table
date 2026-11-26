@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-AP1E
+type: decision_record
+name: PG PLM/EEM Cloud Services - No Applicable Reference Architecture
+description: >-
+  Reference-architecture conformance decision for the PLM/EEM cloud services deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  noApplicablePattern: No reference architecture has been selected for this pattern. reference-architecture-aws-eks-microservices-multitenant is the closest candidate and matches the EKS container tier, but this pattern is a hybrid of EKS containers and a CDK-deployed Lambda and Step Functions estate, and it depends on the SQL Server database catalogued in the legacy pattern rather than on a cloud-native store alone. Confirming conformance would require verifying the multitenancy model, which has not been done. Pattern alignment is an APEX L2 Established criterion, not L1 Baseline, so this pattern is registered without a selected reference architecture and the choice is tracked as an unresolved question in DraftingSession 01M1F8WB4E-0GSN. Status open pending Architecture Review Board input.

@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 4TG85QEKZ3-ZTFS
+type: decision_record
+name: Two-Milestone Delivery (Internal Supervised, then Auditable)
+description: >
+  CCA's first Divan is delivered in two distinct milestones, not one. Milestone
+  A is an Internal Supervised Divan — read-only, in-sandbox, team-only audience,
+  manual JSM approval per run — targeted for 2026-06-15. Milestone B is the
+  Auditable Divan — full 9-layer controls, JIT credentialing, integrated kill
+  switch, anti-affinity enforcement, expanded audience — with a date set by
+  readiness, not the calendar.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- adr
+- decision
+- cca
+- delivery
+- milestones
+- slt-communication
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+decisionRationale: >
+  Promising SLT one date for "first Divan" risks the trap where leadership
+  hears "first agent in 4 weeks" and translates that to "production agent in 4
+  weeks." Splitting delivery into two distinct milestones gives SLT a date
+  they can communicate (Milestone A) without committing to controls that are
+  not built (Milestone B). Failure modes discovered in Milestone A occur
+  before any non-team-member is exposed to them. Anti-affinity, JIT
+  credentialing, and the integrated kill switch are months of work, not
+  weeks, and pretending otherwise would damage trust if missed.
+impact: >
+  Milestone A scope is explicitly bounded: read-only execution only, AWS
+  sandbox only, manual JSM ticket per run, team-only audience, single
+  Discovery Divan (Pendo → Dovetail → Jira → Draft Zero PRD). Any write
+  action, any audience expansion, or any second concurrent Divan is out of
+  scope for Milestone A.
+mitigationPath: >
+  Milestone A retro (target 2026-06-15+) decides whether Milestone B work
+  begins, which controls advance first (Deep-Check vs JIT credentialing vs
+  kill switch), and whether audience expansion is approved.
+relatedDecisionRecords:
+- A167KVYYG2-X831
+- N0X30P3VJ7-42VK

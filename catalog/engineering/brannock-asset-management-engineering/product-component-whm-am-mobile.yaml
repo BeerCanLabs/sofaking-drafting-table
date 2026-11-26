@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-27S3
+type: product_component
+ownerRole: engineer
+name: Whm Am Mobile
+description: Native mobile client for Asset Management asset/inventory scanning - a native Android app (Kotlin) plus a native iOS app (Swift), not a hybrid/cross-platform app. Corrects the original repository-discovery guess of "Java" language / "api-service" classification, which mistook Android build tooling signals for the real client-app nature of this repo.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- whm
+- product-component
+- asset-management
+- mobile
+- client-app
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_Mobile
+language: Kotlin (Android) and Swift (iOS)
+classification: other
+runtimeRequirement: 'Native Android (Kotlin, package com.sofakingretail.whm) and native iOS (Swift) mobile applications; not a hosted service.'
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_Mobile
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: android/Trackweb/androidframework/build.gradle; android/Trackweb/anychart/build.gradle; android/Trackweb/app/build.gradle; android/Trackweb/app/json/response_user_role_help_desk.json; android/Trackweb/app/src/androidTest/resources/response_active_priorities.json; android/Trackweb/app/src/androidTest/resources/response_all_active_and_filter_users.json; android/Trackweb/app/src/androidTest/resources/response_all_service_groups.json; android/Trackweb/app/src/androidTest/resources/response_all_technicians.json; android/Trackweb/app/src/androidTest/resources/response_associate_rfid_tag.json; android/Trackweb/app/src/androidTest/resources/response_create_audit.json; android/Trackweb/app/src/androidTest/resources/response_create_room.json; android/Trackweb/app/src/androidTest/resources/response_create_ticket.json
+  serviceAuthentication: 'Username/password login posted to a per-region base URL (UseCaseLogin.kt), returning an app-specific security token; also supports SSO via a WebView-hosted flow (SsoLoginActivity, WebViewSsoActivity, WvSsoViewModel.kt). Token/expiry stored client-side and refreshed via RefreshTokenCaller.kt, which calls back into the Mobile API on expiry.'
+  secretsManagement: 'No secrets vault; the per-tenant API URL and access token are stored in Android Jetpack DataStore preferences (PreferencesManager.kt). Socket Mobile scanner SDK app key/developer ID are hardcoded in AndroidManifest.xml.'
+  serviceLogging: 'Custom LogUtils wrapper used app-wide; no centralized cloud log shipping found client-side (crash/analytics telemetry covers operational visibility instead - see healthWelfareMonitoring).'
+  healthWelfareMonitoring: 'Crash/usage telemetry via Microsoft App Center (analytics + crashes) and Firebase Analytics. No dedicated health-check endpoint (client apps do not expose one).'
+  availabilityModel: 'Not applicable - client app, distributed as APK/IPA rather than a server deployment.'
+  scalabilityModel: 'Not applicable - client-side.'
+  recoverabilityModel: 'Local Room database cache (TrackwebItDatabase) allows some offline continuity; session-expiration is actively checked and forces logout on expiry.'
+  failureDomain: 'Scoped to a single mobile device/session; app enforces network security via a network-security-config that blocks cleartext except to localhost.'
+  externalDependencies: 'Socket Mobile barcode/RFID scanner SDK; Zebra RFID SDK framework (iOS); ZXing barcode scanning; Firebase; Microsoft App Center. All backend calls go to the Mobile API (01KSM38KFB-D6MJ).'
+  primaryDataStores: 'Local only - Android Room database (TrackwebItDatabase) plus DataStore preferences; no direct external database access from the client.'

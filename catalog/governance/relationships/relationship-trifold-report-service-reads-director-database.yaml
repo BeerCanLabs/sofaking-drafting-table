@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-CFW4
+type: relationship
+name: Trifold Report Service → Trifold Director Database
+source: 01KX421X4R-YEMQ
+target: 01KX421X49-VNRW
+label: reads from
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifold TFS codebase (ReportServer.txt, ReportDllToWWWBin.txt); connection details not yet confirmed by owner interview.

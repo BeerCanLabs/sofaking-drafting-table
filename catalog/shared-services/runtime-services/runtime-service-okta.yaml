@@ -1,0 +1,46 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-SHXD
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+ownerRole: technology-admin
+category: service
+serviceCategory: saas
+name: Okta
+description: 'Vendor-managed identity provider used by Ottoman for authentication and single sign-on integration.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+tags:
+  - saas
+  - identity
+  - sso
+vendor: Okta
+productName: Okta
+productVersion: managed
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: Not confirmed in the Ottoman source materials.
+  dpaNotes: DPA status not confirmed in the Ottoman source materials.
+  vendorSLA: Not confirmed in the Ottoman source materials.
+  incidentNotificationProcess: Not confirmed in the Ottoman source materials.
+complianceCerts: []
+authenticationModel: other
+architectureNotes:
+  auditVisibility: 'Okta administrative and authentication event visibility is expected, but the exact Ottoman logging and export path was not provided in the source materials.
+
+    '
+  healthStatusVisibility: Vendor status visibility and incident notification path are not confirmed.
+  failureDomain: Scoped to the Okta tenant and the Ottoman identity integration.
+capabilities:
+  - 01KQQ4Q026-MHJM
+deliveryModel: saas
+decisionRecords:
+  - ref: 01KT16XJAJ-G1XE
+    key: auditVisibility
+  - ref: 01KT16XJAJ-G1XE
+    key: failureDomain

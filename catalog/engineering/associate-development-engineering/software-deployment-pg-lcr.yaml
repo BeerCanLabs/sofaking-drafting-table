@@ -1,0 +1,90 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG4-R1NA
+type: software_deployment_pattern
+ownerRole: engineer
+name: 'PG: LCR & Resource Library'
+description: Learning Content Repository and Resource Library — a Associate Development sub-product hosted on the Settee platform.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Associate Development
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - associate-development
+  - lcr
+  - resource-library
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: pendo-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Hosted in AWS us-east-1 (Production Microservices account 736016846305). See the service groups for the EKS, EC2 and Octopus-deployed pieces.
+  deploymentTargetsHistory: Previously recorded as "Hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware." That hosting is obsolete for this product, corrected per the product owner. The linked decision record was updated to match.
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  noAdditionalInteractions: External interactions require owner interview.
+  dataClassification: Data classification was not confirmed by owner interview.
+  failureDomain: Failure domain was not confirmed by owner interview.
+  noPatternDeviations: Pattern deviations require owner interview.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Resource Library Services on EKS
+    deploymentTarget: aws-us-east-1
+    notes: Codefresh-deployed services on Amazon EKS. aws-us-east-1 is inferred from the production ingress hosts (*.use1.sofaking.example) and the us-east-1 database, OpenSearch and S3 endpoints in the production ConfigMaps. No cd/dr manifests were found in these repositories. Not yet confirmed by the owner.
+    deployableObjects:
+      - ref: 01M71NWZVQ-D4AR
+        diagramTier: presentation
+        notes: Rubric Designer App. IDM via AWS CodeBuild, Ottoman via Codefresh (Ottoman path is on EKS).
+      - ref: 01M71NWZVQ-HKYG
+        diagramTier: application
+        notes: Resource Library Service. Codefresh.
+      - ref: 01M71NWZVQ-ZD56
+        diagramTier: application
+        notes: Rubric Designer Service. Codefresh.
+      - ref: 01M71NWZVQ-2C2K
+        diagramTier: application
+        notes: External API Service. Codefresh.
+      - ref: 01M71NWZVQ-4Z7N
+        diagramTier: application
+        notes: Interaction Service. Codefresh.
+      - ref: 01M71NWZVQ-Z1SS
+        diagramTier: application
+        notes: Resource Library Elasticsearch Sync. Codefresh.
+      - ref: 01M71SSZ2X-R56B
+        diagramTier: data
+        notes: ElastiCache Redis cluster rl-redis-prod (Production Microservices account, us-east-1). Used by Resource Library Service.
+  - name: TeamCity and Octopus Deployed Apps
+    deploymentTarget: aws-us-east-1
+    notes: The Universal Resource Library UI Module is a Settee UI module loaded inside Settee. Owner-confirmed deployment by Octopus to environment aws_prod, three Listening Tentacle targets tagged Settee and UIModules (Default Machine Policy), in the Production Microservices account (736016846305), us-east-1.
+    deployableObjects:
+      - ref: 01M71NWZVQ-M1PQ
+        diagramTier: presentation
+        notes: Universal Resource Library UI Module (Settee). TeamCity build, Octopus deploy.
+  - name: Learning Designer on EC2
+    deploymentTarget: aws-us-east-1
+    notes: Three Windows EC2 instances running IIS, deployed by Octopus (two in environment prod_ottm, which is Ottoman production, and one in aws_prod, which is IDM production). Owner-confirmed as AWS region us-east-1 in the Production Microservices account (736016846305).
+    deployableObjects:
+      - ref: 01M71NWZVQ-SVSV
+        diagramTier: presentation
+        notes: Learning Designer App (.NET 4.8 on IIS). TeamCity build, Octopus deploy.
+decisionRecords:
+  - ref: 01KT16XHXS-03DB
+    key: deploymentTargets

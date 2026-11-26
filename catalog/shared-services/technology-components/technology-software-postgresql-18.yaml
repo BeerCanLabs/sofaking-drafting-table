@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-SFDE
+type: technology_component
+ownerRole: technology-admin
+name: PostgreSQL 18
+description: PostgreSQL 18 major release baseline.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- postgresql
+classification: software
+vendor: PostgreSQL Global Development Group
+productName: PostgreSQL
+productVersion: '18'
+vendorLifecycle:
+  mainstreamSupportEnd: 2030-11-14
+  extendedSupportEnd: 2030-11-14
+  notes: PostgreSQL versioning policy lists PostgreSQL 18 final release on November 14, 2030.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-postgresql-listener
+  name: Default PostgreSQL Listener
+  description: Default PostgreSQL listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 5432
+    protocol: PostgreSQL
+    direction: inbound
+    description: Default PostgreSQL client listener.

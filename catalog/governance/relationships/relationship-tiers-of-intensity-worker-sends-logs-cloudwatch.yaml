@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYMPKVGR-F94F
+type: relationship
+name: Tiers of Intensity SQS Poller Lambda → Amazon CloudWatch Logs
+description: >-
+  The Lambda worker writes invocation and processing logs to its managed
+  CloudWatch log group.
+source: 01KX18GPWW-8CJS
+externalTarget: Amazon CloudWatch Logs
+label: sends invocation logs to
+technology: AWS Lambda logging
+direction: event
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KQQ4Q026-D04B
+tags:
+  - tiers-of-intensity
+  - lambda
+  - cloudwatch
+  - logging
+notes: Terraform configures 365-day retention for the Lambda log group.

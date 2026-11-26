@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-D4AR
+type: product_component
+ownerRole: engineer
+name: Rubric Designer App
+description: Vue 3, TypeScript and Vite front-end application for Rubric Designer, served from an nginx container (repository BeerCanLabs/sk-app-RubricDesigner). Deployed through two paths - IDM and Ottoman.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- rubric-designer
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-app-RubricDesigner
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js (build); nginx (container runtime)
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-app-RubricDesigner
+  deploymentPipeline: Two paths (owner-confirmed). IDM is deployed with AWS CodeBuild. Ottoman is deployed with CodeFresh.
+  idmDeploymentEvidence: The repository defines an AWS CDK pipeline (lib/app-rubric_designer-stack.ts, which uses CodePipeline and CodeBuild) and an S3 and CloudFront stack (lib/s3_cloudfront_template_stack.ts). Which AWS accounts and regions this targets was not confirmed. The IDM hosting is not modeled by runsOn and needs owner input.
+  ottomanDeploymentEvidence: Kubernetes manifests (Deployment, Service, HPA, ConfigMap) under cd/ for prod and stage; nginx container serves on port 80 (Dockerfile, nginx.conf). runsOn is Amazon EKS Standard for this path.
+  observedRuntimeSignals: docker, nginx, vue, vite, typescript, aws-cdk, kubernetes-manifests
+  observedManifestPaths: Dockerfile; nginx.conf; cdk.json; package.json; bin/app-rubric_designer.ts; lib/app-rubric_designer-stack.ts; lib/deployment_stage.ts; lib/s3_cloudfront_template_stack.ts; ci/codefresh-build.yml; ci/codefresh-main-build.yml; ci/pull-request.yml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-master.yml; cd/prod/deploy.yml; cd/stage/deploy.yml
+  observedDependencySignals: UI source references IDM services (ui/app/src/services/IDMSvc.ts, CheckRoleSvc.ts) for sign-in and role checks.
+  serviceAuthentication: Uses IDM for user identity and role checks (observed in UI source). Remaining details not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed. The CDK pipeline reads github-token and npmrc from AWS Secrets Manager.
+  serviceLogging: Logging approach was not confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed. HPA manifests exist in cd/, owner to confirm.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01M71NWZVQ-ZD56
+    purpose: Backend API for rubrics and indicators.
+    interface: VITE_ENDPOINT (msvc-rubricdesiger.use1.sofaking.example/api)
+  - ref: 01M71NWZVQ-HKYG
+    purpose: Resource Library API used by the app.
+    interface: VITE_APP_BASEURL_RLAPI

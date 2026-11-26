@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-N9DB
+type: reference_architecture
+name: Hosted Dedicated Windows and SQL Server Suite
+description: Reference Architecture for customer, ITC, or partner-hosted Windows application stacks with dedicated application tiers and SQL Server data tiers.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- hosted
+- windows
+- sqlserver
+- dedicated-stack
+patternType: hosted-dedicated-windows-sqlserver
+serviceGroups:
+- name: Presentation Tier
+  deploymentTarget: customer-hosted
+  deployableObjects:
+  - ref: 01KQQ5JT04-F2AX
+    diagramTier: presentation
+  - ref: 01KQQ5JT03-2NEW
+    diagramTier: presentation
+- name: Application Tier
+  deploymentTarget: customer-hosted
+  deployableObjects:
+  - ref: 01KQQ5JT04-F2AX
+    diagramTier: application
+  - ref: 01KQQ5JT03-2NEW
+    diagramTier: application
+- name: Traffic and API Routing
+  deploymentTarget: customer-hosted
+  deployableObjects:
+  - ref: 01KQQ5JT1E-SW3X
+    diagramTier: application
+  - ref: 01KQQ5JT00-191S
+    diagramTier: data
+- name: Database Tier
+  deploymentTarget: grr-datacenter
+  deployableObjects:
+  - ref: 01KQQ5JT01-QFN5
+    diagramTier: data
+notes:
+  lifecycleRationale: Maintain as an explicit exception for existing hosted systems while referenced Windows Server and SQL Server Technology Components remain in extended support. This pattern should not be used for new target-state architecture.
+  availabilityModel: Dedicated application and data tiers must declare failover, backup, and recovery posture per hosted boundary.
+  tenancyModel: Isolation is provided by dedicated stack, ITC, customer, or tenant boundaries.
+  deploymentModel: Manual or semi-automated deployment paths are expected to be documented as deviations until automated.
+  patternRisks: Non-Sofa King hosting control, manual deployment, and shared storage blast radius must be explicitly recorded.

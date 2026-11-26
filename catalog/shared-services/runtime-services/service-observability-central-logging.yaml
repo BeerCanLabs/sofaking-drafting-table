@@ -1,0 +1,55 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-A6M5
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Central Logging Service
+description: Reusable Sofa King logging service standard that forwards platform and workload logs to AWS OpenSearch Service.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - observability
+  - logging
+  - opensearch
+  - fluent-bit
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1P-11K0
+architectureNotes:
+  serviceAuthentication: Access to the managed logging destination is controlled through AWS IAM and workload identity.
+  secretsManagement: Log forwarding endpoint and credential material are supplied through managed cluster secret delivery when required.
+  serviceLogging: Fluent Bit forwards platform and workload logs to AWS OpenSearch Service for centralized retention and search.
+  healthWelfareMonitoring: Fluent Bit forwarder health, delivery errors, and AWS OpenSearch domain health are monitored through the observability stack.
+  availabilityModel: Log forwarding runs as a replicated cluster service and the logging destination uses the AWS OpenSearch managed service availability model.
+  scalabilityModel: Forwarder replicas and AWS OpenSearch domain capacity scale independently with log volume.
+  recoverabilityModel: Failed forwarder pods are restarted by the container platform and AWS OpenSearch recovery follows the managed service recovery model.
+  failureDomain: Scoped to the EKS cluster logging plane and the AWS OpenSearch domain and region.
+deploymentConfigurations:
+  - id: managed-opensearch-destination
+    name: Managed OpenSearch Destination
+    description: Logs are delivered to AWS OpenSearch Service for centralized storage and search.
+    addressesQualities:
+      - availability
+      - scalability
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KQQ5JT1P-11K0
+    role: log-forwarder
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJE1-81BG
+    key: serviceAuthentication
+  - ref: 01KT16XJE1-81BG
+    key: secretsManagement
+  - ref: 01KT16XJE1-81BG
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJE1-81BG
+    key: failureDomain

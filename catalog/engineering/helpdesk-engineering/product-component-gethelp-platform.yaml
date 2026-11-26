@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0M-C1F5
+type: product_component
+ownerRole: engineer
+name: GetHelp (HelpDesk) Platform
+description: |
+  Multi-tenant help desk platform composed of three Angular SPAs
+  (HHD_Login, HHD_UI, HHD_UP), the HHD_API .NET backend, tenant-isolated SQL
+  Server databases, AWS Lambda background processing, and S3-hosted environment
+  configuration in AWS ECS-hosted environments.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+  - helpdesk
+  - gethelp
+  - angular
+  - dotnet
+  - aws
+  - ecs
+  - lambda
+  - product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  technologyStack: Angular SPA frontends, .NET Web API backend, SQL Server persistence, AWS Lambda, and S3-hosted runtime configuration.
+  deploymentModel: Coordinated AWS ECS release across HHD_Login, HHD_UI, HHD_UP, HHD_API, SQL release scripts, Lambda artifacts, and S3 configuration.
+  tenantIsolationModel: Shared application runtime with tenant isolation primarily enforced at the SQL Server database layer.
+  securityModel: Signal Sciences WAF in the ECS and NGINX path, tenant-specific authentication flows, and backend authorization enforcement.
+  observabilityModel: Application Insights and CloudWatch are the active observability systems; Dynatrace is currently excluded from the active architecture.
+  runtimeRequirement: Current-state runtime spans shared ECS workloads, Lambda background execution, and externalized environment configuration.
+decisionRecords:
+  - ref: 01KT16XHN0-MHHX
+    key: runtimeRequirement

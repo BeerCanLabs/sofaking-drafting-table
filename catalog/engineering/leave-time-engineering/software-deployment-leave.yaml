@@ -1,0 +1,748 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEQ-JS8E
+type: software_deployment_pattern
+ownerRole: engineer
+name: Leave Management - Pattern
+aliases:
+  - Leave Software Deployment Pattern
+description: Software Deployment Pattern for Leave production workloads across Grand Rapids and AWS, including owner-confirmed Leave-only EKS workloads and confirmed Grand Rapids compute, runtime, database, and shared-storage boundaries (OPS-049026).
+version: 1.5.132
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Leave
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - repository-discovery
+  - leave
+architectureNotes:
+  interServiceConnections: >-
+    Modeled relationships capture F5 BIG-IP ingress to the Grand Rapids Leave web/API tier, the Grand Rapids web/API tier to shared storage and GRRFTP1, GRRFTP1 to Amazon S3, and the active GRRFTP1-to-Sofa King Central file exchange. The F5 distributes traffic across active IIS servers and uses URL health checks for pool-member health. Session persistence is application-specific: the GRRLVENAVWEB* and GRRLVEWS* F5 pools both host Leave Web MVC and use cookie-based persistence; GRRLVEWS* does not host Leave Web API. The GRRLVEAPIWEB* and GRRLVEMBAPI* Leave Web API pools, the GRRLVEMHAPI* Leave IVR Menu Handler API pool, and the GRRLVEBOTWEB* Leave Job API pool do not use session persistence, so requests may move between active pool members. Persistence is not inferred for other IIS pools. Each production EKS cluster has an internet-facing and an internal AWS Application Load Balancer, for four distinct ALB deployment instances across the two clusters; the ALBs terminate client TLS. rota-frontend-reactjs and rota-frontend-reactjs-ml are explicitly exposed through the chaise internet-facing ALB. HTTP is the contributor's provisional best guess for the backend ALB-to-EKS protocol but is not confirmed; listener counts and routing for the remaining workloads remain unconfirmed. Workloads in leave-prod do not communicate directly with workloads in chaise. Whether any EKS workload accesses GRRFTP1 or GRRFILES1 is unknown, so no AWS-to-Grand Rapids file-service relationship is inferred. Same-tier connections within each cluster and the remaining repository-discovered service graph have not been reviewed.
+  patternType: repository-discovered core services; Grand Rapids compute, runtime, database, and shared-storage boundaries confirmed by owner interview on 2026-07-29 (OPS-049026).
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Hosted across Grand Rapids and AWS. Grand Rapids web and API tiers run on Sofa King-owned VMware infrastructure. SQL Server 2022 runs on dedicated physical Windows Server 2022 hosts in a Grand Rapids-only failover cluster with Always On availability groups, shared with Time & Attendance (owner-confirmed 2026-07-29). Production EKS workloads run in AWS us-east-1 rather than Grand Rapids. Five active workloads run in the leave-prod cluster in the Team_Leave_Prod account (829641239427); all other active EKS workloads run in the chaise cluster in the Production Microservices account (736016846305). Four production Leave AWS Lambda functions also run in the Production Microservices account, two on .NET 6 and two on .NET 8 (console evidence supplied 2026-08-05).
+  availabilityRequirement: High availability within Grand Rapids; must remain operational through a single server or infrastructure-node failure (owner-confirmed 2026-07-29). IIS web applications run active-active across multiple web servers behind the F5, which uses URL health checks to remove unhealthy application instances from rotation. The MDaemon high- and low-priority pools use the same failure-handling model; F5 automatically removes a failed GRRMAIL member and routes new traffic to remaining members. Messages already in the failed member's local queue remain unavailable until that server is restored. Each Grand Rapids .NET service server runs one Windows Service instance, while the number of servers varies by function. Where a function has multiple servers, all service instances run active-active rather than using a passive standby; per-function server counts remain to be verified. JAMS is an exception to that active-active service model; GRRJAMS1 is normally active and automatically fails over to standby GRRJAMS2. Production EKS workloads in both leave-prod and chaise are distributed across multiple AWS Availability Zones in us-east-1 and run with multiple pod replicas (owner-confirmed 2026-08-05); exact replica counts remain unconfirmed.
+  externalDependencies: Shared F5 BIG-IP ingress fronts all Grand Rapids web/API endpoints. Shared GRRNAP1CLU1 NetApp cluster provides file storage via the Leave-only GRRFILES1 Storage VM. GRRFTP1 managed file-transfer service supports FTP, FTPS, and SFTP, and forwards logs to Amazon S3. The shared Grand Rapids MDaemon mail platform serves Leave & Time, Platform, and IDM through high- and low-priority F5 pools and supports SMTP plus raw-file queues used by email agents. Rota Legacy and New Rota Letter Writer and Report Writer delivery use GRRMAILLOW; Rota Platform Email Agent uses GRRMAILHIGH. Static-filename Rota reports bypass the Email Queue and Email Agent and send directly over SMTP to GRRMAILLOW. JAMS Scheduler 6.3.26.0 on GRRJAMS1/GRRJAMS2 is shared with PG\PLM-EEM and stores scheduling state in the JAMS database on the shared Grand Rapids SQL Server 2022 platform. The active Sofa King Central dependency is implemented by the running SKIntegrationService Windows service on the Windows Server 2016 VMware VM GRRLVEUTIL1 under service account SVC_AES_PRD_UTIL_SCH; it watches Sofa King Central export folders on GRRFTP1 and writes transformed files to Leave ToRota folders (owner-confirmed through 2026-08-13).
+  dataClassification: Restricted. Leave Management uses the shared, multi-tenant Rota database, which contains personally identifiable information (owner-confirmed 2026-07-29).
+  failureDomain: Grand Rapids data center for the legacy application and database boundary. The shared Rota database, shared GRRNAP1CLU1 NetApp cluster, shared F5 BIG-IP ingress, JAMS scheduler shared with PG\PLM-EEM, single-instance GRRFTP1 file-transfer service, and single GRRLVEUTIL1 VM running SKIntegrationService with no standby are additional shared or single-server exposures within that domain. MDaemon continues accepting new traffic after a single GRRMAIL failure through F5 pool-member removal, but each server stores its mail queue locally; messages already queued on a failed server remain unavailable until that server is restored. JAMS reduces scheduler-node exposure through automatic failover from GRRJAMS1 to standby GRRJAMS2, but its JAMS database remains on the shared Grand Rapids SQL platform and only the normally active GRRJAMS1 VM is protected by Veeam; standby GRRJAMS2 is not backed up (owner-confirmed through 2026-09-03). AWS EKS workloads in both production clusters span multiple Availability Zones in us-east-1; zone count and identities are intentionally not inferred (owner-confirmed 2026-08-05).
+  patternDeviations: F5 BIG-IP terminates client TLS and forwards unencrypted HTTP to Grand Rapids backend servers; plain HTTP is a proposed non-standard connectionProtocols value pending vocabulary review. Leave Email Agent raw-message SMB traffic and direct report SMTP traffic to GRRMAILLOW and GRRMAILHIGH are also unencrypted within Grand Rapids. GRRLVEAG*, GRRLVEMC*, GRRLVEBOTWEB*, GRRLVEAPIWEB*, GRRLVENAVWEB*, GRRLVEWS*, GRRLVEEAN*, GRRLVEPIC*, GRRLVERA1, GRRLVEDL1, GRRJAMS1, and GRRJAMS2 remain active on end-of-support Windows Server 2012 with no active upgrade or retirement plan and no approved risk acceptance. GRRFTP1 runs Globalscape EFT Server 6.5.0.40 on a single Windows Server 2008 R2 host with no active retirement plan. GRRCONWEB1-3 and GRRSUBIT1 remain active on Windows Server 2008 R2 with no active retirement or upgrade plan and no identified risk acceptance. The Windows Server 2003 Fulfillment Engine estate remains active pending the JAG 2.0 replacement, which has no committed delivery date. GRRLVEUTIL1 runs the deprecated Windows Server 2016 VM host standard with no active upgrade or retirement plan. GRRMAIL1-6 no longer have synchronized configuration because their former Chef automation is not functioning, creating configuration-drift and rebuild risks. SKIntegrationService is a single-instance file-transformation service without a Nagios Windows-service check or automatic restart after process failure, and no remediation plan or ticket exists. Two production AWS Lambda functions, use1-lambda-prd-abs-ivr-tts-processor and use1-lambda-prd-abs-func-add-new-sub-to-default-pref-list, run on end-of-support Microsoft .NET 6; remediation or exception evidence remains unconfirmed (owner and console evidence through 2026-09-03).
+  legacyRisks: Active, unremediated end-of-support production systems — GRRLVEAG*, GRRLVEMC*, GRRLVEBOTWEB*, GRRLVEAPIWEB*, GRRLVENAVWEB*, GRRLVEWS*, GRRLVEEAN*, GRRLVEPIC*, GRRLVERA1, GRRLVEDL1, GRRJAMS1, and GRRJAMS2 on Windows Server 2012; GRRCONWEB1, GRRCONWEB2, GRRCONWEB3, GRRSUBIT1, and GRRFTP1 on Windows Server 2008 R2; and the Windows Server 2003 Fulfillment Engine estate pending JAG 2.0 (WFMAT-57071, no committed ETA). GRRLVEUTIL1 and GRRMAIL1-6 use the deprecated Windows Server 2016 VM host standard; GRRMAIL1-6 have no active operating-system upgrade plan or ticket. GRRMAIL1-6 are protected by Veeam VM backups, correcting the earlier finding; OPS-961456 is complete, but no GRRMAIL restore test has been performed. Their former Chef synchronization is inactive, no separate authoritative off-server configuration export exists, and no ticket or plan addresses active configuration synchronization or export. No approved risk acceptance or exception has been identified for the end-of-support estate; lifecycle and recovery disposition remain open governance items.
+  deploymentQualities: Availability and failure-domain boundaries are confirmed for the Grand Rapids production runtime (see availabilityRequirement, failureDomain). JAMS provides automatic scheduler-node failover from normally active GRRJAMS1 to standby GRRJAMS2 and stores scheduling state in its database on the shared Grand Rapids SQL Server 2022 platform; failover-test evidence remains unconfirmed. Only GRRJAMS1 is protected by Veeam, leaving standby GRRJAMS2 without VM-backup coverage. Event Analyzer on GRRLVEEAN*, Prior Image Cache on GRRLVEPIC*, Report Agent on GRRLVERA1, and Data Importer on GRRLVEDL1 also lack Veeam VM-backup coverage. Leave MOS Job Checker on GRRLVEMC* is protected by Veeam, while Leave Event Processor on GRRLVEEVP* and Leave JAG on GRRLVEAG* are not. None of the five Leave Email Agent servers—GRRLVELEGEA1, GRRLVEPLATEA1, GRRLVELWEA1, GRRLVERWEA1, and GRRIDMEA1—is protected by Veeam. GRRSUBIT1 is protected by Veeam, while GRRCONWEB1, GRRCONWEB2, and GRRCONWEB3 are not; the missing GRRCONWEB coverage is an unplanned recoverability gap with no remediation ticket. VM-backup coverage for the Windows Server 2003 Fulfillment Engine estate remains unknown; GRRLVEUTIL1 is confirmed recoverable from a VM backup but its backup product remains unconfirmed, while GRRFTP1 and GRRMAIL1-6 are confirmed protected by Veeam VM backups. The AWS EKS workloads are distributed across multiple Availability Zones and run with multiple pod replicas. Pod autoscaling is workload-specific and depends on hpa.yaml availability; exact replica counts and the active production HPA map remain unconfirmed. EKS workload recovery is provisionally believed to use redeployment from source-controlled configuration and deployment pipelines, but the runbook and recovery-test evidence are unconfirmed. GRRLVEUTIL1 is recoverable from VM backup, but its recovery objective and restore-test evidence remain unconfirmed. SKIntegrationService starts automatically when the VM boots but is not configured to restart after an isolated service crash. Nagios monitors GRRLVEUTIL1 host health but not the SKIntegrationService Windows service, leaving application-level failure detection incomplete. A conjectured reactive process has Sofa King users notice a missing transformation and then inspect the service over RDP; this is not verified monitoring evidence. SKIntegrationService processing and error-log destinations are unknown. Scalability and recoverability details for the shared NetApp platform and GRRFTP1 remain open follow-ups.
+  awsRuntimeBoundary: >-
+    ProductComponents with production Kubernetes evidence are grouped under the
+    Amazon EKS Standard Container Host and run in AWS us-east-1, not on
+    Grand Rapids VMware. Production deployment manifests and Terraform establish
+    the region. The product owner confirmed on 2026-08-04 that all at-api-* and
+    at-svc-* EKS workloads belong exclusively to Leave, not Time & Attendance.
+    The workloads run across two separate production EKS clusters
+    (owner-confirmed 2026-08-04). The leave-prod cluster is in the
+    Team_Leave_Prod account (829641239427) and actively runs
+    abs-api-availability, abs-api-moschecker, abs-svc-availability-loader,
+    abs-svc-availability-processor, and abs-svc-moschecker-processor. All other
+    active workloads run in the chaise cluster in the Production Microservices
+    account (736016846305). An abs-api-availability deployment
+    also exists in the Production Microservices cluster but has no running pods.
+    Production workloads in both clusters are distributed across multiple
+    Availability Zones in us-east-1 and run with multiple pod replicas; zone
+    identities and exact replica counts are not modeled. Horizontal Pod
+    Autoscaling is workload-specific and depends on hpa.yaml availability; the
+    active production HPA map remains unverified.
+    at-api-PlatformSyncPublic, at-api-performance, and
+    at-svc-leaveeventpublishing remain outside this group because the product
+    owner confirmed they are not running in production.
+    AWS Lambda is a separate confirmed production runtime in the Production
+    Microservices account. Four functions were observed: use1-lambda-prd-abs-ivr-tts-processor
+    (.NET 6), use1-lambda-prd-abs-partner-billing-processor (.NET 8),
+    use1-lambda-prd-abs-func-add-new-sub-to-default-pref-list (.NET 6), and
+    use1-lambda-prd-abs-mpn-syncuserregistrationstatus (.NET 8). The IVR TTS
+    four functions are implemented in BeerCanLabs/sk-abs-lambdafunctions
+    and provisioned by production Terraform in
+    BeerCanLabs/sk-abs-infrastructure (authenticated GitHub evidence,
+    2026-08-05). Leave & Time Engineering owns the application code for all
+    four confirmed production functions. A fifth repository project,
+    abs-func-jag-purge-processor, is not observed in the current production AWS
+    Lambda inventory and remains outside the active production map unless later
+    deployment evidence establishes it.
+    Production Terraform confirms SQS event-source mappings for IVR TTS and
+    add-new-sub, an SNS subscription plus SQS dead-letter queues for MPN sync,
+    and two enabled monthly EventBridge Scheduler invocations for partner
+    billing. The IVR TTS function also uses the production IVR organization-files
+    S3 bucket. Partner-billing source configuration names an RotaBilling
+    database hosted on the same shared Grand Rapids SQL Server 2022 physical
+    failover cluster as the main Rota database. This creates a confirmed
+    cross-boundary dependency from AWS Production Microservices to the
+    Grand Rapids database failure domain; the RotaBilling endpoint and data
+    classification are now partially resolved: it contains PII and is classified
+    restricted. Its authoritative schema or migration repository remains
+    unidentified, so a separate DataComponent is deferred to an Leave & Time
+    Engineering or DBRE follow-up.
+    IVR TTS, add-new-sub, and partner billing are attached to private VPC subnets
+    in us-east-1a and us-east-1c. MPN sync has no VPC configuration in its
+    production function Terraform. The classification of the partner-billing
+    report S3 bucket remains unresolved.
+  databaseAccessEvidence:
+    source: Dynatrace database client spans supplied by the contributor on 2026-08-04.
+    observationWindow: Four complete, unsampled six-hour windows.
+    evidenceBoundary: Direct database client spans only. Leave of a span does not exclude indirect data access through HTTP or another service.
+    workloadStatefulness: Unknown and likely workload-specific. Confirmed external database connections do not establish that all workloads are stateless or exclude persistent-volume use.
+    chaiseToGrand RapidsNetworkPath: Unknown. Dynatrace confirms the direct SQL connections but does not establish whether traffic uses Direct Connect, Transit Gateway, site-to-site VPN, or another private path.
+    leaveProdFinding: No direct database client spans were observed from the selected leave-prod abs-* workloads.
+    chaiseConnections:
+      - workload: at-api-employee
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro.rotaprod.example:62621; prdlvadbcnl1.rotaprod.example:60173
+      - workload: at-api-integration-service
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro.rotaprod.example:62621
+      - workload: at-api-temp
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro.rotaprod.example:62621; prdlvadbcnl1.rotaprod.example:60173
+      - workload: at-api-referencedata
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro and prdlvadbcnl1
+      - workload: at-api-leavedashboard
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro and prdlvadbcnl1
+      - workload: at-api-adminuser
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1ro and prdlvadbcnl1
+      - workload: at-api-eventcalendar
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl1.rotaprod.example:60173
+      - workload: abs-svc-evp-usersync
+        database: SQL Server / Rota
+        endpoints: prdlvadbcnl2.rotaprod.example:62621
+      - workload: at-svc-pushnotifications
+        database: SQL Server / Rota and Aurora PostgreSQL / absPushNotifications
+        endpoints: prdlvadbcnl1.rotaprod.example:60173; Aurora writer and reader on 5432
+      - workload: at-svc-pushnotifications-ml
+        database: SQL Server / Rota and Aurora PostgreSQL / absPushNotifications
+        endpoints: prdlvadbcnl1.rotaprod.example:60173; Aurora reader and occasional writer on 5432
+    auroraWriter: abs-prod-aurora-postgres-cluster.cluster-obiaalbgobho.us-east-1.rds.amazonaws.com:5432
+    auroraReader: abs-prod-aurora-postgres-cluster.cluster-ro-obiaalbgobho.us-east-1.rds.amazonaws.com:5432
+    sqlReadOnlyInference: prdlvadbcnl1ro appears to be read-only based on its hostname and observed SELECT traffic; this remains an inference.
+    technologiesNotObserved: Redis, MongoDB, DynamoDB, Cassandra, MySQL, Oracle, and other database technologies did not appear in the captured direct database spans.
+    jamsSchedulingState: Both Grand Rapids JAMS scheduler nodes use the JAMS database hosted on the same shared Grand Rapids SQL Server 2022 physical failover cluster as Leave. The JAMS database is distinct from the Rota database (owner-confirmed 2026-08-06).
+  eksSecretsManagement: Production EKS workloads are provisionally believed to use a combination of AWS Secrets Manager and Kubernetes Secrets. Where pods access Secrets Manager, they use IAM roles associated with their Kubernetes service accounts rather than stored AWS access keys (owner-confirmed 2026-08-05). Workload-level assignments, classic IRSA versus EKS Pod Identity, synchronization, and rotation behavior remain unconfirmed.
+  productionHostInventory: >-
+    Grand Rapids production web applications and .NET services run on VMware.
+    Microsoft IIS hosts only the web applications; it does not host the separate
+    .NET services. Those .NET services run as Windows Services on the
+    VMware-hosted Windows servers. Each server assigned to a function runs one
+    instance of that function's Windows Service; functions may be deployed to
+    different numbers of servers. When multiple servers support the same
+    function, all Windows Service instances run actively at the same time.
+    IIS web applications run concurrently across multiple Grand Rapids web
+    servers in active-active pools behind the F5.
+    GRRLVEAG*, GRRLVEMC*, GRRLVEBOTWEB*, GRRLVEAPIWEB*, GRRLVENAVWEB*,
+    GRRLVEWS*, GRRLVEEAN*, GRRLVEPIC*, GRRLVERA1, GRRLVEDL1, GRRJAMS1, and
+    GRRJAMS2 run Windows Server 2012. GRRLVEEVP*, GRRLVEMHAPI1-5,
+    GRRLVEMBAPI1-9, GRRLVELEGEA1, GRRLVEPLATEA1,
+    GRRLVELWEA1, GRRLVERWEA1, GRRIDMEA1, GRRLVEUTIL1, and GRRMAIL1-6 run
+    Windows Server 2016. GRRCONWEB1-3, GRRSUBIT1, and GRRFTP1 remain active on Windows Server
+    2008 R2. The Windows Server 2003 Fulfillment Engine estate also remains
+    active pending the JAG 2.0 production rollout tracked by WFMAT-57071, for
+    which the ETA is still TBD. SQL node names are intentionally not required
+    at this conceptual pattern level; the confirmed boundary is a multi-server
+    Windows Server 2022 physical failover cluster using SQL Server 2022 Always
+    On availability groups and listeners, with every replica in Grand Rapids.
+    Additional active Grand Rapids workloads are Event Analyzer on GRRLVEEAN*,
+    Prior Image Cache on GRRLVEPIC*, Report Agent on GRRLVERA1, and Data
+    Importer on GRRLVEDL1; all four run as .NET Windows Services. Nagios
+    monitors both host health and Windows-service health for all four. None of
+    GRRLVEEAN*, GRRLVEPIC*, GRRLVERA1, or GRRLVEDL1 is protected by Veeam VM
+    backups; this is an unplanned recoverability gap with no remediation
+    ticket. JAMS is a
+    third-party JAMS Scheduler 6.3.26.0 deployment with GRRJAMS1 normally active
+    and automatic failover to standby GRRJAMS2. Nagios monitors both host health
+    and the JAMS Scheduler service on both nodes, routing those alerts to the
+    CloudOps-HCM Opsgenie team. Only GRRJAMS1 is protected by Veeam; the lack
+    of Veeam coverage for standby GRRJAMS2 is an unplanned recoverability gap
+    with no remediation ticket.
+    All listed servers run Windows Server 2012.
+    Both JAMS nodes use the JAMS scheduling database on the shared Grand Rapids
+    SQL Server 2022 platform; this is distinct from the Rota database.
+    The JAMS deployment is a shared platform serving Leave and PG\PLM-EEM,
+    owned and operated by the approved CloudOps Support team. Component
+    repositories or COTS ownership evidence and remaining
+    instance-specific deployment details remain unresolved. Support status is
+    not inferred from the installed version alone.
+    GRRMAIL1-3 and GRRMAIL6 form the MDaemon high-priority pool, while
+    GRRMAIL4-5 form the low-priority pool. All six mail servers run Windows
+    Server 2016 behind F5 and run MDaemon 19.5.2. CloudOps Support owns and
+    operates the shared platform. No active plan or ticket exists to upgrade
+    MDaemon 19.5.2; vendor-support status remains unverified and is not inferred
+    from the installed version alone. Administrators RDP to the GRRMAIL servers
+    using AD admin accounts, with access granted through an AD CloudOps group;
+    MDaemon opens without an additional application login after Windows
+    authentication.
+  mdaemonOperationalProfile: >-
+    The Grand Rapids MDaemon platform is shared by Leave & Time, Platform,
+    and IDM. GRRMAIL1, GRRMAIL2, GRRMAIL3, and GRRMAIL6 form the high-priority
+    F5 pool; GRRMAIL4 and GRRMAIL5 form the low-priority pool. F5 automatically
+    removes a failed member and routes new traffic to the remaining servers.
+    Each server stores its mail queue locally, so messages already queued on a
+    failed node remain unavailable until that node is restored. All six servers
+    are currently protected by Veeam VM backups, correcting the earlier
+    no-backup finding; OPS-961456 is complete. Veeam runs incremental backups
+    Sunday through Friday and a full backup Saturday, retaining 13 restore
+    points. It restores the whole
+    server, including MDaemon configuration and its local queue, with no post-restore
+    configuration required, but no GRRMAIL Veeam restore has been tested. There
+    is no documented recovery-time objective for restoring a failed GRRMAIL
+    server or its local queue. MDaemon application
+    and mail-processing logs remain
+    local to each server for three months and are not centrally forwarded.
+    MDaemon configuration is not synchronized: Chef formerly synchronized the
+    servers but no longer functions for this platform. No authoritative
+    off-server configuration export and no separate configuration-remediation
+    ticket or plan exist. There are no active tickets or plans to upgrade
+    MDaemon 19.5.2 or Windows Server 2016; MDaemon vendor-support status remains
+    unverified. Administrators authenticate to Windows over RDP with AD admin
+    accounts authorized by an AD CloudOps group, then open MDaemon without
+    another application login. The exact AD group name and whether MDaemon
+    records administrator-attributed configuration changes are unknown. Nagios
+    monitors MDaemon service health and queue depth and routes alerts to the
+    CloudOps-HCM Opsgenie team. Rota Legacy, Letter Writer, Report Writer, and
+    static-filename report SMTP delivery use GRRMAILLOW; Rota Platform Email
+    Agent uses GRRMAILHIGH. GRRMAIL delivers outbound messages directly to
+    recipient mail systems rather than through another SMTP relay; whether
+    direct delivery uses opportunistic TLS is unknown. The
+    raw-message SMB connections and direct SMTP delivery are unencrypted within Grand Rapids (source-reviewed and
+    owner-confirmed through 2026-09-03).
+  sharedStorageAndFileTransfer: >-
+    GRRNAP1CLU1 is a shared, Cloud Engineering / Infrastructure-owned,
+    two-node NetApp FAS2720 cluster with multiple Storage VMs. GRRFILES1 is the
+    Leave-only Storage VM, is accessed exclusively through SMB, and is not
+    used by Time & Attendance. GRRFTP1 is a separate, single-server file-transfer
+    boundary that hosts its own shares, runs Globalscape EFT Server 6.5.0.40 on
+    Windows Server 2008 R2, and supports FTP, FTPS, and SFTP over SSH. GRRFTP1
+    accounts are managed locally in Globalscape and authenticate with username
+    and password or SSH public keys. Authentication and transfer logs are stored
+    locally and transferred to Amazon S3. GRRFTP1 has no standby but can be
+    restored from a VM backup; recovery objectives and restore-test evidence
+    remain unconfirmed.
+  monitoringAndAlerting: >-
+    Monitoring responsibility is split. Nagios monitors Grand Rapids Leave
+    server availability and resource health, Windows services and processes,
+    IIS websites and application pools, and basic endpoint availability.
+    Direct host and Windows Service process checks are confirmed for Leave
+    Event Processor, Email Agent, JAG, and MOS Job Checker. SKIntegrationService
+    remains the confirmed exception with host-only Nagios coverage. Nagios also
+    monitors MDaemon service health and mail queue depth across GRRMAIL1-6;
+    those alerts route to the CloudOps-HCM Opsgenie team.
+    MDaemon application and mail-processing logs are stored only on each
+    GRRMAIL server for three months and are not centrally forwarded; logs on
+    a failed server are unavailable with that server.
+    Dynatrace monitors application performance, transaction traces, and
+    application errors across Grand Rapids and both production EKS clusters,
+    and is confirmed to monitor EKS cluster, node, and pod health. Additional
+    EKS monitoring through CloudWatch or another platform is unconfirmed.
+    Both monitoring platforms send Leave operational alerts to the CloudOps-HCM
+    Opsgenie team for the confirmed Grand Rapids path. Dynatrace multi-service
+    problem alerts mentioning leave-prod and chaise have also been observed
+    routing to CloudOps-HCM, but individual EKS workload alert routing is not
+    confirmed. PRTG monitors the supporting GRRNAP1CLU1 cluster and GRRFILES1
+    Storage VM and sends operational alerts through both Opsgenie and email.
+    Application and container logs from production EKS workloads are collected
+    through the Central Logging Service in AWS OpenSearch. leave-prod and
+    chaise use separate OpenSearch domains hosted in their corresponding AWS
+    accounts; the exact forwarding configuration, domain names, and endpoints
+    remain unconfirmed.
+    GRRLVEUTIL1 is an explicit exception to the general Nagios Windows-service
+    coverage: Nagios monitors its host health but does not directly monitor
+    SKIntegrationService. Alert priorities, detailed escalation rules, and the
+    PRTG email-relay path remain unconfirmed.
+    Production Terraform configures CloudWatch log groups for all four confirmed
+    Leave Lambda functions. The reviewed Terraform contains no CloudWatch alarm
+    or Dynatrace instrumentation evidence, so Lambda health monitoring and alert
+    routing remain unconfirmed rather than inferred from logging alone.
+  operationalCoverage: >-
+    CloudOps Support is the primary operational responder for production
+    Leave EKS workload incidents. CloudOps-HCM is the distinct Opsgenie team
+    used for the confirmed alert-routing paths and should not be treated as the
+    owning DRAFT team. When CloudOps Support determines that an incident is
+    caused by application code, it escalates remediation to Leave & Time
+    Engineering while retaining overall incident coordination until resolution.
+    Leave & Time Engineering is reached through the AT_Dev_team Opsgenie team
+    and its AT_Office_Out_schedule for after-hours application-code incidents.
+    AT_Office_In_schedule provides the corresponding office-hours coverage; the
+    schedule windows can change with team demands, and Opsgenie remains the
+    authoritative source for their current configured hours. CloudOps Support
+    has no blanket authority for application-impacting restart or redeployment
+    decisions; authority depends on incident context, and most application
+    decisions may require feedback from Leave & Time Engineering. CloudOps
+    Support may independently restart a pod when an approved operational
+    runbook explicitly authorizes that action; current workload-level runbook
+    coverage remains unconfirmed. Leave & Time Engineering owns the
+    application code for all active production abs-* and at-* EKS workloads;
+    it also owns rota-frontend-reactjs and rota-frontend-reactjs-ml, covering
+    the complete confirmed active production Leave EKS workload inventory.
+    CloudOps-HCM alerts automatically route through
+    CloudOps_HCM_Office_In_Schedule or CloudOps_HCM_Office_Out_Schedule. During
+    daylight time, weekday Office-In coverage is 12:00 AM-6:00 PM EDT and
+    Office-Out coverage is 6:00 PM-29:00 AM EDT. During standard time,
+    Office-In is 11:00 PM-6:00 PM EST and Office-Out is 6:00 PM-15:00 PM EST.
+    Office-Out provides continuous weekend coverage from Friday 6:00 PM through
+    Monday 12:00 AM. Start times can vary with offshore staffing.
+  unresolvedEvidence: >-
+    Confirmed unknowns remain open rather than inferred: the work-distribution
+    and duplicate-processing controls used by active-active Grand Rapids
+    Windows Service instances; automatic restart actions for Event Processor,
+    Email Agent, JAG, and MOS Job Checker; application-server VM-backup
+    coverage; the specific .NET
+    runtime families and versions used by Grand Rapids web applications and
+    Windows Services; current
+    SKIntegrationService source repository and maintainer; its processing and
+    error-log destinations; its recovery objective and restore-test evidence;
+    GRRFTP1 and NetApp scalability and recovery evidence; detailed Nagios checks
+    and thresholds; Opsgenie priority mappings and escalation rules; and the
+    private network path carrying chaise-to-Grand Rapids SQL traffic; and the
+    lifecycle disposition or approved risk acceptance for the Windows Server
+    2008 R2, Windows Server 2003, and GRRLVEUTIL1 Windows Server 2016 estate;
+    and remediation or approved exception evidence for the two production AWS
+    Lambda functions running on end-of-support Microsoft .NET 6.
+  discoveryBoundary: This pattern was originally inferred from repository names, GitHub metadata, and safe file-tree signals only. Grand Rapids production compute, runtime, database, and shared-storage detail was subsequently confirmed by owner interview via the Leave Management DRAFT L1 Compute and Runtime Review drafting session (catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml), tracked by OPS-049026.
+  sourceRepositories:
+    - productService: 01KQQ5JT05-MD2X
+      repositoryName: BeerCanLabs/sk-abs-api-availability
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-api-availability
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT06-6F7S
+      repositoryName: BeerCanLabs/sk-abs-event-processor
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-event-processor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-91TW
+      repositoryName: BeerCanLabs/sk-abs-ivr-menu-handler-api
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-ivr-menu-handler-api
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-RTMW
+      repositoryName: BeerCanLabs/sk-abs-lambdafunctions
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-lambdafunctions
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme, serverless
+    - productService: 01KQQ5JT06-539N
+      repositoryName: BeerCanLabs/sk-abs-svc-availability-loader
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-svc-availability-loader
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT06-C97C
+      repositoryName: BeerCanLabs/sk-abs-svc-availability-processor
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-svc-availability-processor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT06-V9JN
+      repositoryName: BeerCanLabs/sk-abs-svc-evp-usersync
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-svc-evp-usersync
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT06-MGGN
+      repositoryName: BeerCanLabs/sk-abs-svc-permissionsync
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-svc-permissionsync
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT0A-7VKB
+      repositoryName: BeerCanLabs/sk-abs-web-api
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-web-api
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-0KZE
+      repositoryName: BeerCanLabs/sk-abs-database
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-database
+      repositoryPrimaryLanguage: TSQL
+      observedRuntimeSignals: dotnet, github_actions, readme
+    - productService: 01KQQ5JT0A-R0DM
+      repositoryName: BeerCanLabs/sk-abs-web-mvc
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-web-mvc
+      repositoryPrimaryLanguage: JavaScript
+      observedRuntimeSignals: dotnet, node, readme, teamcity
+    - productService: 01KQQ5JT06-KPFG
+      repositoryName: BeerCanLabs/sk-abs-emailagent
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-emailagent
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-KTPA
+      repositoryName: BeerCanLabs/sk-abs-jag
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-jag
+      repositoryPrimaryLanguage: JavaScript
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-30GY
+      repositoryName: BeerCanLabs/sk-abs-jobapi
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-jobapi
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-YPRZ
+      repositoryName: BeerCanLabs/sk-abs-mosjobchecker
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-mosjobchecker
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT06-P1BK
+      repositoryName: BeerCanLabs/sk-abs-remap-tool
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-remap-tool
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: docker, dotnet, node, readme
+    - productService: 01KZ6F0ZEH-2QVC
+      repositoryName: BeerCanLabs/sk-at-api-masterdata
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-masterdata
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, kubernetes, terraform
+    - productService: 01KZ6F0ZEH-QBMX
+      repositoryName: BeerCanLabs/sk-at-svc-platform-identity-match-processor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-platform-identity-match-processor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, kubernetes, terraform
+    - productService: 01KZ6GWG11-EBV8
+      repositoryName: BeerCanLabs/sk-abs-api-moschecker
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-api-moschecker
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet
+    - productService: 01KZ6GWG11-6104
+      repositoryName: BeerCanLabs/sk-abs-svc-moschecker-processor
+      sourceRepository: https://github.com/BeerCanLabs/sk-abs-svc-moschecker-processor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet
+    - productService: 01KSM38KER-3KG1
+      repositoryName: BeerCanLabs/sk-rota-frontend-reactjs
+      sourceRepository: https://github.com/BeerCanLabs/sk-rota-frontend-reactjs
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: docker, node, kubernetes
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Repository Discovered Services
+    deploymentTarget: grr-datacenter
+    notes: EKS and Lambda workloads have been separated into their confirmed AWS boundaries. Placement of the remaining repository-discovered components is still provisional until reviewed individually.
+    deployableObjects:
+      - ref: 01KQQ5JT06-6F7S
+        diagramTier: application
+        networkZone: ops
+        notes: Runs as a Windows Service on the GRRLVEEVP* Windows Server 2016 Grand Rapids family, with one active instance per deployed server. GRRLVEEVP* is not protected by Veeam VM backups; this is an unplanned recoverability gap with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-91TW
+        diagramTier: application
+        networkZone: app
+        notes: Hosted active-active in IIS on the GRRLVEMHAPI1-5 Windows Server 2016 Grand Rapids server family behind a non-sticky F5 pool. None of the five servers is protected by Veeam VM backups; this is an unplanned recoverability gap with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT0A-7VKB
+        diagramTier: application
+        networkZone: web
+        notes: Hosted active-active in IIS on the Windows Server 2012 GRRLVEAPIWEB1-25 family and Windows Server 2016 GRRLVEMBAPI1-9 family behind non-sticky F5 pools. GRRLVEAPIWEB1-15 is protected by Veeam VM backups; GRRLVEAPIWEB16-25 and GRRLVEMBAPI1-9 are not. Both missing-coverage groups are unplanned recoverability gaps with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-0KZE
+        diagramTier: data
+        networkZone: data
+      - ref: 6S5V669HDB-RFYP
+        diagramTier: data
+        networkZone: data
+      - ref: 01KQQ5JT0A-R0DM
+        diagramTier: application
+        networkZone: web
+        notes: Hosted on the Windows Server 2012 GRRLVENAVWEB* and GRRLVEWS* Grand Rapids IIS families behind distinct F5 pools using cookie-based persistence. Neither server family is protected by Veeam VM backups; this is an unplanned recoverability gap with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-KPFG
+        diagramTier: application
+        networkZone: app
+        notes: Runs as one active Windows Service instance on each of GRRLVELEGEA1, GRRLVEPLATEA1, GRRLVELWEA1, GRRLVERWEA1, and GRRIDMEA1; all five VMs use Windows Server 2016 and none is protected by Veeam VM backups, which is an unplanned recoverability gap with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-KTPA
+        diagramTier: application
+        networkZone: app
+        notes: Runs as a Windows Service on the GRRLVEAG* Windows Server 2012 Grand Rapids family, with one active instance per deployed server. GRRLVEAG* is not protected by Veeam VM backups; this is an unplanned recoverability gap with no remediation ticket (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-30GY
+        diagramTier: application
+        networkZone: ops
+        notes: Hosted active-active in IIS on the GRRLVEBOTWEB* Windows Server 2012 Grand Rapids family behind a non-sticky F5 pool. The server family is protected by Veeam VM backups (owner-confirmed through 2026-09-03).
+      - ref: 01KQQ5JT06-YPRZ
+        diagramTier: application
+        networkZone: ops
+        notes: Runs as a Windows Service on the GRRLVEMC* Windows Server 2012 Grand Rapids family, with one active instance per deployed server. GRRLVEMC* is protected by Veeam VM backups (owner-confirmed through 2026-09-03).
+  - name: AWS Lambda - Production Microservices
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT05-CT7X
+    notes: Four production Leave Lambda functions are confirmed in Production Microservices account 736016846305 from contributor-supplied AWS console evidence dated 2026-08-05. All use Zip packages. Authenticated GitHub search confirms that all four are implemented in BeerCanLabs/sk-abs-lambdafunctions and provisioned by BeerCanLabs/sk-abs-infrastructure production Terraform.
+    deployableObjects:
+      - ref: 01KQQ5JT06-RTMW
+        diagramTier: application
+        networkZone: app
+        instance: use1-lambda-prd-abs-ivr-tts-processor
+        notes: Confirmed production AWS Lambda function using .NET 6; name matches a manifest in BeerCanLabs/sk-abs-lambdafunctions.
+      - ref: 01KQQ5JT06-RTMW
+        diagramTier: application
+        networkZone: app
+        instance: use1-lambda-prd-abs-func-add-new-sub-to-default-pref-list
+        notes: Confirmed production AWS Lambda function using .NET 6; name matches a manifest in BeerCanLabs/sk-abs-lambdafunctions.
+      - ref: 01KQQ5JT06-RTMW
+        diagramTier: application
+        networkZone: app
+        instance: use1-lambda-prd-abs-partner-billing-processor
+        notes: Confirmed production AWS Lambda function using .NET 8; source is in BeerCanLabs/sk-abs-lambdafunctions and production Terraform is in BeerCanLabs/sk-abs-infrastructure.
+      - ref: 01KQQ5JT06-RTMW
+        diagramTier: application
+        networkZone: app
+        instance: use1-lambda-prd-abs-mpn-syncuserregistrationstatus
+        notes: Confirmed production AWS Lambda function using .NET 8; source is in BeerCanLabs/sk-abs-lambdafunctions and production Terraform is in BeerCanLabs/sk-abs-infrastructure.
+  - name: AWS EKS - Team Leave Prod
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    notes: Owner-confirmed active workloads in the leave-prod cluster, Team_Leave_Prod AWS account 829641239427. The attached 2026-08-04 workload screenshot corroborates the five deployment names. This cluster has separate internet-facing and internal AWS Application Load Balancers, which terminate client TLS. HTTP is a provisional contributor assumption for the backend protocol; listener counts and workload routing remain unconfirmed. These workloads do not communicate directly with workloads in chaise.
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: web
+        instance: leave-prod-internet-facing-ingress
+        notes: Owner-confirmed internet-facing ALB for the leave-prod cluster; listener and workload routing details remain unconfirmed.
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: app
+        instance: leave-prod-internal-ingress
+        notes: Owner-confirmed internal ALB for the leave-prod cluster; listener and workload routing details remain unconfirmed.
+      - ref: 01KQQ5JT05-2FWS
+        diagramTier: data
+        networkZone: ops
+        instance: leave-prod-opensearch-logging-domain
+        notes: Separate AWS OpenSearch domain receiving application and container logs from leave-prod in Team_Leave_Prod account 829641239427; domain name, endpoint, retention, and forwarding details remain unconfirmed.
+      - ref: 01KQQ5JT05-MD2X
+        diagramTier: application
+        networkZone: app
+        instance: abs-api-availability
+        notes: Active pods run in this cluster. A second deployment exists in the Production Microservices cluster with zero running pods.
+      - ref: 01KZ6GWG11-EBV8
+        diagramTier: application
+        networkZone: app
+        instance: abs-api-moschecker
+      - ref: 01KQQ5JT06-539N
+        diagramTier: application
+        networkZone: app
+        instance: abs-svc-availability-loader
+      - ref: 01KQQ5JT06-C97C
+        diagramTier: application
+        networkZone: ops
+        instance: abs-svc-availability-processor
+      - ref: 01KZ6GWG11-6104
+        diagramTier: application
+        networkZone: ops
+        instance: abs-svc-moschecker-processor
+  - name: AWS EKS - Production Microservices
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-75QN
+    notes: All active Leave EKS workloads not assigned to leave-prod run in the chaise cluster in AWS account 736016846305, named Production Microservices. This cluster has separate internet-facing and internal AWS Application Load Balancers, which terminate client TLS. HTTP is a provisional contributor assumption for the backend protocol; listener counts and workload routing remain unconfirmed. The abs-api-availability deployment also exists here but currently has zero running pods. These workloads do not communicate directly with workloads in leave-prod.
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: web
+        instance: chaise-internet-facing-ingress
+        notes: Owner-confirmed internet-facing ALB for the chaise cluster; listener and workload routing details remain unconfirmed.
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: app
+        instance: chaise-internal-ingress
+        notes: Owner-confirmed internal ALB for the chaise cluster; listener and workload routing details remain unconfirmed.
+      - ref: 01KQQ5JT05-2FWS
+        diagramTier: data
+        networkZone: ops
+        instance: chaise-opensearch-logging-domain
+        notes: Separate AWS OpenSearch domain receiving application and container logs from chaise in Production Microservices account 736016846305; domain name, endpoint, retention, and forwarding details remain unconfirmed.
+      - ref: 01KQQ5JT05-MD2X
+        diagramTier: application
+        networkZone: app
+        instance: abs-api-availability
+        notes: Deployment exists in this cluster, but no pods are running; active pods run in leave-prod.
+      - ref: 01KQQ5JT06-V9JN
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT06-MGGN
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT06-P1BK
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-SHEB
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-C0VC
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-KA0H
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-X9TJ
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-1XKD
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-J8YX
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-T07Z
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-MBWT
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT07-AB02
+        diagramTier: application
+        networkZone: data
+      - ref: 01KQQ5JT07-ZRAA
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT08-SY5W
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT08-6C47
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT08-0CE3
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT08-RBP9
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT08-XGZJ
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-FSSB
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-N5MJ
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT09-XWPN
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-GK9D
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-2XXW
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KZ6F0ZEH-QBMX
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT09-2463
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-WRHM
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-45J2
+        diagramTier: application
+        networkZone: app
+        instance: at-svc-pushnotifications
+      - ref: 01KQQ5JT09-45J2
+        diagramTier: application
+        networkZone: app
+        instance: at-svc-pushnotifications-ml
+        notes: ML workload variant observed connecting directly to Rota SQL Server and the absPushNotifications Aurora PostgreSQL database.
+      - ref: 01KQQ5JT09-6DJG
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT09-GQE3
+        diagramTier: application
+        networkZone: web
+      - ref: 01KQQ5JT09-12K4
+        diagramTier: application
+        networkZone: app
+      - ref: 01KZ6F0ZEH-2QVC
+        diagramTier: application
+        networkZone: app
+      - ref: 01KSM38KER-3KG1
+        diagramTier: presentation
+        networkZone: web
+        instance: rota-frontend-reactjs
+        notes: Standard production Kubernetes deployment sourced from cd/prod.
+      - ref: 01KSM38KER-3KG1
+        diagramTier: presentation
+        networkZone: web
+        instance: rota-frontend-reactjs-ml
+        notes: ML production Kubernetes deployment sourced from cd/prod-ml.
+  - name: Grand Rapids Shared Infrastructure
+    deploymentTarget: grr-datacenter
+    notes: Shared infrastructure confirmed by owner interview via OPS-049026. F5 BIG-IP, the SQL Server 2022 DBMS Service, and the Amazon S3 Storage service are reused as-is from the existing catalog. The Grand Rapids NetApp Shared File Storage and GRRFTP1 File Transfer Service were authored net-new because no matching reusable objects existed.
+    deployableObjects:
+      - ref: 01KQQ5JT00-Z6WV
+        diagramTier: presentation
+        networkZone: web
+        notes: Fronts all Grand Rapids Leave Management web and API endpoints; terminates client TLS and forwards unencrypted HTTP to the backend (owner-confirmed 2026-07-29).
+      - ref: 01KQQ5JT01-950D
+        diagramTier: data
+        networkZone: data
+        notes: Shared physical Windows failover cluster with Always On availability groups; also used by Time & Attendance against the same Rota database (owner-confirmed 2026-07-29).
+      - ref: 01KYN1RHK4-NAPP
+        diagramTier: data
+        networkZone: data
+        notes: Leave-only GRRFILES1 SMB Storage VM on the shared GRRNAP1CLU1 cluster (owner-confirmed 2026-07-29).
+      - ref: 01KYN1RHK6-FTP1
+        diagramTier: utility
+        networkZone: ops
+        notes: Hosts the shares used by GRRLVEUTIL1 for the Sofa King Central file-transformation workflow; single server with no HA partner (owner-confirmed 2026-07-29).
+      - ref: 01KZZMDMN1-RT01
+        diagramTier: utility
+        networkZone: web
+        notes: Shared MDaemon 19.5.2 email-delivery platform on six Windows Server 2016 VMs. GRRMAIL1-3 and GRRMAIL6 form the high-priority pool; GRRMAIL4-5 form the low-priority pool behind F5 (source-reviewed and owner-confirmed 2026-08-13).
+  - name: Deployment Automation Dependencies
+    deploymentTarget: enterprise-shared-services
+    notes: Codefresh and ArgoCD are confirmed participants in production Leave EKS deployment. Their division of responsibilities and any additional deployment platforms remain unconfirmed.
+    deployableObjects:
+      - ref: 01KQQ5JT1D-KJ3A
+        diagramTier: utility
+        networkZone: ops
+        notes: Confirmed production EKS deployment platform; exact build, promotion, and deployment responsibilities remain unconfirmed.
+      - ref: 01KQQ5JT1E-01JZ
+        diagramTier: utility
+        networkZone: ops
+        notes: Confirmed production EKS GitOps deployment platform; exact reconciliation scope relative to Codefresh remains unconfirmed.
+  - name: Monitoring and Alerting Dependencies
+    deploymentTarget: enterprise-shared-services
+    notes: Shared monitoring and alerting platforms used by the Leave production deployment across Grand Rapids and AWS. Detailed ownership and operating controls for the shared platforms are intentionally deferred to their platform owners.
+    deployableObjects:
+      - ref: 01KQQ5JT1F-E2CC
+        diagramTier: utility
+        networkZone: ops
+        notes: Nagios provides server, Windows service/process, IIS, and basic endpoint monitoring; GRRLVEUTIL1 host health is monitored but SKIntegrationService itself is not.
+      - ref: 01KXK7BD4N-93KS
+        diagramTier: utility
+        networkZone: ops
+        notes: Dynatrace provides application performance, transaction trace, and application error telemetry for Grand Rapids workloads and for both the leave-prod and chaise production EKS clusters. It also monitors EKS cluster, node, and pod health; additional monitoring platforms remain unconfirmed.
+      - ref: 01KQQ5JT1E-A6M5
+        diagramTier: utility
+        networkZone: ops
+        notes: Collects application and container logs from production Leave EKS workloads and forwards them to separate AWS OpenSearch domains for leave-prod and chaise.
+      - ref: 01KYWJ47V9-F3BJ
+        diagramTier: utility
+        networkZone: ops
+        notes: PRTG monitors the shared NetApp cluster and Leave GRRFILES1 Storage VM and alerts through Opsgenie and email.
+      - ref: 01KYWPPQ2Q-8AE1
+        diagramTier: utility
+        networkZone: ops
+        notes: Nagios and Dynatrace Grand Rapids Leave alerts route to the CloudOps-HCM team and its Office-In and Office-Out schedules. Dynatrace multi-service problem alerts mentioning leave-prod and chaise have also been observed on this route; individual EKS workload alert routing remains unconfirmed.
+decisionRecords:
+  - ref: 01KT16XHFB-P4A4
+    key: deploymentTargets
+  - ref: 01KT16XHFB-P4A4
+    key: availabilityRequirement
+  - ref: 01KT16XHFB-P4A4
+    key: dataClassification
+  - ref: 01KT16XHFB-P4A4
+    key: failureDomain
+  - ref: 01KT16XHFB-P4A4
+    key: patternDeviations
+  - ref: 01KT16XHFB-P4A4
+    key: externalDependencies

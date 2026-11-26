@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YV-5Y01
+name: Ubuntu 20.04 on EC2 Standard Host → Wiz Cloud Security
+catalogStatus: stub
+source: 01KQQ5JT03-P51F
+label: calls
+externalTarget: Wiz Cloud Security
+notes:
+  background: "Runtime and posture visibility for Ubuntu workloads."
+capabilities:
+- 01KQQ4Q026-JW52

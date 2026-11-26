@@ -1,0 +1,380 @@
+schemaVersion: '1.0'
+uid: 01KYNW4CFB-4282
+type: drafting_session
+name: LSCIS Infrastructure Documentation Drafting Session
+description: Rebuilding LSCIS (Sofa King CIS - Lakeshore) infrastructure documentation from a single-ITC architecture whiteboard diagram, after consolidating five incorrectly-separate module-level SoftwareDeploymentPatterns into one product-level pattern with service groups. Extended on 2026-07-30 with a full GitHub repository reconciliation, resolving most whiteboard-only stubs against real repos and documenting the broader lakeshore-cis-tillbook-engineering repo backlog.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+- session
+- sis
+- lakeshore
+- lscis
+- infrastructure
+- drafting
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KFR-BPTG
+sourceArtifacts:
+- name: LSCIS Single-ITC architecture whiteboard diagram
+  type: diagram
+  location: Provided inline by the product owner in chat, 2026-07-28.
+  notes: 'Box diagram labeled "Single ITC" showing: a Web Services tier (Customer Information, Salesbook, DataMap, CentralAdmin, Specialservices, VendorLink, Householdaccess, HouseholdaccessBFF, and a "CISAdminBFF ?" the author themself marked uncertain); a Utility Services tier (JAMS Scheduler); an App Services tier (Calculators, Schedule Services, Syncer); Redis OSS sitting between the web and DB tiers; a Database Services tier ("Primary DB Cluster: DB1, DB2, DBR <- Customers Access"); an Azure box (CloudCentral for VendorLink routing, and a separate "CIS DB"); a box labeled "Server at LSRCN - Separate Service" with the handwritten note "(need to locate Sync website & pristine DB)"; an AWS box (Document Vault, Lambda -> S3); a "Server at HPT" box (Course Library); and, outside the ITC box, mobile clients "CIS Admin Mobile (new)", "CIS Admin Mobile (legacy)", and "Parent Admin Mobile".'
+- name: Owner clarification - SDP structure
+  type: interview
+  location: Chat conversation, 2026-07-28.
+  notes: 'Owner corrected an initial proposal to treat each LSCIS module as its own SoftwareDeploymentPattern: LSCIS is one product with one dedicated server stack per ITC ("site"), not five separately deployed products. This drove retiring the five module-level SDPs (LSCIS - Central, DataMap, Salesbook, Householdaccess, CustomerInformation) and their paired decision-record stubs in favor of service groups on the single product-level SDP (01KSM38KFR-BPTG).'
+- name: Owner clarification - Kong/Ottoman authentication
+  type: interview
+  location: Chat conversation, 2026-07-28.
+  notes: >-
+    Owner corrected the removal of Kong Gateway from the topology: Kong Gateway
+    is confirmed infrastructure that hosts LSCIS's authentication layer.
+    LSCIS has an external integration with Ottoman (soon to be rebranded
+    Sofa King ID) for authentication. Reinstated as an "Ingress /
+    Authentication" service group and two relationship objects. Owner was not
+    sure how this relates to the pre-existing "hard dependency on external
+    LDAP for authentication" patternDeviations note.
+- name: GitHub repository reconciliation
+  type: repository-discovery
+  location: BeerCanLabs GitHub org, via GitHub MCP, 2026-07-30.
+  notes: Searched the org for all repos matching the sis-app-/cis-db-/cis-lib-/cis-svc-/cis-msvc-/cis-util- naming conventions plus the two known one-offs (sis-bff-exago, sis-ui-backpack-design). Found 86 sis-prefixed repos total; cross-referenced against all 47 existing catalog entries to fill repoUrl gaps and surface undocumented repos.
+- name: Owner clarification - whiteboard stub resolution
+  type: interview
+  location: Chat conversation, 2026-07-30.
+  notes: 'Owner resolved most remaining whiteboard-only stubs from the 2026-07-28 session: CIS Svc CloudCentral is a deployment variant of CIS App Centraladmin (not separate code); CIS Svc Course Library maps to BeerCanLabs/sk-cis-app-salesbook-content-library (API + website, split into two catalog entries); CIS Svc JAMS Scheduler is the third-party JAMS COTS product, not Sofa King code; CIS Svc Schedule Services maps to BeerCanLabs/sk-cis-util-customerinformation-asc-timetable (legacy ASC Timetables vendor integration, in maintenance mode); CIS Svc LSRCN Sync Website is a duplicate of CIS Svc Syncer (both are the DASLSync API); CIS BFF Householdaccess is real — a separate deployment of the sis-app-householdaccess repo (Householdaccess.Mobile.Api), CIS-team-owned, consumed by the Mobile team''s app; CIS BFF CISAdmin is a duplicate of CIS Svc Mobile API; CIS App Parent Admin Mobile is a React Native app owned by the Mobile team, out of scope for this catalog. CIS Svc Calculators remains unconfirmed (working theory: may refer to WIRIS, a 3rd-party MathML editor dependency, not a standalone component).'
+- name: Owner clarification - Syncer repo split
+  type: interview
+  location: Chat conversation, 2026-07-30.
+  notes: BeerCanLabs/sk-cis-util-customerinformation-syncer contains two components — a Sync API (DASLSync, ASMX web service reading from the Pristine DB) and a Syncer console app (DASLSyncer, deployed to each ITC, calls the Sync API to update the local region DB). Split into two catalog entries accordingly (CIS Svc Syncer for the API, CIS Util Customerinformation Syncer for the console app). This also resolved CIS Db LSRCN Pristine — hosted centrally at LSRCN, a copy of CIS Db Customerinformation, with no separate codebase.
+- name: Owner clarification - Document Vault and Specialservices retirements
+  type: interview
+  location: Chat conversation, 2026-07-30.
+  notes: CIS Svc Document Vault (legacy Lambda/S3 service) is decommissioned, replaced by CIS Msvc Document Vault (BeerCanLabs/sk-cis-msvc-document-vault, CDK-deployed .NET microservice). Specialservices is retired as a product line; every Specialservices-labeled component (CIS App Specialservices, CIS App Specialservices Classic, CIS Util Specialservices Patcher, CIS Util Specialservices Classic Migrator) marked retired accordingly. CIS Svc Tillbook Customersearch never launched (retired, dead). CIS Svc Tillbook Web Help replaced by the Sofa King Learning Center (retired). CIS App Mobile CIS Admin is being phased out in favor of a React Native app owned by the Mobile team, but remains an active LS CIS component today (deprecated, not retired).
+- name: Owner clarification - sis-util-* backlog review
+  type: interview
+  location: Chat conversation, 2026-07-30.
+  notes: Reviewed 15 previously-undocumented sis-util-* repos and 1 sis-app-* repo (sis-app-salesbook-content-library) discovered via the GitHub reconciliation. Owner provided function/status for all but two (CIS Util Customerinformation ACE MSB and CIS Util Customerinformation DASL Agent — names/context known, exact function not). Decided not to catalog any sis-lib-* repos (14 found) since they are shared libraries, not independently deployed components. Also confirmed data-store-service-lakeshore-cis-sqlserver-2019 uses SQL Server Authentication.
+generatedObjects:
+- name: LSCIS (Sofa King CIS - Lakeshore) software-deployment-pattern
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KFR-BPTG
+  notes: serviceGroups rebuilt to match the 2026-07-28 diagram; five module-level SDPs retired into it.
+- name: CIS Svc CloudCentral
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-M9SZ
+  notes: 2026-07-30 — resolved and retired; deployment variant of CIS App Centraladmin (01KSM38KFP-Z4NW), not separate code.
+- name: CIS Svc JAMS Scheduler
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-7E7G
+  notes: 2026-07-30 — resolved; third-party JAMS COTS product, no repository expected.
+- name: CIS Svc Calculators
+  type: product_component
+  status: stubbed
+  ref: 01KYNVC9SP-24QT
+  notes: 2026-07-30 — still unconfirmed. Working theory is WIRIS (3rd-party MathML editor dependency), not a standalone component. Needs owner interview.
+- name: CIS Svc Schedule Services
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-DT28
+  notes: 2026-07-30 — resolved; maps to BeerCanLabs/sk-cis-util-customerinformation-asc-timetable, a legacy ASC Timetables vendor integration in maintenance mode.
+- name: CIS Svc Syncer
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-PAC8
+  notes: 2026-07-30 — resolved; maps to the DASLSync API within BeerCanLabs/sk-cis-util-customerinformation-syncer.
+- name: CIS Svc Document Vault
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-V9F6
+  notes: 2026-07-30 — retired; decommissioned, replaced by CIS Msvc Document Vault (01KYT8HNHX-Y51W).
+- name: CIS Svc Course Library
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-XEM8
+  notes: 2026-07-30 — resolved; API half of BeerCanLabs/sk-cis-app-salesbook-content-library. Website half split into CIS App Salesbook Content Library (01KYT9PCVA-0CGM).
+- name: CIS App Parent Admin Mobile
+  type: product_component
+  status: created
+  ref: 01KYNVC9SP-J1TG
+  notes: 2026-07-30 — retired; React Native app owned by the Mobile team, out of scope for this catalog.
+- name: CIS BFF Householdaccess
+  type: product_component
+  status: created
+  ref: 01KYNVC9SP-QNB7
+  notes: 2026-07-30 — confirmed real; separate deployment (Householdaccess.Mobile.Api) of the sis-app-householdaccess repo. Not a duplicate of CIS BFF Exago.
+- name: CIS BFF CISAdmin
+  type: product_component
+  status: created
+  ref: 01KYNVC9SP-WPVW
+  notes: 2026-07-30 — retired as a duplicate of CIS Svc Mobile API (01KSM38KFQ-0HE2).
+- name: CIS Svc LSRCN Sync Website
+  type: product_component
+  status: created
+  ref: 01KYNVC9SQ-DPNP
+  notes: 2026-07-30 — retired as a duplicate of CIS Svc Syncer.
+- name: CIS Db LSRCN Pristine
+  type: data_component
+  status: created
+  ref: 01KYNVC9SP-9ARM
+  notes: 2026-07-30 — located; hosted at LSRCN separately from per-ITC hosting, a copy of CIS Db Customerinformation, no separate codebase.
+- name: CIS Db Azure Central
+  type: data_component
+  status: stubbed
+  ref: 01KYNVC9SN-SQ01
+- name: Kong Gateway Service -> LSCIS (Sofa King CIS - Lakeshore)
+  type: relationship
+  status: created
+  ref: 01KYNXWY26-PFFR
+  notes: Reinstates Kong Gateway into the topology after it was incorrectly dropped as an apparent auto-discovery artifact.
+- name: LSCIS (Sofa King CIS - Lakeshore) -> Okta (Ottoman / Sofa King ID)
+  type: relationship
+  status: created
+  ref: 01KYNXWY27-2GRE
+  notes: Protocol/technology unconfirmed; relationship to the existing LDAP patternDeviation note unconfirmed (see Q6).
+- name: CIS App Specialservices
+  type: product_component
+  status: created
+  ref: 01KSM38KFQ-65XY
+  notes: 2026-07-30 — retired; Specialservices product line retired per product owner.
+- name: CIS App Specialservices Classic
+  type: product_component
+  status: created
+  ref: 01KSM38KFQ-N7HY
+  notes: 2026-07-30 — retired; Specialservices product line retired per product owner.
+- name: CIS Svc Tillbook Customersearch
+  type: product_component
+  status: created
+  ref: 01KSM38KFR-3H0Q
+  notes: 2026-07-30 — retired; never launched, dead code. Also confirmed language/runtime (.NET Core 3.1, C#) via repo discovery.
+- name: CIS Svc Tillbook Web Help
+  type: product_component
+  status: created
+  ref: 01KSM38KFR-4GGC
+  notes: 2026-07-30 — retired; replaced by CIS Msvc Learning Center. Also confirmed language/runtime (.NET Framework, C#) via repo discovery.
+- name: CIS App Mobile CIS Admin
+  type: product_component
+  status: created
+  ref: 01KSM38KFP-WBNG
+  notes: 2026-07-30 — deprecated (still active); being phased out for a Mobile-team-owned React Native app. Also corrected language/runtime — Apache Cordova/JavaScript, not .NET (prior "dotnet" signal was a false positive).
+- name: CIS Util Customerinformation Syncer
+  type: product_component
+  status: created
+  ref: 01KYT8CCJT-4ARY
+  notes: 2026-07-30 — new; console-app half of the syncer repo split (DASLSyncer), companion to CIS Svc Syncer.
+- name: CIS Msvc Document Vault
+  type: product_component
+  status: created
+  ref: 01KYT8HNHX-Y51W
+  notes: 2026-07-30 — new; replacement for the retired CIS Svc Document Vault.
+- name: CIS App Salesbook Content Library
+  type: product_component
+  status: created
+  ref: 01KYT9PCVA-0CGM
+  notes: 2026-07-30 — new; website half of the Course Library repo split, companion to CIS Svc Course Library.
+- name: CIS Util Tillbook Notifications
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-QE89
+  notes: 2026-07-30 — new; Windows service for scheduling/sending end-user notifications across Tillbook.
+- name: CIS Util Customerinformation Patcher
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-RDFW
+  notes: 2026-07-30 — new; home-grown database patching utility predating Flyway.
+- name: CIS Util Specialservices Patcher
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-R9JS
+  notes: 2026-07-30 — new; retired at creation per the Specialservices retirement rule.
+- name: CIS Util Householdaccess Alerts
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-86S4
+  notes: 2026-07-30 — new; retired at creation, functionality rolled into CIS Util Tillbook Notifications.
+- name: CIS Util Tillbook Identity Migration
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-X670
+  notes: 2026-07-30 — new; retired at creation, one-time migration utility.
+- name: CIS Util Specialservices Classic Migrator
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-EAEP
+  notes: 2026-07-30 — new; retired at creation per the Specialservices retirement rule (not individually confirmed by owner).
+- name: CIS Util Customerinformation ACE MSB
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-1SS8
+  notes: 2026-07-30 — new; "ACE Master Schedule Builder," console app or scheduled service. Exact function unconfirmed.
+- name: CIS Util Customerinformation SSID Updater
+  type: product_component
+  status: created
+  ref: 01KYTAHA3S-XH7Z
+  notes: 2026-07-30 — new; interfaces with a State of Lakeshore-run database to retrieve customer SSIDs.
+- name: CIS Util Salesbook Attendance Syncher
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-DA8X
+  notes: 2026-07-30 — new; console app invoked by SQL Server xp_cmdshell to reconcile attendance data post-nightly-integration.
+- name: CIS Util Salesbook Nightly Integration
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-BQWM
+  notes: 2026-07-30 — new; Windows Service loading CustomerInformation-exported data into Salesbook.
+- name: CIS Util Salesbook PB Compare
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-0GNW
+  notes: 2026-07-30 — new; database maintenance/upgrade utility used during summer rollover.
+- name: CIS Util Salesbook Year End Reports
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-PBRD
+  notes: 2026-07-30 — new; Windows Service running Salesbook year-end reports, saved to the Document Vault.
+- name: CIS Util SOM Program Type Migrator
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-A9RX
+  notes: 2026-07-30 — new; retired at creation, dead, exact function beyond SOM program-type migration unknown.
+- name: CIS Util Salesbook Report Card Publish
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-2G0D
+  notes: 2026-07-30 — new; console app generating PDF report cards, saved to the Document Vault.
+- name: CIS Util Customerinformation ActiveReports EndUser Designer
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-4SDA
+  notes: 2026-07-30 — new; report-customization designer UI for ITC admins, rarely used.
+- name: CIS Util Customerinformation DASL Agent
+  type: product_component
+  status: created
+  ref: 01KYTB1KTJ-F18D
+  notes: 2026-07-30 — new; owner flagged as likely important but could not describe its function. High priority for follow-up.
+assumptions:
+- id: A1
+  statement: '"CIS Admin Mobile (new)" in the diagram is the existing "CIS App Mobile CIS Admin" catalog entry (01KSM38KFP-WBNG), and "CIS Admin Mobile (legacy)" is the existing native "iOS Tbcis Admin" (01KSM38KFE-MRVH) and "Android Tbcis Admin" (01KSM38KFD-4CPA) entries.'
+  rationale: Naming similarity (TBCIS Admin = Tillbook CIS Admin) and the new entry being a hybrid/Cordova app consistent with a modernization effort.
+  impact: If wrong, the Mobile Clients service group misattributes three existing components and "new" vs "legacy" labeling in the topology is incorrect.
+  relatedObjects:
+  - ref: 01KSM38KFP-WBNG
+  - ref: 01KSM38KFE-MRVH
+  - ref: 01KSM38KFD-4CPA
+- id: A2
+  statement: 'The diagram''s "Primary DB Cluster: DB1, DB2, DBR" maps to the three existing catalog databases (CustomerInformation DB, Salesbook Master DB, Salesbook Region DB), with DBR representing a customer-facing read replica of that same cluster rather than a fourth database.'
+  rationale: These are the only three per-ITC MSSQL databases already cataloged for LSCIS, and the diagram's cluster sits in the same Database Services position they already occupy.
+  impact: If wrong, the Database Services group under-represents the actual cluster and a DBR read-replica may need its own catalog entry.
+  relatedObjects:
+  - ref: 01KSM38KFP-25CX
+  - ref: 01KSM38KFP-1J9Y
+  - ref: 01KSM38KFP-YGZ8
+- id: A3
+  statement: '"HPT" in the diagram is the High Point, MI data center (workspace deployment target high point-datacenter).'
+  rationale: HPT is a natural abbreviation for High Point, and no other approved deployment target matches.
+  impact: That vocabulary entry is documented as non-production/Sofa King-owned hardware, which conflicts with Course Library appearing to be a production dependency in the diagram. Needs owner confirmation before being treated as validated.
+notes:
+  assumptionsVsQuestions: The three assumptions above (A1-A3) are best-effort guesses made to keep drafting moving. The "Not sure yet" items below (Q1-Q4) were deliberately left unresolved rather than guessed, per explicit owner direction during the 2026-07-28 session. Q1, Q2, and Q3 were resolved on 2026-07-30.
+unresolvedQuestions:
+- id: Q1
+  question: Is "HouseholdaccessBFF" a genuinely new/separate service from the existing "CIS BFF Exago" catalog entry, or the same service under a different name?
+  status: answered
+  currentBestGuess: 'Answered 2026-07-30: it is real and genuinely separate — a distinct deployment (Householdaccess.Mobile.Api) of the sis-app-householdaccess repo, CIS-team-owned, consumed by the Mobile team''s mobile app. Not the same service as CIS BFF Exago.'
+  impact: Affects whether a duplicate catalog object exists and whether relationships should target Exago or the new stub.
+  relatedObjects:
+  - ref: 01KSM38KFQ-X2TJ
+  - ref: 01KYNVC9SP-QNB7
+- id: Q2
+  question: Does "CISAdminBFF" exist at all, and if so is it distinct from CIS BFF Exago and CIS BFF Householdaccess?
+  status: answered
+  currentBestGuess: 'Answered 2026-07-30: it is the same component as CIS Svc Mobile API. Retired as a duplicate.'
+  impact: Affects whether this stub should be promoted, merged, or deleted.
+  relatedObjects:
+  - ref: 01KYNVC9SP-WPVW
+  - ref: 01KSM38KFQ-0HE2
+- id: Q3
+  question: Where does the "Sync website" and "pristine DB" at LSRCN actually live, and what do they do?
+  status: answered
+  currentBestGuess: 'Answered 2026-07-30: the "Sync website" is the same component as CIS Svc Syncer (the DASLSync API), retired as a duplicate. The "pristine DB" is hosted at LSRCN separately from all per-ITC hosting and is a copy of CIS Db Customerinformation; it has no separate codebase.'
+  impact: These two objects cannot be scored as complete on any dimension (deployment target, availability, data classification) until located.
+  relatedObjects:
+  - ref: 01KYNVC9SQ-DPNP
+  - ref: 01KYNVC9SP-9ARM
+- id: Q4
+  question: How does the Azure-hosted "CIS DB" relate to the three per-ITC databases (CustomerInformation, Salesbook Master, Salesbook Region) — separate database, central aggregate, or naming overlap?
+  status: open
+  currentBestGuess: Modeled as a fully separate database pending confirmation.
+  impact: Affects whether cross-database relationships/replication need to be modeled between Azure and LSRCN.
+  relatedObjects:
+  - ref: 01KYNVC9SN-SQ01
+- id: Q5
+  question: For every module in the consolidated SDP, what is the actual availability requirement, data classification, and failure domain — the prior module-level stubs all had these marked "requires owner interview."
+  status: open
+  impact: Blocks scoring several SDP Completeness Rubric dimensions (AV, DC, FD) per the SDP Completion Interview protocol. As of 2026-07-30, nearly every product_component and data_component in this catalog directory still has serviceAuthentication, secretsManagement, serviceLogging, healthWelfareMonitoring, availabilityModel, scalabilityModel, recoverabilityModel, and failureDomain unconfirmed — this is the largest remaining body of work.
+- id: Q6
+  question: How does the confirmed Kong/Ottoman (Sofa King ID) authentication integration relate to the SDP's pre-existing "hard dependency on external LDAP for authentication with no fallback" patternDeviations note — is LDAP stale documentation for the same integration, or a separate still-active dependency (e.g. for a different user population or module)?
+  status: open
+  currentBestGuess: Not guessed — both notes are kept side by side in architectureNotes pending clarification.
+  impact: Affects whether the LDAP patternDeviations note should be corrected/retired, and whether a second externalTarget relationship for LDAP needs to be modeled separately from the Okta/Ottoman relationship.
+  relatedObjects:
+  - ref: 01KYNXWY27-2GRE
+- id: Q7
+  question: Is CIS Svc Calculators a genuinely separate Sofa King-owned component, or does it actually refer to WIRIS, a 3rd-party MathML editor dependency embedded within another application?
+  status: open
+  currentBestGuess: Owner's working theory as of 2026-07-30 favors WIRIS, but this is unconfirmed.
+  impact: If it is WIRIS, this stub should be retired as a non-component (a 3rd-party dependency, not a separate deployable) rather than left as a candidate product_component.
+  relatedObjects:
+  - ref: 01KYNVC9SP-24QT
+- id: Q8
+  question: What does CIS Util Customerinformation DASL Agent actually do?
+  status: open
+  currentBestGuess: Owner flagged this as "probably important" on 2026-07-30 but could not describe its function. Name suggests a relationship to the DASL sync family (CIS Svc Syncer, CIS Util Customerinformation Syncer).
+  impact: Unknown function for a component flagged as likely important is a risk gap — could be load-bearing infrastructure with no documented owner knowledge.
+  relatedObjects:
+  - ref: 01KYTB1KTJ-F18D
+- id: Q9
+  question: What does CIS Util Customerinformation ACE MSB ("ACE Master Schedule Builder") actually do beyond its name?
+  status: open
+  currentBestGuess: Not guessed — owner confirmed the name expansion on 2026-07-30 but not the function.
+  impact: Blocks full documentation of this component's role in the scheduling/master-schedule-building process.
+  relatedObjects:
+  - ref: 01KYTAHA3S-1SS8
+nextSteps:
+- id: N1
+  action: Run the SDP Completion Interview (Phase 4) against the consolidated SDP to resolve data classification, availability, and failure domain for the newly-merged service groups.
+  status: open
+- id: N2
+  action: Model remaining inter-service relationships (Web Services -> Redis, Web Services -> Database Services, CloudCentral -> VendorLink, and any others) as first-class relationship objects. Kong Gateway -> LSCIS routing and LSCIS -> Okta/Ottoman authentication are now modeled; everything else within the per-ITC stack is still unmodeled.
+  status: open
+- id: N3
+  action: Confirm whether Amazon Neptune (removed from this SDP's topology as an apparent mismatched auto-discovery artifact) is genuinely unused by LSCIS, or should be re-added with correct justification. Kong Gateway was reinstated on 2026-07-28 after owner confirmation that it hosts LSCIS's authentication layer — no longer an open item.
+  status: open
+- id: N4
+  action: Confirm the four "Not sure yet" mappings (Q1, Q2, Q3, Q4) with the product owner and update the affected stubs.
+  status: open
+  notes: Q1, Q2, and Q3 confirmed and closed on 2026-07-30. Only Q4 (Azure CIS DB relationship) remains open.
+- id: N5
+  action: Reconcile product-component runsOn values that look like generic auto-discovery mismatches (e.g., CentralAdmin pointing at an AWS Lambda host despite being a VMware-hosted .NET app).
+  status: open
+- id: N6
+  action: 'The Mobile Clients service group uses deploymentTarget: end-user-devices, which validate.py flags as non-standard against the workspace deployment-targets vocabulary. Decide whether to submit a vocabulary proposal for a "distributed client device" target or model mobile clients a different way.'
+  status: open
+- id: N7
+  action: Resolve Q7, Q8, and Q9 with the product owner or relevant team — CIS Svc Calculators (WIRIS theory), CIS Util Customerinformation DASL Agent (function unknown, flagged important), and CIS Util Customerinformation ACE MSB (function unknown beyond name expansion).
+  status: open
+- id: N8
+  action: Work through the serviceAuthentication/secretsManagement/serviceLogging/healthWelfareMonitoring/availabilityModel/scalabilityModel/recoverabilityModel/failureDomain backlog (see Q5) across all ~60 product/data components in this catalog directory, a handful at a time rather than all at once.
+  status: open
+- id: N9
+  action: Flag to the product owner that BeerCanLabs/sk-cis-util-customerinformation-syncer's repo name only reflects half of its contents (the DASLSyncer console app), not the DASLSync API also housed there (CIS Svc Syncer) — worth a rename or split discussion on the engineering side.
+  status: open
+- id: N10
+  action: Flag to the product owner that CIS Svc Tillbook Customersearch was built on .NET Core 3.1 despite the sis-svc- naming convention implying legacy ASP.NET Framework — naming convention mismatch worth noting for future svc-vs-msvc decisions (component itself is retired/dead, so low urgency).
+  status: open

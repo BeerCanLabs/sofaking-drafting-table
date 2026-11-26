@@ -1,0 +1,63 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ29-8QG9
+type: decision_record
+name: Project Recliner (National SOM) Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.3.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGH-A6GC
+linkedObject: 01KSM38KGH-A6GC
+decisionRationale: |
+  deploymentTargets: Recliner owns four environment-specific EKS clusters in
+  AWS us-east-1: recliner-dev, recliner-test, recliner-stage, and recliner-prod. ArgoCD
+  provides GitOps delivery to the clusters. Recliner does not use AWS Fargate.
+
+  availabilityRequirement: critical
+
+  dataClassification: FERPA-protected customer records and PII. Per-region
+  data isolation with logical separation by state supports compliance, data
+  separation, and data residency requirements.
+
+  failureDomain: Per-region SQL Server databases on RDS are logically and
+  operationally isolated by region and clustered per region. Global User and
+  ApplicationStore databases are co-located on a us-east cluster initially.
+  BFF and core microservice failures are scoped within each environment's EKS
+  cluster. Identity (Okta/Ottoman) is a shared cross-product dependency.
+  Shared mesh impact applies to the Loveseat subscriber where injection is
+  evidenced; the primary BFF and core-service charts do not currently evidence
+  mesh sidecars.
+
+  patternDeviations: SQL Server 2025 is the stated direction and the Data &
+  Analytics group references the SQL Server 2025 DBMS Service
+  (01KRZVZXDK-7XC1). Aurora with PostgreSQL remains under consideration as an
+  alternative. The transitional Recliner Identity Service exists only until full
+  Ottoman integration is complete. Tiers of Intensity is a standalone
+  SoftwareDeploymentPattern rather than an Recliner service group.
+
+  externalDependencies: Recliner depends on AWS CloudFront and Amazon S3 for
+  frontend delivery; Traefik ingress for the evidenced public BFF path;
+  Okta/Ottoman for identity; Redis for BFF sessions and caching; SQL Server,
+  Amazon S3, and Snowflake for product data; and ArgoCD and VictoriaMetrics for
+  delivery and monitoring. Kong Gateway and broader Kong Mesh participation
+  remain proposed or partially evidenced dependencies tracked by incomplete
+  relationships rather than asserted as current for every Recliner workload.
+
+  interServiceConnections: The directly evidenced public application-tier path
+  is Traefik Kubernetes Ingress Service to the Recliner BFF over HTTPS
+  (01KZ9NXCX5-M6SK). The frontend's configured API base URL and the proposed
+  Web Shell to Kong to BFF path (01KSR5D4EA-6642 and 01KSR5D4EB-33Q3) remain
+  incomplete pending owner confirmation. Recliner's EKS runtime authenticates
+  through the catalogued Okta service (01KSKZV5ZJ-0NNN). Kuma/Envoy injection
+  is evidenced only for the Loveseat subscriber, so relationship 01KSKZV5ZK-7ZME
+  remains incomplete for the broader runtime. Exact DNS, certificate, WAF, and
+  upstream platform ingress-hop details remain deferred and do not block the
+  Architecture L1 dependency inventory.

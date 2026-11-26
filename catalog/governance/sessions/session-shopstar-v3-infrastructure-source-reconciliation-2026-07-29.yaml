@@ -1,0 +1,756 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-X285
+type: drafting_session
+name: shopstar v3 Infrastructure Source Reconciliation
+description: >-
+  Reconcile shopstar v3 application, VMware, Terraform, Ansible/AAP, AWS,
+  database, print, IDM, GRR edge/network, and AccuRoute modernization evidence
+  into DRAFT while preserving current-versus-target uncertainty. This session
+  and assessment are shopstar V3 only; inactive shopstar V5 architecture and evidence
+  are explicitly excluded.
+version: 1.9.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+sessionStatus: open
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - drafting-session
+  - shopstar-v3
+  - infrastructure
+  - terraform
+  - ansible
+  - aws
+  - vmware
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGG-871T
+resumptionContext:
+  scopeDecision: >-
+    shopstar V3 only. shopstar V5 is inactive and out of scope. Do not use V5
+    architecture, infrastructure, RabbitMQ, print services, monitoring,
+    incidents, deployment patterns, or documentation as V3 evidence.
+  currentProductionPipeline: shopstar-v3-production
+  currentTomcatHostFamily: GRRSHS3TC* on Ubuntu 22.04 with PRC, PRT, and PRS role segmentation
+  databaseMigrationInventoryDate: '2026-08-17'
+sourceArtifacts:
+  - name: shopstar V3 current infrastructure confirmation
+    type: interview
+    location: Current Draftsman session, 2026-08-19
+    notes: >-
+      Current V3-only confirmation covering the 2026-08-17 per-primary-host
+      InnoDB migration inventory, primary/read-only-replica mappings, 24-hour
+      RPO and undefined formal RTO, legacy 48-72 hour backup/restore SLA,
+      Percona/S3 recovery architecture, IDM and RabbitMQ host placement,
+      F5/Tomcat pool evidence, shopstar-v3-production delivery flow, Terraform and
+      Ansible responsibilities, Secret Server and Ansible Vault usage,
+      observability, database-audit limits, and the remaining evidence gaps.
+  - name: sofaking-drafting-table existing shopstar catalog
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-sofaking-drafting-table
+    notes: Baseline shopstar v3 SDP, product components, shared runtime services, relationships, and validation decisions at origin/main commit a4f69273.
+  - name: shopstar DRAFT confirmed architecture context
+    type: document
+    location: SHOPSTAR_DRAFT_CONTEXT.md
+    notes: >-
+      Product-owner-confirmed input received 2026-08-04 covering component
+      boundaries, F5 routing, tenant database selection and lifecycle,
+      authentication paths, Account API deployment, RabbitMQ synchronization,
+      print processing, and AccuRoute production responsibilities.
+  - name: shopstar mixed-engine database owner correction
+    type: interview
+    location: Current Draftsman session, 2026-08-04
+    notes: >-
+      Superseded summary retained for provenance. The current 2026-08-17
+      inventory now supplies per-primary-host migration status and exact
+      primary/read-only-replica mappings. It does not establish replica engine
+      status independently.
+  - name: sys-shopstar-terraform VMware and SSM automation
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-sys-shopstar-terraform/tree/shopstar-terraform-grr-a2c-idm
+    notes: >-
+      Commit bc31036958d2e89fe0472f160ad86b5c6705b81c (2025-09-03).
+      vSphere VM creation, S3/DynamoDB state, SSM hybrid activation, generated
+      Ansible inventory, and batch/environment tfvars. Local checkout contained
+      pre-existing uncommitted files and was inspected read-only.
+  - name: sys-shopstar-terraform AccuRoute EC2 candidate
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-sys-shopstar-terraform/tree/feature/accuroute-ec2-only
+    notes: >-
+      Commit 7096ec538f3e88cc77e34d7782ee31150d65ca6d (2026-06-16).
+      Unmerged two-role Windows EC2 design using launch templates, ASGs, IAM,
+      EBS, CloudWatch, S3, SQS, and Secrets Manager.
+  - name: ansible_playbooks_sre shopstar AccuRoute branch
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-ansible_playbooks_sre/tree/shopstar_accuroute_servers
+    notes: >-
+      Commit c2f57c7438296d4381d62f999a34e21d221fa2a1 (2026-07-27).
+      Active AAP/EC2 lifecycle, Windows bootstrap, domain join, IIS/SQL
+      prerequisites, AccuRoute 8 role, security agents, monitoring, and
+      diagnostics.
+  - name: shopstar v3 - final stage
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11867974426/shopstar+v3+-+final+stage
+    notes: Confluence version 3, updated 2025-09-03. Documents Terraform-to-Ansible VMware provisioning, SSM hybrid activation, state storage, server-role templates, and operational execution.
+  - name: shopstar - Environment Guide
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/120091170/shopstar+-+Environment+Guide
+    notes: Confluence version 58, updated 2025-09-29. Documents production/non-production topology, legacy hosts, Tomcat, print, IDM/RabbitMQ, MySQL, SMTP, AccuRoute, and observed GRR address placement; the page is under construction and includes legacy inventory.
+  - name: Grand Rapids Environment
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/12092682/Grand Rapids+Environment
+    notes: Confluence version 4, updated 2018-07-06. Empty landing page whose descendants contain GRR network diagrams, address spaces, perimeter, and datacenter evidence.
+  - name: Internet Outside Network Address Space
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18388842/Internet+Outside+Network+Address+Space
+    notes: Confluence version 5, updated 2025-01-29. Documents Datavault-provided DIA, active/passive HSRP, dual-threaded connectivity, 2 Gbps service with 2.2 Gbps burst, and upstream traffic dropping above the limit.
+  - name: GRR Firewalls 100 and 101 CIS DMZ Network
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/145829863/GRR+Firewalls+100+and+101+CIS+DMZ+Network
+    notes: Confluence version 1, updated 2019-08-26. Explicitly lists CUSORD/shopstar as an occupant of the CIS DMZ protected by GRR firewalls 100 and 101; rule-level configuration is not included.
+  - name: DMZ Network Address Space
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11315350/DMZ+Network+Address+Space
+    notes: Confluence version 7, updated 2019-08-26. Defines DMZ 10 as VLAN 56 at 172.19.56.0/22 and DMZ 9 as VLAN 50 at 172.19.50.0/23.
+  - name: Internal Server Network Address Space
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/10002848/Internal+Server+Network+Address+Space
+    notes: Confluence version 4, updated 2018-05-10. Lists GRR internal server ranges including 10.173.0.0/16.
+  - name: GRR Network Diagram
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15285267105/GRR+Network+Diagram
+    notes: Confluence version 2, updated 2026-02-05. Network SME confirmed on 2026-08-05 that the diagram is current for GRR production; it excludes the new shopstar development environment being built in AWS.
+  - name: shopstar V3 and V5 WAF Info
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/12660037054/shopstar+V3+V5+-+WAF+Info
+    notes: Confluence version 1, updated 2021-11-24. Lists historical shopstar v3 public records and origin addresses, but the current WAF CNAME/A-record fields for v3 are blank.
+  - name: OPS-217684 shopstar v3 Edge and Network Review
+    type: issue
+    location: https://sofaking-example.atlassian.net/browse/OPS-217684
+    notes: Records the network SME review and the remaining requirement to model or explicitly defer incomplete product-specific edge and network details.
+  - name: shopstar v3 - New environment guide
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15100797405/shopstar+v3+-+New+environment+guide
+    notes: Confluence version 2, updated 2026-01-19. Target Ubuntu 22.04 inventory for Tomcat, MySQL, print, IDM, IT, and SMTP roles.
+  - name: V3 Servers
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SD/pages/143054707/V3+Servers
+    notes: Confluence version 74, updated 2026-04-21. Current MySQL 8.0.35 primary/replica, print-worker, Tomcat, IT, IDM, SMTP, QA, and RC details.
+  - name: shopstar MySQL V3 Production and Non Production Servers
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17211799589/shopstar+-+MySQL+-+V3+Production+and+Non+Production+Servers
+    notes: Confluence version 48, updated 2026-05-01. State-partitioned primary/replica topology, VMware host placement, and AWS secondary-replica statement.
+  - name: shopstar - MySQL - V3 Production DB Architecture & Backup Schedule
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/16411493511/shopstar+-+MySQL+-+V3+Production+DB+Architecture+Backup+Schedule
+    notes: >-
+      Confluence version 34, retrieved 2026-08-03. Documents GRR primary/replica
+      inventory, per-replica full-backup schedules, delayed Cloudberry uploads
+      to sk_datum S3 buckets, archive/history retention, patching constraints,
+      current 48-72 hour exposure, and proposed recovery alternatives.
+  - name: shopstar - Install and Configure MySQL Workbench
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17236142040/shopstar+-+Install+and+Configure+MySQL+Workbench
+    notes: Confluence version 6, updated 2025-10-16. Documents MySQL Workbench 8.0 and the managed shopstar connection bundle used for database administration.
+  - name: shopstar - Server Access using SSO
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18554725919/shopstar+-+Server+Access+using+SSO
+    notes: Confluence version 3, updated 2024-08-30. Documents Sofa King credential entry through Microsoft My Applications, shopstar AWS SSO, Systems Manager Fleet Manager terminal access, and MySQL administration.
+  - name: shopstar MySql Database Auditing for Security and Compliance
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11989857561/shopstar+MySql+Database+Auditing+for+Security+Compliance
+    notes: Confluence version 4, updated 2025-06-24. Defines intended MySQL Enterprise Audit Plugin coverage, configuration, rotation, alerting, and optional SIEM integration; implementation evidence is not included.
+  - name: MySQL Production User Creation and Password Expiry Policy
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14603154540/MySQL+Production+User+Creation+Password+Expiry+Policy
+    notes: Confluence version 1, updated 2025-06-30. Requires temporary production credentials to be changed at first login.
+  - name: shopstar - MySQL - v3 Shared database service accounts inventory
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17368419243/shopstar+-+MySQL+-+v3+Shared+database+service+accounts+inventory
+    notes: Confluence version 2, updated 2025-07-11. Inventories application, audit, print, integration, privileged, replication, and monitoring identities and their documented team ownership; some legacy rows remain incomplete.
+  - name: shopstar MySQL User Creation and Role Assignment
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/16768593415/shopstar+MySQL+User+Creation+Role+Assignment+for+different+teams+based+on+Role+Based+Access+Control+System
+    notes: Confluence version 2, updated 2025-06-25. Maps Developer/Customer Support, QA, and Data/DBA users to defined MySQL roles.
+  - name: Role-Based Access Control System for shopstar MySQL Users
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13958866265/Role-Based+Access+Control+RBAC+System+for+shopstar+MySQL+Users
+    notes: Confluence version 3, updated 2025-05-20. Defines least-privilege role intent, DBA-only OS root access through Fleet Manager, Secret Server storage, and planned audit-log use.
+  - name: Shopstar - MySQL - Linux - DBInstance Backup Restore from S3
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13533000660/Shopstar+-+MySQL+-+Linux+-+DBInstance+Backup+Restore+from+S3
+    notes: Confluence version 48, updated 2025-01-31. Documents encrypted Percona backup retrieval from S3, validation-instance restoration, integrity checks, and Jira evidence capture.
+  - name: DR Procedure - shopstar v3 Data Team
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17571717194/DR+Procedure+-+shopstar+v3+Data+Team
+    notes: Confluence version 14, updated 2025-10-29. Documents AWS infrastructure rebuild followed by S3 restore and validation; primary database hosts are restored before replicas.
+  - name: 2025-10-15 DR Tabletop - shopstar v3
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17848275962/2025-10-15+DR+Tabletop+-+shopstar+v3
+    notes: Confluence version 4, updated 2025-10-20. Records a 24-hour RPO target, undefined RTO, 77-hour recovery estimate, 48-hour recovery-point estimate, failure to meet RPO, and MyISAM migration and AWS automation improvements.
+  - name: AWS MySQL Replicas, Recovery Objectives, Restore Testing, and Open Gaps for shopstar v3
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/11950975735/AWS+MySQL+Replicas+Recovery+Objectives+Restore+Testing+and+Open+Gaps+for+shopstar+v3
+    notes: >-
+      Confluence version 3, updated 2026-08-04. The no-production-secondary-
+      replicas-in-AWS conclusion remains current. Its prior summary of a
+      72-hour formal RTO and successful 2026-08-04 restore evidence is
+      superseded by the 2026-08-19 confirmation: formal RTO is undefined, and
+      the most recent successful actual restore test and evidence are
+      unresolved.
+  - name: OPS-142763 shopstar v3 Data Domain Review
+    type: issue
+    location: https://sofaking-example.atlassian.net/browse/OPS-142763
+    notes: The 2026-08-04 owner clarification supersedes the earlier AWS-replica assumption; production secondary replicas exist in GRR only.
+  - name: AAP Configuration
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~557058f6407d3f1273411fb12ad82dfd793c77/pages/19122176042/AAP+Configuration
+    notes: Confluence version 2, updated 2026-06-18. AAP projects, job templates, inventories, credential pattern, and observed dev/stage/prod job state.
+  - name: AWS Configuration
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/~557058f6407d3f1273411fb12ad82dfd793c77/pages/11332023900/AWS+Configuration
+    notes: Confluence version 2, updated 2026-06-18. shopstar AWS account boundaries, role assumption, private networking, Windows EC2 baseline, encrypted volumes, and routing.
+  - name: shopstar v3 technical knowledge transfer
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SD/pages/178477357
+    notes: Confluence version 12, updated 2022-08-10. Establishes the shared codebase, organization terminology, orgID tenancy, and v3/v5 product split.
+  - name: Update Production
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SD/pages/12640414702/Update+Production
+    notes: Confluence version 28, updated 2024-07-11. Evidence for Jenkins plus manual Tomcat, print, utility, JDBC-driver, and database rollout steps.
+generatedObjects:
+  - name: shopstar v3 - Pattern
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KGG-871T
+    notes: >-
+      Reconciled current V3-only infrastructure, the shopstar-v3-production
+      delivery pipeline, Terraform/Ansible automation, Ubuntu host baseline,
+      application boundaries, F5 and tenancy behavior, authentication paths,
+      the 2026-08-17 per-primary-host InnoDB migration inventory, exact GRR
+      primary/read-only-replica mappings, 24-hour RPO with undefined formal
+      RTO, Percona/S3 rebuild-and-restore recovery, Secret Server and Ansible
+      Vault usage, observability, database administration, RBAC, and planned
+      audit controls.
+  - name: shopstar v3 Application
+    type: product_component
+    status: created
+    ref: 01KSM38KGD-WYH7
+    notes: Corrected from static HTML hosting to the owner-confirmed main Java/Tomcat application, with shared Admin DB and orgID-based tenant selection, three authentication paths, source-backed tenancy, and Ubuntu target evidence.
+  - name: shopstar v3 Suite
+    type: product_component
+    status: created
+    ref: 01KSM38KGD-HSPQ
+    notes: Retained as a deprecated provenance object only; it is unreferenced by the active shopstar deployment topology and has no asserted Tomcat runtime binding.
+  - name: AccuRoute (OmTool)
+    type: network_service
+    status: created
+    ref: 01KS4DGJVK-Q9GY
+    notes: Preserved as the existing production service and linked to its candidate replacement.
+  - name: Upland AccuRoute 8
+    type: technology_component
+    status: created
+    ref: 01KYRAQ0KC-7ZFS
+  - name: shopstar AccuRoute 8 AWS Service
+    type: runtime_service
+    status: created
+    ref: 01KYRAQ0KC-MPJQ
+    notes: Candidate only; dev/stage infrastructure evidence does not prove completed application install or production cutover.
+  - name: shopstar IDM Integration to RabbitMQ
+    type: relationship
+    status: created
+    ref: 01KYRAQ0KC-KR20
+    notes: >-
+      Confirms asynchronous organization, user, permission, and enable-user
+      synchronization; RabbitMQ runs with IDM Integration on grrshs3idm01 and
+      grrshs3idm02. Historical two-node mirrored-queue design is retained as
+      historical evidence while current runtime topology remains open.
+  - name: shopstar AccuRoute 8 AWS Service to Amazon S3 Storage
+    type: relationship
+    status: created
+    ref: 01KYRAQ0KC-HENB
+  - name: shopstar AccuRoute 8 AWS Service to AWS SQS
+    type: relationship
+    status: created
+    ref: 01KYRAQ0KC-3VGS
+  - name: shopstar AccuRoute 8 AWS Service to Nagios Monitoring
+    type: relationship
+    status: created
+    ref: 01KYRAQ0KC-BZDP
+assumptions:
+  - id: A1
+    statement: >-
+      This drafting session and assessment cover shopstar V3 only. shopstar V5 is
+      inactive and explicitly excluded; no V5 evidence is used to infer V3
+      behavior.
+    rationale: Explicit scope confirmation received 2026-08-19.
+    impact: No shopstar V5 drafting session or architecture changes are part of this work.
+  - id: A2
+    statement: The candidate AccuRoute AWS deployment is represented as one runtime service with alternate AAP and Terraform deployment configurations.
+    rationale: AAP currently discovers one host per active environment, while the Terraform feature branch models two logical roles in one product modernization.
+    impact: The runtime may need to split into scan-extract and document-fetch-store services if the Terraform design is selected.
+  - id: A3
+    statement: The existing Customer Solutions pillar and SOM engineering ownership are retained without reinterpretation.
+    rationale: They predate this session and no owner correction was provided.
+    impact: Business taxonomy and owner fields must change if the product owner identifies a different pillar or accountable team.
+  - id: A4
+    statement: >-
+      There is only one shopstar product deployment pattern. The
+      repository-discovery stub "shopstar - Households Portal - Pattern"
+      (01KSM38KEX-DF2H) was deprecated with supersededBy pointing to this
+      session's primary object. shopstar-parent (parent-facing web tier) and
+      shopstar-user-sync (shared IDM/user-sync eventing) were folded into this
+      pattern's service groups; shopstar-sandbox (never deployed) was not.
+    rationale: User-directed consolidation on 2026-07-29; confirmed only one shopstar product exists.
+    impact: Resolves Q6 and preserves the V3-only boundary for future resumptions.
+    relatedObjects:
+      - ref: 01KSM38KEX-DF2H
+unresolvedQuestions:
+  - id: Q1
+    question: Does the AAP/Ansible EC2 build supersede the sys-shopstar-terraform AccuRoute feature branches, or are both intended to coexist?
+    status: open
+    currentBestGuess: AAP is the more current operational path because its branch is active through July 27, 2026 and dev/stage jobs are documented as successful.
+    impact: Determines whether S3/SQS/ASG relationships remain candidate, become preferred, or are removed.
+    relatedObjects:
+      - ref: 01KYRAQ0KC-MPJQ
+  - id: Q2
+    question: Has AccuRoute 8 been installed and configured in dev or stage since the checked-in variables disabled application, database, and service configuration?
+    status: open
+    currentBestGuess: Infrastructure and prerequisites are ready, but vendor application installation remains manual.
+    impact: Determines whether the candidate runtime can move beyond incomplete/candidate status.
+    relatedObjects:
+      - ref: 01KYRAQ0KC-MPJQ
+  - id: Q3
+    question: Has production AccuRoute AWS infrastructure run or cut over, and can the Windows Server 2003 R2 / SQL Server 2000 appliance be retired?
+    status: open
+    currentBestGuess: No; the June AAP record shows prod templates unexecuted and zero discovered hosts.
+    impact: Controls lifecycle status for both legacy and target AccuRoute services.
+    relatedObjects:
+      - ref: 01KS4DGJVK-Q9GY
+      - ref: 01KYRAQ0KC-MPJQ
+  - id: Q4
+    question: Which operating-system and host family is current for the shopstar V3 Tomcat estate?
+    status: answered
+    currentBestGuess: >-
+      The current Tomcat estate uses GRRSHS3TC* Ubuntu 22.04 hosts with PRC,
+      PRT, and PRS role segmentation. Older RHEL/CentOS Tomcat inventories are
+      historical and are not current infrastructure.
+    impact: Closes the prior ambiguity that treated old RHEL/CentOS Tomcat nodes as potentially current.
+  - id: Q5
+    question: Do production secondary MySQL replicas exist in AWS?
+    status: answered
+    currentBestGuess: >-
+      No. The current owner clarification states that secondary replicas exist
+      in the GRR datacenter; no production secondary MySQL replicas exist in
+      AWS. AWS is used as the rebuild-and-restore destination during a
+      datacenter recovery.
+    impact: Confirms Grand Rapids as the production database failure domain and removes AWS replica failover from the current architecture.
+  - id: Q6
+    question: Should a separate shopstar v5 drafting session be opened after this v3 infrastructure reconciliation?
+    status: answered
+    currentBestGuess: >-
+      No. This session and assessment are V3 only, and shopstar V5 is inactive and
+      explicitly out of scope. The repository-discovered
+      "shopstar - Households Portal - Pattern" stub (01KSM38KEX-DF2H) was deprecated
+      and merged into this session's primary object; its two V5-labeled
+      repositories (shopstar, shopstar-scheduler) were intentionally excluded rather
+      than reconciled. V5 architecture, infrastructure, RabbitMQ, print
+      services, monitoring, incidents, deployment patterns, and documentation
+      must not be used as evidence for V3.
+    impact: Keeps all V5 evidence out of the current V3 assessment.
+  - id: Q7
+    question: Is Customer Solutions the confirmed business pillar for shopstar, and is SOM Special Orders Management Engineering the accountable owner?
+    status: open
+    currentBestGuess: Existing catalog values retained pending owner confirmation.
+    impact: Required to remove the existing inferred-pillar caveat.
+  - id: Q8
+    question: How do the approved backup windows map to formal RPO and RTO values?
+    status: answered
+    currentBestGuess: >-
+      The documented RPO is 24 hours. Formal RTO is undefined and has not been
+      established. The legacy 48-72 hour transactional backup/restore
+      operational SLA is not the formal RTO.
+    impact: Corrects the prior 72-hour RTO claim and preserves the distinction between a recovery objective and an operational backup/restore SLA.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q9
+    question: Is the MySQL Enterprise Audit Plugin enabled on every production instance, and where are audit events retained, alerted on, and reviewed?
+    status: open
+    currentBestGuess: The guide defines the intended audit configuration and optional SIEM integrations, but does not prove production deployment, retention, alert ownership, or review cadence.
+    impact: Prevents the documented audit design from being treated as an implemented production control.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q10
+    question: What approval, recertification, removal, and rotation processes govern human and shared MySQL production access?
+    status: open
+    currentBestGuess: RBAC, first-login password expiry, DBA-only OS root access, Secret Server storage, and most account owners are documented; lifecycle evidence and several incomplete shared-account rows remain.
+    impact: Blocks complete production access-governance evidence.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q11
+    question: What data may be used in QA and RC, and how are non-production data refresh, masking, access, retention, purge, and manual changes controlled?
+    status: open
+    currentBestGuess: Separate Ubuntu 22.04 QA and RC database hosts are documented, but the selected sources do not describe their data-handling controls.
+    impact: Blocks completion of the non-production data strategy.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q12
+    question: What are the active shopstar V3 production primary/read-only-replica mappings?
+    status: answered
+    currentBestGuess: >-
+      RT1 grrv3db1ppr/ptxcmb1m maps to grrv3db1prpl/ptxcmb1s; RT2
+      grrv3db2ppr/ptxcmb2m to grrv3db2prpl/ptxcmb2s; RT3
+      grrv3db3ppr/ptxcmb3m to grrv3db3prpl/ptxcmb3s; RT4
+      grrv3db4ppr/ptxcmb4m to grrv3db4prpl/ptxcmb4s; RT5
+      grrv3db5ppr/ptxcmb5m to grrv3db5prpl/ptxcmb5s; RT6
+      grrv3db6ppr/ptxcmb6m to grrv3db6prpl/ptxcmb6s; RT7
+      grrv3db7ppr/ptxcmb7m to grrv3db7prpl/ptxcmb7s; NI
+      grrv3db8ppr/pnicmb1m to grrv3db8prpl/pnicmb1s; and MA1/MA2
+      grrv3db10ppr/pmacmb1m+pmacmb2m to
+      grrv3db10prpl/pmacmb1s+pmacmb2s. All are in GRR and use
+      primary/read-only-reporting-replica topology, not MySQL Group
+      Replication. No production secondary replicas exist in AWS.
+    impact: Closes the active primary/replica mapping question and confirms the GRR database failure domain.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q13
+    question: What is the most recent successful shopstar restore test and associated evidence?
+    status: open
+    currentBestGuess: >-
+      A DR tabletop exists and the encrypted S3 restore procedure is
+      documented, but the most recent successful actual restore test and its
+      supporting evidence have not been verified.
+    impact: Prevents the documented restore procedure from being treated as current restore-test evidence.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q14
+    question: Are the MyISAM recovery limitation and primary-only risk for static history groups 14-16 formally accepted, deferred, or assigned remediation dates?
+    status: open
+    currentBestGuess: >-
+      The InnoDB conversion is active. The 2026-08-17 primary-host inventory
+      records RT1, RT2, RT3, RT4, RT7, NI, MA1, and MA2 complete. RT5 and RT6
+      are pending confirmation or approval for the documented 2026-08-28
+      through 2026-08-30 target window. Formal disposition for primary-only
+      history groups 14-16 is not documented.
+    impact: Blocks closure of the remaining data-resilience risk disposition.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q15
+    question: What are the documented single points of failure in the shopstar v3 database architecture?
+    status: answered
+    currentBestGuess: >-
+      Each active primary is the sole production write dependency for its
+      database group. The GRR replicas are read-only and cannot be used as a
+      failover tier; all primaries and replicas share the GRR datacenter
+      failure domain. Static history groups 14-16 are primary-only with no
+      replicas. There are no production database replicas in AWS, so GRR site
+      loss requires infrastructure rebuild and S3 restore rather than failover.
+      MyISAM's limited crash-recovery and backup capabilities increase the
+      impact and duration of failures for the workloads that remain on
+      MyISAM.
+    impact: Makes the database availability risks explicit for L1 review and ties remediation to the InnoDB conversion and disaster-recovery work.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q16
+    question: What is the current GRRSHS3TC* membership in Prod_Cusord_dunmoreV3_9080, Prod_Cusord_cobblestoneV3_9080, and Prod_Cusord_v3_login_9080, and what failover rules apply?
+    status: open
+    reason: >-
+      The established pool names and hostname-specific routing to Tomcat port
+      9080 are confirmed, but current Ubuntu GRRSHS3TC* member assignment and
+      failover behavior are not. No replacement F5 pool names are evidenced.
+    impact: Prevents the ingress relationship from documenting exact current pool membership and resilience behavior.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+      - ref: 01KSR5D4DY-TVTF
+  - id: Q17
+    question: What is the exact DD_DATASOURCES orgID-to-database mapping, including the planned NI churn date?
+    status: open
+    reason: Active and churned database sets are confirmed, but the routing map and NI lifecycle date are not. PA, IL, NC, and WI are churned and excluded from active topology.
+    impact: Prevents complete tenant-routing and database-lifecycle documentation.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+      - ref: 01KSR5D4E0-7W1T
+  - id: Q18
+    question: Which cataloged gateway endpoints terminate and validate the Sofa King IdM and Ottoman/Okta OIDC flows for shopstar v3?
+    status: open
+    reason: The authentication paths are confirmed, but the exact endpoint and token-validation boundaries are not.
+    impact: Blocks first-class authentication relationships without guessing at a shared-service target.
+    relatedObjects:
+      - ref: 01KSM38KGD-WYH7
+  - id: Q19
+    question: Which database engine/service provides admin2, which LDAP service and SMTP relay does shopstar-account-api use, and how are OIDC, RabbitMQ, SMTP, LDAP, and application JDBC secrets injected at runtime?
+    status: open
+    reason: >-
+      Secret Server is confirmed for operational, server, and database
+      credentials; Ansible Vault is confirmed for infrastructure automation;
+      and backup encryption credentials are in Secret Server. The admin2
+      engine/catalog binding, LDAP and SMTP endpoints, and exact application
+      runtime injection mechanisms remain unresolved.
+    impact: Blocks accurate Account API dependency relationships and application-level secret-delivery evidence.
+    relatedObjects:
+      - ref: 01KSM38KGC-DDE9
+  - id: Q20
+    question: Which shopstar components consume util-idm-auth4j, and what library version is deployed?
+    status: open
+    reason: The product owner confirmed that util-idm-auth4j is a shared Java library rather than a deployed service, but did not identify consumers or version.
+    impact: Keeps the library out of deployed topology while preserving the remaining software-composition gap.
+    relatedObjects:
+      - ref: 01KSM38KGD-WYH7
+      - ref: 01KSM38KGC-DDE9
+      - ref: 01KSM38KGD-4Q9H
+  - id: Q21
+    question: What Java version applies to shopstar-account-api?
+    status: open
+    reason: Spring Boot JAR packaging and HTTP port 8888 are confirmed; Java version is not.
+    impact: Prevents the ProductComponent runtime declaration from being complete.
+    relatedObjects:
+      - ref: 01KSM38KGC-DDE9
+  - id: Q22
+    question: What current RabbitMQ cluster membership, mirroring policy, exchanges, exact queues, routing keys, retry rules, and dead-letter behavior support shopstar identity synchronization?
+    status: open
+    reason: >-
+      RabbitMQ is confirmed on grrshs3idm01 and grrshs3idm02. Historical V3
+      documentation describes a two-node cluster with mirrored user-sync
+      queues, but current runtime membership, mirroring, detailed messaging,
+      and failure handling require verification. The generic shared service's
+      three-node quorum topology is not inherited.
+    impact: Prevents complete event-interface and recoverability documentation.
+    relatedObjects:
+      - ref: 01KSM38KGD-4Q9H
+      - ref: 01KYRAQ0KC-KR20
+  - id: Q23
+    question: Which tenant databases are assigned to each production print worker from pr70phl through pr95phl?
+    status: open
+    reason: The print-host range and direct tenant-MySQL access are confirmed, but worker assignments are not.
+    impact: Prevents complete print-to-database topology and failure-impact analysis.
+    relatedObjects:
+      - ref: 01KSR5D4E2-CFPK
+  - id: Q24
+    question: What is the current server-by-server MyISAM/InnoDB status across the active shopstar production database estate, and when was it last verified?
+    status: answered
+    currentBestGuess: >-
+      The migration inventory updated 2026-08-17 records InnoDB complete for
+      RT1 grrv3db1ppr/ptxcmb1m, RT2 grrv3db2ppr/ptxcmb2m, RT3
+      grrv3db3ppr/ptxcmb3m, RT4 grrv3db4ppr/ptxcmb4m, RT7
+      grrv3db7ppr/ptxcmb7m, NI grrv3db8ppr/pnicmb1m, and MA1/MA2
+      grrv3db10ppr/pmacmb1m+pmacmb2m. RT5
+      grrv3db5ppr/ptxcmb5m and RT6 grrv3db6ppr/ptxcmb6m are pending
+      confirmation or approval for the documented 2026-08-28 through
+      2026-08-30 target window. These statuses cover primary host groups only;
+      replica engine status is not independently verified.
+    impact: Closes the active primary-host migration inventory question while preserving the replica-engine evidence boundary.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+      - ref: 01KSR5D4E0-7W1T
+  - id: Q25
+    question: Where do shopstar-account-api, Shopstar IDM Integration, and RabbitMQ run in production, and on which application ports?
+    status: answered
+    currentBestGuess: >-
+      grrshs3idm01 and grrshs3idm02 both run shopstar-account-api on HTTP port
+      8888, shopstar-idm-integration on HTTP port 8889, and RabbitMQ. F5 service
+      pools exist for the Account API and IDM Integration.
+    impact: Closes current production IDM/RabbitMQ host placement without inheriting the generic RabbitMQ service topology.
+    relatedObjects:
+      - ref: 01KSM38KGC-DDE9
+      - ref: 01KSM38KGD-4Q9H
+      - ref: 01KYRAQ0KC-KR20
+  - id: Q26
+    question: What GRR datacenter edge and network facts are confirmed for shopstar v3?
+    status: answered
+    currentBestGuess: >-
+      shopstar production is hosted at the GRR Lakeshore Data Centers facility, formerly
+      Datavault, and is explicitly listed in the CIS DMZ behind GRR firewalls
+      100 and 101. DMZ 10 is VLAN 56 at 172.19.56.0/22, DMZ 9 is VLAN 50 at
+      172.19.50.0/23, and internal server ranges include 10.173.0.0/16.
+      Observed shopstar 172.25.58.x hosts fall within DMZ 10, while observed
+      database, print, and batch hosts fall within 10.173.0.0/16. The GRR DIA
+      uses active/passive HSRP and dual-threaded connectivity with 2 Gbps
+      service and a 2.2 Gbps burst allowance.
+    impact: Establishes the GRR production placement, perimeter, address-space, and circuit context needed for L1.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q27
+    question: What is the exact current shopstar ingress and inter-zone rule set?
+    status: open
+    currentBestGuess: >-
+      DRAFT models F5 BIG-IP ingress to Tomcat and the GRR sources establish the
+      CIS DMZ and firewalls 100 and 101. The meeting summary states that network
+      details were discussed but does not preserve the exact firewall rules,
+      current DNS and WAF records, F5 VIPs and backend pools, DMZ-to-10.180
+      ports and protocols, or TLS termination point.
+    impact: Prevents the logical edge path from being treated as verified rule-level current-state evidence.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q28
+    question: What resilience, monitoring, ownership, and single-point-of-failure controls apply to the GRR edge?
+    status: open
+    currentBestGuess: >-
+      The internet service is active/passive HSRP and dual-threaded, but the
+      selected evidence does not confirm whether firewalls 100 and 101 and the
+      F5 are resilient pairs, their failure behavior, individual device or
+      provider single points of failure, or accountable owners for firewall,
+      F5, DNS, WAF, monitoring, and circuit operations.
+    impact: Blocks a complete edge availability and accountability assessment.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q29
+    question: Is the February 2026 GRR network diagram current for shopstar?
+    status: answered
+    currentBestGuess: >-
+      Yes for GRR production. The network SME confirmed it as current on
+      2026-08-05, with the explicit limitation that it does not include the new
+      shopstar development environment being built in AWS.
+    impact: Establishes the current GRR production diagram scope without conflating it with the AWS development build.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q30
+    question: Which Jenkins pipeline currently deploys shopstar V3 to production, and how automated is the release flow?
+    status: answered
+    currentBestGuess: >-
+      shopstar-v3-production is the current production pipeline. It is operator
+      triggered, parameterized, and partially automated; deployment units are
+      manually selected from release contents, and database upgrade steps are
+      conditionally selected by the development team. Environment progression
+      is QA to RC to Production, with RC as pre-production release validation.
+      shopstar-v3-production-new was temporary during the Ubuntu migration and is
+      no longer active.
+    impact: Closes the current production deployment-pipeline question and excludes the temporary migration pipeline from current topology.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q31
+    question: Which mechanisms provision and configure the current Ubuntu shopstar V3 infrastructure?
+    status: answered
+    currentBestGuess: >-
+      Terraform in sys-shopstar-terraform provisions Ubuntu 22.04 VMware VMs,
+      using encrypted S3 remote state and DynamoDB locking. Ansible in
+      ansible_playbooks_sre configures Java, Tomcat where applicable,
+      networking, users, certificates/keystores, application/runtime settings,
+      Nagios agent, Dynatrace OneAgent, AWS SSM/Fleet Manager, CrowdStrike,
+      Nessus, and Automox. Provisioning is substantially automated but retains
+      manual operational steps.
+    impact: Closes the infrastructure provisioning and host-configuration mechanism question without describing the flow as fully autonomous.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q32
+    question: Where are general shopstar V3 operational and infrastructure credentials stored?
+    status: answered
+    currentBestGuess: >-
+      Secret Server stores operational, server, and database credentials,
+      including database-backup encryption credentials. Ansible Vault is used
+      by infrastructure automation. Exact application runtime secret injection
+      remains open under Q19.
+    impact: Closes the general credential-storage question while keeping application-level injection unresolved.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q33
+    question: Is current shopstar V3 application logging centrally aggregated or forwarded to a SIEM, and what retention, alerting, and review rules apply?
+    status: open
+    reason: >-
+      Nagios, Dynatrace OneAgent, Systems Manager/Fleet Manager, and MySQL
+      Enterprise Monitor are confirmed for V3, but current V3-only evidence
+      does not establish centralized application-log aggregation or SIEM
+      handling.
+    impact: Prevents observability tooling from being treated as centralized V3 application-log or SIEM evidence.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: Q34
+    question: What exact URI does F5 use for the Account API and IDM Integration HTTP health checks?
+    status: open
+    reason: F5 HTTP health monitoring and service pools are confirmed, but the health-check URI is not.
+    impact: Prevents an invented actuator or other health endpoint from entering the current topology.
+    relatedObjects:
+      - ref: 01KSM38KGC-DDE9
+      - ref: 01KSM38KGD-4Q9H
+nextSteps:
+  - id: N1
+    action: Confirm the AccuRoute AAP-versus-Terraform boundary and application-install state with the owning SRE/product team.
+    status: open
+    owner: som-special-programs-management-engineering
+  - id: N2
+    action: Record the current Terraform provisioning and Ansible host-configuration mechanisms for the Ubuntu shopstar V3 estate.
+    status: done
+    owner: som-special-programs-management-engineering
+    notes: >-
+      sys-shopstar-terraform, encrypted S3 state, DynamoDB locking, Ubuntu 22.04
+      VM templates, and ansible_playbooks_sre baseline configuration are now
+      recorded, including the remaining manual operational steps.
+  - id: N3
+    action: Resolve exact shared targets and complete first-class relationships for Sofa King IdM and Ottoman/Okta authentication, Account API access to admin2/LDAP/SMTP, exact runtime secret injection, GRRSHS3TC* F5 pool membership, utility/batch interactions, and final AccuRoute application flows.
+    status: open
+    owner: som-special-programs-management-engineering
+  - id: N5
+    action: Record the current recovery-objective interpretation and backup architecture.
+    status: done
+    owner: som-special-programs-management-engineering
+    notes: >-
+      RPO is 24 hours; formal RTO is undefined; and the legacy 48-72 hour
+      transactional backup/restore SLA is not the RTO. Percona XtraBackup on
+      replica hosts, scheduled S3 uploads, encrypted S3 restore procedures, and
+      Secret Server-managed backup encryption credentials are documented. The
+      successful actual restore-test evidence remains open under Q13.
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N6
+    action: Verify production audit deployment and close the human and shared-account access lifecycle gaps with DBRE and security owners.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N7
+    action: Document the QA and RC data classification, masking or synthetic-data approach, refresh, access, retention, purge, and manual change controls.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N8
+    action: Track RT5 and RT6 migration confirmation or approval against the documented 2026-08-28 through 2026-08-30 target window, and obtain owner disposition for the primary-only static-history risk.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N9
+    action: Reconcile DD_DATASOURCES orgID mappings, the NI churn date, and print-worker-to-tenant-database assignments with the owning application and database teams.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N10
+    action: Confirm util-idm-auth4j consumers and deployed version; retain it as a library dependency rather than a deployed service.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGD-WYH7
+      - ref: 01KSM38KGC-DDE9
+      - ref: 01KSM38KGD-4Q9H
+  - id: N11
+    action: Runtime-verify RabbitMQ cluster membership, mirroring policy, exchanges, exact queues, routing keys, retry behavior, dead-letter handling, and operational ownership without inheriting the generic shared-service topology.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGD-4Q9H
+      - ref: 01KYRAQ0KC-KR20
+  - id: N12
+    action: Capture or explicitly defer the shopstar-specific firewall rules, current DNS/WAF path, F5 VIPs and pools, ports and protocols, TLS termination, edge failover behavior, single points of failure, and ownership and monitoring assignments.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N13
+    action: Locate and verify evidence for the most recent successful actual shopstar V3 restore test.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N14
+    action: Verify whether current V3 application logs are centrally aggregated or forwarded to a SIEM, including retention, alerting, and review ownership.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGG-871T
+  - id: N15
+    action: Confirm the exact F5 HTTP health-check URI used for the Account API and IDM Integration pools.
+    status: open
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KSM38KGC-DDE9
+      - ref: 01KSM38KGD-4Q9H

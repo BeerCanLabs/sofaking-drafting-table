@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYMPF7PJ-N4Y2
+type: decision_record
+name: Tiers of Intensity Inter-service Topology
+description: Accepted architecture decision recording the cross-boundary communication paths for the standalone Tiers of Intensity deployment.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- tiers-of-intensity
+- som
+- deployment
+- messaging
+- decision-record
+category: decision
+status: accepted
+affectedComponent: 01KYMPHRH4-9VP1
+linkedObject: 01KYMPHRH4-9VP1
+approver: SOM Special Orders Management Engineering
+approvalDate: '2026-07-28'
+decisionRationale: >-
+  Product event topics deliver to SQS; SQS triggers the Lambda worker; the
+  worker calls the queue-batch API over HTTPS through an internal Traefik load
+  balancer; Traefik routes to the Kubernetes API Service and pods; and the API
+  publishes calculated results to product SNS topics through the AWS SDK.
+  Stage uses the LE1 endpoint
+  dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com,
+  while production uses the Chaise endpoint
+  dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com.
+  ArgoCD reconciles the API manifests into LE1 and Chaise. Explicit
+  Relationship objects record each communication and deployment path so that
+  the cross-zone topology is analyzable in DRAFT.

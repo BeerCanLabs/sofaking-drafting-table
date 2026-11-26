@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJCN-F7GS
+type: decision_record
+name: Apache Tomcat Application Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1E-9CDM
+linkedObject: 01KQQ5JT1E-9CDM
+decisionRationale: "serviceAuthentication: Authentication is managed at the application layer or via integrated  Tomcat realms.\n\nsecretsManagement: Secrets are provided via environment variables or configuration files  managed by the deployment automation.\n\nserviceLogging: Tomcat access and application logs are forwarded centrally via the  host's logging agent.\n\nhealthWelfareMonitoring: Service welfare is monitored via HTTP health endpoints and JVM metrics.\n\navailabilityModel: Availability is achieved via multiple instances behind a load balancer.\n\nscalabilityModel: Scalability is achieved by adding additional Tomcat instances to the pool.\n\nrecoverabilityModel: Failed instances are automatically replaced or restarted by the  orchestration layer.\n\nfailureDomain: Impact is scoped to the Tomcat instance or the cluster serving the workload."

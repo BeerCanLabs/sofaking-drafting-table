@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-A9RX
+type: product_component
+ownerRole: engineer
+name: CIS Util SOM Program Type Migrator
+description: Migration utility for data related to which SOM application a region uses. Dead — exact function beyond that is not well understood.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- som
+- migration
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-som-program-type-migrator
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery. Product owner confirmed this is dead but does not have detailed knowledge of its exact function beyond migrating data related to which SOM application a region uses. Requires further owner/team interview if historical detail is ever needed.
+  repositoryName: BeerCanLabs/sk-cis-util-som-program-type-migrator

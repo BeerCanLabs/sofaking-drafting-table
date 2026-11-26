@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ2-ZZH2
+type: object_patch
+name: Sofa King Data Integration capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Data Integration capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0XNZEY-DENJ
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1V-646V
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the SQL Server 2019 with SSIS Database Standard.
+    - ref: 01KQQ5JT1S-R1DR
+      lifecycleStatus: retired
+      notes: Microsoft Office 2007 support ended in 2017; remove this legacy Access database engine from acceptable use.
+    - ref: 01KQQ5JT1S-M0RD
+      lifecycleStatus: retired
+      notes: Microsoft Office 2010 support ended in 2020; remove this legacy Access database engine from acceptable use.
+    - ref: 01KQQ5JT1T-3PWG
+      lifecycleStatus: retired
+      notes: SQL Server Native Client 11 is not recommended for application use and should be migrated to a supported SQL driver.
+    - ref: 01KQQ5JT1V-TZ8X
+      lifecycleStatus: retired
+      notes: Progress OpenEdge 11.x is retired and should be migrated to a supported OpenEdge release.
+    - ref: 01KQQ5JT1V-VGXJ
+      lifecycleStatus: existing-only
+      notes: Maintained for Salesdesk Connex integration automation pending owner confirmation of exact package version.

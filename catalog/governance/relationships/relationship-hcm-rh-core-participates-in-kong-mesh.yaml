@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-66D8
+type: relationship
+name: HCM RH Core → Kong Mesh Service
+description: >-
+  HCM RH Core application pods participate in the default Kuma mesh through
+  injected Envoy-based data-plane sidecars.
+catalogStatus: complete
+source: 01KSM38KG5-FBRT
+target: 01KYAXMZ7H-KJT2
+label: participates in
+technology: Kuma mTLS / Envoy data plane
+direction: synchronous
+flow: bidirectional
+capabilities:
+  - 01KT0V5MCV-RM8M
+tags:
+  - hcm-rh
+  - kong-mesh
+  - kuma
+  - envoy
+notes: >-
+  All inspected HCM RH Core pods in chaise and le1 had
+  kuma.io/sidecar-injected=true and used the default mesh on 2026-07-24.

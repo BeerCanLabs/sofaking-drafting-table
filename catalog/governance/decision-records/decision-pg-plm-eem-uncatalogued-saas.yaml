@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-9C7X
+type: decision_record
+name: PG PLM/EEM - LaunchDarkly and Avalara Are Not in the Catalog
+description: >-
+  Records two third-party SaaS dependencies of PLM/EEM that have no
+  corresponding object in the DRAFT catalog and no precedent elsewhere at
+  Sofa King, per APEX Architecture L1 criterion 5. Narrowed from three after
+  Trevor Lane's review; Salesforce was split out to 01M1HJY7E4-CJ8C.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - non-standard-technology
+  - associate-development
+  - plm
+  - eem
+  - saas
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  nonStandardTechnology: The PLM/EEM cloud tier depends on two third-party SaaS
+  platforms that have no object in the DRAFT catalog and no evidence of use
+  anywhere else at Sofa King. From the production ConfigMap: LaunchDarkly
+  (app.launchdarkly.com/api/v2 - feature management) and Avalara
+  (AvalaraEnvironment - tax calculation). A catalog-wide search finds neither
+  name in any object outside the SKPG-19589 records themselves, so unlike
+  Salesforce there is no organisational precedent to cite. NARROWED after
+  Trevor Lane's review: Salesforce was originally grouped here but is
+  demonstrably established across fourteen catalog files, so it needs a
+  cataloguing action rather than an exception and has been split out to
+  decision record 01M1HJY7E4-CJ8C. These two are recorded as non-standard
+  because they are uncatalogued, NOT because they are known to be disallowed.
+  Leave from DRAFT is not evidence of absent procurement - DRAFT does not
+  track procurement - so the first question for the Architecture Review Board
+  is whether either is enterprise-procured. If they are, the remedy is to
+  catalogue them as Technology Components; if not, they are genuine exceptions.
+  ACTION REQUIRED: APEX Architecture L1 criterion 5 requires a Jira tracking
+  item for each non-standard technology choice. No dedicated exception ticket
+  exists yet; SKPG-19589 is the only tracking item. Status open pending
+  Architecture Review Board direction.

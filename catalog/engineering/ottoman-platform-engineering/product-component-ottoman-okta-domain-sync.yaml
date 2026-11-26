@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFS-487E
+type: product_component
+ownerRole: engineer
+name: Ottoman Okta-Domain Synchronizer Lambdas
+description: 'Pair of Sofa King-authored AWS Lambda functions that synchronize identity state between Okta and the Ottoman Domain Service.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT05-CT7X
+tags:
+  - ottoman
+  - lambda
+  - identity-sync
+  - product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  runtimeRequirement: Deployed as a containerized .NET Core / Node.js / Lambda service within the Ottoman AWS EKS/Lambda environment.
+  serviceAuthentication: Synchronization uses AWS IAM and Okta or Domain Service integration credentials.
+  secretsManagement: Function secrets are expected to be managed through AWS-native secret distribution.
+  serviceLogging: Lambda logs are expected to be forwarded through CloudWatch and the platform logging stack.
+  healthWelfareMonitoring: Lambda errors, duration, and invocation metrics are expected to be monitored through AWS telemetry.
+  availabilityModel: AWS Lambda provides regional managed availability for the function runtime.
+  scalabilityModel: Lambda concurrency scales with synchronization demand within configured limits.
+  recoverabilityModel: Function deployment is recovered from the GitOps or release-managed artifact.
+  failureDomain: Scoped to the Okta and Domain Service identity synchronization path.
+decisionRecords:
+  - ref: 01KT16XHQC-W61Y
+    key: runtimeRequirement

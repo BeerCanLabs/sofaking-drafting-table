@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-EZJR
+type: runtime_service
+ownerRole: technology-admin
+name: Docker Application Service
+description: Stub application service for Docker-hosted workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - app
+  - docker
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1R-2JS3
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: Container platform access and service identities use centralized identity and secret distribution.
+  scalingApproach: horizontally scaled container hosts behind load balancer
+  serviceLogging: Container and workload logs are exported to centralized logging beyond host-level collection.
+  healthCheck: container health probe and synthetic service monitor
+  healthWelfareMonitoring: Container health probes, synthetic monitoring, and platform telemetry monitor service welfare.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  availabilityModel: Multiple container hosts provide an active service pool behind the load balancer.
+  scalabilityModel: Horizontal expansion or contraction of the container host pool.
+  recoverabilityModel: Failed hosts are replaced and workloads are rescheduled onto healthy hosts.
+  failureDomain: Scoped to the Docker service deployment pool for a given workload tier.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple Docker hosts existing-only service availability when a single host fails.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: elastic-scale
+    name: Elastic Scale
+    description: Container host pool scales horizontally based on workload demand.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1R-2JS3
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJB3-5QPZ
+    key: serviceAuthentication
+  - ref: 01KT16XJB3-5QPZ
+    key: secretsManagement
+  - ref: 01KT16XJB3-5QPZ
+    key: serviceLogging
+  - ref: 01KT16XJB3-5QPZ
+    key: failureDomain

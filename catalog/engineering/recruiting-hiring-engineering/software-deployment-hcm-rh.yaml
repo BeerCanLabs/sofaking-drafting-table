@@ -1,0 +1,223 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG7-42XD
+type: software_deployment_pattern
+ownerRole: engineer
+name: New Recruiting & Hiring - Pattern
+aliases:
+  - HCM RH Software Deployment Pattern
+description: HCMRH (Human Capital Management Recruit and Hire) is a comprehensive dual-application retail recruitment platform serving both job seekers (Retailjobspot) and employers (Recruit & Hire) with microservices architecture, event-driven messaging via AWS SNS/SQS, MongoDB data storage, and Kubernetes orchestration
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: HCM Recruiting & Hiring
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+notes:
+  background: "Production-ready microservices platform serving RETAIL retail recruitment market with 165K+ retail institutions, supporting job posting management, application tracking, hiring pipelines, and job seeker career goal matching. Integrates with company-wide Loveseat event bus for real-time synchronization with Core HR, Platform, and legacy Recruit systems. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."
+tags:
+  - software-deployment-pattern
+  - microservices
+  - hcm-rh
+  - retailjobspot
+  - event-driven
+  - kubernetes
+  - hcmrh
+  - mongodb-atlas
+architectureNotes:
+  architectureStyle: Microservices with event-driven messaging (AWS SNS/SQS), API-first REST services, containerized on Kubernetes
+  systemOverview: Dual-application platform - Retailjobspot (job seeker app on port 3002) and Recruit & Hire (employer app on port 3003) backed by 7 .NET Core microservices and 1 Node.js PDF service
+  frontendApps: Two Next.js 16 applications in monorepo with React 19, TypeScript, Tailwind CSS, Jotai state management
+  backendServices: Job Postings, Applications, Job Seeker, Organizations, Permissions, Core (notifications), PDF Generator
+  authentication: Ottoman gateway with x-sk-userinfo header injection providing Person ID, Domain ID, Organization ID, Role, user details
+  authorization: Permission-based with Major Actions (PostJobs, ReviewApplications) and Scope-of-View filtering, SuperAdmin capabilities
+  dataArchitecture: >-
+    MongoDB Atlas is the only database currently used by New Recruiting &
+    Hiring. Non-production uses the Sofa King non-production Atlas project and
+    production uses the Sofa King production Atlas project, with logical
+    separation across the backend services. Aurora PostgreSQL was provisioned
+    for the rewrite but the R&H development team confirmed it is not in use.
+  dataOwnership: >-
+    Tom Sandoval is the confirmed R&H 2.0 data SME. The shared MongoDB Atlas
+    service is operationally owned through the Data Management Team catalog
+    boundary.
+  caching: Redis distributed caching with HybridCache (L1 local + L2 Redis), output caching with tag-based invalidation
+  messagingEventDriven: AWS SNS for pub/sub (job posting events), AWS SQS for async processing (notifications), Loveseat Kafka for external event integration
+  loveseatIntegration: Company-wide event bus for external system synchronization - identity matching, person profiles, org-person relationships, job openings from legacy Recruit, site changes, organization updates
+  externalIntegrations: Textkernel (resume parsing), FileService (document storage), Google Indexing API (job search visibility), EIS (retail institution details), Platform notification service
+  deployment: Containerized via Docker, deployed to Kubernetes with rolling updates (maxSurge 50%, maxUnavailable 0), service mesh (Kuma)
+  edgeAndIngress: >-
+    Authenticated application traffic enters through the shared Ottoman Kong
+    Gateway dependency. Traefik v3.3.6 is the confirmed Kubernetes ingress
+    controller for the HCM RH application Services in chaise and le1.
+  serviceMesh: >-
+    HCM RH application pods participate in the default Kong Mesh/Kuma mesh
+    through injected Envoy-based kuma-sidecar data planes. Production uses
+    Kuma 1.8.0 and stage/lower environments use Kuma 2.8.6.
+  liveNetworkEvidence: >-
+    Read-only inspection of chaise, le1, prod-ottm, and stage-ottm on
+    2026-07-24 confirmed the Traefik controllers, Kuma versions and mesh
+    membership, shared multizone control-plane pairings, and AWS NLB exposure
+    of the Ottoman Kong proxy Services.
+  deploymentTargets: Dev/QA/Stage in shared AWS accounts, Production in dedicated AWS account; all in us-east region
+  availabilityRequirement: Multi-replica deployment with horizontal pod autoscaling, Kubernetes liveness and readiness probes
+  availabilityIntentEvidence: >-
+    The OPS-358008 availability review inspected all six deployable objects.
+    Current production manifests in hcmrh-app configure both the job-seeker and
+    employer deployments with HPA minimum 2 and maximum 6 replicas; hcmrh-core
+    configures HPA minimum 2 and maximum 4 replicas. All three use rolling
+    updates with maxUnavailable 0. MongoDB Atlas is confirmed as multi-region,
+    while the shared Kong Gateway, Traefik DaemonSet, and multizone Kuma service
+    boundaries have documented redundant topologies. Every deployable object is
+    therefore explicitly classified `intent: ha`.
+  scalabilityModel: Horizontal scaling via K8s HPA, MongoDB indexing strategies, connection pooling, circuit breakers
+  recoverabilityModel: MongoDB automatic backups, Kubernetes self-healing, SQS dead-letter queues
+  failureDomain: AWS availability zones, Kubernetes node distribution
+  dataClassification: PII (job seeker profiles, applications), organizational data, retail institution data
+  noApplicablePattern: No existing DRAFT reference architecture matches this dual-application (Retailjobspot + Recruit & Hire) .NET Core and Node.js microservices pattern on Kubernetes with event-driven AWS SNS/SQS messaging and a Kuma service mesh. See decision record 01KTGG6XFP-YNGM.
+  externalDependencies: Textkernel (resume parsing), FileService (document storage), Google Indexing API (job-search visibility), EIS (retail institution details), and the Platform notification service. See decision record 01KTGG6XFP-H8HA.
+  noPatternDeviations: No applicable reference architecture exists for this pattern, so there are no deviations to record. See decision record 01KTGG6XFP-NT67.
+  compliance: Authentication audit trails, application view history tracking, permission-based access control
+  observability: Structured JSON logging via Serilog with correlation IDs, request context propagation across services
+  resilience: Polly circuit breakers (15s attempt, 90s total, 45s sampling), retry policies, timeout policies
+  cicdPipeline: Codefresh CI/CD with Docker build, SonarQube quality gates, Quay/ECR registry, manual approval gates for QA/Stage/Prod
+  patternType: microservices
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+    - productService: 01KSM38KG5-VM7E
+      repositoryName: BeerCanLabs/sk-hcmrh-fork-util-organization-api
+      sourceRepository: https://github.com/BeerCanLabs/sk-hcmrh-fork-util-organization-api
+      repositoryPrimaryLanguage: PowerShell
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KSM38KG5-49X9
+      repositoryName: BeerCanLabs/sk-hcmrh-app
+      sourceRepository: https://github.com/BeerCanLabs/sk-hcmrh-app
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: docker, node, readme
+    - productService: 01KSM38KG5-FBRT
+      repositoryName: BeerCanLabs/sk-hcmrh-core
+      sourceRepository: https://github.com/BeerCanLabs/sk-hcmrh-core
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: HCM RH Frontend Applications
+    deploymentTarget: aws-us-east-2
+    substrate: 01KYAVGDVV-EKJ2
+    deployableObjects:
+      - ref: 01KSM38KG5-49X9
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Production job-seeker and employer manifests each configure an HPA
+          minimum of 2 and maximum of 6 replicas, with rolling updates set to
+          maxUnavailable 0.
+  - name: HCM RH Backend Services
+    deploymentTarget: aws-us-east-2
+    substrate: 01KYAVGDVV-09RG
+    deployableObjects:
+      - ref: 01KSM38KG5-FBRT
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          The production backend manifest configures an HPA minimum of 2 and
+          maximum of 4 replicas, with rolling updates set to maxUnavailable 0.
+  - name: HCM RH Data Platform
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Existing MongoDB Atlas dependency confirmed as the only database
+      currently used by New Recruiting & Hiring. The shared service remains
+      deprecated for new adoption, and this existing use is tracked through
+      OPS-435884.
+    deployableObjects:
+      - ref: 01KQQ5JT05-E3FZ
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          Vendor-managed Atlas projects provide separate non-production and
+          production database boundaries; the production cluster is
+          multi-region.
+  - name: Edge and Service Mesh
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Shared Ottoman gateway, Kubernetes ingress, and service-mesh
+      dependencies confirmed by application manifests and live cluster
+      inspection. The AWS NLB is modeled as a shared Kong Gateway relationship
+      rather than HCM RH-owned infrastructure.
+    deployableObjects:
+      - ref: 01KQQ5JT1E-SW3X
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Existing governed Kong Gateway Service used as the logical Ottoman
+          entry point for authenticated HCM RH traffic. The shared service is
+          implemented as a multi-node Kong cluster.
+      - ref: 01KYAXMZ7H-72BR
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Traefik v3.3.6 ingress boundary in the chaise and le1 application
+          clusters, running as node-distributed DaemonSets behind shared load
+          balancing.
+      - ref: 01KYAXMZ7H-KJT2
+        diagramTier: utility
+        networkZone: ops
+        notes: >-
+          Shared multizone Kuma/Kong Mesh service with injected Envoy-based
+          data planes and paired global/zone control-plane boundaries.
+deploymentQualities:
+  availability:
+    target: High availability with multi-replica deployment
+    implementation: Kubernetes horizontal pod autoscaling, liveness and readiness probes, rolling updates with zero downtime
+    monitoring: Health check endpoints, pod restart monitoring
+  scalability:
+    approach: Horizontal scaling
+    implementation: Kubernetes HPA based on CPU/memory metrics, MongoDB sharding strategies, connection pooling
+    limits: Configurable replica counts per service, MongoDB cluster capacity planning
+  recoverability:
+    backupStrategy: MongoDB automated backups with point-in-time recovery
+    failureHandling: Kubernetes self-healing via pod restarts, SQS dead-letter queues for message replay
+    rto: Minutes for pod recovery, hours for data restoration
+  resilience:
+    patterns: Circuit breakers (Polly), retry policies with exponential backoff, timeout policies
+    configuration: 15s attempt timeout, 90s total timeout, 45s sampling window
+    degradation: Graceful degradation via circuit breakers, fallback responses
+  observability:
+    logging: Structured JSON logging via Serilog with correlation IDs
+    tracing: Request context propagation across microservices
+    monitoring: Kubernetes metrics, application-level health checks
+decisionRecords:
+  - ref: 01KT16XHY4-WSD0
+    key: deploymentTargets
+  - ref: 01KTGG6XFP-ZXZD
+    key: availabilityRequirement
+  - ref: 01KTGG6XFP-Z7FB
+    key: dataClassification
+  - ref: 01KTGG6XFP-4PD3
+    key: failureDomain
+  - ref: 01KTGG6XFP-T0TT
+    key: interServiceConnections
+  - ref: 01KTGG6XFP-H8HA
+    key: externalDependencies
+  - ref: 01KTGG6XFP-YNGM
+    key: noApplicablePattern
+  - ref: 01KTGG6XFP-NT67
+    key: noPatternDeviations

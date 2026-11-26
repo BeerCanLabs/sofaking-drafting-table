@@ -1,0 +1,71 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T71-8YPE
+type: software_deployment_pattern
+ownerRole: engineer
+name: Corvid Intranet
+description: >-
+  Software Deployment Pattern for Corvid Intranet — an internal staff
+  help-desk/support portal for the Trifold/KIO product family, bridged to
+  the external Zendesk ticketing platform. Discovered from the IntranetCode,
+  IntranetDB, and ZendeskForCorvidIntranet folders of the
+  KIOTrifoldStandaloneApplication repo.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Trifold
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - trifold
+  - corvid-intranet
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+notes:
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  dataClassification: internal
+  failureDomain:
+    scope: service-group
+    description: >-
+      Legacy dedicated-stack deployment, consistent with the rest of the
+      Trifold family. Not yet confirmed by owner interview.
+  patternDeviations: >-
+    Owner confirmed hosted on the same servers as Nysdcb Directors,
+    Translation Direct, and Advisory Direct: GRRCDPMISCWEB11 (prod,
+    grr-datacenter) / HPTCDPDEVMISC1 (QA, high point-datacenter).
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KX4A2T6M-BCEY
+        diagramTier: presentation
+        networkZone: web
+        notes: Corvid Intranet — internal staff help-desk/support portal.
+      - ref: 01KX4A2T71-MWBT
+        diagramTier: presentation
+        networkZone: web
+        notes: Zendesk bridge for the Corvid Intranet help-desk workflow.
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: data
+        networkZone: data
+        notes: Shared SQL Server 2019 DataStoreService (existing-only); not yet confirmed by owner interview.
+      - ref: 01KX4A2T6F-JF2C
+        diagramTier: data
+        networkZone: data
+        notes: Corvid Intranet Database (nyseintranet).
+decisionRecords: []

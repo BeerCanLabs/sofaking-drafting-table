@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGM-A8RR
+type: product_component
+ownerRole: engineer
+name: ERP CIS Jasper Server
+description: erp-cis-jasper-server
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+  - repository-discovery
+  - erp-cis
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-cis-jasper-server
+language: XSLT
+classification: api-service
+architectureNotes:
+  lifecycleRationale: 'Deprecated 2026-08-04. Superseded by the curated JasperSoft Reporting Service (01KQQ5JT1F-737K), which is the authoritative model of the per-region Jasper deployment. This discovery-generated stub is retained for repository provenance only and should not be referenced by active patterns.'
+  supersededBy: 01KQQ5JT1F-737K
+  repositoryName: BeerCanLabs/sk-erp-cis-jasper-server
+  observedRuntimeSignals: docker, helm, java, kubernetes, readme
+  observedManifestPaths: jasperreports-server-pro-8.0.3-bin/buildomatic/jacoco.coverage.conf.json; jasperreports-server-pro-8.0.3-bin/buildomatic/jacoco.coverage.temp.json; jasperreports-server-pro-8.0.3-bin/buildomatic/jdbc-dep/pom.xml; jasperreports-server-pro-8.0.3-bin/buildomatic/pom.xml; jaspersoft-containers/Docker/jrs/Dockerfile; jaspersoft-containers/Docker/jrs/cluster-docker-compose.yml; jaspersoft-containers/Docker/jrs/docker-compose.yml; jaspersoft-containers/Docker/jrs/resources/glowroot/admin.json; jaspersoft-containers/Docker/jrs/resources/glowroot/config-default.json; jaspersoft-containers/Docker/scalableQueryEngine/Dockerfile; jaspersoft-containers/Docker/scalableQueryEngine/docker-compose.yaml; jaspersoft-containers/Docker/scalableQueryEngine/resources/properties/redisson-jcache.yaml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'XSLT transformation — runs inside the calling application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XJ40-J3NZ
+    key: runtimeRequirement

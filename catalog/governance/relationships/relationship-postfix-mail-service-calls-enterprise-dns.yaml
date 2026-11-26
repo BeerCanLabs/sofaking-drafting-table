@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZS-W8Z4
+name: Postfix Mail Service → Enterprise DNS
+catalogStatus: stub
+source: 01KQQ5JT1E-TT1N
+label: calls
+externalTarget: Enterprise DNS
+notes:
+  background: "Mail routing and service discovery dependency."

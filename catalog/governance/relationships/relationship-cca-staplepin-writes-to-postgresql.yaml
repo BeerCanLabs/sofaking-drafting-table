@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: PK16ZQVZRV-Q0TM
+type: relationship
+name: CCA Staplepin Control Plane → PostgreSQL Audit Store
+catalogStatus: incomplete
+source: 01KYWQE2F1-14MN
+label: writes to
+target: 01KYWQE2FD-1TW6
+description: >-
+  [INTENDED] Staplepin is the sole writer to the PostgreSQL system of record,
+  persisting Divan lifecycle events, tool invocations, lineage, and outcomes.
+  Divans have no direct database client. CloudTrail provides a second independent
+  audit trail.
+technology: PostgreSQL wire protocol (TLS, in-VPC)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - audit

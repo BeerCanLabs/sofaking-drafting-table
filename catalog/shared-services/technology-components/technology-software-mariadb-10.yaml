@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-N4TF
+type: technology_component
+ownerRole: technology-admin
+name: MariaDB Server 10
+description: MariaDB 10.x LTS series.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- mariadb
+classification: software
+vendor: MariaDB Foundation
+productName: MariaDB Server
+productVersion: '10'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: This stub ABB spans multiple MariaDB 10.x release series. MariaDB publishes support timelines at the specific series level rather than for the umbrella 10.x line.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-mariadb-listener
+  name: Default MariaDB Listener
+  description: Default MariaDB listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 3306
+    protocol: MariaDB
+    direction: inbound
+    description: Default MariaDB client listener.

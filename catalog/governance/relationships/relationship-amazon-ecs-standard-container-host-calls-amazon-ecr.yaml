@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YN-GY2N
+name: Amazon ECS Standard Container Host → Amazon ECR
+catalogStatus: stub
+source: 01KQQ5JT02-KJHA
+label: calls
+externalTarget: Amazon ECR
+notes:
+  background: "Container image registry for ECS task deployments."

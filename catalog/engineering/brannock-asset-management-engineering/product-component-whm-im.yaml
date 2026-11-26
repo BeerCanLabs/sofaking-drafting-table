@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-STJH
+type: product_component
+ownerRole: engineer
+name: Whm Im
+aliases:
+  - Trackweb-IM Monolith
+  - Legacy Trackweb-IM Platform
+description: Legacy monolithic Trackweb-IM platform (Visual Basic .NET / ASP.NET WebForms). Repository-discovered stub for BeerCanLabs/sk-WHM_IM, enriched with confirmed logging and health-check facts from the TRK-680 dev spike. Absorbs the hand-authored "Legacy Trackweb-IM Platform" stub (former uid 01KSM38KFC-5642, repoUrl TBD), which described the same real system without a repository link; 5642 is retired with DecisionRecord 01M07T82GS-FGWX as the disposition evidence.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: Q8J31D44E3-F22K
+tags:
+- repository-discovery
+- whm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_IM
+language: Visual Basic .NET
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_IM
+  observedRuntimeSignals: dotnet, github_actions, readme
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; ClassLibraries/ControllerLayer/ControllerLayer.csproj; ClassLibraries/InventoryManagement/InventoryManagement.vbproj; ClassLibraries/UserExperience/UserExperience.vbproj; ClassLibraries/Utilities/Utilities.csproj; Core/Core.vbproj; Data/Data.vbproj; IntegrationService/IntegrationService.csproj; ReportAssembly/ReportAssembly.vbproj; TRACKWEBTest/TRACKWEBTest.csproj
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: 'Confirmed by direct repository read (TRK-680 dev spike) plus cross-check with the product engineering owner: logging is split across five uncoordinated mechanisms with no shared correlation identifier — the tblUnvLog database table (BLL/LogManagement/Log.cs, ~2 call sites), Windows Event Log (Global.asax.vb, CustomTelemetryInitializer.vb), System.Diagnostics.Trace to a local FileLogTraceListener (SSOCommon.vb, PendoHelper.cs, login.aspx.vb, ResetPassword.aspx.vb), Application Insights (automatic, per-region InstrumentationKey region preference), and tblErrors/stpro_Errors_ins/error.aspx (reached from ~100 code-behind catch blocks, also displays raw exception detail to the end user). None of the four non-AppInsights mechanisms is centrally consumable without direct region-database or local-file access. NLog + CloudWatch shipping is planned under TRK-350 but not yet implemented.
+
+    '
+  healthWelfareMonitoring: 'Confirmed by direct repository read (TRK-680 dev spike): no health-check endpoint exists anywhere in the Trackweb tree today. A full search found only two unrelated .ashx handlers (ImageDisplay.ashx, pdfHandler.ashx); neither is a health probe, and no external uptime monitor is configured. TRK-859 will port AM''s SiteDbCheck.ashx / SiteRenderCheck.aspx pattern, blocked on WHM_IM having no RegionName region preference for the DB probe (see runtime-service-whm-im-iis, Q8J31D44E3-F22K, for the hosting-runtime side of this gap).
+
+    '
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+decisionRecords:
+  - ref: 01M07T82GS-FGWX
+    key: serviceLogging
+  - ref: 01M07T82GS-FGWX
+    key: healthWelfareMonitoring

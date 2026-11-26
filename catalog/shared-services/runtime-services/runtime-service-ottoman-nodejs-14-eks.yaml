@@ -1,0 +1,92 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHN-N014
+type: runtime_service
+ownerRole: technology-admin
+name: Ottoman Node.js 14 on EKS Application Runtime
+description: >-
+  Non-standard current-state Ottoman EKS runtime for the production Load Test
+  component, whose source image pins end-of-life Node.js 14.15.0.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - runtime
+  - application
+  - nodejs
+  - nodejs-14
+  - end-of-life
+  - eks
+  - ottoman
+  - ops-104695
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KZ2MRPH1-N014
+architectureNotes:
+  minNodes: 0
+  autoscaling: none-observed
+  loadBalancer: unresolved
+  repositoryEvidence: >-
+    BeerCanLabs/sk-plat-ottoman-loadtest package.json and Dockerfile on the
+    default branch both pin Node.js 14.15.0. The application is TypeScript on
+    NestJS 7.
+  nonStandardRuntime: >-
+    Node.js 14 reached end of life on April 30, 2023 and is outside the approved
+    preferred Node.js 22 baseline. The user selected the Ottoman Node.js 22 EKS
+    runtime as the upgrade target on 2026-07-31.
+  upgradeTarget: >-
+    Replace this current-state runtime mapping with 01KZ2MRPHN-N022 after the
+    loadtest repository and deployed image are upgraded and verified.
+  clusterInventory: >-
+    The workload was observed on 2026-07-31 only in ottm-prod as a RollingUpdate
+    Deployment with zero desired replicas and image tag 0.0.34.
+  serviceAuthentication: Authentication behavior has not been confirmed.
+  secretsManagement: >-
+    Secret delivery was intentionally not inspected during this review.
+  serviceLogging: Application log forwarding has not been confirmed.
+  healthWelfareMonitoring: >-
+    No running pod was available to verify probes, sidecars, or monitoring.
+  availabilityModel: >-
+    The production Deployment was scaled to zero; activation and availability
+    expectations remain unresolved.
+  scalabilityModel: No HorizontalPodAutoscaler was confirmed for this workload.
+  recoverabilityModel: >-
+    A RollingUpdate Deployment is configured, but recovery behavior could not be
+    observed while desired replicas remained zero.
+  failureDomain: >-
+    The Deployment exists only in the observed production environment; no
+    running placement evidence was available.
+deploymentConfigurations:
+  - id: dormant-production-loadtest
+    name: Dormant Production Load Test
+    description: >-
+      Retain the production Deployment at zero desired replicas until explicitly
+      activated for approved load testing.
+    addressesQualities:
+      - availability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KZ2MRPH1-N014
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceAuthentication
+  - ref: 01KZ2MRPHR-0PS1
+    key: secretsManagement
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceLogging
+  - ref: 01KZ2MRPHR-0PS1
+    key: healthWelfareMonitoring
+  - ref: 01KZ2MRPHR-0PS1
+    key: availabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: scalabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: recoverabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: failureDomain

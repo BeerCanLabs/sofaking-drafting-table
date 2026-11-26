@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: DPBRPGYSNK-3BA2
+type: relationship
+name: CCA Staplepin Control Plane → Openfin Runtime
+catalogStatus: incomplete
+source: 01KYWQE2F1-14MN
+label: launches
+target: 01KYWQE2F3-CZ2H
+description: >-
+  [INTENDED] Staplepin launches a scoped Divan on the Openfin execution runtime,
+  mediating assumption of the per-Divan IAM identity for the single permitted task.
+technology: HTTPS / AWS SDK (in-VPC control call)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - orchestration

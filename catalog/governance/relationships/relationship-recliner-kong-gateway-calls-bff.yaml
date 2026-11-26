@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EB-33Q3
+name: Kong Gateway Service → Recliner BFF API
+description: >-
+  Proposed design per the Recliner Infrastructure Architecture Confluence page:
+  Kong Gateway validates the Ottoman-issued token, applies gateway policy,
+  and reverse-proxies the authenticated request to the Recliner BFF.
+catalogStatus: incomplete
+source: 01KQQ5JT1E-SW3X
+label: routes authenticated requests to
+target: 01KSM38KGD-063V
+technology: HTTPS
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KT0V5MCV-3A6F
+tags:
+  - recliner
+  - kong
+  - ottoman
+  - bff
+notes: >-
+  Originally confirmed only by the Recliner Infrastructure Architecture
+  Confluence document, whose title carries a "[DRAFT]" suffix marking it as a
+  proposed design. Repo evidence gathered 2026-08-05 for OPS-306834
+  contradicts this specific hop: the som-recliner repository's
+  infra/platform/aws_services.tf routes the BFF's public Route53 CNAME
+  directly to a dedicated internet-facing Traefik ALB (see
+  relationship-traefik-ingress-service-routes-recliner-bff.yaml), and no Kong
+  Gateway reference exists anywhere in that repository's infrastructure code.
+  Downgraded to incomplete pending SOM Recliner engineering confirmation of
+  whether this hop is still planned, already retired, or never implemented.

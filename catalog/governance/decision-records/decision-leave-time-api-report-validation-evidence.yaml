@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHD7-D90B
+type: decision_record
+name: Leave Time API Report Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT07-AB02
+linkedObject: 01KQQ5JT07-AB02
+decisionRationale: 'runtimeRequirement: Infrastructure configuration (HCL/Terraform); no application runtime.'

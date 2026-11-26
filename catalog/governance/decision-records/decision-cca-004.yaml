@@ -1,0 +1,55 @@
+schemaVersion: '1.0'
+uid: N0X30P3VJ7-42VK
+type: decision_record
+name: 9-Layer Security Framework — Pre-Check, Deep-Check, Post-Check
+description: >
+  CCA enforces a 9-layer security framework grouped into three bands.
+  Pre-Check (intent classification, input sanitization, scope validation)
+  runs before execution. Deep-Check (policy evaluation, Guardfin safety,
+  LLM Gateway routing) runs during execution. Post-Check (output validation
+  in the Harness layer, audit persistence) runs after execution. "Harness"
+  means the sofaking-guardfin-harness layer -- a validation stage inside
+  Guardfin, in-VPC -- not a third-party platform (ratified 2026-08-02,
+  Leo Park; OPS-177566). Each layer is a gate, not
+  a sprint — no layer is skipped to ship faster. Tracked as SAAS-94947
+  through SAAS-09050.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- adr
+- decision
+- cca
+- security
+- defense-in-depth
+- 9-layer
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+decisionRationale: >
+  Defense in depth: a single control will miss something. Three independent
+  bands (before, during, after execution) means a Divan must pass nine
+  consecutive gates before its action is considered successful. Splitting
+  the controls into Pre / Deep / Post bands also lets the bands be delivered
+  on different milestones. Pre-Check and Post-Check are scoped for Milestone
+  A (intent classification + input sanitization in Week 1; output validation
+  + audit persistence in Week 3). Deep-Check (Guardfin integration depth,
+  LLM Gateway routing depth, policy evaluation engine) is scoped for
+  Milestone B. "Ship now, secure later" is not an option.
+impact: >
+  Divan execution is gated at nine points. A failure at any point aborts
+  execution and writes a failure record. No layer may be bypassed even for
+  trusted operators.
+mitigationPath: >
+  [INTENDED] Each layer is groomed as its own SAAS-####### ticket. Order of
+  delivery: Pre-Check Layer 1 (SAAS-94947), Pre-Check Layer 2 (SAAS-96512),
+  Pre-Check Layer 3 (SAAS-14062), then Post-Check 7-8-9 (SAAS-92034 to
+  SAAS-09050) in Milestone A. Deep-Check 4-5-6 (SAAS-17961 to SAAS-23220)
+  is Milestone B work.
+relatedDecisionRecords:
+- A167KVYYG2-X831
+- 62GNEE8S2T-W4GV
+- 4TG85QEKZ3-ZTFS

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZF-1776
+name: Windows Server 2022 on VMware Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT04-A7W8
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Endpoint protection and host containment."
+capabilities:
+- 01KQQ4Q026-JW52

@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-BZFX
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Transfer Family SFTP
+description: 'Fully managed SFTP service for Amazon S3 and Amazon EFS.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- file-transfer
+- sftp
+vendor: Amazon Web Services
+productName: AWS Transfer Family
+productVersion: managed
+authenticationModel: other
+capabilities:
+- 01KT0XNZEY-K1J3
+architectureNotes:
+  resilienceModel: Inherently multi-AZ high availability.
+  configurableSurface: Server endpoints, identity providers, and logging.
+  failureDomain: Scoped to the AWS region.
+decisionRecords:
+- ref: 01KSNAW2AK-M1WR
+  key: resilienceModel
+- ref: 01KSNAW2AK-M1WR
+  key: configurableSurface
+- ref: 01KSNAW2AK-M1WR
+  key: failureDomain
+- ref: 01KSNAW2AK-M1WR
+  capability: 01KT0XNZEY-K1J3
+deliveryModel: paas

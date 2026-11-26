@@ -1,0 +1,241 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-RWQB
+type: software_deployment_pattern
+ownerRole: engineer
+name: 'PG: PLM/EEM — Legacy Estate'
+aliases:
+  - PLM/EEM Legacy Deployment Pattern
+  - STL LDMS and FORMIX
+description: >-
+  The long-lived tier of Sofa King Associate Development's PLM (Professional
+  Learning Management) and EEM (Employee Evaluation Management) product. LDMS is
+  PLM's predecessor system and FORMIX is EEM's; both remain in service. A Classic
+  ASP and .NET Framework estate on Windows/IIS behind the GRR F5 BIG-IP,
+  backed by a hub-and-spoke SQL Server database (STL) plus the FORMIXFORMS
+  database. Modelled as a pattern separate from the cloud tier
+  (01M1F8WB4E-8WVS) at the direction of the DRAFT programme, following the
+  rh-hiretrack / hcm-rh precedent. Authored for APEX L1 Baseline under
+  SKPG-19589; unresolved items are tracked in DraftingSession 01M1F8WB4E-0GSN
+  rather than asserted here.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Associate Development
+  notes: >-
+    Pillar carried over from the sibling PG LCR pattern and NOT yet confirmed by
+    product ownership. Tracked as an unresolved question in DraftingSession
+    01M1F8WB4E-0GSN; treat as provisional.
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - associate-development
+  - plm
+  - eem
+  - legacy
+  - apex-l1
+  - skpg-50273
+notes:
+  retirementPosture: >-
+    Confirmed 2026-08-31 by Miles Chandler: the legacy estate is NOT on a
+    short-term funded retirement plan. This pattern is therefore modelled as
+    existing-only and actively supported, not deprecated or retired. The
+    separation from the cloud tier reflects genuinely different deployment
+    shapes and operational models, NOT an impending decommissioning.
+  ottomanMigrationInProgress: >-
+    IN PROGRESS as of 2026-02, recorded rather than modelled. Octopus
+    deployments of LDMS.Net, LDMS Legacy, FORMIX and the PG Report Writer
+    Service to a prod_ottm (Ottoman production) target are already complete
+    per OPS-94649, with only the PlmEem Orchestra pipeline outstanding per
+    OPS-18728. This pattern continues to record the GRR topology as the
+    established state because the migration is mid-flight and the end-state
+    topology is not yet settled. Re-model the deployment targets once the
+    migration completes; do not read the GRR entries below as evidence that no
+    Ottoman footprint exists. Source: "PG Work Left for PG" (Confluence
+    39199080479).
+deploymentTargets: >-
+  grr-datacenter for all five service groups. RESOLVED under SKPG-19589 review:
+  this was previously carried as an unresolved contradiction because the
+  production connection string names Data Source=AWSPGDB01S.corp.flp, which was
+  read as evidence of an AWS-hosted database tier. The PLM/EEM Environment Guide
+  (Confluence 648381633) settles it. Its GRR Production Environment table lists
+  the production estate as GRRPLMWEB01P-06P (app), GRRPLMRW01-02 (report
+  writer), grrldmsutil1 (utility) and GRRPGDB01/GRRPGDB02 (database), all on
+  Windows Server 2022, with the web and report-writer tiers assigned to F5
+  pools. AWSPGDB01S follows the same guide's environment-suffix convention -
+  AWSPLMWEB01Q is QA and AWSPLMWEB01S is stage, and AWSPGDB01Q is documented as
+  the QA database in Confluence 422904436 - so AWSPGDB01S is the AWS STAGE
+  database picked up from a release configuration file, not a production host.
+  High Point-datacenter is the corresponding non-production site per the
+  deployment-targets vocabulary, though no non-production topology has been
+  catalogued for this pattern. See also the ottomanMigrationInProgress note
+  above.
+availabilityRequirement: >-
+  Partially confirmed from infrastructure documentation; no availability tier,
+  RTO or RPO has been ratified by the owning team. The application tier is a
+  six-node web farm (GRRPLMWEB01P through 06P) behind F5 pool Prod_LDMS_80, and
+  the report-writer tier is a two-node pair behind Prod_LDMS_ReportWriter_80,
+  which evidences active redundancy at both tiers (Confluence 648381633). The
+  database tier runs two SQL Server availability groups, GRRPGPRDAG01 and
+  GRRPGPRDAG02, which is consistent with the Data Source=tcp:ag1 and
+  ApplicationIntent=ReadOnly routing seen in the connection strings
+  (Confluence 604045714). Replica counts, synchronisation mode, failover
+  posture, and a ratified RTO/RPO remain unconfirmed and are tracked in
+  DraftingSession 01M1F8WB4E-0GSN.
+dataClassification: >-
+  Confidential — associate personal data. The STL database is the system of
+  record for RETAIL region staff professional-learning history, and FORMIXFORMS
+  holds employee evaluation instruments and scores. Both are personally
+  identifiable employment information about named associates, and evaluation
+  content is additionally sensitive as employment-decision material. STL-LDMS.Net
+  also carries a credit-card integration project
+  (STLI.Shared.Integration.CreditCards), so payment data may be in scope — this
+  is unconfirmed and is tracked as an open question in DraftingSession
+  01M1F8WB4E-0GSN. Not yet reviewed by Information Security.
+failureDomain: >-
+  The STL SQL Server estate is the single shared failure domain for this
+  pattern: LDMS (.NET and Classic ASP), FORMIX, and the Report Writer all read
+  from it, so a database outage takes the whole legacy tier down. The estate is
+  fronted by two availability groups (GRRPGPRDAG01, GRRPGPRDAG02), which bound
+  instance-level failure but not estate-level. Inbound access depends on the
+  GRR F5 BIG-IP: loss of the Prod_LDMS_80 pool removes access to the six-node
+  web farm, and loss of Prod_LDMS_ReportWriter_80 removes reporting. Blast
+  radius extends beyond this pattern — the cloud tier (01M1F8WB4E-8WVS) also
+  depends on this database estate, so a failure here degrades PLM/EEM cloud
+  services as well.
+patternDeviations: >-
+  Not applicable — no reference architecture has been selected for this pattern
+  (see decision record 01M1F8WB4E-B6GF), so there are no deviations from a
+  selected pattern to record. Non-standard technology choices are recorded
+  separately as decision records 01M1F8WB4E-XJM2 (Classic ASP and the
+  TeamCity/Octopus/Chef/psake build chain) and 01M1F8WB4E-2ND0 (New Relic).
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+  - name: Web Edge and Routing
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Added under SKPG-19589 after review found the pattern declared a web
+      network zone with an internet-facing Classic ASP surface but no
+      terminating edge service. Follows the rh-hiretrack precedent, the
+      sibling GRR-hosted legacy pattern, which carries the same group shape.
+    deployableObjects:
+      - ref: 01KQQ5JT00-Z6WV
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          F5 BIG-IP — load balancing and SSL termination for the legacy estate,
+          reused rather than re-declared per the DRAFT reuse model. CONFIRMED
+          from the PLM/EEM Environment Guide (Confluence 648381633), whose GRR
+          Production Environment table assigns pool Prod_LDMS_80 to
+          GRRPLMWEB01P-06P and pool Prod_LDMS_ReportWriter_80 to GRRPLMRW01-02.
+          Corroborated by the GRR Patching Guide (Confluence 26214756),
+          "Manage client traffic on F5 prior to performing maintenance", and by
+          the PLM/EEM IDM rollout runbook (Confluence 145694490), which
+          disables web nodes from an F5 pool before deploying LDMS Legacy,
+          LDMS .Net and FORMIX to them. Whether Imperva Web Application
+          Firewall (01KQQ5JT1D-MY47) also sits in the inbound path is NOT
+          established and is tracked in DraftingSession 01M1F8WB4E-0GSN.
+  - name: LDMS Application Tier
+    deploymentTarget: grr-datacenter
+    notes: >-
+      PLM's predecessor system. Two co-existing generations of the same
+      application are still deployed: the Classic ASP surface and the .NET
+      Framework rewrite. Both run on the six-node GRRPLMWEB01P-06P web farm
+      behind F5 pool Prod_LDMS_80.
+    deployableObjects:
+      - ref: 01KSM38KG3-05HQ
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          STL-LDMS.Net — the .NET Framework LDMS application (API, Web, Core,
+          Entity, Service, Utilities projects). Built by TeamCity and deployed
+          by Octopus rather than the Codefresh standard; see decision record
+          01M1F8WB4E-XJM2. Ships Nhdcb (New Brunswick Department of Retail)
+          and credit-card integration projects.
+      - ref: 01KSM38KG3-2N7T
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          STL-LDMS-Legacy — the Classic ASP LDMS surface (src/asp, including
+          nRegionAdmin and SysAdmin). Classic ASP is not an approved
+          Technology Component; see decision record 01M1F8WB4E-XJM2. Built with
+          psake PowerShell scripts and deployed by Octopus.
+  - name: FORMIX Application Tier
+    deploymentTarget: grr-datacenter
+    notes: >-
+      EEM's predecessor system. Carries the evaluation-rights automation that
+      the cloud tier's Step Function invokes.
+    deployableObjects:
+      - ref: 01KSM38KG2-8JV3
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          STL-FORMIX — the FORMIX evaluation system, including
+          EemEvaluationRightsAutomation (a CDK-deployed AWS component that
+          provisions a DynamoDB table and SNS/SQS subscriptions), the SMELT
+          application, and the FH.Core forms web tier. Its language and runtime
+          records were corrected under SKPG-19589; it retains the generic .NET
+          Core Application Service runsOn because it is a mixed IIS-plus-Lambda
+          estate whose split needs an owner decision.
+  - name: Reporting
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Two-node report-writer tier (GRRPLMRW01, GRRPLMRW02) behind F5 pool
+      Prod_LDMS_ReportWriter_80.
+    deployableObjects:
+      - ref: 01KSM38KG3-PN95
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          PG-ReportWriter — serves reporting for both LDMS and FORMIX. Its
+          cloud-side companion PG-ReportWriterAgent (01KSM38KG3-2X43) sits in
+          the cloud pattern 01M1F8WB4E-8WVS; the cross-pattern path is recorded
+          in decision record 01M1F8WB4E-7RGZ.
+  - name: PLM/EEM Legacy Data
+    deploymentTarget: grr-datacenter
+    notes: >-
+      RESOLVED under SKPG-19589 review. This group previously carried an
+      unresolved deployment boundary because the production connection string
+      names AWSPGDB01S.corp.flp. The production database tier is GRRPGDB01 and
+      GRRPGDB02 at the Grand Rapids data center on Windows Server 2022, running
+      availability groups GRRPGPRDAG01 (STL, FORMIXFORMS, FORMIXAUDIT, SSISDB)
+      and GRRPGPRDAG02 (STL.Application, STL.EMail, STL.Exceptions, STL.Form,
+      STL.Security, STL.XML, PGDashBoardKPI, PGReportWriter, PGScormMsvc).
+      AWSPGDB01S is the AWS stage database under the same naming convention.
+      Sources: Confluence 648381633 and 604045714.
+    deployableObjects:
+      - ref: 01M1F8WB4E-MBKA
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          The STL SQL Server database — system of record for PLM/EEM, deployed
+          in a hub-and-spoke topology (STLSharedEntitiesHub,
+          STLSharedEntitiesSpoke0) on availability group GRRPGPRDAG01.
+      - ref: 01M1F8WB4E-R0RG
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          The FORMIXFORMS SQL Server database — evaluation forms and scores.
+          Confirmed co-located with STL on availability group GRRPGPRDAG01.
+decisionRecords:
+  - ref: 01M1F8WB4E-HK7Z
+    key: externalDependencies
+  - ref: 01M1F8WB4E-7RGZ
+    key: interServiceConnections
+  - ref: 01M1F8WB4E-B6GF
+    key: noApplicablePattern

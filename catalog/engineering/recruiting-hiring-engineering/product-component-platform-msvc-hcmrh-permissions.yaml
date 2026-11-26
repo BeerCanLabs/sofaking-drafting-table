@@ -1,0 +1,125 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-GGGP
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Permissions
+description: Authorization microservice managing user and group permissions with dual permission model (Primary action+scope-based and Additional feature flags), supporting multi-tenant organization and domain-based scoping with SuperAdmin capabilities
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- recruiting-hiring
+- permissions
+- authorization
+- microservice
+- dotnet
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-permissions
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: User Authorization API
+  protocol: REST
+  path: /api/permissions/user-authorization
+  authentication: oauth
+  description: User permission retrieval and authorization evaluation
+- name: Anonymous User Authorization API
+  protocol: REST
+  path: /api/permissions/user-authorization/orgperson
+  authentication: TBD
+  description: Permission lookup by OrgPersonId
+- name: Permission Users API
+  protocol: REST
+  path: /api/permissions/permission-users/{organizationId}
+  authentication: oauth
+  description: User permission CRUD operations
+- name: Permission Groups API
+  protocol: REST
+  path: /api/permissions/permission-groups/{organizationId}
+  authentication: oauth
+  description: Group permission management and cloning
+- name: Setup API
+  protocol: REST
+  path: /api/permissions
+  authentication: oauth
+  description: Organization and user setup
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  type: connection string
+  required: true
+  sensitive: true
+  description: MongoDB connection string
+- name: MongoDB__DatabaseName
+  type: database name
+  required: true
+  sensitive: false
+  description: MongoDB database name
+- name: ConnectionStrings__Redis
+  type: connection string
+  required: true
+  sensitive: true
+  description: Redis connection for output caching
+- name: OrgPersonService__Url
+  type: url
+  required: true
+  sensitive: false
+  description: Organization/person data service URL
+- name: TokenService__Uri
+  type: url
+  required: true
+  sensitive: false
+  description: OAuth token service URI
+- name: TokenService__ClientId
+  type: string
+  required: true
+  sensitive: false
+  description: OAuth client identifier
+- name: TokenService__ClientSecret
+  type: string
+  required: true
+  sensitive: true
+  description: OAuth client secret
+- name: ConfigCat__SdkKey
+  type: string
+  required: true
+  sensitive: true
+  description: ConfigCat SDK key for feature flags
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-hcmrh-permissions
+  observedRuntimeSignals: docker, dotnet, readme, terraform
+  observedManifestPaths: .vscode/launch.json; .vscode/settings.json; .vscode/tasks.json; Dockerfile; Hcmrh.Msvc.Permissions.sln; cd/codefresh-deploy-manual.yml; cd/demo/cm.yml; cd/demo/deploy.yml; cd/demo/es.yml; cd/demo/hpa.yml; cd/demo/ingress.yml; cd/demo/service.yml
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (3 collections - permissions_groups, permissions_users, permissions_groupmembers)
+  caching: Redis output caching with 1-hour expiry for authorization responses
+  permissionModel: Dual model with Primary Permissions (Major Actions like PostJobs/ReviewApplications + Scope-of-View for JobTypes/Departments/Sites) and Additional Permissions (feature flags like ManageFunnels, ViewSensitiveData)
+  authorizationLogic: Five-step evaluation - null checks, SuperAdmin authorization, primary permission validation, additional permission check, authorization status
+  externalIntegrations: OrgPersonService (HTTP) for organizational data, TokenService (OAuth)
+  serviceAuthentication: Ottoman trusted header (x-sk-userinfo); OAuth 2.0 for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs
+  healthWelfareMonitoring: Kubernetes liveness/readiness probes
+  availabilityModel: Multi-replica with HPA; rolling updates maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via K8s HPA; MongoDB indexing on PersonId, DomainId, OrganizationId
+  recoverabilityModel: MongoDB automatic backups; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt, 90s total, 45s circuit breaker sampling
+  scopeOfView: Supports "All" wildcard and specific entity filtering
+  superAdminPermissions: CreateUsersAndManagePermissions capability
+  externalDependencies:
+    serviceDependencies:
+      - name: None
+        purpose: This is a dependency sink service that only receives calls from other HCMRH services
+    internalPackages:
+      - Hcmrh.Logging 1.0.22
+notes:
+  background: "Production-ready authorization microservice implementing fine-grained RBAC with scope-based access control. Supports group-based permission inheritance and SuperAdmin privileges. Critical security component for HCMRH platform. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

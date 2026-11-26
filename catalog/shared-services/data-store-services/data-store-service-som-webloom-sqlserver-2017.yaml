@@ -1,0 +1,85 @@
+schemaVersion: '1.0'
+uid: 01KWF5PCRR-BMD4
+type: data_store_service
+ownerRole: technology-admin
+name: SOM Webloom SQL Server 2017 Legacy Database Service
+description: 'Self-managed Microsoft SQL Server 2017 database service for the legacy Webloom/Colohub SOM Service Management environment. Webloom uses a multi-tenant model with shared infrastructure and large shared databases.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - som
+  - quickfit
+  - webloom
+  - colohub
+  - legacy
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-BEFY
+primaryTechnologyComponent: 01KQQ5JT1T-QKGB
+architectureNotes:
+  sqlPlatform: Microsoft SQL Server 2017 Enterprise.
+  hostModel: Webloom SQL Server runs 100% on VMware virtual machines in Colohub/Webloom. Exact SQL VM inventory requires confirmation.
+  tenancyModel: Webloom SOM is multi-tenant. Customer data follows the same main-database concept as AWS, but Webloom does not follow the standardized per-customer AWS naming pattern; shared database names appear to start with SOM. A shared Webloom database can contain roughly 6 to 10 customers. Exact tenant isolation mechanism requires confirmation.
+  databaseInventory:
+    customerApplicationDatabases: Multi-tenant Webloom application databases.
+    sharedConfigurationDatabases: SOM Solo, related to Financing Billing and shared by AWS and Webloom customers.
+    importStagingDatabases: Similar setup to QuickfitImport exists in Webloom for customer upload data and incoming-data transformation; Development follow-up is needed for details.
+    reportingDatabases: No dedicated reporting database identified.
+    auditLoggingDatabases: SKDBA exists on each SQL Server and is the central local logging location for system-related tasks and logs on that server.
+    ssisIntegrationDatabases: SSISDB exists per SQL Server. SSIS service is installed on all SQL Servers.
+    legacyWebloomSpecificDatabases: None identified.
+  serviceAuthentication: SSIS uses a SQL password service account for package execution. Application database authentication and shared credential usage require confirmation.
+  secretsManagement: SQL password account secret storage, rotation, and application connection-string storage require confirmation.
+  serviceLogging: SQL logs are local today and are not shipped off box yet. Local SQL/log retention is approximately 90 days with automatic cleanup. Dynatrace Logging is planned to centralize log collection. SKDBA on each SQL Server stores system-related tasks and logs for that server.
+  healthWelfareMonitoring: SQL Server health is monitored through standard Nagios tooling in Webloom and AWS.
+  availabilityModel: Webloom SQL has no HA, no clustering, and no standby model.
+  scalabilityModel: Legacy multi-tenant shared database scaling model requires confirmation.
+  recoverabilityModel: Full, differential, and transaction-log backups support recovery. RPO is 15 minutes. RTO varies by database size. Customer-level restore is not feasible for Webloom multi-tenant databases.
+  failureDomain: Multi-tenant Webloom databases create broader customer blast radius than AWS single-tenant databases. A shared database or SQL service failure can affect multiple Webloom Service Management customers.
+  backup:
+    strategy: Full, differential, and transaction-log backups.
+    platform: SQL Server DBA Tools create backups; CloudBerry uploads backups to S3. Transaction-log, full, and differential backups are sent to S3 for both AWS and Webloom.
+    rto: Varies by database size.
+    rpo: 15 minutes.
+    retention: Annual backups retained for 7 years, monthly backups retained for 12 months, and full backups retained for 30 days. Local backup copies are retained for roughly one week.
+    s3RetentionControls: S3 backups are encrypted and protected by compliance lock controls, requiring appropriate decryption keys for restore.
+  ha:
+    mechanism: None. No clustering or HA exists for Webloom SQL.
+  encryption:
+    atRest: SQL backups are encrypted at rest.
+    inTransit: SQL connections are not believed to be encrypted in transit because internal PKI is not a strong current practice.
+  accessControl:
+    model: Requires confirmation for application access. SSIS uses a SQL password service account.
+  sensitiveDataBoundaries: Customer data is stored in main customer databases, but Webloom database structure does not follow the standardized per-customer AWS naming convention. Webloom SOM databases include FERPA/CDP data, Financing or claims-related data, health-adjacent data, audit records, and file import metadata. Sensitive-table inventory and data-obfuscation scripts are pending from the database team and Development. Customer-level deletion and restore are constrained by the multi-tenant model, and churned customer data is archived under the 7-year S3 backup/compliance retention posture.
+  dataDeletionProcessReference: https://sofaking-example.atlassian.net/wiki/spaces/PRODMGMT/pages/15787982433/SOM+Data+Deletion+-+Churning+Clients+Process
+  restoreProcessReference: https://sofaking-example.atlassian.net/wiki/spaces/SaaSIO/pages/15477171876
+  fileToDatabaseFlow: Webloom has a similar setup to QuickfitImport for customer upload data and incoming-data transformation; Development follow-up is needed for details. Database-side import/export processing uses local SSIS packages and SFTP/customer file locations rather than FSx for most operations. Import status, errors, and audit trails are logged and notifications are sent. Manual export/import processes run on database servers. No purge policy exists today; purge automation is in process and the current process is manual. A separate application-data drive pattern is being pushed so import/extract files do not mix with SQL data disks or the C drive.
+  databaseRoadmapUncertainty: The database conversation referenced upgrade planning from SQL Server 2017 toward newer SQL Server versions, but target version, target environment, and timeline require confirmation before being modeled as current state.
+deploymentConfigurations:
+  - id: backup-and-database-restore
+    name: Backup And Database Restore
+    description: SQL Server DBA Tools and CloudBerry-backed S3 backups support database-level recovery with 15-minute RPO.
+    addressesQualities:
+      - recoverability
+  - id: legacy-shared-database-scaling
+    name: Legacy Shared Database Scaling
+    description: Webloom uses shared multi-tenant databases; exact scale-up and capacity model requires confirmation.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT03-BEFY
+    role: host
+    notes: Webloom SOM server baseline is Windows Server 2012 R2 on VMware virtual machines; exact SQL VM inventory requires confirmation.
+  - ref: 01KQQ5JT1T-QKGB
+    role: function
+    configuration: default-tds-listener
+deliveryModel: self-managed

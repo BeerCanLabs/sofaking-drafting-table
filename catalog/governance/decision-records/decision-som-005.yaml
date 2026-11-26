@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-32F8
+type: decision_record
+name: Data Integration DB — SA by Architectural Decision
+description: 'The Data Integration Services database (SQL Server 2019 with SSIS) is intentionally deployed as a single instance. This is an explicit architectural decision, not historical debt.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- decision
+- som
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT01-SM8X
+decisionRationale: 'The Data Integration DB serves ETL and data pipeline workloads with defined run windows. The workload does not require continuous availability — pipeline failures can be retried without data loss. The complexity and cost of HA configuration for SSIS workloads is not justified by the availability requirement of this service group.
+
+  '
+impact: 'Loss of ETL and data integration processing during an outage window. Impact is bounded to the data pipeline — the application tier remains available. Acceptable given the retry-safe nature of the workload.
+
+  '
+mitigationPath: 'No mitigation required at this time. Revisit if integration workloads become time-critical or if retry-safe guarantees cannot be maintained.
+
+  '
+linkedObject: 01KSM38KEX-R400

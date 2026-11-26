@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-QE89
+type: product_component
+ownerRole: engineer
+name: CIS Util Tillbook Notifications
+aliases:
+- CIS Util Householdaccess Alerts (rolled in, retired)
+description: Windows service for scheduling and sending notifications to end users. Does more than just Householdaccess alerts — CIS Util Householdaccess Alerts was rolled into this service and retired.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- notifications
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-tillbook-notifications
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a Windows service for scheduling/sending end-user notifications across the Tillbook suite (not limited to Householdaccess).
+  repositoryName: BeerCanLabs/sk-cis-util-tillbook-notifications
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

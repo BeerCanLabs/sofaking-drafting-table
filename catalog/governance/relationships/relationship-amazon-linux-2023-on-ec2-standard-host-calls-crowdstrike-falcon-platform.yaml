@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YH-7EFV
+name: Amazon Linux 2023 on EC2 Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT02-PK8G
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Host endpoint protection telemetry and response."
+capabilities:
+- 01KQQ4Q026-JW52

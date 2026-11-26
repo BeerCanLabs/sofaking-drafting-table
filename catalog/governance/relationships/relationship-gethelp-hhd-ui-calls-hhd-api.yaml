@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E6-8GF5
+name: HelpDesk HHD_UI → HelpDesk HHD_API
+catalogStatus: stub
+source: 01KSM38KFC-FM2A
+label: calls
+target: 01KSM38KFB-X6P1
+notes:
+  background: "The HHD_UI Angular SPA calls the shared HHD_API backend on port 443 with the authenticated tenant session."
+capabilities: []

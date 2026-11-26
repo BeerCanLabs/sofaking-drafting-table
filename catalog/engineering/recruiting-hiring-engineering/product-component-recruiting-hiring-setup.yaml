@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-WPVK
+type: product_component
+ownerRole: engineer
+name: Recruiting Hiring Setup
+description: 'Recruit local development environment documentation and on-boarding best practices '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- recruiting-hiring
+- product-component
+- rh
+repoUrl: https://github.com/BeerCanLabs/sk-recruit-setup
+language: PowerShell
+classification: api-service
+runtimeRequirement: PowerShell
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-recruit-setup
+  observedRuntimeSignals: docker, readme
+  observedManifestPaths: marco/marco.json; recruit-dashboards/docker-compose.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

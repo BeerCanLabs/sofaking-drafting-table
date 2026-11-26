@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-BYBV
+type: product_component
+ownerRole: engineer
+name: Recliner Customer Profile Service
+description: 'Internal microservice for Project Recliner handling customer profile data,
+
+  including FERPA-protected customer records. .NET Core 8 on AWS EKS; backed
+
+  by per-region Recliner SQL databases.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- customer-profile
+- dotnet-core-8
+- eks
+- ferpa
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner Customer Profile Internal API
+  protocol: REST
+  authenticationModel: oauth
+  description: In-cluster REST API for customer profile records.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet, docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-backend/SKSOM.UserProfile/SKSOM.UserProfile/SKSOM.UserProfile.csproj;
+    infra/k8s/charts/recliner-user-profile/Chart.yaml;
+    infra/k8s/charts/recliner-user-profile/templates/deployment.yaml;
+    infra/k8s/charts/recliner-user-profile/templates/ingress.yaml
+  provenanceBoundary: >-
+    The checked-in deployment is named recliner-user-profile; this DRAFT object
+    retains the architecture inventory's Customer Profile display name while
+    recording the concrete repository path.

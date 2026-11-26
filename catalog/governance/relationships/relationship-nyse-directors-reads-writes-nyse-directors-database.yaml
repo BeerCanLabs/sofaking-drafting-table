@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T74-NY01
+type: relationship
+name: Nysdcb Directors → Nysdcb Directors Database
+source: 01KX4A2T6M-PJ5C
+target: 01KX4A2T6F-ZVRF
+label: reads from and writes to
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifoldStandaloneApplication repo (NysdcbdirectorsCode); connection details not yet confirmed by owner interview.

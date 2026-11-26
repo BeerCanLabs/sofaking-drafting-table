@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZT-5EPR
+name: Active Directory Authentication Service → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT1E-6R0B
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Domain controller health and availability are monitored through Nagios."
+capabilities:
+- 01KQQ4Q026-98VD

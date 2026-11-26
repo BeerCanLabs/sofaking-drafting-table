@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: D12WBAGZTZ-6M0B
+type: relationship
+name: Atlas TenantDirectory → Atlas Region Databases
+description: Owns the global database (whm-unified-global, regions table) through GLOBAL_DATABASE_CONNECTION_STRING;
+  hands out per-region connection strings read from Secrets Manager.
+catalogStatus: stub
+source: 01M5WY4E7P-7P1K
+target: 01M7D4BSC5-EJC5
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Owns the global database (whm-unified-global, regions
+    table) through GLOBAL_DATABASE_CONNECTION_STRING; hands out per-region connection strings read from Secrets
+    Manager.
+  evidence: 'whm-unified-core develop: .agentic/08-tenant-directory-reference.md, Service.Core.TenantDirectory.App/Program.cs;
+    whm-unified-dbmigration develop: global/migrations'

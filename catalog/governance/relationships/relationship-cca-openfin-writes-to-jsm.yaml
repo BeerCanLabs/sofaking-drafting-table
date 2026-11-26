@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: WXDY5WGZ5H-WRWB
+type: relationship
+name: CCA Openfin Runtime (JSM Divan) → JSM Service Desk
+catalogStatus: incomplete
+source: 01KYWQE2F3-CZ2H
+label: writes tickets to
+target: 01KYWQE2EY-55NE
+description: >-
+  [DOCUMENTED] JSM is reached UNDER THE HOOD, not by the user. The JSM Divan (the
+  only DIVAN holding Atlassian credentials) performs run-lifecycle ticket I/O --
+  updating JSM issues -- so every governed run is ticket-bound and its approvals +
+  human-readable audit trail live on the JSM ticket. Corrected 2026-07-31 (Justin
+  Hale review): the Divan is NOT the platform's only JSM writer -- the Console
+  BFF creates Service Requests with its own scoped credential (see relationship
+  "CCA Console (Front Door) → JSM Service Desk"), and the gated intake poller
+  reads the desk with the JSM service account. Single-writer consolidation at the
+  credential layer is INTENDED, not current.
+technology: HTTPS (Atlassian REST API)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - ticket-io
+  - jsm

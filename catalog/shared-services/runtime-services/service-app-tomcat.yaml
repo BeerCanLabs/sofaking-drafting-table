@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-9CDM
+type: runtime_service
+ownerRole: technology-admin
+name: Apache Tomcat Application Service
+description: 'Standard Tomcat application service pattern for Java-based workloads.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - java
+  - tomcat
+category: service
+serviceCategory: general
+host: 01KQQ5JT03-AQA9
+primaryTechnologyComponent: 01KQQ5JT1R-X6MC
+architectureNotes:
+  serviceAuthentication: 'Authentication is managed at the application layer or via integrated  Tomcat realms.
+
+    '
+  secretsManagement: 'Secrets are provided via environment variables or configuration files  managed by the deployment automation.
+
+    '
+  serviceLogging: 'Tomcat access and application logs are forwarded centrally via the  host''s logging agent.
+
+    '
+  healthWelfareMonitoring: 'Service welfare is monitored via HTTP health endpoints and JVM metrics.
+
+    '
+  availabilityModel: 'Availability is achieved via multiple instances behind a load balancer.
+
+    '
+  scalabilityModel: 'Scalability is achieved by adding additional Tomcat instances to the pool.
+
+    '
+  recoverabilityModel: 'Failed instances are automatically replaced or restarted by the  orchestration layer.
+
+    '
+  failureDomain: 'Impact is scoped to the Tomcat instance or the cluster serving the workload.
+
+    '
+internalComponents:
+  - ref: 01KQQ5JT1R-X6MC
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJCN-F7GS
+    key: serviceAuthentication
+  - ref: 01KT16XJCN-F7GS
+    key: secretsManagement
+  - ref: 01KT16XJCN-F7GS
+    key: serviceLogging
+  - ref: 01KT16XJCN-F7GS
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJCN-F7GS
+    key: availabilityModel
+  - ref: 01KT16XJCN-F7GS
+    key: scalabilityModel
+  - ref: 01KT16XJCN-F7GS
+    key: recoverabilityModel
+  - ref: 01KT16XJCN-F7GS
+    key: failureDomain

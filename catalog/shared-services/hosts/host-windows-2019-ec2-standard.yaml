@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-C74W
+type: host
+ownerRole: technology-admin
+name: Windows Server 2019 on EC2 Standard Host
+description: Windows Server 2019 host for existing-only workloads pending migration to 2022.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- aws
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-6C5F
+computePlatformComponent: 01KQQ5JT1P-A24W
+internalComponents:
+- ref: 01KQQ5JT1Q-6C5F
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

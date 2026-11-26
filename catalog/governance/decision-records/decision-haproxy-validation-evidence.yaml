@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KYAFY78H-CEF8
+type: decision_record
+name: HAProxy Validation Evidence
+description: Minimum L1 evidence recorded so DRAFT validation can trace HAProxy's Service Behavior requirements to a committed DecisionRecord. Owner/edge-SME follow-up is still needed to replace the unconfirmed fields.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+  - sofaking-central-engineering
+category: decision
+status: accepted
+affectedComponent: 01KYAFQQJB-FF30
+linkedObject: 01KYAFQQJB-FF30
+decisionRationale: "serviceAuthentication: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nserviceLogging: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\navailabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nscalabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nrecoverabilityModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nfailureDomain: Scoped to the staging environment where this instance runs.\n\nauthenticationAccessModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nlogAuditVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nhealthStatusVisibility: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nresilienceModel: Not confirmed in the source catalog; requires follow-up during the next drafting interview.\n\nconfigurableSurface: Not confirmed in the source catalog; requires follow-up during the next drafting interview."

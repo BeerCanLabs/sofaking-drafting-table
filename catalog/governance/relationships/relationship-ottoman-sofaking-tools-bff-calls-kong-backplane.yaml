@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DV-WRVT
+name: Ottoman Sofa King Tools BFF → Ottoman Kong Gateway Backplane
+catalogStatus: stub
+source: 01KSM38KFX-J6Z2
+label: calls
+target: 01KSM38KFX-QMDW
+notes:
+  background: "Sofa King Tools BFF routes internal management console requests through Kong Backplane to platform microservices via HTTPS."
+capabilities: []

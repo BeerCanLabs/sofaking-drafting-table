@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0A-R0DM
+type: product_component
+ownerRole: engineer
+name: Leave Web Mvc
+description: Leave Web MVC
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-web-mvc
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-web-mvc
+  observedRuntimeSignals: dotnet, node, readme, teamcity
+  observedManifestPaths: SK.Rotaops.Test.Web/SK.Rotaops.Test.Web.csproj; SK.Rotaops.Web/SK.Rotaops.Web.csproj;
+    SK.Rotaops.Web/package.json; SK.Rotaops.WebOptimizer/SK.Rotaops.WebOptimizer.csproj;
+    SK.AppBase.Web/SK.AppBase.Web.csproj; SK.SessionState/SK.SessionState.csproj;
+    GitVersion.yml; Grunt/package.json; abs-web-mvc.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

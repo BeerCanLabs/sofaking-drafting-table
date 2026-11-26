@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KYX7W8VC-DFDB
+type: runtime_service
+name: CCA Slack Bridge (Side Door)
+description: >-
+  [INTENDED] Near-future SIDE DOOR into the platform: a Slack bridge that lets a
+  person start and interact with a governed run from Slack, alongside the CCA
+  Console front door. Like the Console it is a pure Staplepin control-plane client
+  (no model credentials of its own); the same governance path applies -- the run
+  is ticket-bound, policy-constrained, validated, and audited. Not yet built or
+  deployed.
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - side-door
+  - slack
+  - interaction-surface
+  - intended
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYX7W8VK-8PCH
+networkPlacement: vpc-private
+authenticationModel: oauth

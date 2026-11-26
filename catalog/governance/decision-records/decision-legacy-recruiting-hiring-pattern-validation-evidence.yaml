@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHYT-0TT2
+type: decision_record
+name: Legacy Recruiting & Hiring - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG8-20BZ
+linkedObject: 01KSM38KG8-20BZ
+decisionRationale: "deploymentTargets: Production Primary: GRR Datacenter (Windows web farm + SQL cluster + NetApp + F5). Non-prod/Stage/QA: AWS us-east-1. DR: AWS us-east-2 (DR SQL cluster + CloudEndure).\n\navailabilityRequirement: High (customer-facing ATS / hiring platform; outages directly affect region hiring operations).\n\ndataClassification: PII (applicant and staff data, resumes, evaluations, application forms, background info);  FERPA-aligned where store HR data is involved.\n\nfailureDomain: Primary failure domains are individual web servers, SQL instances, and GRR datacenter. Web tier is horizontally scaled; loss of a single IIS node is tolerable.  SQL Server cluster nodes share storage.\n\npatternDeviations: ['Heavily customized single-tenant architecture with per-client IIS apps and dbs.', 'Transactional replication with updatable subscriptions (deprecated feature).', 'Subscribing file model (AspexRoot + OLA2Common) for code sharing.']"

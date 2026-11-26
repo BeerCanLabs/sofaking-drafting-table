@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ7H-YA07
+type: decision_record
+name: SQL Server 2019 with SSIS Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT01-SM8X
+linkedObject: 01KQQ5JT01-SM8X
+decisionRationale: "secretsManagement: Database credentials and integration secrets stored centrally\n\nserviceLogging: Database engine and SSIS execution logs are forwarded to centralized logging beyond host-level collection.\n\navailabilityModel: Single ETL database instance by explicit architectural decision.\n\nscalabilityModel: Vertical scale-up of the ETL database instance with optional workload tuning.\n\nrecoverabilityModel: Restore the ETL database from backups and re-establish SSIS execution on a rebuilt host.\n\nfailureDomain: Scoped to the shared data-integration service group served by this ETL database.\n\nbackup.strategy: Daily full backup with transaction log backup aligned to ETL windows\n\nbackup.platform: SQL Server native backup to managed storage\n\nbackup.rto: 4h\n\nbackup.rpo: 24h\n\nha.mechanism: none\n\nencryption.atRest: Transparent Data Encryption enabled for all production databases"

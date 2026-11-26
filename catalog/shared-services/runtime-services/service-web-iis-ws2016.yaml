@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-JCA7
+type: runtime_service
+ownerRole: technology-admin
+subtype: service
+name: IIS Web Service on Windows Server 2016
+description: "IIS web service hosted on Windows Server 2016 on Amazon EC2. Lifecycle is deprecated - inherited from the WS2016 host OS EOL. Existing Product Services on this runtime require migration planning to the standard IIS web-service pattern on WS2022 or later.\n"
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - web
+  - iis
+category: service
+serviceCategory: general
+host: 01KQQ5JT03-4A7S
+primaryTechnologyComponent: 01KQQ5JT1S-PYY2
+architectureNotes:
+  hostModel: AWS-hosted Windows IIS workloads using this runtime run on Windows Server 2016 EC2 hosts. Database servers are not represented by this runtime and are modeled separately.
+  serviceAuthentication: Web identities and administrative access use centralized identity and certificate services.
+  scalingApproach: Horizontal scaling behind an application load balancer
+  serviceLogging: IIS and application logs are forwarded to centralized logging beyond host event collection.
+  healthCheck: HTTP endpoint probe monitored by the load balancer and synthetic monitoring
+  healthWelfareMonitoring: Endpoint probes, synthetic monitoring, and platform telemetry monitor service welfare.
+  secretsManagement: Application secrets and certificates sourced from centralized secret storage
+  availabilityModel: Multiple IIS instances behind a load balancer when deployed in HA mode.
+  scalabilityModel: Horizontal scaling behind an application load balancer.
+  recoverabilityModel: Replace failed IIS nodes and return them to service through the standard deployment workflow.
+  failureDomain: Scoped to the IIS web-service tier within its deployment environment.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple IIS instances behind a load balancer provide active web-service redundancy.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: horizontal-scale
+    name: Horizontal Scale
+    description: Additional IIS instances can be deployed behind the load balancer to increase capacity.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT03-4A7S
+    role: host
+  - ref: 01KQQ5JT1S-PYY2
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJFQ-6BYA
+    key: serviceAuthentication
+  - ref: 01KT16XJFQ-6BYA
+    key: secretsManagement
+  - ref: 01KT16XJFQ-6BYA
+    key: serviceLogging
+  - ref: 01KT16XJFQ-6BYA
+    key: failureDomain

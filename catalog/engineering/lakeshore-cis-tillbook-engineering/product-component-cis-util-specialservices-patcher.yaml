@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-R9JS
+type: product_component
+ownerRole: engineer
+name: CIS Util Specialservices Patcher
+description: Specialservices variant of the database Patcher utility. Retired — Specialservices is retired.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- specialservices
+- database
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-specialservices-patcher
+classification: worker
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as the Specialservices variant of CIS Util Customerinformation Patcher. Retired along with the rest of the Specialservices product line. Runtime confirmed by product owner on 2026-07-31 — .NET Framework 4.8.
+  repositoryName: BeerCanLabs/sk-cis-util-specialservices-patcher

@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 1HQE4RR9SE-W46N
+type: relationship
+name: Atlas UI → Sofa King Passport login
+description: The browser is redirected to VITE_PASSPORT_LOGIN_URL when no authenticated session exists, and VITE_SOFAKING_BASE_URL
+  (https://stage-retail.ss.sofaking.example) is used for org-switcher redirects and logout.
+catalogStatus: stub
+source: 01M5WY4E7P-GCD5
+externalTarget: Sofa King Passport login
+label: authenticates via
+technology: Browser redirect / HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. The browser is redirected to VITE_PASSPORT_LOGIN_URL when
+    no authenticated session exists, and VITE_SOFAKING_BASE_URL (https://stage-retail.ss.sofaking.example) is
+    used for org-switcher redirects and logout. Candidate catalog object: Ottoman Passport Core Service (01KSM38KFX-9EHD);
+    inferred, not confirmed.'
+  evidence: 'whm-unified-ui develop: .env.example, src/features/auth'

@@ -1,0 +1,284 @@
+schemaVersion: '1.0'
+uid: 01M7BNBY4G-CBKS
+type: drafting_session
+name: Atlas Source Inspection 2026-11-13
+description: Read the seven whm-unified-* repositories to confirm the Atlas pattern (01M5WY4E7P-AWVD) and replace
+  its prose-only connections with relationship objects, two data-store objects and runtime specs. Records what the
+  code confirms, what it contradicts, and what the V1 design describes that is not implemented yet.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+sessionStatus: open
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- drafting-session
+- atlas
+- unified-inventory
+- source-derived
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01M5WY4E7P-AWVD
+sourceArtifacts:
+- name: BeerCanLabs/sk-whm-unified-core
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-core
+  notes: 'develop at eece62e (2026-11-13). .NET 10 monorepo: nine deployed services plus a local YARP gateway; .agentic/
+    architecture notes; docker compose; image workflow README (Kubernetes via ArgoCD, LE1 dev).'
+- name: BeerCanLabs/sk-whm-unified-ui
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-ui
+  notes: develop (main carries only the README). React 19 + TypeScript SPA; API base URL, Passport and Wingman
+    configuration; image workflow README (region fixed to us-east-1).
+- name: BeerCanLabs/sk-whm-unified-modules
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-modules
+  notes: 'develop: Service.App.RequestToPay scaffold with a HealthController only.'
+- name: BeerCanLabs/sk-whm-unified-dbmigration
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-dbmigration
+  notes: 'develop: Flyway global and service migrations, per-environment cluster and customer inventories (dev RDS
+    cluster endpoint in us-east-1; test, stage and prod inventories empty).'
+- name: BeerCanLabs/sk-whm-unified-artifacts
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-artifacts
+  notes: 'develop: placeholder shared-library projects; no facts used.'
+- name: BeerCanLabs/sk-whm-unified-automation
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-whm-unified-automation
+  notes: Playwright test framework; environment hosts whm-unified-dev.int.sofaking.example noted, no architecture
+    facts used.
+- name: BeerCanLabs/sk-sys-whm-unified-terraform
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-sys-whm-unified-terraform
+  notes: 'main: eleven ECR repositories (nine core services, requesttopay, ui); default region us-east-1; no cluster,
+    network or database resources.'
+generatedObjects:
+- name: Atlas Aurora PostgreSQL
+  type: data_store_service
+  status: created
+  ref: 01M7BNBY4G-329E
+- name: Atlas Tenant Redis
+  type: data_store_service
+  status: created
+  ref: 01M7BNBY4G-2M0B
+- name: Atlas UI → Atlas Identity
+  type: relationship
+  status: created
+  ref: 71HRBT7CJR-405Y
+- name: Atlas UI → Atlas Workflow
+  type: relationship
+  status: created
+  ref: YCAF15D704-S8CN
+- name: Atlas UI → Sofa King Wingman widget
+  type: relationship
+  status: created
+  ref: YCJHHQFSQG-SR3D
+- name: Atlas UI → Sofa King Passport login
+  type: relationship
+  status: created
+  ref: 1HQE4RR9SE-W46N
+- name: Atlas Identity → Okta
+  type: relationship
+  status: created
+  ref: 7G96W89HBB-TCQE
+- name: Atlas Identity → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: 95P2BNN7QD-RK2Z
+- name: Atlas Identity → Atlas Tenant Redis
+  type: relationship
+  status: created
+  ref: 6VH3DV1EYY-H4A6
+- name: Atlas Identity → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: 7HWD62YY4C-KT05
+- name: Atlas TenantDirectory → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: D12WBAGZTZ-6M0B
+- name: Atlas Workflow → Atlas Identity
+  type: relationship
+  status: created
+  ref: KJ4R2S52SN-17YC
+- name: Atlas Workflow → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: J0P0SQA0ZF-2K7X
+- name: Atlas Workflow → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: 5M7KEDJ5ED-8V3P
+- name: Atlas Domain → Atlas Identity
+  type: relationship
+  status: created
+  ref: AGCSSM5NW6-NEZ3
+- name: Atlas Domain → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: CC2KZAX6XC-84AH
+- name: Atlas Domain → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: FZJZGAPNTM-Y084
+- name: Atlas Integration → Atlas Identity
+  type: relationship
+  status: created
+  ref: YC84ZFFMB5-VDYQ
+- name: Atlas Integration → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: 12FJDBEZPR-7TEZ
+- name: Atlas Integration → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: P78HK4FWDK-RKGT
+- name: Atlas Imports → Atlas Identity
+  type: relationship
+  status: created
+  ref: 7QB1WEN45V-7AYW
+- name: Atlas Imports → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: TK3HQ81WFG-AMPD
+- name: Atlas Imports → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: 8TWYYF4MT0-M0WC
+- name: Atlas Notifications → Atlas Identity
+  type: relationship
+  status: created
+  ref: YV5EX19QPQ-GA3B
+- name: Atlas Notifications → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: M805K2AXBC-64BR
+- name: Atlas Notifications → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: 17X975DJ7Z-SVP5
+- name: Atlas Reports → Atlas Identity
+  type: relationship
+  status: created
+  ref: H75Y470BD9-DKCP
+- name: Atlas Reports → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: MT2VE8GC4B-ETXG
+- name: Atlas Reports → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: NBTY4NVF49-K6B1
+- name: Atlas Scheduler → Atlas Identity
+  type: relationship
+  status: created
+  ref: DBW03G2301-7KKC
+- name: Atlas Scheduler → Atlas TenantDirectory
+  type: relationship
+  status: created
+  ref: VVG6H6ZKTM-D1RP
+- name: Atlas Scheduler → Atlas Aurora PostgreSQL
+  type: relationship
+  status: created
+  ref: YQ4VE2EB9A-PTH1
+- name: Atlas Workflow → Atlas Domain
+  type: relationship
+  status: created
+  ref: CEJBPG8TAJ-7VFQ
+- name: Atlas Workflow → Sofa King Platform Tasks API
+  type: relationship
+  status: created
+  ref: 9J11QAKQZZ-FQQJ
+- name: Atlas Workflow → Sofa King Platform Workflows API
+  type: relationship
+  status: created
+  ref: Q28MJW18G8-N4CY
+- name: Atlas Workflow → Okta
+  type: relationship
+  status: created
+  ref: WQ0WWB3RHR-P5RH
+- name: Atlas Domain → Sofa King IDM
+  type: relationship
+  status: created
+  ref: N70EJ55GPG-N8HA
+- name: Atlas Domain → Atlas Tenant Redis
+  type: relationship
+  status: created
+  ref: N69JA5SAPK-ZF2J
+- name: Atlas Integration → Loveseat Event Bus
+  type: relationship
+  status: created
+  ref: F41GJJRQ2S-GBVQ
+- name: Atlas Integration → Loveseat Event Bus
+  type: relationship
+  status: created
+  ref: D6T8AKQC8K-D5YH
+- name: Atlas Integration → Okta
+  type: relationship
+  status: created
+  ref: XWC60ZAQE2-YKDS
+assumptions:
+- id: A1
+  statement: The database behind the dev RDS cluster endpoint is Aurora PostgreSQL.
+  rationale: Endpoint form .cluster-<id>.rds.amazonaws.com and the Aurora writer/reader discussion in .agentic/10-connection-topology.md.
+  impact: Data store object name and vendor fields.
+- id: A2
+  statement: Okta, Sofa King IDM and the Loveseat Event Bus referenced in code are the catalog's Okta (01KQQ5JT1D-SHXD),
+    Sofa King IDM (01KXK7BD4N-8Z19) and the Loveseat Event Bus externalTarget already used by other patterns.
+  rationale: Name match only; no uid appears in the code.
+  impact: Relationship targets.
+- id: A3
+  statement: Secrets Manager is modeled as a runtimeSpec dependency rather than a relationship on each service.
+  rationale: The product-component schema names configuration stores as the purpose of runtimeSpec.dependencies.
+  impact: Rendered as derived edges.
+unresolvedQuestions:
+- id: Q1
+  question: Which AWS region and platform (EKS or other Kubernetes, ECS) host Atlas in production?
+  status: open
+  reason: Pattern records aws-us-east-2 on EKS; dev evidence is us-east-1 and Kubernetes via ArgoCD.
+  impact: Deployment target of every service group and the reference-architecture choice.
+- id: Q2
+  question: Aurora or RDS PostgreSQL, and which engine version, per environment?
+  status: open
+- id: Q3
+  question: What hosts the per-region Redis?
+  status: open
+- id: Q4
+  question: Is the separate Request-To-Pay module still the plan now that its flows live in Atlas Workflow?
+  status: open
+  relatedObjects:
+  - ref: 01M5WY4E7P-WSNT
+  - ref: 01M5WY4E7P-YC9P
+- id: Q5
+  question: Which catalog objects stand for the Platform Tasks API, the Platform Workflows API, Wingman, Passport
+    and the Kong edge Atlas uses?
+  status: open
+  currentBestGuess: Platform Msvc Workflowinstance/Workflowdefinition, Settee Wingman, Ottoman Passport Core
+    Service, Kong Gateway Service.
+- id: Q6
+  question: What serves /api/session/me, which the UI calls?
+  status: open
+- id: Q7
+  question: When do the ERP adapters, AP Desk events, Core HR reads, Wingman notifications and the importer land,
+    so the pattern can carry them as relationships?
+  status: deferred
+nextSteps:
+- id: N1
+  action: Owning team confirms the inferred mappings (A1, A2) and answers Q1 to Q3.
+  status: open
+  owner: whm-unified-inventory
+- id: N2
+  action: Replace externalTarget strings with catalog uids once Q5 is answered.
+  status: open
+- id: N3
+  action: Re-run the inspection when whm-unified-modules gains real endpoints.
+  status: open
+- id: N4
+  action: Owning team confirms the two data components added 2026-11-14 (Atlas Region Databases on the Aurora
+    cluster, Atlas Session and Token Cache on the tenant Redis), their classification and the Redis hosting.
+  status: open
+  owner: whm-unified-inventory
+notes:
+  method: Direct read of the repositories listed above; every relationship cites its evidence files in notes.evidence.
+    No claims were taken from the V1 diagram alone.

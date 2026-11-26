@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01M7TTVBDD-4S8V
+type: product_component
+ownerRole: engineer
+name: AP Desk MCP Adapter
+description: MCP adapter for agents; tools generated from the OpenAPI contract x-agent extensions.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: ap-desk-engineering
+  contact: msorrell@sofaking.example
+tags:
+- ap-desk
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-bs-ap-desk
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node 24 LTS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-bs-ap-desk
+  hostingModel: Runs in an EKS cluster in the Sofa King Integration AWS account (owner interview); dev currently uses an interim EC2 host with docker compose (infra/dev).
+  observedManifestPaths: mcp/package.json; mcp/Dockerfile
+  serviceAuthentication: Signed x-sk-userinfo header on /api/* calls (see docs/identity-context.md in the repo); remainder not confirmed, Draftsman must interview the owner.
+  secretsManagement: Not confirmed; spec R-6.5-02 calls for federated workload identity (EKS pod identity or IRSA) plus a secrets store.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed; assume service health checks are required until confirmed.
+  availabilityModel: Not yet defined; to be set by the Business Solutions tech lead before production.
+  scalabilityModel: Not yet defined; to be set by the Business Solutions tech lead before production.
+  recoverabilityModel: Not yet defined; to be set by the Business Solutions tech lead before production.
+  failureDomain: Not yet defined; to be set by the Business Solutions tech lead before production.

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSBP-WJTM
+type: relationship
+name: 'Sofa King Central Msvc Mesh BFF → Sofa King Central Msvc Preferences'
+catalogStatus: stub
+source: 01KYQ4D9S4-24XM
+target: 01KQQ5JT0K-VRT2
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Direct base URL configuration.

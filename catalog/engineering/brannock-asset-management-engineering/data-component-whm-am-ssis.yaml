@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-FJX4
+type: data_component
+ownerRole: engineer
+name: Whm Am Ssis
+description: SSIS packages (BulkLocationImport, Deactivate, InventoryTransfer) for Asset Management, deployed into a SQL Server Integration Services catalog and resolving per-region database credentials at runtime from Delinea/Thycotic Secret Server.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT01-SM8X
+tags:
+- whm
+- data-component
+- asset-management
+- ssis
+- etl
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_SSIS
+targetEngine: mssql
+dataClassification: internal
+containsPII: false
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_SSIS
+  observedRuntimeSignals: dotnet, github_actions
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; TrackwebIT_DAL/TrackwebIT_DAL.csproj; TrackwebIT_SSIS.sln; TrackwebIT_SecretServer_Library/TrackwebIT_SecretServer_Library.csproj
+  serviceAuthentication: 'Not an inbound-facing service - a batch ETL package executed inside the SQL Server Integration Services catalog. Calls to Secret Server use OAuth2 Resource-Owner-Password-Credentials grant (OAuthApi.GetOAuthToken posts grant_type=password with ClientId/ClientSecret to {ApiUrl}/oauth2/token), then uses the returned bearer token for subsequent Secret Server REST calls. Database connections use SQL Server authentication.'
+  secretsManagement: 'Confirmed Delinea/Thycotic Secret Server (TrackwebIT_SecretServer_Library): REST endpoints /oauth2/token (OAuth2 password grant) and /api/v1/secrets(/{id}) match the Secret Server REST API v1 shape. SecretServerService.GetSecret() authenticates, searches the secret by identifier/folder path, and fetches it by numeric secret ID; the actual SQL connection string is pulled out of the secret''s Notes field. Project parameters (SecretServerApiUrl, SecretServerClientID, SecretServerClientSecret, SecretServerSecretPath) mean every package resolves its per-region DB connection string dynamically from Secret Server at runtime rather than storing it in the package - the most mature secrets posture among the legacy .NET Framework AM components.'
+  serviceLogging: 'SSIS native logging via the built-in LogProviderSQLServer log provider - execution logs are written to SQL Server. Deployment into the SSISDB catalog means package execution reports/logging are also captured natively by the SSIS Catalog.'
+  healthWelfareMonitoring: 'Not determinable from repo alone; no dedicated health-check or monitoring hooks found (no event-handler-based alerting, no CloudWatch integration in this repo, unlike 01KSM38KFB-G3T3).'
+  availabilityModel: 'Deployed as an .ispac project into a SQL Server Integration Services catalog (SSISDB) via ISDeploymentWizard.exe targeting SQL Server 2016 - on-prem/VM-hosted SSIS Catalog execution, not IIS, not serverless, not containerized.'
+  scalabilityModel: 'Not determinable from repo alone; SSIS Catalog executions are typically scaled by scheduling/agent-job concurrency on the host SQL Server rather than anything visible in this repo.'
+  recoverabilityModel: 'Package-level defensive SQL: staging tables, backups, and drop/cleanup steps are explicit steps in the DAL SQL scripts (TakeTableBackups.sql, CreateStagingTable.sql, DropWorkTables.sql) - a stage-then-commit pattern with pre-move backups rather than transactional/automatic rollback tooling.'
+  failureDomain: 'Each .dtsx package (BulkLocationImportPackage, Deactivate, InventoryTransfer) is an independently-executable unit within one shared SSIS project/catalog folder, sharing the same Secret-Server-resolved DB credentials and the same _TrackwebSSIS / per-region Trackweb<Region> databases - a DB or Secret Server outage affects all packages in the project.'
+  externalDependencies: 'Delinea/Thycotic Secret Server (confirmed - see secretsManagement). SQL Server (source/target for staging + destination tables). No ERP/other-API integrations found directly in this repo.'
+  primaryDataStores: 'SQL Server: _TrackwebSSIS (staging/shared) and per-region catalogs such as TrackwebNonProdPinecrestregion - the same Trackweb family of databases used by 01KSM38KFB-XZ3E.'

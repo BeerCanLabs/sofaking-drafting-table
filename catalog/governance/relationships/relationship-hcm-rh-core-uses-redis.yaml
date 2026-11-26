@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-JW3P
+type: relationship
+name: HCM RH Core → Redis Caching Service
+source: 01KSM38KG5-FBRT
+target: 01KQQ5JT00-191S
+label: uses for distributed caching
+technology: Redis protocol
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - hcm-rh
+  - caching
+notes: >-
+  HCM RH Core configures ConnectionStrings__Redis and uses Redis for
+  distributed and output caching.

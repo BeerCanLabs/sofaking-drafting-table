@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS6E-21XC
+type: relationship
+name: 'Platform Sand Notifications → Platform Msvc Notificationinbox'
+catalogStatus: stub
+source: 01KSM38KFT-N5SH
+target: 01KSM38KFY-JK7R
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.

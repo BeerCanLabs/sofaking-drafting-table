@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: DV6QN2B7EA-X72C
+type: relationship
+name: CCA JSM Intake Poller → JSM Service Desk
+catalogStatus: incomplete
+source: 01KYXH0DG6-XEYW
+label: polls service requests from
+target: 01KYWQE2EY-55NE
+description: >-
+  [DOCUMENTED] Every 5 minutes (EventBridge schedule) the intake poller queries
+  the CCA service desk over the Jira REST API (api.atlassian.com gateway, JSM
+  service-account credential) for matched service requests newer than its
+  watermark. Merged but gated off (enable_jsm_intake_poller = false); go-live
+  planned 2026-08-04 as MVP-0 slim-path step 2.
+technology: HTTPS (Atlassian REST API via api.atlassian.com)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - intake
+  - jsm

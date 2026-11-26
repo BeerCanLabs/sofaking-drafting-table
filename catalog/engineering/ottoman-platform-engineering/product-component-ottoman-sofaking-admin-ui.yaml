@@ -1,0 +1,50 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-2FQW
+type: product_component
+ownerRole: engineer
+name: Ottoman Sofa King Admin UI
+description: Sofa King Administration SPA — client-facing management console for user, assignment, and access administration on the Ottoman platform. Lives in plat-passport-monorepo alongside its BFF.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+repoUrl: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+tags:
+- ottoman
+- platform
+- product-component
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-passport-monorepo
+  runtimeRequirement: >-
+    The develop-branch root package and Dockerfile.plat-ui-sofaking-admin pin
+    Node.js 24.14.1. The production image shares the monorepo release tag
+    observed across all five Passport workloads.
+  serviceAuthentication: >-
+    No client-side auth logic — a pure SPA relying on the BFF/Kong session.
+    src/interceptor/axios.interceptor.ts handles 404/502/network-error toasts
+    but, unlike the Tools UI, has no explicit 403-to-/unauthorized redirect —
+    a real behavioral difference between the two SPAs worth confirming with
+    the owning team.
+  secretsManagement: >-
+    None applicable — .env.example carries the same warning as the Tools UI
+    against putting secrets in env vars, since they are built into the
+    frontend bundle.
+  serviceLogging: None — static SPA served by the `serve` package; no server-side logging framework.
+  healthWelfareMonitoring: >-
+    cd/dev/deploy.yml defines only a startupProbe against a static
+    /health.html file — no readinessProbe or livenessProbe, matching the
+    Tools UI's gap.
+  availabilityModel: 1 replica with no HPA and no PodDisruptionBudget in the dev overlay.
+  scalabilityModel: No autoscaling configured.
+  recoverabilityModel: Kubernetes restarts the pod on failure; no application-level recovery logic (static content).
+  failureDomain: Failure domain follows the Ottoman platform's EKS deployment; no independent resilience posture.
+  dependencies:
+    - 01KSM38KFW-W42S
+notes:
+  background: "Stub created during Ottoman SDP completion interview. Sofa King Admin UI is a platform-owned control-plane SPA (not a consuming-product UI) and belongs in the Ottoman SDP. Full catalog entry requires owner interview."

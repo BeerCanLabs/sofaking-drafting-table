@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-WJJW
+type: relationship
+name: Platform Compliance API → Platform Compliance Database
+source: 01KY5775KP-FZPJ
+target: 01KY5775KP-AXH7
+label: reads from and writes to
+description: >-
+  The API uses a PostgreSQL connection pool for compliance checks and immutable,
+  versioned compliance-rule persistence.
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KT0V5MCV-VD0Y
+tags:
+  - platform-compliance-engine
+  - api
+  - postgresql

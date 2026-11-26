@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP4V-AM0S
+type: relationship
+name: 'Settee Jarvis → Settee Framework Angularjs'
+catalogStatus: stub
+source: 01KSM38KGJ-MRK0
+target: 01KSM38KGJ-NQSQ
+label: loads at runtime
+technology: HTTPS / dynamic asset load
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: AngularJS framework loaded from ANGULAR_FW_PATH / ANGULAR18_FW_PATH
+  loadMechanism: 'Runtime load. app.js resolves the module name from the first URL path segment (ui-module-helper.getModUrlValue), then falls back to the universal-* variant when there is no exact asset-manifest entry. Modules are fetched from moduleBasePath (uimodules.sofaking.example in production).'

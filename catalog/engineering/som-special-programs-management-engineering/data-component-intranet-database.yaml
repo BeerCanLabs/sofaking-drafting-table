@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6F-JF2C
+type: data_component
+ownerRole: engineer
+name: Corvid Intranet Database
+description: >-
+  SQL Server database (nyseintranet) supporting the Corvid Intranet portal:
+  help desk calls, agreements, business partners, escalation matrices, audit
+  logs, training, and customer renewals. Discovered from the IntranetDB
+  folder of the KIOTrifoldStandaloneApplication repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+targetEngine: mssql
+dataClassification: internal
+containsPII: true
+tags:
+  - trifold
+  - corvid-intranet
+  - repository-discovery
+  - data-component
+repoUrl: TBD
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\IntranetDB"
+  repositoryName: KIOTrifoldStandaloneApplication
+  runsOnAssumption: >-
+    DataStoreService and host location not yet confirmed by owner interview;
+    assumed to follow the same SQL Server 2019 / grr-datacenter pattern as
+    the rest of the Trifold family pending confirmation.

@@ -1,0 +1,50 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF5-6E11
+type: software_deployment_pattern
+ownerRole: engineer
+name: Customer Analytics Lab
+description: Software Deployment Pattern for Customer Analytics Lab. Stub created from Pendo product list; detail requires owner interview.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.data-analytics
+  productFamily: D&A
+owner:
+  team: foresight5-analytics-engineering
+  contact: data-engineering-analytics-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- data-analytics
+- customer-analytics
+- 5share
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: pendo-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed; require owner interview.
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  noAdditionalInteractions: External interactions require owner interview.
+  dataClassification: Data classification was not confirmed by owner interview.
+  failureDomain: Failure domain was not confirmed by owner interview.
+  noPatternDeviations: Pattern deviations require owner interview.
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Pending Owner Interview
+  deploymentTarget: owner-interview-required
+  notes: Deployment target and service composition require owner interview.

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRVF5WR-V8Y0
+type: relationship
+name: AM IDCore → SofaKingSecurityLibrary
+catalogStatus: complete
+source: 01KSM38KFB-YGSN
+label: depends on
+target: 01KSM38KFC-566V
+description: Compiled NuGet reference used for password-complexity/history validation (PasswordService.ValidatePasswordComplexityHistory) in user profile management.
+technology: .NET library reference (NuGet)
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- shared-library
+- security
+notes:
+  background: Confirmed via TIPIdentityCore.csproj referencing WHM.SofaKingSecurityLibrary v1.1.0.0 and ProfileSettings.aspx.cs calling PasswordService directly. Distinct from WHM_SofaKingSecurityLibrary_HD (01KSM38KFC-JJ65), which no AM repository references.
+capabilities: []

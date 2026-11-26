@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 5QJ2PBRAGZ-6D7J
+type: relationship
+name: CCA Slack Bridge (Side Door) → Staplepin Control Plane
+catalogStatus: stub
+source: 01KYX7W8VC-DFDB
+label: calls
+target: 01KYWQE2F1-14MN
+description: >-
+  [INTENDED] Near-future side door: the Slack bridge relays governed-run
+  interactions to the Staplepin control plane, alongside the Console front door.
+  Same governance path (ticket-bound, policy-constrained, validated, audited).
+  Not yet built.
+technology: HTTPS (REST + events) to staplepin.cca.local:3100
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - side-door
+  - intended

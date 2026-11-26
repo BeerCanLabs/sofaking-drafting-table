@@ -1,0 +1,200 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-DBFS
+type: software_deployment_pattern
+ownerRole: engineer
+name: Trifold
+description: >-
+  Software Deployment Pattern for Trifold — a legacy ASP.NET/IIS and Windows
+  Service suite (KIOTrifold) hosted on a dedicated Windows Server 2022
+  physical host at the Grand Rapids Data Center, backed by SQL Server.
+  Service composition reconstructed from the KIOTrifold TFS codebase;
+  several facts remain open pending owner confirmation (see notes and the
+  linked DraftingSession).
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Trifold
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - trifold
+  - cdp
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+notes:
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  dataClassification: confidential
+  failureDomain:
+    scope: service-group
+    description: >-
+      Legacy dedicated-stack deployment; a Windows host failure affects the
+      whole Trifold service group (web, application services, and batch all
+      run on the same host). Not yet confirmed by owner interview.
+  patternDeviations: >-
+    Deviates from the Hosted Dedicated Windows and SQL Server Suite RA's
+    "Traffic and API Routing" tier: no Kong Gateway or Redis cache is present
+    in this legacy stack — traffic routing is handled directly by IIS with no
+    API gateway or caching layer. Windows Service components (Maintenance,
+    Email, Report, Sync, Batch) attach directly to the Host substrate rather
+    than a dedicated RuntimeService, since no non-deprecated Windows Service
+    RuntimeService object exists in the catalog yet (tracked as a Shared
+    Services gap in the linked DraftingSession).
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-PGTY
+    deployableObjects:
+      - ref: 01KX421X4Q-R73N
+        diagramTier: presentation
+        networkZone: web
+        notes: Corvid Front End Web — main Trifold CDP portal, includes the Financing billing web UI.
+      - ref: 01KX421X4P-S9K4
+        diagramTier: presentation
+        networkZone: web
+        notes: SKSS.Authentication.Trifold authentication API.
+      - ref: 01KXK81789-T026
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Trifold Identity Hub (identity.cdpdirect.example) — discovered via the
+          CDP Direct WAF Info Confluence page; relationship to the existing
+          Trifold Authentication API not yet confirmed.
+      - ref: 01KXK81788-D45P
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Trifold Document Repository (docs.cdpdirect.example) — discovered via
+          the CDP Direct WAF Info Confluence page; likely fronts the
+          DocRepositoryDB shared-services gap.
+      - ref: 01KXK8178A-CAKJ
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Trifold Messaging Service (messaging.cdpdirect.example) — discovered
+          via the CDP Direct WAF Info Confluence page; relationship to the
+          shared RabbitMQ Messaging Service RuntimeService not yet confirmed.
+      - ref: 01KXK81789-KW2Q
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          CDP Viewer (viewer.cdpdirect.example) — discovered via the CDP Direct
+          WAF Info Confluence page; function not yet confirmed.
+      - ref: 01KXK8179A-CP17
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Trifold Collaboration Portal (collaborationportal.sofaking.example)
+          — discovered via the "Trifold - Key Product Functionality"
+          Confluence page; architecture relationship not yet confirmed.
+      - ref: 01KZ441KFJ-3PJQ
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Trifold My Insights Dashboard — discovered via the "Trifold - Key
+          Product Functionality" Confluence page; may be a feature within
+          Corvid Front End Web rather than a standalone component.
+  - name: Corvid Portal Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-PGTY
+    deployableObjects:
+      - ref: 01KX4A2T70-N90K
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Corvid Portal — Powershop-integrated portal, also known as
+          Households Portal (portal.cdpdirect.example). Confirmed by owner to run
+          on its own dedicated production server (GRRCDPPORTWEB11),
+          separate from the shared www01–www13 Web Tier pod fleet — modeled
+          as its own service group for that reason. Owner confirmed
+          GRRCDPPORTWEB11 is Windows Server 2022, matching the substrate's
+          host class. Owner confirmed GRRCDPPORTWEB11 is a VM, consistent
+          with the rest of the Trifold fleet — substrate references the
+          physical-standard host class as a placeholder either way, since
+          the only VMware host object in the catalog is deprecated. Owner
+          confirmed on 2026-09-10: Corvid Portal is a sub-application of Trifold Document Repository
+          (calls its API to pull documents for parents — see relationship
+          object); stage hosted on GRRCDPBETAWEB11; no QA environment is
+          set up for this app because it integrates with the region's
+          Customer Information System.
+  - name: Application Services Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-PGTY
+    deployableObjects:
+      - ref: 01KX421X4Q-YSDR
+        diagramTier: application
+        networkZone: app
+        notes: MaintenanceService Windows Service — scheduled maintenance routines.
+      - ref: 01KX421X4Q-MZW2
+        diagramTier: application
+        networkZone: app
+        notes: EmailService Windows Service — outbound transactional email.
+      - ref: 01KX421X4R-YEMQ
+        diagramTier: application
+        networkZone: app
+        notes: CorvidReportService + ReportServerAdmin — reporting Windows Service.
+      - ref: 01KX421X4R-0KCD
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          CorvidSync / SIF Integration Windows Service. Also documented in
+          the KIOTrifoldStandaloneApplication repo (CorvidSyncService)
+          per owner confirmation of same-system identity.
+  - name: Batch Processing Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-PGTY
+    deployableObjects:
+      - ref: 01KX421X4P-FE7F
+        diagramTier: utility
+        networkZone: app
+        notes: DemographicNotify/Batch and MDClaimService/Batch scheduled jobs.
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          Shared SQL Server DataStoreService (catalog ref is the SQL Server 2019 existing-only object). Owner confirmed the GRRCDPDBSQL19\CDPPROD19 instance runs SQL Server 2022 (engine build 16.0.42551.1); this ref remains until a preferred SQL Server 2022 DataStoreService exists.
+      - ref: 01KX421X49-VNRW
+        diagramTier: data
+        networkZone: data
+        notes: Director database — primary operational data.
+      - ref: 01KX421X49-TV6R
+        diagramTier: data
+        networkZone: data
+        notes: DirectorMaster database — configuration/master data.
+      - ref: 01KX4A2T6F-MG8N
+        diagramTier: data
+        networkZone: data
+        notes: Corvid Portal Database — dedicated database for Corvid Portal.
+      - ref: 01KX4A2T6G-KGEP
+        diagramTier: data
+        networkZone: data
+        notes: CorvidSyncService Database — customer import batch/config data for the Sync Service.
+decisionRecords:
+  - ref: 01KT16XJ3K-SY65
+    key: deploymentTargets
+  - ref: 01KT16XJ3K-SY65
+    key: externalDependencies
+  - ref: 01KT16XJ3K-SY65
+    key: interServiceConnections

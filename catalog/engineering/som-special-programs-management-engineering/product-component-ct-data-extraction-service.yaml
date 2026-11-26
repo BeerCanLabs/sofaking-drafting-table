@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6G-F0WV
+type: product_component
+ownerRole: engineer
+name: CT Data Extraction Tool
+aliases:
+  - CT Data Extraction Service
+  - PPT Data Extraction UI
+description: >-
+  Connecticut-specific customer data extraction tool. Owner confirmed this is
+  a single console application, obsolete/retired — not the web UI +
+  Windows Service + RabbitMQ setup originally modeled from repo evidence
+  (CTDataExtractProcessingService, PPTDataExtraction.UI, som.ctexport queue).
+  The separately-modeled "PPT Data Extraction UI" component and its calls
+  relationship were retired as incorrect per owner correction. Discovered
+  from the CTDataExtractionTool folder of the KIOTrifoldStandaloneApplication
+  repo.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: retired
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - ct-data-extraction
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+language: C#
+classification: cli
+runtimeRequirement: >-
+  .NET Framework 4.x (legacy console application; exact version not
+  confirmed by owner interview; retired).
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\CTDataExtractionTool"
+  repositoryName: KIOTrifoldStandaloneApplication
+  observedManifestPaths:
+    - CTDataExtractProcessingService
+  correction: >-
+    Originally modeled as two components (a web UI and a Windows Service
+    consuming a RabbitMQ queue) based on repo folder evidence. Owner
+    confirmed on 2026-08-11 this is actually a single obsolete/retired
+    console application; the web-UI component and its calls relationship
+    were removed as incorrect.

@@ -1,0 +1,273 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR5-K0FT
+type: software_deployment_pattern
+ownerRole: engineer
+name: Shared Customer Record
+aliases:
+  - SSR
+  - Customer Data Platform
+description: >-
+  Shared Customer Record (SSR), formerly the Customer Data Platform. Cloud-native
+  Customer Solutions microservices platform on AWS EKS providing core customer
+  identity and family-relationship data (Customer Profile), year-scoped calendars,
+  sessions, and pricing periods (Academic Calendar), and customer store membership
+  (Customer Membership). Each service is an ASP.NET Core HTTP API on .NET 10 with its
+  own DynamoDB single-table store and change-data-capture, and event-driven Lambda
+  workers that publish canonical customer events to the Loveseat event bus (authenticating
+  with Okta); Customer Profile also validates caller-supplied orgPersonIds against the
+  Ottoman msvc-org-person service (IDM auth) and consumes Loveseat identity-match events.
+  All three services are deployed to le1 in development
+  and stage; Customer Membership is still being built. Production is intended for
+  Chaise and not yet provisioned.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Shared Customer Record
+  notes: >-
+    Pillar confirmed by the platform owner (Customer Services team lead) on
+    2026-07-17.
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+followsReferenceArchitecture: 01KQQ5JT1D-D614
+tags:
+  - software-deployment-pattern
+  - customer-solutions
+  - shared-customer-record
+  - microservices
+  - eks
+  - dynamodb
+  - event-driven
+  - dotnet
+  - traefik
+  - argocd
+  - repository-discovery
+networkZones:
+  - id: ingress
+    name: Cluster Ingress
+    tier: frontend
+    description: >-
+      Traefik ingress on le1 routes the per-service hostnames to the API ClusterIP
+      Services. Kong is not in the request path.
+  - id: application
+    name: Customer Services Application
+    tier: application
+    description: Stateless API pods running on EKS in le1, one namespace per service.
+  - id: managed-integration
+    name: AWS Managed Integration
+    description: >-
+      Regional DynamoDB, DynamoDB Streams, EventBridge Pipes, SNS, SQS, DLQs, Lambda,
+      and Secrets Manager in us-east-1.
+  - id: operations
+    name: Deployment Operations
+    description: ArgoCD GitOps reconciliation boundary for the API manifests.
+serviceGroups:
+  - name: Kubernetes Ingress
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        networkZone: ingress
+        diagramTier: presentation
+      - ref: 01KYAXMZ7H-72BR
+        networkZone: ingress
+        diagramTier: presentation
+  - name: Customer Profile Microservice
+    deploymentTarget: aws-us-east-1
+    substrate: 01M5CS4D96-RT10
+    deployableObjects:
+      - ref: 01KXR9XAR4-BES0
+        networkZone: application
+        diagramTier: application
+        riskRef: 01M5CS4D95-QH7A
+  - name: Academic Calendar Microservice
+    deploymentTarget: aws-us-east-1
+    substrate: 01M5CS4D96-RT10
+    deployableObjects:
+      - ref: 01KXR9XAR4-N2VN
+        networkZone: application
+        diagramTier: application
+        riskRef: 01M5CS4D95-QH7A
+  - name: Customer Membership Microservice
+    deploymentTarget: aws-us-east-1
+    substrate: 01M5CS4D96-RT10
+    deployableObjects:
+      - ref: 01KXR9XAR4-HKKE
+        networkZone: application
+        diagramTier: application
+        riskRef: 01M5CS4D95-QH7A
+  - name: Event Processing
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT05-CT7X
+    deployableObjects:
+      - ref: 01KXRSDP02-EVPB
+        networkZone: managed-integration
+        diagramTier: application
+      - ref: 01M5CS4D93-XYNH
+        networkZone: managed-integration
+        diagramTier: application
+      - ref: 01M5CS4D94-NXJ3
+        networkZone: managed-integration
+        diagramTier: application
+  - name: Event Messaging
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT05-HTRA
+        networkZone: managed-integration
+        diagramTier: application
+      - ref: 01KQQ5JT05-0C4P
+        networkZone: managed-integration
+        diagramTier: application
+  - name: Data Services
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KXR9XAR4-SH1Y
+        networkZone: managed-integration
+        diagramTier: data
+      - ref: 01M5CS4D93-EWK0
+        networkZone: managed-integration
+        diagramTier: data
+      - ref: 01M5CS4D93-GMYC
+        networkZone: managed-integration
+        diagramTier: data
+      - ref: 01KQQ5JT04-K58R
+        networkZone: managed-integration
+        diagramTier: data
+      - ref: 01KWF3RGCF-T2HM
+        networkZone: managed-integration
+        diagramTier: data
+  - name: GitOps Delivery
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KQQ5JT1E-01JZ
+        networkZone: operations
+        diagramTier: utility
+availabilityRequirement: >-
+  No high-availability target is defined yet. Development and stage run each API as a
+  single replica with no autoscaler (requests 100m CPU / 256Mi, limits 800m / 2048Mi)
+  behind Traefik, with readiness and liveness probes; EKS reschedules a failed pod.
+  Event processing relies on AWS-managed regional availability (DynamoDB Streams,
+  SNS, SQS with DLQs, Lambda). Production is not provisioned, so no production
+  availability requirement is recorded.
+dataClassification: >-
+  Confidential. Customer Profile and Customer Membership hold FERPA-protected customer
+  and family PII (identity, contact, family associations, membership and exit dates
+  keyed by customer). Academic Calendar holds structural, non-PII scheduling data and
+  is classed internal. Final tier (confidential vs restricted) for Customer Profile
+  and Customer Membership is pending Data/Security confirmation; see session
+  questions data-classification-confirm and membership-data-classification.
+failureDomain:
+  scope: service-group
+  description: >-
+    An API pod failure is isolated to its service and rescheduled by EKS. Each
+    service owns its own DynamoDB table, SNS topic, queues, and Lambda, so a data or
+    event-pipeline failure is isolated to that service. A le1 cluster or Traefik
+    outage takes all three APIs down together in development and stage. Membership
+    validates Customer Profile, Academic Calendar, and Core HR Org Unit synchronously
+    and fails closed, so an outage of any of those blocks Membership writes (503).
+    Lambda, SQS, SNS, and DynamoDB are regional us-east-1 managed-service dependencies.
+patternDeviations: >-
+  Follows the AWS EKS Multi-Tenant Microservices reference architecture with three
+  evidenced deviations: (1) the data tier uses AWS DynamoDB (01KQQ5JT04-K58R,
+  preferred) per service rather than the RA's PostgreSQL/S3/Redis data services;
+  (2) event processing runs on AWS Lambda (01KQQ5JT05-CT7X) alongside the EKS-hosted
+  APIs; (3) ingress is Traefik only, with no Kong gateway or Kong Mesh in the path
+  (Academic Calendar's spec records dropping the service mesh deliberately and
+  validating Okta JWTs and scopes in-service).
+deploymentTargets: >-
+  Development and stage are deployed to the le1 EKS cluster by ArgoCD
+  (le1.ss-msvc-customer-profile-{dev,stage}, le1.ss-msvc-calendar-{dev,stage}, and
+  le1.ss-msvc-customer-membership-{dev,stage}), one namespace per service, behind
+  Traefik at customer-profile-{env}, academic-calendar-{env}, and
+  customer-membership-{env}.ss.sofaking.example. Each service's AWS resources
+  (DynamoDB, Streams, Pipe, SNS, SQS, Lambda) are deployed by CDK into the shared
+  AWS account for that environment in us-east-1. Production is intended for Chaise
+  and is not yet provisioned for any service (no ArgoCD application or overlay).
+notes:
+  sourceRepositories:
+    - productService: 01KXR9XAR4-BES0
+      repositoryName: BeerCanLabs/sk-ss-msvc-customer-profile
+      sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet (net10.0), docker, aws-cdk, dynamodb, lambda, sns, sqs
+    - productService: 01KXR9XAR4-HKKE
+      repositoryName: BeerCanLabs/sk-ss-msvc-customer-membership
+      sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet (net10.0), docker, aws-cdk, dynamodb, lambda; spec Ready to build 2026-09-29, implementation in progress (crawled 2026-10-20)
+    - productService: 01KXR9XAR4-N2VN
+      repositoryName: BeerCanLabs/sk-ss-msvc-calendar
+      sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet (net10.0), docker, aws-cdk, dynamodb, lambda, sns, sqs (crawled 2026-10-20)
+  discoveryBoundary: >-
+    Composition inferred from read-only crawls of the three ss-msvc-* repositories
+    (2026-07-17 and 2026-10-20) and of the k8s-deployments manifests for le1
+    (2026-10-20), all owner-authorized. Runtime substrate for the APIs is AWS EKS
+    per each repository's CLAUDE.md. Network Zone and Connection Elicitation was run
+    with the owner on 2026-10-20: Traefik is the only ingress (no Kong); an internal
+    Traefik ALB is the only thing in front of it for dev and stage (no WAF or CDN);
+    the four network zones and the zone assignment are confirmed; Loveseat and Customer
+    Membership's validation calls enter through the per-service Traefik hostnames; and
+    all three APIs read AWS Secrets Manager. Same-tier connections were not reviewed.
+    The production edge on Chaise, the le1 cluster's own failure and availability
+    characteristics, and any Operations rule on service-to-service paths have not been
+    elicited.
+  deploymentResources: >-
+    All three services run one replica per environment with the same resource
+    footprint; production on Chaise and any HA target are not yet defined.
+decisionRecords:
+  - ref: 01M5CS4D94-KV7W
+    key: externalDependencies
+  - ref: 01M5CS4D94-CSKS
+    key: interServiceConnections
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: field
+    key: followsReferenceArchitecture
+    equals: 01KQQ5JT1D-D614
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: deployment-targets
+    status: satisfied
+    mechanism: field
+    key: deploymentTargets
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: availability-requirement
+    status: satisfied
+    mechanism: field
+    key: availabilityRequirement
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: additional-interactions
+    status: satisfied
+    mechanism: decisionRecord
+    key: externalDependencies
+    ref: 01M5CS4D94-KV7W
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: data-classification
+    status: satisfied
+    mechanism: field
+    key: dataClassification
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: failure-domain
+    status: satisfied
+    mechanism: field
+    key: failureDomain
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: pattern-deviations
+    status: satisfied
+    mechanism: field
+    key: patternDeviations
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: inter-service-connections
+    status: satisfied
+    mechanism: decisionRecord
+    key: interServiceConnections
+    ref: 01M5CS4D94-CSKS

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV4R19-RRJ1
+type: relationship
+name: AM ETL Microservices → Mosyle
+catalogStatus: complete
+source: 01KSM38KFB-G3T3
+label: syncs with
+externalTarget: Mosyle
+description: Dedicated Lambda microservices sync Apple device data from Mosyle MDM, including an embedded SSIS package (Mosyle_MDM_Import.dtsx) for one flow.
+technology: REST/HTTPS
+direction: asynchronous
+flow: outbound
+tags:
+- asset-management
+- mdm
+- etl
+notes:
+  background: Confirmed via the MosyleMDM_SSIS project bundled in the ETL_MSA solution and named Mosyle-suffixed Lambda services.
+capabilities: []

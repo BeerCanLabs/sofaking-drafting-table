@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-ZR18
+type: decision_record
+name: Application Server — Java on Amazon ECS Runtime Binding
+description: 'The RT-ERP monolith is bound to the Java Application Service on Amazon ECS, using EC2-backed cluster capacity and CloudFormation-managed infrastructure.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+- ard
+- rt-erp
+category: decision
+status: accepted
+affectedComponent: 01KSM38KEX-PX7B
+impact: 'The application now inherits the verified ECS-on-EC2 host, scaling, image-delivery, observability, and recovery model.
+
+  '
+mitigationPath: 'Revalidate this binding if RT ERP migrates away from ECS on EC2 or adopts Fargate.
+
+  '
+linkedObject: 01KSM38KEY-JC4K
+decisionRationale: |
+  runtimeRequirement: The RT-ERP application runs as containerized Java
+  workloads on the Java Application Service on Amazon ECS
+  (01KYQN2WDV-223J). Its ECS cluster uses EC2 capacity supplied by an Auto
+  Scaling Group capacity provider; Fargate is not used. Nested CloudFormation
+  stacks, CodeBuild, ECR, and Systems Manager provide the repeatable deployment
+  path.

@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-ZDAD
+type: relationship
+name: Tri-State CommWeb Authentication Proxy -> Sofa King IDM
+catalogStatus: incomplete
+source: 01KXK7BD4N-4ART
+label: brokers authentication to
+target: 01KXK7BD4N-8Z19
+direction: synchronous
+flow: outbound
+notes: CommWeb brokers AWS SOM authentication requests to the separate Sofa King IDM product in the Production Microservices AWS account.

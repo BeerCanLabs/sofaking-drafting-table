@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KZVJ049V-D8QJ
+type: decision_record
+name: CT Data Extraction Tool Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KX4A2T71-YMWR
+linkedObject: 01KX4A2T71-YMWR
+decisionRationale: >-
+  deploymentTargets: Owner confirmed grr-datacenter / Windows Server 2022,
+  consistent with the rest of the Trifold family. This SDP is retired
+  (single obsolete console application) — the service has been turned off
+  on every hosted server.
+  noAdditionalInteractions: No external system interactions have been
+  identified for this component beyond its own deployable object; the
+  previously-modeled RabbitMQ dependency was removed as incorrect per owner
+  correction on 2026-08-11.
+  noCrossBoundaryConnections: No cross-tier or cross-zone connections exist
+  — it is now modeled as a single component in a single service group with
+  no other Trifold components to connect to.

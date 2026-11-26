@@ -1,0 +1,58 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-HKYG
+type: product_component
+ownerRole: engineer
+name: Resource Library Service
+description: Node.js microservice, built and deployed as a Docker image, that backs the Learning Content Repository / Resource Library (repository BeerCanLabs/sk-msvc-ResourceLibrary). Designed so new resource types can be added with little to no front-end change.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- associate-development
+- lcr
+- resource-library
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-ResourceLibrary
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-ResourceLibrary
+  deploymentPipeline: CodeFresh (owner-confirmed). Repository carries ci/code-fresh/ and cd/codefresh-deploy-*.yml.
+  runtimeHostEvidence: Kubernetes manifests (Deployment, Service, Ingress, HPA) under cd/ for environments prod, prod-ml, stage, stage-ml; container listens on port 4000. Host mapped to Amazon EKS Standard per owner.
+  observedRuntimeSignals: docker, node, readme, kubernetes-manifests
+  observedDataStoreEvidence: Production ConfigMap points at PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (us-east-1, read-write and read-only endpoints), the AWS OpenSearch domain rl-opensearch-prod (us-east-1), and S3 buckets use1-prd-resource-library, use1-prd-resource-library-public and etscvl-migrated. The PostgreSQL cluster is a regional Aurora PostgreSQL cluster (owner-confirmed). Redis, per the owner, uses production seed host rl-redis-prod.85c0f9.clustercfg.use1.cache.amazonaws.com, port 6379; this is the ElastiCache for Redis OSS replication group rl-redis-prod (owner-confirmed; see the Resource Library ElastiCache Redis data store service). It does not appear in the ConfigMap. OpenSearch and S3 types are inferred from the domain and bucket names and were not confirmed with the owner.
+  observedDependencySignals: package.json lists pg, sequelize, ioredis, redis, elasticsearch and aws-sdk. ConfigMap also references IDM and Organization APIs (login.sofaking.example, api2.sofaking.example), the External API Service, the Interaction Service, and a Kafka sidecar API (sc-resourcelib.use1.sofaking.example) for events and subscriptions.
+  observedManifestPaths: Dockerfile; package.json; ci/code-fresh/master-merge.yaml; ci/code-fresh/pull-request.yaml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/prod/ingress.yml; cd/prod/hpa.yml; cd/prod-ml/deploy.yml; cd/stage/deploy.yml; cd/stage-ml/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed; owner interview required.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed. An HPA manifest exists in cd/, owner to confirm.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KQQ5JT04-27EP
+    purpose: Primary relational store for Resource Library data.
+    interface: PostgreSQL cluster pg-prod-rds-pgsql-cluster-01 (writer and reader endpoints)
+  - ref: 01KQQ5JT05-2FWS
+    purpose: Search index for resources.
+    interface: OpenSearch domain rl-opensearch-prod
+  - ref: 01KQQ5JT05-KT3Z
+    purpose: File and resource storage.
+    interface: Buckets use1-prd-resource-library, use1-prd-resource-library-public, etscvl-migrated
+  - ref: 01M71SSZ2X-R56B
+    purpose: Redis cluster used by the Resource Library.
+    interface: Configuration endpoint rl-redis-prod.85c0f9.clustercfg.use1.cache.amazonaws.com on port 6379
+  - ref: 01M71NWZVQ-4Z7N
+    purpose: Sends resource interaction events (xAPI statements) for storage and forwarding to Kafka.
+    interface: POST /v1/experiences
+  - ref: 01M71NWZVQ-2C2K
+    purpose: Calls external providers for data and handles their authentication.
+    interface: externalApiHttpApi

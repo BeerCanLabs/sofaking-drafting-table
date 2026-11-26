@@ -1,0 +1,92 @@
+schemaVersion: '1.0'
+uid: 01KRZVZXDK-7XC1
+type: data_store_service
+ownerRole: technology-admin
+name: SQL Server 2025 DBMS Service
+description: |
+  SQL Server 2025 database service. Successor to the SQL Server 2022 DBMS Service.
+  Targeted for new cloud-native platforms (e.g., Project Recliner National SOM) that
+  need a per-tenant or per-region SQL Server engine. Production deployments are
+  expected on AWS RDS for SQL Server; the modeled host below is the self-managed
+  Windows Server 2025 on EC2 Standard Host used as the strategic baseline.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - sqlserver-2025
+category: service
+serviceCategory: database
+host: 01KQQ5JT04-JH3H
+primaryTechnologyComponent: 01KQQ5JT1T-C2C6
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Active Directory integrated identities govern administrator and service access to the database.
+  scalingApproach: scale-up primaries with secondary replicas for resilience
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: SQL listener probe and AG replica health monitoring
+  healthWelfareMonitoring: SQL listener probes, replica telemetry, and platform monitoring track service welfare.
+  secretsManagement: Service accounts and connection secrets stored centrally.
+  availabilityModel: AlwaysOn Availability Groups provide multi-node database availability.
+  scalabilityModel: Vertical scale-up of primary nodes with optional secondary replicas for resilience.
+  recoverabilityModel: Failed nodes are replaced and rejoined to the AG while backups support point-in-time recovery.
+  failureDomain: Scoped to the SQL Server availability group serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: SQL Server native backup to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: AlwaysOn Availability Groups
+  encryption:
+    atRest: TDE enabled on all production databases
+  accessControl:
+    model: Active Directory integrated access with role-based SQL permissions
+deploymentConfigurations:
+  - id: alwayson-availability
+    name: AlwaysOn Availability
+    description: AlwaysOn Availability Groups provide multi-node database availability and recovery tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: scale-up-with-secondary-replicas
+    name: Scale Up With Secondary Replicas
+    description: Capacity grows through larger primary nodes with optional secondary replicas for resilience and workload distribution.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT04-JH3H
+    role: host
+  - ref: 01KQQ5JT1T-C2C6
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ8D-S0PS
+    key: serviceAuthentication
+  - ref: 01KT16XJ8D-S0PS
+    key: secretsManagement
+  - ref: 01KT16XJ8D-S0PS
+    key: serviceLogging
+  - ref: 01KT16XJ8D-S0PS
+    key: failureDomain
+  - ref: 01KT16XJ8D-S0PS
+    key: backup.strategy
+  - ref: 01KT16XJ8D-S0PS
+    key: backup.platform
+  - ref: 01KT16XJ8D-S0PS
+    key: backup.rto
+  - ref: 01KT16XJ8D-S0PS
+    key: backup.rpo
+  - ref: 01KT16XJ8D-S0PS
+    key: ha.mechanism
+  - ref: 01KT16XJ8D-S0PS
+    key: encryption.atRest
+  - ref: 01KT16XJ8D-S0PS
+    key: accessControl.model

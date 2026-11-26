@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 9N13QY5625-8CH8
+name: Platform UI Sofa King Tools → Ottoman Sofa King Tools BFF
+catalogStatus: stub
+source: 01KSM38KG0-P6RD
+label: calls
+target: 01KSM38KFX-J6Z2
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via apps/plat-ui-sofaking-tools/src/interceptor/axios.interceptor.ts, baseURL env.SOFAKING_TOOLS_BFF_INTERNAL_URL (defaults http://localhost:6010 per src/env.ts)."
+capabilities: []

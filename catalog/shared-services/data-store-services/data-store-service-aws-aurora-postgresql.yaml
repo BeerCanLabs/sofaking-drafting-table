@@ -1,0 +1,118 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-27EP
+type: data_store_service
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Aurora PostgreSQL
+description: 'AWS-managed Aurora PostgreSQL database service used by Ottoman platform services for relational persistence.
+
+  '
+version: 1.0.1
+catalogStatus: incomplete
+lifecycleStatus: preferred
+tags:
+  - aws
+  - aurora
+  - postgresql
+  - database
+vendor: Amazon Web Services
+productName: Aurora PostgreSQL
+productVersion: managed
+deliveryModel: paas
+networkPlacement: vpc-private
+patchingOwner: aws-managed
+authenticationModel: iam
+architectureNotes:
+  resilienceModel: 'Aurora PostgreSQL is deployed as a managed multi-AZ database cluster with a production writer in us-east-1 and disaster recovery reader capacity in us-east-2 for Ottoman.
+
+    '
+  configurableSurface: 'Cluster topology, parameter groups, endpoints, backup retention, encryption, and network access controls are customer-managed within AWS.
+
+    '
+  failureDomain: Scoped to the Aurora cluster, AWS account, VPC, and configured region.
+capabilities:
+  - 01KT0V5MCV-VD0Y
+deploymentConfigurations:
+  - id: iam-access-control
+    name: IAM Authentication and Access Control
+    description: Aurora uses IAM database authentication exclusively; no database passwords are issued to applications or administrators. Access is granted through IAM roles with least-privilege policies. Elevated access follows a JIT role-assumption pattern via AWS IAM. IAM authentication tokens expire after 15 minutes, enforcing implicit reauthentication. MFA is enforced via IAM Condition keys on sensitive roles. The root DB user is disabled post-cluster creation.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: vpc-network-security
+    name: VPC Network Security and Firewall Configuration
+    description: Aurora cluster has no public endpoint. VPC Security Groups restrict inbound access to port 5432 from app-tier security groups only. Network ACLs enforce subnet-level controls. Security Group rules are reviewed every 6 months by the architecture-review-board team to enforce least-privilege network access.
+    addressesQualities:
+      - recoverability
+  - id: automated-backups-and-recovery
+    name: Ottoman Production Backup Retention
+    description: Production Ottoman Aurora backups are retained daily for 31 days, monthly for 13 months, and annually for seven years using AWS Backup.
+    addressesQualities:
+      - recoverability
+  - id: data-encryption
+    name: Encryption in Transit and at Rest
+    description: TLS 1.2+ is enforced for all client connections via Aurora parameter group (ssl=1, ssl_min_protocol_version=TLSv1.2). All Aurora cluster storage is encrypted at rest using LVE-875 via AWS KMS customer-managed key, covering data files, automated backups, snapshots, and read replicas.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: cloud-security-baseline
+    name: Cloud Security Baseline and Posture Management
+    description: Aurora cluster is deployed in a private VPC with no public endpoint exposure. AWS Security Hub is enabled with CIS AWS Foundations Benchmark v3; findings are reviewed by the information security team. GuardDuty monitors for anomalous database access patterns. Billing alarms are configured at the AWS account level. Unused regions are disabled via Service Control Policies (SCPs).
+    addressesQualities:
+      - recoverability
+requirementImplementations:
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.3.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: iam-access-control
+    notes: IAM-only authentication eliminates local admin accounts. Least-privilege IAM roles scoped per service. Elevated access obtained via JIT IAM role assumption; no standing privileged sessions.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: iam-access-control
+    notes: No database passwords issued; IAM token authentication (15-minute TTL) enforces implicit timeout and MFA via IAM Condition keys. Account lockout managed by IAM.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.2
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: iam-access-control
+    notes: Root DB user disabled post-cluster creation. All access via IAM roles eliminates password vault requirement. MFA enforced via IAM Condition keys on sensitive roles.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: iam-access-control
+    notes: IAM authentication tokens expire after 15 minutes, requiring reauthentication. Compromised credential monitoring handled by IAM Access Analyzer and GuardDuty credential findings.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.09.1.2
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: vpc-network-security
+    notes: Security Groups restrict port 5432 inbound to app-tier security groups only. Rules reviewed every 6 months by architecture-review-board.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.11.2.2
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: data-encryption
+    notes: TLS 1.2+ enforced via Aurora parameter group. All storage encrypted using LVE-875 via AWS KMS CMK, including automated backups and snapshots.
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.11.2.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: data-encryption
+    notes: Aurora cluster storage encrypted at rest with LVE-875 via AWS KMS CMK, covering data files, automated backups, snapshots, and all read replicas.
+decisionRecords:
+  - ref: 01KT16XJ58-DD9D
+    key: resilienceModel
+  - ref: 01KT16XJ58-DD9D
+    key: configurableSurface
+  - ref: 01KT16XJ58-DD9D
+    key: failureDomain
+  - ref: 01KT16XJ58-DD9D
+    capability: 01KT0V5MCV-VD0Y

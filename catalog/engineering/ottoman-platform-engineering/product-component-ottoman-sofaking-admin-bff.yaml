@@ -1,0 +1,75 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-W42S
+type: product_component
+ownerRole: engineer
+name: Ottoman Sofa King Admin BFF
+description: 'Customer-facing Ottoman administration BFF for granting and revoking access, managing permissions, and setting migration dates.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - bff
+  - customer-admin
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-passport-monorepo
+  runtimeRequirement: >-
+    The develop-branch app package and Dockerfile.plat-bff-sofaking-admin both
+    pin Node.js 24.14.1. The production image shares the monorepo release tag
+    observed across all five Passport workloads.
+  serviceAuthentication: >-
+    Same header-trust chain as the other BFF/Passport Core apps
+    (UserContextMiddleware + local UserMiddleware, CASL @casl/ability), plus a
+    domain-context guard unique to this app
+    (src/common/middleware/domain-context.middleware.ts,
+    src/common/guards/domain-context.guard.ts) that reads the x-sk-domainid
+    header and cross-checks it against the caller's authProfile.domains,
+    throwing ForbiddenException on mismatch — this is the concrete mechanism
+    behind Ottoman's per-domain tenant isolation for administration actions,
+    partially answering the Ottoman SDP's open tenancy-model question.
+  secretsManagement: >-
+    AWS Secrets Manager via ExternalSecrets Operator
+    (apps/plat-bff-sofaking-admin/cd/dev/es.yml). This app has its own
+    Postgres connection (TYPEORM_SCHEMA=skadmin, TYPEORM_DATABASE=ottoman-core),
+    so TYPEORM_PASSWORD is also secret-sourced here.
+  serviceLogging: nestjs-pino + pino-http + pino-pretty, same pattern as sibling apps.
+  healthWelfareMonitoring: >-
+    /health/live, /health/ready, /health/startup are trivial; /health pings
+    only domain-svc — it does NOT check Passport Core or Invitation Service
+    despite depending on both, a monitoring coverage gap relative to its
+    sibling Tools BFF (which checks all three of its dependencies).
+  availabilityModel: 2 replicas, RollingUpdate maxUnavailable 0/maxSurge 50%. HPA min 2/max 4 (CPU 70%/mem 80%). PodDisruptionBudget maxUnavailable 1.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization.
+  recoverabilityModel: No circuit breaker or explicit retry logic found in this app.
+  failureDomain: Scoped to the customer-facing Ottoman administration tier.
+  dependencies:
+    - 01KSM38KFW-WA83
+    - 01KSM38KFX-ETDW
+    - 01KSM38KFH-NYK5
+    - 01KSM38KFX-9EHD
+    - 01KQQ5JT1D-SHXD
+  dependencyCorrection: >-
+    Confirmed via module imports (InvitationModule, DomainsModule,
+    IdentitySourceModule) and .env.example mesh URLs that this component
+    calls Platform Msvc Org Person (01KSM38KFH-NYK5). RESOLVED 2026-08-04: a
+    Ottoman developer confirmed the legacy Ottoman OrgPerson Service
+    (01KSM38KFX-9EQ8) is retired — its repo no longer exists on GitHub — so
+    the prior ambiguity is closed.
+  unconfirmedDependencies: >-
+    Newly observed, not yet in the catalog: Employee Service
+    (EMPLOYEE_SVC_BASE_URL) and a Salesforce sandbox integration
+    (vendor-integrations module) — config-only in this pass.
+decisionRecords:
+  - ref: 01KT16XHPE-5VVW
+    key: runtimeRequirement

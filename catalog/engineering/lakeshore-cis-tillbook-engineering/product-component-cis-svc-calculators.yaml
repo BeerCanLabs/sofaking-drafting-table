@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SP-24QT
+type: product_component
+ownerRole: engineer
+name: CIS Svc Calculators
+description: Not a separately deployed component. This is WIRIS, a 3rd-party MathML editor plugin for CKEditor, delivered as client-side JavaScript files embedded within CIS App Householdaccess and CIS App Salesbook.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- drafting-2026-07-28
+repoUrl: TBD
+classification: other
+language: JavaScript
+runtimeRequirement: 'N/A — client-side JS plugin, not an independently deployed component'
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28; not yet confirmed by repository discovery or owner interview. Exact function beyond "Calculators" label not yet known.
+  openQuestion: Resolved by product owner on 2026-07-31 — this is WIRIS, a 3rd-party MathML editor plugin for CKEditor, shipped as JS files embedded in CIS App Householdaccess (01KSM38KFQ-247S) and CIS App Salesbook (01KSM38KFP-FTNZ), not CIS App Centraladmin; it is not a separately deployed Sofa King component. Retired as a standalone catalog entry accordingly.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

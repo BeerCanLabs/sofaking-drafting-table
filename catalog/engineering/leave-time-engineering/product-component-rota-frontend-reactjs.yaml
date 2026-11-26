@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KSM38KER-3KG1
+type: product_component
+ownerRole: engineer
+name: Rota Frontend Reactjs
+description: Leave frontend application deployed through standard and ML production Kubernetes workload variants.
+version: 1.0.1
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- rota
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-rota-frontend-reactjs
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  runtimePlacement: GitHub contains Kubernetes Deployment manifests at cd/prod/deploy.yml and cd/prod-ml/deploy.yml, validating the owner-identified rota-frontend-reactjs and rota-frontend-reactjs-ml production EKS workloads from this shared codebase.
+  repositoryName: BeerCanLabs/sk-rota-frontend-reactjs
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: .vscode/extensions.json; .vscode/launch.json; .vscode/settings.json; Dockerfile; cd/codefresh-deploy-develop-qa.yml; cd/codefresh-deploy-manual-branch.yml; cd/codefresh-deploy-manual-ml.yml; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/ingress.yml; cd/dev/service.yml; cd/prod/deploy.yml; cd/prod-ml/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

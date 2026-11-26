@@ -1,0 +1,180 @@
+schemaVersion: '1.0'
+uid: 01M0GBWMZJ-E0NF
+type: product_component
+name: Digital Stores EntityAPI
+aliases:
+- entityapi
+- server-ang
+- DSHP EntityAPI
+description: ASP.NET Web API 2 backend for Digital Stores Suite+ on .NET Framework 4.6.1, hosted in IIS.
+  Serves the /api/v1 REST surface plus two legacy handler endpoints, and reads and writes SQL Server directly
+  with hand-written SQL and no ORM. Multi-tenant by store region, with a separate database per region
+  resolved per request through a central DS_Admin catalog. Authored from a direct read of BeerCanLabs/sk-server-ang
+  on 2026-08-20; architecture facts and their provenance are recorded in DecisionRecord 01M0GBWMZJ-AAX4.
+  Availability, scalability, recoverability and failure-domain posture were closed on 2026-09-08 from the
+  DRAFT L1 Baseline Questionnaire and the Digital Stores Environment Guide.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- digital-stores
+- product-component
+- source-derived
+- owner-confirmed
+repoUrl: https://github.com/BeerCanLabs/sk-server-ang
+language: C#
+classification: api-service
+runtimeRequirement: .NET Framework 4.6.1 / ASP.NET Web API 2 under IIS
+interfaces:
+- name: EntityAPI REST v1
+  protocol: REST
+  path: /api/v1/
+  authenticationModel: other
+  description: Primary JSON REST surface, attribute-routed across roughly 140 controllers. POST creates,
+    PATCH applies application/json-patch+json, PUT performs filtered search or full replace, GET reads
+    by id. Authenticated by an opaque session GUID plus a SHA-256 request fingerprint, not by JWT or OAuth.
+- name: Legacy DSAL handler
+  protocol: other
+  path: /DSAL.axd
+  authenticationModel: other
+  description: Legacy form-encoded POST endpoint routed to LegacyController in App_Start/WebApiConfig.cs.
+    Dispatches to named application-layer classes under DSAL/AL/ by AL and Method parameters. Still in
+    active use alongside the REST surface.
+- name: Login handler
+  protocol: other
+  path: /DSLogin.axd
+  authenticationModel: other
+  description: Sign-in endpoint routed to LogInController; issues the session GUID. Per the owner on
+    2026-09-08 this is also where the front end calls SecurityAL::GetSecurityList() once, after which the
+    security list is cached client-side - see DecisionRecord 01M0GBWMZJ-TMGD.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-server-ang
+  sourceRepository: https://github.com/BeerCanLabs/sk-server-ang
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet-framework, aspnet-webapi2, iis, sqlserver, log4net
+  observedManifestPaths: entityapi/DSHP.sln; entityapi/DSHPDocker.sln; entityapi/entityapi/entityapi.csproj;
+    entityapi/entityapi/packages.config; entityapi/entityapi/Dockerfile; entityapi/docker-compose.yml;
+    entityapi/DSAL/DSAL.csproj; entityapi/LoggingEngine/LoggingEngine.csproj; GenerateViewModel/GenerateViewModel.sln
+  serviceAuthentication: Confirmed by direct repository read of entityapi/entityapi/Controllers/BaseController.cs.
+    Not JWT, not Windows auth, not OAuth, not cookie-based. Every controller action calls IsAuthorized()
+    itself, which reads the ds-region-id, Authorization, ds-context and ds-session headers, parses the
+    bearer value as a System.Guid session token, resolves the tenant from the request subdomain, and validates
+    via DSAuthentication.AuthenticateSession. A second factor recomputes a SHA-256 request fingerprint
+    over the request path plus a Fingerprint seed from app settings plus the session GUID. Authorization
+    is one security group per user (tblsecuritygroup) granting view, edit, new, fy, fyedit and draft per
+    resource. See DecisionRecord 01M0GBWMZJ-TMGD for the disabled server-side per-screen check, which the
+    2026-09-08 owner answer confirmed remains disabled - GetSecurityList() is a sign-in-time front-end
+    call, not a per-request server-side enforcement point - returning that record from mitigated to open.
+  databaseAuthentication: >-
+    Confirmed mixed by the owner on 2026-10-02. Both SQL authentication and Windows/Integrated Security
+    (SSPI) are legitimately in use across different connection strings - this was not a contradiction
+    between the owner's 2026-09-08 answer to question 4.4 (SQL authentication) and the checked-in
+    entityapi/Framework/Web.config, which declares the DSAdmin and DSGeneric connection strings with
+    Integrated Security=SSPI. At least DSAdmin and DSGeneric use Windows auth; the 2026-09-08 answer
+    evidently described a different, not-yet-named connection path. Which connections use which model
+    beyond DSAdmin and DSGeneric is not evidenced from source, since the runtime Web.config is
+    gitignored. See notes on data store service 01M25X9W0R-VQJ3.
+  secretsManagement: Partially confirmed. entityapi/entityapi/Web.config and Web.Release.config are gitignored,
+    so the live connection strings, the Fingerprint HMAC seed and the log4net appender configuration are
+    not in source control - that is the correct posture. entityapi/Framework/Web.config is checked in
+    and does contain two named connection strings (DSAdmin and DSGeneric); both use Integrated Security=SSPI
+    and carry no password material. Where the runtime Web.config is sourced from at deploy time was not
+    determined and requires owner interview.
+  serviceLogging: 'Confirmed by direct repository read: three uncoordinated mechanisms with no shared
+    correlation identifier. First, log4net loggers throughout the controller and application layers, with
+    appender configuration held outside the repository. Second, a custom queue-based audit and telemetry
+    LoggingEngine (entityapi/LoggingEngine/) that BaseController invokes on every successful authorization
+    via addPageOpenTransaction, plus report, export, pie-chart and page-event transactions. Third, flat
+    daily files named <yyyyMMdd>_<HostName>_LoggingEngine.log written by entityapi/LoggingEngine/Logger.cs
+    and auto-deleted after 31 days. The LoggingEngine ships a MySql.Data.dll but no MySqlConnection usage
+    was found and its app.config is empty, so its actual transaction destination is unresolved. No central
+    log aggregation was found. The 31-day local retention and the leave of aggregation both bear on Hearthstone
+    HCF.06.1.1 and HCF.06.1.2, whose dispositions remain open, and on the highest-level-audit-logging clause
+    of Sofa King''s Data Classification and Protection Policy given that this product is classified
+    Confidential.'
+  healthWelfareMonitoring: 'Confirmed by direct repository read: no health, healthz, readiness, liveness
+    or ping endpoint exists anywhere across roughly 140 controllers, no health route is registered in
+    App_Start/WebApiConfig.cs, and neither the Dockerfile nor docker-compose.yml declares a healthcheck.
+    No APM agent, Application Insights, CloudWatch agent, Dynatrace or Datadog reference is present in
+    the repository. Monitoring is host-level only and lives outside the application: AWS CloudWatch in
+    AWS account 472468972873 plus Nagios XI at http://issuse1nagios1/nagiosxi/, per the Environment Guide.
+    Because no health endpoint exists, the load balancers in front of production and sandbox cannot be
+    performing application-level health checks, only host or port checks.'
+  dataPersistence: 'Confirmed by direct repository read: Microsoft SQL Server accessed through System.Data.SqlClient
+    in entityapi/Framework/DBInteract.cs and DBConnection.cs with hand-written SQL and no ORM. View models
+    and their SELECT, INSERT, UPDATE and DELETE statements are machine-generated by the standalone GenerateViewModel
+    WinForms tool, which reads a vTableColumns metadata view. The engine is SQL Server 2017 on Windows EC2,
+    one instance per environment tier, now modelled as data store service 01M25X9W0R-VQJ3.'
+  tenancyModel: 'Confirmed by direct repository read: database per store region. At request time BaseController
+    resolves the subdomain to an AdminRegionEL through DSAdminRegions.Instance[subDomain], and DSAdminRegions.Instance.AllRegions
+    maps RegionId to DatabaseName. The DSAdmin connection string targets a central DS_Admin catalog.
+    DS_Admin is therefore a platform-wide dependency shared by every region, not a shard-scoped one,
+    which the owner confirmed on 2026-09-08.'
+  environmentTiers: 'Confirmed by direct repository read of the DSCorsPolicy allow-list in entityapi/entityapi/App_Start/WebApiConfig.cs:
+    roughly 180 explicit HTTPS origins under *.digital-showrooms.example across four bands - production per-region
+    subdomains, <region>sandbox, <region>qa and <region>al (alpha). Also allowed are us1.app.pendo.io
+    and localhost:4200. The four bands map to the Environment Guide''s four host groups and to the four
+    tierVariants on SoftwareDeploymentPattern 01KRZ1GCH3-99RF.'
+  availabilityModel: 'Confirmed 2026-09-08 by the owner and corroborated by the Environment Guide. The
+    EntityAPI shares one IIS origin and the same hosts as the SPA, so its web-tier posture is identical:
+    production PRAngWeb1 in an AWS Auto Scaling group behind PRLB-155628125.us-west-1.elb.amazonaws.com,
+    sandbox SBWeb behind SBLB-3852661381.us-west-1.elb.amazonaws.com, and a single unbalanced host each in
+    QA (QAWeb) and alpha (ALWeb4). Its effective availability is bounded by the data tier rather than the
+    web tier: each environment tier has one SQL Server instance with no availability group and no failover
+    partner, and there is no RDS instance in any region of AWS account 472468972873. No availability
+    target, RTO or RPO is recorded for the product - see DecisionRecord 01M25X9W0R-GKSK.'
+  scalabilityModel: 'Partially confirmed 2026-09-08. Horizontally scalable at the web tier in production
+    and sandbox through the Auto Scaling group, whose policy bounds and scaling metric are not recorded.
+    Not scalable at the data tier: growth in region count adds databases to the same per-tier SQL Server
+    instance rather than adding instances, so that instance is the ceiling, and vertical resize is the only
+    lever (production is m5.4xlarge against m5.xlarge in sandbox and c5.large in QA and alpha). Two
+    application-level constraints qualify any horizontal scaling: DSAdminRegions.Instance is a per-process
+    singleton cache of the region-to-database map, so its refresh behaviour across multiple web hosts is
+    not evidenced, and the LoggingEngine writes per-host flat files, so log data fragments as hosts are
+    added. Neither was determined from source.'
+  recoverabilityModel: 'Confirmed 2026-09-08. Recovery is host-level restore from infrastructure backup:
+    AWS Backup weekly AMIs on Friday at 23:00 CST and daily EBS snapshots Monday through Thursday at 23:00
+    CST, retained 30 days and copied to us-west-1 and us-east-1. The deployable artifact itself is
+    recoverable from the dshpDeploy repository, which holds build output per tier by branch, so a web host
+    can be rebuilt and redeployed without rebuilding from source. Data recovery is the constraint rather
+    than application recovery: no SQL Server native or transaction-log backup schedule is recorded, so the
+    practical RPO is up to roughly 24 hours, and no restore has a tested RTO. See DecisionRecord
+    01M25X9W0R-GKSK.'
+  failureDomain: 'Confirmed 2026-09-08: platform-wide. The owner confirmed that DS_Admin is a single point
+    of failure whose loss removes access for all regions, which the source read had already indicated -
+    every request resolves its region to a database through it. Beyond DS_Admin, each tier''s region
+    databases sit on one SQL Server EC2 instance with no availability group, so the loss of that host takes
+    every region in the tier offline. The EntityAPI''s own web-tier failure domain is narrower - a service
+    group in production and sandbox, tier-wide in QA and alpha - but it is not the binding constraint.'
+  buildAndDeployment: 'Confirmed by direct repository read: there is no .github/workflows directory and
+    no CI pipeline in this repository. Builds are MSBuild against entityapi/entityapi/entityapi.csproj
+    with PublishProfile FolderProfile.pubxml, driven manually or by main-ang/build-alpha.ps1. Note a documentation
+    drift: server-ang/CLAUDE.md references .github/workflows/auto-codex-review.yml, which does not exist.
+    Per the owner on 2026-09-08, a developer triggers the QA to Sandbox to Production branch promotion in
+    dshpDeploy manually, the same build is exercised in each tier in turn, and there is no automated
+    validation or approval gate before a promotion goes live.'
+  containerization: 'Confirmed by direct repository read: entityapi/entityapi/Dockerfile (microsoft/aspnet:4.7.1-windowsservercore-1709)
+    and entityapi/docker-compose.yml exist, but no evidence was found that containers are used in any
+    deployed environment. Treated as development tooling, not production runtime. The 2026-09-08 evidence
+    supports that reading: the Environment Guide records plain Windows EC2 web hosts running IIS in all
+    four tiers, with no container runtime named anywhere.'
+  testCoverage: 'Confirmed by direct repository read: no test projects exist in the repository. This
+    compounds the SQL Server 2017 migration risk recorded in DecisionRecord 01M0GDHSAM-F64B, because
+    compatibility-level testing against a hand-written-SQL data layer has no automated safety net.'
+decisionRecords:
+- ref: 01M0GBWMZJ-AAX4
+  key: dataPersistence
+- ref: 01M0GBWMZJ-AAX4
+  key: tenancyModel
+- ref: 01M0GBWMZJ-AAX4
+  key: buildAndDeployment
+- ref: 01M0GBWMZJ-TMGD
+  key: serviceAuthentication
+- ref: 01M25X9W0R-GKSK
+  key: availabilityModel
+- ref: 01M25X9W0R-56TA
+  concern: external dependencies and service connections

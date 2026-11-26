@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: FMHGZCRGHF-SKKG
+type: relationship
+name: Platform Compliance API → Kong Mesh Service
+description: >-
+  The Platform Compliance API pods are planned participants in the shared Kong
+  Mesh through injected Envoy-based data-plane sidecars.
+catalogStatus: incomplete
+source: 01KY5775KP-FZPJ
+target: 01KYAXMZ7H-KJT2
+label: participates in
+technology: Kuma / Envoy data plane
+direction: synchronous
+flow: bidirectional
+capabilities:
+  - 01KT0V5MCV-RM8M
+tags:
+  - platform-compliance-engine
+  - kong-mesh
+  - kuma
+  - envoy
+notes: >-
+  Owner-confirmed planned architecture on 2026-07-27. Exact namespace injection
+  policy, mesh name, workload annotations, traffic policies, and observed sidecar
+  evidence remain to be linked.

@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-SAS6
+type: technology_component
+ownerRole: technology-admin
+name: SAP Crystal Reports
+description: 'Business intelligence application used to design and generate interactive  reports. Used in ERP-WS for over 1200+ legacy reports.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reporting
+- legacy
+- software
+vendor: SAP
+productName: Crystal Reports
+productVersion: legacy
+classification: software
+patchingOwner: sofaking-managed
+architectureNotes:
+  integrationModel: Integrated into Desktop (OL5) and DocGen subsystem.
+capabilities:
+- 01KT0XNZEY-70Y6

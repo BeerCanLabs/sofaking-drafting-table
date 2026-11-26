@@ -1,0 +1,445 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1H-SC3T
+type: drafting_session
+name: Ottoman Platform SDM Drafting Session
+description: 'Partial drafting session created from Ottoman architecture and operations source material. The session produced a validating SDM, reusable PaaS/SaaS stubs, first-party runtime component stubs, and explicit follow-up questions.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+- session
+- ottoman
+- sdm
+- drafting
+primaryObjectType: software_deployment_pattern
+sourceArtifacts:
+- name: Ottoman - App Architecture & Ops Overview (Platform SRE View)
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Ottoman Zone (Gateway Data Plane)
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Ottoman Core Services / Component Catalog
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Platform Ottoman - Aurora PostgreSQL Connectivity
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Platform Ottoman - Neptune Connectivity
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Ottoman Development / GitHub Repos
+  type: repository
+  notes: Source cited in user-provided SDM input.
+- name: Ottoman Notes (SRE discovery)
+  type: document
+  notes: Source cited in user-provided SDM input.
+- name: Dev-team repository linking pass (2026-08-03)
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-plat-ottoman-core, https://github.com/BeerCanLabs/sk-plat-svc-domain, https://github.com/BeerCanLabs/sk-plat-svc-invitation, https://github.com/BeerCanLabs/sk-plat-svc-organization, https://github.com/BeerCanLabs/sk-msvc-org-person, https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+  notes: >-
+    Jordan Hale supplied this repository list on behalf of the Ottoman Dev
+    team to align Dev-owned ProductComponents with CloudOps' existing
+    OPS-433061 runtime mapping. Repository-crawl confirmation was granted for
+    this exact scope. Filled serviceAuthentication, secretsManagement,
+    serviceLogging, healthWelfareMonitoring, availabilityModel,
+    scalabilityModel, recoverabilityModel, failureDomain, and dependencies
+    across all 10 pre-existing ProductComponents in scope, added Plat Ottoman
+    Core as a new stub, resolved the document-database-selection question, and
+    surfaced several new open questions (see unresolvedQuestions).
+generatedObjects:
+- name: Ottoman Platform SDM
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KG2-ZB6W
+- name: AWS Aurora PostgreSQL
+  type: runtime_service
+  status: stubbed
+  ref: 01KQQ5JT04-27EP
+- name: AWS Network Load Balancer
+  type: runtime_service
+  status: stubbed
+  ref: 01KQQ5JT05-9P9S
+- name: Okta
+  type: runtime_service
+  status: stubbed
+  ref: 01KQQ5JT1D-SHXD
+- name: Ottoman Kong Gateway Backplane
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-QMDW
+- name: Ottoman Passport Core Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-9EHD
+- name: Ottoman Domain Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-WA83
+- name: Ottoman Invitation Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-ETDW
+- name: Ottoman Organization Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-DQGA
+- name: Ottoman OrgPerson Service
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-9EQ8
+- name: Ottoman Sofa King Tools BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFX-J6Z2
+- name: Ottoman Sofa King Admin BFF
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFW-W42S
+- name: Ottoman Loveseat Publisher Lambda
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFS-ZR7Y
+- name: Ottoman Okta-Domain Synchronizer Lambdas
+  type: product_component
+  status: stubbed
+  ref: 01KSM38KFS-487E
+- name: Plat Ottoman Core
+  type: product_component
+  status: stubbed
+  ref: X5EM83VCQP-721F
+unresolvedQuestions:
+- id: org-person-repo-consolidation
+  question: >-
+    The catalog carries three org-person-like ProductComponents:
+    Ottoman OrgPerson Service (plat-svc-orgperson, 01KSM38KFX-9EQ8, still a
+    stub with no confirmed runtime placement), Platform Msvc Org Person
+    (msvc-org-person, 01KSM38KFH-NYK5, the actual observed EKS workload with
+    a full architecture-notes profile), and Platform Msvc Orgperson
+    (plat-msvc-orgperson, 01KSM38KFZ-HYKP, a distinct C#/.NET stub). The Dev
+    team's repo list for this linking pass named only msvc-org-person. Which
+    of the other two repos, if any, are still active?
+  status: answered
+  reason: >-
+    A Ottoman developer confirmed 2026-08-04 that msvc-org-person is the
+    only org-person service they know of; plat-svc-orgperson returns a 404 on
+    GitHub (repository no longer exists) and plat-msvc-orgperson's last commit
+    was 2019-01-28. Both are confirmed dead, independently verified via
+    GitHub's commit history.
+  currentBestGuess: >-
+    Both plat-svc-orgperson (01KSM38KFX-9EQ8) and plat-msvc-orgperson
+    (01KSM38KFZ-HYKP) are set lifecycleStatus retired. Removed
+    01KSM38KFX-9EQ8 from the Ottoman SDP's Platform Core Services service
+    group.
+  impact: >-
+    Passport Core, Sofa King Tools BFF, and Sofa King Admin BFF
+    dependencyCorrection notes updated to reflect resolution — msvc-org-person
+    is the sole confirmed dependency. One external relationship (the former
+    Customer Profile OrgPerson Worker sync, owned by the Shared Customer Record
+    team) targeted the now-retired 01KSM38KFX-9EQ8; it was later deleted along
+    with the worker — see the customer-data-platform-orgperson-sync-target
+    question below.
+  relatedObjects:
+  - ref: 01KSM38KFX-9EQ8
+  - ref: 01KSM38KFH-NYK5
+  - ref: 01KSM38KFZ-HYKP
+- id: standalone-repo-staleness
+  question: >-
+    Platform BFF Sofa King Tools (01KSM38KFX-AF27, standalone plat-bff-sofaking-tools
+    repo) and the earlier-noted standalone plat-ui-sofaking-tools repo both
+    appear superseded by their equivalent apps inside plat-passport-monorepo
+    (which carry the same production release tag observed on 2026-07-31).
+    Are the standalone repos retired?
+  status: answered
+  reason: >-
+    A Ottoman developer confirmed 2026-08-04 that plat-passport-monorepo is
+    the only way this service deploys today. Independently verified via
+    GitHub: both standalone repos' last commit is 2022-09-06, and
+    plat-bff-sofaking-tools' final commit is itself titled "add note
+    regarding decommissioning of repo."
+  currentBestGuess: >-
+    Platform BFF Sofa King Tools (01KSM38KFX-AF27) set lifecycleStatus
+    retired. No separate catalog object exists for the standalone
+    plat-ui-sofaking-tools repo — its supersession is recorded as a note on
+    Platform UI Sofa King Tools (01KSM38KG0-P6RD).
+  impact: Avoided carrying duplicate, stale ProductComponents for the same runtime behavior.
+  relatedObjects:
+  - ref: 01KSM38KFX-AF27
+  - ref: 01KSM38KG0-P6RD
+- id: customer-data-platform-orgperson-sync-target
+  question: >-
+    The former Customer Profile OrgPerson Worker sync relationship (owned by the
+    Shared Customer Record team, formerly the Customer Data Platform team) targeted
+    the now-retired legacy Ottoman OrgPerson Service (01KSM38KFX-9EQ8). Should
+    that sync now target Platform Msvc Org Person (01KSM38KFH-NYK5) instead?
+  status: answered
+  reason: >-
+    Surfaced as a side effect of retiring 01KSM38KFX-9EQ8 on 2026-08-04. Answered
+    2026-10-20 by the Shared Customer Record team: the OrgPerson Worker and its
+    sync were removed (ADR-006, TBSPS-4319), so the relationship was deleted. The
+    Customer Profile API now validates a caller-supplied orgPersonId against
+    msvc-org-person (01KSM38KFH-NYK5), read-only, with an IDM token.
+  currentBestGuess: Resolved; no catalog relationship targets 01KSM38KFX-9EQ8 any longer.
+  impact: None remaining. The new Customer Profile API to Platform Msvc Org Person relationship is owned by the Shared Customer Record team.
+  relatedObjects:
+  - ref: 01KSM38KFX-9EQ8
+  - ref: 01KSM38KFH-NYK5
+- id: ottoman-core-catalog-scope
+  question: >-
+    Plat Ottoman Core (plat-ottoman-core) is a local developer-environment
+    orchestrator (Docker Compose + CLI) with no deployment of its own. Should
+    it remain a governed ProductComponent, or should it be tracked only as
+    developer-tooling documentation outside the SDP's deployable-object
+    boundary?
+  status: open
+  reason: It was one of the six repos the Dev team asked to link, but it has no runtime placement to add to serviceGroups.
+  currentBestGuess: Keep it stubbed in the catalog but excluded from Ottoman SDP serviceGroups until the engineering leader confirms intent.
+  impact: Affects whether this component needs a runsOn/host resolution at all.
+  relatedObjects:
+  - ref: X5EM83VCQP-721F
+- id: secrets-hygiene-contrast-security
+  question: >-
+    plat-svc-domain and plat-svc-invitation both have a plaintext Contrast
+    Security API key and service key committed to source at
+    contrast_security.yaml. Is this a live credential, and should it be
+    rotated and removed from source control?
+  status: open
+  reason: Discovered during repository research; out of scope for the Draftsman to remediate directly.
+  currentBestGuess: Flag for the engineering leader and security team; do not treat as resolved until confirmed rotated/removed.
+  impact: Potential credential-exposure risk if the key is live.
+  relatedObjects:
+  - ref: 01KSM38KFW-WA83
+  - ref: 01KSM38KFX-ETDW
+- id: secrets-management-inconsistency
+  question: >-
+    Secrets are sourced three different ways across Ottoman first-party
+    services: AWS Secrets Manager via ExternalSecrets Operator (Invitation
+    Service, all five Passport monorepo apps), a plain Kubernetes Secret
+    manifest populated at deploy time by Codefresh (Organization Service),
+    and a Kubernetes Secret of unconfirmed upstream origin (Domain Service,
+    Platform Msvc Org Person). Should the platform standardize on one
+    mechanism?
+  status: open
+  reason: Discovered during repository research; a platform-wide standardization decision, not a per-component fix.
+  currentBestGuess: No standardization proposed yet; raise with the engineering leader.
+  impact: Affects secret-rotation consistency and audit posture across the platform.
+  relatedObjects:
+  - ref: 01KSM38KFW-WA83
+  - ref: 01KSM38KFX-ETDW
+  - ref: 01KSM38KFX-DQGA
+  - ref: 01KSM38KFH-NYK5
+- id: jira-tracking-non-standard-tech
+  question: >-
+    L1 architecture maturity requires every non-standard technology choice to
+    have a Jira tracking item (target dates not required at L1). Four
+    non-standard choices are documented in the catalog with no linked ticket:
+    (1) Node.js 24 in active use platform-wide vs. the preferred Node.js 22
+    baseline, (2) Kubernetes 1.31 on ottm-prod pending the approved N-1
+    rolling upgrade, (3) the ConfigCat direct-call pattern bypassing the
+    Platform Feature Flag Service (confirmed in Domain, Invitation,
+    Organization, and OrgPerson Service), (4) Ottoman Load Test's upgrade
+    path off EOL Node.js 14 (see product-component-ottoman-load-test.yaml
+    architectureNotes.upgradePathUpdate — path itself is now also unconfirmed).
+  status: open
+  reason: >-
+    A Ottoman developer confirmed 2026-08-04 that no ticket exists for
+    items 1, 3, or 4, and none is known for item 2 (developer's guess: owned
+    jointly by OPS and Identity teams, unconfirmed). Not this developer's area
+    to open tickets on OPS's/Identity's behalf.
+  currentBestGuess: Tickets need to be opened; ownership for the K8s N-1 item needs confirmation from OPS/Identity leadership.
+  impact: Blocks the "non-standard technology choices tracked in Jira" L1 maturity criterion until tickets exist and are linked back into the catalog.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+  - ref: 01KSM38KFW-WA83
+  - ref: 01KSM38KFX-ETDW
+  - ref: 01KSM38KFX-DQGA
+  - ref: 01KSM38KFH-NYK5
+  - ref: 01KZ2MRPH7-10AD
+- id: lambda-shutdown-plan
+  question: Is Platform Msvc Org Person's parallel AWS Lambda deployment path (serverless.yaml) live or dead code?
+  status: answered
+  reason: >-
+    A Ottoman developer confirmed 2026-08-04 that the Data/AI team plans to
+    shut it down within the next couple of weeks (target: mid-to-late August
+    2026). Recorded on the ProductComponent as architectureNotes.lambdaShutdownPlan.
+  currentBestGuess: EKS is the sole authoritative deployment path once the Data/AI team completes the Lambda shutdown.
+  impact: No catalog action needed now; revisit after the shutdown to remove the serverless.yaml path from architectureNotes.failureDomain if confirmed complete.
+  relatedObjects:
+  - ref: 01KSM38KFH-NYK5
+- id: operational-resilience-gaps
+  question: >-
+    Several resilience gaps surfaced during repository research: Invitation
+    Service and Organization Service both have graceful-shutdown hooks either
+    disabled or never wired despite a configured terminationGracePeriodSeconds;
+    Platform Msvc Org Person has no PodDisruptionBudget at all (unlike its
+    NestJS siblings) and no app-level SIGTERM handler; Sofa King Admin BFF's
+    /health check does not cover Passport Core or Invitation Service despite
+    depending on both; Organization Service runs LOG_LEVEL=debug in
+    production. Should these be tracked as a remediation backlog?
+  status: open
+  reason: Discovered during repository research; requires engineering-leader/platform-team prioritization.
+  currentBestGuess: Track as a follow-up backlog item rather than blocking this catalog pass.
+  impact: Operational maturity gaps that do not block cataloging but affect production resilience.
+  relatedObjects:
+  - ref: 01KSM38KFX-ETDW
+  - ref: 01KSM38KFX-DQGA
+  - ref: 01KSM38KFH-NYK5
+  - ref: 01KSM38KFW-W42S
+- id: owning-team-and-contacts
+  question: Which team owns Ottoman and what are the primary operational contacts?
+  status: open
+  reason: The user-provided source notes explicitly state that owning team and contacts are not formally declared.
+  currentBestGuess: Cloud Architecture is the drafting owner only, not necessarily the runtime owner.
+  impact: SDM and generated runtime stubs may need owner metadata once the accountable team is confirmed.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: eks-node-sizing
+  question: What EKS node groups, instance types, and sizing policies are used by Ottoman?
+  status: open
+  reason: Specific EKS node types and instance sizes were marked TBD in the source material.
+  currentBestGuess: Use the existing standard EKS host RBB until sizing details are confirmed.
+  impact: Host-level capacity, cost, and failure-domain modeling may need refinement.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: observability-details
+  question: What dashboards, alerting thresholds, and lower-level observability artifacts should represent Prometheus and Velero now that Fluent Bit is modeled as the central logging forwarder?
+  status: open
+  reason: The source names these components but does not provide full operational detail for Prometheus or Velero.
+  currentBestGuess: Use the central logging standard for Fluent Bit and keep Prometheus and Velero as SDM-level interactions until reusable standards are created.
+  impact: Observability remains less precise than the lowest-responsible-level modeling rule prefers.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: runbooks
+  question: Where are the runbooks for authentication outage, mesh connectivity, and deployment failure?
+  status: open
+  reason: Runbooks were explicitly marked TBD in the source material.
+  currentBestGuess: No runbook-backed operational decision is recorded yet.
+  impact: Operational readiness and control implementation evidence may remain incomplete.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: gateway-endpoints
+  question: What are the specific production gateway URLs and service endpoints?
+  status: open
+  reason: The source material marks the gateway URLs and service endpoints as TBD.
+  currentBestGuess: Preserve VPC and regional placement but omit concrete endpoints.
+  impact: Traffic-path review may need endpoint-level updates later.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: tenancy-model
+  question: How is tenancy implemented across Ottoman services, including logical separation and data partitioning?
+  status: open
+  reason: Tenancy implementation details were explicitly marked TBD in the source material.
+  currentBestGuess: Treat Ottoman as a shared platform dependency until data partitioning details are confirmed.
+  impact: Data classification, failure-domain, and compliance evidence may need revision.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: document-database-selection
+  question: Is OrgPerson Service backed by MongoDB Atlas, AWS DocumentDB, or another MongoDB-compatible service?
+  status: answered
+  reason: >-
+    Repository discovery on msvc-org-person (2026-08-03) found a
+    mongodb+srv:// SRV connection string against a .mongodb.net cluster and
+    an explicit ATLAS: true config flag in src/connection.js — conclusive
+    evidence of MongoDB Atlas, not AWS DocumentDB.
+  currentBestGuess: Platform Msvc Org Person (01KSM38KFH-NYK5) persists to MongoDB Atlas.
+  impact: Resolved — no new PaaS object needed; MongoDB Atlas is recorded directly on the ProductComponent's architectureNotes.persistence.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+  - ref: 01KSM38KFH-NYK5
+- id: mesh-component-cataloging
+  question: Should Kuma control planes and Envoy sidecars become reusable RBB or ABB objects?
+  status: answered
+  reason: Kong Mesh Service (01KYAXMZ7H-KJT2) now models Kuma control planes and injected Envoy data planes as reusable internal components.
+  currentBestGuess: Reference the Kong Mesh network service from the Ottoman SDP and do not duplicate Kuma or Envoy as external interactions.
+  impact: The Gateway & Service Mesh tier now satisfies lowest-responsible-level modeling for the service-mesh path.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+assumptions:
+- id: use-existing-kong-rbb
+  statement: The SDM reuses rbb.service.gateway.kong as the closest current catalog object for Ottoman Kong Gateway.
+  rationale: The catalog already has a Kong Gateway service RBB, while Ottoman-specific Kong/Kuma/Envoy mesh objects do not exist yet.
+  impact: Kong runtime substrate and hybrid-mode details may need a dedicated RBB later.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+  - ref: 01KQQ5JT1E-SW3X
+- id: stub-first-party-components
+  statement: First-party Ottoman components are created as product-service RBB stubs so the SDM can reference runtime-behavior components directly.
+  rationale: The source material identifies distinct APIs, BFFs, platform services, and Lambda functions with separate operational behavior.
+  impact: Owner, runtime sizing, dependencies, and control evidence should be filled in during follow-up interviews.
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+nextSteps:
+- id: confirm-runtime-ownership
+  action: Confirm Ottoman owning team, escalation contacts, and whether Cloud Architecture should remain the catalog owner.
+  status: open
+  owner: cloud-architecture
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: resolve-document-db
+  action: Confirm whether OrgPerson Service uses MongoDB Atlas, AWS DocumentDB, or another MongoDB-compatible service.
+  status: open
+  owner: platform-sre
+  relatedObjects:
+  - ref: 01KSM38KFX-9EQ8
+- id: add-mesh-runtime-objects
+  action: Decide whether to add reusable ABB/RBB objects for Kuma control planes and Envoy sidecar proxies.
+  status: done
+  owner: cloud-architecture
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+  - ref: 01KYAXMZ7H-KJT2
+- id: add-observability-runtime-objects
+  action: Decide whether Prometheus and Velero should become reusable standards or remain Software Deployment Pattern implementation notes.
+  status: open
+  owner: platform-sre
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: confirm-runbooks-and-alerts
+  action: Link runbooks, dashboards, and alert thresholds for authentication outage, mesh connectivity, and deployment failure.
+  status: open
+  owner: platform-sre
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: engineering-leader-review
+  action: >-
+    Bring the remaining open questions to the Ottoman engineering leader:
+    Plat Ottoman Core catalog scope, Contrast Security secrets-hygiene
+    finding, secrets-management inconsistency across services, and the
+    operational-resilience gap list. (Org-person repo consolidation and
+    standalone-repo staleness were answered directly by a Dev-team developer
+    on 2026-08-04 — see resolved questions above.)
+  status: open
+  owner: jordan-hale
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+  - ref: X5EM83VCQP-721F
+- id: open-jira-tickets-non-standard-tech
+  action: >-
+    Open (or link existing) Jira tickets for the four non-standard technology
+    choices with no current tracking item: Node.js 24 vs. preferred Node.js
+    22, Kubernetes 1.31 N-1 upgrade, the ConfigCat direct-call pattern, and
+    Ottoman Load Test's Node.js 14 upgrade path.
+  status: open
+  owner: ottoman-platform-engineering
+  relatedObjects:
+  - ref: 01KSM38KG2-ZB6W
+- id: confirm-customer-data-platform-orgperson-target
+  action: >-
+    Ask the Customer Data Platform team to confirm whether
+    relationship-customer-profile-orgperson-worker-syncs-to-ottoman-orgperson.yaml
+    should be repointed from the now-retired 01KSM38KFX-9EQ8 to
+    01KSM38KFH-NYK5. Done 2026-10-20: the Shared Customer Record team removed the
+    worker and that relationship (ADR-006) and added a Customer Profile API
+    relationship to 01KSM38KFH-NYK5.
+  status: done
+  owner: jordan-hale
+  relatedObjects:
+  - ref: 01KSM38KFX-9EQ8
+  - ref: 01KSM38KFH-NYK5
+primaryObjectUid: 01KSM38KG2-ZB6W

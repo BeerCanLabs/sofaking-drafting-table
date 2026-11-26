@@ -1,0 +1,73 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-737K
+type: runtime_service
+ownerRole: engineer
+name: JasperSoft Reporting Service
+description: 'Per-region JasperSoft reporting service for RT-ERP. The cloud deployment runs as an ECS service on EC2-backed cluster capacity and includes Jasper web application, PostgreSQL repository, ActiveMQ, and buildomatic container roles.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - service
+  - reporting
+  - jaspersoft
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-KJHA
+primaryTechnologyComponent: 01KQQ5JT1R-T40D
+architectureNotes:
+  serviceAuthentication: 'Jasper administrative access and region datasource authentication are configured per region. Database access uses the provisioned JDBC datasource identity.
+
+    '
+  serviceLogging: 'Container and ECS service telemetry is sent to CloudWatch; Jasper application logs are available to the region logging and troubleshooting workflow.
+
+    '
+  healthWelfareMonitoring: 'ECS task state, ALB health checks, CloudWatch telemetry, and Nagios checks monitor the per-region Jasper service.
+
+    '
+  secretsManagement: 'Jasper administrative and datasource credentials are stored in the approved secret-management workflow and injected into region configuration; credentials are not committed to container images.
+
+    '
+  availabilityModel: 'The documented cloud baseline uses a single desired task for the active Jasper service version. ECS replaces a failed task, but this baseline is not represented as active-active high availability.
+
+    '
+  scalabilityModel: 'Jasper and Jasper 9 are separate ECS service definitions and can coexist during migration. A representative production cluster showed Jasper 9 at one running task and the legacy Jasper service retained separately. Desired count or EC2 capacity can be changed operationally, but horizontal Jasper scaling is not claimed without validating repository storage and session behavior.
+
+    '
+  recoverabilityModel: 'ECS replaces failed tasks from versioned images. Repository recovery follows the documented workflow that stops Jasper capacity, restores the EFS-backed PostgreSQL repository, and restarts the service.
+
+    '
+  failureDomain: 'Scoped to the Jasper ECS service and repository storage for one region environment.
+
+    '
+  deploymentModel: 'Per-region ECS services on the Amazon ECS Standard Container Host. Legacy Jasper and Jasper 9 service definitions may coexist during migration; AWS Fargate is not used.'
+  containerRoles: 'Jasper web application, PostgreSQL repository, ActiveMQ, and buildomatic. Jasper 9 templates also support an RDS-backed repository migration path.'
+  sourceDocumentation: 'https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19112059945 and https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211'
+internalComponents:
+  - ref: 01KQQ5JT02-KJHA
+    role: host
+  - ref: 01KQQ5JT1R-T40D
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJEQ-EXVC
+    key: serviceAuthentication
+  - ref: 01KT16XJEQ-EXVC
+    key: secretsManagement
+  - ref: 01KT16XJEQ-EXVC
+    key: serviceLogging
+  - ref: 01KT16XJEQ-EXVC
+    key: availabilityModel
+  - ref: 01KT16XJEQ-EXVC
+    key: scalabilityModel
+  - ref: 01KT16XJEQ-EXVC
+    key: recoverabilityModel
+  - ref: 01KT16XJEQ-EXVC
+    key: failureDomain
+  - ref: 01KQQ5JT02-T523
+    key: deploymentModel

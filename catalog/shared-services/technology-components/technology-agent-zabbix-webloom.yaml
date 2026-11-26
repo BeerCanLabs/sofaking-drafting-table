@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KWF4MDGM-PQ49
+type: technology_component
+ownerRole: technology-admin
+name: Zabbix Agent - Webloom
+description: 'Zabbix monitoring agent used by the Webloom-local Zabbix monitoring deployment. Zabbix remains local to Webloom, and Webloom monitoring has mostly migrated to Nagios across SOM.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - monitoring
+  - zabbix
+  - webloom
+  - legacy
+vendor: Zabbix
+productName: Zabbix Agent
+productVersion: unknown
+classification: agent
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Exact Zabbix agent/server version and Webloom deployment topology require confirmation.
+capabilities:
+  - 01KQQ4Q026-98VD
+configurations:
+  - id: webloom-local-monitoring
+    name: Webloom Local Monitoring
+    description: Local Webloom Zabbix monitoring checks for host and service availability.
+    capabilities:
+      - 01KQQ4Q026-98VD
+    networkBindings:
+      - port: 10050
+        protocol: Zabbix
+        direction: inbound
+        description: Zabbix agent check endpoint on monitored Webloom Windows servers.

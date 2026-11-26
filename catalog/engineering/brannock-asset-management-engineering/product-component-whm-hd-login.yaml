@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-KKH6
+type: product_component
+ownerRole: engineer
+name: HelpDesk HHD_Login
+description: |
+  Angular single-page application that is the authentication entry point and
+  launch experience for the HelpDesk / GetHelp platform (HHD_Login). Handles
+  tenant-specific login and SSO redirect flows and routes authenticated users
+  into the correct downstream experience.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+- helpdesk
+- gethelp
+- whm
+- frontend
+- angular
+- ecs
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_HD_Login
+language: TypeScript
+classification: web-application
+runtimeRequirement: Containerized Angular SPA workload in the shared ECS environment.
+architectureNotes:
+  serviceAuthentication: HHD_Login supports tenant-specific SSO and non-SSO entry flows (SAML, Azure, Google, ClassLink, ADFS, Rapid Identity, OneLogin) and routes authenticated users into the correct experience.
+  configurationModel: Login runtime behavior is driven by environment-specific configuration externalized in Amazon S3 (login config).
+  serviceLogging: Frontend telemetry and request logging flow through Application Insights and the shared observability stack.
+  healthWelfareMonitoring: Synthetic checks plus Application Insights and CloudWatch-backed telemetry monitor the login experience.
+  availabilityModel: Runs as replicated ECS tasks behind the Imperva WAF web ingress path.
+  scalabilityModel: Scales horizontally within the shared ECS environment.
+  recoverabilityModel: Failed tasks are replaced by ECS service orchestration.
+  failureDomain: Scoped to the HelpDesk web/login tier of the GetHelp platform.
+  reconciliationNote: Promoted from repository-discovery stub to the canonical HelpDesk C2 container HHD_Login. Architecture qualities were migrated from the curated GetHelp current-state model (the retired collapsed 'GetHelp Frontend Web' component) to align the DRAFT model with the BRS "Infrastructure & Deployment Architecture" Confluence C2 diagram. Host corrected from EKS (repository-discovery guess) to the ECS current-state runtime.
+  repositoryName: BeerCanLabs/sk-WHM_HD_Login
+  observedRuntimeSignals: docker, dotnet, node, readme
+  observedManifestPaths: BrannockClientLogin/.vscode/launch.json; BrannockClientLogin/Dockerfile; BrannockClientLogin/HHD_Login.sln; BrannockClientLogin/Service References/Application Insights/ConnectedService.json; BrannockClientLogin/angular.json; BrannockClientLogin/e2e/tsconfig.e2e.json; BrannockClientLogin/package-lock.json; BrannockClientLogin/package.json; BrannockClientLogin/src/assets/config.json; BrannockClientLogin/src/tsconfig.app.json; BrannockClientLogin/src/tsconfig.spec.json; BrannockClientLogin/tsconfig.json
+notes:
+  background: "Canonical HelpDesk frontend container (HHD_Login). Originally discovered from read-only Sofa King GitHub repository tree signals; enriched from the curated GetHelp current-state model. No source file contents or secrets were copied into Draft."

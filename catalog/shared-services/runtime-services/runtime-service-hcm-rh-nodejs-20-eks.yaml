@@ -1,0 +1,88 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-EKJ2
+type: runtime_service
+ownerRole: technology-admin
+name: HCM RH Node.js 20 on EKS Application Runtime
+description: >-
+  Application runtime substrate for the HCM Recruiting & Hiring Next.js
+  applications. The HCM RH App containers run on Amazon EKS using the governed
+  Node.js 20 TechnologyComponent.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - runtime
+  - application
+  - nodejs
+  - nodejs-20
+  - eks
+  - hcm-rh
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1V-J38E
+architectureNotes:
+  minNodes: 2
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: >-
+    Ottoman authenticates requests and injects trusted user context before
+    traffic reaches the Next.js workloads.
+  secretsManagement: >-
+    Runtime configuration is injected through Kubernetes ConfigMaps and
+    secrets.
+  serviceLogging: >-
+    Server-side Next.js logs are emitted by the containers for collection by
+    the platform logging pipeline.
+  healthWelfareMonitoring: >-
+    Kubernetes liveness and readiness probes monitor each application
+    deployment.
+  availabilityModel: >-
+    The two Next.js applications use independent multi-replica Kubernetes
+    Deployments distributed across EKS worker nodes.
+  scalabilityModel: >-
+    Horizontal Pod Autoscalers scale the application deployments independently.
+  recoverabilityModel: >-
+    Stateless containers are restarted by Kubernetes and replaced when pods or
+    nodes fail.
+  failureDomain: >-
+    Failure is isolated to an application Deployment within the regional EKS
+    cluster.
+deploymentConfigurations:
+  - id: multi-replica-hpa
+    name: Multi-Replica Deployment with HPA
+    description: >-
+      Run each Next.js application as a multi-replica Kubernetes Deployment
+      with horizontal pod autoscaling.
+    addressesQualities:
+      - availability
+      - scalability
+  - id: kubernetes-self-healing
+    name: Kubernetes Self-Healing
+    description: >-
+      Use readiness and liveness probes so Kubernetes removes unhealthy pods
+      from service and replaces failed containers.
+    addressesQualities:
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KQQ5JT1V-J38E
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KYAVGDVV-18NV
+    key: serviceAuthentication
+  - ref: 01KYAVGDVV-18NV
+    key: secretsManagement
+  - ref: 01KYAVGDVV-18NV
+    key: serviceLogging
+  - ref: 01KYAVGDVV-18NV
+    key: healthWelfareMonitoring
+  - ref: 01KYAVGDVV-18NV
+    key: recoverabilityModel
+  - ref: 01KYAVGDVV-18NV
+    key: failureDomain

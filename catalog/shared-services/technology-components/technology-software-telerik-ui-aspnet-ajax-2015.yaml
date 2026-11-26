@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: TW69MZPMV6-PE36
+type: technology_component
+ownerRole: technology-admin
+name: Telerik UI for ASP.NET AJAX 2015.3
+description: Telerik UI for ASP.NET AJAX server control library used by WHM Display Materials Management for grids, date pickers, combo boxes, modal windows, async upload, and AJAX management. Deployed as Telerik.Web.UI.dll, Telerik.Web.UI.Skins.dll, and Telerik.Web.UI.Design.dll from the ThirdPartyControls\ vendor directory.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - whm
+  - telerik
+  - aspnet-webforms
+  - ui-controls
+  - third-party
+  - eol
+classification: software
+vendor: Progress
+productName: Telerik UI for ASP.NET AJAX
+productVersion: 2015.3.1111.40
+vendorLifecycle:
+  mainstreamSupportEnd: '2017-03-01'
+  extendedSupportEnd: '2018-03-01'
+  notes: Q3 2015 release (2015.3.1111). Progress Telerik mainstream support ended approximately 18 months post-release; extended support has also lapsed. This version is end-of-life. CVE-2019-18935 (critical RCE via deserialization in RadAsyncUpload) affects versions prior to 2020.1.114 — the Telerik.AsyncUpload.ConfigurationEncryptionKey and Telerik.Upload.ConfigurationHashKey settings in WebAppSettings.config must be set to unique random 64-character values per environment to mitigate. Current shipping version as of 2026 is approximately 2026.x; upgrade planning is documented in TrackwebIM-Telerik-Upgrade-Notes.md.
+notes: Used exclusively by BeerCanLabs/sk-WHM_IM (Trackweb ASP.NET WebForms application). Controls observed in use include RadGrid, RadComboBox, RadTextBox, RadDatePicker, RadWindow, RadAjaxManager, RadAjaxPanel, RadAsyncUpload, RadStyleSheetManager, RadToolTip, RadNumericTextBox, RadBinaryImage, and RadButton.

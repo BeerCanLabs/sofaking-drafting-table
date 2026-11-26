@@ -1,0 +1,67 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPH7-10AD
+type: product_component
+ownerRole: engineer
+name: Ottoman Load Test
+description: >-
+  A Ottoman product component used to generate load for platform performance
+  and capacity validation.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N014
+tags:
+  - ottoman
+  - product-component
+  - load-test
+  - kubernetes
+repoUrl: https://github.com/BeerCanLabs/sk-plat-ottoman-loadtest
+language: TypeScript
+classification: other
+runtimeRequirement: Node.js 14.15.0 on Amazon EKS (non-standard; end of life)
+runtimeSpec:
+  ports:
+    - number: 3050
+      protocol: TCP
+      direction: inbound
+architectureNotes:
+  evidenceSource: >-
+    Read-only Kubernetes observations from ottm-dev, ottm-stage, and ottm-prod
+    on 2026-07-31.
+  observedDeployment: >-
+    plat-ottoman-loadtest was observed only in production as a RollingUpdate
+    Deployment with zero desired replicas and image tag 0.0.34. No running pod
+    was available to verify sidecar injection or runtime behavior.
+  repositoryEvidence: >-
+    The default-branch package.json and Dockerfile both pin Node.js 14.15.0.
+    package.json identifies a TypeScript NestJS 7 application. The repository
+    URL was confirmed by the user on 2026-07-31.
+  nonStandardRuntime: >-
+    Node.js 14 reached end of life on April 30, 2023 and is outside the approved
+    preferred Node.js 22 baseline. The user directed that this component be
+    upgraded to Node.js 22. Node.js 14.15.0 remains the observed current state
+    until repository and deployment evidence confirm completion.
+  upgradeTarget: >-
+    Node.js 22 on the Ottoman EKS Application Runtime (01KZ2MRPHN-N022),
+    selected by the user on 2026-07-31.
+  upgradePathUpdate: >-
+    UNCONFIRMED, flagged 2026-08-04: a Ottoman developer (not the service
+    owner) believes this load-test service is being replaced with a K6-based
+    implementation, attributed to "Jessica," rather than upgraded in place to
+    Node.js 22. This would supersede the upgradeTarget above. Needs
+    confirmation from the actual owning team/individual before treating
+    either path as authoritative.
+  serviceAuthentication: Authentication behavior has not been confirmed.
+  secretsManagement: Secret delivery was not inspected during this review.
+  serviceLogging: Application log forwarding was not inspected during this review.
+  availabilityModel: >-
+    The production Deployment was intentionally or operationally scaled to zero;
+    activation and availability expectations have not been confirmed.
+  scalabilityModel: No confirmed HorizontalPodAutoscaler was observed.
+  recoverabilityModel: Recoverability requirements have not been confirmed.
+  failureDomain: >-
+    The Deployment exists in the production EKS environment, but no running
+    workload placement or component-specific zone policy was available.

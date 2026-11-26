@@ -1,0 +1,97 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-6CH6
+type: software_deployment_pattern
+ownerRole: engineer
+name: Salesdesk
+description: >-
+  Software Deployment Pattern for Salesdesk, covering the main SEMWeb3
+  case-management application and its companion parent-facing Household Portal.
+  Combined from two separate stubs discovered from the Pendo product list;
+  detail requires owner interview.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Salesdesk
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+aliases:
+  - Salesdesk - Households Portal
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - salesdesk
+  - cdp
+  - parents-portal
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+notes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: pendo-discovered
+  noApplicablePattern: Follows the Hosted Dedicated Windows and SQL Server Suite Reference Architecture, consistent with sibling Special Orders Management products (Trifold, Tailor, Corvid Intranet, Translation Direct).
+  deploymentTargets: >-
+    Hosted at the Grand Rapids data center (grr-datacenter). Corrected from an
+    earlier Pendo-discovered stub that incorrectly recorded Colohub/Zeeland
+    NY; corrected during the SE-SEM repository discovery session on
+    2026-07-28.
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  noAdditionalInteractions: External interactions require owner interview.
+  dataClassification: Data classification was not confirmed by owner interview.
+  failureDomain: Failure domain was not confirmed by owner interview.
+  noPatternDeviations: Pattern deviations require owner interview.
+  sourceRepositories:
+    - productService: 01KYMYCJTS-84Y4
+      repositoryName: BeerCanLabs/sk-SE-SEM
+      sourceRepository: https://github.com/BeerCanLabs/sk-SE-SEM
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: >-
+        ASP.NET MVC/WebForms hybrid, 100+ Forms.* plugin projects (CDP, BIP,
+        FBA, and similar), Telerik/RadControls (RCAJAX) document generation.
+    - productService: 01KYMYCJTS-KZRE
+      repositoryName: BeerCanLabs/sk-SE-SEM
+      sourceRepository: https://github.com/BeerCanLabs/sk-SE-SEM
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: >-
+        ASP.NET web application with a dedicated SEMData data-access project.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    substrate: 01KQQ5JT04-PGTY
+    deployableObjects:
+      - ref: 01KYMYCJTS-84Y4
+        diagramTier: presentation
+        networkZone: web
+        notes: SEMWeb3 — main CDP/BIP/FBA case-management application.
+      - ref: 01KYMYCJTS-KZRE
+        diagramTier: presentation
+        networkZone: web
+        notes: Salesdesk Household Portal — parent-facing companion to SEMWeb3.
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KYMYCJTS-JTNW
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          Dedicated SEM SQL Server database, shared by SEMWeb3 and the
+          Household Portal; not yet confirmed by owner interview.
+decisionRecords:
+  - ref: 01KT16XJ33-HW6Z
+    key: deploymentTargets

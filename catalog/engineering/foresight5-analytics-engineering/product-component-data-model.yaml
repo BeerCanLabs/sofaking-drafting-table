@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF4-DBPV
+type: product_component
+ownerRole: engineer
+name: Data Model
+description: 'Documentation for Sinet''s data models.  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: foresight5-analytics-engineering
+  contact: data-engineering-analytics-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- data
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-data-model
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-data-model
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: apis/manifest.json; apis/schema-delete--api-v1-mc-:mcId-assessors-:userId.json; apis/schema-delete--api-v1-mc-:mcId-collections-:collectionId.json; apis/schema-delete--api-v1-mc-:mcId-evidence-:evId-option-:optionId.json; apis/schema-delete--api-v1-mc-:mcId-evidences-:evidenceId.json; apis/schema-delete--api-v1-mc-:mcId-groups-:groupId.json; apis/schema-delete--api-v1-mc-:mcId-tags-:tagId.json; apis/schema-delete--api-v1-mc-:mcId.json; apis/schema-delete--api-v1-mc-evidences-:evidenceId-resources-:resourceId.json; apis/schema-get--api-v1-collections.json; apis/schema-get--api-v1-mc-:mcId-assessors.json; apis/schema-get--api-v1-mc-:mcId-collections.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

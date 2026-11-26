@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-Z16T
+type: relationship
+ownerRole: engineer
+name: Customer Membership Event Publisher → Okta
+description: >-
+  The Event Publisher Lambda obtains OAuth client-credentials bearer tokens
+  (scope plat.loveseat) from Okta to authenticate to Loveseat, using a dedicated Okta
+  client for membership. Per the membership spec; the Loveseat client and authority
+  values are still open.
+source: 01M5CS4D94-NXJ3
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - identity
+  - planned

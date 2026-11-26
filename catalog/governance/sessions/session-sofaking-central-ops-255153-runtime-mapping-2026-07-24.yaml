@@ -1,0 +1,172 @@
+schemaVersion: '1.0'
+uid: QKXP5RGT7A-H5DX
+type: drafting_session
+ownerRole: engineer
+name: Sofa King Central Compute and Runtime L1 Mapping (OPS-255153)
+description: >-
+  Closure work for OPS-255153, the Compute and Runtime L1 architecture review.
+  Maps the Sofa King Central Platform aggregate component to the governed
+  runtime_service objects for its hybrid runtime estate (previously only
+  referenced the EKS host), reconciles legacy .NET version gaps, and records
+  the risk/decision evidence needed to close the review.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - session
+  - sofaking-central
+  - ops-103072
+  - compute-and-runtime
+primaryObjectType: product_component
+primaryObjectUid: 01KQQ5JT0K-TN7W
+sourceArtifacts:
+  - name: OPS-255153 Compute and Runtime L1 review (Jira)
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-255153
+    notes: >-
+      Comments from Sean Holt (2026-07-15 through 2026-07-24) identifying
+      that the aggregate component only referenced the EKS host and listing
+      the remaining closure items.
+  - name: Team FC service inventory (Confluence)
+    type: documentation
+    location: https://sofaking-example.atlassian.net/wiki/spaces/DEV/pages/145790883/Team+FC
+    notes: >-
+      Confirms product contacts (Noah Pardee — Group Lead, Neil Lerner —
+      Product Owner) and the hybrid hosting mix cited in this session.
+  - name: Sofa King Central ECSands infrastructure code
+    type: source-repository
+    location: https://github.com/BeerCanLabs/sk-plat-infra-services-cicd/tree/main/Packer
+    notes: >-
+      Cloud Engineering Packer definitions for the Sofa King Central legacy
+      fleet select IDM-base-sk-2022 images and identify the operating system
+      as Windows Server 2022.
+generatedObjects:
+  - name: Microsoft .NET Framework 4.8
+    type: technology_component
+    status: created
+    ref: BMRKCQRYYP-PV6V
+  - name: Microsoft .NET Core Runtime 2.1
+    type: technology_component
+    status: created
+    ref: Q31NNG9J25-GQKG
+  - name: Microsoft .NET Core Runtime 3.1
+    type: technology_component
+    status: created
+    ref: 4PEF0MQPD9-ZMPW
+  - name: Microsoft .NET Runtime 5
+    type: technology_component
+    status: created
+    ref: 8HSAQJHAR3-TSZB
+  - name: Sofa King Central Platform → AWS Lambda Runtime
+    type: relationship
+    status: created
+    ref: 0XTZ1194M1-R2N0
+  - name: Sofa King Central Platform → Node.js Application Service
+    type: relationship
+    status: created
+    ref: QK4YPK6W7A-Q2FY
+  - name: Sofa King Central Platform → Redis Caching Service
+    type: relationship
+    status: created
+    ref: WQY367VZHG-VRSN
+  - name: Sofa King Central Platform → IIS Standard Web Service
+    type: relationship
+    status: created
+    ref: K0JG3TB3AH-4GY5
+  - name: Sofa King Central Platform — Legacy Runtime Version Risk
+    type: decision_record
+    status: created
+    ref: 2YPE08XABA-QDW5
+  - name: Sofa King Central Platform (runtimeRequirement confirmed, notes field renamed, decisionRecords linked)
+    type: product_component
+    status: created
+    ref: 01KQQ5JT0K-TN7W
+unresolvedQuestions:
+  - id: iis-ec2-variant-unconfirmed
+    question: >-
+      Which IIS/EC2 runtime service matches the current legacy fleet: IIS
+      Standard Web Service (existing-only, 01KQQ5JT1F-HZTZ) or IIS Web Service
+      on Windows Server 2016 (deprecated, 01KQQ5JT1F-JCA7)?
+    status: answered
+    reason: >-
+      Cloud Engineering's current Sofa King Central Packer definitions select
+      the IDM-base-sk-2022 base image and identify Windows Server 2022 as the
+      operating system.
+    currentBestGuess: >-
+      IIS Standard Web Service (01KQQ5JT1F-HZTZ) is the accurate relationship
+      target. The deprecated Windows Server 2016 variant does not apply.
+    impact: >-
+      The last runtime category is now structurally represented from the
+      aggregate Sofa King Central Platform component.
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+      - ref: K0JG3TB3AH-4GY5
+assumptions:
+  - id: runtime-categories-confirmed
+    statement: >-
+      Sean Holt's runtime category list (legacy .NET Framework/IIS on EC2,
+      .NET Core/.NET containers on EKS, SQS-triggered Lambda, Node.js, and
+      Redis/ElastiCache) was confirmed accurate by Noah Pardee (Group
+      Lead) on 2026-07-24, satisfying OPS-255153 closure item #1.
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+  - id: legacy-version-stubs-not-wired-to-shared-runtimes
+    statement: >-
+      The 4 new legacy TechnologyComponent stubs are referenced only via the
+      new decisionRecord, not via primaryTechnologyComponent on the shared
+      IIS/.NET Core Application Service runtime_service objects.
+    rationale: >-
+      Those runtime_service objects are shared infrastructure owned by
+      architecture-review-board and used by many other products; overwriting
+      their primaryTechnologyComponent to a single legacy version would
+      misrepresent every other consumer. The version gap is documented as a
+      decision/risk instead.
+    impact: >-
+      A future company-wide effort to version-pin shared runtime patterns per
+      consumer (or split them by version) would let this decision record be
+      superseded by a structural fix.
+    relatedObjects:
+      - ref: 2YPE08XABA-QDW5
+nextSteps:
+  - id: confirm-iis-variant-with-cloud-engineering
+    action: >-
+      Confirm with Cloud Engineering whether Sofa King Central's legacy
+      IIS/EC2 fleet runs the current or WS2016 pattern, then add the
+      corresponding relationship from Sofa King Central Platform.
+    status: done
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+      - ref: K0JG3TB3AH-4GY5
+  - id: rerun-validation-ops-293831
+    action: >-
+      Run python3 .draft/framework/tools/validate.py --workspace . after
+      adding the IIS Standard Web Service relationship.
+    status: done
+    owner: sofaking-central-engineering
+    relatedObjects:
+      - ref: 01KQQ5JT0K-TN7W
+  - id: update-ops-255153-status
+    action: >-
+      Post the resolved closure items and follow-up PR as a comment on
+      OPS-255153.
+    status: done
+    owner: sofaking-central-engineering
+resumptionContext:
+  jiraTicket: OPS-255153
+  confirmedBy: Noah Pardee (Group Lead), 2026-07-24
+  iisRuntimeService: IIS Standard Web Service (01KQQ5JT1F-HZTZ)
+  scopeDecision: >-
+    Scoped to the Sofa King Central Platform aggregate component only, per
+    Sean Holt's advisory that the 27 individually re-homed component stubs do
+    not need per-component runtime updates if the aggregate mapping covers the
+    L1 boundary.
+notes:
+  validationStatus: >-
+    Passed on 2026-07-24 using
+    python3 .draft/framework/tools/validate.py --workspace . after adding the
+    IIS Standard Web Service relationship.

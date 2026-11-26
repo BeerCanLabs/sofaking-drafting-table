@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYAVGDVV-D7YM
+type: relationship
+name: HCM RH Core → Loveseat Event Bus
+source: 01KSM38KG5-FBRT
+externalTarget: Loveseat Event Bus
+label: registers event subscriptions with
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - hcm-rh
+  - loveseat
+  - eventing
+notes: >-
+  HCM RH Core exposes and manages the environment-specific subscription
+  configuration Loveseat uses to route events to HCM RH services. Loveseat remains
+  an external target because no governed shared-service object exists yet.

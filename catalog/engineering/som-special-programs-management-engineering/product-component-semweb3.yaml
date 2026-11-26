@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KYMYCJTS-84Y4
+type: product_component
+ownerRole: engineer
+name: SEMWeb3
+description: >-
+  Main ASP.NET web application for Salesdesk (Custom Orders Manager) — the
+  region-facing CDP/BIP/FBA case-management product. Hosts 100+ Forms.*
+  plugin projects (Forms.CDP, Forms.BIP, Forms.FBA, Forms.FIE, and similar)
+  compiled into one deployed website. Discovered from the SEM/Websites/SEMWeb3
+  folder of the SE-SEM repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - salesdesk
+  - sem
+  - special-retail
+  - repository-discovery
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-SE-SEM
+language: C#
+classification: web-application
+notes:
+  sourceRepository: SEM/Websites/SEMWeb3
+  repositoryName: BeerCanLabs/sk-SE-SEM
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: >-
+    ASP.NET MVC/WebForms hybrid application referencing 100+ Forms.* plugin
+    projects (CDP, BIP, FBA, FIE, and other special-retail forms) and
+    Telerik/RadControls (RCAJAX) document-generation libraries. IIS-hosted;
+    no Dockerfile present.
+  observedManifestPaths: >-
+    SEM/Websites/SEMWeb3/SEMWeb3.csproj, SEM/Websites/SEMWeb3/packages.config

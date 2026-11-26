@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHE-HEZW
+type: relationship
+name: 'Platform Msvc Forminstance → AWS Simple Queue Service'
+catalogStatus: stub
+source: 01KSM38KFY-DZKV
+target: 01KQQ5JT05-0C4P
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: WorkflowInstance event log items to fc-forms-workflow-general and fc-forms-workflow-priority; DLQ fc-forms-workflow-dlq.

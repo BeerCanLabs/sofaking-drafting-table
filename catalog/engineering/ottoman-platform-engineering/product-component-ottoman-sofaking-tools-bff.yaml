@@ -1,0 +1,74 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-J6Z2
+type: product_component
+ownerRole: engineer
+name: Ottoman Sofa King Tools BFF
+description: 'Internal Ottoman management console BFF used for application and service registration, certification, organization management, and internal operations.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - bff
+  - internal-admin
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-passport-monorepo
+  runtimeRequirement: >-
+    The develop-branch app package and Dockerfile.plat-bff-sofaking-tools both
+    pin Node.js 24.14.1. The production image shares the monorepo release tag
+    observed across all five Passport workloads.
+  serviceAuthentication: >-
+    Same header-trust chain as Passport Core (shared UserContextMiddleware
+    from libs/plat-nestjs-components), plus an app-specific UserMiddleware
+    (apps/plat-bff-sofaking-tools/src/permissions/middleware/user.middleware.ts)
+    that builds req.user with a CASL (@casl/ability) AbilityFactory for
+    role-based access control. No direct Okta SDK dependency — Okta calls
+    appear delegated to Passport Core/Domain Service.
+  secretsManagement: >-
+    AWS Secrets Manager via ExternalSecrets Operator
+    (apps/plat-bff-sofaking-tools/cd/dev/es.yml), same pattern as Passport
+    Core but a smaller secret set (no TypeORM/Redis password — this app has
+    no database of its own).
+  serviceLogging: nestjs-pino + pino-http + pino-pretty, same pattern as sibling apps.
+  healthWelfareMonitoring: >-
+    /health/live, /health/ready, /health/startup are trivial (no local DB);
+    /health pings core-svc (Passport Core), domain-svc, and invitation-svc via
+    HttpHealthIndicator. A separate health-check-proxy module also exists,
+    presumably for the UI.
+  availabilityModel: 2 replicas, RollingUpdate maxUnavailable 0/maxSurge 50%. HPA min 2/max 4 (CPU 70%/mem 80%). PodDisruptionBudget maxUnavailable 1.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization.
+  recoverabilityModel: No circuit breaker or explicit retry logic found in this app; relies on the shared HTTP client stack from libs/plat-nestjs-components.
+  failureDomain: Scoped to the internal Ottoman administration tier.
+  dependencies:
+    - 01KSM38KFW-WA83
+    - 01KSM38KFX-ETDW
+    - 01KSM38KFH-NYK5
+    - 01KSM38KFX-DQGA
+    - 01KSM38KFX-9EHD
+  dependencyCorrection: >-
+    Confirmed via .env.example mesh URLs and health-check target that this
+    component calls Platform Msvc Org Person (01KSM38KFH-NYK5) and Passport
+    Core (01KSM38KFX-9EHD, via the /health "core-svc" ping). RESOLVED
+    2026-08-04: a Ottoman developer confirmed the legacy Ottoman OrgPerson
+    Service (01KSM38KFX-9EQ8) is retired — its repo no longer exists on
+    GitHub — so the prior ambiguity is closed.
+  unconfirmedDependencies: >-
+    Newly observed, not yet in the catalog: fc-msvc-list (LIST_SVC_BASE_URL),
+    Retail Institution API, Product Access Service, and an
+    Integrations service (INTEGRATIONS_SVC_BASE_URL) — all config-only in
+    this pass, source modules exist (src/identity-sources, src/salesforce,
+    src/vendor-integrations) but individual client calls were not traced.
+decisionRecords:
+  - ref: 01KT16XHPM-MX5F
+    key: runtimeRequirement

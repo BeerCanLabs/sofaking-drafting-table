@@ -1,0 +1,92 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-9EHD
+type: product_component
+ownerRole: engineer
+name: Ottoman Passport Core Service
+description: 'BFF and API service that serves migration flows and orchestrates invitation acceptance, health checks, and user migration workflows for Ottoman.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - identity
+  - passport
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-passport-monorepo
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-passport-monorepo
+  runtimeRequirement: >-
+    The develop-branch app package and Dockerfile.plat-passport-core both pin
+    Node.js 24.14.1. The production image shares the monorepo release tag
+    observed across all five Passport workloads.
+  serviceAuthentication: >-
+    Header-trust model, not self-issued JWT: shared middleware from
+    libs/plat-nestjs-components (UserContextMiddleware) parses Kong/Backplane-
+    signed headers (x-sk-userinfo, x-sk-impersonator, x-sk-idpuserid) into
+    req.userInfo; AuthProfileMiddleware then calls the gateway's
+    /!/authprofile/{personId} endpoint with a GATEWAY_API_TOKEN. Passport Core
+    additionally has direct Okta SDK usage (@okta/okta-auth-js,
+    @okta/okta-sdk-nodejs, src/common/services/okta.service.ts) and its own
+    guards: okta-request.guard.ts (validates an authorization_code header for
+    Okta event hooks), passport.guard.ts (requires req.userInfo),
+    application-management.guard.ts (gated by a ConfigCat flag).
+  secretsManagement: >-
+    AWS Secrets Manager via an ExternalSecrets Operator ExternalSecret
+    (apps/plat-passport-core/cd/dev/es.yml, ClusterSecretStore
+    aws-secret-manager) materialized into a Kubernetes Secret. Confirmed
+    secret keys: REDIS_AUTH_HOST/USERNAME/PASSWORD, CONFIGCAT_BASIC_AUTH_PASSWORD,
+    CONFIGCAT_SDK_KEY, GATEWAY_API_TOKEN, IDM_CLIENT_SECRET, OKTA_CLIENT_TOKEN,
+    TYPEORM_PASSWORD. Uses an IRSA-annotated ServiceAccount for AWS access.
+  serviceLogging: nestjs-pino + pino-http + pino-pretty (apps/plat-passport-core/src/common/logger/logger.module.ts), same redaction/correlation-ID pattern as sibling services.
+  healthWelfareMonitoring: >-
+    apps/plat-passport-core/src/health/health.controller.ts exposes
+    /health/live (trivial liveness), /health/ready and /health/startup
+    (Postgres ping), /health (Postgres + domain-svc + invitation-svc HTTP
+    pings), plus custom /health/resilience and /health/resilience/detailed
+    (circuit-breaker states) and /health/redis/cache-test. Kubernetes wires
+    startupProbe/readinessProbe/livenessProbe on container port 8005.
+  availabilityModel: >-
+    2 replicas, RollingUpdate maxUnavailable 0/maxSurge 50%, requests cpu
+    300m/mem 1024Mi, limits cpu 3000m/mem 2048Mi. HPA min 2/max 4 (CPU 70%/mem
+    80%). PodDisruptionBudget maxUnavailable 1.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization.
+  recoverabilityModel: >-
+    Has an actual circuit breaker — a @Resilient() decorator
+    (common/services/resilience.service.ts) wraps outbound calls to Domain,
+    Okta, Loveseat, and Organization services, with state exposed on
+    /health/resilience. This is more mature than its sibling services, none of
+    which have a circuit breaker.
+  failureDomain: Scoped to the Ottoman identity and migration workflow service tier.
+  dependencies:
+    - 01KSM38KFW-WA83
+    - 01KSM38KFX-ETDW
+    - 01KSM38KFH-NYK5
+    - 01KSM38KFX-DQGA
+    - 01KSM38KFW-W42S
+    - 01KQQ5JT1D-SHXD
+    - Loveseat platform event bus
+  dependencyCorrection: >-
+    ORGPERSON_SVC_BASE_URL resolves to a msvc-org-person-service mesh
+    hostname (apps/plat-passport-core/.env.example, cd/dev/cm.yml), i.e. this
+    component calls Platform Msvc Org Person (01KSM38KFH-NYK5). RESOLVED
+    2026-08-04: a Ottoman developer confirmed the legacy Ottoman OrgPerson
+    Service (01KSM38KFX-9EQ8, plat-svc-orgperson repo) is retired — its repo
+    no longer exists on GitHub — so the prior ambiguity is closed.
+  unconfirmedDependencies: >-
+    Newly observed and not yet in the catalog, config-only/not independently
+    code-confirmed in this pass: a Lambda helper (LAMBDA_URL), S3 (Salesforce
+    CSV import), Redis Cloud (session/cache), and the internal Wingman UI
+    tool.
+  persistence: Aurora PostgreSQL database passportcoreservice, schema passportcore.
+decisionRecords:
+  - ref: 01KT16XHQY-JRA1
+    key: runtimeRequirement

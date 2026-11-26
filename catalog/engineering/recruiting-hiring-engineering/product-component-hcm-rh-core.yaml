@@ -1,0 +1,140 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG5-FBRT
+type: product_component
+ownerRole: engineer
+name: HCM RH Core
+description: Central notification hub and cross-cutting concerns microservice managing multi-channel notifications (in-app, email), AWS SQS event consumption for job posting updates, notification templates, pending notification processing, organization setup orchestration, and Loveseat event subscription management
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KYAVGDVV-09RG
+tags:
+- recruiting-hiring
+- notifications
+- core-services
+- microservice
+- dotnet
+- event-driven
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-hcmrh-core
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: Notifications API
+  protocol: REST
+  endpoint: /api/{orgId}/notifications
+  authentication: oauth
+  description: Multi-channel notification CRUD
+- name: Notification Templates API
+  protocol: REST
+  endpoint: /api/{orgId}/notification-templates
+  authentication: oauth
+  description: Template management
+- name: Pending Notifications API
+  protocol: REST
+  endpoint: /api/process-pending-notifications
+  authentication: TBD
+  description: Scheduled notification processing
+- name: Organization Setup API
+  protocol: REST
+  endpoint: /api/organizations/{orgId}/setup-organization
+  authentication: oauth
+  description: Setup orchestration
+- name: Loveseat Subscriptions API
+  protocol: REST
+  endpoint: /api/events/subscriptions
+  authentication: TBD
+  description: Loveseat event subscription management
+- name: Health Check
+  protocol: REST
+  endpoint: /api/Health
+  authentication: TBD
+  description: MongoDB liveness probe
+- name: Readiness Check
+  protocol: REST
+  endpoint: /api/Ready
+  authentication: TBD
+  description: Readiness probe
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  description: connection string
+  required: true
+  sensitive: true
+- name: MongoDB__DatabaseName
+  description: database name
+  required: true
+  sensitive: false
+- name: ConnectionStrings__Redis
+  description: Redis connection
+  required: true
+  sensitive: true
+- name: AWS__Region
+  description: AWS region for SQS
+  required: true
+  sensitive: false
+- name: AWS__SQS__QueueUrl
+  description: SQS queue URL for job posting events
+  required: true
+  sensitive: false
+- name: PlatformNotificationService__Url
+  description: external notification platform
+  required: true
+  sensitive: false
+- name: JobPostingsService__Url
+  description: job postings service endpoint
+  required: true
+  sensitive: false
+- name: JobSeekerService__Url
+  description: job seeker service endpoint
+  required: true
+  sensitive: false
+- name: ConfigCat__SdkKey
+  description: feature flags
+  required: true
+  sensitive: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-hcmrh-core
+  observedRuntimeSignals: docker, dotnet, readme, terraform
+  observedManifestPaths: .vscode/launch.json; .vscode/tasks.json; Dockerfile; Hcmrh.Core.sln; cd/codefresh-deploy.yml; cd/demo/cm.yml; cd/demo/deploy.yml; cd/demo/hpa.yml; cd/demo/ingress.yml; cd/demo/process-pending-notifications.yml; cd/demo/service.yml; cd/dev/cm.yml
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (5 collections - core_notifications, core_notificationTemplates, core_pendingNotifications, core_failedNotifications, core_clientSetup)
+  caching: Redis distributed caching and output caching
+  eventConsumption: AWS SQS long polling (20s) for JobPostingUpdated events from SNS with DLQ after 5 retries
+  notificationChannels: InApp and Email with multi-channel support
+  htmlRendering: Razor.Templating.Core with CkEditor markdown compatibility
+  notificationFlow: API → NotificationService → PlatformNotificationService (HTTP) → HtmlContentBuilder → MongoDB → BackgroundNotificationService
+  externalIntegrations: PlatformNotificationService (external notification platform), JobPostingsService (HTTP), JobSeekerService (HTTP for goal matching)
+  serviceAuthentication: Ottoman trusted header (x-sk-userinfo); OAuth 2.0 for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs
+  healthWelfareMonitoring: Kubernetes liveness (MongoDB health) and readiness probes
+  availabilityModel: Multi-replica with HPA; rolling updates maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via K8s HPA; background SQS listener with long polling
+  recoverabilityModel: MongoDB automatic backups; SQS DLQ for failed events; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt, 90s total, 45s circuit breaker sampling
+  loveseatIntegration: Manages subscription endpoint for Loveseat event routing to other HCMRH services
+  loveseatSubscriptionManagement: Manages Loveseat subscription endpoint that returns environment-specific callback URLs for all HCMRH services. Configuration stored in LoveseatSubscriptions.json defines which services handle which event types with operation and constraint filters per environment.
+  loveseatSubscriptionEndpoint: /api/events/subscriptions (returns subscription configuration for Loveseat to route events to HCMRH services)
+  loveseatTotalSubscriptions: 7 subscriptions across 6 event types routing to 3 HCMRH services (Job Seeker 4 types, Job Postings 1 type, Organizations 2 types)
+  organizationSetup: Orchestrates multi-service organization initialization workflow
+  externalDependencies:
+    awsServices:
+      - name: SNS
+        purpose: Job posting events source
+      - name: SQS Queue
+        resource: notification-{env}-sqs-queue
+        purpose: Async message consumption with 20s long polling
+    internalPackages:
+      - Hcmrh.Logging (assumed based on pattern)
+notes:
+  background: "Production-ready central services hub managing all HCMRH notifications across channels. Consumes job posting events from SQS to trigger goal-matched notifications. Serves as Loveseat subscription registry for system-wide event routing. Orchestrates cross-service organization setup workflows. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

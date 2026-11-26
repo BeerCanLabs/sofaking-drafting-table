@@ -1,0 +1,123 @@
+schemaVersion: '1.0'
+uid: 01KRZX0C11-QH66
+type: runtime_service
+ownerRole: technology-admin
+name: Recliner .NET Core 8 on EKS Application Runtime
+description: |
+  Application runtime substrate for Project Recliner (National SOM). Hosts the
+  .NET Core 8 BFF and the eight first-party Recliner core microservices on AWS
+  EKS, with each microservice running as an independently scalable Kubernetes
+  Deployment. Recliner owns four environment-specific clusters: recliner-dev,
+  recliner-test, recliner-stage, and recliner-prod. This is the architecture-layer
+  execution environment for the Recliner ProductComponents.
+version: 1.2.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - runtime
+  - application
+  - dotnet
+  - dotnet-core-8
+  - eks
+  - recliner
+  - microservices
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1S-D14E
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  clusterInventory: |
+    Recliner owns one EKS cluster per environment in AWS us-east-1:
+    development = recliner-dev, test = recliner-test, stage = recliner-stage, and
+    production = recliner-prod.
+  deploymentMethod: |
+    ArgoCD GitOps reconciles Recliner Kubernetes manifests into the
+    environment-specific EKS clusters.
+  computeBoundary: |
+    Recliner application workloads in this runtime run on EKS. Recliner does not use
+    AWS Fargate, so no Fargate Host or RuntimeService belongs in the Recliner
+    deployment boundary.
+  productBoundary: |
+    Tiers of Intensity is modeled as a standalone SoftwareDeploymentPattern.
+    Its Lambda worker is not part of the Recliner runtime inventory.
+  serviceAuthentication: |
+    The BFF's public ingress is a dedicated internet-facing Traefik ALB (see
+    software_deployment_pattern 01KSM38KGH-A6GC edgeNetworkStrategy); no Kong
+    Gateway hop is evidenced ahead of it in the som-recliner repository's infra
+    code. Caller identity is derived application-side from Ottoman-issued
+    request context. The exact upstream token-validation boundary for that
+    public hostname is deferred pending SOM Recliner engineering confirmation.
+    In-cluster service-to-service traffic is documented as intending to use
+    the Platform Service Mesh, though mesh sidecar injection is currently
+    evidenced only for the recliner-loveseat-subscriber workload, not the BFF or
+    core services (see runtime notes and relationship 01KSKZV5ZK-7ZME).
+  scalingApproach: |
+    Each microservice runs as its own Kubernetes Deployment and scales
+    independently with a Horizontal Pod Autoscaler.
+  serviceLogging: Application logs are forwarded to centralized logging beyond the EKS host runtime.
+  healthCheck: Kubernetes readiness/liveness probes on a standard HTTP endpoint per service.
+  healthWelfareMonitoring: Pod readiness, platform monitoring (VictoriaMetrics), and APM telemetry track service welfare.
+  secretsManagement: Runtime secrets injected from centralized secret storage at pod start.
+  availabilityModel: |
+    Multi-replica Kubernetes Deployments per microservice, distributed across
+    EKS worker nodes and availability zones.
+  scalabilityModel: |
+    Horizontal Pod Autoscaler per service; each Recliner microservice scales
+    independently.
+  recoverabilityModel: |
+    EKS replaces failed pods automatically; node failures are handled by the
+    cluster autoscaler.
+  failureDomain: |
+    Workload failures are scoped to a single Recliner microservice Deployment.
+    Cluster-level failures are isolated to one environment-specific EKS
+    cluster.
+deploymentConfigurations:
+  - id: environment-cluster-boundaries
+    name: Environment-Specific Recliner EKS Clusters
+    description: |
+      Isolate development, test, stage, and production in the product-owned
+      recliner-dev, recliner-test, recliner-stage, and recliner-prod EKS clusters.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: per-service-autoscaling-group
+    name: Per-Service Kubernetes Autoscaling
+    description: |
+      Each Recliner microservice runs in its own Kubernetes Deployment and
+      Horizontal Pod Autoscaler so a hot service can scale independently.
+    addressesQualities:
+      - scalability
+      - availability
+  - id: service-mesh-participation
+    name: Platform Service Mesh Participation
+    description: |
+      Services join the Platform Service Mesh so that authenticated traffic flows
+      over a shared, secure network between Ottoman, BFF, Loveseat, and Recliner
+      backend services.
+    addressesQualities:
+      - availability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KQQ5JT1S-D14E
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJAT-51KQ
+    key: serviceAuthentication
+  - ref: 01KT16XJAT-51KQ
+    key: secretsManagement
+  - ref: 01KT16XJAT-51KQ
+    key: serviceLogging
+  - ref: 01KT16XJAT-51KQ
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJAT-51KQ
+    key: recoverabilityModel
+  - ref: 01KT16XJAT-51KQ
+    key: failureDomain

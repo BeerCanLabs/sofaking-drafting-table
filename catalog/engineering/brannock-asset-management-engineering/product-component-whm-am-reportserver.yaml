@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-XABQ
+type: product_component
+ownerRole: engineer
+name: Whm Am Reportserver
+description: Custom multi-tenant reporting service for Asset Management, built on GrapeCity ActiveReports (not SSRS) and hosted as an OWIN Web API on IIS. Renders per-region reports to PDF/CSV/XLS.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- whm
+- product-component
+- asset-management
+- reporting
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_ReportServer
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_ReportServer
+  observedRuntimeSignals: dotnet
+  observedManifestPaths: TrackwebIT.Cache.Service.Tests/TrackwebIT.Cache.Service.Tests.csproj; TrackwebIT.Cache.Service/TrackwebIT.Cache.Service.csproj; TrackwebITReports.ActiveReports/TrackwebITReports.ActiveReports.csproj; TrackwebITReports.Common/TrackwebITReports.Common.csproj; TrackwebITReports.Integration.Tests/TrackwebITReports.Integration.Tests.csproj; TrackwebITReports.Model/TrackwebITReports.Model.csproj; TrackwebITReports.Service/TrackwebITReports.Service.csproj; TrackwebITReports.Tests/TrackwebITReports.Tests.csproj; TrackwebITReports.sln; TrackwebITReports/Service References/Application Insights/ConnectedService.json; TrackwebITReports/TrackwebITReports.csproj
+  serviceAuthentication: 'Dual model. (a) OWIN JWT Bearer auth is wired up (app.UseJwtAuth), with JWT secret/issuer/audience pulled from a DB-backed Configuration table. (b) Controller-level authorization is a custom multi-tenant scheme (TrackwebAuthorize): reads domain and SessionID HTTP headers, looks up the tenant/host by domain, then validates the session ID against that tenant''s own database to resolve a User. A separate TrackwebSystemUserAuthorize allows a synthetic "System" user for system-to-system calls. HealthCheckController is explicitly [AllowAnonymous].'
+  secretsManagement: 'Database-backed configuration table (dbo.Configuration), not a vault. Seed scripts checked into the repo show plaintext secrets: JWT secret, AWS access/secret key pair for CloudWatch, and a Redis/ElastiCache endpoint. No AWS Secrets Manager/Key Vault usage found.'
+  serviceLogging: 'NLog, shipped to AWS CloudWatch Logs, configured dynamically at startup from the DB Configuration table (target/region/keys sourced from SQL). A LoggerService wraps NLog with process-timing around named operations. Correlation middleware propagates a CorrelationId header/Activity for distributed-trace correlation across requests.'
+  healthWelfareMonitoring: 'Explicit health endpoint: HealthCheckController at api/HealthCheck, [AllowAnonymous], returns {"Status":"OK"}. Application Insights is also wired in alongside CloudWatch logging.'
+  availabilityModel: 'IIS-hosted OWIN web app (classic ASP.NET on IIS) - consistent with the other AM C# services; no container/App Service artifacts found.'
+  scalabilityModel: 'Optional distributed cache via Redis/AWS ElastiCache, config-gated by a RedisCacheEnabled flag pointing at an ElastiCache endpoint. Dependency injection is per-request scoped (SimpleInjector), enabling stateless scale-out in principle.'
+  recoverabilityModel: 'Centralized error-handling middleware plus error-logging wrap-alls in the authorization filters log failures with stack traces. No explicit retry/circuit-breaker policy found beyond that.'
+  failureDomain: 'Multi-tenant by domain header - each tenant/region is resolved to its own database connection per request, so a single service instance serves many tenant databases; failure isolation is at the database-connection level per request, not per deployed instance.'
+  externalDependencies: 'GrapeCity ActiveReports v12 (custom reporting engine, not SSRS) rendering to PDF/CSV/XLS. Report output storage is config-driven: AWS S3 or local filesystem, selected via a StorageType DB config key. AWS CloudWatch (logging), Redis/ElastiCache (optional cache), Application Insights.'
+  primaryDataStores: 'SQL Server, per-tenant connection resolved dynamically via a Host table (database TrackwebReports plus each region''s own database); configuration/secrets also live in a SQL Server Configuration table.'

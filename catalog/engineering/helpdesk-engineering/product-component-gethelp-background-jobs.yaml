@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0M-PM3P
+type: product_component
+ownerRole: engineer
+name: GetHelp Background Jobs
+description: |
+  Lambda-backed asynchronous and scheduled processing for GetHelp, including
+  background jobs, integration processing, and other operational tasks that run
+  outside the primary ECS request path.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+  - gethelp
+  - lambda
+  - background-processing
+  - integration-processing
+  - product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  serviceAuthentication: Background jobs use AWS IAM roles and trusted service credentials to access GetHelp dependencies.
+  executionModel: Lambda provides the split execution model for background jobs, scheduled work, and integration processing outside the synchronous HHD_API request path.
+  secretsManagement: Job configuration and secrets are externalized through the shared environment configuration pattern.
+  serviceLogging: Function execution telemetry and job logs are forwarded to CloudWatch and the shared observability stack.
+  healthWelfareMonitoring: Invocation success rates, failure alarms, and function telemetry track job health.
+  availabilityModel: Lambda provides multi-AZ execution availability for asynchronous background processing.
+  scalabilityModel: Background jobs scale elastically through Lambda concurrency.
+  recoverabilityModel: Failed job invocations are retried and functions are redeployed from the coordinated release package when needed.
+  failureDomain: Scoped to the GetHelp background-processing workflow layer.
+  runtimeRequirement: AWS Lambda-based background execution supporting the shared GetHelp platform.
+decisionRecords:
+  - ref: 01KT16XHMT-37VV
+    key: runtimeRequirement

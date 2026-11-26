@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-X6MC
+type: technology_component
+ownerRole: technology-admin
+name: Apache Tomcat
+description: 'Open-source implementation of the Java Servlet, JavaServer Pages, Java  Expression Language and Java WebSocket technologies.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- java
+- application-server
+- middleware
+vendor: Apache Software Foundation
+productName: Tomcat
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source lifecycle.
+capabilities:
+- 01KT0V5MCV-RZV0
+configurations:
+- id: default-tomcat-listener
+  name: Default Tomcat Listener
+  description: Default Tomcat HTTP connector listener for application workloads.
+  capabilities:
+  - 01KT0V5MCV-RZV0
+  networkBindings:
+  - port: 8080
+    protocol: HTTP
+    direction: inbound
+    description: Default Tomcat HTTP connector listener.

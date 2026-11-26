@@ -1,0 +1,66 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-AXH7
+type: data_component
+ownerRole: engineer
+name: Platform Compliance Database
+description: >-
+  PostgreSQL schema and migrations for products, product-scoped policies,
+  immutable versioned compliance rules, and rule-validation audit runs. Rules
+  retain CEL source expressions and compiled ZEN decision models.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+runsOn: 01KY5775KP-YBP0
+targetEngine: postgresql
+dataClassification: internal
+containsPII: false
+tags:
+  - platform-compliance-engine
+  - postgresql
+  - compliance-rules
+  - data-component
+tables:
+  - name: product
+    description: Named products that own compliance policies.
+    containsPII: false
+    classification: internal
+  - name: policy
+    description: >-
+      Product-scoped compliance policies with descriptions and reference URLs.
+    containsPII: false
+    classification: internal
+  - name: rule
+    description: >-
+      Immutable rule versions containing CEL conditions, output decisions,
+      compiled ZEN models, policy ownership, lifecycle state, idempotency keys,
+      and audit metadata.
+    containsPII: false
+    classification: internal
+  - name: rule_validation_run
+    description: >-
+      Audit record for every rule evaluation, including evaluated context,
+      immutable rule version, match/result payloads, errors, performance, and
+      creation time.
+    containsPII: false
+    classification: internal
+retentionPolicy: Not defined in the repository or linked Jira architecture tickets.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+  sourceCommit: 5c391fbe3afc342f0d711e8c768684af9bd15b55
+  observedManifestPaths: >-
+    db/migrations/20260715000001_initial_schema.sql;
+    infra/k8s/migrate-job.yaml
+  classificationRationale: >-
+    The observed schema contains compliance configuration and audit metadata and
+    no explicitly named PII fields. The rule_validation_run.context_json column
+    accepts caller-supplied evaluation context, so Internal/no-PII remains
+    provisional pending owner confirmation of allowed inputs and Information
+    Security review.
+  databaseTargetRationale: >-
+    The repository uses PostgreSQL 16 for local development. OPS-362835 calls for
+    AWS RDS for PostgreSQL in deployed environments but does not identify engine
+    version, topology, backup policy, or final service configuration.

@@ -1,0 +1,72 @@
+schemaVersion: '1.0'
+uid: A167KVYYG2-X831
+type: decision_record
+name: Every Action Is Ticket-Bound (JSM Choke Point)
+aliases:
+- JSM Is the Sole Front Door (Choke Point)
+description: >
+  SUPERSEDED IN PART, 2026-08-04 -- see decision record 01KZ6K57W5-APKF ("The CCA
+  Console Is the Front Door; JSM Is the Governance Record"). The CHOKE POINT
+  principle below stands and is still in force: no service request, no execution.
+  The ENTRY POINT claim below -- "no direct API, no chat-only entry" -- is retired.
+  The requester enters through the CCA Console, which opens the governing service
+  request server-side under a scoped identity, so a run is ticket-bound without
+  the requester using the JSM portal. A conversational front end is therefore
+  correct architecture, not a control violation. Ratified by Leo Park (Lead
+  Architect); the original wording is retained below as the evidence of record for
+  the DRAFT 0.41 validation run. Renamed from "JSM Is the Sole Front Door (Choke
+  Point)" because that title was actively misleading; the prior name is preserved
+  in aliases.
+
+  ORIGINAL WORDING (retained, partly superseded): Every meaningful action in Cloud
+  Divan Academy originates from a Jira Service Management (JSM) service request.
+  There is no direct API, no chat-only entry, no admin shortcut. Plain language:
+  the only way to make CCA do anything is to file a ticket, like you would for any
+  other Sofa King service.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- adr
+- decision
+- cca
+- governance
+- jsm
+category: decision
+status: accepted
+affectedComponent: Z8ZEXRM11J-FGJ6
+decisionRationale: >
+  JSM forecloses roughly 80% of the "what if an agent goes rogue" objections
+  by structurally requiring that every action be ticket-bound, approvable,
+  cancellable, and auditable in a system Sofa King already trusts. The
+  alternative (a bespoke runtime API or chat trigger) would require us to
+  reinvent approval, audit, and identity-binding from scratch. JSM also
+  inherits Atlassian's existing access controls, which lowers the security
+  surface compared to a custom front door.
+impact: >
+  STILL IN FORCE: no JSM service request means no execution, and any execution path
+  that dispatches work without an associated service request is a control violation
+  and must be removed.
+
+  AMENDED 2026-08-04: the obligation to PRODUCE the request no longer falls on the
+  consumer. The Console opens it server-side on the requester's behalf. So the rule
+  is "a governing service request must exist before dispatch," not "the human must
+  file a ticket." The original wording below over-specified the mechanism.
+
+  ORIGINAL WORDING (retained): All consumers of CCA (humans, scripts, upstream
+  agents) must produce a structured request that becomes a JSM ticket. Any direct
+  execution path that bypasses JSM is a control violation and must be removed.
+mitigationPath: >
+  Continuous: monitor for any execution attempt that lacks a corresponding
+  JSM ticket reference in the PostgreSQL audit log. Treat as a control
+  failure if observed. This detection is unchanged by the 2026-08-04 amendment --
+  it tests for the ticket's existence, not for who created it, so it remains the
+  correct control for both the Console path and the JSM-portal path.
+relatedDecisionRecords:
+- 01KZ6K57W5-APKF
+- 62GNEE8S2T-W4GV
+- 4TG85QEKZ3-ZTFS
+- N0X30P3VJ7-42VK

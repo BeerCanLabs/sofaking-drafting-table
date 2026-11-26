@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01M12W6R3B-ZHCN
+type: relationship
+name: Digital Stores Imperva WAF → AWS Application Load Balancer
+catalogStatus: incomplete
+source: 01KQQ5JT1D-MY47
+label: forwards HTTPS to
+target: 01KQQ5JT04-P7QJ
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: >-
+  Imperva fronts inbound *.digital-showrooms.example traffic and forwards accepted HTTPS
+  traffic to the AWS Application Load Balancer. Reported by the workspace owner
+  on 2026-08-27; no infrastructure-as-code, AWS account, or region detail was
+  confirmed, so ALB placement remains open in DraftingSession 01M0GBWMZJ-8XYB.

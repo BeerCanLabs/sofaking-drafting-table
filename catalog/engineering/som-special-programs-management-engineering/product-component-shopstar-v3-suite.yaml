@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-HSPQ
+type: product_component
+ownerRole: engineer
+name: shopstar v3 Suite
+description: >-
+  Deprecated discovery-generated logical rollup retained for repository
+  provenance. It is not a separately deployed workload; the shopstar v3
+  Application is the main Java/Tomcat application, while Shopstar Account API and
+  Shopstar IDM Integration are separate deployed services.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+- java
+- tomcat
+- mysql
+- legacy
+- on-prem
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstar-v3
+classification: other
+runtimeRequirement: No standalone runtime; this logical rollup is superseded by the concrete deployed shopstar components.
+architectureNotes:
+  lifecycleRationale: >-
+    Deprecated on 2026-08-04 after product-owner confirmation that shopstar-v3 is
+    the main Java/Tomcat application and that shopstar-account-api and
+    shopstar-idm-integration are separately deployed services. This rollup must
+    not appear as an additional deployed Tomcat workload.
+  supersededBy: 01KSM38KGD-WYH7
+  technologyStack: Built on Java, Tomcat, and BIRT.
+  deploymentModel: >-
+    Production runs on VMware in GRR with non-production in High Point. The
+    current Tomcat estate uses GRRSHS3TC* Ubuntu 22.04 hosts with PRC, PRT, and
+    PRS role segmentation. Older RHEL/CentOS Tomcat inventories are historical
+    and are not asserted as current infrastructure.
+  tenancyModel: Shared state-aware Java codebase with region data isolated by orgID.
+  sourceEvidence: >-
+    Reconciled from the shopstar v3 source repository, sys-shopstar-terraform,
+    ansible_playbooks_sre, and current Confluence environment/server guides.

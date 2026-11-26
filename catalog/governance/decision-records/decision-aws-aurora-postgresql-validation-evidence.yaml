@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ58-DD9D
+type: decision_record
+name: AWS Aurora PostgreSQL Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT04-27EP
+linkedObject: 01KQQ5JT04-27EP
+decisionRationale: "resilienceModel: Aurora PostgreSQL is deployed as a managed multi-AZ database cluster with a production writer in us-east-1 and disaster recovery reader capacity in us-east-2 for Ottoman.\n\nconfigurableSurface: Cluster topology, parameter groups, endpoints, backup retention, encryption, and network access controls are customer-managed within AWS.\n\nfailureDomain: Scoped to the Aurora cluster, AWS account, VPC, and configured region."

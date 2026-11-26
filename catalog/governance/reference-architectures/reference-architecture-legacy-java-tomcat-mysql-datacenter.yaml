@@ -1,0 +1,59 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-JW5N
+type: reference_architecture
+name: Legacy Java Tomcat MySQL Datacenter
+description: Reference Architecture for legacy datacenter-hosted Java and Tomcat workloads with MySQL data services, message queues, reporting engines, and dedicated utility servers.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- legacy
+- java
+- tomcat
+- mysql
+- datacenter
+patternType: legacy-java-tomcat-mysql
+serviceGroups:
+- name: Web Application Tier
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT03-AQA9
+    diagramTier: presentation
+  - ref: 01KQQ5JT1E-9CDM
+    diagramTier: presentation
+  - ref: 01KQQ5JT00-Z6WV
+    diagramTier: utility
+- name: Print and Reporting Services
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT03-AQA9
+    diagramTier: application
+  - ref: 01KQQ5JT1F-V6XM
+    diagramTier: application
+- name: Database Tier
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT00-WKWF
+    diagramTier: data
+- name: Identity and Eventing
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT03-AQA9
+    diagramTier: application
+  - ref: 01KQQ5JT1E-JBCV
+    diagramTier: application
+- name: Legacy Utility Services
+  deploymentTarget: lsrcn-iaas
+  deployableObjects:
+  - ref: 01KQQ5JT03-BEFY
+    diagramTier: utility
+architectureNotes:
+  lifecycleRationale: Disinvest because the pattern resolves to end-of-support Technology Components, including Windows Server 2012 R2 and MySQL 8.
+  availabilityModel: Availability is primarily datacenter-local unless a product-specific DR design is documented.
+  modernizationModel: OS, runtime, build, and deployment modernization should be tracked as explicit migration work.
+  tenancyModel: Tenant and regional partitioning must be stated by product implementation.
+  patternRisks: Legacy operating systems, datacenter dependency, and limited geographic failover must be explicitly recorded.

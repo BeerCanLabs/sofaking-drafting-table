@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6G-KGEP
+type: data_component
+ownerRole: engineer
+name: Trifold CorvidSyncService Database
+description: >-
+  SQL Server database backing the Trifold Sync Service, holding customer
+  import batches, file configuration, business rule errors, and region
+  configuration used during bulk customer/region data import. Discovered
+  from the CorvidSyncServiceDB folder of the KIOTrifoldStandaloneApplication
+  repo (CorvidSyncService.sqlproj).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+targetEngine: mssql
+dataClassification: confidential
+containsPII: true
+tags:
+  - trifold
+  - cdp
+  - sif
+  - repository-discovery
+  - data-component
+repoUrl: TBD
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\CorvidSyncServiceDB"
+  repositoryName: KIOTrifoldStandaloneApplication
+  runsOnAssumption: >-
+    DataStoreService target assumed as SQL Server 2019 (existing-only),
+    consistent with the rest of the Trifold data tier; not yet confirmed
+    by owner interview.

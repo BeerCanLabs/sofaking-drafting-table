@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E9-93R0
+name: HelpDesk HHD_API → GetHelp Background Jobs
+catalogStatus: stub
+source: 01KSM38KFB-X6P1
+label: calls
+target: 01KQQ5JT0M-PM3P
+notes:
+  background: "HHD_API workflows invoke or coordinate Lambda-backed asynchronous processing via HTTPS."
+capabilities: []

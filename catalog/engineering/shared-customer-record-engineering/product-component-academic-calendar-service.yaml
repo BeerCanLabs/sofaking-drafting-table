@@ -1,0 +1,118 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR4-N2VN
+type: product_component
+ownerRole: engineer
+name: Academic Calendar Service
+aliases:
+  - Calendar Service
+  - ss-msvc-calendar
+description: >-
+  ASP.NET Core (.NET 10) HTTP API for the year-scoped calendar and time structure
+  of the Shared Customer Record: Calendar (with embedded CalendarDate), Session
+  (with embedded pricing-period links), and PricingPeriod. Reads and writes the
+  Academic Calendar DynamoDB store and exposes org- and store-year-scoped REST
+  endpoints with optimistic concurrency (If-Match / revision), soft-delete, and
+  in-service JWT scope authorization. Containerized and deployed on AWS EKS
+  (cluster le1). Change events are published outbound-only to Loveseat by the
+  Academic Calendar Event Publisher.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+runsOn: 01M5CS4D96-RT10
+language: C#
+classification: api-service
+runtimeRequirement: .NET 10
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - api-service
+  - dotnet
+  - eks
+  - product-component
+interfaces:
+  - name: Academic Calendar REST API
+    protocol: REST
+    path: /api/orgs/{orgId}/store-years/{year}/{calendars|sessions|pricing-periods}
+    authenticationModel: oauth
+    description: >-
+      Year-scoped CRUD for Calendar, Session, and PricingPeriod (list, create,
+      get, update, delete; PUT and DELETE require If-Match). Read-only
+      GET .../calendars/{calendarId}/dates/{date} for the embedded CalendarDate.
+      Scopes ss.calendar.read, ss.calendar.write, and ss.calendar.delete; deny by
+      default. Cursor pagination; RFC 9457 problem+json errors. Health probes at
+      /health/live and /health/ready are anonymous. Stage host
+      academic-calendar-stage.ss.sofaking.example.
+runtimeSpec:
+  ports:
+    - number: 8080
+      protocol: HTTP
+      direction: inbound
+      name: web
+      description: HTTP API listener (container and service port 8080).
+  dependencies:
+    - ref: 01M5CS4D93-EWK0
+      purpose: Primary persistence for calendar, session, and pricing-period data.
+      interface: DynamoDB table SS_Calendar_{Env}
+    - ref: 01KWF3RGCF-T2HM
+      purpose: The API is configured with SECRETS_NAMESPACE calendar/api/ (owner-confirmed it reads Secrets Manager); the calendar spec says only the publisher Lambda is granted GetSecretValue, so the API's grant is an open discrepancy.
+      interface: AWS Secrets Manager (namespace calendar/api/)
+environmentConfiguration:
+  - name: Aws__TableName
+    description: DynamoDB table name (SS_Calendar_{Env}); the spec's Aws__CalendarTableName is stale against the deployed ConfigMap.
+    required: true
+    sensitive: false
+  - name: Jwt__Authority
+    description: Okta authority used to validate bearer tokens (JWKS over HTTPS).
+    required: true
+    sensitive: false
+  - name: Jwt__Audience
+    description: Expected token audience.
+    required: true
+    sensitive: false
+  - name: SECRETS_NAMESPACE
+    description: Secrets Manager discovery prefix for the API (calendar/api/).
+    required: false
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+  repositoryName: BeerCanLabs/sk-ss-msvc-calendar
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (net10.0), docker, aspnet-core, dynamodb, aws-cdk, lambda
+  specification: >-
+    docs/architecture/calendar-service-spec.md (status Ready to build, 2026-07-30;
+    Jira TBSPS-5555 / TBSPS-4995). The repo CLAUDE.md still says "scaffold", which
+    is stale: controllers for Calendar, Session, and PricingPeriod exist.
+  entitiesOwned: >-
+    Calendar, CalendarDate (embedded in Calendar.dates[]), Session,
+    PricingPeriod, SessionPricingPeriodAssociation (embedded as
+    Session.pricingPeriodIds[]). Only Calendar, Session, and PricingPeriod are
+    items; the other two have no item and no GSI.
+  dataClassification: >-
+    Non-PII structural/reference data per the repo's data-classification.md. The
+    platform still treats all customer data as protected (defense in depth).
+  security: >-
+    In-service Okta JWT validation plus per-endpoint scope policies; FallbackPolicy
+    requires an authenticated user (identity only). Tenant binding is enforced at
+    the gateway via the org-prefixed key; no service mesh (diverges from
+    api-design.md). Audit logging via [AuditLog] on every action.
+  environments: >-
+    le1 cluster (EKS). Dev and stage sync automatically via ArgoCD
+    (le1.ss-msvc-calendar-{dev,stage}) from k8s-deployments; hosts
+    academic-calendar-{dev,stage}.ss.sofaking.example (Traefik ingress, paths
+    /api, /scalar, /openapi, and /health in dev). 1 replica, requests 100m/256Mi,
+    limits 800m/2048Mi. No prod overlay, VPC, or IRSA exists yet; production is
+    intended for Chaise. Kubernetes namespace is ss-msvc-calendar; CDK resources
+    use the calendar-* prefix.
+  referentialIntegrity: >-
+    No cross-service foreign keys; orgId and siteId are opaque in v1. Session
+    pricingPeriodIds are validated in-service against live PricingPeriods at the
+    same siteId. PricingPeriod delete returns 409 while referenced (GSI-2 lookup;
+    accepted eventual-consistency race, TBSPS-3340).
+  supportingLibraries: >-
+    Non-deployable projects in the same repo: Domain, Application, Infrastructure,
+    SecretsConfiguration. Canonical models are vendored from Util-SofaKingModels
+    (customer domain, CalendarType / SessionType / PricingPeriodType v01.00).

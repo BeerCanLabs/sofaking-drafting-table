@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZV-HCC9
+name: Central Logging Service → AWS OpenSearch Service
+catalogStatus: stub
+source: 01KQQ5JT1E-A6M5
+label: calls
+target: 01KQQ5JT05-2FWS
+notes:
+  background: "Managed OpenSearch domain used as the central log destination."

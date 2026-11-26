@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-PBRD
+type: product_component
+ownerRole: engineer
+name: CIS Util Salesbook Year End Reports
+description: Windows Service that runs Salesbook year-end reports, saving PDFs of data to the Document Vault before it is cleared out by the summer rollover process.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- salesbook
+- reporting
+- rollover
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-salesbook-year-end-reports
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a Windows Service running Salesbook year-end reports and saving PDFs to the Document Vault ahead of summer rollover data clearing. Depends on CIS Msvc Document Vault (or its retired predecessor, depending on when this service was last updated — needs confirmation).
+  repositoryName: BeerCanLabs/sk-cis-util-salesbook-year-end-reports
+  serviceAuthentication: AWS API Keys. Confirmed by product owner on 2026-07-31 — document publishers that write to the Document Vault use AWS API Keys.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

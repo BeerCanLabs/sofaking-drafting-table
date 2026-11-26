@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-FK72
+type: decision_record
+name: Scanning Server — Unintentional Single Instance
+description: 'The ABBYY FlexiScan scanning server is deployed as a single instance with no redundancy. This is not an intentional architectural decision.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- som
+category: risk
+status: open
+affectedComponent: 01KQQ5JT1F-1YGS
+impact: 'Loss of document scanning capability for all tenants in the affected SubEnvironment. SOM workflows requiring document capture would be blocked.
+
+  '
+mitigationPath: 'Evaluate whether ABBYY FlexiScan supports multi-instance deployment. If so, add a second instance behind a load balancer. If not, assess whether a cloud-native scanning alternative could provide built-in HA.
+
+  '
+linkedObject: 01KSM38KEX-R400

@@ -1,0 +1,55 @@
+schemaVersion: '1.0'
+uid: 01KYJEE22K-42CS
+type: product_component
+ownerRole: engineer
+name: Platform Compliance Database Migrator
+description: >-
+  One-shot Kubernetes Job that applies the repository-owned dbmate PostgreSQL
+  migrations before the Platform Compliance API rollout.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+runsOn: 01KQQ5JT02-75QN
+language: SQL
+classification: worker
+runtimeRequirement: dbmate 2 container image with the repository migrations baked into /db
+tags:
+  - platform-compliance-engine
+  - database-migration
+  - dbmate
+  - postgresql
+  - eks
+  - product-component
+environmentConfiguration:
+  - name: DATABASE_URL
+    description: PostgreSQL connection URL supplied by the compliance-db Kubernetes Secret.
+    required: true
+    sensitive: true
+  - name: DBMATE_NO_DUMP_SCHEMA
+    description: Prevents dbmate from writing a schema dump during the deployment job.
+    required: true
+    sensitive: false
+runtimeSpec:
+  dependencies:
+    - ref: 01KY5775KP-AXH7
+      purpose: Applies the versioned Platform Compliance Database schema before API rollout.
+      interface: PostgreSQL via dbmate
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+  repositoryName: BeerCanLabs/sk-platform-compliance-engine
+  sourceCommit: 5c391fbe3afc342f0d711e8c768684af9bd15b55
+  repositoryPrimaryLanguage: TypeScript
+  observedRuntimeSignals: >-
+    Kubernetes batch/v1 Job, dbmate 2, PostgreSQL, non-root security context,
+    RuntimeDefault seccomp, read-only root filesystem, no Kubernetes API token
+  observedManifestPaths: >-
+    infra/k8s/migrate-job.yaml; db/migrations/20260715000001_initial_schema.sql
+  sourceEvidence: >-
+    The checked-in manifest is a deployment skeleton: the delivery pipeline must
+    build an image containing db/migrations, replace the public-image placeholder,
+    run the Job to completion, and only then roll out the API. This component
+    remains incomplete until that image and pipeline are implemented.

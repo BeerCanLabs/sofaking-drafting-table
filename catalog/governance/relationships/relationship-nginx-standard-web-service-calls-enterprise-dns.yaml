@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV601-A6MP
+name: NGINX Standard Web Service → Enterprise DNS
+catalogStatus: stub
+source: 01KQQ5JT1F-7VJE
+label: calls
+externalTarget: Enterprise DNS
+notes:
+  background: "Service registration and name resolution for web endpoints."

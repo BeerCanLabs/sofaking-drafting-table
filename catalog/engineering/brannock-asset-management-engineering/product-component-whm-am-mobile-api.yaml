@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-D6MJ
+type: product_component
+ownerRole: engineer
+name: Whm Am Mobile API
+description: ASP.NET Web API backing the AM mobile app (01KSM38KFB-27S3) - handles mobile auth, asset scanning workflows, and SAP integration for mobile clients.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- whm
+- product-component
+- asset-management
+- mobile
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_Mobile_API
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_Mobile_API
+  observedRuntimeSignals: dotnet, github_actions, readme
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; TrackwebMobileSites.sln; TrackwebMobileSites_Logon.sln; TrackwebIT.Mobile.Api/HelpDesk.config.json; TrackwebIT.Mobile.Api/TrackwebIT.Mobile.Api.csproj; TrackwebIT.Mobile.Api/ar-webviewer-locale.json; TrackwebIT.Mobile.BL/TrackwebIT.Mobile.BL.csproj; TrackwebIT.Mobile.BL/ar-webviewer-locale.json; TrackwebIT.Mobile.DAL/TrackwebIT.Mobile.DAL.csproj; TrackwebIT.Mobile.Data/TrackwebIT.Mobile.Data.csproj
+  serviceAuthentication: 'Custom AES-encrypted bearer token in the Authorization header (not JWT/OAuth). A TrackwebAuthorize AuthorizeAttribute (TrackwebIT.Mobile.Security) AES-CBC-decrypts the header into a SecurityToken and checks ExpiresOn; token is minted/refreshed by TokenController. AES key/IV/keysize are stored in Web.config appSettings.'
+  secretsManagement: 'Plaintext secrets in config files, no vault: AES key/IV in Web.config; SAP integration credentials (SAPLogin/SAPPassword) in plaintext in Web.config; SQL Server credentials in plaintext in WebConnectionStrings.config.'
+  serviceLogging: 'NLog (TrackwebIT.Mobile.Log) - dual target: AWS CloudWatch Logs (log group AMIMMApplication, us-east-1) and a file-based fallback group (network share, falling back to local temp). Global API error/action logging filters wrap all controller actions.'
+  healthWelfareMonitoring: 'No dedicated /health endpoint; VersionController exposes assembly title/file version as a basic liveness/version probe. A separate TrackwebIT.Mobile.KeepAlive console tool periodically pings api/token as a warm-up/keep-alive pattern rather than true health monitoring.'
+  availabilityModel: 'IIS, deployed via MSDeploy/Web Deploy to named IIS servers (per-environment publish profiles: QA, Staging, Release, Dev) - classic IIS multi-environment topology, not containers/App Service.'
+  scalabilityModel: 'system.web/sessionState mode="InProc" in Web.config - in-process session state, not horizontally scale-out-ready by default (a comment in Web.config itself flags this: change to Custom session mode for multi-instance cloud deployment). CORS is wide open (AllowAllOriginsAllMethodsAndAllRequestHeaders).'
+  recoverabilityModel: 'Not explicitly defined in-repo (no retry/circuit-breaker library found); relies on IIS process recycling and the external KeepAlive pinger.'
+  failureDomain: 'Single IIS app per environment/region; connection string is per-region database, suggesting a single-tenant-per-deployment failure domain, consistent with 01KSM38KFB-QFJ1.'
+  externalDependencies: 'SAP via SOAP (basicHttpBinding: BasicHttpBinding_IAssetsService, BasicHttpBinding_ILocationsService, custom binding zbn_trackweb_asset_chg against SAP NetWeaver [PRO/010]) with Basic auth - same SAP integration pattern as 01KSM38KFB-QFJ1.'
+  primaryDataStores: 'SQL Server via ADO.NET/Entity Framework 6; per-region connection string (e.g. Initial Catalog=TrackwebTestPinecrestregion).'

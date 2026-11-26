@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYAFQQJB-V30V
+type: relationship
+name: Kong Gateway Service -> Sofa King Central Platform
+catalogStatus: incomplete
+source: 01KQQ5JT1E-SW3X
+label: routes requests to
+target: 01KQQ5JT0K-TN7W
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: Kong Gateway is confirmed in the Sofa King Central request path. Confirmed by Sofa King Central engineering; exact placement relative to the AWS ALB (before/after) is not modeled at L1.
+tags:
+  - sofaking-central-engineering
+  - kong
+  - api-gateway
+  - ingress

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZR-CG2P
+name: Node.js Application Service → Dynatrace Platform
+catalogStatus: stub
+source: 01KQQ5JT1E-W3TA
+label: calls
+externalTarget: Dynatrace Platform
+notes:
+  background: "Application performance and tracing telemetry."
+capabilities:
+- 01KQQ4Q026-98VD

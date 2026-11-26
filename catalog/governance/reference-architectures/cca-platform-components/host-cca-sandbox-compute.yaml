@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYWQZ7BS-61RJ
+type: host
+name: CCA Sandbox Compute (aws-us-east-1)
+description: >-
+  [INTENDED] Private in-VPC compute substrate that hosts the CCA control plane,
+  the sandboxed Divan execution runtime, and the in-VPC governance services
+  (safety layer and model gateway). Lives in the USE1-DEV-CCA-VPC
+  (vpc-704325323934be3a5, CIDR 10.203.8.0/22) in AWS account 151930920086,
+  us-east-1. Deny-by-default egress, no public inbound, no public SSH.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - sandbox
+  - aws-us-east-1
+  - intended

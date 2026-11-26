@@ -1,0 +1,242 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1H-B2YK
+type: software_deployment_pattern
+ownerRole: engineer
+name: Time & Attendance - Pattern
+aliases:
+  - Leave Time Software Deployment Pattern
+description: Repository-discovered Time & Attendance deployment-pattern stub. Production EKS-backed at-api-* and at-svc-* workloads are excluded because the product owner assigned them exclusively to Leave.
+version: 1.0.2
+catalogStatus: stub
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Leave & Time
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - repository-discovery
+  - leave-time
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Hosted at Grand Rapids Data Center (Grand Rapids MI). Sofa King-owned hardware, VMware.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only. The sourceRepositories list preserves original discovery provenance and is not evidence of product membership; production EKS-backed at-api-* and at-svc-* components were removed from this pattern after the product owner confirmed on 2026-08-04 that they belong exclusively to Leave.
+  sourceRepositories:
+    - productService: 01KQQ5JT07-SHEB
+      repositoryName: BeerCanLabs/sk-at-api-leavedashboard
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-leavedashboard
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-C0VC
+      repositoryName: BeerCanLabs/sk-at-api-adminuser
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-adminuser
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-KA0H
+      repositoryName: BeerCanLabs/sk-at-api-employee
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-employee
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-X9TJ
+      repositoryName: BeerCanLabs/sk-at-api-eventCalendar
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-eventCalendar
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-1XKD
+      repositoryName: BeerCanLabs/sk-at-api-integration-service
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-integration-service
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-J8YX
+      repositoryName: BeerCanLabs/sk-at-api-ivrvoiphandler-twilio
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-ivrvoiphandler-twilio
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, node, readme, terraform
+    - productService: 01KQQ5JT07-T07Z
+      repositoryName: BeerCanLabs/sk-at-api-PlatformSync
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-PlatformSync
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT07-Z0CX
+      repositoryName: BeerCanLabs/sk-at-api-PlatformSyncPublic
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-PlatformSyncPublic
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, node, readme
+    - productService: 01KQQ5JT07-MBWT
+      repositoryName: BeerCanLabs/sk-at-api-referencedata
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-referencedata
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-AB02
+      repositoryName: BeerCanLabs/sk-at-api-report
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-report
+      repositoryPrimaryLanguage: HCL
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-ZRAA
+      repositoryName: BeerCanLabs/sk-at-api-temp
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-api-temp
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT08-1NTW
+      repositoryName: BeerCanLabs/sk-at-msvc-canonicaleventpublisher
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-msvc-canonicaleventpublisher
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT08-K88Q
+      repositoryName: BeerCanLabs/sk-at-msvc-TwilioWebAgent
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-msvc-TwilioWebAgent
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT08-SY5W
+      repositoryName: BeerCanLabs/sk-at-svc-applicationusermodifiedprocessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-applicationusermodifiedprocessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT08-6C47
+      repositoryName: BeerCanLabs/sk-at-svc-CanonicalConsortiaEventProcessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-CanonicalConsortiaEventProcessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT08-0CE3
+      repositoryName: BeerCanLabs/sk-at-svc-CanonicalConsortiumUserEventProcessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-CanonicalConsortiumUserEventProcessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT08-RBP9
+      repositoryName: BeerCanLabs/sk-at-svc-CanonicalEmployeeEventProcessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-CanonicalEmployeeEventProcessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT08-XGZJ
+      repositoryName: BeerCanLabs/sk-at-svc-canonicaleventpublishing
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-canonicaleventpublishing
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-FSSB
+      repositoryName: BeerCanLabs/sk-at-svc-consecutivedaysanalyzer
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-consecutivedaysanalyzer
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-N5MJ
+      repositoryName: BeerCanLabs/sk-at-svc-consecutivedaysprocessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-consecutivedaysprocessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-XWPN
+      repositoryName: BeerCanLabs/sk-at-svc-consortiumuser-localstore
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-consortiumuser-localstore
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT09-GK9D
+      repositoryName: BeerCanLabs/sk-at-svc-ivrtts
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-ivrtts
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-2XXW
+      repositoryName: BeerCanLabs/sk-at-svc-OrgPersonProcessor
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-OrgPersonProcessor
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-2463
+      repositoryName: BeerCanLabs/sk-at-svc-platformuser-updatehandler
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-platformuser-updatehandler
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT09-WRHM
+      repositoryName: BeerCanLabs/sk-at-svc-platformusers-localstore
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-platformusers-localstore
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT09-45J2
+      repositoryName: BeerCanLabs/sk-at-svc-pushnotifications
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-pushnotifications
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT09-6DJG
+      repositoryName: BeerCanLabs/sk-at-svc-pushnotifications-deliveryfailure
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-pushnotifications-deliveryfailure
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT09-GQE3
+      repositoryName: BeerCanLabs/sk-at-svc-pushnotifications-enqueuing
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-pushnotifications-enqueuing
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+    - productService: 01KQQ5JT09-12K4
+      repositoryName: BeerCanLabs/sk-at-svc-pushnotifications-platformusercache
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-svc-pushnotifications-platformusercache
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme, terraform
+    - productService: 01KQQ5JT07-S7PT
+      repositoryName: BeerCanLabs/sk-AT-BasisObjects
+      sourceRepository: https://github.com/BeerCanLabs/sk-AT-BasisObjects
+      repositoryPrimaryLanguage: PowerShell
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT08-0GET
+      repositoryName: BeerCanLabs/sk-at-ivr-voip-spikes
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-ivr-voip-spikes
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: dotnet, readme
+    - productService: 01KQQ5JT08-BJD0
+      repositoryName: BeerCanLabs/sk-at-reactjs-eventCalendar
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-reactjs-eventCalendar
+      repositoryPrimaryLanguage: TypeScript
+      observedRuntimeSignals: docker, node, readme
+    - productService: 01KQQ5JT08-6Z4A
+      repositoryName: BeerCanLabs/sk-at-sandbox
+      sourceRepository: https://github.com/BeerCanLabs/sk-at-sandbox
+      repositoryPrimaryLanguage: C#
+      observedRuntimeSignals: docker, dotnet, readme
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Remaining Repository Discovered Services
+    deploymentTarget: grr-datacenter
+    notes: Production EKS-backed at-api-* and at-svc-* components are intentionally absent and are modeled in the Leave Management pattern. Placement of these remaining repository-discovered objects is still provisional.
+    deployableObjects:
+      - ref: 01KQQ5JT08-1NTW
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT08-K88Q
+        diagramTier: application
+        networkZone: web
+      - ref: 01KQQ5JT07-S7PT
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT08-0GET
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT08-BJD0
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT08-6Z4A
+        diagramTier: application
+        networkZone: data
+decisionRecords:
+  - ref: 01KT16XHE9-M1KC
+    key: deploymentTargets

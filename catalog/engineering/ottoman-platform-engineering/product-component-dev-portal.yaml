@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-33BQ
+type: product_component
+ownerRole: engineer
+name: Dev Portal
+description: Developer documentation for Sofa King customers and integrators. Maybe https://docs.sofaking.example one day?
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- dev
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-dev-portal
+language: Vue
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-dev-portal
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: ci/codefresh.yml; docsearch.config.json; package.json; src/data/doc-links.yaml; yarn.lock
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

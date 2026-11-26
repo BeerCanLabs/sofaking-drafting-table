@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT07-T07Z
+type: product_component
+ownerRole: engineer
+name: Leave API Platformsync
+description: API endpoints for use in syncing data from the system of record to our
+  DB
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-at-api-PlatformSync
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  runtimePlacement: Production Kubernetes manifests and Terraform establish Amazon EKS placement in AWS us-east-1; the product owner confirmed on 2026-08-04 that at-api-* and at-svc-* EKS workloads belong exclusively to Leave, not Time & Attendance.
+  repositoryName: BeerCanLabs/sk-at-api-PlatformSync
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; Sk.AT.PlatformSync.sln; at-api-platformsync.sln;
+    cd/codefresh-deploy-manual-branch.yml; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml;
+    cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/es.yml; cd/prod/ingress.yml; cd/prod/service.yml;
+    cd/qa/cm.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

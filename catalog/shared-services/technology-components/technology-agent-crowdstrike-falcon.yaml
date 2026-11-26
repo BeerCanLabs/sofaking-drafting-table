@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-32F0
+type: technology_component
+ownerRole: technology-admin
+name: CrowdStrike Falcon Agent
+description: Endpoint protection agent installed on supported hosts to enable the CrowdStrike platform.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- agent
+- security
+classification: agent
+vendor: CrowdStrike
+productName: Falcon
+productVersion: current
+platformDependency: external.security.crowdstrike-falcon-platform
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SaaS-delivered agent lifecycle is managed by the vendor platform.
+capabilities:
+- 01KQQ4Q026-JW52

@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KYQN2Z6F-F3XG
+type: decision_record
+name: Java Application Service on Amazon ECS Validation Evidence
+description: |
+  Accepted runtime decisions derived from the RT ERP CloudFormation templates,
+  deployment automation, and operational runbooks so DRAFT can trace the
+  EC2-backed ECS runtime to committed evidence.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - adr
+  - aws
+  - ecs
+  - ec2
+  - java
+  - rt-erp
+category: decision
+status: accepted
+affectedComponent: 01KYQN2WDV-223J
+linkedObject: 01KSM38KEY-JC4K
+decisionRationale: |
+  runtimeRequirement: RT ERP Java workloads run as Amazon ECS services on
+  EC2-backed ECS clusters; Fargate is not used.
+
+  serviceAuthentication: Product authentication remains with the deployed
+  component. Deployment automation assumes region IAM roles.
+
+  secretsManagement: Runtime parameters and sensitive configuration are
+  distributed through AWS Systems Manager and region deployment
+  configuration rather than container images.
+
+  serviceLogging: ECS telemetry is sent to CloudWatch and application logs may
+  be forwarded to centralized logging.
+
+  healthWelfareMonitoring: ECS desired-state reconciliation, ALB health checks,
+  CloudWatch, APM, and synthetic monitoring cover service welfare.
+
+  availabilityModel: Desired task count, ALB routing, and ECS replacement are
+  configured per region environment.
+
+  scalabilityModel: ECS desired counts scale tasks and the ECS capacity
+  provider scales its EC2 Auto Scaling Group. A representative production
+  region showed separate service roles with independently configured desired
+  counts, including idle batch services held at zero.
+
+  recoverabilityModel: ECS and Auto Scaling replace failed capacity;
+  CloudFormation and ECR provide repeatable rebuilds.
+
+  failureDomain: Each runtime is contained within one region environment's
+  AWS account and ECS cluster.
+
+  Evidence:
+  https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211
+  https://github.com/BeerCanLabs/sk-erp_cloudformation_ecs
+  https://github.com/BeerCanLabs/sk-erp-automation/tree/cf-update-pipeline-v2
+  AWS ECS console observation for lakerg-pd-ecs on 2026-07-29.

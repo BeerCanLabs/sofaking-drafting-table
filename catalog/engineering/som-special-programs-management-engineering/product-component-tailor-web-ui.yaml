@@ -1,0 +1,127 @@
+schemaVersion: '1.0'
+uid: W6N1TCS8DQ-2WMB
+type: product_component
+ownerRole: engineer
+name: Tailor Web and Comet Sites
+description: IIS-hosted Tailor tenant web sites and per-site Comet applications managed by the Tailor SRE playbook.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+runtimeRequirement: 'Microsoft IIS 10 and Tailor web application runtime; exact application framework version requires owner confirmation.'
+tags:
+  - tailor
+  - som
+  - iis
+  - web
+  - comet
+  - ansible-discovered
+  - aap-discovered
+repoUrl: TBD
+classification: web-application
+interfaces:
+  - name: Tenant web UI
+    protocol: other
+    path: /
+    authenticationModel: TBD
+    description: HTTP IIS website binding for tenant-specific Tailor hostnames.
+  - name: Comet application
+    protocol: other
+    path: /Comet
+    authenticationModel: TBD
+    description: Per-site Comet web application deployed under each Tailor IIS site.
+networkBindings:
+  - port: 80
+    protocol: HTTP
+    direction: inbound
+    description: IIS HTTP listener for Tailor tenant sites; F5 provides the external virtual-server boundary.
+runtimeSpec:
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: tenant-sites
+      direction: inbound
+      description: HTTP bindings generated for Tailor tenant hostnames.
+  dependencies:
+    - ref: 01KQQ5JT00-Z6WV
+      purpose: Receives load-balanced HTTP/HTTPS traffic from F5 BIG-IP.
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Reads and writes Tailor application data in SQL Server.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_web/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_web/vars/main.yml
+  deploymentEvidence: The Tailor web role creates IIS sites, matching app pools, Comet applications, and per-site VC3 Task View Scheduler Windows services from environment-specific site lists.
+  environmentModel: AAP confirms grr_prod and grr_uat web templates target GRR vmware. AAP confirms hpt_qa and hpt_stg web templates target HPT vmware. The role also defines hpt_dev, but no hpt-tailor-dev AAP template was found in the Tailor template search.
+  productionScale: AAP exposes production web templates for cluster_01 through cluster_05. cluster_06 and cluster_07 in the role vars are placeholders for future expansion.
+  uatScale: AAP exposes grr-tailor-uat-web-playbook with env grr_uat and cluster_01, mapping to the UAT web server pair in the role vars.
+  activeHostInventory:
+    production:
+      - cluster: cluster_01
+        aapTemplate: grr-tailor-prd-web-cluster_01-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_WEB_cluster_01
+        hosts:
+          - GRRTLRPRDWEB01
+          - GRRTLRPRDWEB02
+      - cluster: cluster_02
+        aapTemplate: grr-tailor-prd-web-cluster_02-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_WEB_cluster_02
+        hosts:
+          - GRRTLRPRDWEB03
+          - GRRTLRPRDWEB04
+      - cluster: cluster_03
+        aapTemplate: grr-tailor-prd-web-cluster_03-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_WEB_cluster_03
+        hosts:
+          - GRRTLRPRDWEB05
+          - GRRTLRPRDWEB06
+      - cluster: cluster_04
+        aapTemplate: grr-tailor-prd-web-cluster_04-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_WEB_cluster_04
+        hosts:
+          - GRRTLRPRDWEB07
+          - GRRTLRPRDWEB08
+      - cluster: cluster_05
+        aapTemplate: grr-tailor-prd-web-cluster_05-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_PRD_WEB_cluster_05
+        hosts:
+          - GRRTLRPRDWEB09
+          - GRRTLRPRDWEB10
+      - cluster: cluster_06
+        status: placeholder-future-expansion
+        provisioningHosts:
+          - GRRTLRPRDWEB11
+          - GRRTLRPRDWEB12
+      - cluster: cluster_07
+        status: placeholder-future-expansion
+        provisioningHosts:
+          - GRRTLRPRDWEB13
+          - GRRTLRPRDWEB14
+    uat:
+      - cluster: cluster_01
+        aapTemplate: grr-tailor-uat-web-playbook
+        inventoryLimit: Datacenters_GRR_vm_Tailor_2022_UAT_WEB
+        hosts:
+          - GRRTLRUATWEB01
+          - GRRTLRUATWEB02
+    hptNonProduction:
+      - environment: hpt_qa
+        aapTemplate: hpt-tailor-qa-web-playbook
+        provisioningTemplate: hpt-tailor-qa-web-vsphere
+        inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_WEB_QA
+        hosts:
+          - HPTTLRQAWEB01
+      - environment: hpt_stg
+        aapTemplate: hpt-tailor-stg-web-playbook
+        provisioningTemplate: hpt-tailor-stg-web-vsphere
+        inventoryLimit: Datacenters_Holland_vm_Development_KIO_Tailor_2022_WEB_STG
+        hosts:
+          - HPTTLRSTGWEB01
+  provisioningTemplateHostEvidence: grr-tailor-prd-web-vsphere includes GRRTLRPRDWEB01 through GRRTLRPRDWEB14. GRRTLRPRDWEB11 through GRRTLRPRDWEB14 are retained as cluster_06 and cluster_07 future-expansion placeholders because active playbook templates were not found for those clusters.
+  sharedContent: UAT and production use UNC-backed TailorWebFiles shares under grrtlrfs01; the file-server catalog object is not yet modeled.

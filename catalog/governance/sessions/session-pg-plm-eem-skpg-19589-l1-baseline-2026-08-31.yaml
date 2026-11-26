@@ -1,0 +1,889 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-0GSN
+type: drafting_session
+name: >-
+  Associate Development PLM/EEM — APEX L1 Baseline DRAFT Registration (SKPG-19589)
+description: >-
+  Registers Sofa King Associate Development's PLM (Professional Learning
+  Management) and EEM (Employee Evaluation Management) product in DRAFT for APEX
+  Turn 01 Architecture L1 Baseline. Establishes two SoftwareDeploymentPatterns —
+  a legacy estate (01M1F8WB4E-RWQB) and a cloud services tier (01M1F8WB4E-8WVS)
+  — catalogues the data stores, runtime services and edge dependencies that had
+  no objects, and records the non-standard technology choices. Dependency
+  evidence was gathered by reading the PLM/EEM repositories directly rather than
+  by owner interview, and in the third round by reading Sofa King's own
+  infrastructure documentation, so this session carries a substantial set of
+  unresolved questions. Per the DRAFT Architecture Maturity Rubric, explicitly
+  tracked unknowns do not block L1 Baseline; silently blank fields do.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - session
+  - associate-development
+  - plm
+  - eem
+  - draft-l1
+  - apex-turn-1
+  - maturity-rubric
+  - skpg-50273
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01M1F8WB4E-8WVS
+sourceArtifacts:
+  - name: SKPG-19589 — Register PLM/EEM with DRAFT
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/SKPG-19589
+    notes: >-
+      Spike under epic SKPG-97916 (APEX L1 Certification - PLM/EEM). Acceptance
+      criteria require a software_deployment_pattern defining components, all
+      service dependencies catalogued against Technology Components, a catalog
+      entry passing DRAFT validation, explicit ownership and service
+      boundaries, and non-standard technology recorded as decision records.
+  - name: APEX Sofa King Engineering Maturity Framework
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14499496223/
+    notes: >-
+      Turn 01 / Architecture L1 Baseline is the bar for this session. Criterion
+      5 requires a Jira tracking item for each non-standard technology choice,
+      which is stronger than the ticket's own acceptance criteria — see
+      unresolved question non-standard-tech-jira-items.
+  - name: PLM/EEM repositories
+    type: other
+    location: https://github.com/BeerCanLabs/sk-pg-msvc-plm-eem-api
+    notes: >-
+      Dependency evidence was read directly from the repositories, following
+      the precedent set by the Recliner L1 session (01KZ9NXCX5-3BT5) of treating
+      the repository as the source of truth. The production ConfigMap at
+      cd/prod-ottoman/cm.yml supplied the external-dependency, S3, DynamoDB,
+      and Step Function inventory; cd/*/ingress.yml confirmed the Traefik
+      ingress class; connection strings in STL-LDMS.Net, STL-LDMS-Legacy, and
+      STL-FORMIX supplied the SQL Server estate.
+  - name: PLM/EEM - Environment Guide
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/150348721/
+    notes: >-
+      Added in the third round. The single most productive source in this
+      session: its GRR Production Environment table carries an explicit F5 pool
+      column, which settled the legacy edge question, and OS versions, which
+      settled the Windows Server version question. Also identified AWSPGDB01S
+      as a stage host by its own naming convention, resolving the
+      grr-datacenter versus AWS contradiction. CAUTION: the page mixes eras -
+      its All Environment URLs table still gives production as "Rackspace
+      Physical", which the GRR server table contradicts. Cite the GRR table,
+      not that row. Last modified 2025-04-17 by a now-deactivated author, so
+      CloudOps should still countersign.
+  - name: PG - SQL Ola Hallengren Based Maintenance Plans
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/182420204/
+    notes: >-
+      Named the two production availability groups GRRPGPRDAG01 and
+      GRRPGPRDAG02 and their database inventories, confirming FORMIXFORMS is
+      co-located with STL, and documented the backup strategy for both data
+      store objects.
+  - name: PG Work Left for PG
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/17731178002/
+    notes: >-
+      Live page, 2026-02. Its PG pipeline inventory is the strongest single
+      piece of evidence that msvc-pg-forms is not in production, and it
+      surfaced both the in-flight Ottoman migration of the legacy estate and
+      the plm-Dashboard-BFF and Rubric Designer boundary question.
+  - name: All Products - Maintenance - GRR - Patching Guide
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15532384/
+    notes: Corroborating evidence for F5 in the GRR inbound path.
+  - name: PLM/EEM - 2/13 IDM Rollout
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/140681766/
+    notes: >-
+      Runbook showing web nodes being disabled from an F5 pool before LDMS
+      Legacy, LDMS .Net and FORMIX are deployed to them — the same three
+      components claimed by the legacy pattern.
+  - name: PG - DR Cut Over Plan (Master)
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/125014676/
+    notes: >-
+      Source for the manual, consent-gated database DR cutover recorded on the
+      data store objects. The page flags itself as needing updating.
+  - name: EEM - Mongo DB (SKPG-68686)
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/PRO/pages/14731244006/
+    notes: >-
+      Design sketch, not implemented. Records that FORMIXFORMS held roughly 1.8
+      million tables as of 2026-03-02 and that a Mongo-compatible direction is
+      under product consideration. Relevant context for the DocumentDB question
+      but not evidence of deployed architecture.
+  - name: DraftingSession — Project Recliner Turn 1 DRAFT L1 Baseline
+    type: catalog
+    location: 01KZ9NXCX5-3BT5
+    notes: >-
+      Used as the structural precedent for what an L1 Baseline session records
+      and how deferred questions are framed.
+generatedObjects:
+  - name: 'PG: PLM/EEM — Legacy Estate'
+    type: software_deployment_pattern
+    status: created
+    ref: 01M1F8WB4E-RWQB
+  - name: 'PG: PLM/EEM — Cloud Services'
+    type: software_deployment_pattern
+    status: created
+    ref: 01M1F8WB4E-8WVS
+  - name: PG STL SQL Server Database
+    type: data_store_service
+    status: created
+    ref: 01M1F8WB4E-MBKA
+    notes: >-
+      The PLM/EEM system of record had no object in the catalog before this
+      session. Hub-and-spoke topology recorded from connection-string evidence;
+      host, availability group, backup and DR posture added in the third round
+      from infrastructure documentation.
+  - name: PG FORMIXFORMS SQL Server Database
+    type: data_store_service
+    status: created
+    ref: 01M1F8WB4E-R0RG
+  - name: PG SQL Database Source
+    type: data_component
+    status: created
+    ref: 01M1F8WB4E-TGHY
+    notes: >-
+      The pg-sql repository was missed entirely by the repository-discovery
+      import and had no catalog object.
+  - name: PG PLM/EEM Legacy - External Dependencies
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-HK7Z
+  - name: PG PLM/EEM Legacy - Inter-Service Connections
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-7RGZ
+  - name: PG PLM/EEM Legacy - No Applicable Reference Architecture
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-B6GF
+  - name: PG PLM/EEM Cloud Services - External Dependencies
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-72BP
+  - name: PG PLM/EEM Cloud Services - Inter-Service Connections
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-7DRZ
+  - name: PG PLM/EEM Cloud Services - No Applicable Reference Architecture
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-AP1E
+  - name: PG PLM/EEM - New Relic Agent Is a Non-Standard Observability Choice
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-2ND0
+  - name: PG PLM/EEM Legacy - Classic ASP and a Non-Standard Build and Deploy Chain
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-XJM2
+    notes: >-
+      Widened in the third round from "Classic ASP and TeamCity" to include
+      Octopus Deploy and Chef, both evidenced in the Environment Guide and in
+      active use per OPS-94649 and OPS-18728.
+  - name: PG PLM/EEM - LaunchDarkly and Avalara Are Not in the Catalog
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-9C7X
+    notes: >-
+      Narrowed from three SaaS platforms to two after the second-round review.
+      Salesforce split out to 01M1HJY7E4-CJ8C because it is established
+      Sofa King-wide and needs cataloguing rather than an exception.
+  - name: PG PLM/EEM - Salesforce Is Established but Absent from the Catalog
+    type: decision_record
+    status: created
+    ref: 01M1HJY7E4-CJ8C
+  - name: PG PLM/EEM - ASP.NET Core 10 Is Not in the Approved Technology Catalog
+    type: decision_record
+    status: created
+    ref: 01M1F8WB4E-BE9M
+    notes: >-
+      Narrowed in the third round from four technologies to one. DocumentDB,
+      API Gateway and the Node.js 14 Lambda runtime all belong exclusively to
+      msvc-pg-forms, which is now recorded as pre-production, so they are no
+      longer carried as production exceptions.
+  - name: PG ASP.NET Core 10 on EKS Application Runtime
+    type: runtime_service
+    status: created
+    ref: 01M1HJY7E4-V1HG
+    notes: >-
+      Closes the first review gap. No runtime service existed for either PG
+      compute tier because components pointed runsOn straight at host objects.
+      Follows the runtime-service-recliner-dotnet-eks convention.
+  - name: Microsoft ASP.NET Core 10
+    type: technology_component
+    status: created
+    ref: 01M1HJY7E4-WE6B
+    notes: >-
+      A company-wide gap rather than a PG exception. SOM Tiers of Intensity and
+      the Customer Data Platform are already recorded on .NET 10 in this catalog,
+      which previously topped out at ASP.NET Core 9.
+  - name: AWS API Gateway (REST)
+    type: network_service
+    status: created
+    ref: 01M1HJY7E4-RPTG
+    notes: >-
+      A second edge path into the cloud tier that the initial registration
+      missed. Reclassified in the third round as having no confirmed production
+      consumer, since msvc-pg-forms is not believed to be live.
+  - name: PG Form Service DocumentDB Cluster
+    type: data_store_service
+    status: created
+    ref: 01M1HJY7E4-3NGA
+  - name: Amazon DocumentDB 4.0
+    type: technology_component
+    status: created
+    ref: 01M1HJY7E4-SKZN
+assumptions:
+  - id: l1-scope-is-baseline-only
+    statement: >-
+      SKPG-19589 requires DRAFT L1 Baseline maturity (rubric level 1) — a valid,
+      schema-passing SoftwareDeploymentPattern with unknowns tracked in a
+      DraftingSession — not Established or Apex maturity.
+    rationale: >-
+      The parent epic is titled "APEX L1 Certification" and the acceptance
+      criteria match the Baseline criteria in ARCHITECTURE_MATURITY.md.
+      Reference-architecture alignment, scalability boundaries, and HA evidence
+      are L2 Established criteria and are deliberately not attempted here.
+    relatedObjects:
+      - ref: 01M1F8WB4E-8WVS
+      - ref: 01M1F8WB4E-RWQB
+  - id: two-patterns-not-one
+    statement: >-
+      PLM/EEM is modelled as two SoftwareDeploymentPatterns rather than one,
+      split by deployment shape.
+    rationale: >-
+      Directed by Jordan Hale's team on 2026-08-31, following the
+      rh-hiretrack / hcm-rh precedent where a legacy predecessor and its
+      modern successor are modelled apart. Note that the split is NOT justified
+      by an impending retirement — Miles Chandler confirmed the legacy
+      estate is not on a short-term funded retirement plan. The justification is
+      the difference in deployment shape and operational model.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01M1F8WB4E-8WVS
+  - id: ldms-formix-are-plm-eem-lineage
+    statement: >-
+      LDMS is PLM's predecessor system and FORMIX is EEM's, so both belong inside
+      the PLM/EEM boundary rather than being separate products.
+    rationale: >-
+      STL-FORMIX contains an EemEvaluationRightsAutomation project, and
+      PG-ReportWriter describes itself as the "Report Writer for LDMS and
+      Formix". The cloud tier's Step Function is named
+      sk-pg-prod-EemEvalRightsAutomation, tying the cloud EEM surface directly
+      to the FORMIX automation.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+  - id: in-flight-work-is-noted-not-modelled
+    statement: >-
+      Work that is still in development or in progress is recorded as a note
+      against the affected objects rather than modelled as established
+      architecture.
+    rationale: >-
+      Directed during the third-round review. Applied to three things: the
+      Ottoman migration of the legacy estate, which is mid-flight per
+      OPS-94649 and OPS-18728; msvc-pg-forms and its exclusive dependencies,
+      which are pre-production; and the EEM forms-to-MongoDB direction under
+      SKPG-68686, which is a design sketch. The purpose is to keep the patterns
+      describing deployed state, while preserving the discovery so it is not
+      re-found later.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01M1F8WB4E-8WVS
+      - ref: 01KSM38KG3-8PKZ
+unresolvedQuestions:
+  - id: legacy-database-hosting-boundary
+    question: >-
+      Does the STL SQL Server estate run in the Grand Rapids data center, or on
+      AWS-hosted Windows servers joined to the corporate domain?
+    status: answered
+    reason: >-
+      RESOLVED in the third round: grr-datacenter, and the AWS hostname was a
+      red herring. The PLM/EEM Environment Guide (Confluence 648381633) lists
+      the production database tier as GRRPGDB01 (10.219.40.87) and GRRPGDB02
+      (10.175.40.88) on Windows Server 2022 at GRR, and the PG maintenance plan
+      inventory (Confluence 604045714) names the two availability groups
+      GRRPGPRDAG01 and GRRPGPRDAG02 that hold STL and FORMIXFORMS. The
+      Data Source=AWSPGDB01S.corp.flp string that created the contradiction
+      follows the Environment Guide's own environment-suffix convention -
+      AWSPLMWEB01Q is QA, AWSPLMWEB01S is stage, and AWSPGDB01Q is documented
+      as the QA database in Confluence 422904436 - so AWSPGDB01S is the AWS
+      STAGE database, read out of a release configuration file. tcp:ag1 is a GRR
+      availability group.
+    currentBestGuess: >-
+      Not applicable, resolved from infrastructure documentation.
+    impact: >-
+      Removes the blocker this question placed on selecting a reference
+      architecture at L2, since the two candidate patterns differed on exactly
+      this point. The legacy pattern's deployment target is now asserted rather
+      than caveated.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01M1F8WB4E-MBKA
+  - id: database-host-and-version-assumed
+    question: >-
+      What host and SQL Server version do the STL and FORMIXFORMS databases
+      actually run on?
+    status: answered
+    reason: >-
+      SUPERSEDED in the third round - split into its two halves, one resolved
+      and one not. The OS version is resolved: Windows Server 2022, per the
+      Environment Guide, so both data store objects are repointed from Windows
+      Server 2019 Physical Standard Host (01KQQ5JT04-F2AX) to Windows Server
+      2022 Physical Standard Host (01KQQ5JT04-PGTY). Two residues remain and
+      are tracked separately: legacy-windows-host-hypervisor and
+      database-version-assumed. This question is closed only so that its two
+      successors can be tracked distinctly; the SQL Server version is still an
+      assumption in the graph.
+    currentBestGuess: >-
+      Not applicable, superseded.
+    impact: >-
+      The highest-priority follow-up from the first round is half closed. One
+      unverified technology fact remains in the graph - the SQL Server version -
+      and it now has evidence pointing away from the declared value.
+    relatedObjects:
+      - ref: 01M1F8WB4E-MBKA
+      - ref: 01M1F8WB4E-R0RG
+  - id: database-version-assumed
+    question: >-
+      Which SQL Server version runs the STL and FORMIXFORMS production estate?
+    status: open
+    reason: >-
+      Successor to database-host-and-version-assumed. Microsoft SQL Server 2019
+      (01KQQ5JT1T-F6Q1) remains declared on both data store objects because the
+      schema requires a primaryTechnologyComponent when deliveryModel is
+      self-managed. It is unverified, and the evidence now points away from it:
+      the Environment Guide records the DR pair DRPGDB01/DRPGDB02 running SQL
+      Server 2016 Enterprise Edition, and a DR replica normally matches or
+      trails production. SQL Server 2016 is marked deprecated in this catalog,
+      so if production is 2016 this becomes an L2 Established finding as well
+      as a factual correction.
+    currentBestGuess: >-
+      Possibly SQL Server 2016 Enterprise rather than 2019, on the strength of
+      the DR pair. Not asserted - substituting one unverified value for another
+      would not be an improvement.
+    impact: >-
+      One unverified technology fact remains in the graph looking
+      authoritative. The PG database Confluence pages are authored by Tony
+      Sandoval and Jared Kemp, who should be able to confirm quickly.
+    relatedObjects:
+      - ref: 01M1F8WB4E-MBKA
+      - ref: 01M1F8WB4E-R0RG
+  - id: legacy-windows-host-hypervisor
+    question: >-
+      Is the GRR PLM/EEM Windows estate physical or VMware?
+    status: open
+    reason: >-
+      Successor to database-host-and-version-assumed and to
+      legacy-windows-host-version. The OS version is settled at Windows Server
+      2022, but the catalog splits Windows Server 2022 into a physical host
+      object (01KQQ5JT04-PGTY, lifecycleStatus preferred) and a VMware host
+      object (01KQQ5JT04-A7W8, lifecycleStatus deprecated). The
+      deployment-targets vocabulary describes GRR as Sofa King-owned VMware
+      hardware, which would point at the deprecated object. The physical object
+      is declared instead, because asserting deprecated infrastructure on the
+      strength of a vocabulary description would be the worse of the two
+      errors.
+    currentBestGuess: >-
+      Unknown. If VMware is confirmed, both data store objects and the three
+      IIS components should be repointed at 01KQQ5JT04-A7W8, and the deprecated
+      lifecycle of that host becomes an L2 Established finding for the estate.
+    impact: >-
+      Does not block L1 Baseline - the runtime-service layer is resolved either
+      way. Determines whether the legacy estate carries a deprecated host
+      dependency at L2. CloudOps or Axonius should have this.
+    relatedObjects:
+      - ref: 01M1F8WB4E-MBKA
+      - ref: 01M1F8WB4E-R0RG
+      - ref: 01KSM38KG3-05HQ
+  - id: formixforms-production-host
+    question: >-
+      Where does the FORMIXFORMS database run in production, and is it
+      co-located with the STL database?
+    status: answered
+    reason: >-
+      RESOLVED in the third round, and the original assumption was correct. The
+      PG maintenance plan inventory (Confluence 604045714) lists FORMIXFORMS on
+      availability group GRRPGPRDAG01 alongside STL, FORMIXAUDIT and SSISDB, and
+      the Associate Development Data Life Cycle Policy (Confluence 640421777)
+      states that two production SQL Server instances host the PG databases.
+      The two databases are co-located, so the legacy pattern's data service
+      group does not need splitting.
+    currentBestGuess: Not applicable, resolved.
+    impact: >-
+      Closes the risk that the legacy pattern's data service group
+      misrepresented two separate platforms as one.
+    relatedObjects:
+      - ref: 01M1F8WB4E-R0RG
+  - id: legacy-edge-gateway-unconfirmed
+    question: >-
+      What terminates ingress for the legacy web tier?
+    status: answered
+    reason: >-
+      RESOLVED in the third round: F5 BIG-IP, from documentation rather than
+      precedent. The PLM/EEM Environment Guide (Confluence 648381633) carries an
+      explicit F5 pool column in its GRR Production Environment table,
+      assigning pool Prod_LDMS_80 to the six-node web farm GRRPLMWEB01P-06P and
+      pool Prod_LDMS_ReportWriter_80 to GRRPLMRW01-02. Corroborated by the GRR
+      Patching Guide (Confluence 26214756) and by the IDM rollout runbook
+      (Confluence 145694490), which disables nodes from an F5 pool before
+      deploying LDMS Legacy, LDMS .Net and FORMIX. F5 BIG-IP (01KQQ5JT00-Z6WV)
+      is now referenced from a Web Edge and Routing service group on the legacy
+      pattern, matching the rh-hiretrack shape that was originally only
+      precedent.
+    currentBestGuess: Not applicable, resolved.
+    impact: >-
+      Closes the last outstanding element of APEX Architecture L1 criterion 2.
+      The legacy pattern's web zone now has a terminating edge object.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01KQQ5JT00-Z6WV
+  - id: legacy-windows-host-version
+    question: >-
+      Which Windows Server version hosts the IIS-based legacy components?
+    status: answered
+    reason: >-
+      RESOLVED in the third round: Windows Server 2022. The Environment Guide's
+      GRR Production Environment table records Windows Server 2022 for every
+      production PLM/EEM server - the six web/app nodes, both report writers,
+      the utility host and both database servers. Note the AWS DR estate is
+      older (Windows Server 2012 R2 for the legacy DR trio, Windows Server 2019
+      Datacenter for DRPGDB01/02), so DR and production are not on the same
+      baseline. The hypervisor question is tracked separately as
+      legacy-windows-host-hypervisor.
+    currentBestGuess: Not applicable, resolved.
+    impact: >-
+      Removes the risk of repeating the assumed-host mistake, and gives the
+      three IIS components and both data stores a defensible host reference.
+    relatedObjects:
+      - ref: 01KSM38KG3-05HQ
+      - ref: 01KSM38KG3-2N7T
+      - ref: 01KSM38KG3-PN95
+  - id: imperva-in-legacy-inbound-path
+    question: >-
+      Does Imperva Web Application Firewall sit in front of the legacy F5 for
+      PLM/EEM?
+    status: open
+    reason: >-
+      Raised in the third round alongside the F5 resolution. Imperva Web
+      Application Firewall (01KQQ5JT1D-MY47) is used Sofa King-wide and
+      INFSEC-809 shows it fronting at least one product domain, but no evidence
+      places it in the PLM/EEM inbound path specifically. Not asserted.
+    currentBestGuess: >-
+      Plausible given organisation-wide use, but unevidenced for this product.
+    impact: >-
+      Does not block L1 Baseline - the terminating edge service is catalogued.
+      If Imperva is in the path it belongs in the Web Edge and Routing group
+      alongside F5.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+  - id: stl-identity-pattern-ownership
+    question: >-
+      Which pattern should own STL-Identity — the cloud tier it runs on, or the
+      legacy tier it exists to integrate with — and does its queue processor
+      run on Lambda at all?
+    status: open
+    reason: >-
+      WIDENED in the third round. The original question was one of pattern
+      placement: STL-Identity runs as CDK-deployed Lambda functions, which
+      places it in the cloud tier, but its purpose is the STL integration queue
+      processor, which serves the legacy estate. A runtime question now sits
+      underneath it. The Environment Guide records a pg-queueprocessor-prod EC2
+      instance (i-7d014351, 172.28.4.33) in the Sofa King_STL account
+      (248376931381), described as a utility service whose alerts can show as
+      ftp-server-2. If the integration queue processor runs on that instance,
+      then this component's runsOn of AWS Lambda Runtime describes only its PG
+      Lambda half, and a host or second runtime is missing from the graph.
+    currentBestGuess: >-
+      Placed in the cloud services pattern on the basis of its Lambda estate.
+      The queue processor most plausibly runs on the pg-queueprocessor-prod EC2
+      instance, which would make the component a two-runtime service that may
+      warrant splitting.
+    impact: >-
+      Does not block L1 Baseline; the component references a runtime service.
+      Placement determines which pattern carries the relationship object at L2,
+      and the runtime split determines whether the graph is accurate.
+    relatedObjects:
+      - ref: 01M1F8WB4E-8WVS
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01KSM38KG2-Y4KV
+  - id: plm-eem-adjacent-services-boundary
+    question: >-
+      Should plm-Dashboard-BFF and Rubric Designer be claimed by the PLM/EEM
+      patterns, or do they correctly belong to the Ottoman platform?
+    status: open
+    reason: >-
+      Raised in the third round. The boundary review in this session considered
+      only the 29 objects in catalog/engineering/associate-development-engineering,
+      so two PLM/EEM-named services with live PG deployment pipelines were never
+      assessed. Both are catalogued under ottoman-platform-engineering:
+      plm-Dashboard-BFF (product-component-plm-dashboard-bff) and Rubric
+      Designer (product-component-platform-msvc-rubricdesigner). "PG Work Left
+      for PG" (Confluence 39199080479) lists plm-Dashboard-BFF in the PG
+      pipeline inventory and shows plm-dashboard-bff pods running on
+      stage-ottoman, and OPS-57657 tracks Rubric Designer PROD deployment with
+      msvc-rubricdesigner-deployment-prod-ml pods. Rubrics are core EEM
+      functionality and the BFF is PLM-named.
+    currentBestGuess: >-
+      Both are genuinely PG functionality hosted on the shared platform, which
+      is a legitimate reason for the Ottoman placement - but the placement was
+      never a decision, it is where repository discovery put them. An owner
+      should confirm rather than the placement being inherited by default.
+    impact: >-
+      Potentially material to APEX Architecture L1 criterion 1, which requires
+      the pattern to define the app's components. If either service is properly
+      PLM/EEM, the patterns are incomplete. Recorded as a question rather than
+      a gap because both objects do exist in the catalog and the platform
+      placement is defensible.
+    relatedObjects:
+      - ref: 01M1F8WB4E-8WVS
+      - ref: 01M1F8WB4E-RWQB
+  - id: legacy-ottoman-migration-endstate
+    question: >-
+      What is the end-state deployment topology for the legacy estate once the
+      Ottoman migration completes?
+    status: deferred
+    reason: >-
+      Recorded rather than modelled, per the in-flight-work-is-noted-not-modelled
+      assumption. OPS-94649 records Octopus deployments of LDMS.Net, LDMS
+      Legacy, FORMIX and the PG Report Writer Service to a prod_ottm target as
+      already complete, with only the PlmEem Orchestra pipeline outstanding
+      (OPS-18728), under PG epic SKPG-82566. The legacy pattern therefore
+      describes a topology that is actively changing.
+    currentBestGuess: >-
+      The legacy applications are gaining a Ottoman production footprint
+      alongside, or eventually instead of, the GRR web farm. Whether GRR
+      remains, and whether the F5 edge survives the move, is not established.
+    impact: >-
+      Does not block L1 Baseline - the GRR topology is the established state and
+      is documented. Re-model deployment targets when the migration completes,
+      and expect the edge and host references to change with it.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+  - id: business-pillar-confirmation
+    question: >-
+      Which business pillar do the PLM/EEM patterns belong to?
+    status: deferred
+    reason: >-
+      business-pillar.people-solutions was carried over from the sibling PG LCR
+      pattern rather than confirmed by product ownership. AGENTS.md is explicit
+      that pillar IDs are proper nouns and must be assigned by asking the owner,
+      never inferred.
+    currentBestGuess: >-
+      business-pillar.people-solutions, matching the other Associate Development
+      entry in the catalog.
+    impact: >-
+      Does not block L1 Baseline validation, but an incorrect pillar
+      misclassifies the product in every business-context rollup.
+    relatedObjects:
+      - ref: 01M1F8WB4E-8WVS
+      - ref: 01M1F8WB4E-RWQB
+  - id: data-classification-ratification
+    question: >-
+      Is "confidential — associate personal data" the correct classification, and
+      is payment data in scope?
+    status: deferred
+    reason: >-
+      The classification recorded on both patterns is the authoring team's
+      assessment from repository evidence, not an Information Security review.
+      STL-LDMS.Net contains an STLI.Shared.Integration.CreditCards project,
+      which if live would bring payment data and its associated obligations into
+      scope.
+    currentBestGuess: >-
+      Confidential associate PII is certainly in scope. The credit-card
+      integration may be dormant; its status is unknown.
+    impact: >-
+      Does not block L1 Baseline. Materially affects the security and compliance
+      requirement groups and must be settled before any L2 claim.
+    relatedObjects:
+      - ref: 01M1F8WB4E-RWQB
+      - ref: 01M1F8WB4E-MBKA
+  - id: component-defects-from-discovery
+    question: >-
+      Should the mis-recorded component objects be corrected in this change or a
+      separate cleanup?
+    status: answered
+    reason: >-
+      RESOLVED, and there were THREE defects, not two. Repository discovery
+      recorded STL-FORMIX (01KSM38KG2-8JV3) as JavaScript on Node.js when every
+      manifest is a .csproj or .sln; recorded PG-ReportWriter (01KSM38KG3-PN95)
+      the same way against an 11-project .NET solution, caught in review and
+      missed by the original sweep; and recorded pg-msvc-plm-eem-api
+      (01KSM38KG3-P3SC) as running on AWS Lambda Serverless Host when its
+      manifests are Kubernetes. All three are corrected.
+    currentBestGuess: >-
+      Not applicable, resolved. A broader lesson stands: the
+      repository-discovery import mis-detected language on at least two of nine
+      PG components, so discovery-sourced language and runtime fields should not
+      be trusted without checking the repository.
+    impact: >-
+      Does not block L1 Baseline. Now closed: STL-FORMIX and PG-ReportWriter
+      record C# on .NET, and pg-msvc-plm-eem-api points at the PG ASP.NET
+      Core 10 on EKS runtime service. STL-FORMIX keeps its .NET Core Application
+      Service runsOn deliberately, being a mixed IIS-plus-Lambda estate whose
+      split needs an owner decision.
+    relatedObjects:
+      - ref: 01KSM38KG2-8JV3
+      - ref: 01KSM38KG3-PN95
+      - ref: 01KSM38KG3-P3SC
+  - id: non-standard-tech-jira-items
+    question: >-
+      What Jira tickets should track the non-standard technology exceptions?
+    status: open
+    reason: >-
+      APEX Architecture L1 criterion 5 requires non-standard technology choices
+      to be documented in the catalog "with a tracking item in Jira". Five
+      decision records now exist and none has a dedicated ticket; SKPG-19589 is
+      still the only tracking item. The five are New Relic (01M1F8WB4E-2ND0),
+      Classic ASP and the build/deploy chain (01M1F8WB4E-XJM2), LaunchDarkly
+      and Avalara (01M1F8WB4E-9C7X), Salesforce (01M1HJY7E4-CJ8C), and
+      ASP.NET Core 10 (01M1F8WB4E-BE9M). Note the last has been narrowed to
+      one technology, and that two of the five - Salesforce and ASP.NET
+      Core 10 - are organisation-wide cataloguing actions rather than PG
+      exceptions. Related work exists but does not satisfy the criterion:
+      SKPG-35699 is a backlog Classic ASP modernization epic from a
+      story-generator POC, SKPG-38812 is LaunchDarkly flag hygiene under epic
+      SKPG-43094, and OPS-320032 shows DocumentDB access already provisioned
+      elsewhere at Sofa King. A Jira search across all projects for New Relic,
+      LaunchDarkly, Avalara, Classic ASP and DocumentDB since 2025 found no
+      existing exception tracking items.
+    currentBestGuess: >-
+      One ticket per decision record, linked from the record, raised as Tasks
+      under epic SKPG-97916 rather than Sub-tasks, since SKPG-19589 and its
+      siblings are the Task layer.
+    impact: >-
+      This is now the ONLY item gating the APEX Architecture L1 claim. Every
+      other criterion is met.
+    relatedObjects:
+      - ref: 01M1F8WB4E-2ND0
+      - ref: 01M1F8WB4E-XJM2
+      - ref: 01M1F8WB4E-9C7X
+      - ref: 01M1HJY7E4-CJ8C
+      - ref: 01M1F8WB4E-BE9M
+  - id: rds-dependency-uncatalogued
+    question: >-
+      What managed database does msvc-pg-forms connect to?
+    status: answered
+    reason: >-
+      RESOLVED, and the original premise was wrong. This question assumed an AWS
+      RDS dependency because the repository ships rds-combined-ca-bundle.p7b.
+      Reading SK.PG.FormService.CDK/FormServiceDbStack.cs shows the CDK
+      provisions Amazon DocumentDB: an Amazon.CDK.AWS.DocDB DatabaseCluster with
+      a docdb4.0 parameter group and a db.t3.medium instance. DocumentDB uses
+      the same RDS certificate bundle for TLS, which is what made that file look
+      like RDS evidence.
+    currentBestGuess: >-
+      Not applicable, resolved from source. Catalogued as data store
+      01M1HJY7E4-3NGA with Technology Component 01M1HJY7E4-SKZN, both
+      lifecycleStatus candidate and both now recorded as pre-production.
+    impact: >-
+      Closed the last uncatalogued data dependency against Architecture L1
+      criterion 2. The Mongo-compatible platform question it opened is deferred
+      rather than an L1 item, because the consuming service is not in
+      production.
+    relatedObjects:
+      - ref: 01KSM38KG3-8PKZ
+      - ref: 01M1HJY7E4-3NGA
+  - id: form-service-production-status
+    question: >-
+      Has msvc-pg-forms ever actually been deployed to production?
+    status: open
+    reason: >-
+      STRENGTHENED in the third round from two signals to five, all pointing the
+      same way. (1) The repository has no cd/ directory and no codefresh.yml -
+      its root holds only cdk.json, windowsBuild.cmd, src/, README.md and the CA
+      bundle - so it has no deployment pipeline, where every other claimed
+      PLM/EEM component has one. (2) It is absent from the PG pipeline
+      inventory in "PG Work Left for PG" (Confluence 39199080479), which lists
+      STL-LDMS-Legacy, STL-LDMS.Net, STL-FORMIX, plm-Dashboard-BFF,
+      pg-msvc-plm-eem-api, STL-Identity, pg-plm-ui, msvc-ResourceLibrary and
+      PG-ReportWriter. (3) FormServiceDbStack.cs leaves DeletionProtection
+      commented out, annotated "uncomment when we are ready to go live".
+      (4) FormServiceLambdaStack.cs hardcodes the authorizer's idmUrl to
+      idgatewayawsstage.skqa.example, a QA endpoint, with a TODO. (5) The authorizer
+      runs the end-of-life nodejs14.x Lambda runtime. The conclusion is acted on
+      - the component is reclassified lifecycleStatus candidate and its
+      dependencies recorded as pre-production - but this question stays OPEN
+      because no owner has confirmed it. Evidence-complete is not the same as
+      confirmed.
+    currentBestGuess: >-
+      Built and deployed to lower environments at most, never promoted to
+      production.
+    impact: >-
+      Acting on this simplified the L1 position considerably: DocumentDB, API
+      Gateway and the Node.js 14 runtime move out of decision record
+      01M1F8WB4E-BE9M and out of the criterion 5 ticket set, and the two
+      hardest ARB questions - DocumentDB against the deprecated MongoDB Atlas
+      object, and API Gateway as an edge standard - leave the L1 path. If an
+      owner confirms the service IS live, all of that reverses and three
+      exception tickets are needed.
+    relatedObjects:
+      - ref: 01KSM38KG3-8PKZ
+      - ref: 01M1HJY7E4-3NGA
+      - ref: 01M1HJY7E4-RPTG
+  - id: dynamodb-and-s3-inventory
+    question: >-
+      What is the full DynamoDB table inventory, and are the five S3 buckets the
+      complete set?
+    status: deferred
+    reason: >-
+      Table names are environment-prefixed at runtime (AwsDynamoTablePrefix) and
+      provisioned across CDK stacks, so no static list exists in configuration.
+      The five S3 buckets come from the production ConfigMap and may not include
+      buckets referenced only in code.
+    currentBestGuess: >-
+      The five named buckets are the primary set; the DynamoDB footprint is at
+      least the EemEvalRights table.
+    impact: >-
+      Does not block L1 Baseline — both services are catalogued as dependencies.
+      Per-resource inventory would be needed for L3 IaC composability.
+    relatedObjects:
+      - ref: 01M1F8WB4E-8WVS
+nextSteps:
+  - id: raise-non-standard-tech-tickets
+    action: >-
+      Raise a Jira tracking item for each of the five non-standard technology
+      decision records and link them from the records, satisfying APEX
+      Architecture L1 criterion 5: New Relic (01M1F8WB4E-2ND0), Classic ASP and
+      the build/deploy chain (01M1F8WB4E-XJM2), LaunchDarkly and Avalara
+      (01M1F8WB4E-9C7X), Salesforce (01M1HJY7E4-CJ8C), and ASP.NET Core 10
+      (01M1F8WB4E-BE9M). Raise as Tasks under epic SKPG-97916, not Sub-tasks.
+      This is the only remaining L1 gate.
+    status: open
+    owner: associate-development-engineering
+  - id: confirm-form-service-liveness
+    action: >-
+      Confirm whether msvc-pg-forms is in production. The evidence says no on
+      five independent signals and the catalog has been updated on that basis,
+      but no owner has confirmed. If it is live, restore DocumentDB, API Gateway
+      and the Node.js 14 runtime to decision record 01M1F8WB4E-BE9M and raise
+      tickets for them; if it is not, decide whether the component leaves the
+      cloud pattern entirely.
+    status: open
+    owner: associate-development-engineering
+  - id: confirm-database-version-and-hypervisor
+    action: >-
+      DBA team to confirm the production SQL Server version for the STL and
+      FORMIXFORMS estate - the DR pair runs SQL Server 2016 Enterprise, which
+      contradicts the declared 2019 - and CloudOps to confirm whether the GRR
+      Windows Server 2022 estate is physical or VMware, since the VMware host
+      object is deprecated. Tom Sandoval and Jared Kemp author the PG
+      database documentation.
+    status: open
+    owner: cloud-engineering-infrastructure
+  - id: confirm-adjacent-service-boundary
+    action: >-
+      Product and engineering ownership to decide whether plm-Dashboard-BFF and
+      Rubric Designer belong to the PLM/EEM patterns or to the Ottoman
+      platform, and move them if so. Neither was assessed in the original
+      boundary review.
+    status: open
+    owner: associate-development-engineering
+  - id: take-platform-tech-to-arb
+    action: >-
+      Take the remaining platform technology questions to the Architecture
+      Review Board: promote ASP.NET Core 10 to an approved Technology Component
+      (three product families already use it), confirm procurement status for
+      LaunchDarkly and Avalara, and assign an owner for authoring the shared
+      Salesforce objects. The DocumentDB and API Gateway rulings are deferred
+      until the form service's production status is settled.
+    status: open
+    owner: architecture-review-board
+  - id: confirm-pillar-and-classification
+    action: >-
+      Product ownership to confirm the business pillar; Information Security to
+      review the data classification including whether the credit-card
+      integration is live.
+    status: open
+    owner: associate-development-engineering
+  - id: report-committed-credentials
+    action: >-
+      Route the committed AWS access key IDs in
+      pg-msvc-plm-eem-api/cd/prod-ottoman/cm.yml and the SQL credentials in
+      STL-LDMS.Net web.db.secrets.config to Information Security. Outside
+      SKPG-19589 scope; relevant to APEX Gating L1 secrets scanning, which
+      requires secrets scanning to pass clean before production promotion.
+    status: open
+    owner: information-security
+  - id: confirm-database-hosting
+    action: >-
+      Confirm whether the STL SQL Server estate runs at grr-datacenter or on
+      AWS, and correct the legacy pattern's data service group deployment
+      target.
+    status: done
+    owner: associate-development-engineering
+  - id: confirm-legacy-edge-and-host
+    action: >-
+      Confirm what terminates ingress for the legacy web tier and which Windows
+      Server version hosts the IIS components, then add the edge object and host
+      references.
+    status: done
+    owner: cloud-engineering-infrastructure
+  - id: correct-discovery-defects
+    action: >-
+      Correct STL-FORMIX language and runtime, PG-ReportWriter language and
+      runtime, and pg-msvc-plm-eem-api runsOn.
+    status: done
+    owner: associate-development-engineering
+  - id: close-skpg-19589
+    action: >-
+      Link the merged pull requests and the maturity scorecard in SKPG-19589 and
+      close it, once the five non-standard technology tickets exist.
+    status: open
+    owner: associate-development-engineering
+notes:
+  scoringMethod: >-
+    Phase 1 (Validate & Verify) of the five-phase procedure in
+    ARCHITECTURE_MATURITY.md was run against both patterns. Phases 2 and 3
+    (Established and Apex) were not executed — out of scope for an L1 Baseline
+    ticket.
+  evidenceBasis: >-
+    Rounds one and two traced every dependency to a specific artifact in a
+    PLM/EEM repository: the production ConfigMap for external dependencies, S3,
+    DynamoDB and Step Functions; cd/*/ingress.yml for the Traefik ingress
+    class; committed connection strings for the SQL Server estate; CDK
+    manifests for SNS, SQS, API Gateway and DocumentDB. Round three added
+    Sofa King's own infrastructure documentation, which outranks precedent and
+    inference in the DRAFT evidence hierarchy and resolved four questions the
+    repositories could not settle. No owner interview has been held at any
+    point, which is why pillar, data classification, RTO/RPO and the form
+    service's production status remain unconfirmed.
+  reviewFeedback: >-
+    Round two: Trevor Lane raised two gaps against APEX Architecture L1 -
+    missing runtime and edge service objects under criterion 2, and missing
+    Jira tracking items under criterion 5. All five factual claims verified
+    correct, including a third component defect the original sweep missed. One
+    correction back: the cloud tier was NOT complete, because msvc-pg-forms
+    fronts on API Gateway and persists to DocumentDB rather than the assumed
+    RDS. Round three: the legacy edge object and Windows host version, left
+    deliberately open pending CloudOps, were both found in Sofa King's own
+    documentation rather than needing an interview - along with answers to the
+    database hosting boundary and FORMIXFORMS co-location. Direction given in
+    round three was that work still in development or in progress should be
+    noted rather than modelled, which is recorded as the
+    in-flight-work-is-noted-not-modelled assumption and applied to the form
+    service, the Ottoman migration and the EEM MongoDB design.
+  encodingRepair: >-
+    This file was committed in the previous change with a UTF-8 byte-order mark
+    and double-encoded em-dashes (rendering as a-circumflex sequences
+    throughout). Both are repaired here; the file is now plain UTF-8 without a
+    BOM. No content was changed by the repair.
+  boundaryDecisions: >-
+    Twenty-nine objects in catalog/engineering/associate-development-engineering
+    were reviewed. Nine were claimed across the two patterns. Trainscape (three
+    objects, repositories confirmed deleted), Elevate (two objects, repositories
+    dormant since 2022 and 2023), and msvc-pg-activity and msvc-pg-content
+    (GitHub topics p-fc and s-hcm place them with Sofa King Central, not PG)
+    were excluded on Miles Chandler's confirmation. The remaining
+    exclusions are other PG sub-products (LX, Micro-Credentials, LCR) and
+    non-deployable shared libraries. LIMITATION found in round three: this
+    review covered only the PG engineering folder, so PLM/EEM-named services
+    catalogued under other teams were never assessed. See unresolved question
+    plm-eem-adjacent-services-boundary.

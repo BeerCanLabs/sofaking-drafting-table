@@ -1,0 +1,200 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFD-1G0D
+type: software_deployment_pattern
+ownerRole: engineer
+name: Display Materials Management - Pattern
+aliases:
+  - Inventory Management - Display Materials (Trackweb-IM / IMR)
+description: 'Display Materials Management suite for RETAIL. Comprises the legacy  monolithic Trackweb-IM platform and its greenfield microservices-based  replacement, IM Refresh (IMR). Actively migrating regions from legacy to IMR.
+
+  '
+version: 1.5.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.brannock-asset-management-engineering
+  productFamily: Trackweb-IM
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - trackweb
+  - imr
+  - inventory
+  - microservices
+  - legacy
+  - hybrid-platform
+followsReferenceArchitecture: 01KQQ5JT1D-DAAM
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  availabilityRequirement: high
+  dataClassification: pii
+  failureDomain: 'Legacy: per-region single-tenant EC2/IIS and SQL failure domains. IMR: shared multi-AZ EKS cluster and Aurora PostgreSQL services in us-east-1, with ingress and application runtime spread across subnets in us-east-1a, us-east-1b, and us-east-1c.
+
+    '
+  deploymentTargets: 'Legacy: AWS US-EAST-1 (EC2/IIS + SQL AG). IMR: AWS account 126293295630, cluster imr-prod on EKS 1.35 in VPC vpc-045b95b44db215688, managed node groups across subnets subnet-0afe83b9630cb40f9, subnet-0823e2a98ed8ec59a, and subnet-0fd35d853533f943b, with public ALB ingress and internal Traefik-based observability ingress.
+
+    '
+  patternDeviations: 'Two architectures running in parallel during migration. Legacy has no  CI/CD or automated testing. IMR uses Dapr sidecars which conflicts with Kong Mesh.
+
+    '
+  availabilityModel: 'IMR public ingress terminates on an internet-facing AWS ALB and forwards to Traefik on a multi-AZ EKS cluster. Managed node groups are configured across three availability zones with autoscaling bounds of 1 to 50 nodes per group.
+
+    '
+  migrationStrategy: 'Phased region migration using a serverless ETL pipeline (Glue, Step Functions, Lambda).
+
+    '
+  itcTenancyModel: 'Legacy uses single-tenant SQL databases (1200+). IMR uses multi-tenant  Aurora PostgreSQL with row-level security.
+
+    '
+  externalDependencies: 'External interactions are declared in serviceGroups[].externalInteractions: Public DNS and ACM.'
+  imrLifecycleNote: 'Unverified as of 2026-08-25. The IMM DRAFT L1 developer questionnaire records a statement that IMR is retired (attributed to Kiran Aziz, Slack, 2026-08-20). That statement is not yet reflected in this pattern: the six IMR service groups, the IMR-derived values in failureDomain / deploymentTargets / patternDeviations / availabilityModel / itcTenancyModel / migrationStrategy, the followsReferenceArchitecture link to 01KQQ5JT1D-DAAM, and this object''s description and aliases all still assert IMR as current. Retiring IMR is a pattern-wide change, not a service-group deletion, and it needs a scoped decision record before any content is removed - see DraftingSession 01M07T82GS-87MN, question imr-retirement-scope.'
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Legacy Trackweb-IM Web Tier
+    deploymentTarget: aws-us-east-1
+    substrate: Q8J31D44E3-F22K
+    notes: VB6/.NET monolith on EC2/IIS. Region carried over from the original catalog import and still unconfirmed against AWS or CMDB evidence - tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d.
+    deployableObjects:
+      - ref: 01KSM38KFC-STJH
+        diagramTier: application
+        networkZone: web
+        notes: WHM_IM — legacy Trackweb-IM monolith (ControllerLayer, InventoryManagement, Core, Data, IntegrationService, ReportAssembly). Replaces the former hand-authored "Trackweb-IM Monolith" placeholder entry (01KSM38KFC-5642, retired) with the real repository-discovered component.
+  - name: Legacy Database Tier
+    deploymentTarget: aws-us-east-1
+    notes: 1200+ single-tenant SQL Server databases. Region carried over from the original catalog import and still unconfirmed against AWS or CMDB evidence - tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d.
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: application
+        networkZone: data
+  - name: Legacy Integration & ETL
+    deploymentTarget: aws-us-east-1
+    notes: SSIS packages and SFTP exchange. Region carried over from the original catalog import and still unconfirmed against AWS or CMDB evidence - tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d.
+    deployableObjects:
+      - ref: 01KQQ5JT01-SM8X
+        diagramTier: application
+        networkZone: data
+      - ref: 01KQQ5JT1F-KJXR
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KSM38KFC-EN0P
+        diagramTier: application
+        networkZone: app
+        notes: WHM_Integrations — heterogeneous per-region CIS integration/ETL system (SSIS + SQL Server Agent on 4 shared hosts, 2 Windows Services, Python ETL pipelines, AWS Lambda/Node "Brannock" stack). Auth/secrets/logging/monitoring/availability/scalability/recoverability/failure-domain facts confirmed by direct repository read — see decision record 01M0DH79Q9-B3AP. Runtime host mapping partially confirmed 2026-08-25 by the developer questionnaire (Windows Service hosts per environment; Lambda stack in AWS account 675180657723 / us-east-1); the four shared SQL Agent hosts still have no DRAFT or CMDB identifiers, so runsOn is unchanged. Host mapping and a secrets-hygiene finding remain open — tracked in DraftingSession 01M07T82GS-87MN.
+  - name: Client Tooling
+    deploymentTarget: customer-hosted
+    notes: Barcode/label peripheral tooling installed on region workstations; no server-side component of its own. Deployment target confirmed 2026-08-25 by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire, replacing the owner-interview-required sentinel — the application is deployed to and runs on region-operated workstations, which is what customer-hosted denotes. The separate build and distribution facts (installer built manually in Visual Studio, kept only on the builder's local machine, distributed by file share or email) are recorded on 01KSM38KFC-0A26 and decision record 01M0CVDXKH-B9BW, and raise a new artifact-lifecycle risk tracked in DraftingSession 01M07T82GS-87MN.
+    deployableObjects:
+      - ref: 01KSM38KFC-0A26
+        diagramTier: utility
+        networkZone: ops
+        notes: WHM_Zebra_Tools — WinForms desktop client (VB.NET) that connects directly to the region's Trackweb SQL Server at runtime to print Zebra labels; packaged for distribution via an InstallShield installer project. Auth/secrets/logging/monitoring/availability/scalability/recoverability/failure-domain facts confirmed by direct repository read — see decision record 01M0CVDXKH-B9BW. Build, distribution, ownership, and platform facts confirmed 2026-08-25 by the Trackweb-IM development team. Remaining open item is artifact lifecycle — no archived installer and no rollback path.
+  - name: IMR Presentation (React)
+    deploymentTarget: owner-interview-required
+    notes: React SPA served from S3 via CloudFront. Deployment region intentionally left unconfirmed rather than assumed — the pattern's own named account/VPC/subnet facts place IMR in us-east-1, while the previous aws-us-east-2 value traced only to the generic default in the deployment-targets vocabulary. Tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete rather than mis-regioned; that claim is not yet confirmed or scoped — see question imr-retirement-scope.
+    productServices:
+      - id: 01KSM38KFF-RRWF
+        name: IMR React UI
+    deployableObjects:
+      - ref: 01KQQ5JT04-6F8T
+        diagramTier: application
+        networkZone: web
+  - name: IMR Public Edge & Ingress
+    deploymentTarget: aws-us-east-1
+    notes: 'Public traffic reaches IMR through the internet-facing imr-prod-traefik ALB. The ALB forwards to a NodePort Traefik service on the EKS worker nodes. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete; that claim is not yet confirmed or scoped — see DraftingSession 01M07T82GS-87MN, question imr-retirement-scope.
+
+      '
+    externalInteractions:
+      - name: Public DNS and ACM
+        type: external
+        notes: 'Wildcard certificates for sofaking.example and use1.sofaking.example terminate at the public ALB.
+
+          '
+        capabilities:
+          - 01KQQ4Q026-MHJM
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: application
+        networkZone: web
+        notes: Public ALB named imr-prod-traefik with ACM TLS certificates.
+  - name: IMR Microservices (EKS)
+    deploymentTarget: aws-us-east-1
+    notes: '.NET Core services with Dapr sidecars running on managed EKS node groups in us-east-1a, us-east-1b, and us-east-1c. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete; that claim is not yet confirmed or scoped — see DraftingSession 01M07T82GS-87MN, question imr-retirement-scope.
+
+      '
+    deployableObjects:
+      - ref: 01KQQ5JT1E-4060
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT1D-MY47
+        diagramTier: application
+        networkZone: web
+  - name: IMR Data Tier (Aurora)
+    deploymentTarget: owner-interview-required
+    notes: Multi-tenant Aurora PostgreSQL with RLS. Deployment region intentionally left unconfirmed rather than assumed — the pattern's own architectureNotes place IMR Aurora in us-east-1, while the previous aws-us-east-2 value traced only to the generic default in the deployment-targets vocabulary. Tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete rather than mis-regioned; that claim is not yet confirmed or scoped — see question imr-retirement-scope.
+    deployableObjects:
+      - ref: 01KQQ5JT00-X90C
+        diagramTier: application
+        networkZone: data
+  - name: IMR Observability & Operations
+    deploymentTarget: aws-us-east-1
+    notes: 'Cluster observability uses VictoriaMetrics and kube-prometheus-stack with internal Traefik ingress for Grafana, Alertmanager, and Prometheus. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete; that claim is not yet confirmed or scoped — see DraftingSession 01M07T82GS-87MN, question imr-retirement-scope.
+
+      '
+    deployableObjects:
+      - ref: 01KQQ5JT1E-HCBR
+        diagramTier: application
+        networkZone: ops
+        notes: Metrics collection and dashboards deployed on the EKS cluster.
+  - name: Migration ETL Pipeline
+    deploymentTarget: owner-interview-required
+    notes: Glue/Step Functions/Lambda migration engine. Deployment region intentionally left unconfirmed rather than assumed — the pattern's own named account/VPC/subnet facts place IMR in us-east-1, while the previous aws-us-east-2 value traced only to the generic default in the deployment-targets vocabulary. Tracked in DraftingSession 01M07T82GS-87MN, question region-reconciliation-1g0d. A 2026-08-20 Slack statement that IMR is retired would make this group obsolete rather than mis-regioned, and would also raise the unanswered question of what became of regions already migrated onto IMR — see question imr-retirement-scope.
+    deployableObjects:
+      - ref: 01KQQ5JT05-12C2
+        diagramTier: application
+        networkZone: ops
+      - ref: 01KQQ5JT05-WX2Z
+        diagramTier: application
+        networkZone: ops
+decisionRecords:
+  - ref: 01KT16XHME-YWTR
+    key: deploymentTargets
+  - ref: 01KT16XHME-YWTR
+    key: availabilityRequirement
+  - ref: 01KT16XHME-YWTR
+    key: dataClassification
+  - ref: 01KT16XHME-YWTR
+    key: failureDomain
+  - ref: 01KT16XHME-YWTR
+    key: patternDeviations
+  - ref: 01KT16XHME-YWTR
+    key: externalDependencies
+  - ref: 01M07T82GS-FGWX
+    key: componentWiring
+  - ref: 01M07T82GS-FGWX
+    key: sharedInfraDisposition
+  - ref: 01M0CVDXKH-B9BW
+    key: clientToolingArchitectureFacts
+  - ref: 01M0CVDXKH-B9BW
+    key: clientToolingDeploymentTarget
+  - ref: 01M0DH79Q9-B3AP
+    key: integrationsArchitectureFacts
+  - ref: 01M0DH79Q9-B3AP
+    key: integrationsRuntimeHostMapping

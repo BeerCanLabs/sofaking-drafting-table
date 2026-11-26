@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-FVXF
+type: technology_component
+ownerRole: technology-admin
+name: Nartac IIS Crypto
+description: Windows TLS and cipher suite configuration tool downloaded by IHMD web server automation.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- tls
+- iis
+classification: software
+vendor: Nartac Software
+productName: IIS Crypto
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Automation downloads the current IIS Crypto executable without a pinned version.
+capabilities:
+- 01KT0XNZEY-RVTG
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/whm/am_webserver/iiscrypto/tasks/main.yml."

@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KXRSDP07-R1DB
+type: relationship
+ownerRole: engineer
+name: Customer Profile Service → Customer Profile Store
+description: The Customer Profile Service reads and writes customer, contact, and association data in its DynamoDB single-table store.
+source: 01KXR9XAR4-BES0
+target: 01KXR9XAR4-SH1Y
+label: reads from and writes to
+technology: DynamoDB
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - shared-customer-record

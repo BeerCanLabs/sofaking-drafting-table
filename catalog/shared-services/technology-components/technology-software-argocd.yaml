@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-2KJF
+type: technology_component
+ownerRole: technology-admin
+name: ArgoCD
+description: 'Declarative, GitOps continuous delivery tool for Kubernetes. Used in Recliner for automated application deployment.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- kubernetes
+- gitops
+- continuous-delivery
+vendor: CNCF / Argo Project
+productName: ArgoCD
+productVersion: unknown
+classification: software
+patchingOwner: organization-scheduled
+capabilities:
+- 01KT0XNZEY-Q2TF
+- 01KQQ4Q026-RTWC

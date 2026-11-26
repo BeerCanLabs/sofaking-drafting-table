@@ -1,0 +1,160 @@
+schemaVersion: '1.0'
+uid: 01KX18GPWW-93YA
+type: product_component
+ownerRole: engineer
+name: Tiers of Intensity Service
+description: |
+  Sofa King-authored API service for centralized TEA Tiers of Intensity
+  calculations. The stateless service exposes synchronous calculation,
+  detailed-result, explanation, funding-tool, ruleset, health, and queue-batch
+  endpoints. The queue path receives requests from the Tiers of Intensity SQS
+  Poller Lambda, and the API owns publication of calculated results to
+  product-specific SNS topics.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+runtimeRequirement: ASP.NET Core on .NET 10 (net10.0)
+language: C#
+tags:
+  - som
+  - recliner
+  - tiers-of-intensity
+  - tier-calc-api
+  - domain-score
+  - eks
+repoUrl: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+classification: api-service
+interfaces:
+  - name: Synchronous Tiers of Intensity API
+    protocol: REST
+    path: /v1/intensity-calculations
+    authenticationModel: other
+    description: >-
+      Synchronous calculation, detailed-result, explanation, and ruleset
+      endpoints. The current source installs no application authentication
+      middleware; the open risk record preserves that observed boundary.
+  - name: Queue batch API
+    protocol: REST
+    path: /v1/intensity-calculations/queue-batches
+    authenticationModel: api-key
+    description: >-
+      Lambda-facing batch endpoint with optional X-TierCalc-Queue-Key support.
+      Current deployment enablement and secret delivery remain tracked as an
+      implementation risk.
+  - name: Tiers of Intensity output topics
+    protocol: other
+    authenticationModel: iam
+    description: Publishes processed result messages to SE-TOI, Shopstar-TOI, and SOM-TOI SNS topics.
+networkBindings:
+  - port: 8080
+    protocol: HTTP
+    direction: inbound
+    description: ASP.NET Core application listener targeted by the Kubernetes Service.
+  - port: 443
+    protocol: HTTPS
+    direction: outbound
+    description: AWS SDK publication to product SNS topics.
+environmentConfiguration:
+  - name: QueueEndpointAuth__Enabled
+    description: Enables shared-key validation on the queue-batch endpoint.
+    required: false
+    sensitive: false
+  - name: QueueEndpointAuth__ApiKey
+    description: Shared key expected from the Lambda queue worker.
+    required: false
+    sensitive: true
+  - name: AwsMessaging__EnableSnsPublishing
+    description: Enables API-owned publication of calculation result notifications.
+    required: false
+    sensitive: false
+  - name: AwsMessaging__ProductTopics__{ProductId}__TopicArn
+    description: Product-specific result topic mapping.
+    required: false
+    sensitive: false
+runtimeSpec:
+  ports:
+    - number: 8080
+      protocol: HTTP
+      name: web
+      direction: inbound
+      description: Calculation API, health, readiness, and OpenAPI listener.
+    - number: 443
+      protocol: HTTPS
+      name: aws-sns
+      direction: outbound
+      description: SNS result publication through the AWS SDK.
+  dependencies:
+    - ref: 01KQQ5JT05-HTRA
+      purpose: Publishes processed Tiers of Intensity results to SNS output topics.
+      interface: SE-TOI, Shopstar-TOI, SOM-TOI
+decisionRecords:
+  - ref: 01KYMPFAPR-YF1D
+    concern: authentication and deployment configuration
+requirementImplementations:
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: source-repository
+    status: satisfied
+    mechanism: field
+    key: repoUrl
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: component-owner
+    status: satisfied
+    mechanism: field
+    key: owner.team
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: runtime-requirement
+    status: satisfied
+    mechanism: field
+    key: runtimeRequirement
+  - requirementGroup: 01KRWRRNM7-G642
+    requirementId: classification
+    status: satisfied
+    mechanism: field
+    key: classification
+notes:
+  businessPurpose: |
+    Centralizes TEA-aligned Tiers of Intensity calculation logic for Sofa King
+    products. The 2026-27 model scores Assortment & Instruction, Behavior,
+    Communication, Independent Functioning, and Personal Care/Health from 0
+    to 3, then combines those results into the customer's overall tier.
+  ruleOwnership: |
+    The API keeps product applications from separately implementing the same
+    TEA calculation rules, reducing drift risk as state advisory evolves.
+  deploymentModel: |
+    Deployed as the som-tier-calc-api container on the shared Amazon EKS
+    Standard Container Host in AWS us-east-1. Development, QA, and staging use
+    LE1; production uses Chaise. ArgoCD reconciles environment manifests under
+    k8s-deployments/manifests/som/tier-calc-api. Stage and production traffic
+    enters through the environment-specific internal Traefik load balancer.
+  runtimeEvidence: |
+    Directory.Build.props defaults TierCalcTargetFramework to net10.0. The API
+    project uses Microsoft.NET.Sdk.Web, and the Dockerfile builds with
+    mcr.microsoft.com/dotnet/sdk:10.0 and runs on
+    mcr.microsoft.com/dotnet/aspnet:10.0.
+  deploymentEvidence: |
+    All four checked-in environments run two replicas with readiness and
+    liveness probes, CPU and memory requests/limits, and an HPA from two to four
+    replicas at 70 percent CPU. Traefik routes a ClusterIP Service on port 80 to
+    container port 8080. Stage uses the LE1 internal endpoint
+    dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com;
+    production uses the Chaise internal endpoint
+    dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com.
+  dataHandling: |
+    The calculation path is stateless and performs no database or remote lookup.
+    Requests contain FERPA-protected customer information and PII.
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+  repositoryName: BeerCanLabs/sk-som-tiers-of-intensity
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: ASP.NET Core 10, REST, SNS publishing, Docker, EKS, health probes
+  observedManifestPaths: |
+    src/TierCalc.Api, Dockerfile, .github/workflows/tier-calc-api-ci.yml,
+    k8s-deployments/manifests/som/tier-calc-api/{dev,qa,stage,prod}
+  discoveryBoundary: |
+    Application origin/main commit fc727888dd2bd3be32ccde3363417c20152ac376
+    and k8s-deployments origin/main commit
+    52cfaaaf667e2e4390cd25004fac6577e736048c were reviewed read-only on
+    2026-07-28.

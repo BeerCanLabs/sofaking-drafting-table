@@ -1,0 +1,76 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D93-XYNH
+type: product_component
+ownerRole: engineer
+name: Academic Calendar Event Publisher
+description: >-
+  AWS Lambda worker (.NET 10) that consumes change messages from the
+  event-publisher SQS queue (fed by the DynamoDB Streams → EventBridge Pipe → SNS
+  fanout), translates Calendar, Session, and PricingPeriod changes into canonical
+  customer-domain events (create, update, or delete on tombstone), and publishes
+  them to the Sofa King Loveseat event bus. Outbound-only: the Academic Calendar
+  service has no inbound worker and no Loveseat subscription.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+runsOn: 01KQQ5JT05-CT7X
+language: C#
+classification: worker
+runtimeRequirement: .NET 10 (AWS Lambda)
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - worker
+  - lambda
+  - event-driven
+  - loveseat
+  - product-component
+runtimeSpec:
+  dependencies:
+    - ref: 01KQQ5JT05-0C4P
+      purpose: Consumes calendar-event-publisher-queue (SNS-subscribed SQS).
+      interface: SQS queue calendar-event-publisher-queue
+    - ref: 01KWF3RGCF-T2HM
+      purpose: Retrieve the Loveseat client secret.
+      interface: AWS Secrets Manager, namespace calendar/event-publisher/
+environmentConfiguration:
+  - name: EventsUri
+    description: Loveseat events ingest endpoint ({LoveseatService:BaseUrl}/api/Events).
+    required: true
+    sensitive: false
+  - name: LoveseatService__AuthorityUrl
+    description: Okta authority for client-credentials token exchange.
+    required: true
+    sensitive: false
+  - name: LoveseatService__Scope
+    description: Okta scope for Loveseat (plat.loveseat).
+    required: true
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+  repositoryName: BeerCanLabs/sk-ss-msvc-calendar
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (net10.0), aws-lambda, sqs
+  observedManifestPaths: >-
+    src/deploy/Deploy/CalendarEventPublisherStack.cs;
+    src/deploy/Deploy/Configuration/EventPublisherConfiguration.cs;
+    docs/architecture/eventing-pipeline.md;
+    docs/deploy/event-publisher-dlq-runbook.md
+  eventContract: >-
+    EventType-03.03 envelope; event.content is the full canonical CalendarTypeV01,
+    SessionTypeV01, or PricingPeriodTypeV01 (state, id, metadata, revision). Source
+    is { application: ss, service: calendar }. At-least-once delivery; consumers
+    dedupe updates on (content.id, content.revision) and take delete
+    unconditionally. CalendarDate and the pricing-period link emit no events of
+    their own; they ride as Calendar and Session updates.
+  deadLetter: >-
+    Each SQS queue has a DLQ (maxReceiveCount 3-5, at least 14-day retention) with
+    alerting and a replay runbook. Failed or unchanged writes emit no events.
+  authentication: >-
+    Okta client credentials with scope plat.loveseat. The owner confirmed on
+    2026-10-20 that Okta is the Loveseat auth provider for every Shared Customer Record
+    service; the calendar spec's mention of IDM is superseded.

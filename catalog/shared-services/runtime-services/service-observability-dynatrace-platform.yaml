@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-93KS
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Dynatrace Observability Platform
+description: Vendor-managed external Dynatrace controller platform that receives telemetry from Dynatrace OneAgent on SOM systems for APM, monitoring, and logging.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - saas
+  - observability
+  - apm
+  - monitoring
+  - logging
+  - dynatrace
+category: service
+serviceCategory: saas
+vendor: Dynatrace
+productName: Dynatrace
+productVersion: managed
+primaryTechnologyComponent: 01KQQ5JT1N-RSE4
+vendorGovernance:
+  dataLeavesInfrastructure: true
+  dataResidencyCommitment: Not confirmed.
+  dpaNotes: Telemetry and logging governance details require confirmation.
+  vendorSLA: Not confirmed.
+  incidentNotificationProcess: Vendor status and support process require confirmation.
+authenticationModel: other
+architectureNotes:
+  auditVisibility: Dynatrace provides APM, monitoring, and logging visibility through its vendor-managed controller platform.
+  healthStatusVisibility: OneAgent telemetry from monitored SOM systems is reported to the external controller platform.
+  failureDomain: Loss of Dynatrace reduces observability but does not directly interrupt SOM request processing.
+deliveryModel: saas

@@ -1,0 +1,149 @@
+schemaVersion: '1.0'
+uid: 01KYMVEMEY-N7JC
+type: drafting_session
+ownerRole: engineer
+name: HCM RH Data Domain L1 Mapping (OPS-435884)
+description: >-
+  Closure work for OPS-435884. Uses owner confirmation and internal data
+  documentation to model MongoDB Atlas as the only active New Recruiting &
+  Hiring database, link the governed data-store and technology objects, and
+  record the deprecated existing-use disposition.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+sessionStatus: resolved
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - session
+  - hcm-rh
+  - ops-103064
+  - data-domain
+  - mongodb-atlas
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KG7-42XD
+sourceArtifacts:
+  - name: OPS-435884 Data Domain L1 review
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-435884
+    notes: >-
+      Toby Hanley confirmed MongoDB is the only database currently used by
+      New Recruiting & Hiring, and Tom Sandoval confirmed he is the R&H 2.0
+      data SME.
+  - name: HCM - RH 2.0 - Data
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14381964054/HCM+-+RH+2.0+-+Data
+    notes: >-
+      Parent documentation hierarchy supplied by the R&H 2.0 data SME.
+  - name: HCM-RH MongoDB Connectivity
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18073101494/HCM-RH+MongoDB+Connectivity
+    notes: >-
+      Confirms separate Sofa King non-production and production Atlas projects,
+      SRV-based client connectivity, and a multi-region production cluster.
+  - name: HCM-RH Aurora PostgreSQL Connectivity - Not in Use
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11981404834/HCM-RH+Aurora+PostgreSQL+Connectivity+-+Not+in+Use
+    notes: >-
+      Records the July 24, 2026 R&H development-team confirmation that the
+      provisioned Aurora PostgreSQL environment is not required or used.
+  - name: HCM RH architecture onboarding PR 35
+    type: source-repository
+    location: https://github.com/BeerCanLabs/sk-sofaking-drafting-table/pull/35
+    notes: >-
+      Original DRAFT onboarding evidence identified MongoDB in architecture
+      notes but did not link it as a deployable data dependency.
+generatedObjects:
+  - name: New Recruiting & Hiring - Pattern
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KG7-42XD
+  - name: MongoDB Atlas
+    type: data_store_service
+    status: created
+    ref: 01KQQ5JT05-E3FZ
+  - name: MongoDB Atlas Managed Database
+    type: technology_component
+    status: created
+    ref: 01KYMVEMEY-KN81
+  - name: HCM RH Core → MongoDB Atlas
+    type: relationship
+    status: created
+    ref: RHH7DSXH4J-WYGH
+unresolvedQuestions:
+  - id: exact-atlas-engine-version
+    question: >-
+      Which exact MongoDB database-engine release is active in each Sofa King
+      Atlas project?
+    status: deferred
+    reason: >-
+      The vendor-managed release is not stated in the source documentation and
+      exact patch-level inventory is not required for Architecture L1.
+    currentBestGuess: >-
+      Treat the technology version as provider-managed until the Data
+      Management Team supplies release-level inventory.
+    impact: >-
+      Version-specific lifecycle analysis remains future enrichment; the
+      governed product, owner, persistence capability, and network binding are
+      explicit.
+    relatedObjects:
+      - ref: 01KYMVEMEY-KN81
+  - id: exact-atlas-private-connectivity
+    question: >-
+      Does every environment reach Atlas through private endpoints, peering,
+      or another restricted network path?
+    status: deferred
+    reason: >-
+      The supplied connectivity page confirms authenticated TLS connections
+      but does not establish the network transport boundary for every
+      environment.
+    currentBestGuess: >-
+      Preserve the confirmed MongoDB-over-TLS relationship without asserting a
+      private-link implementation.
+    impact: >-
+      Exact network controls remain operational enrichment and do not block
+      the L1 dependency inventory.
+    relatedObjects:
+      - ref: RHH7DSXH4J-WYGH
+assumptions:
+  - id: mongodb-is-only-active-database
+    statement: >-
+      MongoDB Atlas is the only database currently used by New Recruiting &
+      Hiring.
+    rationale: >-
+      Toby Hanley confirmed the database inventory in OPS-435884, and the
+      supplied Aurora PostgreSQL page was updated to state that R&H will not
+      use the provisioned PostgreSQL environment.
+    relatedObjects:
+      - ref: 01KQQ5JT05-E3FZ
+  - id: existing-use-non-standard
+    statement: >-
+      The R&H MongoDB Atlas dependency is documented as existing use without
+      changing the shared service's deprecated lifecycle.
+    rationale: >-
+      OPS-435884 requires non-standard technology to be documented and tracked,
+      but Architecture L1 does not require a redesign or remediation date.
+    relatedObjects:
+      - ref: 01KQQ5JT05-E3FZ
+nextSteps:
+  - id: merge-data-domain-mapping
+    action: >-
+      Obtain review and merge the OPS-435884 data-domain mapping pull request.
+    status: open
+    owner: recruiting-hiring-engineering
+    relatedObjects:
+      - ref: 01KSM38KG7-42XD
+  - id: close-ops-435884
+    action: >-
+      Confirm the merged catalog state and validation evidence in Jira, then
+      close OPS-435884.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KQQ5JT05-E3FZ
+notes:
+  validationStatus: >-
+    Passed on 2026-07-28 using
+    python3 .draft/framework/tools/validate.py --workspace .; 1,468 catalog
+    files validated successfully.

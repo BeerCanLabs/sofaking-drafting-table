@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D93-TKHH
+type: relationship
+ownerRole: engineer
+name: Academic Calendar Service → Academic Calendar Store
+description: The Academic Calendar Service reads and writes calendar, session, and pricing-period data in its DynamoDB single-table store.
+source: 01KXR9XAR4-N2VN
+target: 01M5CS4D93-EWK0
+label: reads from and writes to
+technology: DynamoDB
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - shared-customer-record

@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-8RR3
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Windows Server 2025
+description: Stub for Windows Server 2025 operating system workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- os
+- windows
+- microsoft
+classification: operating-system
+vendor: Microsoft
+productName: Windows Server
+productVersion: '2025'
+configurations:
+- id: dedicated-log-volume
+  name: Dedicated Log Volume
+  description: Configure Windows to write operating system logs to a dedicated log volume managed as part of the standard logging configuration.
+  capabilities:
+  - 01KQQ4Q026-D04B
+vendorLifecycle:
+  mainstreamSupportEnd: 2029-11-13
+  extendedSupportEnd: 2034-11-14
+  notes: Microsoft Lifecycle lists Windows Server 2025 mainstream support through November 13, 2029 and extended support through November 14, 2034.
+capabilities:
+- 01KQQ4Q026-QM2X

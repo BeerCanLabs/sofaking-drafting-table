@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJEF-6TJT
+type: decision_record
+name: Eclipse BIRT Reporting Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT1F-V6XM
+linkedObject: 01KQQ5JT1F-V6XM
+decisionRationale: "serviceAuthentication: Authentication is inherited from the parent application or print service host.\n\nsecretsManagement: Configuration and credentials are managed via the host's standard  configuration mechanisms.\n\nserviceLogging: BIRT engine logs are captured as part of the application or service logs.\n\nhealthWelfareMonitoring: Welfare is monitored via the health of the parent JVM or host.\n\navailabilityModel: Availability is tied to the host or application instances where the  engine is integrated.\n\nscalabilityModel: Scales vertically with host resources or horizontally with additional  application instances.\n\nrecoverabilityModel: Recovery is achieved through host or application restarts.\n\nfailureDomain: Impact is scoped to the host or JVM running the BIRT engine."

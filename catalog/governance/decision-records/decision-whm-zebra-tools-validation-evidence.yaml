@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHKB-7GTX
+type: decision_record
+name: Whm Zebra Tools Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFC-0A26
+linkedObject: 01KSM38KFC-0A26
+decisionRationale: 'runtimeRequirement: Windows installer build tool; no application runtime on the hosting service.'

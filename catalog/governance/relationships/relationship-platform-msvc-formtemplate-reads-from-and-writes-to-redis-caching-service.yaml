@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSFA-TZHR
+type: relationship
+name: 'Platform Msvc Formtemplate → Redis Caching Service'
+catalogStatus: stub
+source: 01KYQ4D9RJ-XDT3
+target: 01KQQ5JT00-191S
+label: reads from and writes to
+technology: RESP
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Hangfire queue storage for deferred and batch execution.

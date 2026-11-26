@@ -1,0 +1,127 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR4-HKKE
+type: product_component
+ownerRole: engineer
+name: Customer Membership Service
+aliases:
+  - ss-msvc-customer-membership
+description: >-
+  Planned ASP.NET Core (.NET 10) HTTP API owning the Customer Store Association,
+  the record that a customer is enrolled at a site for a store year (entry and
+  optional exit, entry grade level, membership type, primary-store flag, and
+  rollover intent). Spec-complete (Ready to build, 2026-09-29) with initial
+  implementation in progress; facts below are taken from the spec and are not yet
+  observed in a deployed service. Reads and writes the Customer Membership
+  DynamoDB store, validates every GUID reference synchronously against Customer
+  Profile, Academic Calendar, and the org-unit (site) service, and publishes change
+  events outbound-only to Loveseat via the Customer Membership Event Publisher.
+version: 0.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+runsOn: 01M5CS4D96-RT10
+language: C#
+classification: api-service
+runtimeRequirement: .NET 10
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - api-service
+  - dotnet
+  - eks
+  - planned
+  - product-component
+interfaces:
+  - name: Customer Membership REST API
+    protocol: REST
+    path: /api/orgs/{orgId}/store-years/{year}/customer-store-associations
+    authenticationModel: oauth
+    description: >-
+      Year-scoped list, create, get, full-replace update, and soft-delete of
+      CustomerstoreAssociation (If-Match optional). Scopes ss.membership.read,
+      ss.membership.write, and ss.membership.delete (delete separable because
+      tombstoning affects funding); deny by default. Cursor pagination (default
+      100, max 500) with no list filters; no by-customer, by-site, or cross-year
+      reads in v1. Health probes at /health/live and /health/ready are anonymous.
+runtimeSpec:
+  ports:
+    - number: 8080
+      protocol: HTTP
+      direction: inbound
+      name: web
+      description: HTTP API listener (container and service port 8080).
+  dependencies:
+    - ref: 01M5CS4D93-GMYC
+      purpose: Primary persistence for customer store associations and uniqueness markers.
+      interface: DynamoDB table SS_CustomerMembership_{Env}
+    - ref: 01KXR9XAR4-BES0
+      purpose: Validate customerId exists (create) before writing.
+      interface: GET /api/orgs/{orgId}/customers/{customerId} (Okta M2M, ss.profile.read)
+    - ref: 01KXR9XAR4-N2VN
+      purpose: Validate calendarId exists and belongs to the same siteId (create and every PUT carrying calendarId).
+      interface: GET /api/orgs/{orgId}/store-years/{year}/calendars/{calendarId} (Okta M2M, ss.calendar.read)
+    - ref: 01KYQ4D9RR-T700
+      purpose: Validate siteId and nextYearStoresiteId exist. Core HR Org Unit (owned by the HCM Sofa King Central team) is the service Sofa King relies on to retrieve site information, confirmed by the owner 2026-10-20.
+      interface: Org-unit site existence check, org in X-SK-ORG-ID (IDM M2M, scope open; endpoint contract not yet documented)
+    - ref: 01KWF3RGCF-T2HM
+      purpose: Retrieve Okta and IDM machine-to-machine client secrets.
+      interface: AWS Secrets Manager (namespace customer-membership/api/)
+environmentConfiguration:
+  - name: Aws__TableName
+    description: DynamoDB table name (SS_CustomerMembership_{Env}).
+    required: true
+    sensitive: false
+  - name: Jwt__Authority
+    description: Okta authority used to validate bearer tokens; null by default so a misconfigured deploy fails closed.
+    required: true
+    sensitive: false
+  - name: Jwt__Audience
+    description: Expected token audience.
+    required: true
+    sensitive: false
+  - name: SECRETS_NAMESPACE
+    description: Secrets Manager discovery prefix for the API (customer-membership/api/).
+    required: true
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-membership
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (net10.0), docker, aspnet-core, aws-cdk, dynamodb, lambda (crawled 2026-10-20; implementation in progress)
+  specification: >-
+    docs/architecture/membership-service-spec.md (status Ready to build,
+    2026-09-29; Jira TBSPS-4301 / TBSPS-9040). Treat the spec as intent; confirm
+    against the deployed service as it lands.
+  entitiesOwned: CustomerstoreAssociation only (aggregate root, one item). Membership is the concept; Customer Store Association is the record.
+  businessKey: >-
+    (siteId, customerId, entryDate), unique across store years, enforced by a
+    transactional uniqueness-marker item that a tombstone releases.
+  referentialIntegrity: >-
+    Fail-closed pre-write validation (boundary rule 6) of customerId, siteId,
+    calendarId, and nextYearStoresiteId; customerId and siteId are immutable. 10s
+    timeout, no retry, cache, or circuit breaker on dependency clients. Dependency
+    404/410 or site mismatch returns 400; 401/403 returns 500; timeout or 5xx
+    returns 503.
+  dataClassification: >-
+    Entry/exit dates and grade level are directory information; customerId links to
+    PII. Treated as confidential in the Customer Membership Store pending Data/Security
+    confirmation.
+  security: >-
+    In-service Okta JWT validation plus per-endpoint scope policies; tenant binding
+    is enforced at the gateway and the route orgId is trusted. Accepted residual
+    risk: dev and stage share one Okta authority and audience.
+  environments: >-
+    Deployed to the le1 EKS cluster in dev and stage (ArgoCD applications
+    le1.ss-msvc-customer-membership-{dev,stage}, namespace ss-msvc-customer-membership,
+    1 replica, requests 100m/256Mi, limits 800m/2048Mi, Traefik ingress hosts
+    customer-membership-{dev,stage}.ss.sofaking.example; confirmed in
+    k8s-deployments 2026-10-20). No prod overlay; production is intended for Chaise.
+    Open: Loveseat client and base URL, outbound Okta/IDM clients and base URLs, prod
+    VPC, prod Jwt authority and audience.
+  buildPrerequisites: >-
+    Sofa King.SharedCustomer.CanonicalModels 1.2.0 must publish (ss-lib-canonical-models
+    PR #8, TBSPS-2617); the site-service contract (endpoint, base URL, IDM scope,
+    SLO, owner) is undocumented.

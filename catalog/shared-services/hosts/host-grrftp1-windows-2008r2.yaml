@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ06-HST1
+type: host
+ownerRole: technology-admin
+name: GRRFTP1 Host
+description: Single Windows Server 2008 R2 host running the GRRFTP1 managed file-transfer service. No standby or clustered high-availability partner.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - host
+  - windows
+  - legacy
+  - grand rapids
+operatingSystemComponent: 01KQQ5JT1Q-E6ZM
+notes:
+  availabilityModel: Single server with no standby or clustered high-availability partner (owner-confirmed 2026-07-29).
+  recoverabilityModel: Can be restored from a VM backup (owner-confirmed 2026-07-29).
+  lifecycleRisk: Windows Server 2008 R2 is past extended support (2020-01-14). There is no active upgrade or retirement plan and no identified risk acceptance for this host (owner-confirmed 2026-07-29).
+  sourceSession: Confirmed via the Leave Management DRAFT L1 Compute and Runtime Review drafting session (catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml), tracked by OPS-049026.

@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-J3DF
+type: object_patch
+name: Sofa King capability.quality-gates implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.quality-gates.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-RTWC
+patch:
+  owner:
+    team: ottoman-platform-engineering
+    contact: platform-engineering-ottoman-eng@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1N-4850
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1R-2KJF
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1R-GS38
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: DEBGENPE77-DJ1A
+type: environment_tier
+name: UAT
+tierId: uat
+catalogStatus: complete
+purpose: other
+availabilityExpectation: business-hours
+costPosture: balanced
+description: |
+  User acceptance testing environment used for production-like validation before
+  release or customer acceptance. UAT may share production-style topology while
+  retaining non-production change and availability expectations.
+notes: >
+  Added from Tailor AAP evidence: grr-tailor-uat-web-playbook,
+  grr-tailor-uat-sql-playbook, grr-tailor-uat-ssrs-playbook, and
+  grr-tailor-uat-ssis-playbook all target GRR vmware UAT inventory groups.

@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KX421X49-VNRW
+type: data_component
+ownerRole: engineer
+name: Trifold Director Database
+description: >-
+  Primary operational SQL Server database for the Trifold CDP product
+  (Director), holding customer/case data. Discovered from the DBSolutions
+  folder of the KIOTrifold TFS codebase.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+targetEngine: mssql
+dataClassification: confidential
+containsPII: true
+tags:
+  - trifold
+  - cdp
+  - repository-discovery
+  - data-component
+repoUrl: TBD
+notes:
+  sourceRepository: "tfs://KIOTrifold/Dev/Source/DBSolutions/Director"
+  repositoryName: KIOTrifold
+  runsOnAssumption: >-
+    DataStoreService target assumed as SQL Server 2019 (existing-only) pending
+    owner confirmation of the exact SQL Server version in production.
+  sqlInstance: >-
+    Owner confirmed this database is hosted on SQL Server instance
+    GRRCDPDBSQL19\CDPPROD19, along with the Corvid Portal database.
+  sqlVersionConfirmed: >-
+    Owner confirmed on 2026-08-11 the actual engine build for this instance
+    is 16.0.42551.1 (SQL Server 2022) — contradicting both the SQL Server
+    2019 placeholder used for runsOn and the SQL Server 2016 SP3-GDR claim
+    from the "Trifold - System Requirements" Confluence page previously
+    used to answer the sql-server-version open question. runsOn intentionally
+    left unchanged pending a decision on a proper SQL Server 2022
+    DataStoreService object for this legacy dedicated instance.

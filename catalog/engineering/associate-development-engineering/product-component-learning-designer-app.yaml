@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01M71NWZVQ-SVSV
+type: product_component
+ownerRole: engineer
+name: Learning Designer App
+description: .NET Framework 4.8 web application (Virtual Showroom), forked from the LS CIS Virtual Showroom for use by the Resource Library. Hosted in IIS (repository BeerCanLabs/sk-learning-designer-app). Its database is described by the Learning Designer Db data component.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- associate-development
+- lcr
+- resource-library
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-learning-designer-app
+language: C#
+classification: web-application
+runtimeRequirement: .NET Framework 4.8 on IIS
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-learning-designer-app
+  deploymentPipeline: Build in TeamCity, deploy with Octopus Deploy (owner-confirmed). The repository packages the web project as a NuGet package (VirtualShowroom/nuspec/web.nuspec).
+  runtimeHostEvidence: CONTRIBUTING.md documents hosting in IIS with ASP.NET; the web project targets .NET Framework 4.8. runsOn is the IIS Standard Web Service (Windows Server on EC2), per owner. The repository does not state where the production IIS servers run; the owner supplied the Octopus deployment targets (see octopusDeploymentTargets).
+  octopusDeploymentTargets: Owner-provided from Octopus Deploy. Three enabled Listening Tentacle targets, all tagged PG-VirtualShowroom. Instances i-070a4b8318f71e7d9 (EC2AMAZ-HEE5B45) and i-0a69675b95a000b39 (EC2AMAZ-ILNAFS2) are in Octopus environment prod_ottm, and instance i-05aaee270456b9d7a is in environment aws_prod. All are on Sofa King private 10.101.x.x addresses. Owner confirms these instances are in AWS region us-east-1, in the Production Microservices account (736016846305). Owner confirms Octopus environment prod_ottm is Ottoman production (two instances) and aws_prod is IDM production (one instance), matching the IsOttoman app setting.
+  observedRuntimeSignals: dotnet-framework-4.8, iis, nuspec, mssql
+  observedManifestPaths: VirtualShowroom/VirtualShowroom.sln; VirtualShowroom/nuspec/web.nuspec; GitVersion.yml
+  observedDependencySignals: Uses an IDM OIDC client for sign-in and calls the Resource Library API and site (appSettings ResourceLibraryApiBaseUri, ResourceLibrarySiteBaseUri). Database is created from BeerCanLabs/sk-learning-designer-db (SQL Server).
+  awsEvidence: The repository does not name the production IIS servers. It contains no production host names; only stage and QA URLs in sample config and CONTRIBUTING. The only AWS evidence is database/buildspec.yml, an AWS CodeBuild job (us-east-1) that runs Flyway migrations against a SQL Server database, with the connection read from SSM parameter /CodeBuild/LearningDesigner/Flyway. Git history also shows an IsOttoman app setting and "morph deployment" test commits, so a Ottoman deployment path may exist; owner to confirm.
+  serviceAuthentication: Authenticates through IDM (OIDC, redirect path /oidc-idm) per README. Remaining details not confirmed; owner interview required.
+  secretsManagement: Secrets management approach was not confirmed; config files (appSettings.config, connectionStrings.config) are created per environment.
+  serviceLogging: Logging approach was not confirmed; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed.
+  availabilityModel: Availability target was not confirmed.
+  scalabilityModel: Scalability model was not confirmed.
+  recoverabilityModel: Recoverability model was not confirmed.
+  failureDomain: Failure domain was not confirmed.
+runtimeSpec:
+  dependencies:
+  - ref: 01KSM38KG2-RP4P
+    purpose: Application database (SQL Server).
+    interface: connectionStrings VirtualShowroom
+  - ref: 01M71NWZVQ-HKYG
+    purpose: Resource Library API used by the app.
+    interface: appSettings ResourceLibraryApiBaseUri

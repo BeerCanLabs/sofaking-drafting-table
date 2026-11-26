@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: QSJJ1SPDHQ-A56F
+name: Ottoman Passport Core Service → Ottoman Invitation Service
+catalogStatus: stub
+source: 01KSM38KFX-9EHD
+label: calls
+target: 01KSM38KFX-ETDW
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "INVITATION_SVC_BASE_URL confirmed in apps/plat-passport-core/.env.example; Passport Core orchestrates invitation acceptance per its ProductComponent description. Already recorded informally in architectureNotes.dependencies; formalized here as a Relationship object."
+capabilities: []

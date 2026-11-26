@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YE-S03F
+name: Amazon Linux 2 on EC2 Standard Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT02-3AQK
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Authentication dependency for enterprise access and administration."
+capabilities:
+- 01KQQ4Q026-MHJM

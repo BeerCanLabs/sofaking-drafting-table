@@ -1,0 +1,71 @@
+schemaVersion: '1.0'
+uid: 01KZZ7RDS0-6N2Q
+type: data_store_service
+ownerRole: engineer
+name: Leave Redis Cloud
+description: Deployment-specific Redis Cloud service being introduced for Leave job-availability workloads.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - leave
+  - redis
+  - redis-cloud
+  - aws
+  - availability-store
+  - deployment-specific
+vendor: Redis
+productName: Redis Cloud
+productVersion: managed
+deliveryModel: saas
+patchingOwner: vendor-managed
+authenticationModel: other
+architectureNotes:
+  relatedGenericCatalogEntry: 01KQQ5JT00-191S
+  genericEntryApplicability: The existing generic Redis Caching Service entry describes a self-managed Redis pattern. Its Sentinel or cluster topology, backup, RPO, RTO, and centralized-secret assumptions must not be inherited by this Redis Cloud deployment.
+  operationalOwner: DBRE owns the Redis Cloud subscription and database operational configuration.
+  deployment:
+    cloud: AWS
+    region: us-east-1
+    currentEnvironment: stage
+    stageDatabase: RDB-LEAVE-AVAILABILITY-STORE-STG01
+    productionTopology: Not yet confirmed.
+    availabilityAndReplication: Multi-zone placement, replication, failover, and high-availability behavior have not yet been confirmed.
+  expectedWorkloads:
+    - componentRef: 01KQQ5JT06-KTPA
+      component: Leave Jag
+      relationship: Believed to support the new Job Availability Generator availability store.
+      status: Inferred from the stage database name; Engineering confirmation required.
+    - componentRef: 01KQQ5JT06-YPRZ
+      component: Leave Mosjobchecker
+      relationship: Expected to support the new MOS Checker version after production rollout.
+      status: Planned and SME-reported; Engineering confirmation required.
+  persistenceModel:
+    intendedBehavior: Redis Cloud data is intended to be persistent.
+    systemOfRecord: The Rota database remains the source of truth.
+    rebuildability: Engineering has stated that Redis data can be rebuilt from Rota.
+  dataClassification:
+    status: Unknown.
+    ownerFollowUp: Engineering confirmation is required for PII and sensitivity classification.
+  applicationAuthentication:
+    model: Username and password service accounts.
+    credentialStorage: Unknown.
+    rotation: Unknown.
+  humanAccess:
+    model: Human users authenticate through SSO in the My Apps portal.
+  monitoring:
+    platform: Believed to use built-in Redis Cloud monitoring and alerting based on DBRE-observed email notifications.
+    confidence: Not yet confirmed from the Redis Cloud configuration.
+    thresholdsAndRouting: Unknown.
+  recoverability:
+    rpo: Unknown.
+    rto: Unknown.
+    backupAndRestore: Unknown.
+    disasterRecovery: Region-level recovery behavior has not yet been confirmed.
+  knownOperationalRisks:
+    - Production topology, availability-zone design, failover behavior, and disaster recovery remain undefined in the catalog.
+    - Application credential storage and rotation have not been confirmed.
+    - Monitoring thresholds, notification routing, data classification, RPO, and RTO require Engineering or operational validation.

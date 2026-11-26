@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ8X-TWCF
+type: decision_record
+name: AccuRoute (OmTool) Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KS4DGJVK-Q9GY
+linkedObject: 01KS4DGJVK-Q9GY
+decisionRationale: "resilienceModel: Single appliance with no HA pair. Failure domain is bounded to the appliance.\n\nconfigurableSurface: OmTool administration console for routing rules and queue configuration.\n\nfailureDomain: Single AccuRoute appliance; no geographic redundancy."

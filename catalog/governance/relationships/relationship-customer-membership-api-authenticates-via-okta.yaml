@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01M5CT6KT0-7VJ4
+type: relationship
+ownerRole: engineer
+name: Customer Membership Service → Okta
+description: >-
+  The Customer Membership Service validates caller bearer tokens against Okta
+  (Jwt:Authority and Audience), enforces ss.membership.read, write, and delete
+  scopes in-service, and uses Okta machine-to-machine clients (ss.profile.read,
+  ss.calendar.read) for its outbound Customer Profile and Academic Calendar
+  validation calls. Per the membership spec.
+source: 01KXR9XAR4-HKKE
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OIDC / OAuth 2.0
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - identity
+  - planned

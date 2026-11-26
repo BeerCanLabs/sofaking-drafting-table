@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ3TZ2F-ABBZ
+type: relationship
+name: 'Platform Sand File → AWS Simple Queue Service'
+catalogStatus: stub
+source: 01KSM38KFT-TS9E
+target: 01KQQ5JT05-0C4P
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: asynchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Declared by sand-File source inspection 2026-07-29. Persistence held in the public API tier rather than behind an internal microservice.

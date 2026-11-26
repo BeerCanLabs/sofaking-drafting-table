@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: GW54R0VS1H-MN5F
+name: Platform Msvc Org Person → Ottoman Domain Service
+catalogStatus: stub
+source: 01KSM38KFH-NYK5
+label: calls
+target: 01KSM38KFW-WA83
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via DOMAIN_SVC_BASE_URL and src/service/domain.js axios calls to /v1/persons and /v1/domains (create/search/delete person, idp lookups)."
+capabilities: []

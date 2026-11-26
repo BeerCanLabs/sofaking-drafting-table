@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 8HSAQJHAR3-TSZB
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft .NET Runtime 5
+description: Legacy .NET 5 application runtime (non-LTS).
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - software
+  - app-framework
+  - dotnet
+  - legacy
+classification: software
+vendor: Microsoft Corporation
+productName: .NET
+productVersion: '5'
+vendorLifecycle:
+  mainstreamSupportEnd: 2022-05-10
+  extendedSupportEnd: 2022-05-10
+  notes: .NET 5 reached end of support on 2022-05-10.
+capabilities:
+  - 01KT0V5MCV-RZV0
+notes:
+  background: >-
+    Added to represent legacy Sofa King Central workloads identified in
+    OPS-255153. See SKC-47920 for modernization tracking.

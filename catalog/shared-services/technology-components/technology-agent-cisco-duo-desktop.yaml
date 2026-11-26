@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-6M9E
+type: technology_component
+ownerRole: technology-admin
+name: Cisco Duo Desktop
+description: Desktop authentication client used to enforce multifactor login flows.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- authentication
+classification: agent
+vendor: Cisco
+productName: Duo Desktop
+productVersion: current
+platformDependency: external.authentication.cisco-duo
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Lifecycle follows the vendor-managed Duo service.
+capabilities:
+- 01KQQ4Q026-4JR6

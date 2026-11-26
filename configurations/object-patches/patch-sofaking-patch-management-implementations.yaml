@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-G3EV
+type: object_patch
+name: Sofa King capability.patch-management implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.patch-management.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-BH6E
+patch:
+  owner:
+    team: cloud-engineering-infrastructure
+    contact: cloud-engineering@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1N-9MHG
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1N-WH7R
+    lifecycleStatus: existing-only
+    notes: Assumed existing-only for AWS Systems Manager based patch orchestration where Automox is not the selected pattern.
+  - ref: 01KQQ5JT1P-23A3
+    lifecycleStatus: existing-only
+    notes: Assumed existing-only for remaining Microsoft Configuration Manager managed estates.

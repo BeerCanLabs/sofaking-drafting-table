@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF0-NCWT
+type: product_component
+ownerRole: engineer
+name: WSERP Web (Ledgerline/OL6)
+description: 'Browser-based WSERP product comprising the Ledgerline Angular frontend and .NET 8 API. It implements a subset of Desktop functionality.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+runsOn: 01KQQ5JT03-2NEW
+tags:
+- erp
+- dotnet
+- angular
+- web
+- oregon
+- product-component
+repoUrl: TBD
+classification: web-application
+language: TypeScript 5.4.5 / C# (.NET 8)
+notes:
+  technologyStack: Ledgerline frontend uses Angular 17.3.4 and TypeScript 5.4.5; Ledgerline API uses .NET 8.
+  runtimeRequirement: Hosted on the shared Web IIS tier, separate from Portal VMs.

@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJE-4200
+type: object_patch
+name: Sofa King Service Mesh capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Service Mesh capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-RM8M
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1R-B7GP
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Dapr Sidecar Service Standard.

@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-C50S
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft PowerShell 7.3.9
+description: PowerShell runtime installed on the Linux automation control node for shopstar Linux orchestration.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- powershell
+- linux
+classification: software
+vendor: Microsoft
+productName: PowerShell
+productVersion: 7.3.9
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2024-05-08'
+  notes: PowerShell 7.3 is past vendor support; replace with a supported PowerShell 7 release.
+capabilities:
+- 01KT0XNZEY-35Y2
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/shopstar_linux.yml."

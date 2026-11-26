@@ -1,0 +1,70 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T73-AHA1
+type: software_deployment_pattern
+ownerRole: engineer
+name: Translation Direct
+description: >-
+  Software Deployment Pattern for Translation Direct — a cross-product
+  document translation service integrating with the One Hour Translation
+  API. Discovered from the TranslationDirect and TranslationDirectDB folders
+  of the KIOTrifoldStandaloneApplication repo. Owner confirmed on
+  2026-09-10 this legacy app is superseded by sei-translation-service, a
+  modern .NET microservice on EKS.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: Trifold
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - special-programs
+  - trifold
+  - translation-direct
+followsReferenceArchitecture: 01KQQ5JT1D-N9DB
+supersededBy: 01KSM38KGE-GYTE
+notes:
+  availabilityRequirement: Availability requirement was not confirmed by owner interview.
+  dataClassification: internal
+  failureDomain:
+    scope: service-group
+    description: >-
+      Legacy dedicated-stack deployment, consistent with the rest of the
+      Trifold family. Not yet confirmed by owner interview.
+  patternDeviations: >-
+    Owner confirmed production hosted on GRRCDPMISCWEB11 (grr-datacenter);
+    QA hosted on HPTCDPDEVMISC1 (high point-datacenter). Owner believes
+    the previously-observed connection-string server name CDPINTMISC is an
+    outdated/retired name, not a distinct current host.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+  - name: Web Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KX4A2T6Z-3MTP
+        diagramTier: presentation
+        networkZone: web
+        notes: Translation Direct document translation web application.
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: data
+        networkZone: data
+        notes: Shared SQL Server 2019 DataStoreService (existing-only); not yet confirmed by owner interview.
+      - ref: 01KX4A2T6F-8QEN
+        diagramTier: data
+        networkZone: data
+        notes: Translation Direct Database.
+decisionRecords: []

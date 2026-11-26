@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YF-T3W2
+name: Amazon Linux 2 Physical Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT02-0BJZ
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Host endpoint protection telemetry and response."
+capabilities:
+- 01KQQ4Q026-JW52

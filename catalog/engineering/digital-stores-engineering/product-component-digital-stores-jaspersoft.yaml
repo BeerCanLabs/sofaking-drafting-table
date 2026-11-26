@@ -1,0 +1,52 @@
+schemaVersion: '1.0'
+uid: 01M3SCXAH0-AQ06
+type: product_component
+name: Digital Stores Jaspersoft
+description: >-
+  Stub. A separately paid JasperReports-based custom-report and data-extract service that runs ten
+  nightly extracts against the Digital Stores SQL Server estate and delivers them over
+  ftp.digital-showrooms.example. Confirmed to exist via answer 7.1 of the DRAFT L1 Baseline Questionnaire
+  (2026-09-08) and enumerated in DecisionRecord 01M25X9W0R-56TA (external dependencies) and
+  DecisionRecord 01M263WKS2-NR3T (inter-service-connections). Deliberately not modeled on the
+  existing RT-ERP-specific JasperSoft Reporting Service (01KQQ5JT1F-737K): that object is an
+  ECS-per-region deployment evidenced for a different product, and reusing it here would assert an
+  unverified hosting model. Registered now only to anchor the confirmed Jaspersoft-to-SQL-Server
+  relationship as a real object rather than a narrative reference; full posture is unconfirmed and is
+  the remaining scope of the register-external-dependencies next step in DraftingSession
+  01M0GBWMZJ-8XYB.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- jaspersoft
+- stub
+- external-dependency
+classification: other
+repoUrl: 'N/A — third-party COTS product (Jaspersoft), no Sofa King-owned repository'
+runtimeRequirement: 'N/A — third-party COTS product'
+architectureNotes:
+  hostingModel: >-
+    Not confirmed. Neither main-ang nor server-ang evidences where Jaspersoft runs, and it was not
+    asked directly in the 2026-09-08 questionnaire round - only that it exists and reads region data
+    for nightly extracts. Could be a Digital Stores-operated host in AWS account 472468972873, a
+    separate vendor-hosted instance, or something else. No deploymentTarget or runsOn reference is
+    asserted pending owner interview.
+  serviceAuthentication: Not confirmed. Owner interview required.
+  secretsManagement: Not confirmed. Owner interview required.
+  serviceLogging: Not confirmed. Owner interview required.
+  availabilityModel: Not confirmed. Owner interview required.
+  recoverabilityModel: Not confirmed. Owner interview required.
+  dataFlow: >-
+    Confirmed by the owner on 2026-09-08: reads from the Digital Stores SQL Server estate
+    (01M25X9W0R-VQJ3) to produce ten nightly customer data extracts, delivered over an SFTP host at
+    ftp.digital-showrooms.example. Both the extract content and the SFTP host's own posture (encryption,
+    retention, access control) are unconfirmed and out of scope for this stub.
+decisionRecords:
+- ref: 01M25X9W0R-56TA
+  key: existence
+- ref: 01M263WKS2-NR3T
+  key: dataFlow

@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KT4NPBC1-TKS0
+type: object_patch
+name: Sofa King WAF capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT WAF capability. Replaces the retired local capability-sofaking-waf.yaml.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-Z079
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQS0TF50-8W8X
+      lifecycleStatus: preferred
+      notes: Preferred cloud WAF option for services routed through Imperva.
+    - ref: 01KQQ5JT1N-8E8B
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the Signal Sciences Security Agent Service Standard.
+    - ref: 01KQQ5JT1N-X9FJ
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only for legacy IIS-hosted Signal Sciences deployments.

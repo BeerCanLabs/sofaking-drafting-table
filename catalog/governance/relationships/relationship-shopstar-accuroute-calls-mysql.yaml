@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E3-0X5Q
+name: AccuRoute (OmTool) → MySQL 8 DBMS Service
+catalogStatus: incomplete
+source: 01KS4DGJVK-Q9GY
+label: writes to
+target: 01KQQ5JT00-WKWF
+description: >-
+  In the confirmed legacy scan-to-archive path, AccuRoute writes routed
+  document information to shopstar MySQL. Normal BIRT report generation does not
+  use AccuRoute.
+technology: MySQL JDBC
+direction: synchronous
+flow: outbound
+tags:
+  - shopstar-v3
+  - document-routing
+  - legacy
+notes:
+  background: >-
+    Email enters through Mimecast/Exchange before OmTool processes the
+    document. The target shared-service UID identifies the existing MySQL
+    service family only; its generic Group Replication, HA, RPO, and RTO
+    characteristics do not apply to shopstar.
+  unresolved: >-
+    Whether cover-sheet, conversion, email/fax, or other AccuRoute paths use
+    this database edge is not confirmed. Exact schemas, archive destinations,
+    transaction boundaries, and the active database group used by this path
+    are also unresolved; no engine status is inferred without that mapping.
+capabilities: []

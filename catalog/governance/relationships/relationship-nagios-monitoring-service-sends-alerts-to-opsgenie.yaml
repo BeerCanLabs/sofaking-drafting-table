@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: V8FWQZZ34C-9A56
+name: Nagios Monitoring Service → Opsgenie Alerting Service
+catalogStatus: incomplete
+source: 01KQQ5JT1F-E2CC
+label: sends alerts to
+target: 01KYWPPQ2Q-8AE1
+direction: asynchronous
+flow: outbound
+notes:
+  background: Owner-confirmed on 2026-08-03 that Nagios sends operational alerts for Grand Rapids Leave Management to the CloudOps-HCM Opsgenie team, shared with Dynatrace Leave alerts. MDaemon service-health and mail-queue-depth alerts from GRRMAIL1 through GRRMAIL6 were explicitly confirmed on this route on 2026-08-13. During daylight time, weekday routing uses CloudOps_HCM_Office_In_Schedule from 12:00 AM through 6:00 PM EDT and CloudOps_HCM_Office_Out_Schedule afterward. During standard time, Office-In runs 11:00 PM through 6:00 PM EST and Office-Out runs 6:00 PM through 11:00 PM EST; start times can vary with offshore staffing. Office-Out provides continuous weekend coverage from Friday 6:00 PM through Monday 12:00 AM. Alert priorities and detailed escalation rules remain undocumented.
+capabilities:
+- 01KQQ4Q026-98VD

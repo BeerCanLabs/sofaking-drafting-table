@@ -1,0 +1,836 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFV-2QAF
+type: software_deployment_pattern
+ownerRole: engineer
+name: Sofa King Platform - Pattern
+aliases:
+- Platform Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.platform
+  productFamily: Platform
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- platform
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KQQ5JT0T-KHQD
+    repositoryName: BeerCanLabs/sk-msvc-LeaveTimeInternalTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-LeaveTimeInternalTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFX-HH4N
+    repositoryName: BeerCanLabs/sk-msvc-AccountMigration
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-AccountMigration
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFX-4R15
+    repositoryName: BeerCanLabs/sk-msvc-audit-logging
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-audit-logging
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme, serverless
+  - productService: 01KSM38KFV-ZCZD
+    repositoryName: BeerCanLabs/sk-msvc-cc-loveseat-connector
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-cc-loveseat-connector
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFW-7T74
+    repositoryName: BeerCanLabs/sk-msvc-cc-oplog-processor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-cc-oplog-processor
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFY-HK2X
+    repositoryName: BeerCanLabs/sk-msvc-CCPlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-CCPlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFA-X9SK
+    repositoryName: BeerCanLabs/sk-msvc-Credential
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Credential
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-CQK3
+    repositoryName: BeerCanLabs/sk-msvc-DataImport
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-DataImport
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFG-SYNY
+    repositoryName: BeerCanLabs/sk-msvc-Department
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Department
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KFG-BJHR
+    repositoryName: BeerCanLabs/sk-msvc-retail-institution
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-retail-institution
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, node, readme
+  - productService: 01KSM38KFY-SGT5
+    repositoryName: BeerCanLabs/sk-msvc-EmailService
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-EmailService
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-S9ZC
+    repositoryName: BeerCanLabs/sk-msvc-EmailValidation
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-EmailValidation
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFG-MYWB
+    repositoryName: BeerCanLabs/sk-msvc-Employee
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Employee
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFG-QAVJ
+    repositoryName: BeerCanLabs/sk-msvc-Employer
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Employer
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFY-PW52
+    repositoryName: BeerCanLabs/sk-msvc-EventListener
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-EventListener
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-5GBK
+    repositoryName: BeerCanLabs/sk-msvc-externalAPIService
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-externalAPIService
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KQQ5JT0V-ZZ3J
+    repositoryName: BeerCanLabs/sk-msvc-fc-credential
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-fc-credential
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFY-PB2S
+    repositoryName: BeerCanLabs/sk-msvc-feature-flag
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-feature-flag
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFY-DJKY
+    repositoryName: BeerCanLabs/sk-msvc-File
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-File
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-DZKV
+    repositoryName: BeerCanLabs/sk-msvc-FormInstance
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-FormInstance
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-6TSZ
+    repositoryName: BeerCanLabs/sk-msvc-FormsV2
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-FormsV2
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KG5-X3NQ
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-ai-prompt-service
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-ai-prompt-service
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, node, readme, terraform
+  - productService: 01KSM38KG6-65T4
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-applications
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-applications
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG6-NN6D
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-dashboard
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-dashboard
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KG6-0YP7
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-job-postings
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-job-postings
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG6-0W10
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-job-seeker
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-job-seeker
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG6-B4CV
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-organizations
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-organizations
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG6-GGGP
+    repositoryName: BeerCanLabs/sk-msvc-hcmrh-permissions
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-hcmrh-permissions
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KFA-2SRB
+    repositoryName: BeerCanLabs/sk-msvc-IDM-Okta-Adapter
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-IDM-Okta-Adapter
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFY-HRZ1
+    repositoryName: BeerCanLabs/sk-msvc-ImportProcessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ImportProcessor
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-R53Q
+    repositoryName: BeerCanLabs/sk-msvc-InteractionService
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-InteractionService
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFG-FCFP
+    repositoryName: BeerCanLabs/sk-msvc-JobType
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-JobType
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFY-7P1C
+    repositoryName: BeerCanLabs/sk-msvc-List
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-List
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet
+  - productService: 01KSM38KFH-XBKG
+    repositoryName: BeerCanLabs/sk-msvc-Location
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Location
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG3-6FDK
+    repositoryName: BeerCanLabs/sk-msvc-Micro-Credentials
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Micro-Credentials
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFY-JK7R
+    repositoryName: BeerCanLabs/sk-msvc-NotificationInbox
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-NotificationInbox
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFY-5TKC
+    repositoryName: BeerCanLabs/sk-msvc-NotificationProcessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-NotificationProcessor
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFZ-JZVM
+    repositoryName: BeerCanLabs/sk-msvc-NotificationQueue
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-NotificationQueue
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFH-NYK5
+    repositoryName: BeerCanLabs/sk-msvc-org-person
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-org-person
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme, serverless
+  - productService: 01KSM38KFH-JDYM
+    repositoryName: BeerCanLabs/sk-msvc-org-person-swagger-alb-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-org-person-swagger-alb-api
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: cloudformation, docker, kubernetes, node, python, readme, serverless
+  - productService: 01KSM38KFH-HE70
+    repositoryName: BeerCanLabs/sk-msvc-Organization
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Organization
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, github_actions, node, readme
+  - productService: 01KSM38KFZ-EABN
+    repositoryName: BeerCanLabs/sk-msvc-pde-content
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pde-content
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFZ-A4YZ
+    repositoryName: BeerCanLabs/sk-msvc-pde-UserServiceClient
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pde-UserServiceClient
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFZ-12Z5
+    repositoryName: BeerCanLabs/sk-msvc-pde-UserUpdateHandlerService
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pde-UserUpdateHandlerService
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFZ-HDMC
+    repositoryName: BeerCanLabs/sk-msvc-PDEPlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-PDEPlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFZ-E28N
+    repositoryName: BeerCanLabs/sk-msvc-PDFProcessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-PDFProcessor
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFA-34QP
+    repositoryName: BeerCanLabs/sk-msvc-Permissions
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Permissions
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG3-G2XX
+    repositoryName: BeerCanLabs/sk-msvc-pg-activity
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pg-activity
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KG3-SDKE
+    repositoryName: BeerCanLabs/sk-msvc-pg-content
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pg-content
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KG3-8PKZ
+    repositoryName: BeerCanLabs/sk-msvc-pg-forms
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-pg-forms
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KFZ-KP71
+    repositoryName: BeerCanLabs/sk-msvc-Plat-Announcements
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Plat-Announcements
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFZ-4ZFW
+    repositoryName: BeerCanLabs/sk-msvc-plat-audit
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-plat-audit
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFZ-5GK6
+    repositoryName: BeerCanLabs/sk-msvc-plat-permission
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-plat-permission
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFZ-29EE
+    repositoryName: BeerCanLabs/sk-msvc-plat-websocket
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-plat-websocket
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFZ-CB4T
+    repositoryName: BeerCanLabs/sk-msvc-PlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-PlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFH-TM0Y
+    repositoryName: BeerCanLabs/sk-msvc-Position
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Position
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFZ-EF1G
+    repositoryName: BeerCanLabs/sk-msvc-PremiumAccountManager
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-PremiumAccountManager
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG0-0KA5
+    repositoryName: BeerCanLabs/sk-msvc-ProactiveSiteMap
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ProactiveSiteMap
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFA-S2A5
+    repositoryName: BeerCanLabs/sk-msvc-ProductAccess
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ProductAccess
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFA-5078
+    repositoryName: BeerCanLabs/sk-msvc-ProductAccess-lambda
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ProductAccess-lambda
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KG6-A2W6
+    repositoryName: BeerCanLabs/sk-msvc-RecruitFCErrorQueue
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RecruitFCErrorQueue
+    repositoryPrimaryLanguage: PowerShell
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG6-RHBN
+    repositoryName: BeerCanLabs/sk-msvc-RecruitIdentityProvider
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RecruitIdentityProvider
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG6-4SDY
+    repositoryName: BeerCanLabs/sk-msvc-RecruitNotifications
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RecruitNotifications
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG6-WV7Z
+    repositoryName: BeerCanLabs/sk-msvc-RecruitPlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RecruitPlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KG0-17X9
+    repositoryName: BeerCanLabs/sk-msvc-ResourceLibrary
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ResourceLibrary
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG0-YG4N
+    repositoryName: BeerCanLabs/sk-msvc-ResourceLibrary-lambda
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ResourceLibrary-lambda
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: readme, serverless
+  - productService: 01KSM38KG7-VNVW
+    repositoryName: BeerCanLabs/sk-msvc-rl-elasticsync
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-rl-elasticsync
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG7-5WAF
+    repositoryName: BeerCanLabs/sk-msvc-RL-EventProcessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RL-EventProcessor
+    repositoryPrimaryLanguage: HCL
+    observedRuntimeSignals: docker, node, readme, terraform
+  - productService: 01KSM38KG7-F58M
+    repositoryName: BeerCanLabs/sk-msvc-rlVideoPlayer
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-rlVideoPlayer
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG0-GGGG
+    repositoryName: BeerCanLabs/sk-msvc-RubricDesigner
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-RubricDesigner
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme, terraform
+  - productService: 01KSM38KFJ-5P3W
+    repositoryName: BeerCanLabs/sk-msvc-staff-member
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-staff-member
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KG0-C36C
+    repositoryName: BeerCanLabs/sk-msvc-WorkflowDefinition
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-WorkflowDefinition
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG0-B9ZX
+    repositoryName: BeerCanLabs/sk-msvc-WorkflowInstance
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-WorkflowInstance
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG0-SWRJ
+    repositoryName: BeerCanLabs/sk-msvc-WorkflowProcessor
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-WorkflowProcessor
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG0-SDFY
+    repositoryName: BeerCanLabs/sk-msvc-ZendeskTokenAdapter
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-ZendeskTokenAdapter
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFX-AF27
+    repositoryName: BeerCanLabs/sk-plat-bff-sofaking-tools
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-bff-sofaking-tools
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFX-BNB9
+    repositoryName: BeerCanLabs/sk-plat-bff-ottoman-muap
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-bff-ottoman-muap
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFX-907S
+    repositoryName: BeerCanLabs/sk-plat-ottoman-lambdas
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-ottoman-lambdas
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme, serverless
+  - productService: 01KSM38KFZ-HYKP
+    repositoryName: BeerCanLabs/sk-plat-msvc-orgperson
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-msvc-orgperson
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG0-4HE0
+    repositoryName: BeerCanLabs/sk-plat-notification-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-notification-api
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KG0-3Z8G
+    repositoryName: BeerCanLabs/sk-plat-permission-service
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-permission-service
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG0-5NC8
+    repositoryName: BeerCanLabs/sk-plat-svc-auth-lookup-service
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-svc-auth-lookup-service
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFX-YHNB
+    repositoryName: BeerCanLabs/sk-platform-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-platform-api
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KFZ-NA5K
+    repositoryName: BeerCanLabs/sk-msvc-Plat-Data-Import
+    sourceRepository: https://github.com/BeerCanLabs/sk-msvc-Plat-Data-Import
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme, serverless
+  - productService: 01KSM38KFX-R9AA
+    repositoryName: BeerCanLabs/sk-plat-data-exporter
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-data-exporter
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme, serverless
+  - productService: 01KSM38KFX-X7MB
+    repositoryName: BeerCanLabs/sk-plat-ai-frontend
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-ai-frontend
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG0-P6RD
+    repositoryName: BeerCanLabs/sk-plat-ui-sofaking-tools
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-ui-sofaking-tools
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG0-1B9E
+    repositoryName: BeerCanLabs/sk-plat-ui-ottoman-muap
+    sourceRepository: https://github.com/BeerCanLabs/sk-plat-ui-ottoman-muap
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KFT-JQ4V
+    repositoryName: BeerCanLabs/sk-sand-mobile-bff
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-mobile-bff
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KFS-JSTS
+    repositoryName: BeerCanLabs/sk-sand-QuickfitPlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-QuickfitPlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFS-3ZRM
+    repositoryName: BeerCanLabs/sk-sand-Credential
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Credential
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFS-0KQ2
+    repositoryName: BeerCanLabs/sk-sand-Department
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Department
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-VQP6
+    repositoryName: BeerCanLabs/sk-sand-Employee
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Employee
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, terraform
+  - productService: 01KSM38KFT-TS9E
+    repositoryName: BeerCanLabs/sk-sand-File
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-File
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-E80B
+    repositoryName: BeerCanLabs/sk-sand-Form
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Form
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-KHN8
+    repositoryName: BeerCanLabs/sk-sand-Insights
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Insights
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-EZX6
+    repositoryName: BeerCanLabs/sk-sand-insights-RH
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-insights-RH
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-X06Q
+    repositoryName: BeerCanLabs/sk-sand-Jobtype
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Jobtype
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme
+  - productService: 01KSM38KFT-SV4K
+    repositoryName: BeerCanLabs/sk-sand-List
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-List
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-JJ3K
+    repositoryName: BeerCanLabs/sk-sand-Location
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Location
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-N5SH
+    repositoryName: BeerCanLabs/sk-sand-Notifications
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Notifications
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-ZVFF
+    repositoryName: BeerCanLabs/sk-sand-Organization
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Organization
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-RGK1
+    repositoryName: BeerCanLabs/sk-sand-Permission
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-Permission
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-SCAJ
+    repositoryName: BeerCanLabs/sk-sand-RecruitNavigation
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-RecruitNavigation
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFT-303M
+    repositoryName: BeerCanLabs/sk-sand-RecruitZendesk
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-RecruitZendesk
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFV-DHBD
+    repositoryName: BeerCanLabs/sk-sand-TrifoldPlatformTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-sand-TrifoldPlatformTools
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KQQ5JT0T-KHQD
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-HH4N
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-4R15
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFV-ZCZD
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFW-7T74
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KFY-HK2X
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-CQK3
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-SGT5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-S9ZC
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFG-QAVJ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-PW52
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-5GBK
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-PB2S
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-DJKY
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-DZKV
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-6TSZ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG5-X3NQ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG6-65T4
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG6-NN6D
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG6-0YP7
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KG6-0W10
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KG6-B4CV
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG6-GGGP
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFA-2SRB
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-R53Q
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-6FDK
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-JK7R
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFY-5TKC
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KFZ-JZVM
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFH-NYK5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFH-JDYM
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFH-HE70
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-EABN
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-A4YZ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-12Z5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-HDMC
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-G2XX
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-SDKE
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-8PKZ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-KP71
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-5GK6
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-29EE
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFZ-CB4T
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFH-TM0Y
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-EF1G
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-0KA5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFA-S2A5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFA-5078
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KG6-A2W6
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG6-RHBN
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG6-4SDY
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG6-WV7Z
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG0-17X9
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-YG4N
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KG7-VNVW
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG7-5WAF
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KG7-F58M
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-GGGG
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFJ-5P3W
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-SDFY
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-AF27
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-BNB9
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-907S
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KFZ-HYKP
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-4HE0
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-3Z8G
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG0-5NC8
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFX-YHNB
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFZ-NA5K
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFX-R9AA
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFX-X7MB
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG0-P6RD
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KG0-1B9E
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFT-JQ4V
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFS-JSTS
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-E80B
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-KHN8
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-EZX6
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-X06Q
+    diagramTier: application
+    networkZone: ops
+  - ref: 01KSM38KFT-SV4K
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-ZVFF
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFT-SCAJ
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFT-303M
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFV-DHBD
+    diagramTier: application
+    networkZone: app

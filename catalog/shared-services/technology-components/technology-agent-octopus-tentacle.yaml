@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-1QHY
+type: technology_component
+ownerRole: technology-admin
+name: Octopus Tentacle
+description: Deployment agent used to register Windows hosts with Octopus Deploy and receive application deployments.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- deployment
+- agent
+classification: agent
+vendor: Octopus Deploy
+productName: Tentacle
+productVersion: latest
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SRE automation downloads the latest Octopus Tentacle installer at provisioning time; exact installed version needs owner confirmation.
+capabilities:
+- 01KT0XNZEY-Q2TF
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/octopus_tentacle/tasks/main.yml and vars/main.yml."

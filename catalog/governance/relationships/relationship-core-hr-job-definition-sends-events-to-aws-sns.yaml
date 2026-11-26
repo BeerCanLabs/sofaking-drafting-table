@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHT-H6XK
+type: relationship
+name: 'Core HR Job Definition → AWS SNS'
+catalogStatus: stub
+source: 01KYQ4D9RV-KPHB
+target: 01KQQ5JT05-HTRA
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: CoreHR event publication.

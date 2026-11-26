@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 6S5V669HDB-RFYP
+type: data_component
+ownerRole: engineer
+name: Leave Archive Database
+description: Queryable historical archive database for Leave Management, used to offload older Rota records from the main production database.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT01-950D
+tags:
+  - confluence-documented
+  - leave
+  - rota
+  - archive
+  - sqlserver
+  - data-component
+repoUrl: TBD
+targetEngine: mssql
+dataClassification: restricted
+containsPII: true
+architectureNotes:
+  sourceDocuments:
+    - title: AT - SQL Server Environment Connectivity - 2025 Build
+      url: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/19925233917/AT+-+SQL+Server+Environment+Connectivity+-+2025+Build
+      lastModified: '2026-06-24'
+      authority: Confirmed by owner interview on 2026-07-15 as current truth for Leave Management.
+  databasePlatform: Windows Server 2022 Standard Edition with SQL Server 2022 Enterprise Edition.
+  archivePurpose: Owner confirmed on 2026-07-15 that the archive stores long-term historical data that remains queryable and offloads old Rota records from the main production database.
+  sqlEnvironment:
+    sqlInstance: GRRLVAARCDB01\LVAARC01
+    listener: GRRLVAARCCN1.ROTAPROD.EXAMPLE
+    port: 59981
+  classificationRationale: Inherits restricted classification and PII expectation from archived Rota person-level leave data; confirm if archive-specific redaction or retention controls differ from production.
+  retentionPolicy: Long-term archive retention duration requires DBA or product-owner confirmation.
+  serviceAuthentication: Authentication model requires DBA or product-owner confirmation.
+  secretsManagement: Secrets management approach requires DBA or product-owner confirmation.
+  serviceLogging: Logging and audit-forwarding approach requires DBA or product-owner confirmation.
+  availabilityModel: Archive availability posture was not documented beyond the standalone SQL Server 2022 archive instance.
+  recoverabilityModel: Backup cadence, restore objective, and archive restore procedure require DBA confirmation.
+  failureDomain: Archive database issues affect historical query and offloaded-record access rather than the main production Rota transactional database.

@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+uid: 01KZ6ZASW4-M019
+type: relationship
+name: at-api-employee connects to Rota Database
+description: Observed direct SQL Server access from the chaise workload to the production Rota database.
+source: 01KQQ5JT07-KA0H
+target: 01KQQ5JT06-0KZE
+label: connects to
+technology: Microsoft SQL Server TDS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+notes: Dynatrace client spans observed prdlvadbcnl1ro.rotaprod.example:62621 and prdlvadbcnl1.rotaprod.example:60173 across four complete, unsampled six-hour windows reviewed on 2026-08-04.
+tags: [leave, database-access, dynatrace-evidence]

@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+uid: 01KZY1BEP4-83B2
+type: relationship
+name: Grand Rapids MDaemon Mail Service reports health to Nagios
+catalogStatus: incomplete
+source: 01KZZMDMN1-RT01
+target: 01KQQ5JT1F-E2CC
+label: reports health to
+direction: asynchronous
+flow: outbound
+capabilities:
+  - 01KQQ4Q026-98VD
+notes:
+  background: Contributor-confirmed on 2026-08-13 that Nagios monitors both MDaemon service health and mail queue depth across GRRMAIL1 through GRRMAIL6 and routes those alerts to the CloudOps-HCM Opsgenie team. Exact check names, thresholds, priority mappings, and detailed escalation rules remain unconfirmed.

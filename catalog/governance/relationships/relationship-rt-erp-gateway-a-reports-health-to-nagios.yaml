@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: MYBPWKX0K7-BSSX
+type: relationship
+name: RT ERP Gateway-A → Nagios Monitoring Service
+catalogStatus: incomplete
+source: 01KYT589B4-1XSE
+label: reports tunnel and host health to
+target: 01KQQ5JT1F-E2CC
+technology: NCPA and NRDP monitoring
+direction: event
+flow: outbound
+notes: >-
+  RT ERP operational monitoring covers region gateway reachability and
+  stunnel process or port health through the shared Nagios platform.
+capabilities:
+  - 01KQQ4Q026-98VD

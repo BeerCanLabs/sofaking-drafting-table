@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-PX7B
+type: product_component
+ownerRole: engineer
+name: RT-ERP Application Server
+description: 'Sofa King-authored monolithic ERP, CIS, and HRMS application component deployed per region as containerized Amazon ECS services on EC2-backed cluster capacity.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+runsOn: 01KYQN2WDV-223J
+tags:
+- rt-erp
+- sis
+- hrms
+- java
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-erp-cis
+classification: api-service
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-erp-cis
+  repositoryPrimaryLanguage: Java
+  supersedes: 'This curated component is the authoritative model of the erp-sis monolith. It supersedes the discovery-generated stub ERP CIS Application (01KSM38KGM-ZYY2), which is retained as deprecated for provenance.'
+  serviceAuthentication: 'Product identities default to Sofa King IDM, with LDAP and local database authentication retained as region-specific fallback paths.
+
+    '
+  secretsManagement: 'Runtime secrets, certificates, and deployment configuration are assumed to come from centralized secret storage and parameter-management services.
+
+    '
+  serviceLogging: 'Application logs are forwarded beyond the underlying runtime tier to the shared central logging platforms.
+
+    '
+  healthWelfareMonitoring: 'CloudWatch and Glowroot telemetry are treated as the baseline runtime observability stack for application welfare.
+
+    '
+  availabilityModel: 'Region deployments are intended to satisfy high-availability expectations within the single-tenant cloud deployment boundary.
+
+    '
+  scalabilityModel: 'Application capacity changes through ECS desired task counts; cluster capacity changes through the ECS capacity provider and its EC2 Auto Scaling Group.
+
+    '
+  recoverabilityModel: 'ECS and Auto Scaling replace failed tasks and EC2 capacity. CloudFormation and versioned ECR images provide repeatable rebuilds.
+
+    '
+  failureDomain: 'Scoped to one region environment in its own AWS account and ECS cluster.
+
+    '
+  runtimeRequirement: 'Java containers deployed as ECS services on the Amazon ECS Standard Container Host. The cluster capacity is EC2-backed using ECS-optimized Amazon Linux 2023; AWS Fargate is not used.
+
+    '
+  deploymentAutomation: 'Nested CloudFormation stacks are updated by CodeBuild using the region deployment role. Images are supplied through Amazon ECR and runtime parameters through AWS Systems Manager.'
+  deploymentRoles: 'A representative production cluster contains independently scaled Tomcat, Tomcat batch, general batch, payroll batch, report batch, and notification batch ECS services. Filebeat and Jasper services share the region cluster but are modeled as observability and reporting concerns rather than additional application components.'
+  sourceDocumentation: 'https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211/ERP+cloudformation+Pipeline'
+decisionRecords:
+  - ref: 01KYQN2Z6F-F3XG
+    key: runtimeRequirement

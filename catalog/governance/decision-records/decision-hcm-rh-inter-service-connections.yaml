@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KTGG6XFP-T0TT
+type: decision_record
+name: New Recruiting & Hiring - Inter-Service Connections
+description: Inter-service-connections decision for the New Recruiting & Hiring deployment pattern, promoted from catalog architecture notes to a committed DecisionRecord so DRAFT requirement evidence is traceable.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: open
+affectedComponent: 01KSM38KG7-42XD
+linkedObject: 01KSM38KG7-42XD
+decisionRationale: 'interServiceConnections: Internal service-to-service interaction via AWS SNS (pub/sub for job-posting events) and AWS SQS (async notification processing), with Loveseat Kafka for external event integration and a Kuma service mesh. Status open pending recruiting-hiring team / ARB ratification.'

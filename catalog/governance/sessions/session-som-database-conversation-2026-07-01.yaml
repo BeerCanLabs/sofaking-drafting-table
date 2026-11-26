@@ -1,0 +1,149 @@
+schemaVersion: '1.0'
+uid: 01KWFCH93A-QDHF
+type: drafting_session
+name: SOM Database Conversation Drafting Session
+description: 'Drafting session created from the 2026-07-01 Zoom meeting "DRAFT & Sofa King SOM - Database Conversation" to fold database architecture facts into the current AWS SOM and legacy Webloom SOM catalog objects while preserving unresolved database-team follow-ups.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - session
+  - som
+  - database
+  - quickfit
+  - drafting
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KEX-R400
+sourceArtifacts:
+  - name: DRAFT & Sofa King SOM - Database Conversation
+    type: zoom-meeting
+    location: https://docs.zoom.us/doc/16EXPkTAShybQ4LTuR0-BQ
+    notes: Zoom AI summary and transcript from the 2026-07-01 database-team conversation with Jordan Hale, Sam Hu, Trevor Lane, and Sunil Pradhan.
+generatedObjects:
+  - name: Sofa King SOM PM & SM - AWS Platform
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KEX-R400
+    notes: Updated with additional database retention, S3 compliance-lock, SSIS scheduling, QuickfitImport segregation, and sensitive-data follow-up details from the meeting.
+  - name: SOM Service Management - Webloom Legacy
+    type: software_deployment_pattern
+    status: created
+    ref: 01KWF246JB-VNFC
+    notes: Updated with Webloom multi-tenant database density, shared database naming, backup retention, SSIS scheduling, and file-processing details from the meeting.
+  - name: SOM AWS SQL Server 2017 Database Service
+    type: data_store_service
+    status: created
+    ref: 01KWF5PCRR-8FHN
+  - name: SOM Webloom SQL Server 2017 Legacy Database Service
+    type: data_store_service
+    status: created
+    ref: 01KWF5PCRR-BMD4
+  - name: SOM SSISDB SQL Server 2017 Integration Service
+    type: data_store_service
+    status: created
+    ref: 01KWF5PCRR-ZJE9
+unresolvedQuestions:
+  - id: som-solo-details
+    question: What are the detailed ownership, usage, access pattern, and customer-data boundaries for the SOM Solo Financing Billing shared database/service across AWS and Webloom?
+    status: open
+    reason: The meeting confirmed SOM Solo is shared across AWS and Webloom and related to Financing Billing, but its detailed usage still needs follow-up with Sean and TK.
+    currentBestGuess: Treat SOM Solo as a shared Financing Billing database/service dependency for all SOM customers until the application owners provide detailed boundaries.
+    impact: Failure domain, sensitive-data mapping, and restore/delete semantics for Financing Billing remain incomplete.
+    relatedObjects:
+      - ref: 01KSM38KEX-R400
+      - ref: 01KWF246JB-VNFC
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: sensitive-table-obfuscation-inventory
+    question: Which SOM tables contain sensitive data, and which data-obfuscation scripts or processes apply to those tables?
+    status: open
+    reason: The database team committed to provide the table list and obfuscation scripts after Development updates are available.
+    currentBestGuess: Catalog sensitive data at the database-category level until the table-level inventory is supplied.
+    impact: Data classification, lower-environment data handling, and deletion/retention evidence remain incomplete.
+    relatedObjects:
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: churn-delete-vs-archive-process
+    question: What is the authoritative customer churn data handling process for AWS and Webloom, including when data is deleted, archived, or retained under S3 backup/compliance controls?
+    status: open
+    reason: The meeting indicated churned customer data is archived and S3 data is retained for seven years, while the referenced deletion process still needs verification for AWS and Webloom specifics.
+    currentBestGuess: Treat active customer data deletion as process-driven, with S3 archive/backup data retained under the seven-year compliance posture.
+    impact: Customer deletion expectations and compliance evidence need explicit reconciliation.
+    relatedObjects:
+      - ref: 01KSM38KEX-R400
+      - ref: 01KWF246JB-VNFC
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: sql-version-roadmap
+    question: What is the authoritative SQL Server upgrade target and timeline for AWS and Webloom SOM environments?
+    status: open
+    reason: The meeting referenced movement from SQL Server 2017 toward newer versions, but the Zoom summary used ambiguous Webloom/WebEx wording and no authoritative target/timeline was confirmed.
+    currentBestGuess: Keep current state modeled as SQL Server 2017 Enterprise for both AWS and Webloom until the roadmap is confirmed.
+    impact: Lifecycle risk and modernization planning cannot be scored accurately until the SQL version roadmap is known.
+    relatedObjects:
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: import-flow-service-boundary
+    question: What is the exact boundary between AWS Transfer/S3/Lambda/FSx, local SSIS/SFTP file processing, QuickfitImport, and the application-owned Data Import Service?
+    status: open
+    reason: The meeting clarified database-side processing uses local SSIS packages and SFTP/customer file locations for most operations, while prior infrastructure discussion identified AWS Transfer Family moving S3 files to FSx customer locations.
+    currentBestGuess: Treat AWS Transfer/S3/Lambda/FSx as the AWS file-intake and landing path, and treat SSIS/QuickfitImport/Data Import Service as the database ingestion path pending Development confirmation.
+    impact: End-to-end import failure domains, audit trails, and purge ownership remain incomplete.
+    relatedObjects:
+      - ref: 01KSM38KEW-G59V
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-ZJE9
+assumptions:
+  - id: current-state-only
+    statement: This drafting pass records current-state SOM/Quickfit database architecture only and does not include Recliner future-state architecture.
+    rationale: The user explicitly scoped this work to current-state Quickfit/SOM and not Recliner.
+    impact: Recliner objects remain out of scope for this session.
+    relatedObjects:
+      - ref: 01KSM38KEX-R400
+      - ref: 01KWF246JB-VNFC
+  - id: zoom-summary-ambiguity
+    statement: Ambiguous Zoom summary references to WebEx or WebAIM are treated as likely transcription/summary artifacts and are captured as follow-up questions rather than authoritative names.
+    rationale: The product context uses Webloom/Colohub, and the transcript summary used inconsistent terms.
+    impact: Current-state catalog facts avoid overfitting to meeting-summary wording that may be inaccurate.
+    relatedObjects:
+      - ref: 01KWF246JB-VNFC
+nextSteps:
+  - id: confirm-som-solo
+    action: Follow up with Sean and TK to document SOM Solo ownership, usage, data boundaries, and restore/delete behavior.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: collect-sensitive-table-list
+    action: Collect the sensitive-table inventory and data-obfuscation scripts from the database team and Development.
+    status: open
+    owner: database-team
+    relatedObjects:
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+  - id: verify-churn-process
+    action: Verify the customer churn deletion/archive process for both AWS single-tenant databases and Webloom multi-tenant databases against the referenced Confluence process.
+    status: open
+    owner: database-team
+    relatedObjects:
+      - ref: 01KSM38KEX-R400
+      - ref: 01KWF246JB-VNFC
+  - id: confirm-sql-roadmap
+    action: Confirm SQL Server upgrade target versions and timelines for AWS and Webloom SOM before modeling roadmap state.
+    status: open
+    owner: database-team
+    relatedObjects:
+      - ref: 01KWF5PCRR-8FHN
+      - ref: 01KWF5PCRR-BMD4
+notes:
+  meetingMetadata:
+    date: '2026-07-01'
+    title: DRAFT & Sofa King SOM - Database Conversation
+    zoomSummaryDocument: https://docs.zoom.us/doc/16EXPkTAShybQ4LTuR0-BQ

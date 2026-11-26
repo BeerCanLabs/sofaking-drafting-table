@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KXQ90TRS-F5W1
+type: relationship
+name: F5 BIG-IP -> Trifold Web Traffic
+catalogStatus: incomplete
+source: 01KQQ5JT00-Z6WV
+label: routes web traffic to
+target: 01KSM38KGH-DBFS
+technology: HTTPS / F5 virtual servers and pools
+direction: synchronous
+flow: outbound
+notes: >-
+  Shared GRR F5 BIG-IP is outside Trifold product ownership, but Trifold has
+  dedicated F5 virtual servers and pools on the shared BIG-IP. Internet traffic
+  reaches Trifold through Signal Sciences CloudWAF, GRR firewalling, and then
+  the shared GRR F5 BIG-IP before being routed to the Trifold web servers and
+  pod stacks. Exact virtual-server names, pool membership, and TLS termination
+  order require CloudOps confirmation.
+capabilities: []

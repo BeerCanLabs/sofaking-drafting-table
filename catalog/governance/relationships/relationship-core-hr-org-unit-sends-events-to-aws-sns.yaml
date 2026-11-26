@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSHQ-XEM2
+type: relationship
+name: 'Core HR Org Unit → AWS SNS'
+catalogStatus: stub
+source: 01KYQ4D9RR-T700
+target: 01KQQ5JT05-HTRA
+label: sends events to
+technology: AWS SDK / HTTPS
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: CoreHR event publication.

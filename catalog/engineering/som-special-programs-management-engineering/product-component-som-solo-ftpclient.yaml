@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGF-78NP
+type: product_component
+ownerRole: engineer
+name: SOM Solo Ftpclient
+description: SOM Solo FTP Client Library
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- som
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-som-solo-ftpclient
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-som-solo-ftpclient
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Upholstr.Files.Transfer.Automata.UpholstrFtp.Get/Upholstr.Files.Transfer.Automata.UpholstrFtp.Get.csproj; Upholstr.Files.Transfer.Automata.UpholstrFtp.Put/Upholstr.Files.Transfer.Automata.UpholstrFtp.Put.csproj; Upholstr.Files.Transfer.Automata.FinancingFtp.Get/Upholstr.Files.Transfer.Automata.FinancingFtp.Get.csproj; Upholstr.Files.Transfer.Automata.FinancingFtp.Put/Upholstr.Files.Transfer.Automata.FinancingFtp.Put.csproj; Upholstr.Files.Transfer.Automata.Worker/Upholstr.Files.Transfer.Automata.Worker.csproj; Upholstr.Files.Transfer.Sftps/Upholstr.Files.Transfer.Sftps.csproj; Upholstr.Files.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFT-RGK1
+type: product_component
+ownerRole: engineer
+name: Platform Sand Permission
+description: 'Public PermissionAPI for Sofa King Central. Coarse-grained edge API that authorizes callers and forwards to internal msvc-* services behind the private subnet.'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- source-inspection
+- sofaking-central
+- public-api
+- sand-tier
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-sand-Permission
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: PermissionAPI
+  protocol: REST
+  path: api2.sofaking.example/PermissionAPI/api
+  authenticationModel: oauth
+  description: Bearer-token authorized public edge API; accepted scopes skapi.public and skapi.internal.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-sand-Permission
+  observedProjects: PermissionApi (net-fx 4.6.1, IIS)
+  observedTargetFrameworks: net-fx 4.6.1
+  observedHostingModel: IIS / System.Web
+  observedPersistence: 'Stateless proxy - forwards to internal msvc-* services and declares no store of its own. EventStore.Client / MongoDB.Driver entries in packages.config arrive transitively through SK.ServiceChassis and are deliberately not modelled as persistence relationships.'
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Skapi/skapi.yaml; PermissionApi.sln; source/PermissionApi/PermissionApi.csproj; tests/PermissionApi.Tests/PermissionApi.Tests.csproj
+  serviceAuthentication: Authentication model was not confirmed by source inspection; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by source inspection; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by source inspection; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by source inspection; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by source inspection.
+  scalabilityModel: Scalability model was not confirmed by source inspection.
+  recoverabilityModel: Recoverability model was not confirmed by source inspection.
+  failureDomain: Failure domain was not confirmed by source inspection.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-sand-Permission
+  repositoryPrimaryLanguage: C#
+  publicApiRoute: api2.sofaking.example/PermissionAPI/api
+  dotnetMigrationState: Not started. Registers its api2 gateway route through Skapi/skapi.yaml. References only SK.ServiceChassis and SK.PermissionsClient - stateless proxy.
+  declaredServiceDependencies: PermissionsService, EmployeeService
+  persistenceRationale: 'Stateless proxy - forwards to internal msvc-* services and declares no store of its own. EventStore.Client / MongoDB.Driver entries in packages.config arrive transitively through SK.ServiceChassis and are deliberately not modelled as persistence relationships.'
+  sourceEvidence: 'Local working-copy inspection 2026-07-29: project files, packages.config/*.csproj package references, and appsettings/Web.config connection strings.'

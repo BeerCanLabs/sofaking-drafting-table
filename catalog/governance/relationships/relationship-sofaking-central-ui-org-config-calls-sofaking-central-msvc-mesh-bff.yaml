@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP81-4773
+type: relationship
+name: 'Sofa King Central UI Org Config → Sofa King Central Msvc Mesh BFF'
+catalogStatus: stub
+source: 01KQQ5JT0K-K8VW
+target: 01KYQ4D9S4-24XM
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Reads VITE_FC_MSVC_MESH_BFF directly rather than the shared buildConfig endpoint map - the only UI library that does so.

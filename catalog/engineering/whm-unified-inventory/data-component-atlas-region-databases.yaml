@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01M7D4BSC5-EJC5
+type: data_component
+ownerRole: engineer
+name: Atlas Region Databases
+description: >-
+  The Atlas (Unified Inventory) PostgreSQL databases: the global database
+  whm-unified-global, which holds the regions directory owned by Atlas
+  TenantDirectory, and one database per region (whm-unified-shard-NN) in
+  which every Atlas service reads and writes only its own table prefix, with
+  row-level security on org_id. All of them deploy onto the Atlas Aurora
+  PostgreSQL cluster and are resolved per request through TenantDirectory.
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-dbmigration
+runsOn: 01M7BNBY4G-329E
+targetEngine: postgresql
+dataClassification: confidential
+containsPII: true
+tags:
+- atlas
+- unified-inventory
+- whm
+- postgresql
+- data-component
+retentionPolicy: >-
+  Not recorded in any repository read. Open item for the owning team.
+notes:
+  provenance: Source inspection 2026-11-13 of whm-unified-dbmigration (develop) and whm-unified-core (develop);
+    added 2026-11-14 so the Atlas pattern places a data component and the Aurora cluster is reached through runsOn,
+    as the 1.4 framework model expects. Not yet confirmed by the owning team.
+  inferred: dataClassification and containsPII are carried from the Atlas pattern's statement (confidential with
+    PII) and were not re-verified against the schema; the retention policy is unknown.
+  databases: whm-unified-global (regions directory, TenantDirectory) and whm-unified-shard-01 in dev; one shard
+    database per region in every environment. Per-region connection strings come from AWS Secrets Manager
+    (TENANT_SECRET_<orgId>).
+  migrations: Flyway trees in whm-unified-dbmigration (global and per-service, with rollback scripts), run by the
+    whm-unified-core image workflow before any image is pushed.

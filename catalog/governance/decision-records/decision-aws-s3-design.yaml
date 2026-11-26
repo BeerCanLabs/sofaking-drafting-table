@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-QMZ1
+type: decision_record
+name: Amazon S3 Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-KT3Z
+decisionRationale: >
+  Amazon S3 is operated as a provider-managed PaaS with inherently multi-AZ high availability within the AWS region. Operators configure bucket policies, KMS encryption, and lifecycle rules; resilience is managed by AWS. The failure domain is scoped to the AWS region and account.

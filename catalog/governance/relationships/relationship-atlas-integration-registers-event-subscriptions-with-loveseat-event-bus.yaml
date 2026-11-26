@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: F41GJJRQ2S-GBVQ
+type: relationship
+name: Atlas Integration → Loveseat Event Bus
+description: 'LoveseatSubscriptionClient keeps the PersonProfile subscription in sync against EventBus:LoveseatBaseUrl
+  (dev: https://loveseat-bs-unified-inventory-stage.ss.sofaking.example).'
+catalogStatus: stub
+source: 01M5WY4E7P-C0VE
+externalTarget: Loveseat Event Bus
+label: registers event subscriptions with
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. LoveseatSubscriptionClient keeps the PersonProfile subscription
+    in sync against EventBus:LoveseatBaseUrl (dev: https://loveseat-bs-unified-inventory-stage.ss.sofaking.example).
+    Inactive unless EventBus:Enabled is true. No publishing, outbox or Kafka client exists in the repository.'
+  evidence: 'whm-unified-core develop: Libraries/BuildingBlocks/EventBus, Service.Core.Integration.App/Program.cs,
+    appsettings.json, appsettings.Dev.json'

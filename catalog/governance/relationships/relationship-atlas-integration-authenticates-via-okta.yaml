@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: XWC60ZAQE2-YKDS
+type: relationship
+name: Atlas Integration → Okta
+description: 'The event bus uses its own Okta client (EventBus:ClientId and ClientSecret from Secrets Manager, scope
+  whm.inventory.events) against EventBus:OAuthAuthority (dev: https://login.stage-retail.ss.sofaking.example/oauth2/ausoqfx0iyU7bN8CI1d7).'
+catalogStatus: stub
+source: 01M5WY4E7P-C0VE
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. The event bus uses its own Okta client (EventBus:ClientId
+    and ClientSecret from Secrets Manager, scope whm.inventory.events) against EventBus:OAuthAuthority (dev: https://login.stage-retail.ss.sofaking.example/oauth2/ausoqfx0iyU7bN8CI1d7).'
+  evidence: 'whm-unified-core develop: Libraries/BuildingBlocks/EventBus/Library.Shared.EventBus/EventBusRegistration.cs,
+    Service.Core.Integration.App/appsettings.Dev.json'

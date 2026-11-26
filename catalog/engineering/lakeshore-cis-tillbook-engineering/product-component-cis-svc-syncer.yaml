@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-PAC8
+type: product_component
+ownerRole: engineer
+name: CIS Svc Syncer
+aliases:
+- CIS Svc LSRCN Sync Website (duplicate whiteboard entry, retired)
+description: DASLSync web service — the Sync API sitting on top of the Pristine database, called by the per-ITC DASLSyncer console app to push static CustomerInformation data to region databases.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-syncer
+language: Visual Basic .NET
+classification: api-service
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Resolved on 2026-07-30 via repository discovery — the repo named sis-util-customerinformation-syncer contains two distinct deployables. This entry covers DASLSync (path DASLSync/), a legacy ASMX web service (Sync.asmx) reading from the Pristine database. The companion console app is cataloged separately as CIS Util Customerinformation Syncer (DASLSyncer/), which calls this API. The repo's own name reflects only the console app half; flagged to the product owner as a naming mismatch worth revisiting.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-syncer
+  observedManifestPaths: DASLSync/DASLSync.vbproj
+  serviceAuthentication: Not confirmed; explicitly flagged as an open question by the product owner on 2026-07-31 during a broader auth review — owner was not sure what authentication the syncer uses. Requires follow-up.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

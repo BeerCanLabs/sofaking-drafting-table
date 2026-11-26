@@ -1,0 +1,13 @@
+schemaVersion: '1.0'
+uid: K3AGNNAP7D-E2MB
+type: relationship
+name: Sofa King Central Platform → Okta
+catalogStatus: stub
+source: 01KQQ5JT0K-TN7W
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OIDC/OAuth2
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KQQ4Q026-MHJM

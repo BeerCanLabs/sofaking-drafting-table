@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-J1EP
+type: relationship
+name: Imperva WAF -> AWS Application Load Balancer
+catalogStatus: incomplete
+source: 01KQQ5JT1D-MY47
+label: forwards HTTPS to
+target: 01KQQ5JT04-P7QJ
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: External Imperva WAF traffic reaches the AWS Application Load Balancer in the Team_Quickfit_Prod AWS account.

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSGY-7NRF
+type: relationship
+name: 'Core HR Retail Institution → AWS DynamoDB'
+catalogStatus: stub
+source: 01KSM38KFG-BJHR
+target: 01KQQ5JT04-K58R
+label: reads from and writes to
+technology: AWS SDK / HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Declared by source inspection 2026-07-29.

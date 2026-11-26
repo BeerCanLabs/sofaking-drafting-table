@@ -1,0 +1,82 @@
+schemaVersion: '1.0'
+uid: 01KT16XHGQ-G60D
+type: decision_record
+name: Sofa King SOM PM & SM AWS Platform Validation Evidence
+description: Architecture decisions promoted from existing catalog notes and refined during Draftsman discussion to separate the AWS PM & SM current-state pattern from legacy Webloom/Colohub Service Management.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KEX-R400
+linkedObject: 01KSM38KEX-R400
+decisionRationale: |
+  deploymentTargets: AWS Account - Team_Quickfit_Prod. Service placement is divided between repeatable sub-environment boundaries and AWS shared-services operational boundaries. Customer-level websites, application pools, and backend databases are deployed inside the assigned sub-environment. Legacy Webloom/Colohub Service Management is modeled separately.
+
+  computeHostingModel: AWS SOM runs on EC2 instances. Non-database Windows EC2 application servers currently run Windows Server 2016. SQL/database servers are excluded from this Windows EC2 baseline and are modeled separately in the SOM SQL Server 2017 database services.
+
+  architectureDetailBoundary: DRAFT records the stable SOM deployment pattern, service boundaries, shared dependencies, and risk posture. Implementation details that vary by customer density or operational tuning, such as EC2 instance size and per-server placement choices, are not treated as stable architecture facts.
+
+  subEnvironmentTopology: Each AWS sub-environment is architecturally identical: the same service roles exist in every sub-environment. Web servers live in an Auto Scaling Group and span availability zones through that service pattern. Application server and job server roles are single-server deployments. Separate AWS Application Load Balancers exist for the web tier and the import/data-ingestion tier. Instance sizing and exact per-server availability-zone placement are engineering/operations details rather than stable architecture facts.
+
+  awsNetworkLayout: AWS SOM currently uses a single VPC with a subnet per availability zone. The subnets used by SOM are private. Detailed routing, network-control, and network-policy questions beyond this boundary should be answered by the networking team.
+
+  trafficPath: For AWS SOM, external DNS in Route 53 sends client traffic to Imperva WAF before AWS. Traffic then reaches the AWS Application Load Balancer. The AWS ALB terminates SSL using the load-balancer certificate. No origin restriction to Imperva is known today. The AWS ingress path is open to Imperva on TCP 443, and traffic from the load balancer to backend targets uses TCP 80.
+
+  securityGroupPosture: Current AWS SOM security groups are very wide open and should be treated as a networking review/remediation item. Exact rule design is owned by the networking team rather than encoded here as application architecture.
+
+  windowsEc2ApplicationHostBaseline: AWS-hosted SOM non-database Windows application servers currently run Windows Server 2016 on EC2. This applies to the IIS/web and .NET application runtime tiers, not to SQL Server/database hosts. Production Windows servers in AWS are joined to the rotaprod.example domain. EDR is provided by CrowdStrike. Dynatrace is installed for APM and logging. Outside the SQL/data tier, infrastructure is treated as ephemeral and recoverable or rebuildable from code rather than backed up as persistent server state.
+
+  dnsModel: External DNS for SOM is hosted in AWS Route 53 in the Production Microservices account. Internal DNS uses the rotaprod.example domain and is stored on domain controllers.
+
+  edgeProtection: Imperva WAF fronts all SOM URLs.
+
+  customerConnectivity: Customers do not connect to SOM through VPNs, private circuits, or other private customer connectivity paths.
+
+  observabilityModel: Across SOM, Pingdom provides external uptime monitors and synthetics. Dynatrace provides APM, some system monitoring, and central logging as the Dynatrace logging rollout progresses. Dynatrace is installed on AWS production application servers for APM and logging. SQL and other logs may still be local depending on component rollout status. Nagios is the standard host/service monitoring platform; Zabbix still exists in Webloom but has mostly migrated to Nagios.
+
+  availabilityRequirement: 24x7
+
+  dataClassification: FERPA-protected. Customer CDP records including health-adjacent information. Data residency and DPA requirements apply to all SaaS Services in this SDM.
+
+  failureDomain: Customer-level websites, application pools, and backend databases provide the first single-tenant isolation boundary. Sub-environment service groups bound broader infrastructure failures to the customer population assigned to that sub-environment. AWS Transfer Family, S3, or Lambda bulk-ingestion failures affect bulk import functionality. FSx failure has a wider blast radius across web servers because FSx hosts IIS web config and site files. Shared AWS services such as messaging and data integration also create broader cross-sub-environment impact when unavailable.
+
+  bulkImportFlow: AWS customers use a single shared AWS Transfer Family SFTP service across Quickfit AWS customers. AWS Transfer Family saves incoming files to S3 object storage. Lambda automation moves files from S3 to AWS FSx customer-specific locations. S3 is partitioned per customer under a top-level bucket. AWS Secrets Manager stores customer mappings to S3 bucket partitions and environment/FSx folders; onboarding automation populates those mappings.
+
+  fsxDependency: SOM uses AWS FSx for Windows File Server in a Multi-AZ configuration for customer-specific bulk-import landing locations and for IIS web config and site files. FSx is Active Directory integrated by default in this deployment. Mount points, folder access, and file permissions use Active Directory-integrated folder and permission controls. No FSx backup configuration is currently configured. Transfer Family, S3, or Lambda failures affect bulk import functionality; FSx failure has a wider blast radius across web servers because IIS configuration and site files depend on FSx.
+
+  tenancyModel: AWS SOM uses customer-level single-tenant deployments: each customer has its own website, application pool, and backend database. Customers are assigned across repeatable sub-environments. Each sub-environment is created equal with the same infrastructure and configuration pattern and has its own SQL Server cluster. Customer density is the capacity signal for when to provision another sub-environment. Current names and counts are operational inventory and should not be treated as stable deployment-pattern facts.
+
+  databaseInventory: SOM database categories identified by the database team: customer application databases are single-tenant in AWS and use the PRDSOM_Quickfitplan_CUSTOMERNAME naming pattern; SOM Solo is related to Financing Billing and is a shared service for all customers across AWS and Webloom; QuickfitImport is a shared customer-upload database for AWS customers; no dedicated reporting database was identified; SKDBA exists on each SQL Server as the local central logging location for system-related tasks and logs; SSISDB exists once per SQL Server; no legacy Webloom-specific database category applies to the AWS pattern.
+
+  databasePlatform: AWS SOM uses Microsoft SQL Server 2017 Enterprise. Each sub-environment has its own SQL Server cluster. Exact AWS SQL host inventory requires confirmation.
+
+  databaseAvailabilityAndRecovery: AWS SOM uses two-node SQL Server Always On clusters with cross-AZ behavior. Deployment is mixed today and moving toward synchronous replication. Passive nodes are used only for HA, not reporting workloads. Backups include full, differential, and transaction-log backups created with SQL Server DBA Tools and uploaded to S3 through CloudBerry. RPO is 15 minutes. RTO varies by client database size. Annual backups are retained for 7 years, monthly backups for 12 months, and full backups for 30 days; local backup copies are retained for roughly one week. S3 backups are encrypted and protected by compliance lock controls, requiring appropriate decryption keys for restore. Customer-level restore is supported for single-tenant databases. Restore process is documented in the AWS S3 DB Backups Download & Restore Tools runbook.
+
+  sharedDatabaseModel: SOM Solo is a Financing Billing shared service for all customers across AWS and Webloom; detailed usage and ownership still require follow-up with the application owners. QuickfitImport is a shared database for all AWS customers and is used for customer upload data, staging, and incoming-data transformation. The shared import database uses organization ID segregation and guardrails to prevent data mixing between clients; Development follow-up is needed for the detailed import flow. SKDBA and SSISDB are per-SQL-server databases, not single global shared databases.
+
+  ssisIntegrationModel: SSIS service is installed on all SQL Servers. SSISDB exists once per SQL Server. SSIS operates against both AWS and Webloom client databases, reads from and writes to client-specific databases, and supports imports, reporting, warehouse feeds, state reporting, migrations, and Financing/claims extracts. SSIS packages may be scheduled on the SSIS server or through SQL Agent jobs local to the SQL Server. SSIS authentication uses a SQL password service account.
+
+  reportingAnalyticsFlows: No dedicated reporting database was identified. Passive SQL nodes are used only for HA, not reporting workloads. Snowflake feeds are populated through SOM data pulls, with extract work still in progress. Direct queries from reporting tools were not identified; authorized production queries may be run through SSMS.
+
+  sensitiveDataBoundaries: SOM customer data lives in the main per-customer database. SOM databases contain FERPA/CDP data, Financing or claims-related data, health-adjacent data, audit records, file import metadata, and credentials/tokens/integration secrets. EBS volumes and SQL backups are encrypted at rest. SQL connections are not believed to be encrypted in transit because internal PKI is not a strong current practice. Sensitive-table inventory and data-obfuscation scripts are pending from the database team and Development. Customer data deletion for churned clients follows the documented SOM Data Deletion - Churning Clients Process; churned customer data is archived to S3 and retained under the 7-year backup/compliance retention posture rather than deleted immediately from S3.
+
+  fileToDatabaseFlow: QuickfitImport is leveraged by the Data Import Service for customer upload data, staging, and incoming-data transformation. Development follow-up is needed for the detailed consumer and write flow. Database-side import/export processing uses local SSIS packages and SFTP/customer file locations for most operations; the exact FSx handoff boundary with application-owned ingestion still requires Development confirmation. Import status, errors, and audit trails are logged and notifications are sent. No purge policy exists today; purge automation is in process and the current process is manual. S3 is long-term storage for database backups; FSx is short-term storage for local backups and failover support.
+
+  databaseRoadmapUncertainty: The database conversation referenced upgrade planning from SQL Server 2017 toward newer SQL Server versions, but target version, target environment, and timeline require confirmation before being modeled as current state.
+
+  databaseRestoreProcessReference: AWS S3 DB Backups Download & Restore Tools: https://sofaking-example.atlassian.net/wiki/spaces/SaaSIO/pages/15477171876
+
+  customerDataDeletionProcessReference: SOM Data Deletion - Churning Clients Process: https://sofaking-example.atlassian.net/wiki/spaces/PRODMGMT/pages/15787982433/SOM+Data+Deletion+-+Churning+Clients+Process
+
+  patternDeviations: This SDM keeps several capabilities centralized in shared-services rather than replicating them per sub-environment, contains intentional single-instance debt and accepted SA decisions documented in linked ARDs, and still follows the nearest sharded AWS SQL Server ReferenceArchitecture even though the actual SOM AWS model is customer-level single tenancy inside repeatable sub-environments. A better reusable ReferenceArchitecture may be needed.
+
+  externalDependencies: External interactions are declared in serviceGroups[].externalInteractions: Sofa King IDM, File Services.
+
+  interServiceConnections: Network and data flows are not yet modeled as relationship objects. Development-owned service definitions are expected to provide those flows.

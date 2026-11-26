@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZW-XNJJ
+name: JasperSoft Reporting Service → Region Database
+catalogStatus: stub
+source: 01KQQ5JT1F-737K
+label: calls
+externalTarget: Region Database
+notes:
+  background: "Reporting queries depend on region-local transactional databases."

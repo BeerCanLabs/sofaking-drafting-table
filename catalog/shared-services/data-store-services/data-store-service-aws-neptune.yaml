@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-TQSS
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: Amazon Neptune
+description: 'Managed graph database service for highly connected datasets.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - database
+  - graph
+vendor: Amazon Web Services
+productName: Neptune
+productVersion: managed
+authenticationModel: iam
+architectureNotes:
+  resilienceModel: Managed multi-AZ high availability.
+  configurableSurface: Cluster instances, parameters, and storage scaling.
+  failureDomain: Scoped to the AWS region and cluster.
+capabilities:
+  - 01KT0V5MCV-VD0Y
+deliveryModel: paas
+decisionRecords:
+  - ref: 01KT16XJ5D-FJA8
+    key: resilienceModel
+  - ref: 01KT16XJ5D-FJA8
+    key: configurableSurface
+  - ref: 01KT16XJ5D-FJA8
+    key: failureDomain
+  - ref: 01KT16XJ5D-FJA8
+    capability: 01KT0V5MCV-VD0Y

@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-2JS3
+type: technology_component
+ownerRole: technology-admin
+name: Docker CE 25
+description: Docker CE 25 software baseline for container build and runtime utilities.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- container
+classification: software
+vendor: Docker
+productName: CE
+productVersion: '25'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source lifecycle is governed by upstream releases.
+capabilities:
+- 01KT0V5MCV-RZV0

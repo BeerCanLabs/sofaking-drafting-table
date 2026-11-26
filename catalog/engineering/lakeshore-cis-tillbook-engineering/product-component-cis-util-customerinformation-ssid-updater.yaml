@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-XH7Z
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation SSID Updater
+description: Console app or scheduled service that interfaces with an Lakeshore State-run database to retrieve state-assigned Customer Identifiers (SSID).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- customerinformation
+- ssid
+- state-integration
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-ssid-updater
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a console app or scheduled service integrating with a State of Lakeshore-run database to retrieve SSIDs.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-ssid-updater
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

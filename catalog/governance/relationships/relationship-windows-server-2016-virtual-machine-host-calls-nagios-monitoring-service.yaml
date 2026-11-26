@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z6-E26N
+name: Windows Server 2016 Virtual Machine Host → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT03-2NEW
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Host health and welfare monitoring through the Nagios XI NCPA Agent configuration."
+capabilities:
+- 01KQQ4Q026-98VD

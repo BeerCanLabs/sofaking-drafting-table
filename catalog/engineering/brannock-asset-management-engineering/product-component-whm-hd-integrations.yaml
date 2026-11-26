@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-MPPP
+type: product_component
+ownerRole: engineer
+name: Whm Hd Integrations
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-WHM_HD_Integrations.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- whm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_HD_Integrations
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_HD_Integrations
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: HCM_Onboarding.Tests/HCM_Onboarding.Tests.csproj; HCM_Onboarding/Examples/Sample-Org-Mapping.json; HCM_Onboarding/HCM_Onboarding.csproj; HCM_Onboarding/Properties/launchSettings.json; HCM_Onboarding/aws-lambda-tools-defaults.json; HCM_Onboarding/aws-lambda-tools-defaults.prod.json; WHM_HD_Integrations.sln; SftpToS3Transfer/Properties/launchSettings.json; SftpToS3Transfer/SftpToS3Transfer.csproj; SftpToS3Transfer/aws-lambda-tools-defaults.json; SftpToS3Transfer/aws-lambda-tools-defaults.prod.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

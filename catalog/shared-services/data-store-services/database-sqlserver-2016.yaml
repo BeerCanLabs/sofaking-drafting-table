@@ -1,0 +1,93 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-Z39K
+type: data_store_service
+ownerRole: technology-admin
+name: SQL Server 2016 DBMS Service
+description: Legacy SQL Server 2016 database service retained for workloads not yet upgraded.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- service
+- dbms
+- sqlserver
+- legacy
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-4A7S
+primaryTechnologyComponent: 01KQQ5JT1T-WE6A
+deploymentConfigurations:
+- id: alwayson-availability
+  name: AlwaysOn Availability
+  description: AlwaysOn Availability Groups provide multi-node database availability and recovery tolerance.
+  addressesQualities:
+  - availability
+  - recoverability
+- id: scale-up-with-secondary-replicas
+  name: Scale Up With Secondary Replicas
+  description: Capacity grows through larger primary nodes with optional secondary replicas for resilience and workload distribution.
+  addressesQualities:
+  - scalability
+- id: backup-and-pitr
+  name: Backup And Point-In-Time Recovery
+  description: Daily full backups plus hourly log backups support restoration and point-in-time recovery.
+- id: encrypted-storage
+  name: Encrypted Storage
+  description: TDE is enabled on production databases to protect data at rest.
+internalComponents:
+- ref: 01KQQ5JT03-4A7S
+  role: host
+- ref: 01KQQ5JT1T-WE6A
+  role: function
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Active Directory integrated identities govern administrator and service access to the database.
+  scalingApproach: scale-up database nodes with secondary replicas where required
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: SQL listener probe and AG replica health monitoring
+  healthWelfareMonitoring: SQL listener probes, replica telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: AlwaysOn Availability Groups provide multi-node database availability.
+  scalabilityModel: Vertical scale-up of primary nodes with optional secondary replicas where required.
+  recoverabilityModel: Failed nodes are replaced and rejoined to the AG while backups support point-in-time recovery.
+  failureDomain: Scoped to the SQL Server availability group serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: SQL Server native backup to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: AlwaysOn Availability Groups
+  encryption:
+    atRest: TDE enabled on all production databases
+  accessControl:
+    model: Active Directory integrated access with role-based SQL permissions
+decisionRecords:
+- ref: 01KSNAW2AK-4CFS
+  key: serviceAuthentication
+- ref: 01KSNAW2AK-4CFS
+  key: secretsManagement
+- ref: 01KSNAW2AK-4CFS
+  key: serviceLogging
+- ref: 01KSNAW2AK-4CFS
+  key: failureDomain
+- ref: 01KSNAW2AK-4CFS
+  key: backup.strategy
+- ref: 01KSNAW2AK-4CFS
+  key: backup.platform
+- ref: 01KSNAW2AK-4CFS
+  key: backup.rto
+- ref: 01KSNAW2AK-4CFS
+  key: backup.rpo
+- ref: 01KSNAW2AK-4CFS
+  key: ha.mechanism
+- ref: 01KSNAW2AK-4CFS
+  key: encryption.atRest
+- ref: 01KSNAW2AK-4CFS
+  key: accessControl.model
+deliveryModel: self-managed

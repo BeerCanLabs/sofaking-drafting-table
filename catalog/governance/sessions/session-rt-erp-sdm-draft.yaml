@@ -1,0 +1,339 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1H-WF7M
+type: drafting_session
+name: RT-ERP/CIS/HRMS SDM Drafting Session
+description: 'Partial drafting session created from the AIRB review and follow-up interview for the cloud-hosted RT-ERP/CIS/HRMS architecture. The session produced a validating SDM, several provisional runtime artifacts, and a set of explicit unresolved questions for later review.
+
+  '
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+- session
+- rt-erp
+- sdm
+- drafting
+primaryObjectType: software_deployment_pattern
+sourceArtifacts:
+- name: AIRB Architecture Review - RT-ERP/CIS/HRMS DRAFT
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/DEV/pages/11557844421/AIRB+Architecture+Review+-+RT-ERP+CIS+HRMS+DRAFT
+  notes: Primary source page used to synthesize the initial SDM intake.
+- name: Drafting Table SDM interview
+  type: interview
+  notes: 'Follow-up interview captured best-effort modeling choices, scope decisions, and unresolved runtime questions.
+
+    '
+- name: BS - Sofa King RT ERP/CIS (TEAMS/Prologic)
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/126553380
+  notes: Operational source index for the current cloud and customer connectivity model.
+- name: ERP CloudFormation Pipeline
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211
+  notes: Deployment runbook for region ECS, CloudFormation, CodeBuild, and ECR updates.
+- name: ERP ECS CloudFormation
+  type: github
+  location: https://github.com/BeerCanLabs/sk-erp_cloudformation_ecs
+  notes: Infrastructure source for ALB, ECS cluster, EC2 capacity, tasks, services, EFS, monitoring, and notifications.
+- name: ERP Deployment Automation
+  type: github
+  location: https://github.com/BeerCanLabs/sk-erp-automation/tree/cf-update-pipeline-v2
+  notes: CodeBuild and per-region environment automation for CloudFormation updates.
+- name: Representative RT ERP Production ECS Cluster
+  type: screenshot
+  notes: 'AWS ECS console observation for lakerg-pd-ecs on 2026-07-29: EC2 Auto Scaling Group-backed cluster with independently scaled Tomcat, batch, Filebeat, Jasper, and Jasper 9 service roles. The sample showed 9 active ECS service definitions, 15 registered container instances, and no Fargate launch type.'
+- name: OPS-188334 RT-ERP Data Domain Review
+  type: issue
+  location: https://sofaking-example.atlassian.net/browse/OPS-188334
+  notes: >-
+    Engineering clarification recorded on 2026-08-04 confirms that each
+    region database uses a writable primary and a read-only replica. The
+    replica is not a true HA partner and does not remove the writable
+    primary's single-point-of-failure risk.
+- name: RT ERP stunnel Architecture
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15070946046
+  notes: >-
+    Source for the customer-hosted stunnel endpoint, per-region Gateway-A
+    path, Netskope operational access, and OpenVPN deprecation.
+- name: RT ERP stunnel Implementation
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14005231828
+  notes: >-
+    Source for Ubuntu 24, stunnel 5.x with OpenSSL 3.x, configuration
+    permissions, connectivity testing, and diagnostic log locations.
+- name: RT ERP Email Troubleshooting
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18412167515
+  notes: >-
+    Source for the application-to-Gateway-B Postfix path on port 25 and the
+    Postfix-to-Amazon-SES path on port 587.
+- name: RT ERP LDAP Configuration
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11672883976
+  notes: >-
+    Source for region-hosted LDAP over LDAPS 636, Java referral behavior,
+    and directory base-DN considerations.
+- name: RT ERP Synergis Time Clocks
+  type: confluence
+  location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/164452088
+  notes: >-
+    Source for region-owned clocks calling the public teamsws Clock/SY7000
+    HTTPS endpoint and the TLS 1.2 device compatibility constraint.
+generatedObjects:
+- name: RT-ERP/CIS/HRMS SDM
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KEY-JC4K
+- name: RT-ERP Application Server
+  type: product_component
+  status: created
+  ref: 01KSM38KEX-PX7B
+- name: IBM Db2 DBMS Service
+  type: data_store_service
+  status: created
+  ref: 01KQQ5JT00-5TYB
+- name: JasperSoft Reporting Service
+  type: runtime_service
+  status: created
+  ref: 01KQQ5JT1F-737K
+- name: Java Application Service on Amazon ECS
+  type: runtime_service
+  status: created
+  ref: 01KYQN2WDV-223J
+- name: RT ERP Gateway-A Secure Tunnel Service
+  type: network_service
+  status: created
+  ref: 01KYT589B4-1XSE
+- name: stunnel 5
+  type: technology_component
+  status: created
+  ref: 01KYT589B4-ETSP
+- name: RT-ERP Drafting ARDs
+  type: decision_record
+  status: created
+  ref: 01KQQ5JT02-ZR18
+  notes: Additional linked ARDs capture the remaining unresolved questions.
+- name: RT-ERP Region Database Availability Gap
+  type: decision_record
+  status: created
+  ref: 01KZ9A3RR6-NA48
+  notes: >-
+    Records the current writable-primary/read-only-replica topology as a
+    region-scoped single point of failure rather than true database HA.
+unresolvedQuestions:
+- id: db-engine-selection
+  question: Is each region deployment expected to run exactly one database platform, or can multiple platforms appear in the same deployment boundary?
+  status: answered
+  reason: 'Documented pre-existing single-tenant architecture (2026-06-17): RT-ERP/CIS has always been single-tenant. Each region runs in its own dedicated AWS account with its own database instance running exactly one platform — Db2, SQL Server 2019, or PostgreSQL 17 — co-resident in the same account as the ECS application services. Oracle is dev/test/legacy only and out of cloud scope. No architectural decision was made; this was a documentation clarification.'
+  currentBestGuess: The three Data Services entries are documented as mutually exclusive per-region alternatives via SDM architectureNotes.databasePlatformSelection and per-entry notes; decision record 01KQQ5JT02-0MBH is resolved.
+  impact: Resolved. Residual risk is limited to misreading the Data Services group as co-deploying all three platforms if the single-tenant, one-platform-per-region rule is overlooked.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KQQ5JT02-0MBH
+- id: database-availability-model
+  question: Does the read-only database replica provide a true high-availability failover path for the selected region database engine?
+  status: answered
+  reason: >-
+    Engineering clarification in OPS-188334 on 2026-08-04 confirms that the
+    read-only replica is not a true HA setup and does not provide automatic
+    promotion or failover for the writable primary.
+  currentBestGuess: >-
+    Each region has one writable primary and one read-only replica for its
+    selected Db2, SQL Server, or PostgreSQL engine. The writable primary is a
+    region-scoped single point of failure; read-only replication and
+    backup/restore are not database HA.
+  impact: >-
+    Loss of the primary interrupts database writes and can make RT-ERP
+    workflows unavailable for the affected region. Region isolation
+    limits the blast radius to that region.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KZ9A3RR6-NA48
+- id: ecs-runtime-pattern
+  question: What reusable ECS-native Java runtime artifact should the RT-ERP application bind to in DRAFT?
+  status: answered
+  reason: The CloudFormation source and deployment runbook confirm an ECS-on-EC2 runtime using ECS-optimized Amazon Linux 2023, an EC2 Auto Scaling Group capacity provider, ALB, ECR, and CodeBuild. Fargate is not used.
+  currentBestGuess: Resolved by Java Application Service on Amazon ECS (01KYQN2WDV-223J); the RT-ERP application component is bound to that runtime.
+  impact: Resolved. Revalidate only if the product changes container orchestration or adopts Fargate.
+  relatedObjects:
+  - ref: 01KSM38KEX-PX7B
+  - ref: 01KQQ5JT02-ZR18
+- id: identity-fallback-model
+  question: Should LDAP and database authentication remain first-class runtime dependency services or be treated as region-specific exception interactions?
+  status: answered
+  reason: >-
+    Sofa King IDM is the preferred path. The LDAP runbook confirms LDAPS 636 as
+    a region-hosted alternate path; database-local authentication is retained
+    as a region-specific exception rather than a standard service.
+  currentBestGuess: >-
+    Resolved by decision record 01KQQ5JT02-V402 and the explicit RT ERP
+    application-to-region-LDAP relationship.
+  impact: >-
+    Resolved. The installed-base alternatives remain visible without being
+    presented as the preferred identity baseline.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KQQ5JT02-V402
+- id: jaspersoft-runtime-topology
+  question: Is JasperSoft truly a standalone per-region reporting service, and if so, what substrate does it run on?
+  status: answered
+  reason: The CloudFormation source, Jasper operations runbook, and a representative production cluster confirm per-region Jasper ECS services on EC2-backed capacity. Legacy Jasper and Jasper 9 service definitions may coexist during migration; the active-version baseline uses one desired task and an EFS-backed PostgreSQL repository.
+  currentBestGuess: Resolved as JasperSoft Reporting Service (01KQQ5JT1F-737K) on the Amazon ECS Standard Container Host. The runtime represents the reporting capability across legacy Jasper and Jasper 9 service variants; RDS remains a migration path.
+  impact: Resolved for the current cloud baseline. Revalidate during Jasper 9 or RDS migration.
+  relatedObjects:
+  - ref: 01KQQ5JT1F-737K
+  - ref: 01KQQ5JT02-T523
+- id: observability-artifacts
+  question: Which lower-level ABBs and runtime artifacts should represent CloudWatch and Glowroot in DRAFT?
+  status: open
+  reason: Observability is clearly required at runtime, but the current model keeps those dependencies at group level rather than as fully cataloged runtime artifacts.
+  currentBestGuess: Treat CloudWatch and Glowroot as runtime observability dependencies while tracking the missing lower-level artifacts separately.
+  impact: The SDM stays valid, but the lowest-responsible-level modeling rule is not fully satisfied yet.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KQQ5JT02-DHQV
+- id: gateway-a-operational-baseline
+  question: >-
+    What production HA, secret distribution, certificate rotation,
+    centralized logging, and automated recovery standard applies to each
+    region Gateway-A?
+  status: open
+  reason: >-
+    The reviewed implementation runbooks establish the current tunnel and
+    access topology but do not establish a redundant gateway or centralized
+    secret and certificate lifecycle.
+  currentBestGuess: >-
+    Preserve the current single Gateway-A per region as an existing-only
+    baseline and track the gap through risk 01KYT589B4-B0Y1.
+  impact: >-
+    A Gateway-A failure can interrupt one region's tunneled connectivity;
+    region isolation limits the blast radius.
+  relatedObjects:
+  - ref: 01KYT589B4-1XSE
+  - ref: 01KYT589B4-B0Y1
+assumptions:
+- id: cloud-only-scope
+  statement: This session covers only the cloud-hosted region deployment model; on-premise deployments will be captured in a separate SDM later.
+  rationale: The source material mixes cloud and on-premise, but the current drafting pass needed a single deployment boundary to stay coherent.
+  impact: On-premise topology and controls remain out of scope for this session.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+- id: runtime-observability-best-guess
+  statement: CloudWatch and Glowroot are treated as runtime observability dependencies because they answer ODC and Hearthstone monitoring concerns even though their full artifact model is incomplete.
+  rationale: The product clearly depends on them at runtime and the SDM should reflect that dependency now.
+  impact: Lower-level ABB and RBB artifacts still need to be added later.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KQQ5JT02-DHQV
+- id: external-network-boundary
+  statement: >-
+    Customer-hosted stunnel servers, Netskope publishers, region LDAP
+    servers, and Synergis clocks remain external relationship targets rather
+    than deployable objects inside the cloud SDP.
+  rationale: >-
+    These systems are customer-owned or shared access dependencies outside the
+    per-region AWS deployment boundary.
+  impact: >-
+    DRAFT records their traffic paths without implying that RT ERP deploys or
+    owns those external systems.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KYT589B4-1XSE
+nextSteps:
+- id: confirm-ecs-java-pattern
+  action: Confirm or create the ECS-native Java runtime pattern and rebind the RT-ERP application component if needed.
+  status: done
+  owner: cloud-architecture
+  notes: Java Application Service on Amazon ECS (01KYQN2WDV-223J) created and the RT-ERP application rebound using CloudFormation and pipeline evidence.
+  relatedObjects:
+  - ref: 01KSM38KEX-PX7B
+  - ref: 01KQQ5JT02-ZR18
+- id: resolve-database-engine-model
+  action: Confirm whether region deployments select one database engine or whether the SDM should explicitly model alternatives.
+  status: done
+  owner: database-platform
+  notes: 'Documented 2026-06-17: pre-existing single-tenant architecture — one database platform per region (Db2, SQL Server 2019, or PostgreSQL 17), co-resident in the region AWS account. SDM architectureNotes.databasePlatformSelection and per-entry notes added; decision record 01KQQ5JT02-0MBH marked resolved.'
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KQQ5JT02-0MBH
+- id: document-database-availability-model
+  action: Document the actual region database replication and failover posture without inheriting unsupported HA claims from the generic shared database services.
+  status: done
+  owner: database-platform
+  notes: >-
+    Resolved 2026-08-05: the RT-ERP SDP now records one writable primary plus
+    one read-only replica, no automatic promotion or failover, and a
+    region-scoped database single point of failure through risk
+    01KZ9A3RR6-NA48.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KZ9A3RR6-NA48
+- id: resolve-database-availability-gap
+  action: Define and approve either a true per-engine HA design with tested automatic failover or an explicit risk-acceptance and recovery plan for the current writable-primary dependency.
+  status: open
+  owner: rt-erp-cis-engineering
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KZ9A3RR6-NA48
+- id: confirm-identity-fallbacks
+  action: Confirm whether LDAP and database authentication are standard runtime dependencies or exception paths relative to Sofa King IDM.
+  status: done
+  owner: cloud-architecture
+  notes: >-
+    Sofa King IDM remains preferred. Region LDAP over LDAPS 636 and
+    database-local authentication are retained as region-specific alternate
+    or exception paths.
+  relatedObjects:
+  - ref: 01KQQ5JT02-V402
+- id: confirm-jaspersoft-topology
+  action: Confirm JasperSoft deployment topology, runtime substrate, and HA posture.
+  status: done
+  owner: engineering
+  notes: Confirmed per-region Jasper ECS services on EC2-backed capacity. Legacy Jasper and Jasper 9 can coexist during migration; the active-version baseline uses one desired task and an EFS-backed PostgreSQL repository. RDS remains a migration path.
+  relatedObjects:
+  - ref: 01KQQ5JT1F-737K
+  - ref: 01KQQ5JT02-T523
+- id: add-observability-artifacts
+  action: Add the missing CloudWatch and Glowroot lower-level runtime artifacts so observability lives at the lowest responsible level.
+  status: open
+  owner: observability
+  relatedObjects:
+  - ref: 01KQQ5JT02-DHQV
+- id: complete-edge-network-review
+  action: >-
+    Model the verified Imperva/ALB, Gateway-A/stunnel/Netskope,
+    Gateway-B/Postfix/SES, LDAP, and Synergis traffic paths.
+  status: done
+  owner: rt-erp-cis-engineering
+  notes: >-
+    DRAFT objects and relationships now preserve the documented current-state
+    paths without pulling customer-owned systems into the cloud deployment
+    boundary.
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KYT589B4-1XSE
+- id: confirm-gateway-a-operational-standard
+  action: >-
+    Confirm Gateway-A redundancy, recovery, monitoring, centralized logging,
+    certificate rotation, and secret storage and resolve risk
+    01KYT589B4-B0Y1.
+  status: open
+  owner: rt-erp-cis-engineering
+  relatedObjects:
+  - ref: 01KYT589B4-1XSE
+  - ref: 01KYT589B4-B0Y1
+- id: reconcile-discovered-erp-cis-components
+  action: 'Reconcile the remaining discovery-generated ERP-CIS components (JasperSoft 01KSM38KGM-A8RR, reporting 01KSM38KGM-3A6W, database obfuscation 01KSM38KGM-FNV0) against the curated SDM objects, following the 2026-06-17 decision that the curated RT ERP & CIS - Pattern is authoritative. The duplicate app component (01KSM38KGM-ZYY2) and discovered pattern (01KSM38KGN-BNJ8) are already deprecated.'
+  status: open
+  owner: rt-erp-cis-engineering
+  notes: 'F2 reconciliation: curated layer (01KSM38KEY-JC4K, 01KSM38KEX-PX7B) is the source of truth. Real repoUrl and provenance copied onto the curated app component; discovery-generated app stub and ERP-CIS pattern deprecated with supersededBy pointers. ARB should review final deprecation decisions for any stubs that touch the curated SDM layer. 2026-08-04: JasperSoft stub (01KSM38KGM-A8RR) confirmed duplicate of curated 01KQQ5JT1F-737K and deprecated. ERP CIS Reporting (01KSM38KGM-3A6W) and Database Obfuscation (01KSM38KGM-FNV0) stubs still need OPS input.'
+  relatedObjects:
+  - ref: 01KSM38KEY-JC4K
+  - ref: 01KSM38KEX-PX7B
+primaryObjectUid: 01KSM38KEY-JC4K

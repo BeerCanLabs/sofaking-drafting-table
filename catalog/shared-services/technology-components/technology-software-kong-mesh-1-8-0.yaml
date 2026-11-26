@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-FF39
+type: technology_component
+ownerRole: technology-admin
+name: Kong Mesh 1.8.0
+aliases:
+  - Kuma 1.8.0
+description: >-
+  Production Kong Mesh distribution of Kuma providing multizone service-mesh
+  control planes and injected data-plane proxies.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - kong-mesh
+  - kuma
+  - service-mesh
+  - production
+vendor: Kong Inc.
+productName: Kong Mesh
+productVersion: 1.8.0
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    Vendor lifecycle and upgrade disposition require confirmation from the
+    shared platform owner.
+capabilities:
+  - 01KT0V5MCV-RM8M
+notes:
+  sourceEvidence: >-
+    Read-only inspection on 2026-07-24 confirmed Kuma control-plane and
+    kuma-dp 1.8.0 images in the chaise and prod-ottm EKS clusters.

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z1-QHPN
+name: Windows Server 2012 R2 Standard Host → Automox Patch Management
+catalogStatus: stub
+source: 01KQQ5JT03-BEFY
+label: calls
+externalTarget: Automox Patch Management
+notes:
+  background: "Minimal patch compliance enforcement while hosts are retired."
+capabilities:
+- 01KQQ4Q026-BH6E

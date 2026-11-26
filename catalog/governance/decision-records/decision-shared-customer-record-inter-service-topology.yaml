@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-CSKS
+type: decision_record
+name: Shared Customer Record Inter-service Topology
+description: Cross-boundary communication paths for the Shared Customer Record deployment and where each is recorded as a catalog relationship.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - shared-customer-record
+  - deployment
+  - messaging
+  - decision-record
+category: decision
+status: accepted
+approver: shared-customer-engineering
+approvalDate: '2026-10-20'
+affectedComponent: 01KXR9XAR5-K0FT
+linkedObject: 01KXR9XAR5-K0FT
+decisionRationale: >-
+  Confirmed by the owner through Network Zone and Connection Elicitation on
+  2026-10-20. Clients reach each API through an internal AWS Traefik load balancer
+  and the le1 Traefik ingress by per-service hostname (Traefik to Customer Profile,
+  Academic Calendar, and Customer Membership); Kong is not in the path and no WAF or
+  CDN sits in front for dev and stage. Customer Membership calls the Customer Profile
+  and Academic Calendar Services, and Loveseat calls the Customer Profile identity-match
+  callback, through those same hostnames. Each API reads AWS Secrets Manager, and the
+  Customer Profile Service also writes unprocessable events to an SQS quarantine queue.
+  ArgoCD reconciles each service's manifests into le1. Within a
+  service, the API reads and writes its own DynamoDB store; DynamoDB Streams feed an
+  EventBridge Pipe, SNS topic, and SQS queue consumed by the event publisher Lambda,
+  which posts canonical events to Loveseat. Customer Profile's API validates caller-supplied
+  orgPersonIds against the Ottoman msvc-org-person service (read-only; the OrgPerson Worker
+  was removed by ADR-006) and receives identity-match callbacks from Loveseat. Each API
+  authenticates callers against Okta. Customer Membership's API validates
+  references synchronously against the Customer Profile Service, the Academic Calendar API,
+  and Core HR Org Unit. Every path above is registered as a relationship object
+  except the intra-service stream, Pipe, SNS, and SQS hops, which are managed AWS
+  plumbing inside the managed-integration zone, and Academic Calendar's and Customer
+  Membership's publisher reads from their queues, recorded as runtime dependencies on
+  the publisher components. Network-zone assignment follows the pattern's networkZones
+  (ingress, application, managed-integration, operations), confirmed by the owner.
+  Not covered: same-tier connections were not reviewed; the production edge on Chaise
+  has not been elicited; the Membership outbound BaseUrls are not yet configured
+  (TBSPS-9657); and whether Operations mandates a particular service-to-service path
+  is unconfirmed.

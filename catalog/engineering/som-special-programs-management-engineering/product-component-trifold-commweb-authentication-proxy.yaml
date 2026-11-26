@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KXK7BD4N-4ART
+type: product_component
+ownerRole: engineer
+name: Tri-State CommWeb Authentication Proxy
+description: >-
+  Trifold-owned CommWeb server group in Grand Rapids that participates in IDM
+  authentication flows. Sofa King SOM depends on CommWeb for IDM authentication,
+  but CommWeb remains part of the Trifold product boundary.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - commweb
+  - authentication
+  - proxy
+  - grand rapids
+repoUrl: TBD
+classification: other
+architectureNotes:
+  serviceAuthentication: CommWeb participates in Trifold IDM authentication flows and is also consumed by Sofa King SOM for IDM authentication. Detailed authentication protocol and server design require confirmation from Trifold architects.
+  secretsManagement: Requires confirmation from Tri-State architects.
+  serviceLogging: Requires confirmation from Tri-State architects.
+  healthWelfareMonitoring: Requires confirmation from Tri-State architects.
+  availabilityModel: Requires confirmation from Tri-State architects.
+  scalabilityModel: CommWeb is described as a group of servers; topology and scaling details require confirmation from Trifold architects.
+  recoverabilityModel: Requires confirmation from Tri-State architects.
+  failureDomain: A CommWeb outage can interrupt Trifold authentication flows and can also affect dependent products such as AWS SOM that rely on CommWeb for IDM authentication.

@@ -1,0 +1,54 @@
+schemaVersion: '1.0'
+uid: 01M6RM4N4Y-D5ZZ
+type: decision_record
+name: Customer Services le1 Failure Domain
+description: Dependencies and shared components that define the scope of impact for Customer Services APIs on the le1 EKS runtime, as far as the catalog and repositories establish them.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - customer-services
+  - shared-customer-record
+  - le1
+  - failure-domain
+  - decision-record
+category: decision
+status: open
+affectedComponent: 01M5CS4D96-RT10
+linkedObject: 01M5CS4D96-RT10
+decisionRationale: >-
+  Per service, from the catalog. Each API is its own Kubernetes Deployment with its own
+  DynamoDB single-table store, event pipeline, and event publisher Lambda. The catalog
+  records no shared workload or data store among the three services.
+  Between services, from the catalog. On create, Customer Membership validates the
+  referenced customer against the Customer Profile Service and the referenced calendar
+  against the Academic Calendar Service before it writes. The catalog records no
+  dependency of Customer Profile or Academic Calendar on Customer Membership. How
+  Membership behaves when either validation target is unavailable is not established.
+  Shared external dependencies, from the catalog. Okta validates caller tokens for the
+  APIs and authenticates the event publishers to Loveseat. Sofa King IDM is used for the
+  calls to Ottoman msvc-org-person (Customer Profile) and Core HR Org Unit (Customer
+  Membership). Loveseat receives the Shared Customer services' published events and
+  delivers Customer Profile's identity-match callbacks. AWS Secrets Manager is read by the
+  Shared Customer services. A
+  failure in any of these affects every service that depends on it.
+  Shared platform, from the catalog. All three APIs run in the same le1 EKS cluster and
+  are reached through the same Traefik ingress with an internal ALB in front. Argo CD
+  delivers their manifests. A failure of the le1 cluster, Traefik, or the ALB affects all
+  three together. In k8s-deployments, Traefik on le1 is configured with
+  deployment.kind DaemonSet and a NodePort service. The number of nodes, their
+  availability zone spread, and Traefik's behavior on node loss are not established.
+  Argo CD, from documentation and repository. The sofaking-argocd context document in
+  the sofaking-engineering-mcp repository states that Argo CD runs in the argocd
+  namespace on the glados EKS cluster. The k8s-deployments repository installs it from
+  apps/clusters/glados/infra/argocd, and its Application for le1 targets le1 as a remote
+  destination. The base values set the application controller to one replica. None of this
+  was checked against the live clusters. The effect of an Argo CD outage on running
+  workloads is not established.
+  Not established. Availability zone spread, behavior when Loveseat is unreachable beyond
+  the queued retries, and the production failure domain. Production on Chaise is not
+  provisioned.
+  Scope: development and stage on le1.

@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 2YPE08XABA-QDW5
+type: decision_record
+name: Sofa King Central Platform — Legacy Runtime Version Risk
+description: >-
+  Sofa King Central's deployed .NET estate spans multiple legacy runtime
+  versions in addition to the current baseline assumed by the shared IIS/.NET
+  Core Application Service runtime patterns.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - decision-record
+  - risk
+  - sofaking-central
+  - runtime-versions
+  - ops-103072
+category: risk
+status: accepted
+affectedComponent: 01KQQ5JT0K-TN7W
+linkedObject: 01KQQ5JT0K-TN7W
+decisionRationale: >-
+  Team FC's operational service inventory confirms production workloads on
+  legacy .NET Framework 4.8, .NET Core 2.1, .NET Core 3.1, .NET 5, and .NET 6,
+  while the shared IIS Standard Web Service and .NET Core Application Service
+  runtime patterns assume a current ASP.NET Core 8 baseline. No upgrade is
+  required to close the OPS-255153 Compute and Runtime L1 review; the version
+  gap is accepted and tracked as a modernization item rather than remediated
+  immediately.
+impact: >-
+  Services running on end-of-support .NET Core 2.1/3.1/.NET 5 and legacy .NET
+  Framework carry unpatched-runtime risk until modernized. Scoped to the
+  individual services running those versions, not the full Sofa King Central
+  estate.
+mitigationPath: >-
+  Modernization and containerization tracked under SKC-47920. No remediation
+  date required for L1 closure.

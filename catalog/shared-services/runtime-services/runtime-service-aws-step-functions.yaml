@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-WX2Z
+type: runtime_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Step Functions
+description: 'Serverless function orchestrator for business-critical application workflows.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- orchestration
+- serverless
+vendor: Amazon Web Services
+productName: Step Functions
+productVersion: managed
+authenticationModel: iam
+capabilities:
+- 01KQQ4Q026-3ZWJ
+architectureNotes:
+  resilienceModel: Managed multi-AZ high availability.
+  configurableSurface: State machines and execution roles.
+  failureDomain: Scoped to the AWS region.
+decisionRecords:
+- ref: 01KSNAW2AK-Z8Y0
+  key: resilienceModel
+- ref: 01KSNAW2AK-Z8Y0
+  key: configurableSurface
+- ref: 01KSNAW2AK-Z8Y0
+  key: failureDomain
+deliveryModel: paas

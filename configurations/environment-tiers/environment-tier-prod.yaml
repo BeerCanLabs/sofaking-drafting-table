@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: WYMZEMZ80T-9Y2B
+type: environment_tier
+name: Production
+tierId: prod
+catalogStatus: complete
+purpose: production
+availabilityExpectation: high-availability
+costPosture: balanced
+description: |
+  Live customer-facing production environment. Deployed from tagged releases
+  following change-management approval. Multi-region capability required for
+  mission-critical workloads. Full SOC 2 and RT-RAMP audit scope.
+complianceScope:
+- 01KQQ4Q027-T3CA
+- 01KQQ4Q027-7JN2
+- 01KQQ4Q027-1GHC
+- 01KQQ5JT20-M5R2
+parameterSurface:
+- name: awsAccountId
+  description: AWS account ID for the production environment
+  required: true
+  sensitive: false
+- name: awsRegion
+  description: Primary AWS region for the production environment
+  required: true
+  sensitive: false
+- name: vpcId
+  description: VPC ID where services are deployed
+  required: true
+  sensitive: false
+- name: deployRoleArn
+  description: IAM role ARN the pipeline assumes to deploy
+  required: true
+  sensitive: false
+- name: certificateArn
+  description: ACM certificate ARN for HTTPS termination
+  required: true
+  sensitive: false
+- name: kmsKeyArn
+  description: KMS key ARN for encryption-at-rest
+  required: true
+  sensitive: false
+notes: >
+  Production requires all compliance controls (security, SOC 2, RT-RAMP,
+  Sofa King HEARTHSTONE). Autoscaling and multi-AZ deployment required for HA
+  workloads. Change management approval gating applies to all deployments.

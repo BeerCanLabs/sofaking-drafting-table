@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z4-19VF
+name: Windows Server 2016 Physical Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT03-RNZ0
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Endpoint protection and host containment."
+capabilities:
+- 01KQQ4Q026-JW52

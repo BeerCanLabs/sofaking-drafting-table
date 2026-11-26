@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YM-9AKR
+name: Amazon ECS Standard Container Host → Amazon ECS Control Plane
+catalogStatus: stub
+source: 01KQQ5JT02-KJHA
+label: calls
+externalTarget: Amazon ECS Control Plane
+notes:
+  background: "Managed ECS control plane orchestrating task scheduling and service state."

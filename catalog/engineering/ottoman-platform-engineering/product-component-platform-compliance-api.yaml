@@ -1,0 +1,100 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-FZPJ
+type: product_component
+ownerRole: engineer
+name: Platform Compliance API
+description: >-
+  Node.js and Express REST API that manages the Product → Policy → Rule
+  hierarchy, creates immutable compliance-rule versions, validates and compiles
+  CEL expressions to ZEN decision models, evaluates approved rules, records every
+  evaluation as an audit run, and exposes database-aware health endpoints.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+runsOn: 01KQQ5JT02-75QN
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 22 or later
+tags:
+  - platform-compliance-engine
+  - api
+  - express
+  - nodejs
+  - eks
+  - product-component
+interfaces:
+  - name: Compliance Products REST API
+    protocol: REST
+    path: /api/products
+    authenticationModel: TBD
+    description: Creates and lists products that own compliance policies.
+  - name: Compliance Policies REST API
+    protocol: REST
+    path: /api/policies
+    authenticationModel: TBD
+    description: Creates and lists product-scoped compliance policies.
+  - name: Compliance Rules REST API
+    protocol: REST
+    path: /api/rules
+    authenticationModel: TBD
+    description: >-
+      Creates immutable rule versions, lists and retrieves product- or
+      policy-filtered rules, validates CEL, advances rule state, evaluates
+      approved or version-pinned rules, and returns validation-run history.
+  - name: Health Endpoint
+    protocol: REST
+    path: /healthz
+    authenticationModel: other
+    description: Returns API and PostgreSQL connectivity status.
+networkBindings:
+  - port: 3000
+    protocol: HTTP
+    direction: inbound
+    description: Express HTTP listener.
+environmentConfiguration:
+  - name: PORT
+    description: API listener port; defaults to 3000.
+    required: false
+    sensitive: false
+  - name: DATABASE_URL
+    description: PostgreSQL connection URL used by the API connection pool.
+    required: true
+    sensitive: true
+  - name: NODE_ENV
+    description: Node.js runtime environment; production is set in the runtime image.
+    required: false
+    sensitive: false
+runtimeSpec:
+  ports:
+    - number: 3000
+      protocol: HTTP
+      name: api
+      direction: inbound
+      description: Express REST API listener.
+  dependencies:
+    - ref: 01KY5775KP-AXH7
+      purpose: >-
+        Stores products, policies, immutable compiled compliance-rule versions,
+        and rule-validation audit runs.
+      interface: PostgreSQL
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+  repositoryName: BeerCanLabs/sk-platform-compliance-engine
+  sourceCommit: 5c391fbe3afc342f0d711e8c768684af9bd15b55
+  repositoryPrimaryLanguage: TypeScript
+  observedRuntimeSignals: >-
+    node 22, express 4, typescript 5.7, PostgreSQL client, CEL parser,
+    embedded ZEN engine, in-memory LRU decision cache, docker, eks
+  observedManifestPaths: >-
+    services/api/package.json; services/api/Dockerfile;
+    services/api/src/index.ts; services/api/src/routes/;
+    services/api/src/controllers/; services/api/src/db/;
+    services/api/src/rules/; services/api/src/events/publisher.ts
+  eventingBoundary: >-
+    The current event publisher is intentionally a no-op seam. S3, Lambda, SQS,
+    Bedrock, and EKS worker flows described in OPS-362835 are planned architecture
+    and are not implemented in the current repository checkout.

@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-RHV0
+type: relationship
+ownerRole: engineer
+name: Traefik Kubernetes Ingress Service → Customer Membership Service
+description: >-
+  Traefik on le1 routes requests for customer-membership-{dev,stage}.ss.sofaking.example
+  (paths /api, /scalar, /openapi, and /health in dev) to the Customer Membership Service ClusterIP
+  Service and EKS pods. Kong is not in the request path.
+source: 01KYAXMZ7H-72BR
+target: 01KXR9XAR4-HKKE
+label: routes requests to
+technology: HTTP
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - shared-customer-record
+  - traefik
+  - ingress
+notes: >-
+  Source: k8s-deployments manifests/sharedcustomer ingress.yml (ingress class traefik),
+  read 2026-10-20. Load-balancer, WAF, and CDN placement in front of Traefik is not
+  yet elicited.

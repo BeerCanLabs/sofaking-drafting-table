@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KYRAQ0KC-KR20
+type: relationship
+name: shopstar IDM Integration to RabbitMQ
+description: >-
+  shopstar IDM Integration publishes and consumes asynchronous organization,
+  user, permission, and enable-user synchronization messages through RabbitMQ.
+catalogStatus: incomplete
+source: 01KSM38KGD-4Q9H
+target: 01KQQ5JT1E-JBCV
+label: publishes and consumes identity events
+technology: AMQP on port 5672
+direction: event
+flow: bidirectional
+capabilities:
+  - 01KT0V5MCV-KT72
+tags:
+  - shopstar
+  - idm
+  - rabbitmq
+  - source-reconciled
+notes:
+  background: >-
+    Shopstar IDM Integration runs on port 8889 on grrshs3idm01 and grrshs3idm02,
+    and RabbitMQ runs on both production IDM hosts. Historical V3
+    documentation defines a two-node clustered pattern with mirrored user-sync
+    queues. The target shared-service UID identifies RabbitMQ as the reused
+    service family only; the generic service's three-node quorum topology is
+    not inherited by shopstar.
+  unresolved: >-
+    Current cluster membership, mirroring policy, exchanges, exact queues
+    beyond the documented user-sync family, routing keys, retry behavior,
+    dead-letter behavior, and message ownership require runtime verification.

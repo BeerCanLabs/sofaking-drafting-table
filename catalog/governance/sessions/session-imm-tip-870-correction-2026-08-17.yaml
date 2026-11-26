@@ -1,0 +1,290 @@
+schemaVersion: '1.0'
+uid: 01M07T82GS-87MN
+type: drafting_session
+name: IMM DRAFT Model Correction (TRK-870)
+description: Consolidates IMM/IMR into a single DRAFT SDP (01KSM38KFD-1G0D) and wires the three real IMM product components into it, satisfying APEX Architecture-vector L1 / DRAFT rubric Baseline (1). Fast-follow to TRH-9828 (Asset Management), per spike TRH-0231.
+version: 1.4.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- drafting-session
+- imm
+- tip-279
+- apex
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KFD-1G0D
+sourceArtifacts:
+- name: TRK-870 - update DRAFT site with corrected details for IMM
+  type: jira-ticket
+  location: https://sofaking-example.atlassian.net/browse/TRK-870
+  notes: Primary implementation ticket, drafted from spike TRH-0231 as the IMM fast-follow to TRH-9828.
+- name: IMM in DRAFT - Current State & APEX Architecture-Vector Baseline Path (TRH-0231)
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/14536378142/IMM+in+DRAFT+Current+State+APEX+Architecture-Vector+Baseline+Path+TRH-0231
+  notes: Spike that diagnosed the SDP conflation and proposed the remediation plan; mirrored locally at spikes/TRH-0231/.
+- name: IMM APEX L1 - Research about the code changes - Spike Findings (TRK-680)
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/PRO/pages/16520024764/IMM+APEX+L1+-+Research+about+the+code+changes+Spike+Findings+TRK-680
+  notes: A separate observability spike (TRK-350/313/314/315 support), not this ticket's own documentation source. Its confirmed repository facts about WHM_IM's logging landscape and health-check leave were reused directly to enrich 01KSM38KFC-STJH and Q8J31D44E3-F22K rather than re-deriving them.
+- name: IMM DRAFT L1 - Developer Questionnaire and Remediation Record
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/18259984798/IMM+DRAFT+L1+Developer+Questionnaire+and+Remediation+Record
+  notes: 'Owner-answer collection sheet for the remaining L1 gaps, authored by Trevor Lane. Answers landed into the catalog on 2026-08-25 - Client Tooling deployment/build/distribution facts, the WHM_Integrations Windows Service and Lambda host mapping, and the TRK-686 security owner. Its own closure table is not itself an L1 sign-off: as of 2026-08-25 four of seven closure rows, the team decision, the decision owner, and the decision date are unfilled, and the secrets-hygiene remediation table is entirely blank. It also records an unverified statement that IMR is retired - see question imr-retirement-scope.'
+- name: session-asset-management-tih-9828-correction-2026-07-30.yaml
+  type: drafting_session
+  location: catalog/governance/sessions/session-asset-management-tih-9828-correction-2026-07-30.yaml
+  notes: Prior AM session. Its unresolvedQuestions.imr-imm-service-group-handoff item explicitly handed the HTRA/0C4P/CT7X disposition question to this ticket; resolved here (see decision-imm-scope-correction.yaml).
+- name: BeerCanLabs/sk-WHM_IM
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-WHM_IM
+  notes: Logging landscape and health-check leave confirmed by direct repository read during TRK-680 (not this session); reused here as-is. Auth/secrets/availability/scalability/recoverability/failure-domain facts were not covered by TRK-680 and remain unconfirmed.
+- name: BeerCanLabs/sk-WHM_Zebra_Tools
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-WHM_Zebra_Tools
+  notes: Cloned locally and read directly during this session (2026-08-19) to confirm 01KSM38KFC-0A26's architecture facts - see decision record 01M0CVDXKH-B9BW. Also surfaced a hardcoded shared SQL Server credential in source (Zebra/global.vb, Zebra/frmMain.vb), tracked as a security concern separate from this catalog correction and now ticketed as TRK-686 (owner Kamal Shaw).
+- name: BeerCanLabs/sk-WHM_Integrations
+  type: repository
+  location: https://github.com/BeerCanLabs/sk-WHM_Integrations
+  notes: Cloned locally and read directly during this session (2026-08-20) to confirm 01KSM38KFC-EN0P's architecture facts - see decision record 01M0DH79Q9-B3AP. The repository was never actually deleted or renamed (created 2022, continuously live) - the earlier "404, repo not found" report was a personal GitHub access gap on the reporting account, confirmed and resolved by the repository owner (Kiran Aziz) via Slack DM on 2026-08-19. Also surfaced six tracked (non-gitignored) config.yaml files under the Python ETL pipelines that may hold live secrets, tracked as a security concern separate from this catalog correction.
+generatedObjects:
+- name: Display Materials Management - Pattern
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KFD-1G0D
+  notes: Updated in place (same uid) - real product components wired into service groups, replacing a stale inline placeholder. Region values for IMR Presentation, IMR Data Tier (Aurora), and Migration ETL Pipeline replaced with the owner-interview-required sentinel rather than left asserting an unverified region. Updated again 2026-08-25 - Client Tooling deploymentTarget set to customer-hosted from confirmed owner answers, and an imrLifecycleNote added recording the unverified IMR-retirement statement without acting on it.
+- name: Whm Im
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-STJH
+  notes: Enriched with TRK-680-confirmed logging and health-check facts; absorbed the retired 5642 stub as an alias.
+- name: Legacy Trackweb-IM Platform
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-5642
+  notes: Retired - merged into STJH.
+- name: WHM Display Materials IIS Web Service
+  type: runtime_service
+  status: created
+  ref: Q8J31D44E3-F22K
+  notes: Corrected two fields (serviceLogging, healthWelfareMonitoring) that contradicted TRK-680's confirmed findings.
+- name: Whm Software Deployment Pattern
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KF8-G9FS
+  notes: IMM entries removed and folded into 1G0D; pattern is now HelpDesk-only.
+- name: IMM Scope Correction
+  type: decision_record
+  status: created
+  ref: 01M07T82GS-FGWX
+  notes: New DecisionRecord capturing the merge, wiring, and shared-infra disposition decisions for this session.
+- name: WHM Zebra Tools Architecture Facts
+  type: decision_record
+  status: created
+  ref: 01M0CVDXKH-B9BW
+  notes: New DecisionRecord capturing architecture facts confirmed by direct repository read for 01KSM38KFC-0A26, superseding 01KT16XHKB-7GTX's incorrect "installer only, no runtime" claim. Updated 2026-08-25 to resolve the deploymentTarget item and record platformRequirement and artifactLifecycle findings from the developer questionnaire.
+- name: Whm Zebra Tools
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-0A26
+  notes: Enriched 2026-08-25 with owner-confirmed build, distribution, ownership, platform, and artifact-lifecycle facts; TRK-686 recorded as the security remediation ticket for the hardcoded credential.
+- name: Whm Integrations
+  type: data_component
+  status: created
+  ref: 01KSM38KFC-EN0P
+  notes: Enriched with facts confirmed by direct repository read; corrected targetEngine (other -> mssql) and containsPII (false -> true). Updated 2026-08-25 with an owner-confirmed runtimeHostMapping (Windows Service hosts per environment, Lambda account/region); runsOn deliberately unchanged.
+- name: WHM Integrations Architecture Facts
+  type: decision_record
+  status: created
+  ref: 01M0DH79Q9-B3AP
+  notes: New DecisionRecord capturing architecture facts confirmed by direct repository read for 01KSM38KFC-EN0P, including the targetEngine and containsPII corrections. Updated 2026-08-25 with the partially-resolved runtime host mapping.
+unresolvedQuestions:
+- id: region-reconciliation-1g0d
+  question: 'What are the correct AWS regions for 1G0D''s service groups - both the three IMR groups still carrying the owner-interview-required sentinel, and the three legacy tiers (Legacy Trackweb-IM Web Tier, Legacy Database Tier, Legacy Integration & ETL) that assert aws-us-east-1 without confirmed evidence?'
+  status: open
+  reason: 'This is the original spike''s flagged "aws-us-east-1 vs aws-us-east-2" inconsistency (TRK-870 AC item 3). Revised 2026-08-22 - leaving aws-us-east-2 in place was itself a silent assertion of an unverified fact, so the three affected IMR service groups now carry the owner-interview-required sentinel instead, matching the convention already used for Client Tooling. Revised again 2026-08-25 - the developer questionnaire confirms the region question is not answerable by the product team and needs CloudOps or the AWS console, and it also surfaced that the three legacy tiers'' aws-us-east-1 values were carried over from the original catalog import and have never been confirmed either. The questionnaire notes no IaC exists in any IMM repository (no serverless.yml, SAM/CloudFormation, or deploy workflows; IMR-IaC has had no commits since March 2022), so Terraform is not an available authoritative source - CloudOps, the AWS console, or CMDB is.'
+  currentBestGuess: For IMR, the specific account 126293295630 / VPC vpc-045b95b44db215688 / subnet detail is more likely to reflect a real, confirmed deployment than a generic vocabulary default, but this is not independently verified. For the legacy tiers, no informed guess - the value has never been evidenced. If imr-retirement-scope resolves as confirmed, the IMR half of this question becomes moot.
+  impact: Does not block Baseline (1) - the requirement is deployment targets be recorded and unknowns tracked, not perfectly reconciled. Blocks the "deployment model internally consistent" row of the questionnaire's own L1 closure table. Should be resolved before claiming Established (2).
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: imr-retirement-scope
+  question: Is IMR (IM Refresh) actually retired, and if so what is the full scope of the retirement - was the rebuild cancelled before deployment, or was deployed infrastructure decommissioned, and what became of any regions already migrated onto it?
+  status: open
+  reason: 'The IMM DRAFT L1 developer questionnaire records "IMR is retired - confirmed by Kiran Aziz, Slack, 2026-08-20" and directs that the six IMR service groups be removed from 1G0D. That has not been done here, for three reasons. First, the evidence is a single Slack statement with no decision record, no scope, and no confirmation that the speaker owns the IMR estate; DRAFT''s evidence hierarchy accepts SME statements but requires them recorded and attributed, and this one drives a destructive change. Second, 1G0D describes IMR infrastructure with named, specific resources (AWS account 126293295630, EKS cluster imr-prod v1.35, VPC vpc-045b95b44db215688, three AZ subnets, public ALB imr-prod-traefik with ACM, multi-tenant Aurora PostgreSQL with RLS, node autoscaling 1-50) - if any of that still exists, deleting it from DRAFT makes the catalog stop reflecting reality, which is the failure mode DRAFT exists to prevent. Third, retiring IMR is a pattern-wide change, not a service-group deletion: this object''s description, aliases, tags (imr, microservices), followsReferenceArchitecture link to 01KQQ5JT1D-DAAM, and six architectureNotes fields (failureDomain, deploymentTargets, patternDeviations, availabilityModel, itcTenancyModel, migrationStrategy) all assert IMR as current, as does DecisionRecord 01KT16XHME-YWTR. Removing only the service groups would leave the pattern internally inconsistent - failing the exact L1 row the change is meant to close.'
+  currentBestGuess: 'Not determined. The pattern''s own description says regions were actively migrating from legacy to IMR, so "retired" most likely means the rebuild programme was stopped, but whether infrastructure was decommissioned, whether any region ever ran on IMR, and where those regions run now are all unanswered. The eight IMR deployable objects (01KQQ5JT04-6F8T, 01KQQ5JT04-P7QJ, 01KQQ5JT1E-4060, 01KQQ5JT1D-MY47, 01KQQ5JT00-X90C, 01KQQ5JT1E-HCBR, 01KQQ5JT05-12C2, 01KQQ5JT05-WX2Z) are shared-infrastructure objects that may be referenced by other SDPs, so their disposition is a separate question from this pattern''s service groups.'
+  impact: Blocks a clean answer to region-reconciliation-1g0d for the IMR half. Does not block Baseline (1) now that the claim is explicitly recorded rather than silently applied. A confirmed retirement needs its own decision record and a pattern-wide pass before any content is removed.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: whm-integrations-repo-not-found
+  question: 'EN0P''s cataloged repoUrl (https://github.com/BeerCanLabs/sk-WHM_Integrations) returned a flat 404 on the GitHub API as of 2026-08-19, with no rename redirect. Was this repository deleted, transferred out of the BeerCanLabs org, or renamed to something that does not obviously match?'
+  status: answered
+  reason: 'Resolved 2026-08-19 via Slack: the repository was never deleted, transferred, or renamed - it has existed continuously since 2022 and was last updated 2026-08-12. The 404 was a personal GitHub access gap on the reporting account. Kiran Aziz (repo owner) confirmed this directly ("You probably just don''t have access to that WHM Integrations repo. I will add you to it.") and granted access the same day. A subsequent clone and direct repository read (see decision record 01M0DH79Q9-B3AP) confirms the repository is real, live, and matches the original 2026-05 bulk-discovery content.'
+  currentBestGuess: Not applicable - resolved. BeerCanLabs/sk-IMR-Integration remains a distinct, unrelated, IMR-scoped stub and should not be linked to EN0P.
+  impact: No longer blocks EN0P enrichment; enrichment is complete as of this update.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-owner-interview
+  question: What are WHM_Integrations' (EN0P) real serviceAuthentication, secretsManagement, serviceLogging, healthWelfareMonitoring, availabilityModel, scalabilityModel, recoverabilityModel, and failureDomain facts?
+  status: answered
+  reason: Resolved 2026-08-20 by direct repository read (no owner interview needed for architecture facts) - see decision record 01M0DH79Q9-B3AP. All eight fields are now confirmed and enriched on 01KSM38KFC-EN0P.
+  currentBestGuess: Not applicable - resolved.
+  impact: TRK-870 AC item 5 is now satisfied for this component.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-runson-host-mapping
+  question: Does runsOn (01KQQ5JT01-QFN5, a single SQL Server host) correctly represent WHM_Integrations' real infrastructure, or does it need to become a multi-host/multi-runtime relationship?
+  status: open
+  reason: 'Direct repository read identified 4 distinct named production SQL Server hosts (AWSBRSPRDLIST1-4.brannocksoft.local) running the SSIS/SQL-Agent majority, plus 2 always-on Windows Services and an AWS Lambda/Node.js stack (BrannockIntegratorAws/) that don''t map to a single SQL Server host at all. Narrowed 2026-08-25 by the developer questionnaire, which supplied real host detail for two of the three substrates: both Windows Services run on prod BRSSSISPRDDB1\BRSSSISPRDDB1,58776, stage AWSBRSPRDLIST6.brannocksoft.local\AWSBRSPRDLIST6,60173, and dev BRSDEVDB1/BRSDEVDB2.brannocksoft.local,64121; the Lambda/Node stack runs in AWS account 675180657723, us-east-1. Those facts are now recorded in EN0P''s runtimeHostMapping. What remains open is narrower: the four shared SQL Agent hosts were left without DRAFT or CMDB identifiers in the questionnaire (the identifier column and the confirmed-by column are both blank for all four rows), so there is still no valid object for runsOn to point at, and none of the four rows carries a confirming name or date.'
+  currentBestGuess: Likely needs Host objects for AWSBRSPRDLIST1-4 plus separate objects for the Windows Services and the Brannock AWS/Node stack, rather than one runsOn value. DRAFT's runsOn is single-valued and structurally cannot express three coexisting substrates, so the component's availabilityModel, failureDomain, and runtimeHostMapping carry that detail instead - an accepted modelling limitation, not an omission.
+  impact: Does not block Baseline (1) - the gap is explicitly tracked here. Should be resolved before claiming Established (2). Creating the four Host objects needs CMDB identifiers that nobody has supplied yet.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-lambda-iac-source
+  question: Which repository or pipeline deploys the WHM_Integrations AWS Lambda/Node "Brannock" stack into account 675180657723?
+  status: open
+  reason: Confirmed 2026-08-25 by the developer questionnaire that no IaC exists inside WHM_Integrations - no serverless.yml, no SAM or CloudFormation template, and no .github/workflows - yet the stack is real and running (BrannockIntegratorAws/Lambda/launchInstanceTemplateFromS3Event.js responds to S3 ObjectCreated:Put by calling EC2.runInstances, alongside Node services under DataMapper/, EmailActivities/, BrannockApiGateway/, and Integrator/intg-dash/). It is therefore deployed from somewhere outside the repository that has not been identified.
+  currentBestGuess: No informed guess - needs CloudOps or whoever administers account 675180657723 to identify the deploying repository, pipeline, or manual process.
+  impact: Does not block Baseline (1). An undeployable-from-source component blocks Apex (3), which requires deployable IaC metadata, and leaves a real operational gap - nobody has identified how this stack is redeployed if lost.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-secrets-hygiene
+  question: Do the six tracked (non-gitignored) config.yaml files under WHM_Integrations' Python ETL pipelines contain live secrets, and if so, do they need rotation?
+  status: open
+  reason: 'Direct repository read found six config.yaml files tracked in git (not gitignored) under _Python_Integration/AI_Log_Monitor, CommonOps_ETLPipeline/PullRemoteSTFPFile, Custom_Integrations/ChargesPayments_MyStoreBucks, Custom_Integrations/Export_ETLPipeline, Custom_Integrations/MDM_ETLPipeline, and CIS_ETLPipeLine/Arbor - one of which (AI_Log_Monitor/config.yaml.example) contains a comment falsely claiming these files are gitignored. File contents were deliberately not opened, per the workspace''s secrets-handling rule. Separately, _Python_Integration/CIS_ETLPipeLine/Arbor/src/api_client.py logs the Arbor API certificate value on every call. Revised 2026-08-25 - the developer questionnaire''s secrets-hygiene remediation table was left entirely blank (no ticket, no owner, no status for any of the four findings), so five days after the finding was raised there is still no tracked remediation, in contrast to the analogous Zebra Tools credential which is ticketed as TRK-686 with a named owner.'
+  currentBestGuess: Not determined - requires the developer's own review of the tracked files' actual contents and, if secrets are present, rotation plus a .gitignore fix. The certificate-in-logs defect is independent of the config files and needs its own fix regardless of what the config files contain.
+  impact: 'Security concern, separate from and not blocking TRK-870''s DRAFT catalog closure. Weight increased by the confirmed containsPII=true correction: this system stages full customer and parent directory PII and CustomerID-linked payment records. Needs a ticket and an owner before the L1 decision is signed.'
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-classification-fit
+  question: Is data_component the right object type for WHM_Integrations long-term, given it includes 2 always-on Windows Services and an AWS Lambda/Node application stack alongside its SSIS/SQL-Agent/schema majority?
+  status: open
+  reason: data_component's definition is first-party data-structure code (schemas, migrations, stored procedures, scheduled jobs), the data-layer peer of ProductComponent. WHM_Integrations' Windows Services and Lambda/Node stack are application runtime code, not data structures, and sit awkwardly under that definition. Revised 2026-08-25 - the developer questionnaire asked whether the Windows Services and Brannock AWS stack should become separate product_component records while SSIS/SQL remains the data_component, and the recorded answer is "Yes". However the questionnaire's own "Decision and owner/date" field captured only the word Yes, with no owner and no date, so there is no accountable decision to implement against. Left unimplemented rather than acting on an unattributed answer.
+  currentBestGuess: Split into separate product_component objects for the two Windows Services and the Brannock AWS/Node stack, leaving a narrower data_component for the SSIS/SQL-Agent/schema side - this is the direction the team indicated, and it also unblocks a sensible runsOn per object. Needs a named decision owner and date before implementation.
+  impact: Does not block Baseline (1). Implementing it would resolve much of whm-integrations-runson-host-mapping as a side effect, since each split object would have a single natural runtime substrate.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-zebra-tools-deployment-target
+  question: Where is WHM_Zebra_Tools' (0A26) installer artifact actually built, stored, and distributed from today?
+  status: answered
+  reason: 'Resolved 2026-08-25 by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire. The installer is built manually with InstallShield inside Visual Studio - no pipeline, consistent with the leave of .github/workflows in the repository. The completed installer is kept only on the builder''s local machine and is deliberately not archived or checked in because it is an executable. Regions obtain it by file share or email. Packaging, publishing, versioning, and support are owned by the Trackweb-IM development team. Because the application is deployed to and runs on region-operated workstations, 1G0D''s Client Tooling service group is now customer-hosted rather than owner-interview-required. The solution file''s legacy CD_ROM/DVD-5/SingleImage configurations are confirmed history, not current practice. See decision record 01M0CVDXKH-B9BW.'
+  currentBestGuess: Not applicable - resolved.
+  impact: Unblocks the last owner-interview-required sentinel on 1G0D. The answers themselves surfaced a new supportability finding - see zebra-tools-artifact-lifecycle.
+  relatedObjects:
+  - ref: 01KSM38KFC-0A26
+  - ref: 01KSM38KFD-1G0D
+- id: zebra-tools-artifact-lifecycle
+  question: How should a released WHM_Zebra_Tools installer be reproduced, reinstated, or rolled back, given that no released installer is archived anywhere and the build is manual and local-only?
+  status: open
+  reason: Surfaced 2026-08-25 by the developer questionnaire answers rather than asserted by DRAFT. The team confirmed there is no rollback process and no previous-installer process, and that the built installer is never archived or checked in. Combined with a manual build on a single developer's machine, this means a previously released version cannot be reliably reproduced, there is no artifact provenance for installers already deployed in regions, and a lost or corrupted build machine loses the shipping artifact. It compounds the hardcoded-credential exposure tracked as TRK-686 - remediating that credential requires rebuilding and redistributing the installer to every region, with no existing distribution or rollback mechanism to lean on.
+  currentBestGuess: 'Minimum viable fix is artifact retention: archive each released installer to a durable, access-controlled location with a version stamp, and record which regions received which version. Full automation of the build is a larger change and not required to close the immediate gap.'
+  impact: Does not block Baseline (1) now that it is recorded. It is a real operational risk with no owner, and it should be weighed before the L1 decision is signed, since it directly affects whether the TRK-686 credential remediation is executable.
+  relatedObjects:
+  - ref: 01KSM38KFC-0A26
+- id: whm-im-remaining-fields
+  question: What are WHM_IM's (STJH) real serviceAuthentication, secretsManagement, availabilityModel, scalabilityModel, recoverabilityModel, and failureDomain facts?
+  status: open
+  reason: TRK-680 confirmed serviceLogging and healthWelfareMonitoring directly; it did not investigate these six remaining fields. Not covered by the 2026-08-25 developer questionnaire either, which scoped itself to regions, Zebra Tools, and Integrations host mapping.
+  currentBestGuess: No informed guess beyond what is already in architectureNotes.
+  impact: Does not block Baseline (1) since the unknowns are explicitly tracked here, but should be resolved before claiming Established (2).
+  relatedObjects:
+  - ref: 01KSM38KFC-STJH
+- id: shared-infra-handoff-resolution
+  question: Are HTRA, 0C4P, and CT7X (handed off by AM session 01KYRVK1NJ-M3CN) current IMM infrastructure needing a home in 1G0D, or obsolete IMR artifacts?
+  status: answered
+  reason: Resolved 2026-08-17 by cross-referencing the catalog - all three are generic multi-tenant AWS platform runtime services (SQS, and by the same pattern SNS and a Glue/Lambda/Step-Functions substrate) already correctly homed under catalog/shared-services/ and consumed by numerous unrelated SDPs (Tiers of Intensity, Customer Data Platform, Sofa King Central, Core HR, HCM RH Core). See DecisionRecord 01M07T82GS-FGWX, sharedInfraDisposition.
+  currentBestGuess: Not IMM-exclusive; no relocation into 1G0D needed unless IMM's real messaging design is later confirmed to use them.
+  impact: Closes the last open item from TRH-9828's session that was explicitly deferred to this ticket.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+nextSteps:
+- id: validate-and-open-pr
+  action: Run validate.py, regenerate the browser, and open a PR for TRK-870 after developer review.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: 'Partially done - PRs #170, #172, and #173 merged. The 2026-08-25 questionnaire-answer PR was authored without a local validator run (no repository clone available in that environment); validate.py and generate_browser.py must be run by a reviewer before merge, and the regenerated docs/assets/browser-data.js and docs/company-vocabulary.html committed.'
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: region-owner-confirmation
+  action: Ask CloudOps to confirm the AWS account and region for every 1G0D service group - both the three IMR groups carrying the owner-interview-required sentinel and the three legacy tiers asserting an unevidenced aws-us-east-1.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: Revised 2026-08-25 - the product team confirmed they cannot answer this and that no IaC exists to derive it from, so CloudOps, the AWS console, or CMDB is the only authoritative source. If imr-retirement-scope resolves as confirmed, only the three legacy tiers remain in scope.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: imr-retirement-confirmation
+  action: Confirm with an owner of the IMR estate whether IMR is retired, what was decommissioned versus never deployed, and what became of any regions already migrated onto it - then record it as a decision record and do a pattern-wide IMR removal pass on 1G0D rather than deleting service groups in isolation.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: 'A complete retirement pass must also address 1G0D''s description, aliases, the imr and microservices tags, followsReferenceArchitecture 01KQQ5JT1D-DAAM, six architectureNotes fields (failureDomain, deploymentTargets, patternDeviations, availabilityModel, itcTenancyModel, migrationStrategy), DecisionRecord 01KT16XHME-YWTR, and the disposition of the eight IMR deployable objects, which are shared-infrastructure objects possibly referenced by other SDPs. Removing only the six service groups would leave the pattern internally inconsistent.'
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: whm-zebra-tools-enrichment
+  action: 'Tailor WHM_Zebra_Tools'' component stub from a direct repository read (no owner interview needed for architecture facts). Completed 2026-08-19 - see decision record 01M0CVDXKH-B9BW. Only the installer''s deployment/distribution target remains open and needs the owner.'
+  status: done
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KFC-0A26
+- id: whm-integrations-repo-status-check
+  action: Confirm with the team (via am-devs Slack or repo admin) whether BeerCanLabs/sk-WHM_Integrations was deleted, transferred, or renamed, before attempting any further enrichment of EN0P.
+  status: done
+  owner: brannock-asset-management-engineering
+  notes: Resolved 2026-08-19 - it was a personal access gap, not a repository issue. Access was granted by Kiran Aziz the same day.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-enrichment
+  action: 'Tailor WHM_Integrations'' component stub from a direct repository read (no owner interview needed for architecture facts). Completed 2026-08-20 - see decision record 01M0DH79Q9-B3AP.'
+  status: done
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-secrets-followup
+  action: File a remediation ticket with a named owner for the six tracked config.yaml files and the logged Arbor API certificate, matching how the analogous Zebra Tools credential was handled as TRK-686, and fix the false gitignore claim in AI_Log_Monitor/config.yaml.example.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: Revised 2026-08-25 - the developer questionnaire's secrets-hygiene table was left entirely blank, so no ticket, owner, or status exists for any of the four findings five days after they were raised. This should be resolved before the L1 decision is signed, given EN0P is now confirmed containsPII=true.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-runson-confirmation
+  action: Obtain DRAFT or CMDB identifiers for the four shared SQL Server Agent hosts (AWSBRSPRDLIST1-4) so Host objects can be created and EN0P's runsOn can point at real references.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: Revised 2026-08-25 - the Windows Service and Lambda halves of this question are now answered and recorded in EN0P's runtimeHostMapping. Only the four SQL Agent hosts remain, and they need identifiers nobody has supplied yet.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-integrations-lambda-iac-identification
+  action: Ask CloudOps, or whoever administers AWS account 675180657723, to identify the repository or pipeline that deploys the Brannock Lambda/Node stack, since no IaC for it exists in WHM_Integrations.
+  status: open
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P
+- id: whm-zebra-tools-deployment-target-confirmation
+  action: Ask the owner where WHM_Zebra_Tools' installer is built, stored, and distributed from today, so the Client Tooling service group in 1G0D can carry a real deploymentTarget instead of the owner-interview-required sentinel.
+  status: done
+  owner: brannock-asset-management-engineering
+  notes: Completed 2026-08-25 via the IMM DRAFT L1 developer questionnaire. Client Tooling is now customer-hosted; build and distribution facts are recorded on 01KSM38KFC-0A26 and decision record 01M0CVDXKH-B9BW.
+  relatedObjects:
+  - ref: 01KSM38KFC-0A26
+  - ref: 01KSM38KFD-1G0D
+- id: zebra-tools-artifact-lifecycle-review
+  action: Decide and assign an owner for WHM_Zebra_Tools installer retention - at minimum archive each released installer to a durable, access-controlled location with a version stamp, and record which regions received which version.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: Prerequisite for executing the TRK-686 credential remediation, which requires rebuilding and redistributing the installer to every region with no existing distribution or rollback mechanism.
+  relatedObjects:
+  - ref: 01KSM38KFC-0A26
+- id: whm-im-remaining-fields-confirmation
+  action: Confirm WHM_IM's remaining serviceAuthentication, secretsManagement, availabilityModel, scalabilityModel, recoverabilityModel, and failureDomain facts, which TRK-680 did not investigate.
+  status: open
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KFC-STJH
+- id: whm-integrations-classification-review
+  action: Get a named decision owner and date for the recorded "Yes" answer on splitting WHM_Integrations' two Windows Services and the Brannock AWS/Node stack into separate product_component objects, then implement the split.
+  status: open
+  owner: brannock-asset-management-engineering
+  notes: Revised 2026-08-25 - the team has indicated the direction but the questionnaire captured no owner or date, so there is no accountable decision to implement against. Implementing the split would also resolve most of whm-integrations-runson-host-mapping.
+  relatedObjects:
+  - ref: 01KSM38KFC-EN0P

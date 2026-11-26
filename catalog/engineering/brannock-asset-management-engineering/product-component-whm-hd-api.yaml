@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-X6P1
+type: product_component
+ownerRole: engineer
+name: HelpDesk HHD_API
+description: |
+  .NET Web API backend for the HelpDesk / GetHelp platform (HHD_API). Hosts
+  tenant-aware business logic, queue and routing workflows, notification
+  orchestration, authorization, integration clients, and SQL Server data access.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+- helpdesk
+- gethelp
+- whm
+- api
+- dotnet
+- ecs
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_HD_API
+language: C#
+classification: api-service
+runtimeRequirement: Containerized .NET Web API workload in the shared ECS environment.
+architectureNotes:
+  serviceAuthentication: API access uses tenant-specific identity context from HHD_Login flows plus backend authorization enforcement.
+  tenantContextResolution: The API resolves tenant identity and selects the appropriate tenant or environment SQL Server database before persistence access.
+  secretsManagement: Runtime secrets and environment configuration are externalized outside the image through the shared S3-hosted environment configuration model (API appsettings).
+  serviceLogging: API logs and traces are forwarded to Application Insights and the shared observability stack.
+  healthWelfareMonitoring: API health is tracked through telemetry, runtime probes, and platform monitoring.
+  availabilityModel: The API backend runs as replicated ECS tasks in the shared service environment.
+  scalabilityModel: The API backend scales horizontally within ECS as tenant demand increases.
+  recoverabilityModel: Failed API tasks are replaced through ECS service orchestration and redeployed from the coordinated release package.
+  failureDomain: Scoped to the shared HelpDesk API tier serving the multi-tenant product.
+  integrations: Integrates with Sofa King Asset Management / Trackweb (the WHM_HD_API repo references a TrackwebNotifications connected service) and coordinates Lambda-backed background processing.
+  reconciliationNote: Promoted from repository-discovery stub to the canonical HelpDesk C2 container HHD_API. Architecture qualities were migrated from the curated GetHelp current-state model (the retired 'GetHelp API Backend' component) to align the DRAFT model with the BRS "Infrastructure & Deployment Architecture" Confluence C2/C3 diagrams. Host corrected from Lambda (repository-discovery guess; the serverless signal reflects in-repo Lambda artifacts) to the ECS current-state runtime that hosts the synchronous Web API.
+  repositoryName: BeerCanLabs/sk-WHM_HD_API
+  observedRuntimeSignals: docker, dotnet, readme, serverless
+  observedManifestPaths: HHD_API.sln; src/HHD-OpenReporting-Tests/HHD-OpenReporting-Tests.csproj; src/HHD-OpenReporting/HHD-OpenReporting.csproj; src/HHD_API/Connected Services/TrackwebNotifications/ConnectedService.json; src/HHD_API/Contrast/Dev.yml; src/HHD_API/Contrast/NEXT.yml; src/HHD_API/Contrast/QA.yml; src/HHD_API/Dockerfile; src/HHD_API/HHD_API.csproj; src/HHD_API/Properties/launchSettings.json; src/HHD_API/Service References/Application Insights/ConnectedService.json; src/HHD_API/config/appsettings.Debug.json
+notes:
+  background: "Canonical HelpDesk API container (HHD_API). Originally discovered from read-only Sofa King GitHub repository tree signals; enriched from the curated GetHelp current-state model. No source file contents or secrets were copied into Draft."

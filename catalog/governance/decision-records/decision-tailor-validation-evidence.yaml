@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ0D-EE4D
+type: decision_record
+name: Tailor Validation Evidence
+description: Architecture decisions promoted from existing catalog notes and Tailor Ansible deployment evidence so DRAFT validation can trace requirement evidence to committed catalog content.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+  - tailor
+  - ansible-discovered
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGG-MAEX
+linkedObject: 01KSM38KGG-MAEX
+decisionRationale: >-
+  deploymentTargets: AAP confirms production and UAT Tailor templates in GRR vmware. AAP confirms QA and stage Tailor templates in HPT vmware. The web role defines hpt_dev, but AAP returned no Tailor DEV job template, inventory group, or HPTTLRDEV host. Sofa King-owned hardware, VMware.
+
+  serviceGroups: Tailor is modeled as F5 BIG-IP traffic edge, production and UAT IIS web/Comet sites, HPT QA/STG non-prod web, IIS EMS sites, production utility/integration workers, CIS importer/support host, production and UAT SSIS hosts, production and UAT SSRS reporting, four production two-host SQL inventory groups, one UAT two-host SQL inventory group, one STG two-host SQL inventory group, and one QA single-host SQL inventory group. PDF-only DEV DB/SSRS nodes are not modeled as active service groups.
+
+  availabilityRequirement: AAP exposes five production web cluster templates and one UAT web cluster template. cluster_06 and cluster_07 in the role vars are placeholders for future expansion. AAP inventory confirms production SQL as four two-host groups, UAT SQL as one two-host group, STG SQL as one two-host group, and QA SQL as one single-host group. SQL Server automation configures AlwaysOn for applicable environments, but current primary/failover state is not inferred from the historical PDF. Formal SLA, RTO, and RPO remain open.
+
+  dataClassification: Tailor is treated as restricted and PII-bearing because it is an CDP/special-programs product; product owner confirmation is still needed.
+
+  failureDomain: Current evidence points to web-cluster failure domains and AAP-confirmed SQL inventory groups. SQL groups are GRRTLRPRDDB01/02, GRRTLRPRDDB03/04, GRRTLRPRDDB05/06, GRRTLRPRDDB07/08, GRRTLRUATDB01/02, HPTTLRSTGDB01/02, and single-host QA group HPTTLRQADB01. No active DEV SQL failure domain was found in AAP. Tenant-to-SQL-group and database-shard boundaries require owner confirmation.
+
+  patternDeviations: Legacy Windows/IIS/SQL Server deployment using Ansible, Artifactory payloads, F5 traffic management, SMB-backed web content for clustered environments, and no container orchestration observed.
+
+  sourceEvidence: AAP Controller /api/v2 job-template, inventory limit, and host membership evidence is the operational source of truth for active Tailor infrastructure and was verified on 2026-07-10. BeerCanLabs/sk-ansible_playbooks_sre branch Tailor_Servers, including playbooks/tailor-playbook.yml, roles/sk_apps/som/tailor_web, tailor_ems, tailor_util, tailor_sis, tailor_ssis, tailor_ssrs, tailor_ssrs_uat, shared SQL/F5 roles, and vSphere-template evidence explain automation intent. SaaSIO-Tailor DB Architecture-100726-202108.pdf is retained as historical documentation context.
+
+  dbArchitectureEvidence: The Tailor DB Architecture PDF shows DEV/QA -> STG -> UAT -> Prod flow, AG listener diagrams, and Prod To UAT Refresh details with read-only backup drive file shares plus rewrite/restore of legacy stored procedures into UAT. Because AAP inventory has no Tailor DEV host and does not expose current SQL primary/failover state, PDF DEV nodes and primary/failover labels are treated as non-authoritative until owner confirmation.
+
+  hostInventoryEvidence: AAP resolves active Tailor hosts for production web cluster_01 through cluster_05 as GRRTLRPRDWEB01 through GRRTLRPRDWEB10, UAT web as GRRTLRUATWEB01/02, production SQL groups as GRRTLRPRDDB01 through GRRTLRPRDDB08, UAT SQL as GRRTLRUATDB01/02, production and UAT SSIS/SSRS hosts, EMS hosts, utility host GRRTLRPRDUTIL1, CIS hosts GRRTLRSIS21 through GRRTLRSIS25, and HPT QA/STG hosts. AAP returned no HPTTLRDEV hosts. AAP vSphere templates also include GRRTLRPRDWEB11 through GRRTLRPRDWEB14, retained as future cluster_06/cluster_07 placeholders rather than active service groups.
+
+  externalDependencies: The playbook shows F5 BIG-IP, SMB-backed TailorWebFiles shares on grrtlrfs01 for UAT/production web content, Artifactory payload downloads, Oracle Client 19c, FileZilla, F5 BIG-IP Edge Client automation, SFTP/CIS file movement, and shared Windows security/monitoring agents. External partner and endpoint inventories require owner confirmation.
+
+  interServiceConnections: Modeled relationships capture F5 to Tailor Web traffic and Tailor web, EMS, utility, SSIS, and SSRS access to the Tailor SQL Server data tier. CIS importer, file-transfer, package-level SSIS, and reporting flows remain incomplete pending owner interview.

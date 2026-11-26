@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: D12ZAVT70N-QJSJ
+name: Ottoman Passport Core Service → Ottoman Domain Service
+catalogStatus: stub
+source: 01KSM38KFX-9EHD
+label: calls
+target: 01KSM38KFW-WA83
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Domain Service is called via common/services/domain.service.ts, wrapped in the @Resilient() circuit-breaker decorator. Already recorded informally in architectureNotes.dependencies; formalized here as a Relationship object."
+capabilities: []

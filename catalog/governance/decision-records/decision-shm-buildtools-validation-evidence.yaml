@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHZ5-X8G2
+type: decision_record
+name: Shm Buildtools Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: store-health-management-shm-engineering
+  contact: sara.gilmore@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG9-4R52
+linkedObject: 01KSM38KG9-4R52
+decisionRationale: 'runtimeRequirement: Container image definition; runtime is determined by the base image and hosting platform.'

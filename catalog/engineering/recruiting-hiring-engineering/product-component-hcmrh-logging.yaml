@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01KTA9VTH2-CB2J
+type: product_component
+ownerRole: engineer
+name: HCMRH Logging Library
+description: Enterprise-grade structured logging library for .NET 9 ASP.NET Core applications providing automatic enrichment with HTTP context, user information, correlation IDs, request timing, and JSON log formatting via Serilog
+version: 1.0.22
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+- hcmrh
+- shared-library
+- logging
+- serilog
+- dotnet
+repoUrl: https://github.com/BeerCanLabs/sk-hcmrh-logging
+language: C#
+classification: library
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: ILogRequestContext
+  description: Request-scoped context management with manual and automatic cleanup
+  protocol: other
+- name: CorrelationIdMiddleware
+  description: Correlation ID generation and propagation
+  protocol: other
+- name: RequestStartTimeMiddleware
+  description: Request timing and elapsed time tracking
+  protocol: other
+- name: StructuredLoggerConfigurationExtensions
+  description: Setup and configuration extensions
+  protocol: other
+environmentConfiguration:
+- name: LOCAL_DEV_ENVIRONMENT
+  type: environment flag
+  required: false
+  sensitive: false
+  description: Pretty-formatted JSON logs in development
+architectureNotes:
+  framework: .NET 9.0 Class Library
+  distribution: NuGet package via Sofa King Artifactory
+  dependencies: Serilog.AspNetCore 9.0.0, Serilog.Sinks.Async 2.1.0, Serilog.Sinks.Console 6.0.0
+  enrichment: Automatic enrichment with correlation IDs, user claims (PersonId, roles, domainId, orgId), HTTP request details, elapsed time
+  features: Structured JSON logging with camelCase, correlation ID management, request-scoped context (manual and automatic cleanup patterns), Ottoman user info extraction from x-sk-userinfo header
+  middlewareStack: CorrelationIdMiddleware (generates/propagates X-Correlation-ID), RequestStartTimeMiddleware (tracks elapsed time)
+  usedByAllServices: All 7 HCMRH microservices use this library for consistent structured logging

@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-01JZ
+type: runtime_service
+ownerRole: technology-admin
+name: ArgoCD GitOps Service
+description: 'Standard ArgoCD service pattern for GitOps-based continuous delivery.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - gitops
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1R-2KJF
+architectureNotes:
+  serviceAuthentication: Integrated with Sofa King identity provider.
+  secretsManagement: Integrated with External Secrets (AWS Secrets Manager).
+  serviceLogging: Logs forwarded to centralized logging.
+  healthWelfareMonitoring: Monitored via ArgoCD health status and EKS telemetry.
+  availabilityModel: High availability deployment on EKS.
+  scalabilityModel: Scales with the number of managed applications and clusters.
+  recoverabilityModel: Rebuilt from Git repository state and Helm charts.
+  failureDomain: Scoped to the EKS cluster or the managed application fleet.
+internalComponents:
+  - ref: 01KQQ5JT1R-2KJF
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJCV-8GQC
+    key: serviceAuthentication
+  - ref: 01KT16XJCV-8GQC
+    key: secretsManagement
+  - ref: 01KT16XJCV-8GQC
+    key: serviceLogging
+  - ref: 01KT16XJCV-8GQC
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJCV-8GQC
+    key: availabilityModel
+  - ref: 01KT16XJCV-8GQC
+    key: scalabilityModel
+  - ref: 01KT16XJCV-8GQC
+    key: recoverabilityModel
+  - ref: 01KT16XJCV-8GQC
+    key: failureDomain

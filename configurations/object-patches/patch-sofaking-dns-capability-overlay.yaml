@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ8-KVXR
+type: object_patch
+name: Sofa King DNS capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT DNS capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-GJBH
+patch:
+  owner:
+    team: architecture-review-board
+  implementations: []

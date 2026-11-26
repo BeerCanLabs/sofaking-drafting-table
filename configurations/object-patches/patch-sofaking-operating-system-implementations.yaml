@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-N33Q
+type: object_patch
+name: Sofa King capability.operating-system implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.operating-system.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-QM2X
+patch:
+  owner:
+    team: cloud-engineering-infrastructure
+    contact: cloud-engineering@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1P-RWQC
+    lifecycleStatus: existing-only
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-249W
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-9ARF
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-QXC6
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-E6ZM
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-X87T
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-ZMCZ
+    lifecycleStatus: deprecated
+    notes: Assumed deprecated because Windows Server 2016 is a legacy baseline and Windows Server 2022 is the preferred baseline.
+  - ref: 01KQQ5JT1Q-6C5F
+    lifecycleStatus: existing-only
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-RTYQ
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-8RR3
+    lifecycleStatus: candidate
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-Z3ER
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-STPB
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-2647
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-RK3B
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-66EB
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1Q-4GF8
+    lifecycleStatus: candidate
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.

@@ -1,0 +1,23 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-SXFS
+type: relationship
+ownerRole: engineer
+name: Customer Membership Service → Customer Profile Service
+description: >-
+  On create, the Customer Membership Service validates that the referenced customerId
+  exists (GET /api/orgs/{orgId}/customers/{customerId}) before writing, per boundary
+  rule 6. Fails closed. Uses an Okta machine-to-machine client with scope
+  ss.profile.read; caller tokens are never forwarded. The call goes to the Customer
+  Profile per-service Traefik hostname (customer-profile-{env}.ss.sofaking.example),
+  re-entering through the internal ALB and Traefik (owner-confirmed 2026-10-20). The
+  BaseUrl is not yet configured in the membership ConfigMaps (TODO TBSPS-9657).
+source: 01KXR9XAR4-HKKE
+target: 01KXR9XAR4-BES0
+label: validates customer via
+technology: REST / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - planned

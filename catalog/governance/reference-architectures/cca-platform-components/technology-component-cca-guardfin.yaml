@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYWQZ7C5-YQG0
+type: technology_component
+name: Guardfin Safety Plugin
+vendor: Sofa King (Cloud Divan Academy)
+productName: Guardfin
+productVersion: '0.1'
+classification: agent
+catalogStatus: incomplete
+description: >-
+  [INTENDED] Safety and control plugin that evaluates and may block Divan actions
+  before execution and signals observability on block. Provides the runtime
+  behavior of the Guardfin safety-layer service. Classified as a
+  governance-framework member, not a compensating control.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - guardfin
+  - safety
+  - intended

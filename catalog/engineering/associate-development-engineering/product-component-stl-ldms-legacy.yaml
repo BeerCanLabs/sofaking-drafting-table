@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-2N7T
+type: product_component
+ownerRole: engineer
+name: Stl Ldms Legacy
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-STL-LDMS-Legacy.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- repository-discovery
+- stl
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-STL-LDMS-Legacy
+language: Classic ASP
+classification: api-service
+runtimeRequirement: ASP Classic (IIS)
+architectureNotes:
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at .NET Core
+    Application Service (01KQQ5JT1E-9CKW), which cannot be right for a Classic
+    ASP application. Repointed at IIS Standard Web Service (01KQQ5JT1F-HZTZ).
+    The underlying Windows Server version is still unknown and the host object
+    is therefore not asserted - see DraftingSession 01M1F8WB4E-0GSN,
+    legacy-windows-host-version.
+  repositoryName: BeerCanLabs/sk-STL-LDMS-Legacy
+  observedRuntimeSignals: dotnet, github_actions, readme
+  observedManifestPaths: .github/workflows/main.yml; src/com/secondary/RapidFailShutdownEmail/RapidFailShutdownEmail.csproj; src/com/secondary/RapidFailShutdownEmail/RapidFailShutdownEmail.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

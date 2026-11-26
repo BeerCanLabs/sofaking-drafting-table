@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-A1F8
+type: product_component
+ownerRole: engineer
+name: Shopstarv3 Sb1
+description: Sandbox to convert shopstar V3 to git
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+  - repository-discovery
+  - shopstarv3
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-shopstarv3-sb1
+language: HTML
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-shopstarv3-sb1
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: cusord-api/pom.xml; cusord-api/src/main/resources/application-dev.yml; cusord-api/src/main/resources/application-prod.yml; cusord-api/src/main/resources/application-rc.yml; cusord-api/src/main/resources/application-test.yml; cusord-api/src/main/resources/application.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHZS-SN7A
+    key: runtimeRequirement

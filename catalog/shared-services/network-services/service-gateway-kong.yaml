@@ -1,0 +1,80 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-SW3X
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Kong Gateway Service
+description: 'Standard Kong Gateway service pattern for API management.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - gateway
+  - api-management
+category: service
+serviceCategory: general
+host: 01KQQ5JT03-VBBS
+primaryTechnologyComponent: 01KQQ5JT1S-Z984
+architectureNotes:
+  serviceAuthentication: 'Gateway management and traffic use centralized auth plugins (OIDC, KeyAuth).
+
+    '
+  secretsManagement: 'Secrets are stored in a centralized vault and injected into the Kong configuration.
+
+    '
+  serviceLogging: 'Access and error logs are forwarded to centralized logging via the host''s logging agent.
+
+    '
+  healthWelfareMonitoring: 'Service welfare is monitored via Kong''s status API and Prometheus metrics.
+
+    '
+  availabilityModel: 'High availability is achieved via multiple Kong nodes in a cluster.
+
+    '
+  scalabilityModel: 'Scales horizontally with additional Kong nodes.
+
+    '
+  recoverabilityModel: 'Nodes are automatically replaced or rebuilt by the orchestration layer.
+
+    '
+  failureDomain: 'Impact is scoped to the Kong cluster serving the traffic path.
+
+    '
+  ottomanEvidence: >-
+    OPS-933430 read-only inspection on 2026-08-10 confirmed Kong Gateway data
+    planes at 2/2 replicas in development (3.6.1.8-0.0.293), 8/8 in stage
+    (3.6.1.8-0.0.297), and 8/8 in production
+    (3.6.1.8-0.0.275-hotfix). Internet-facing NLB Services expose TLS 443 and
+    forward to Kong target port 8443; internal NLBs serve control-plane paths.
+internalComponents:
+  - ref: 01KQQ5JT1S-Z984
+    role: function
+deliveryModel: self-managed
+networkFunction: api-gateway
+networkTopology: edge-ingress
+protocols:
+  - http
+  - https
+decisionRecords:
+  - ref: 01KT16XJ9Y-JTFK
+    key: serviceAuthentication
+  - ref: 01KT16XJ9Y-JTFK
+    key: secretsManagement
+  - ref: 01KT16XJ9Y-JTFK
+    key: serviceLogging
+  - ref: 01KT16XJ9Y-JTFK
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJ9Y-JTFK
+    key: availabilityModel
+  - ref: 01KT16XJ9Y-JTFK
+    key: scalabilityModel
+  - ref: 01KT16XJ9Y-JTFK
+    key: recoverabilityModel
+  - ref: 01KT16XJ9Y-JTFK
+    key: failureDomain

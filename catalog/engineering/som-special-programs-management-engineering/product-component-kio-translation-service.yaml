@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGE-GYTE
+type: product_component
+ownerRole: engineer
+name: Kio Translation Service
+description: KIO Translation Service
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- sei
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-kio-translation-service
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  supersedes: >-
+    Owner confirmed on 2026-09-10 this replaces the legacy Translation
+    Direct ProductComponent (01KX4A2T6Z-3MTP, ASP.NET MVC app talking to
+    One Hour Translation), now deprecated.
+  repositoryName: BeerCanLabs/sk-kio-translation-service
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; SK.KIO.Translation.Service.sln; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/hpa.yml; cd/prod/ingress.yml; cd/prod/service.yml; cd/qa/cm.yml; cd/qa/deploy.yml; cd/qa/hpa.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

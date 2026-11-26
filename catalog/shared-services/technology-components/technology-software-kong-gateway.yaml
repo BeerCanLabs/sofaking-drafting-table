@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-Z984
+type: technology_component
+ownerRole: technology-admin
+name: Kong Gateway
+description: 'Cloud-native, fast, scalable, and distributed API Gateway.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- gateway
+- api-management
+vendor: Kong Inc.
+productName: Kong Gateway
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Open source and enterprise lifecycle.
+capabilities:
+- 01KT0V5MCV-3A6F
+configurations:
+- id: default-proxy-listener
+  name: Default Proxy Listener
+  description: Default Kong Gateway proxy listener profile for HTTP and HTTPS API traffic.
+  capabilities:
+  - 01KT0V5MCV-3A6F
+  networkBindings:
+  - port: 8000
+    protocol: HTTP
+    direction: inbound
+    description: Default Kong proxy HTTP listener.
+  - port: 8443
+    protocol: HTTPS
+    direction: inbound
+    description: Default Kong proxy HTTPS listener.

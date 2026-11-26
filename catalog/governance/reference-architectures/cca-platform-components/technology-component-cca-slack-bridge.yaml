@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KYX7W8VK-8PCH
+type: technology_component
+name: CCA Slack Bridge
+vendor: Sofa King (Cloud Divan Academy)
+productName: cca-slack-bridge
+productVersion: '0.1'
+classification: software
+catalogStatus: stub
+description: >-
+  [INTENDED] Slack app / bridge service that relays governed-run interactions
+  between Slack and the Staplepin control plane. Provides the runtime behavior of
+  the CCA Slack side-door service. Not yet built.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - slack
+  - side-door
+  - intended

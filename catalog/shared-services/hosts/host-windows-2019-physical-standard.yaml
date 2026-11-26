@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-F2AX
+type: host
+ownerRole: technology-admin
+name: Windows Server 2019 Physical Standard Host
+description: Stub host for Windows Server 2019 workloads on physical Dell PowerEdge infrastructure.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- physical
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-6C5F
+computePlatformComponent: 01KQQ5JT1P-9G0K
+internalComponents:
+- ref: 01KQQ5JT1Q-6C5F
+  role: os
+- ref: 01KQQ5JT1P-9G0K
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent
+architectureNotes:
+  healthWelfareMonitoringApproach: Windows host health and welfare telemetry is monitored through the Nagios Monitoring Service.

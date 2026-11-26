@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGD-6BPH
+type: product_component
+ownerRole: engineer
+name: Recliner Document Sharing and Transferring Service
+description: 'Internal microservice for Project Recliner handling document sharing and
+
+  cross-region transfer workflows for Recliner-managed documents. .NET Core 8
+
+  on AWS EKS; coordinates with the Recliner Document Service and external
+
+  Cross-Platform Customer Transfer integrations.
+
+  '
+version: 1.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KRZX0C11-QH66
+tags:
+- recliner
+- document
+- sharing
+- transferring
+- dotnet-core-8
+- eks
+- repository-provenance
+repoUrl: https://github.com/BeerCanLabs/sk-som-recliner
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+interfaces:
+- name: Recliner Document Sharing Internal API
+  protocol: REST
+  authenticationModel: oauth
+  description: In-cluster REST API for document sharing and cross-region transfer workflows.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+  repositoryName: BeerCanLabs/sk-som-recliner
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet, docker, helm, eks
+  observedManifestPaths: >-
+    src/recliner-backend/Solutions/Sofa King SOM Recliner/Recliner Backend Services.sln;
+    infra/k8s/charts/recliner-backend/Chart.yaml;
+    infra/k8s/charts/recliner-backend/templates/deployment.yaml
+  provenanceBoundary: >-
+    The architecture inventory identifies this logical service, while the
+    repository currently evidences it within the shared recliner-backend code and
+    deployment boundary rather than as an independently named Helm chart.

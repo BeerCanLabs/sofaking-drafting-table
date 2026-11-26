@@ -1,0 +1,389 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1J-DWT1
+type: software_deployment_pattern
+ownerRole: engineer
+name: Sofa King Central - Pattern
+aliases:
+  - Sofa King Central (HCM)
+description: 'Multi-tenant HCM platform linchpin. Event-sourced microservice architecture  hosted on AWS. Mixed legacy EC2/IIS and modern EKS environment.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Sofa King Central
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - hcm
+  - microservices
+  - event-sourcing
+  - aws
+  - hybrid-hosting
+followsReferenceArchitecture: 01KQQ5JT1D-DAAM
+notes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  availabilityRequirement: high
+  dataClassification: pii
+  failureDomain: multi-tenant-shared-infrastructure
+  deploymentTargets: 'AWS US-EAST-1 (Production) using EC2 for legacy APIs and EKS for modern services.
+
+    '
+  patternDeviations: 'Public/Internal API split creates proxying overhead.
+
+    '
+  modernizationStrategy: 'Migrating from EventStore/MongoDB to DynamoDB - not complete: 13 event-sourced services still reference EventStore.Client as of 2026-07-29. Actively migrating from EC2/IIS to EKS; sand-File is fully on net8.0, sand-Employee and sand-Jobtype run net-fx and .NET Core variants concurrently, four sand-* APIs remain net-fx 4.6.1 on IIS.
+
+    '
+  drStrategy: 'Only SQL Server compute instances are replicated to US-EAST-2;  full application DR is not currently automated.
+
+    '
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Presentation Tier
+    deploymentTarget: aws-us-east-1
+    notes: Angular UI (migrating to React) served within Settee shell.
+    deployableObjects:
+      - ref: 01KQQ5JT0K-KSXR
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0K-HHQY
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0K-K8VW
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0K-G87M
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0K-0H0T
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0M-53XP
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0M-Y2G5
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KQQ5JT0M-4MNA
+        diagramTier: presentation
+        networkZone: web
+      - ref: 01KSM38KGJ-CZFN
+        diagramTier: presentation
+        networkZone: web
+        notes: Re-homed from Settee (architecture-review-board) 2026-07-22.
+      - ref: 01KSM38KGK-N0PA
+        diagramTier: presentation
+        networkZone: web
+        notes: Re-homed from Settee (architecture-review-board) 2026-07-22.
+      - ref: 01KSM38KGM-365N
+        diagramTier: presentation
+        networkZone: web
+        notes: Re-homed from Settee (architecture-review-board) 2026-07-22.
+      - ref: 01KSM38KGM-HF7D
+        diagramTier: presentation
+        networkZone: web
+        notes: Re-homed from Settee (architecture-review-board) 2026-07-22.
+      - ref: 01KSM38KGM-8DPT
+        diagramTier: presentation
+        networkZone: web
+        notes: Re-homed from Settee (architecture-review-board) 2026-07-22.
+      - ref: 01KYQ4RP13-40QD
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4RP16-KS6E
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4RP1A-MNCQ
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4RP1E-T0RS
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4RP1K-WWGX
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4RP1R-XTDS
+        diagramTier: presentation
+        networkZone: web
+        notes: Added from local source inspection 2026-07-29.
+  - name: Application Services (Hybrid)
+    deploymentTarget: aws-us-east-1
+    notes: Coarse-grained sand-* APIs and event-sourced msvc-* microservices.
+    deployableObjects:
+      - ref: 01KQQ5JT0J-F4R8
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-NTJ6
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-VK9V
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-RRP6
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-EW4F
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-HYXS
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-VRT2
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-MJV2
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-9QS4
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-WX4G
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-JQ9N
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-TTSP
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-VM6S
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0J-VJSC
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0V-ZZ3J
+        diagramTier: application
+        networkZone: app
+      - ref: 01KQQ5JT0K-TN7W
+        diagramTier: application
+        networkZone: app
+        notes: Product-level estate aggregate, not a deployable service. Repurposed 2026-07-29 from a remainder placeholder for unmodelled services into the owner of the estate-wide facts only - ingress path, the four runtimes confirmed under OPS-255153, Okta authentication and central logging. Per-service persistence and calls now live on the individual components.
+      - ref: 01KSM38KFA-X9SK
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFG-SYNY
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFG-BJHR
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFG-MYWB
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFY-HRZ1
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFG-FCFP
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFY-7P1C
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFH-XBKG
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFZ-E28N
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFA-34QP
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (identity-management-idm-engineering) 2026-07-22.
+      - ref: 01KSM38KFZ-4ZFW
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KG0-C36C
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KG0-SWRJ
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KG0-B9ZX
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFS-3ZRM
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFS-0KQ2
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-VQP6
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-TS9E
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-JJ3K
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-N5SH
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-RGK1
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-22.
+      - ref: 01KSM38KFT-E80B
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KSM38KFT-X06Q
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KSM38KFY-DZKV
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KSM38KFH-TM0Y
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KSM38KFY-DJKY
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KSM38KFY-5TKC
+        diagramTier: application
+        networkZone: app
+        notes: Re-homed from Platform (ottoman-platform-engineering) 2026-07-29; missed by the 2026-07-22 pass.
+      - ref: 01KYQ4D9RJ-XDT3
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9RN-XNGS
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9RR-T700
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9RV-KPHB
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9RY-A5SX
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9S1-D1J5
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9S4-24XM
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+  - name: Background & Event Processing
+    deploymentTarget: aws-us-east-1
+    notes: DynamoDB Streams, SQS, and Lambda-based workflow execution.
+    deployableObjects:
+      - ref: 01KQQ5JT05-0C4P
+        diagramTier: application
+        networkZone: app
+      - ref: 01KYQ4D9S6-88NN
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9S9-2P45
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+      - ref: 01KYQ4D9SD-RPM9
+        diagramTier: application
+        networkZone: app
+        notes: Added from local source inspection 2026-07-29.
+  - name: Event Sourcing & Primary State
+    deploymentTarget: aws-us-east-1
+    notes: Migrating from legacy EventStore/MongoDB to DynamoDB. Source inspection 2026-07-29 found EventStore.Client still referenced by 13 event-sourced services, so both stores remain live.
+    deployableObjects:
+      - ref: 01KQQ5JT05-E3FZ
+        diagramTier: application
+        networkZone: data
+        notes: Legacy - being decommissioned.
+      - ref: 01KQQ5JT04-K58R
+        diagramTier: application
+        networkZone: data
+  - name: Relational Read Models & Permissions
+    deploymentTarget: aws-us-east-1
+    notes: Aurora PostgreSQL for read models and MSSQL for permissions.
+    deployableObjects:
+      - ref: 01KYAAZF97-HS3C
+        diagramTier: application
+        networkZone: data
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: application
+        networkZone: data
+decisionRecords:
+  - ref: 01KT16XHJM-VBYB
+    key: deploymentTargets
+  - ref: 01KT16XHJM-VBYB
+    key: availabilityRequirement
+  - ref: 01KT16XHJM-VBYB
+    key: dataClassification
+  - ref: 01KT16XHJM-VBYB
+    key: failureDomain
+  - ref: 01KT16XHJM-VBYB
+    key: patternDeviations
+tierVariants:
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    notes: Matches this SDP's existing default service-group deployment target.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    notes: Staging AWS account, same region as production per the Staging environment-tier definition.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget:
+      provider: aws
+      region: us-east-1
+    notes: Shared AWS test account, same primary region, business-hours availability.

@@ -1,0 +1,44 @@
+schemaVersion: '1.0'
+uid: 01KZZMDMN2-TC01
+type: technology_component
+ownerRole: technology-admin
+name: MDaemon Email Server 19.5.2
+description: Commercial Windows mail-server software used by the shared Grand Rapids production email-delivery platform.
+version: 1.0.1
+catalogStatus: incomplete
+owner:
+  team: cloudops-support
+  contact: carter.wynn@sofaking.example
+tags:
+  - software
+  - email
+  - smtp
+  - mdaemon
+  - grand rapids
+vendor: MDaemon Technologies
+productName: MDaemon Email Server
+productVersion: 19.5.2
+classification: software
+capabilities:
+  - 01KT0XNZEY-KPTW
+vendorLifecycle:
+  notes: Vendor support and end-of-support dates for release 19.5.2 have not been verified. No active upgrade plan or ticket exists as of 2026-08-13; no support conclusion is inferred from the installed version alone.
+configurations:
+  - id: grand rapids-production-mail-endpoints
+    name: Grand Rapids Production Mail Endpoints
+    description: SMTP listener and raw-file queue access used by the shared production MDaemon platform.
+    capabilities:
+      - 01KT0XNZEY-KPTW
+    networkBindings:
+      - port: 25
+        protocol: SMTP
+        direction: inbound
+        description: F5-fronted SMTP submission and mail-transfer endpoint.
+      - port: 445
+        protocol: SMB
+        direction: inbound
+        description: F5-fronted raw-message queue used by email agents.
+notes:
+  sourceDocumentation: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/169810502/MDaemon+Mail+Server+Infrastructure
+  sourceSession: catalog/governance/sessions/session-leave-management-l1-2026-07-28.yaml
+  installedVersionEvidence: Contributor-confirmed during the Leave Management Drafting Session on 2026-08-13.

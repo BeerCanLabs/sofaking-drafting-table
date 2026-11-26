@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DX-QETH
+name: Ottoman Okta-Domain Synchronizer Lambdas → Okta
+catalogStatus: stub
+source: 01KSM38KFS-487E
+label: calls
+target: 01KQQ5JT1D-SHXD
+notes:
+  background: "Okta-Domain Sync Lambda calls Okta via HTTPS for Okta/Domain synchronization."
+capabilities: []

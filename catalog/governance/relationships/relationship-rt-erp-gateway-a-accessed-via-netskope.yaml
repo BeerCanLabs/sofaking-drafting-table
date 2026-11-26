@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 1F45GKZX5J-QNFF
+type: relationship
+name: RT ERP Gateway-A → Netskope Private Access Publishers
+catalogStatus: incomplete
+source: 01KYT589B4-1XSE
+label: receives Sofa King operational access through
+externalTarget: Netskope Private Access Publishers
+technology: Netskope Private Access
+direction: synchronous
+flow: inbound
+notes: >-
+  Netskope publishers provide Sofa King engineers secure private access to the
+  client tunnel environment and replace the deprecated OpenVPN path. The
+  publisher service is external to the region cloud SDP.
+capabilities:
+  - 01KSWVZSZ5-Q6HW
+  - 01KSWVZSZ5-26F1

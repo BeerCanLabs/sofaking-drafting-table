@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01M5CT6KT0-YDQR
+type: relationship
+ownerRole: engineer
+name: Customer Profile Service → Platform Msvc Org Person
+description: >-
+  Callers supply orgPersonId when creating a customer or contact, and the Customer
+  Profile Service validates it against the Ottoman msvc-org-person service before writing
+  (GET orgPersons/{orgPersonId}, org in X-SK-ORG-ID; unknown or mismatched ids are
+  rejected with 400 and an unavailable OrgPerson service maps to 503). Read-only:
+  Customer Profile no longer provisions OrgPersons (ADR-006, TBSPS-4319, TBSPS-7902).
+source: 01KXR9XAR4-BES0
+target: 01KSM38KFH-NYK5
+label: validates orgPersonId via
+technology: REST / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - shared-customer-record
+  - orgperson

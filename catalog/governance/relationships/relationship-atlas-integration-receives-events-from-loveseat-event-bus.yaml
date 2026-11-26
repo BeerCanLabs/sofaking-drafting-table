@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: D6T8AKQC8K-D5YH
+type: relationship
+name: Atlas Integration → Loveseat Event Bus
+description: 'Loveseat posts PersonProfile events to POST /api/integration/loveseat/person-profile (CallbackBaseUrl,
+  dev: https://unified-inventory-nonprod.stage-retail.ss.sofaking.example/service/unified-nonprod-api); the path
+  is exempt from the tenant header requirement.'
+catalogStatus: stub
+source: 01M5WY4E7P-C0VE
+externalTarget: Loveseat Event Bus
+label: receives events from
+technology: HTTPS webhook
+direction: event
+flow: inbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. Loveseat posts PersonProfile events to POST /api/integration/loveseat/person-profile
+    (CallbackBaseUrl, dev: https://unified-inventory-nonprod.stage-retail.ss.sofaking.example/service/unified-nonprod-api);
+    the path is exempt from the tenant header requirement.'
+  evidence: 'whm-unified-core develop: Service.Core.Integration.App/Controllers/LoveseatEventsController.cs, Service.Core.Integration.App/Callbacks,
+    appsettings.json Tenancy:HeaderExemptPaths'

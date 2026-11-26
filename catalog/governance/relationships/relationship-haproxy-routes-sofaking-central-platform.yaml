@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYAFQQJB-K4XF
+type: relationship
+name: HAProxy -> Sofa King Central Platform
+catalogStatus: incomplete
+source: 01KYAFQQJB-FF30
+label: routes requests to
+target: 01KQQ5JT0K-TN7W
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: HAProxy remains active alongside the Ottoman ALB for Sofa King Central staging traffic. Confirmed by Sofa King Central engineering.
+tags:
+  - sofaking-central-engineering
+  - haproxy
+  - ingress
+  - staging

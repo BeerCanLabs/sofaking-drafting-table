@@ -1,0 +1,169 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-0W10
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Job Seeker
+description: Job seeker profile management microservice handling profile CRUD, career goal matching, resume parsing via Textkernel, document management, employer outreach tracking, and Loveseat event processing for identity and profile synchronization
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- recruiting-hiring
+- job-seeker
+- microservice
+- dotnet
+- resume-parsing
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-job-seeker
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: Job Seeker Profile API
+  protocol: REST
+  path: /api/jobseeker/jobseekers
+  authenticationModel: oauth
+  description: Job seeker profile management and CRUD operations
+- name: Job Seeker Goals API
+  protocol: REST
+  path: /api/jobseeker/jobseekers/{personId}/goals
+  authenticationModel: oauth
+  description: Career goal creation and goal-based job matching
+- name: Documents API
+  protocol: REST
+  path: /api/jobseeker/documents
+  authenticationModel: oauth
+  description: Document and resume storage management
+- name: Resume Parsing API
+  protocol: REST
+  path: /api/jobseeker/resumes/parse
+  authenticationModel: oauth
+  description: Resume parsing via Textkernel integration
+- name: Employer Operations API
+  protocol: REST
+  path: /api/jobseeker/employers/{orgId}/job-seekers
+  authenticationModel: oauth
+  description: Employer search and job seeker relationship management
+- name: Employer Outreach API
+  protocol: REST
+  path: /api/jobseeker/employers/{orgId}/employer-outreach
+  authenticationModel: oauth
+  description: Employer outreach campaign management and tracking
+- name: Notes API
+  protocol: REST
+  path: /api/jobseeker/employers/{orgId}/notes
+  authenticationModel: oauth
+  description: Employer notes on job seekers
+- name: Identity Match Event Handler
+  protocol: REST
+  path: /api/jobseeker/events/identitymatch
+  authenticationModel: TBD
+  description: Processes identity match events from Loveseat for legacy migration
+- name: Person Profile Event Handler
+  protocol: REST
+  path: /api/jobseeker/events/personprofile
+  authenticationModel: TBD
+  description: Processes person profile create/update/delete events from Loveseat
+- name: Org Person Event Handler
+  protocol: REST
+  path: /api/jobseeker/events/orgpersontype
+  authenticationModel: TBD
+  description: Updates OrgPersonId from organization sync events
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  description: MongoDB connection string for job seeker database
+  required: true
+  sensitive: true
+- name: MongoDB__DatabaseName
+  description: MongoDB database name (e.g., hcmrh_prod)
+  required: true
+  sensitive: false
+- name: ConnectionStrings__Redis
+  description: Redis connection string for caching and session storage
+  required: true
+  sensitive: true
+- name: Textkernel__AccountId
+  description: Textkernel account ID for resume parsing
+  required: true
+  sensitive: false
+- name: Textkernel__ServiceKey
+  description: Textkernel API service key
+  required: true
+  sensitive: true
+- name: FileService__Url
+  description: File service endpoint for document storage
+  required: true
+  sensitive: false
+- name: TokenService__Uri
+  description: OAuth token service endpoint
+  required: true
+  sensitive: false
+- name: TokenService__ClientId
+  description: OAuth client ID
+  required: true
+  sensitive: false
+- name: TokenService__ClientSecret
+  description: OAuth client secret
+  required: true
+  sensitive: true
+- name: ConfigCat__SdkKey
+  description: ConfigCat SDK key for feature flags
+  required: true
+  sensitive: true
+architectureNotes:
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (9 collections - jobSeekers, goals, documents, notes, legacyUsers, employerReviewInfo, employerOutreach, outreachStatistics, auditLogs)
+  caching: Redis distributed caching for performance optimization
+  resumeParsing: Textkernel RT SDK integration for automated resume data extraction
+  externalIntegrations: Textkernel (resume parsing), FileService (document storage), TokenService (OAuth), OrgPersonService (org/person data)
+  serviceAuthentication: Ottoman trusted header injection (x-sk-userinfo) for user context; OAuth 2.0 client credentials for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs and request context enrichment
+  healthWelfareMonitoring: Kubernetes liveness and readiness probes; health check endpoints
+  availabilityModel: Multi-replica deployment with horizontal pod autoscaling; rolling updates with maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via Kubernetes HPA; MongoDB indexing on PersonId, OrganizationId; geospatial indexing for location-based searches
+  recoverabilityModel: MongoDB automatic backups; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt timeout, 90s total timeout, 45s circuit breaker sampling
+  eventConsumption: Loveseat events for identity matching, profile synchronization, and org-person relationships
+  loveseatEventSubscriptions: Consumes 4 event types from Loveseat Kafka event bus via HTTP POST callbacks - IdentityMatchTransaction (legacy identity matching for migration, filtered by idpId per environment), PersonProfileType delete/update (person profile changes from Core HR), OrgPersonType create/update (organization-person relationships from Core HR, filtered by orgId per environment). All events process real users from HR systems, no demo filtering required as demo job seekers are manually created by sales team.
+  loveseatEventEndpoints: /api/jobseeker/events/identitymatch (IdentityMatchTransaction), /api/jobseeker/events/personprofile/delete (PersonProfileType delete), /api/jobseeker/events/personprofile/update (PersonProfileType update), /api/jobseeker/events/orgpersontype (OrgPersonType create/update)
+  loveseatEnvironmentConstraints: Production idpId=jobseeker-legacy orgId=73112, Staging idpId=jobseeker-legacy-stage orgId=99147268, QA idpId=jobseeker-legacy-qa orgId=99147268
+  legacyMigration: Supports legacy Retailjobspot user migration with identity mapping
+  externalDependencies:
+    serviceDependencies:
+      - name: LegacyTTCore
+        endpoint: api.jobs-board.example
+        purpose: External legacy job board integration
+      - name: EmailService
+        endpoint: emailqueueservice.sofaking.example
+        purpose: Email notifications to job seekers
+      - name: MigrationService
+        service: plat-passport-core K8s mesh
+        purpose: Identity migration and synchronization
+      - name: CoreService
+        service: hcmrh-core
+        purpose: Central notification and orchestration
+      - name: OrgPersonService
+        service: SK OrgPerson sync
+        purpose: Organization and person data synchronization
+    awsServices:
+      - name: SQS Queue JobSeeker Events
+        resource: JobSeeker-events-queue-{env}
+        purpose: Event consumption for asynchronous processing
+    externalAPIs:
+      - name: Textkernel Tx SDK
+        purpose: AI-powered resume parsing and data extraction
+    internalPackages:
+      - Hcmrh.Logging 1.0.22
+notes:
+  background: "Production-ready microservice managing job seeker profiles, career goals, and employer relationships. Integrates with Textkernel for AI-powered resume parsing and supports multi-source data synchronization via Loveseat events from Core HR and Platform systems. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

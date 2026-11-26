@@ -1,0 +1,82 @@
+schemaVersion: '1.0'
+uid: 01KT16XHFB-P4A4
+type: decision_record
+name: Leave Management - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes and the Leave Management DRAFT L1 Compute and Runtime Review drafting session (OPS-049026) so DRAFT validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KEQ-JS8E
+linkedObject: 01KSM38KEQ-JS8E
+decisionRationale: >-
+  deploymentTargets: Hosted at Grand Rapids Data Center (Grand Rapids MI).
+  Sofa King-owned hardware. Web and API tiers run on VMware. SQL Server 2022
+  runs on dedicated physical Windows Server 2022 hosts in a Grand Rapids-only
+  failover cluster shared with Time & Attendance (owner-confirmed 2026-07-29).
+
+
+  availabilityRequirement: Leave Management must remain operational through
+  a single server or infrastructure-node failure within Grand Rapids
+  (owner-confirmed 2026-07-29). Modeled as high availability within
+  Grand Rapids, with the Grand Rapids data center as the larger failure
+  domain.
+
+
+  dataClassification: Restricted. Leave Management uses the shared Rota
+  database, which contains personally identifiable information
+  (owner-confirmed 2026-07-29).
+
+
+  failureDomain: Grand Rapids data center. Within that domain, the shared
+  Rota database, the shared GRRNAP1CLU1 NetApp cluster, the shared F5 BIG-IP
+  ingress, the single-instance GRRFTP1 file-transfer service, and the single
+  GRRLVEUTIL1 VM running SKIntegrationService with no standby are each
+  additional points of shared or single-server failure exposure that require
+  further evidence before they can be scoped independently.
+
+
+  patternDeviations: The Grand Rapids ingress path terminates client TLS at
+  F5 BIG-IP and forwards unencrypted HTTP to the Leave Management backend
+  servers (owner-confirmed 2026-07-29); plain HTTP is not yet an approved
+  connectionProtocols vocabulary value and is tracked as a non-standard-value
+  proposal. GRRFTP1 is a single Windows Server 2008 R2 host running Globalscape
+  EFT Server 6.5.0.40 with no active retirement plan, and GRRCONWEB1-3 and
+  GRRSUBIT1 remain active on Windows Server 2008 R2 with no active retirement
+  or upgrade plan (owner-confirmed 2026-07-29). No approved risk acceptance
+  or exception for this end-of-support estate has been identified.
+  SKIntegrationService is a single-instance file-transformation service with
+  no Nagios Windows-service check and no automatic restart after an isolated
+  process failure; no remediation plan or ticket exists for these gaps
+  (owner-confirmed 2026-08-03).
+  GRRLVEUTIL1 runs the deprecated Windows Server 2016 VM host standard and has
+  no active upgrade or retirement plan before end of support and no approved
+  risk acceptance
+  (owner-confirmed 2026-08-03).
+
+
+  externalDependencies: All Grand Rapids Leave Management web and API
+  endpoints are fronted by the shared F5 BIG-IP service. Leave Management
+  depends on the shared Grand Rapids SQL Server 2022 cluster, the shared
+  GRRNAP1CLU1 NetApp cluster (via the Leave-only GRRFILES1 Storage VM), and
+  the GRRFTP1 managed file-transfer service, which also forwards logs to the
+  existing Amazon S3 Storage service. The active external dependency on
+  Sofa King Central is implemented by the running SKIntegrationService Windows
+  service on GRRLVEUTIL1, which watches Sofa King Central export folders on
+  GRRFTP1 and writes transformed files to Leave ToRota folders
+  (owner-confirmed 2026-08-03; source: Leave Management DRAFT L1 Compute and
+  Runtime Review drafting session, OPS-049026).
+
+
+  netappPlatformDetails: GRRNAP1CLU1 is a shared two-node NetApp FAS2720
+  cluster owned by Cloud Engineering / Infrastructure. GRRFILES1 is the
+  Leave-only SMB Storage VM on that cluster; Time & Attendance does not use
+  GRRFILES1 (owner-confirmed 2026-07-29). ONTAP version, node identities,
+  protection policy, and recovery behavior remain open follow-ups.

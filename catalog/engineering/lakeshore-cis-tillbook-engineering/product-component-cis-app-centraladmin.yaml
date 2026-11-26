@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFP-Z4NW
+type: product_component
+ownerRole: engineer
+name: CIS App Centraladmin
+description: Tillbook Central Admin Website
+aliases:
+- CIS Svc CloudCentral (special VendorLink-routing deployment of this same codebase)
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-app-centraladmin
+language: C#
+classification: web-application
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Corrected by product owner on 2026-07-31 — this is a .NET Framework 4.8 ASP.NET application (Global.asax, IIS-hosted). It has Node-built frontend components, but they compile to static assets referenced from ASPX pages/MVC views, not a standalone Node.js runtime; the earlier "Node.js" runtimeRequirement was a misread of that frontend tooling.
+  repositoryName: BeerCanLabs/sk-cis-app-centraladmin
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: src/CentralAdmin.sln; src/ExampleApps/Plushsoft.Tillbook.TestMVCApp/Plushsoft.Tillbook.TestMVCApp.csproj; src/ExampleApps/Plushsoft.Tillbook.TestWebFormsApp/Plushsoft.Tillbook.TestWebFormsApp.csproj; src/ExampleApps/Plushsoft.Tillbook.TestWebServiceApp/Plushsoft.Tillbook.TestWebServiceApp.csproj; src/Plushsoft.Tillbook.DbMigrator.Console/Plushsoft.Tillbook.DbMigrator.Console.csproj; src/Plushsoft.Tillbook.DbMigrator/Plushsoft.Tillbook.DbMigrator.csproj; src/Plushsoft.Tillbook.IdentityServer/Plushsoft.Tillbook.IdentityServer.csproj; src/Plushsoft.Tillbook.Website.Core/Plushsoft.Tillbook.Website.Core.csproj; src/Plushsoft.Tillbook.Website/Scripts/ckeditor/skins/moono/dev/locations.json; src/Plushsoft.Tillbook.Website/Plushsoft.Tillbook.Website.csproj; src/Plushsoft.Tillbook.Website/bundleconfig.json;
+    src/Plushsoft.Tillbook.Website/contrast_security.yaml
+  serviceAuthentication: 'IdentityServer3 (Plushsoft.Tillbook.IdentityServer project in this repo). Confirmed by product owner on 2026-07-31 as the user auth and OAuth2 provider for most of the Tillbook suite — exceptions are platform services (Okta/Sofa King Identity) and AWS-hosted services (AWS API Keys). Each ITC''s CentralAdmin instance stores CIS Svc CloudCentral (01KYNVC9SQ-M9SZ) as a trusted issuer; this is the actual trust data that CIS Svc Vendorlink validates incoming vendor tokens against, letting VendorLink accept OAuth2 tokens CloudCentral issued to 3rd-party vendors.'
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

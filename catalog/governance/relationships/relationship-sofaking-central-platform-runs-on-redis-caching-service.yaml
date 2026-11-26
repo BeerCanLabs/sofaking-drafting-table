@@ -1,0 +1,13 @@
+schemaVersion: '1.0'
+uid: WQY367VZHG-VRSN
+type: relationship
+name: Sofa King Central Platform → Redis Caching Service
+catalogStatus: stub
+source: 01KQQ5JT0K-TN7W
+target: 01KQQ5JT00-191S
+label: runs on
+flow: outbound
+notes:
+  background: >-
+    Redis/ElastiCache dependency identified in Team FC operational
+    documentation (OPS-255153) but not previously represented in the catalog.

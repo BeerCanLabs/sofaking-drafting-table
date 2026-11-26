@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KER-0R4N
+type: product_component
+ownerRole: engineer
+name: Rota Frontend
+description: Rota Front End Repo
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- rota
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Rota-FrontEnd
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Rota-FrontEnd
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: rota.config.json; rota.dev-ml.json; rota.dev-qa.json; rota.dev.json; cypress.json; cypress/fixtures/AbsCreateDetails/institutions.json; cypress/fixtures/AbsCreateDetails/organizations.json; cypress/fixtures/AbsCreateDetails/permissionsprofiles.json; cypress/fixtures/AbsCreateDetails/productaccess.json; cypress/fixtures/AbsCreateDetails/resources.json; cypress/fixtures/AbsCreateDetails/roles.json; cypress/fixtures/AbsCreateDetails/users.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,224 @@
+schemaVersion: '1.0'
+uid: 01KX18GPWW-PK0K
+type: drafting_session
+name: Tiers of Intensity DRAFT Completion Session
+description: >-
+  Resolved Draftsman session that separated Tiers of Intensity from the Recliner
+  product boundary, refreshed the API and Lambda worker from current source,
+  created the standalone deployment pattern and relationship graph, classified
+  its FERPA/PII data, and moved observed implementation gaps into a complete
+  risk record.
+version: 2.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+sessionStatus: resolved
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - som
+  - tiers-of-intensity
+  - lambda
+  - sqs
+  - sns
+  - eks
+  - completed
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KYMPHRH4-9VP1
+sourceArtifacts:
+  - name: Tiers of Intensity publishing diagram
+    type: drawio
+    location: catalog/engineering/som-special-programs-management-engineering/docs/tier-of-intensity-publishing.drawio
+    notes: Original editable architecture diagram.
+  - name: Tiers of Intensity publishing SVG
+    type: diagram
+    location: catalog/engineering/som-special-programs-management-engineering/docs/tier-of-intensity-publishing.svg
+  - name: Tiers of Intensity source notes
+    type: notes
+    location: catalog/engineering/som-special-programs-management-engineering/docs/tier-of-intensity-publishing-notes.md
+    notes: Evidence summary refreshed on 2026-07-28.
+  - name: Tiers of Intensity application repository
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity
+    notes: >-
+      origin/main commit fc727888dd2bd3be32ccde3363417c20152ac376
+      reviewed read-only.
+  - name: Tiers of Intensity Kubernetes manifests
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-k8s-deployments/tree/main/manifests/som/tier-calc-api
+    notes: >-
+      origin/main commit 52cfaaaf667e2e4390cd25004fac6577e736048c
+      reviewed read-only.
+  - name: Tiers of Intensity Terraform
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-som-tiers-of-intensity-terraform
+    notes: Commit 9a133d2a2ed983aecec2a212e01f55149941b1a9 reviewed read-only.
+  - name: OPS-964449 Provision SQS and SNS in AWS
+    type: jira
+    location: https://sofaking-example.atlassian.net/browse/OPS-964449
+    notes: Provisioning ticket supplied by the architecture owner and marked Done.
+  - name: OPS-455432 Tiers of Intensity - Update for DNS internal
+    type: jira
+    location: https://sofaking-example.atlassian.net/browse/OPS-455432
+    notes: >-
+      Confirms the internal Traefik load-balancer DNS names used by stage on
+      LE1 and production on Chaise.
+generatedObjects:
+  - name: Tiers of Intensity
+    type: software_deployment_pattern
+    status: created
+    ref: 01KYMPHRH4-9VP1
+  - name: Tiers of Intensity Service
+    type: product_component
+    status: created
+    ref: 01KX18GPWW-93YA
+    notes: Existing component refreshed and completed from current source and manifests.
+  - name: Tiers of Intensity SQS Poller Lambda
+    type: product_component
+    status: created
+    ref: 01KX18GPWW-8CJS
+    notes: Existing stub refreshed and completed from the now-present worker source.
+  - name: Tiers of Intensity Deployment Boundary and Topology
+    type: decision_record
+    status: created
+    ref: 01KYMPF7PJ-N4Y2
+  - name: Tiers of Intensity Authentication and Configuration Risks
+    type: decision_record
+    status: created
+    ref: 01KYMPFAPR-YF1D
+  - name: Tiers of Intensity SNS to AWS SQS
+    type: relationship
+    status: created
+    ref: 01KYMPK92Q-Y8BN
+  - name: AWS SQS to Tiers of Intensity SQS Poller Lambda
+    type: relationship
+    status: created
+    ref: 01KYMPKC21-5ZFC
+  - name: Tiers of Intensity SQS Poller Lambda to Tiers of Intensity Service
+    type: relationship
+    status: created
+    ref: 01KYMPKF27-3C17
+  - name: Tiers of Intensity Service to AWS SNS
+    type: relationship
+    status: created
+    ref: 01KYMPKJ23-APV4
+  - name: Traefik Kubernetes Ingress Service to Tiers of Intensity Service
+    type: relationship
+    status: created
+    ref: 01KYMPKNDS-NMZB
+  - name: ArgoCD GitOps Service to Tiers of Intensity Service
+    type: relationship
+    status: created
+    ref: 01KYMPKRFA-ER3G
+  - name: Tiers of Intensity SQS Poller Lambda to Amazon CloudWatch Logs
+    type: relationship
+    status: created
+    ref: 01KYMPKVGR-F94F
+unresolvedQuestions:
+  - id: lambda-trigger-configuration
+    question: What Lambda and SQS trigger settings are deployed?
+    status: answered
+    currentBestGuess: >-
+      Batch size 10, no batching window, 30-second timeout, 512 MB memory,
+      reserved concurrency 10, partial batch failures, 300-second visibility,
+      four-day queue retention, five receives before redrive, and fourteen-day
+      DLQ retention.
+    relatedObjects:
+      - ref: 01KX18GPWW-8CJS
+      - ref: 01KQQ5JT05-0C4P
+  - id: service-invocation-network-and-auth
+    question: How does the Lambda reach and authenticate to the EKS API?
+    status: answered
+    currentBestGuess: >-
+      The worker calls the environment API over HTTPS and supports an optional
+      X-TierCalc-Queue-Key. Current enablement, secret delivery, and the
+      production hostname mismatch are recorded as an open implementation risk.
+    relatedObjects:
+      - ref: 01KX18GPWW-8CJS
+      - ref: 01KX18GPWW-93YA
+      - ref: 01KYMPFAPR-YF1D
+  - id: sns-sqs-policy-and-encryption
+    question: What protects the SNS-to-SQS path?
+    status: answered
+    currentBestGuess: >-
+      SQS-managed server-side encryption, denial of insecure transport, and a
+      queue policy limited to configured SNS topic ARNs. IAM protects AWS
+      service access.
+    relatedObjects:
+      - ref: 01KQQ5JT05-HTRA
+      - ref: 01KQQ5JT05-0C4P
+  - id: data-classification-confirmation
+    question: What data classification applies to Tiers of Intensity payloads?
+    status: answered
+    currentBestGuess: >-
+      Restricted FERPA-protected customer information and PII. The API is
+      stateless; transient queue and logging retention are documented.
+    relatedObjects:
+      - ref: 01KYMPHRH4-9VP1
+assumptions:
+  - id: standalone-product-boundary
+    statement: >-
+      Tiers of Intensity is a standalone Software Deployment Pattern rather
+      than an Recliner service group.
+    rationale: >-
+      It has independent application, Kubernetes, and Terraform repositories
+      and serves SE, shopstar, and SOM integrations.
+    relatedObjects:
+      - ref: 01KYMPHRH4-9VP1
+      - ref: 01KSM38KGH-A6GC
+  - id: current-source-precedence
+    statement: >-
+      Current application, Kubernetes, and Terraform content is implementation
+      evidence; mismatches are recorded as risks instead of silently resolved.
+    relatedObjects:
+      - ref: 01KYMPFAPR-YF1D
+nextSteps:
+  - id: create-standalone-sdp
+    action: Create and complete the standalone Tiers of Intensity deployment pattern.
+    status: done
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KYMPHRH4-9VP1
+  - id: complete-source-components
+    action: Refresh and complete the API and Lambda ProductComponents.
+    status: done
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KX18GPWW-93YA
+      - ref: 01KX18GPWW-8CJS
+  - id: model-topology-and-data
+    action: Record network zones, relationships, availability, failure domains, data classification, and retention.
+    status: done
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KYMPHRH4-9VP1
+  - id: preserve-implementation-risks
+    action: Move authentication and configuration mismatches into a first-class risk record.
+    status: done
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KYMPFAPR-YF1D
+notes:
+  completenessScore: 10/10
+  maturityAssessment: >-
+    Established maturity is supported by a valid standalone SDP, preferred or
+    active shared services, a selected Reference Architecture with documented
+    deviations, explicit scaling and availability boundaries, and a closed
+    relationship graph. Apex remains gated by current authentication,
+    configuration, and secret-mediation risks rather than missing DRAFT facts.
+  closeSummary: >-
+    All drafting questions are resolved. Runtime remediation remains visible in
+    the open risk record and does not require this drafting session to remain
+    open.
+resumptionContext:
+  primaryProduct: Tiers of Intensity
+  stagingCluster: LE1
+  productionCluster: Chaise
+  awsRegion: us-east-1
+  deploymentMethod: ArgoCD GitOps
+  stagingInternalLoadBalancer: dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com
+  productionInternalLoadBalancer: dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com
+  matchedReferenceArchitecture: 01KQQ5JT1D-D614
+  completionScore: 10/10
+  architectureMaturity: Established

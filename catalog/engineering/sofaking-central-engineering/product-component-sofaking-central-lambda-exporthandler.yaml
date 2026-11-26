@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0J-JQ9N
+type: product_component
+ownerRole: engineer
+name: Sofa King Central Lambda Exporthandler
+description: Lambda Function for Sofa King Central's Exports
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- sofaking-central
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-fc-lambda-exporthandler
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-fc-lambda-exporthandler
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: SK.FC.Lambda.ExportHandler.Tests/SK.FC.Lambda.ExportHandler.Tests.csproj;
+    SK.FC.Lambda.ExportHandler.sln; SK.FC.Lambda.ExportHandler/SK.FC.Lambda.ExportHandler.csproj;
+    SK.FC.Lambda.ExportHandler/Properties/launchSettings.json; SK.FC.Lambda.ExportHandler/aws-lambda-tools-defaults.json;
+    SK.FC.Lambda.ExportHandler/resources/function-production.yml; SK.FC.Lambda.ExportHandler/resources/function-qa.yml;
+    SK.FC.Lambda.ExportHandler/resources/function-stage.yml; SK.FC.Lambda.ExportHandler/resources/ruleconfig-production-2h.yml;
+    SK.FC.Lambda.ExportHandler/resources/ruleconfig-production.yml; SK.FC.Lambda.ExportHandler/resources/ruleconfig-qa-2h.yml;
+    SK.FC.Lambda.ExportHandler/resources/ruleconfig-qa.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

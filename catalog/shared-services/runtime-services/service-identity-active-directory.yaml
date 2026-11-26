@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-6R0B
+type: runtime_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Active Directory Authentication Service
+description: Reusable Sofa King authentication service standard for Active Directory Domain Services on the Windows Server 2022 baseline.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - identity
+  - authentication
+  - active-directory
+category: service
+serviceCategory: general
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1S-MZP6
+architectureNotes:
+  serviceAuthentication: Active Directory Domain Services is the authoritative domain authentication service for host administrative access.
+  secretsManagement: Domain controller credentials and privileged administrative secrets are governed through enterprise identity and privileged access controls.
+  serviceLogging: Domain controller security, directory, and authentication logs are forwarded to the Central Logging Service.
+  healthWelfareMonitoring: Domain controller health and directory service availability are monitored through Nagios.
+  availabilityModel: Active Directory is operated with redundant domain controllers.
+  scalabilityModel: Additional domain controllers can be added to support authentication load and site coverage.
+  recoverabilityModel: Domain services recover through redundant controllers, system state backup, and directory recovery procedures.
+  failureDomain: Scoped to the domain controller set and directory domain.
+deploymentConfigurations:
+  - id: redundant-domain-controllers
+    name: Redundant Domain Controllers
+    description: Multiple domain controllers provide authentication availability and directory replication.
+    addressesQualities:
+      - availability
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT04-JKFX
+    role: host
+  - ref: 01KQQ5JT1S-MZP6
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJD3-77RC
+    key: secretsManagement
+  - ref: 01KT16XJD3-77RC
+    key: scalabilityModel
+  - ref: 01KT16XJD3-77RC
+    key: failureDomain

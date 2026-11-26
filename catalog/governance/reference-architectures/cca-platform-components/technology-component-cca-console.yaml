@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KYX7W8VG-J2C2
+type: technology_component
+name: CCA Console BFF + SPA
+vendor: Sofa King (Cloud Divan Academy)
+productName: cca-console
+productVersion: '1.0'
+classification: software
+catalogStatus: incomplete
+description: >-
+  [DOCUMENTED] Express backend-for-frontend plus a served React single-page app.
+  Provides the runtime behavior of the CCA Console front-door service; the BFF is
+  a pure Staplepin control-plane client.
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - console
+  - front-door

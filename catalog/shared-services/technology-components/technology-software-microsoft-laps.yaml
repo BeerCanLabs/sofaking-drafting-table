@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-GGJW
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft LAPS
+description: Microsoft Local Administrator Password Solution tooling installed on domain-joined Windows hosts by base automation.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- privileged-access
+- windows
+classification: software
+vendor: Microsoft
+productName: Local Administrator Password Solution
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SRE automation installs LAPS.x64.msi from internal artifacts; exact product release is not recorded in the playbooks.
+capabilities:
+- 01KQQ4Q026-4JR6
+- 01KQQ4Q026-DTJJ
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/windows_base/tasks/main.yml and vars/main.yml."

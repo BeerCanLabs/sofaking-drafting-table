@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHK4-94ZA
+type: decision_record
+name: Whm Brannock Etl Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord. Corrected 2026-07-30 (TRH-9828) after reading the real repository - the original repository-discovery guess was factually wrong.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFC-VK1S
+linkedObject: 01KSM38KFC-VK1S
+decisionRationale: 'runtimeRequirement: Corrected - this is a real ASP.NET/OWIN Web API + MVC application (Brannock.ETL.Hangfire) that self-hosts Hangfire background job processing and requires an application runtime (IIS). The original repository-discovery finding ("static web assets... no standalone application runtime") was incorrect; it was likely misled by a bundled Kendo UI static-asset package.json under Content/kendo/ and missed the actual ASP.NET/Hangfire application. Confirmed by reading HangfireBootstrapper.cs, ETLServiceConfigurator.cs, and Web.config directly.'

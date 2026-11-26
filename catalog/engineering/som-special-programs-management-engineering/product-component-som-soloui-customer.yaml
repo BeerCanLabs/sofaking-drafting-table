@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGG-QVWQ
+type: product_component
+ownerRole: engineer
+name: SOM Soloui Customer
+description: SOM Solo Customer facing UI
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+  - repository-discovery
+  - som
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-som-soloui-customer
+language: HTML
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-som-soloui-customer
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Upholstr.Solo.Web.Bll/Upholstr.Solo.Web.Bll.csproj; Upholstr.Solo.Web.Models/Upholstr.Solo.Web.Models.csproj; Upholstr.Solo.Web.UI.Tests/Upholstr.Solo.Web.UI.Tests.csproj; Upholstr.Solo.Web.UI/Upholstr.Solo.Web.UI.csproj; Upholstr.Solo.sln
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XJ06-GVD5
+    key: runtimeRequirement

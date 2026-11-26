@@ -1,0 +1,69 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-MZP6
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Active Directory Domain Services 2022
+description: Microsoft directory and domain authentication service aligned to the preferred Windows Server 2022 operating system baseline.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- identity
+- authentication
+- microsoft
+- active-directory
+vendor: Microsoft
+productName: Active Directory Domain Services
+productVersion: Windows Server 2022
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: '2026-10-13'
+  extendedSupportEnd: '2031-10-14'
+  notes: Active Directory Domain Services follows the selected Windows Server 2022 lifecycle for this catalog baseline.
+capabilities:
+- 01KQQ4Q026-MHJM
+configurations:
+- id: domain-integrated-authentication
+  name: Domain Integrated Authentication
+  description: Domain-joined host, administrator, and service identities authenticate through Active Directory Domain Services.
+  capabilities:
+  - 01KQQ4Q026-MHJM
+  networkBindings:
+  - port: 53
+    protocol: DNS/TCP
+    direction: inbound
+    description: DNS name resolution for domain-integrated clients.
+  - port: 53
+    protocol: DNS/UDP
+    direction: inbound
+    description: DNS name resolution for domain-integrated clients.
+  - port: 88
+    protocol: Kerberos/TCP
+    direction: inbound
+    description: Kerberos authentication for domain-integrated clients.
+  - port: 88
+    protocol: Kerberos/UDP
+    direction: inbound
+    description: Kerberos authentication for domain-integrated clients.
+  - port: 389
+    protocol: LDAP
+    direction: inbound
+    description: LDAP directory and authentication traffic.
+  - port: 445
+    protocol: SMB
+    direction: inbound
+    description: SYSVOL and NETLOGON access for domain-joined systems.
+  - port: 636
+    protocol: LDAPS
+    direction: inbound
+    description: LDAP over TLS directory and authentication traffic.
+  - port: 3268
+    protocol: Global Catalog
+    direction: inbound
+    description: Active Directory Global Catalog query traffic.
+  - port: 3269
+    protocol: Global Catalog TLS
+    direction: inbound
+    description: Active Directory Global Catalog query traffic over TLS.

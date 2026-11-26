@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFY-6TSZ
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Formsv2
+description: Version 2 of Forms service that combines and refines functionality from msvc-Form*, msvc-Workflow*, and sand-Form
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-FormsV2
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-FormsV2
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: DataModels/EmployeeFormTemplateConfiguration.json; DataModels/EmployeeQueryType.json; DataModels/FIV1.json; DataModels/FTV1.json; DataModels/FormAPIDef.json; DataModels/FormInstance.json; DataModels/FormLibrary.json; DataModels/FormQueryType.json; DataModels/FormSendRequest.json; DataModels/FormTemplate.json; DataModels/FormTemplatePacket.json; DataModels/FormWorkflow.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

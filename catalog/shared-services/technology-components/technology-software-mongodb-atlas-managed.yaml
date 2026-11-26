@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KYMVEMEY-KN81
+type: technology_component
+ownerRole: technology-admin
+name: MongoDB Atlas Managed Database
+description: >-
+  MongoDB Atlas managed database technology used by Sofa King Atlas projects
+  for document persistence, replica-set availability, backup, and encrypted
+  client connectivity.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: data-management-team
+  contact: data-management-team@sofaking.example
+tags:
+  - software
+  - database
+  - mongodb
+  - mongodb-atlas
+  - managed
+classification: software
+vendor: MongoDB Inc.
+productName: MongoDB Atlas
+productVersion: managed
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: >-
+    MongoDB Atlas is vendor managed. The exact database-engine release running
+    in each Sofa King project was not required or confirmed for Architecture
+    L1.
+capabilities:
+  - 01KT0V5MCV-VD0Y
+configurations:
+  - id: atlas-mongodb-srv-tls
+    name: Atlas MongoDB SRV over TLS
+    description: >-
+      Vendor-managed MongoDB replica-set connectivity discovered through
+      mongodb+srv records and protected with TLS and authenticated database
+      credentials.
+    capabilities:
+      - 01KT0V5MCV-VD0Y
+    networkBindings:
+      - port: 27017
+        protocol: MongoDB over TLS
+        direction: inbound
+        description: Authenticated application database connections.
+notes:
+  sourceEvidence: >-
+    HCM-RH data documentation confirms separate non-production and production
+    MongoDB Atlas projects, SRV-based application connections, and a
+    multi-region production cluster. Exact hostnames and credentials remain in
+    access-controlled operational documentation and secret-management systems.

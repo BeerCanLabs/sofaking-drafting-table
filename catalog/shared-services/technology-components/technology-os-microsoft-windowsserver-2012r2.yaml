@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-X87T
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Windows Server 2012 R2
+description: Legacy Windows Server 2012 R2 baseline retained only for retired planning.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- windows
+- os
+- legacy
+classification: operating-system
+vendor: Microsoft
+productName: Windows Server
+productVersion: 2012R2
+vendorLifecycle:
+  mainstreamSupportEnd: 2018-10-09
+  extendedSupportEnd: 2023-10-10
+  notes: Extended support ended in October 2023.
+capabilities:
+- 01KQQ4Q026-QM2X

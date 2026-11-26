@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: 01KZY1BEP4-QBZS
+type: relationship
+name: Leave email agents write MDaemon raw queues
+catalogStatus: incomplete
+source: 01KQQ5JT06-KPFG
+target: 01KZZMDMN1-RT01
+label: writes raw email messages to
+technology: SMB
+direction: asynchronous
+flow: outbound
+capabilities:
+  - 01KT0XNZEY-KPTW
+notes:
+  background: The MDaemon infrastructure guide identifies F5-fronted SMB raw queues on the high- and low-priority endpoints as the path used by email agents and states that raw files carry most mail volume. The Email Agents page maps Rota Legacy on GRRLVELEGEA1 and the New Rota Email Agent Letter Writer and Report Writer services on GRRLVELWEA1 and GRRLVERWEA1 to GRRMAILLOW. It maps the Rota Platform Email Agent on GRRLVEPLATEA1 to GRRMAILHIGH. Clockwise and IDM rows are outside this Leave-specific relationship. The contributor confirmed on 2026-09-03 that this SMB transport is unencrypted within Grand Rapids.

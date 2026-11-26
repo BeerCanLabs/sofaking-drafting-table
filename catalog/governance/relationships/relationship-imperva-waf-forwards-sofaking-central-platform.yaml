@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYAFQQJB-C2R6
+type: relationship
+name: Imperva WAF -> AWS Application Load Balancer (Sofa King Central)
+catalogStatus: incomplete
+source: 01KQQ5JT1D-MY47
+label: forwards HTTPS to
+target: 01KQQ5JT04-P7QJ
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: Imperva WAF sits in front of the AWS Application Load Balancer for Sofa King Central production traffic. Confirmed by Sofa King Central engineering; exact route rules and listener configuration are not modeled at L1.
+tags:
+  - sofaking-central-engineering
+  - waf
+  - ingress

@@ -1,0 +1,43 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-WKD2
+type: product_component
+ownerRole: engineer
+name: HelpDesk HHD_UP
+description: |
+  Angular single-page application for the end-user support portal experience in
+  the HelpDesk / GetHelp platform (HHD_UP). Lets end users submit and track
+  requests and calls the HHD_API backend.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+- helpdesk
+- gethelp
+- whm
+- frontend
+- angular
+- ecs
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_HD_UP
+language: TypeScript
+classification: web-application
+runtimeRequirement: Containerized Angular SPA workload in the shared ECS environment.
+architectureNotes:
+  serviceAuthentication: HHD_UP uses the tenant identity context established by HHD_Login and calls HHD_API with the authenticated session.
+  configurationModel: User-portal runtime behavior is driven by environment-specific configuration externalized in Amazon S3.
+  serviceLogging: Frontend telemetry and request logging flow through Application Insights and the shared observability stack.
+  healthWelfareMonitoring: Synthetic checks plus Application Insights and CloudWatch-backed telemetry monitor the end-user portal experience.
+  availabilityModel: Runs as replicated ECS tasks behind the Imperva WAF web ingress path.
+  scalabilityModel: Scales horizontally within the shared ECS environment.
+  recoverabilityModel: Failed tasks are replaced by ECS service orchestration.
+  failureDomain: Scoped to the HelpDesk end-user portal web tier of the GetHelp platform.
+  reconciliationNote: Promoted from repository-discovery stub to the canonical HelpDesk C2 container HHD_UP. Architecture qualities were migrated from the curated GetHelp current-state model (the retired collapsed 'GetHelp Frontend Web' component) to align the DRAFT model with the BRS "Infrastructure & Deployment Architecture" Confluence C2 diagram. Host corrected from EKS (repository-discovery guess) to the ECS current-state runtime.
+  repositoryName: BeerCanLabs/sk-WHM_HD_UP
+  observedRuntimeSignals: docker, dotnet, node, readme
+  observedManifestPaths: BrannockHelpDeskUserPortal/Dockerfile; BrannockHelpDeskUserPortal/HHD_UP.sln; BrannockHelpDeskUserPortal/angular.json; BrannockHelpDeskUserPortal/e2e/tsconfig.e2e.json; BrannockHelpDeskUserPortal/package-lock.json; BrannockHelpDeskUserPortal/package.json; BrannockHelpDeskUserPortal/src/assets/config.json; BrannockHelpDeskUserPortal/src/tsconfig.app.json; BrannockHelpDeskUserPortal/src/tsconfig.spec.json; BrannockHelpDeskUserPortal/tsconfig.json; BrannockHelpDeskUserPortal/tslint.json
+notes:
+  background: "Canonical HelpDesk frontend container (HHD_UP). Originally discovered from read-only Sofa King GitHub repository tree signals; enriched from the curated GetHelp current-state model. No source file contents or secrets were copied into Draft."

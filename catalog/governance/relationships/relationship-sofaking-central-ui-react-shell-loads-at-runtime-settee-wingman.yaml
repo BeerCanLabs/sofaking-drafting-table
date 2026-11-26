@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP4X-5B99
+type: relationship
+name: 'Sofa King Central UI React Shell → Settee Wingman'
+catalogStatus: stub
+source: 01KQQ5JT0K-G87M
+target: 01KSM38KGJ-43SY
+label: loads at runtime
+technology: HTTPS / dynamic asset load
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: Loads the Wingman script directly via VITE_WINGMAN_URL

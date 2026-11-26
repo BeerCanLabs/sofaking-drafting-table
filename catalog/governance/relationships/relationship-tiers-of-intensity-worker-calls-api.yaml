@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KYMPKF27-3C17
+type: relationship
+name: Tiers of Intensity SQS Poller Lambda → Tiers of Intensity Service
+description: >-
+  The Lambda adapter submits mapped queue batches to the calculation API and
+  uses each per-message result to determine SQS retry behavior. The HTTPS path
+  enters EKS through the environment's internal Traefik load balancer.
+source: 01KX18GPWW-8CJS
+target: 01KX18GPWW-93YA
+label: calls queue-batch API
+technology: HTTPS port 443
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - tiers-of-intensity
+  - lambda
+  - api
+  - https
+notes: >-
+  Stage uses
+  dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com
+  on LE1. Production uses
+  dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com
+  on Chaise. Traefik then routes to the API ClusterIP Service and pods. The
+  source supports X-TierCalc-Queue-Key when configured. Current Terraform and
+  Kubernetes configuration mismatches are tracked in the linked authentication
+  and configuration risk record.

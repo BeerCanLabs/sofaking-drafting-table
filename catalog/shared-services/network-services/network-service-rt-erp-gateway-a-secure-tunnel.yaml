@@ -1,0 +1,76 @@
+schemaVersion: '1.0'
+uid: 01KYT589B4-1XSE
+type: network_service
+ownerRole: technology-admin
+name: RT ERP Gateway-A Secure Tunnel Service
+description: >-
+  Per-region AWS network service that terminates and routes TLS-wrapped
+  client traffic from the customer-hosted stunnel endpoint into the RT ERP
+  region environment.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - rt-erp
+  - gateway-a
+  - stunnel
+  - netskope
+  - region-connectivity
+deliveryModel: self-managed
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KYT589B4-ETSP
+capabilities:
+  - 01KSWVZSZ5-Q6HW
+  - 01KSWVZSZ5-26F1
+networkFunction: TLS tunnel termination and region-specific TCP routing
+networkTopology: >-
+  One Gateway-A service is deployed inside each region AWS account. A
+  customer-hosted stunnel server connects to the assigned region listener;
+  Netskope Private Access publishers provide the Sofa King operational access
+  path. The former OpenVPN access path is deprecated.
+protocols:
+  - TLS
+  - TCP
+authenticationModel: other
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: provisional region EC2 host
+  - ref: 01KYT589B4-ETSP
+    role: TLS tunnel endpoint
+    configuration: rt-erp-client-tunnel
+deploymentConfigurations:
+  - id: region-gateway-a
+    name: Region Gateway-A
+    description: >-
+      Current per-region single-gateway baseline. Assigned listener ports and
+      routes vary by region; availability and recovery gaps remain recorded
+      in the linked risk.
+decisionRecords:
+  - ref: 01KYT589B4-B0Y1
+    key: secretsManagement
+  - ref: 01KYT589B4-B0Y1
+    key: serviceLogging
+  - ref: 01KYT589B4-B0Y1
+    key: availabilityModel
+  - ref: 01KYT589B4-B0Y1
+    key: scalabilityModel
+  - ref: 01KYT589B4-B0Y1
+    key: recoverabilityModel
+  - ref: 01KYT589B4-B0Y1
+    key: failureDomain
+notes:
+  sourceEvidence: >-
+    RT ERP stunnel architecture and implementation runbooks document a
+    customer-hosted Ubuntu 24 stunnel server, region-specific ports, a
+    Gateway-A destination inside the region AWS account, and Sofa King
+    operational access through Netskope publishers.
+  scopeBoundary: >-
+    The customer-owned physical stunnel server and Netskope publisher service
+    are external to the cloud SDP and are represented through relationships.
+  hostSelection: >-
+    The existing Amazon Linux 2023 on EC2 standard is used as the provisional
+    region Gateway-A substrate. Confirm the current production AMI and host
+    replacement procedure when resolving the linked operational risk.

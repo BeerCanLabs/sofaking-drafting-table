@@ -1,0 +1,59 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-9CKW
+type: runtime_service
+ownerRole: technology-admin
+name: .NET Core Application Service
+description: Stub application service for ASP.NET Core workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - app
+  - dotnet
+category: service
+serviceCategory: general
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1S-D14E
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: Application identities and administrative access use centralized identity and certificate services.
+  scalingApproach: horizontal autoscaling behind load balancer
+  serviceLogging: Application logs are forwarded to centralized logging beyond host event collection.
+  healthCheck: HTTP readiness endpoint monitored by the load balancer
+  healthWelfareMonitoring: Readiness probes, synthetic URL monitoring, and APM telemetry monitor service welfare.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  availabilityModel: Multi-node active application tier behind load balancing.
+  scalabilityModel: Horizontal autoscaling behind the load balancer.
+  recoverabilityModel: Replace failed application nodes while healthy nodes continue serving traffic.
+  failureDomain: Scoped to the .NET Core application tier deployment unit.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple application nodes behind a load balancer provide active service redundancy.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: elastic-scale
+    name: Elastic Scale
+    description: Application nodes scale horizontally based on demand.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT04-JKFX
+    role: host
+  - ref: 01KQQ5JT1S-D14E
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJBC-HVGC
+    key: serviceAuthentication
+  - ref: 01KT16XJBC-HVGC
+    key: secretsManagement
+  - ref: 01KT16XJBC-HVGC
+    key: failureDomain

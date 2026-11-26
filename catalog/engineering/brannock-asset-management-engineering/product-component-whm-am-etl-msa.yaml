@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-G3T3
+type: product_component
+ownerRole: engineer
+name: Whm Am Etl Msa
+description: an ETL (Extract, Transform, Load) process, built with a MicroService Architecture, that integrates data from 3rd party MDM systems such as InTune and Mosyle
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- whm
+- product-component
+- asset-management
+- etl
+- serverless
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_ETL_MSA
+language: C#
+classification: worker
+runtimeRequirement: .NET 8, AWS Lambda (serverless microservices, some also API-Gateway-fronted REST via minimal APIs).
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_ETL_MSA
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: .vscode/launch.json; .vscode/tasks.json; Library.Shared.AWSSecretManager/Library.Shared.AWSSecretManager.csproj; Library.Shared.Base/Library.Shared.Base/Library.Shared.Base.csproj; Library.Shared.Domain/Library.Shared.Domain/Library.Shared.Domain.csproj; Library.Shared.Logging/Library.Shared.Logging.csproj; Library.Shared.Messaging/Library.Shared.Messaging/Library.Shared.Messaging.csproj; Library.Shared.SecretServer/Library.Shared.SecretServer.csproj; Library.Shared.Storage/Library.Shared.Storage/Library.Shared.Storage.csproj; MDM_ETL_MSA.sln; MosyleMDM_SSIS/MosyleMDM.sln; Service.Authentication.InTune/App/Properties/launchSettings.json
+  serviceAuthentication: 'Layered. Inter-microservice calls use AWS API Gateway key auth (x-api-key header, fetched from AWS Secrets Manager with config fallback). Third-party/ERP credential brokering (Service.Authentication.ERP) exposes REST endpoints (GetCustomerCredentials, ValidateCredentials, the latter antiforgery-token-protected) that look up per-customer ERP client id/secret from a SQL Server table (tblUnvRegionPreferences), layered with Secret-Server-based credential retrieval. AWS resource access itself uses an execution IAM role, not embedded static keys.'
+  secretsManagement: 'Layered: AWS Secrets Manager is the primary store (app-config DB connection string, API Gateway key, AWS account ID, Secret Server credentials themselves - each with a config-file fallback). A second Secret Server (Delinea/Thycotic) client is used the same way as in 01KSM38KFB-FJX4, to resolve per-region SQL connection strings at runtime. This is the most mature secrets posture in the AM estate - both AWS Secrets Manager and Secret Server.'
+  serviceLogging: 'AWS CloudWatch Logs via a custom logger (AwsCloudWatchLogger, ICustomLogger) that auto-creates the log group/stream if missing and writes structured Info/Warning/Error events (Error includes exception message, stack trace, source, target site, inner exception).'
+  healthWelfareMonitoring: 'No dedicated /health endpoint; each REST-style service exposes a GET .../version endpoint returning build version as a minimal liveness/version probe (same convention as 01KSM38KFB-XZ3E''s HomeController).'
+  availabilityModel: 'AWS Lambda, serverless, deployed into a VPC (subnets/security groups), 60s timeout, 1024MB memory. Extraction/Transformation/Load services are SQS-triggered Lambdas; some (e.g. Service.Authentication.ERP) are ASP.NET Core minimal APIs hosted as Lambda via API Gateway REST integration. Services also support a non-Lambda hosted-service polling mode for environments without a Lambda execution deadline. Bundles an embedded SSIS project (Mosyle_MDM_Import.dtsx) for the Mosyle MDM flow specifically - a hybrid Lambda + SSIS topology.'
+  scalabilityModel: 'Message-driven, queue-based fan-out: AWS SQS (standard/FIFO) queues per stage (extraction/transformation/load), consumed by independently-scalable Lambda functions - a microservice-per-MDM-system model with separate Extraction/Transformation/Load/Authentication services per system (ERP, GoogleOU, InTune, JamfStore, Mosyle). Lambda concurrency scales per-queue independently of other stages.'
+  recoverabilityModel: 'Chunked/continuation processing to survive Lambda''s execution time limit - config includes TotalChunks/ChunkProcessingDelayMs/RemainingTimeBufferSeconds, and a remaining-time callback lets a Lambda re-publish a continuation message before its deadline. Service.MDMVerification additionally implements application-level dead-letter/retry tracking (MaxRetryCount, persisted QueueItemStatus.DeadLetter state in SQL Server) rather than relying solely on native SQS redrive policies. Note: a Library.Shared.Resilience project exists in the solution but currently contains no source files - a resilience library is scaffolded but not yet implemented.'
+  failureDomain: 'Decomposed per third-party MDM system and per ETL stage (Service.Extraction.*, Service.Transformation.*, Service.Load.*, Service.Authentication.* each suffixed .ERP/.GoogleOU/.InTune/.JamfStore/.Mosyle) - a failure in one system''s pipeline is isolated from others by separate Lambda functions/queues, though all share the same downstream SQL Server config/preferences database and AWS account/IAM role.'
+  externalDependencies: 'Third-party MDM systems InTune, Mosyle, JamfStore, plus Google OU (Google Organizational Unit) and an ERP system integration, each with dedicated Authentication/Extraction/Transformation/Load services. AWS S3 for file-based artifacts. Delinea/Thycotic Secret Server and AWS Secrets Manager (see secretsManagement). Called over HTTP from 01KSM38KFB-QFJ1 (AM_App) as the MDM/ETL integration endpoint referenced by that app''s MDMTriggerService.'
+  primaryDataStores: 'SQL Server (via Microsoft.Data.SqlClient) - queried against tblUnvRegionPreferences for per-customer ERP credentials, consistent with the shared Trackweb-family SQL Server database ecosystem used across the AM estate. AWS S3 also used as a storage dependency for file-based artifacts.'

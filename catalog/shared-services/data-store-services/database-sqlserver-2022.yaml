@@ -1,0 +1,86 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-950D
+type: data_store_service
+ownerRole: technology-admin
+name: SQL Server 2022 DBMS Service
+description: Strategic SQL Server 2022 database service for new application platforms.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- service
+- dbms
+- sqlserver
+category: service
+serviceCategory: database
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1T-92JG
+deploymentConfigurations:
+- id: alwayson-availability
+  name: AlwaysOn Availability
+  description: AlwaysOn Availability Groups provide multi-node database availability and recovery tolerance.
+  addressesQualities:
+  - availability
+  - recoverability
+- id: scale-up-with-secondary-replicas
+  name: Scale Up With Secondary Replicas
+  description: Capacity grows through larger primary nodes with optional secondary replicas for resilience and workload distribution.
+  addressesQualities:
+  - scalability
+internalComponents:
+- ref: 01KQQ5JT04-JKFX
+  role: host
+- ref: 01KQQ5JT1T-92JG
+  role: function
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Active Directory integrated identities govern administrator and service access to the database.
+  scalingApproach: scale-up primaries with secondary replicas for resilience
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: SQL listener probe and AG replica health monitoring
+  healthWelfareMonitoring: SQL listener probes, replica telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: AlwaysOn Availability Groups provide multi-node database availability.
+  scalabilityModel: Vertical scale-up of primary nodes with optional secondary replicas for resilience.
+  recoverabilityModel: Failed nodes are replaced and rejoined to the AG while backups support point-in-time recovery.
+  failureDomain: Scoped to the SQL Server availability group serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: SQL Server native backup to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: AlwaysOn Availability Groups
+  encryption:
+    atRest: TDE enabled on all production databases
+  accessControl:
+    model: Active Directory integrated access with role-based SQL permissions
+decisionRecords:
+- ref: 01KSNAW2AK-3XC6
+  key: serviceAuthentication
+- ref: 01KSNAW2AK-3XC6
+  key: secretsManagement
+- ref: 01KSNAW2AK-3XC6
+  key: serviceLogging
+- ref: 01KSNAW2AK-3XC6
+  key: failureDomain
+- ref: 01KSNAW2AK-3XC6
+  key: backup.strategy
+- ref: 01KSNAW2AK-3XC6
+  key: backup.platform
+- ref: 01KSNAW2AK-3XC6
+  key: backup.rto
+- ref: 01KSNAW2AK-3XC6
+  key: backup.rpo
+- ref: 01KSNAW2AK-3XC6
+  key: ha.mechanism
+- ref: 01KSNAW2AK-3XC6
+  key: encryption.atRest
+- ref: 01KSNAW2AK-3XC6
+  key: accessControl.model
+deliveryModel: self-managed

@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZD-0KJ1
+name: Windows Server 2022 Physical Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT04-PGTY
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Endpoint protection and host containment."
+capabilities:
+- 01KQQ4Q026-JW52

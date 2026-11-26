@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHME-YWTR
+type: decision_record
+name: Display Materials Management - Pattern Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFD-1G0D
+linkedObject: 01KSM38KFD-1G0D
+decisionRationale: "deploymentTargets: Legacy: AWS US-EAST-1 (EC2/IIS + SQL AG). IMR: AWS account 126293295630, cluster imr-prod on EKS 1.35 in VPC vpc-045b95b44db215688, managed node groups across subnets subnet-0afe83b9630cb40f9, subnet-0823e2a98ed8ec59a, and subnet-0fd35d853533f943b, with public ALB ingress and internal Traefik-based observability ingress.\n\navailabilityRequirement: high\n\ndataClassification: pii\n\nfailureDomain: Legacy: per-region single-tenant EC2/IIS and SQL failure domains. IMR: shared multi-AZ EKS cluster and Aurora PostgreSQL services in us-east-1, with ingress and application runtime spread across subnets in us-east-1a, us-east-1b, and us-east-1c.\n\npatternDeviations: Two architectures running in parallel during migration. Legacy has no  CI/CD or automated testing. IMR uses Dapr sidecars which conflicts with Kong Mesh.\n\nexternalDependencies: External interactions are declared in serviceGroups[].externalInteractions: Public DNS and ACM."

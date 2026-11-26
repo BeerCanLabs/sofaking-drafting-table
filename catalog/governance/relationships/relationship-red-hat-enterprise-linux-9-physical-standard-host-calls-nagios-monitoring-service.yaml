@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YR-B747
+name: Red Hat Enterprise Linux 9 Physical Standard Host → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT03-VBBS
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Host health and welfare monitoring through the Nagios XI NCPA Agent configuration."
+capabilities:
+- 01KQQ4Q026-98VD

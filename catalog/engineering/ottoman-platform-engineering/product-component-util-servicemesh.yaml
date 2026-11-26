@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG1-2VYA
+type: product_component
+ownerRole: engineer
+name: Util Servicemesh
+description: '''Service Mesh'''
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- util
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Util-ServiceMesh
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Util-ServiceMesh
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: .vscode/launch.json; .vscode/tasks.json; Dockerfile; Sk.ServiceMesh.sln; codefresh-master-build.yml; codefresh-pr-build.yml; global.json; source/Sk.ServiceMesh/Sk.ServiceMesh.csproj; tests/Sk.ServiceMesh.Tests/Sk.ServiceMesh.Tests.csproj; tests/Sk.ServiceMesh.Tests/Properties/launchSettings.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

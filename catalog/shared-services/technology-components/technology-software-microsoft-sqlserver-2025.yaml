@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-C2C6
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server 2025
+description: SQL Server 2025 installation media is referenced by the SRE SQL Server automation for future database builds.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- database
+- sql-server
+classification: software
+vendor: Microsoft
+productName: SQL Server
+productVersion: '2025'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Support dates are not recorded yet; automation contains SQL Server 2025 media mappings but the default sql_version remains 2022.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-tds-listener
+  name: Default TDS Listener
+  description: Default SQL Server Database Engine listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 1433
+    protocol: TDS
+    direction: inbound
+    description: Default SQL Server Database Engine client listener.
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/win_sql_server/defaults/main.yml."

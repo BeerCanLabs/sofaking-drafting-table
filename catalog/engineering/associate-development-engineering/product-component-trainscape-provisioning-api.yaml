@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG4-8A93
+type: product_component
+ownerRole: engineer
+name: Trainscape Provisioning API
+description: Reusable code and service abstractions for use in our service oriented architecture
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1E-SJEZ
+tags:
+- repository-discovery
+- trainscape
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-trainscape-provisioning-api
+language: Java
+classification: api-service
+runtimeRequirement: Java
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-trainscape-provisioning-api
+  observedRuntimeSignals: java, readme
+  observedManifestPaths: pom.xml; src/main/java/com/trainscape/provisioning/util/pdf/impl/special_characters.json; src/test/java/com/trainscape/provisioning/api/http/listpage.json; src/test/java/com/trainscape/provisioning/api/http/person.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

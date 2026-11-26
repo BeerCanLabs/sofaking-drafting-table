@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: YCAF15D704-S8CN
+type: relationship
+name: Atlas UI → Atlas Workflow
+description: Catalog requests, approval workflows, workflow conditions and request tracking are read and written
+  under /api/workflows/.
+catalogStatus: stub
+source: 01M5WY4E7P-GCD5
+target: 01M5WY4E7P-YC9P
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Catalog requests, approval workflows, workflow conditions
+    and request tracking are read and written under /api/workflows/. The configured API base URL for nonprod builds
+    is https://unified-inventory-nonprod.stage-retail.ss.sofaking.example/service/unified-nonprod-api, Sofa King's
+    RETAIL edge; the code names Kong as the edge that injects the x-sk-userinfo header. Locally the YARP Service.Core.Gateway
+    stands in for that edge and is not part of the deployed image set.
+  evidence: 'whm-unified-ui develop: src/features (apiFetch paths /api/workflows/catalog-requests, /api/workflows/approval-workflows,
+    /api/workflows/workflow-conditions); whm-unified-core develop: Service.Core.Workflows.App/Controllers'

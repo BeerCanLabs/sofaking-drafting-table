@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z6-K1GW
+name: Windows Server 2016 Virtual Machine Host → Security Monitoring Platform
+catalogStatus: stub
+source: 01KQQ5JT03-2NEW
+label: calls
+externalTarget: Security Monitoring Platform
+notes:
+  background: "Host security telemetry and endpoint alerts forwarded to centralized security monitoring."
+capabilities:
+- 01KQQ4Q026-JW52

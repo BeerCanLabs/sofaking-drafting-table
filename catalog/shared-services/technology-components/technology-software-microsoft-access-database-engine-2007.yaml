@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-R1DR
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Access Database Engine 2007
+description: 32-bit Microsoft Access Database Engine redistributable installed for legacy LDMS workloads.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- legacy
+- database-driver
+classification: software
+vendor: Microsoft
+productName: Access Database Engine
+productVersion: '2007'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2017-10-10'
+  notes: Aligned with Microsoft Office 2007 end of support.
+capabilities:
+- 01KT0XNZEY-DENJ
+- 01KT0V5MCV-RZV0
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/ldms/msaccess/tasks/main.yml and ldms-ottoman-playbook.yml."

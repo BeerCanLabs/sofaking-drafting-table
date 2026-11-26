@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZG-62YM
+name: Windows Server 2022 on VMware Standard Host → Central Logging Service
+catalogStatus: stub
+source: 01KQQ5JT04-A7W8
+label: calls
+target: 01KQQ5JT1E-A6M5
+notes:
+  background: "Windows event and application logs are forwarded centrally."
+capabilities:
+- 01KQQ4Q026-D04B

@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-V9F6
+type: product_component
+ownerRole: engineer
+name: CIS Svc Document Vault
+description: Legacy document storage service, decommissioned. Replaced by CIS Msvc Document Vault.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- sis
+- lakeshore
+- tillbook
+- aws
+- lambda
+- s3
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-svc-document-vault
+classification: api-service
+language: C#
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Confirmed retired on 2026-07-30 per product owner — decommissioned and replaced by CIS Msvc Document Vault (BeerCanLabs/sk-cis-msvc-document-vault). Repo retained here for historical/reference purposes only. Runtime corrected on 2026-07-31 per product owner — this legacy service was a .NET Framework 4.8 application hosted on a VM at the LSRCN data center; the Lambda/S3 architecture noted below belongs to its replacement, CIS Msvc Document Vault, not to this component.
+  role: Legacy document vault, VM-hosted at LSRCN. Replaced by CIS Msvc Document Vault, which is Lambda- and S3-based.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

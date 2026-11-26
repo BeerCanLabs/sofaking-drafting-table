@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-MD2X
+type: product_component
+ownerRole: engineer
+name: Leave API Availability
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-abs-api-availability.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-api-availability
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  runtimePlacement: Owner-confirmed on 2026-08-04 that this EKS workload runs in AWS rather than Grand Rapids; AWS region, account, and cluster remain unconfirmed.
+  repositoryName: BeerCanLabs/sk-abs-api-availability
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; abs-api-availability.sln; cd/leave-prod/cm.yml;
+    cd/leave-prod/deploy.yml; cd/leave-prod/deploy_nosigsci.yml; cd/leave-prod/es.yml;
+    cd/leave-prod/hpa.yml; cd/leave-prod/ingress.yml; cd/leave-prod/namespace.yml;
+    cd/leave-prod/sa.yml; cd/leave-prod/service.yml; cd/leave-prod/service_nosigsci.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

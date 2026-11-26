@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFB-XZ3E
+type: product_component
+ownerRole: engineer
+name: Whm Am API
+description: Trackweb_API - AM's integration-facing Web API (Products, PurchaseOrders, Vendor, Shipments, Funding), used today for inbound ERP-style integrations and planned for expanded bidirectional Sofa King ERP integration.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- whm
+- product-component
+- asset-management
+- integration-api
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_AM_API
+language: C#
+classification: api-service
+runtimeRequirement: .NET Framework 4.8, ASP.NET Web API (System.Web, IIS-hosted, non-Core).
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_AM_API
+  observedRuntimeSignals: dotnet, github_actions
+  observedManifestPaths: .github/workflows/auto-codex-review.yml; .github/workflows/auto-copilot-review.yml; .github/workflows/auto-team-review.yml; Trackweb_API.sln; Trackweb_API/ApplicationSettings.config.json; Trackweb_API/Service References/Application Insights/ConnectedService.json; Trackweb_API/Trackweb_API.csproj; Trackweb_BLL/Trackweb_BLL.csproj; Trackweb_DAL/Trackweb_DAL.csproj; Trackweb_DTO/Trackweb_DTO.csproj; UnitTests/UnitTests.csproj
+  serviceAuthentication: 'Custom JWT Bearer authentication filter (TrackwebAuthenticationAttribute) validates the token per request via SecurityTokenHandler.GetPrincipal and requires a TrackwebUser claim; no session state. The JWT signing secret is an appSetting in Keys.config. No org/tenant scoping exists on the token today - the same token grants access to all data (a documented gap, ERP_Integration_Gap_Analysis.md).'
+  secretsManagement: 'App-config-based, not a vault: JWT secret and other keys live in Keys.config/Keys.QA.config (plain, environment-specific app-settings files); SQL credentials are inline plaintext in WebConnectionStrings.config.'
+  serviceLogging: 'NLog (NLog.config): AWSTarget (CloudWatch, log group AMIMMApplication, us-east-1) plus a file-based FallbackGroup, and also wired to Application Insights via an NLog target defined in Web.config.'
+  healthWelfareMonitoring: 'No dedicated health-check controller/endpoint; HomeController.Get() ([AllowAnonymous]) returns assembly title+version as a liveness/version probe. Application Insights web tracking module provides request-level telemetry.'
+  availabilityModel: 'Classic IIS-hosted ASP.NET Web API (ISAPI handler mappings, targetFramework 4.8). No containerization or serverless artifacts found. Actual deploy topology (single IIS server vs. web farm) not determinable from repo alone.'
+  scalabilityModel: 'Stateless Web API (JWT-based, no session state) which is horizontally-scalable-friendly by design, but actual scale-out topology (load balancer, instance count) is not documented in-repo.'
+  recoverabilityModel: 'Not implemented for the planned outbound ERP integration per the gap analysis: idempotency keys, retry/backoff, and an SQS dead-letter queue are all listed as missing requirements. Today''s synchronous CRUD endpoints have no documented retry/compensation logic.'
+  failureDomain: 'Single deployable Web API unit (Trackweb_API/Trackweb_BLL/Trackweb_DAL/Trackweb_DTO) backed by one SQL Server instance - a failure in the DB or the API process affects all integration endpoints since they share the same app pool/connection.'
+  externalDependencies: 'Sofa King ERP (primary named external system - see relationship notes below). Existing built integration surface is api/v2/Integrations/* (Products, PurchaseOrders), all JWT-protected, all inbound. Planned Phase 1 REST flows per ERP_Integration_Gap_Analysis.md (not yet built - treat as target-state, not current-state): Product Catalog Sync (WHM to ERP, GET), Procure-to-Pay/PO Shell Sync (ERP to WHM, POST/PUT), Goods Received Notification (WHM to ERP outbound callback, POST /receipts - requires new outbound HTTP client, retry/backoff, idempotency key, SQS DLQ), and a PO Receipt Status Poll (ERP to WHM, GET) as a polling alternative. Also depends on Brannock.NET (01KSM38KFC-GX9G) as a compiled NuGet library for API response wrapping.'
+  primaryDataStores: 'Microsoft SQL Server via Entity Framework 6. Two databases: Trackweb (primary, TrackwebAPI.ConnectionString) and _TrackwebReports (TrackwebReports.Properties.Settings.ConnectionString), both via SQL Server authentication.'

@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-QPDN
+type: technology_component
+ownerRole: technology-admin
+name: CrushFTP
+description: 'Enterprise file transfer server with advanced management features.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- sftp
+- file-transfer
+- legacy
+vendor: CrushFTP
+productName: CrushFTP
+productVersion: unknown
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Legacy software support.
+capabilities:
+- 01KT0XNZEY-K1J3
+configurations:
+- id: default-sftp-listener
+  name: Default SFTP Listener
+  description: Default SFTP listener for managed file-transfer workloads.
+  capabilities:
+  - 01KT0XNZEY-K1J3
+  networkBindings:
+  - port: 22
+    protocol: SFTP
+    direction: inbound
+    description: Default SFTP file-transfer listener.

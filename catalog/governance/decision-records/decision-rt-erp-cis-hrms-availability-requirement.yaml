@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KTM7D5BT-P86A
+type: decision_record
+name: RT ERP & CIS - Pattern - Availability Requirement
+description: Availability Requirement decision for the RT ERP & CIS - Pattern deployment pattern, promoted from catalog architecture notes to a committed DecisionRecord so DRAFT requirement evidence is traceable.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+- validation-cleanup
+- adr
+category: decision
+status: open
+affectedComponent: 01KSM38KEY-JC4K
+linkedObject: 01KSM38KEY-JC4K
+decisionRationale: 'availabilityRequirement: Current working assumption is a high-availability production target for region deployments aligned to 99.95% service availability expectations. Status open pending rt-erp-cis-engineering / ARB ratification.'

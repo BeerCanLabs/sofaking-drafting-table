@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-4HSX
+type: decision_record
+name: Digital Stores Encryption At Rest Is Not Enabled On Confidential Data
+category: risk
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Confirmed by the Digital Stores engineering owner on 2026-09-08, in answer to question 4.3 of the
+  DRAFT L1 Baseline Questionnaire: Transparent Data Encryption is not enabled on any Digital Stores
+  SQL Server instance. In the same questionnaire, answer 3.1 confirmed that the product handles
+  personally identifiable information and classified the data as Confidential, citing Sofa King's Data
+  Classification and Protection Policy. That policy's Data Protection in AWS section requires that all
+  sensitive data - PHI, PCI, PII or customer data - be encrypted both in transit and at rest, and its
+  Additional Data Requirements section sets full-disk encryption as the minimum at-rest control, with
+  the Security Team empowered to require Transparent Data Encryption or column-level encryption on top
+  of that based on risk. Whether the underlying EBS volumes on PRAngDB1, SUDB, QADB and ALDB are
+  encrypted, which would satisfy the full-disk minimum, was not asked in the questionnaire and is not
+  evidenced anywhere in DRAFT or in the linked Confluence material. This is therefore a confirmed
+  leave of one named control (TDE) over an unconfirmed baseline (EBS encryption), not a confirmed
+  total leave of at-rest encryption.
+version: 1.0.0
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- security
+- encryption
+- data-classification
+- owner-confirmed
+linkedObject: 01M25X9W0R-VQJ3
+affectedComponent: 01M25X9W0R-VQJ3
+impact: >-
+  Bears on Hearthstone Cybersecurity Framework 2026 requirements HCF.06.1.1 and HCF.06.1.2 and on Sofa King's
+  own Data Classification and Protection Policy, which is an internal policy obligation independent of
+  the Hearthstone catalog. Four SQL Server instances hold region staff, payroll, site and customer records
+  classified Confidential. Without TDE, database files, backups and the EBS snapshots and AMIs that
+  AWS Backup copies to us-west-1 and us-east-1 are readable by anyone who obtains the underlying
+  storage artifact, unless volume-level encryption is in place. The exposure compounds with two other
+  confirmed facts: the lower-environment databases are refreshed from production data without a
+  recorded de-identification step (DecisionRecord 01M25X9W0R-KWXR), which widens the set of hosts
+  holding unencrypted Confidential data from one to four, and no database-level audit logging is
+  evidenced, so unauthorized access to that data would not necessarily be detected. Because the
+  posture is now confirmed rather than merely unevidenced, the availability of an exception path
+  matters: Sofa King's policy directs exception requests to security@sofaking.example.
+mitigationPath: >-
+  Four steps, in order. First, establish the baseline: confirm with Cloud Engineering whether EBS
+  volume encryption is enabled on PRAngDB1, SUDB, QADB and ALDB, which determines whether this is a
+  gap against the policy minimum or only against the additional TDE control. Second, refer the
+  finding to Sofa King Information Security at security@sofaking.example for a disposition - either a
+  requirement to enable TDE or a documented, time-bounded exception with compensating controls, an
+  owner and a review date. Third, if TDE is required, plan its enablement alongside the SQL Server
+  2017 termination plan tracked in DecisionRecord 01M0GDHSAM-F64B rather than separately, since
+  migrating off 2017 is an opportunity to enable TDE on the target engine and TDE on 2017 would
+  otherwise be work applied to a platform leaving support on 2027-10-12. Fourth, whichever path is
+  taken, record the outcome here and move this record to resolved or accepted with an approver and
+  approval date. Do not close this record on the basis of EBS encryption alone without an Information
+  Security statement that full-disk encryption is a sufficient control for this data set.

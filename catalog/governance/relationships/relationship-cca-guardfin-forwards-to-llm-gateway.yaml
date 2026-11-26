@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 2XWH75919H-WFNZ
+type: relationship
+name: CCA Guardfin Guardrail → LLM Gateway
+catalogStatus: incomplete
+source: 01KYWQE2F5-96MQ
+label: forwards to
+target: 01KYWQE2F8-GGGG
+description: >-
+  [DOCUMENTED] Completes the governed model path. After the guardrail inspects a
+  Divan's request (observe mode today), it forwards the call to the LLM Gateway
+  (LiteLLM), which routes to the approved provider (AWS Bedrock). This is the live
+  default path: Divan → Guardfin → LLM Gateway → Bedrock.
+technology: HTTPS (OpenAI-compatible) to litellm.cca.local:4000
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - model-routing
+  - safety

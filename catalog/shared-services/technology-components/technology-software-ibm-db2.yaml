@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-SGGM
+type: technology_component
+ownerRole: technology-admin
+name: IBM Db2
+description: 'Provisional Db2 software baseline for RT-ERP region database workloads. Exact edition and version need confirmation from the ERP engineering and DBA teams.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- db2
+classification: software
+vendor: IBM
+productName: Db2
+productVersion: unknown
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-db2-listener
+  name: Default Db2 Listener
+  description: Default Db2 listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 50000
+    protocol: Db2
+    direction: inbound
+    description: Default Db2 client listener.

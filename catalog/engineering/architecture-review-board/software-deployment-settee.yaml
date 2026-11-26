@@ -1,0 +1,270 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-QQFP
+type: software_deployment_pattern
+ownerRole: engineer
+name: Settee Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.platform
+  productFamily: Settee
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- settee
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KGK-DG41
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Data-Importer
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Data-Importer
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-3J1S
+    repositoryName: BeerCanLabs/sk-Settee-Universal-Platform-Data-Exporter
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Universal-Platform-Data-Exporter
+    repositoryPrimaryLanguage: TypeScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KGJ-8KKX
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-AbsMgmt-Institute
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-AbsMgmt-Institute
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-CZFN
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-EC-Dashboard
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-EC-Dashboard
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-N0PA
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-EC-Forms
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-EC-Forms
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-P6EC
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Micro-Credentials
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Micro-Credentials
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-4P54
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PG-PLM
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PG-PLM
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-M2CY
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Announce
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Announce
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-3VRB
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Content-Licensing
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Content-Licensing
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-C3Z4
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-SofaKingCentral
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-SofaKingCentral
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-1GJA
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Organizations
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Organizations
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-RVZF
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-PGCSTools
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-PGCSTools
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-PARP
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Users
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-PlatformTools-Users
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-MW3P
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Recruit-Institute
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Recruit-Institute
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGK-3PEQ
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Directory
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Directory
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-HF7D
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Employee
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Employee
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-8DPT
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Overview
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Overview
+    repositoryPrimaryLanguage: HTML
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-E3FH
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Resource-Library
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Resource-Library
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-365N
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-Settings
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-Settings
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGM-P3CJ
+    repositoryName: BeerCanLabs/sk-Settee-UI-Module-Universal-UserAccess
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-UI-Module-Universal-UserAccess
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-P6K5
+    repositoryName: BeerCanLabs/sk-Settee-dev
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-dev
+    repositoryPrimaryLanguage: unknown
+    observedRuntimeSignals: docker, readme
+  - productService: 01KSM38KGJ-NQSQ
+    repositoryName: BeerCanLabs/sk-Settee-Framework-Angularjs
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Framework-Angularjs
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-MRK0
+    repositoryName: BeerCanLabs/sk-Settee-Jarvis
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Jarvis
+    repositoryPrimaryLanguage: Stylus
+    observedRuntimeSignals: docker, node, readme, terraform
+  - productService: 01KSM38KGJ-99RA
+    repositoryName: BeerCanLabs/sk-Settee-Plugin-FingerLoader
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Plugin-FingerLoader
+    repositoryPrimaryLanguage: CSS
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-HZB1
+    repositoryName: BeerCanLabs/sk-Settee-Plugin-FluidStyles
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Plugin-FluidStyles
+    repositoryPrimaryLanguage: Stylus
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-0VH9
+    repositoryName: BeerCanLabs/sk-Settee-Plugin-FormRenderer
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Plugin-FormRenderer
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-H3G2
+    repositoryName: BeerCanLabs/sk-Settee-Plugin-PlopGenerators
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Plugin-PlopGenerators
+    repositoryPrimaryLanguage: HTML
+    observedRuntimeSignals: node, readme
+  - productService: 01KSM38KGJ-43SY
+    repositoryName: BeerCanLabs/sk-Settee-Wingman
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Wingman
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: github_actions, node, readme
+  - productService: 01KSM38KGJ-DJKV
+    repositoryName: BeerCanLabs/sk-Settee-Storm
+    sourceRepository: https://github.com/BeerCanLabs/sk-Settee-Storm
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KGK-DG41
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGM-3J1S
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGJ-8KKX
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-P6EC
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-4P54
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-M2CY
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-3VRB
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-C3Z4
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-1GJA
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-RVZF
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-PARP
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-MW3P
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGK-3PEQ
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGM-E3FH
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGM-P3CJ
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGJ-P6K5
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-NQSQ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-MRK0
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-99RA
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-HZB1
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KGJ-0VH9
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-H3G2
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-43SY
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KGJ-DJKV
+    diagramTier: application
+    networkZone: app

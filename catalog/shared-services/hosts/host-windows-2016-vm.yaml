@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT03-2NEW
+type: host
+ownerRole: technology-admin
+subtype: host
+name: Windows Server 2016 Virtual Machine Host
+description: "Virtual machine host running Windows Server 2016. Lifecycle status is deprecated \u2014 EOL January 2027. No new services should be deployed on this host. Existing deployments require migration planning.\n"
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- windows
+- vm
+category: host
+operatingSystemComponent: 01KQQ5JT1Q-ZMCZ
+computePlatformComponent: 01KQQ5JT1P-A24W
+architectureNotes:
+  healthWelfareMonitoringApproach: Windows host health and welfare telemetry is monitored through the Nagios Monitoring Service.
+internalComponents:
+- ref: 01KQQ5JT1Q-ZMCZ
+  role: os
+- ref: 01KQQ5JT1P-A24W
+  role: hardware
+  notes: Or equivalent virtual machine hardware in datacenter context.

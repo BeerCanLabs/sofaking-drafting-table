@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+uid: 0XTZ1194M1-R2N0
+type: relationship
+name: Sofa King Central Platform → AWS Lambda Runtime
+catalogStatus: stub
+source: 01KQQ5JT0K-TN7W
+target: 01KQQ5JT05-CT7X
+label: runs on
+flow: outbound
+notes:
+  background: >-
+    SQS-triggered .NET/.NET Core Lambda workloads. Added per OPS-255153 to
+    replace the Lambda Host-only reference with the governed AWS Lambda
+    Runtime runtime_service.

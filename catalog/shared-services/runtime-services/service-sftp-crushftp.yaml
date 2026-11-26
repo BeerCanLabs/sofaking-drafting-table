@@ -1,0 +1,67 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-KJXR
+type: runtime_service
+ownerRole: technology-admin
+name: CrushFTP SFTP Service
+description: 'Standard CrushFTP service pattern for enterprise file transfer.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - sftp
+category: service
+serviceCategory: general
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1R-QPDN
+architectureNotes:
+  serviceAuthentication: 'Authentication is managed via CrushFTP''s internal user manager or  integrated with Active Directory.
+
+    '
+  secretsManagement: 'Credentials and keys are stored within the CrushFTP configuration  encrypted at rest.
+
+    '
+  serviceLogging: 'SFTP transfer logs are forwarded centrally via the host''s logging agent.
+
+    '
+  healthWelfareMonitoring: 'Service welfare is monitored via SFTP availability and system health metrics.
+
+    '
+  availabilityModel: 'Single instance or HA cluster deployment depending on requirements.
+
+    '
+  scalabilityModel: 'Scales vertically with host resources.
+
+    '
+  recoverabilityModel: 'Recovery is achieved via instance restart or rebuild from configuration backup.
+
+    '
+  failureDomain: 'Impact is scoped to the CrushFTP instance or cluster.
+
+    '
+internalComponents:
+  - ref: 01KQQ5JT1R-QPDN
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJF5-HVWZ
+    key: serviceAuthentication
+  - ref: 01KT16XJF5-HVWZ
+    key: secretsManagement
+  - ref: 01KT16XJF5-HVWZ
+    key: serviceLogging
+  - ref: 01KT16XJF5-HVWZ
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJF5-HVWZ
+    key: availabilityModel
+  - ref: 01KT16XJF5-HVWZ
+    key: scalabilityModel
+  - ref: 01KT16XJF5-HVWZ
+    key: recoverabilityModel
+  - ref: 01KT16XJF5-HVWZ
+    key: failureDomain

@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSJC-EKNB
+type: relationship
+name: 'Sofa King Central Msvc Canonicaleventhandler → Loveseat Event Bus'
+catalogStatus: stub
+source: 01KQQ5JT0J-F4R8
+externalTarget: Loveseat Event Bus
+label: registers event subscriptions with
+technology: HTTPS/REST
+direction: event
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- eventing
+notes:
+  background: Loveseat is the Sofa King canonical event bus at sc-employee.use1.sofaking.example. No catalog object exists for it, matching existing practice elsewhere in this catalog of recording it as an external target.
+  subscriptions: '17 subscriptions: Organization, OrganizationV2, OrgPerson, Location, Department, Role, Position, Employee, PositionHire, FormPacketCompleted, HireTransaction, HireRemovalTransaction, EmploymentGroup, PersonProfile, PendingHireTransaction, PendingHireAcceptedTransaction, PendingHireNegatedTransaction.'

@@ -1,0 +1,80 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-SM8X
+type: data_store_service
+ownerRole: technology-admin
+subtype: service
+name: SQL Server 2019 with SSIS
+description: 'SQL Server 2019 database engine with SQL Server Integration Services (SSIS) installed. Used for data integration and ETL workloads. Distinct from the standard sqlserver-2019 due to the SSIS component.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - ssis
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-C74W
+primaryTechnologyComponent: 01KQQ5JT1T-F6Q1
+architectureNotes:
+  serviceAuthentication: Active Directory integrated identities govern administrator and service access to the ETL database.
+  scalingApproach: Vertical scaling of a single ETL database instance
+  serviceLogging: Database engine and SSIS execution logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: SQL connectivity probe and SSIS package execution monitoring
+  healthWelfareMonitoring: SQL connectivity probes, SSIS execution telemetry, and platform monitoring track service welfare.
+  secretsManagement: Database credentials and integration secrets stored centrally
+  availabilityModel: Single ETL database instance by explicit architectural decision.
+  scalabilityModel: Vertical scale-up of the ETL database instance with optional workload tuning.
+  recoverabilityModel: Restore the ETL database from backups and re-establish SSIS execution on a rebuilt host.
+  failureDomain: Scoped to the shared data-integration service group served by this ETL database.
+  internalComponentRationales:
+    01KQQ5JT1V-646V: SQL Server Integration Services (SSIS) component providing ETL and data integration execution capabilities.
+  backup:
+    strategy: Daily full backup with transaction log backup aligned to ETL windows
+    platform: SQL Server native backup to managed storage
+    rto: 4h
+    rpo: 24h
+  ha:
+    mechanism: none
+  encryption:
+    atRest: Transparent Data Encryption enabled for all production databases
+  accessControl:
+    model: Active Directory integrated access with role-based SQL permissions
+internalComponents:
+  - ref: 01KQQ5JT03-C74W
+    role: host
+  - ref: 01KQQ5JT1T-F6Q1
+    role: function
+  - ref: 01KQQ5JT1V-646V
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ7H-YA07
+    key: secretsManagement
+  - ref: 01KT16XJ7H-YA07
+    key: serviceLogging
+  - ref: 01KT16XJ7H-YA07
+    key: availabilityModel
+  - ref: 01KT16XJ7H-YA07
+    key: scalabilityModel
+  - ref: 01KT16XJ7H-YA07
+    key: recoverabilityModel
+  - ref: 01KT16XJ7H-YA07
+    key: failureDomain
+  - ref: 01KT16XJ7H-YA07
+    key: backup.strategy
+  - ref: 01KT16XJ7H-YA07
+    key: backup.platform
+  - ref: 01KT16XJ7H-YA07
+    key: backup.rto
+  - ref: 01KT16XJ7H-YA07
+    key: backup.rpo
+  - ref: 01KT16XJ7H-YA07
+    key: ha.mechanism
+  - ref: 01KT16XJ7H-YA07
+    key: encryption.atRest

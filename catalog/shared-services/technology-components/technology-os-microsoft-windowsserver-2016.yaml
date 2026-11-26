@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-ZMCZ
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Windows Server 2016
+description: Windows Server 2016 baseline in deprecatedment for remaining workloads.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- windows
+- os
+classification: operating-system
+vendor: Microsoft
+productName: Windows Server
+productVersion: '2016'
+vendorLifecycle:
+  mainstreamSupportEnd: 2022-01-11
+  extendedSupportEnd: 2027-01-12
+  notes: Extended support ends in January 2027.
+capabilities:
+- 01KQQ4Q026-QM2X

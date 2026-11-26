@@ -1,0 +1,159 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1G-H6RT
+type: drafting_session
+name: IMR EKS SDM Intake Session
+description: 'Partial drafting session created from Terraform and cluster component source material for the IMR production EKS environment. The session updates the existing Trackweb-IM / IMR SDM with concrete ingress, multi-AZ runtime, and observability details while preserving open questions that the source material does not answer.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+- session
+- imr
+- eks
+- sdm
+- drafting
+primaryObjectType: software_deployment_pattern
+sourceArtifacts:
+- name: terraform-imr EKS module entrypoint
+  type: repository
+  location: /Users/sholt/github/terraform-imr/infra/aws/prod/us-east-1/eks/main.tf
+  notes: Identifies the shared EKS module and cluster input surface.
+- name: terraform-imr IMR prod tfvars
+  type: repository
+  location: /Users/sholt/github/terraform-imr/infra/aws/prod/us-east-1/eks/terraform.tfvars
+  notes: Provides cluster name, VPC, subnet, node group, and addon versions.
+- name: terraform-imr ACM certificate definitions
+  type: repository
+  location: /Users/sholt/github/terraform-imr/infra/aws/prod/us-east-1/eks/certs.tf
+  notes: Documents the wildcard certificates used by the IMR public ingress path.
+- name: Shared EKS module
+  type: repository
+  location: /Users/sholt/github/terra-module-aws-eks/eks.tf
+  notes: Defines managed node groups, security posture, and cluster addon behavior.
+- name: AWS Load Balancer Controller IRSA role
+  type: repository
+  location: /Users/sholt/github/terra-module-aws-eks/iam_irsa_lbc.tf
+  notes: Shows that ALB management is performed through an in-cluster controller via IRSA.
+- name: IMR public Traefik ingress
+  type: repository
+  location: /Users/sholt/github/sys-terra-eks/system-components/traefik/custom/ingress-imr-prod.yaml
+  notes: Documents the public ALB name, TLS annotations, and instance target mode.
+- name: Traefik Helm values
+  type: repository
+  location: /Users/sholt/github/sys-terra-eks/system-components/traefik/values/values.yaml
+  notes: Confirms the NodePort service model and Traefik autoscaling shape.
+- name: IMR prod kube-prometheus values
+  type: repository
+  location: /Users/sholt/github/sys-terra-eks/system-components/kube-prometheus-stack/values/values-imr-prod.yaml
+  notes: Documents internal observability ingress endpoints.
+- name: IMR prod VictoriaMetrics values
+  type: repository
+  location: /Users/sholt/github/sys-terra-eks/system-components/victoriametrics-agent/values/values-imr-prod.yaml
+  notes: Confirms VictoriaMetrics is part of the IMR observability stack.
+generatedObjects:
+- name: Inventory Management - Display Materials (Trackweb-IM / IMR)
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KFD-1G0D
+  notes: Updated with concrete IMR prod EKS ingress and observability details.
+unresolvedQuestions:
+- id: product-boundary-vs-cluster-boundary
+  question: Is the imr-prod EKS cluster dedicated to Trackweb-IM / IMR, or is it a shared platform cluster for multiple IM Refresh product areas?
+  status: open
+  reason: The Terraform and cluster component sources describe the cluster shape but do not fully define workload ownership boundaries.
+  currentBestGuess: Treat the cluster as the IMR production runtime for Trackweb-IM while keeping the possibility of broader shared usage open.
+  impact: Service-group scope and failure-domain wording may need refinement if multiple products share the same cluster boundary.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: ingress-controller-runtime-object
+  question: Should Traefik and the AWS Load Balancer Controller become first-class reusable catalog objects rather than remaining implied by the EKS host and ALB references?
+  status: open
+  reason: The source proves both components are runtime-significant, but the current catalog does not yet model them as dedicated reusable artifacts.
+  currentBestGuess: Keep ALB as an existing PaaS RBB and represent Traefik through service-group notes until lower-level objects are added.
+  impact: The SDM remains useful, but the lowest-responsible-level modeling rule is only partially satisfied.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+  - ref: 01KQQ5JT04-P7QJ
+- id: route53-record-ownership
+  question: Where are the concrete public DNS records for IMR application endpoints defined and owned?
+  status: open
+  reason: The reviewed Terraform covers ACM validation zones and certificates but not the final application DNS record management.
+  currentBestGuess: DNS records are managed outside the reviewed EKS stack files.
+  impact: End-to-end traffic documentation may need an update once DNS ownership and naming are confirmed.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: observability-runtime-depth
+  question: Which lower-level runtime objects should represent Grafana, Alertmanager, Prometheus, and Traefik-internal in the catalog?
+  status: open
+  reason: The source names these deployed components, but only VictoriaMetrics currently has a reusable catalog object.
+  currentBestGuess: Keep them grouped under IMR Observability & Operations while the reusable object model catches up.
+  impact: Utility-tier detail may need to be broken into additional RBBs or ABBs later.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+  - ref: 01KQQ5JT1E-HCBR
+- id: workload-component-granularity
+  question: Which distinct first-party IMR microservices should be modeled as separate product-service runtime objects instead of the current ps.imr.platform umbrella?
+  status: open
+  reason: The EKS and Helm sources describe the cluster substrate and ingress but do not enumerate the full service inventory.
+  currentBestGuess: Keep ps.imr.platform as the shared runtime placeholder until service-level inventory is available.
+  impact: Future SDM iterations may split the application tier into multiple runtime-behavior components.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+  - ref: 01KSM38KFF-RRWF
+assumptions:
+- id: use-existing-trackweb-im-sdm
+  statement: The existing sdm.trackweb-im artifact is the closest catalog object for recording IMR production EKS deployment details.
+  rationale: The catalog already models IMR as the greenfield replacement architecture inside the Trackweb-IM product estate.
+  impact: If IMR later needs a standalone platform-level SDM, this deployment detail may be split or refactored.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: multi-az-node-group-model
+  statement: The IMR production cluster is treated as a three-AZ managed-node-group EKS deployment based on the subnet map and shared module configuration.
+  rationale: The Terraform inputs and shared module clearly define node groups derived from subnets 1a, 1b, and 1c.
+  impact: Availability and failure-domain statements rely on these inputs remaining authoritative for production.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: traefik-public-ingress-path
+  statement: Public IMR ingress is modeled as ALB to Traefik NodePort to in-cluster services.
+  rationale: The ingress manifest and Traefik chart values explicitly show ALB instance targeting and a NodePort Traefik service.
+  impact: If ingress is later split by workload or replaced, the Public Edge & Ingress service group will need revision.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+nextSteps:
+- id: confirm-cluster-scope
+  action: Confirm whether imr-prod is dedicated to Trackweb-IM / IMR or shared with other IM Refresh product workloads.
+  status: open
+  owner: cloud-architecture
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: decide-ingress-runtime-model
+  action: Decide whether Traefik and AWS Load Balancer Controller should become reusable catalog artifacts.
+  status: open
+  owner: cloud-architecture
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: identify-dns-source-of-truth
+  action: Locate the repository or configuration that owns the final public DNS records for IMR endpoints.
+  status: open
+  owner: platform-sre
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: refine-observability-artifacts
+  action: Decide whether Grafana, Alertmanager, Prometheus, and Traefik-internal should be captured as additional reusable runtime objects.
+  status: open
+  owner: observability
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: inventory-first-party-services
+  action: Gather the IMR microservice inventory and decide which components merit distinct product-service runtime artifacts.
+  status: open
+  owner: display-materials-engineering
+  relatedObjects:
+  - ref: 01KSM38KFF-RRWF
+primaryObjectUid: 01KSM38KFD-1G0D

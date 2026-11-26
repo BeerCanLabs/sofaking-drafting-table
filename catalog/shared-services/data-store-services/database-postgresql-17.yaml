@@ -1,0 +1,127 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-X90C
+type: data_store_service
+ownerRole: technology-admin
+name: PostgreSQL 17 DBMS Service
+description: Stub DBMS service for PostgreSQL 17 workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - postgresql
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-TQ84
+primaryTechnologyComponent: 01KQQ5JT1V-N4AK
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Database administrators and service identities authenticate through centralized identity and database account governance.
+  scalingApproach: scale-up primaries with streaming replicas for resilience
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: PostgreSQL service probe and replication lag monitoring
+  healthWelfareMonitoring: Service probes, replication telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: PostgreSQL deployment with primary and streaming replicas for service continuity.
+  scalabilityModel: Vertical scale-up of primaries with replicas used for resilience and read capacity.
+  recoverabilityModel: Failed nodes are rebuilt and rejoined to the replica set while backups support point-in-time recovery.
+  failureDomain: Scoped to the PostgreSQL cluster serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly WAL backup
+    platform: pg_dump / pg_basebackup to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: Streaming Replication
+  encryption:
+    atRest: required
+  accessControl:
+    model: Active Directory integrated access with role-based database permissions
+deploymentConfigurations:
+  - id: replicated-availability
+    name: Replicated Availability
+    description: Primary and streaming-replica deployment provides database availability and recovery tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: scale-up-with-replicas
+    name: Scale Up With Replicas
+    description: Capacity grows through larger primary nodes with replicas for resilience and workload distribution.
+    addressesQualities:
+      - scalability
+  - id: backup-and-pitr
+    name: Backup And Point-In-Time Recovery
+    description: Daily full backups plus hourly WAL backups support restoration and point-in-time recovery.
+  - id: encrypted-storage
+    name: Encrypted Storage
+    description: Encryption at rest is required for supported PostgreSQL deployments.
+  - id: database-password-mfa-baseline
+    name: Database Password And MFA Baseline
+    description: Database administrative and service identities follow strong password, lockout, timeout, and MFA expectations through centralized identity policy.
+  - id: database-mfa-vault-baseline
+    name: Database MFA And Vault Baseline
+    description: Privileged database credentials are protected through MFA-capable identity flows and managed secret vaulting.
+  - id: database-risk-reauthentication
+    name: Database Risk Based Reauthentication
+    description: Database administrative access can require periodic or risk-based reauthentication and compromised credential handling.
+internalComponents:
+  - ref: 01KQQ5JT03-TQ84
+    role: host
+  - ref: 01KQQ5JT1V-N4AK
+    role: function
+requirementImplementations:
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-password-mfa-baseline
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.2
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-mfa-vault-baseline
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-risk-reauthentication
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.10.2.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: backup-and-pitr
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.11.2.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: encrypted-storage
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ74-3PYV
+    key: serviceAuthentication
+  - ref: 01KT16XJ74-3PYV
+    key: secretsManagement
+  - ref: 01KT16XJ74-3PYV
+    key: serviceLogging
+  - ref: 01KT16XJ74-3PYV
+    key: failureDomain
+  - ref: 01KT16XJ74-3PYV
+    key: backup.strategy
+  - ref: 01KT16XJ74-3PYV
+    key: backup.platform
+  - ref: 01KT16XJ74-3PYV
+    key: backup.rto
+  - ref: 01KT16XJ74-3PYV
+    key: backup.rpo
+  - ref: 01KT16XJ74-3PYV
+    key: ha.mechanism
+  - ref: 01KT16XJ74-3PYV
+    key: encryption.atRest
+  - ref: 01KT16XJ74-3PYV
+    key: accessControl.model

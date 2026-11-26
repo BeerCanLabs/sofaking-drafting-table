@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZQ-FYF0
+name: Java Application Service → Dynatrace Platform
+catalogStatus: stub
+source: 01KQQ5JT1E-SJEZ
+label: calls
+externalTarget: Dynatrace Platform
+notes:
+  background: "Application performance and tracing telemetry."
+capabilities:
+- 01KQQ4Q026-98VD

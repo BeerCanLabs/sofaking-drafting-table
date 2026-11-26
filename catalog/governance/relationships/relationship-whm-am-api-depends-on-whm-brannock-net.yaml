@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYRV3DT9-WQFQ
+type: relationship
+name: AM Integration API → Brannock.NET
+catalogStatus: complete
+source: 01KSM38KFB-XZ3E
+label: depends on
+target: 01KSM38KFC-GX9G
+description: Compiled NuGet reference to the shared Brannock.NET library, used for its APIRequest/APIResponse wrapper pattern across ~15+ controllers.
+technology: .NET library reference (NuGet)
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- shared-library
+notes:
+  background: Confirmed as a real compile-time dependency (packages.config across 4 projects, plus using Brannock.NET.APIs; in controller code) - not merely referenced in documentation. Brannock.ETL and Brannock.NET are not shared code dependencies of WHM_AM_App or WHM_AM_ETL_MSA.
+capabilities: []

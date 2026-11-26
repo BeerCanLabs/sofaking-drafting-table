@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-A24W
+type: technology_component
+ownerRole: technology-admin
+name: Amazon EC2 Standard Virtual Profile
+description: Standardized AWS EC2 virtual hardware profile for general application hosting.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- hardware
+- aws
+- virtual
+classification: compute-platform
+vendor: Amazon
+productName: EC2 Standard
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Virtual hardware lifecycle is governed by the AWS platform service.
+capabilities:
+- 01KQQ4Q026-1HZP

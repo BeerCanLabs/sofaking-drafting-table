@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YQ-Z693
+name: Red Hat Enterprise Linux 9 Physical Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT03-VBBS
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Host endpoint protection telemetry and response."
+capabilities:
+- 01KQQ4Q026-JW52

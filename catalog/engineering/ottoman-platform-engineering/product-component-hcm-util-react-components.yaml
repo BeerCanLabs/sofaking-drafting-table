@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFF-2XDH
+type: product_component
+ownerRole: engineer
+name: HCM Util React Components
+description: React components for HCM products
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- hcm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-hcm-util-react-components
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-hcm-util-react-components
+  observedRuntimeSignals: github_actions, node, readme
+  observedManifestPaths: .github/workflows/main.yml; .releaserc.json; .vscode/settings.json; ci/codefresh-build.yml; package-lock.json; package.json; storybook-static/index.json; storybook-static/project.json; tsconfig.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: YNAD6SCP1A-6TFE
+type: relationship
+name: RT ERP Gateway-A → SQL Server 2019 DBMS Service
+catalogStatus: incomplete
+source: 01KYT589B4-1XSE
+label: routes tunneled database traffic to
+target: 01KQQ5JT01-QFN5
+technology: database TCP through stunnel
+direction: synchronous
+flow: outbound
+notes: >-
+  SQL Server is one mutually exclusive region database destination. Listener
+  ports and routes are assigned per region rather than fixed in the reusable
+  Gateway-A service.
+capabilities:
+  - 01KSWVZSZ5-Q6HW

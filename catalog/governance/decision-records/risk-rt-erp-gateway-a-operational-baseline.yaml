@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYT589B4-B0Y1
+type: decision_record
+name: RT ERP Gateway-A Operational Baseline Risk
+description: >-
+  The documented Gateway-A implementation is a region-scoped existing
+  service, but the reviewed runbooks do not establish centralized secret
+  storage, centralized log forwarding, automated horizontal scaling, a
+  redundant gateway topology, or a tested automated recovery mechanism.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - rt-erp
+  - gateway-a
+  - risk
+  - availability
+  - secrets
+category: risk
+status: open
+affectedComponent: RT ERP Gateway-A Secure Tunnel Service
+impact: >-
+  A region Gateway-A failure can interrupt that region's tunneled
+  connectivity. Configuration, certificate handling, and diagnostic logs
+  remain dependent on documented host-level controls until stronger
+  secret-distribution, log-forwarding, and recovery standards are confirmed.
+mitigationPath: >-
+  Confirm the production Gateway-A host topology, certificate and secret
+  storage, centralized logging path, replacement procedure, monitoring
+  coverage, and whether a redundant gateway is required. Preserve region
+  isolation and region-specific port assignments during remediation.
+linkedObject: 01KYT589B4-1XSE

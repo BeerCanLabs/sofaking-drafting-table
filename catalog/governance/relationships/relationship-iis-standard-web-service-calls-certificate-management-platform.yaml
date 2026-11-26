@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZZ-VJE1
+name: IIS Standard Web Service → Certificate Management Platform
+catalogStatus: stub
+source: 01KQQ5JT1F-HZTZ
+label: calls
+externalTarget: Certificate Management Platform
+notes:
+  background: "TLS certificate issuance and renewal for public and internal endpoints."

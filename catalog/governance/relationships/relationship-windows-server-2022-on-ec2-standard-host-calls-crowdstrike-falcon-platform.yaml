@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZB-6Q1H
+name: Windows Server 2022 on EC2 Standard Host → CrowdStrike Falcon Platform
+catalogStatus: stub
+source: 01KQQ5JT04-JKFX
+label: calls
+externalTarget: CrowdStrike Falcon Platform
+notes:
+  background: "Endpoint protection and host containment."
+capabilities:
+- 01KQQ4Q026-JW52

@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KXK81789-T026
+type: product_component
+ownerRole: engineer
+name: Trifold Identity Hub
+description: >-
+  Public identity/SSO web endpoint for the Trifold product family
+  (identity.cdpdirect.example, beta at identitybeta.cdpdirect.example), discovered
+  via the CDP Direct - WAF Info Confluence page. May overlap with, front, or
+  supersede the already-modeled Trifold Authentication API
+  (SKSS.Authentication.Trifold, ref 01KX421X4P-S9K4) — no source repository
+  evidence has been reviewed to confirm the relationship between the two, so
+  they are modeled as separate components pending owner confirmation.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - identity-hub
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+runtimeRequirement: >-
+  Not yet confirmed — source repository has not been identified for this
+  component.
+notes:
+  sourceRepository: >-
+    Not yet identified — evidence is a live public DNS/WAF entry
+    (identity.cdpdirect.example), not a code repository.
+  sourcePage: CDP Direct - WAF Info (Confluence, SKENG space, page 35904193026)
+  possibleServerMatch: >-
+    Owner confirmed on 2026-09-10 that the Corvid Portal → Document
+    Repository API call is authenticated via identity servers
+    GRRCDPIDNTWEB11, GRRCDPIDNTWEB12, and GRRCDPIDNTWEB13. These are likely
+    the hosts backing this component, but that link is not yet confirmed —
+    still unresolved whether Identity Hub overlaps with or supersedes the
+    Trifold Authentication API.

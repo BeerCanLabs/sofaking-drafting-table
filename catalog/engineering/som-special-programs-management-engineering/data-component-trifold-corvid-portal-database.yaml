@@ -1,0 +1,47 @@
+schemaVersion: '1.0'
+uid: 01KX4A2T6F-MG8N
+type: data_component
+ownerRole: engineer
+name: Corvid Portal Database
+description: >-
+  SQL Server database (CorvidPortal) dedicated to the Corvid Portal web
+  application, in addition to its use of the shared DirectorMaster database.
+  Discovered from the CorvidPortal folder of the KIOTrifoldStandaloneApplication
+  repo (PortalConnection connection string reference).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT01-QFN5
+targetEngine: mssql
+dataClassification: confidential
+containsPII: true
+tags:
+  - trifold
+  - cdp
+  - repository-discovery
+  - data-component
+repoUrl: TBD
+notes:
+  sourceRepository: "C:\\Workspaces\\KIOTrifoldStandaloneApplication\\CorvidPortal"
+  repositoryName: KIOTrifoldStandaloneApplication
+  runsOnAssumption: >-
+    DataStoreService target assumed as SQL Server 2019 (existing-only),
+    consistent with the rest of the Trifold data tier; not yet confirmed
+    by owner interview.
+  sqlInstance: >-
+    Owner confirmed this database is hosted on SQL Server instance
+    GRRCDPDBSQL19\CDPPROD19, the same instance as the Director and
+    DirectorMaster ("region databases for CDP") databases.
+  sqlVersionConfirmed: >-
+    Owner confirmed on 2026-08-11 the actual engine build is 16.0.42551.1
+    (SQL Server 2022) — contradicting both the SQL Server 2019 placeholder
+    used for runsOn (closest non-deprecated catalog object) and the SQL
+    Server 2016 SP3-GDR claim from the "Trifold - System Requirements"
+    Confluence page used to answer the sql-server-version open question.
+    runsOn intentionally left unchanged pending a decision on a proper SQL
+    Server 2022 DataStoreService object for this legacy dedicated instance;
+    this may also mean the SQL Server 2016 EOL risk previously routed to
+    the Architecture Review Board doesn't apply to this specific instance.

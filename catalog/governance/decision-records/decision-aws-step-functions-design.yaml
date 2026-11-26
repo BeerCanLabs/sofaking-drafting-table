@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-Z8Y0
+type: decision_record
+name: AWS Step Functions Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-WX2Z
+decisionRationale: >
+  AWS Step Functions is operated as a provider-managed PaaS with managed multi-AZ high availability. Operators configure state machines and execution roles; underlying orchestration infrastructure is managed by AWS. The failure domain is scoped to the AWS region.

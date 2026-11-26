@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG3-027C
+type: product_component
+ownerRole: engineer
+name: Pg Plm UI
+description: PGs new ui project
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+runsOn: 01KQQ5JT1F-7VJE
+tags:
+- repository-discovery
+- pg
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-pg-plm-ui
+language: TypeScript
+classification: web-application
+runtimeRequirement: nginx
+architectureNotes:
+  runtimeCorrectedSkpg50273: >-
+    Corrected under SKPG-19589. runsOn previously pointed at the Amazon EKS
+    Standard Container Host (01KQQ5JT02-75QN), which is a host object, not a
+    runtime service. Repointed at NGINX Standard Web Service (01KQQ5JT1F-7VJE).
+    runtimeRequirement was recorded as Node.js, but the Dockerfile uses
+    node:22.18.0 only as a BUILD stage and the runtime stage is
+    nginx:stable-alpine - this is a statically built SPA served by nginx, not a
+    Node process. language remains TypeScript, which correctly describes the
+    source.
+  repositoryName: BeerCanLabs/sk-pg-plm-ui
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-main.yml; cd/codefresh-deploy-manual.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/hpa.yml; cd/prod/service.yml; cd/stage/cm.yml; cd/stage/deploy.yml; cd/stage/hpa.yml; cd/stage/service.yml; cdk.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

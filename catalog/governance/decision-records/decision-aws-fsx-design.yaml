@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-PTVG
+type: decision_record
+name: AWS FSx Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT05-FMR5
+decisionRationale: |
+  filesystemType: AWS FSx is used as AWS FSx for Windows File Server managed file storage.
+
+  resilienceModel: FSx for Windows is deployed in a Multi-AZ configuration.
+
+  directoryIntegration: FSx is Active Directory integrated by default in this deployment.
+
+  permissionModel: Mount points, folder access, and file permissions use Active Directory-integrated folder and permission controls.
+
+  backupPosture: No FSx backup configuration is currently configured for this service.
+
+  configurableSurface: File system capacity and throughput settings are the configurable service surface currently modeled.
+
+  failureDomain: The failure domain is scoped to the AWS region and VPC.

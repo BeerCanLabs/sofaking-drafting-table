@@ -1,0 +1,659 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1J-BRF4
+type: software_deployment_pattern
+ownerRole: engineer
+name: Help Desk - Pattern
+aliases:
+  - GetHelp (HelpDesk)
+  - HelpDesk / GetHelp
+description: |
+  Current-state software deployment pattern for the HelpDesk / GetHelp
+  multi-tenant support platform. The platform is built from three Angular
+  single-page applications (HHD_Login, HHD_UI, HHD_UP), a .NET API backend
+  (HHD_API), tenant-isolated SQL Server databases, AWS Lambda background
+  processing, and S3-hosted environment configuration deployed into
+  environment-specific AWS ECS clusters.
+version: 1.12.1
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.brannock-asset-management-engineering
+  productFamily: HelpDesk / GetHelp
+  notes: |
+    Current-state evidence comes from the Help Desk Infrastructure & Deployment
+    Architecture page (updated July 22, 2026), the Brannock HelpDesk GitHub Actions
+    CI/CD overview (updated July 16, 2026), and the shared Brannock Data AWS
+    Connectivity inventory (updated July 1, 2026). Supporting evidence includes
+    the non-customer environment matrix, the July 2026 production tenant
+    inventory, four project/component overviews, the Jenkins customer
+    installation procedure, current release recaps and smoke plans, performance
+    and rollback results, the Asset Management staff/customer sync description,
+    the Sofa King Central onboarding procedure, the customer-export SQL process,
+    the August 4 version 14 HelpDesk accountability Q&A, and the August 6
+    version 11 Brannock KPF table. The latest answers reconcile the six production
+    Lambdas, document component and service ownership boundaries, clarify
+    BETA/VALIDATION core-flow evidence, and preserve only the remaining
+    dependency-registration, ingress-ownership, parity-approval, and validation
+    gaps.
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - helpdesk
+  - gethelp
+  - saas
+  - aws
+  - ecs
+  - lambda
+  - sqlserver
+  - multi-tenant
+  - s3-configuration
+followsReferenceArchitecture: 01KQQ5JT1C-AZTH
+architectureNotes:
+  documentationScope: |
+    This revision reconciles the current architecture page with the current
+    GitHub Actions implementation. The GitHub Actions path automates application
+    container CI for HHD_UI, HHD_UP, HHD_Login, and HHD_API and centralized ECS
+    deployment for enabled lower environments. SQL scripts, Lambda artifacts,
+    S3 configuration, and production-side deployment remain part of the broader
+    coordinated release architecture and are not all automated by this workflow.
+  evidenceClassification: |
+    The July 2026 infrastructure page is the primary current-state source. The
+    Ottoman Native design sketch is target-state evidence only and must not be
+    represented as deployed unless independently confirmed. Historical release
+    and test artifacts demonstrate prior practices but do not establish current
+    execution evidence, permanent ownership, or L1 compliance.
+  productServiceScope: |
+    HelpDesk / GetHelp is a browser-based multi-tenant help desk platform for
+    ticket submission and processing, queue management, administration,
+    email-to-ticket processing, notifications, and Asset Management / Trackweb
+    integration. The shared application tier serves multiple customers, with
+    isolation primarily enforced through tenant-specific SQL Server databases
+    and tenant-aware runtime configuration.
+  ownershipCurrentState: |
+    Product management is Rosa Galindo. Rob Hartley is the current
+    accountable HelpDesk owner until Gavin Wells starts and explicitly
+    accepts application and data accountability. The August 4 owner matrix
+    documents boundaries for HHD_Login, HHD_UI, HHD_UP, HHD_API, all six
+    Lambdas, Route53, ElastiCache, SES receipt rules, S3 buckets, scaling
+    schedules, the nightly Asset Management sync, the database mail job, and
+    cross-product integrations. Application Development owns application
+    behavior and HelpDesk-side contracts; DevOps owns deployment, Route53, SES,
+    S3, and Lambda triggers; SRE owns ECS, auto scaling, and ElastiCache;
+    Database Engineering owns database reliability and execution boundaries;
+    and each integrated product owns its side of the contract. The Networking
+    team owns all WAF policies, including Signal Sciences. DevOps and SRE retain
+    the documented NGINX deployment and ECS hosting boundaries. Ownership is
+    explicit for Turn 1; Gabriel's later acceptance is a transition record, not
+    a current ownership gap.
+  keyProductFunctionEvidence: |
+    Brannock KPF version 11 defines a 99.9 target and four Sev-1 functions:
+    production outage/health, region-wide login, ticket submission, and ticket
+    updates/status. It defines three Sev-2 functions: email-to-ticket, ticket
+    routing/assignment, and attachment upload; SLA processing is Sev-4, not
+    Sev-2. The Sev-1 rows now contain API endpoint mappings. The Sev-2 endpoint
+    cells and cross-functional reviewer approvals remain blank. WH-6035 and
+    WH-0097 provide detection research and remediation progress, but they do not
+    replace an approved KPF scope or executed staging-parity evidence.
+  environmentEvidence: |
+    BETA is the de facto final pre-production environment in the AWS production
+    account, and VALIDATION is one of its four websites. BETA uses the same
+    application images later promoted to PROD. WH-3463 records a completed
+    10.1.3 VALIDATION smoke run for role-based login, ticket
+    creation/edit/view, grids, routing, administration, pages, and User Portal
+    behavior. BETA, VALIDATION, VALIDATIONSOLO, and SofaKingSD share Cluster 4.
+    The August 7 follow-up confirms that no linked or durable
+    BETA/VALIDATION evidence currently exists for attachment upload,
+    email-to-ticket, or health/outage checks, and no approved seven-function
+    Sev-1/Sev-2 parity packet exists. This is an explicit current gap rather
+    than an unanswered documentation question. BETA/VALIDATION uses synthetic
+    data with no customer linkage. Sandbox/QA and Staging/Regression use
+    production copies sanitized by replacing email addresses and production
+    settings; access is permission-restricted, refresh is roughly annual,
+    automated pruning enforces a 30-day default retention policy, and
+    authorized Jenkins copy operations are logged. Manual BETA/VALIDATION
+    changes are tracked in Jira and the production-equivalent deployment
+    documentation; OPS-87536 is a completed example.
+  observabilityGap: |
+    Application Insights and CloudWatch are documented as working, and WH-6035
+    maps the four Sev-2 KPFs to candidate failure signals. SLA failures and the
+    API portions of email ingestion and attachment upload are alertable today;
+    email Lambda failures require a CloudWatch alarm, routing exceptions are
+    silently swallowed pending instrumentation, and direct S3 upload failures
+    are not fully covered. Alert thresholds are placeholders, creation was
+    blocked by monitoring permissions, and reviewer approval, tested production
+    alerts, 100 percent Sev-1/Sev-2 coverage, Dynatrace or an approved alternative,
+    synthetic/Pingdom ownership, central log retention, and release gates remain
+    unestablished.
+  testingEvidenceGap: |
+    Mandatory production smoke coverage is now identified for environment and
+    version verification, role-based login/navigation, ticket creation and
+    assignment, dashboards, ticket grids/views, health endpoints, User Portal,
+    and performance spot checks. A blocker protocol requires escalation and
+    rollback preparation for critical failures. The 10.1.3 part-2 recap records
+    successful version, SSO, database, email-to-ticket, ticket-cycle, region,
+    page, workflow, Application Insights, and CloudWatch checks. The six
+    higher-load regressions were tracked through technical-debt tickets, while
+    baselines and thresholds are taken from staging/performance runs. Remaining
+    gaps are formal smoke-result attachment to each production PR or CR,
+    mapping to approved KPFs, links to the six regression resolutions,
+    production-scale/data comparison, SQL connection-pool exhaustion testing,
+    a declared coverage target, an automated performance gate, and
+    release-blocking SAST or SCA enforcement.
+  promotionControlGap: |
+    Kai Novak is named as production-deployment owner. DevOps deploys release
+    branches to VALIDATION/BETA, QA executes mandatory smoke tests and approves,
+    database scripts receive a pre-production dry run when present, Development
+    confirms and monitors, and every production deployment requires a change
+    request. The 10.1.3 deployment page supplies an ordered procedure for SQL,
+    configuration, Lambda, feature flags, image retagging, ECS restart, and
+    testing. OPS-06228 links that procedure and records that the deployment was
+    reverted; the part-2 recap supplies successful test and monitoring results
+    for the later release activity. These sources demonstrate practiced
+    promotion and rollback, but they do not provide one complete successful CR
+    containing approvals, exact immutable image digests, all component versions,
+    formally attached smoke evidence, and full or partial tenant recovery.
+  securityAndRepositoryEvidenceGap: |
+    Owner attestation states that branch protection, required reviewers, and
+    CODEOWNERS are configured and enforced. Direct links establish CODEOWNERS
+    files for the four application repositories and release-scripts repository,
+    version 10.130.2.0 release tags, and recent security workflow runs. Snyk
+    findings surface on develop pull requests, but findings only flag and do not
+    block release because required status-check enforcement is not implemented.
+    Repository Settings exports or screenshots, direct-push restrictions,
+    reviewer counts and identities, exception approval, secrets and IaC scan
+    coverage, and release-blocking severity policy still require evidence.
+  referenceArchitectureStatus: |
+    Applicability of reference architecture 01KQQ5JT1C-AZTH is unverified.
+    Compliance must not be asserted until the current ECS, tenant-per-database
+    SQL, S3 configuration, Lambda, ingress, environment, delivery,
+    observability, logging, rollback, recovery, and security-gate model is
+    compared and deviations are recorded.
+  l1Readiness: |
+    DRAFT Architecture L1 is not ready for final confirmation. Rob Hartley's
+    owner-provided production inventory is authoritative, the six-Lambda count
+    is reconciled, ownership and service boundaries are explicit, and
+    non-standard technology remediation is tracked. The only remaining
+    Architecture L1 gates are: structurally register every active runtime, data,
+    network, scheduled-job, identity-provider, and SaaS dependency in DRAFT
+    with reused Technology Component references, then attach successful
+    repository-native DRAFT validation for the dependency-complete commit.
+    BETA/VALIDATION parity evidence is tracked separately under the Environment
+    L1 vector and does not block DRAFT Architecture L1. Higher-turn
+    observability, testing automation, promotion, security gating, SLO/SLA,
+    recovery, and repository-maturity work also do not block this Architecture
+    L1 decision.
+  currentStateRisks: |
+    Known risks include the shared application failure domain; distributed
+    tenant databases and partial-deployment risk; manually deployed or
+    non-source-controlled Lambda and AWS resources; missing structural DRAFT
+    references for most supporting dependencies; BETA/PROD scale and data
+    disparity; no linked BETA/VALIDATION evidence for attachment upload,
+    email-to-ticket, or health/outage plus no approved seven-function parity
+    packet; S3 and release-unit configuration drift; Lambda logs without expiry
+    and absent centralized privileged/audit logging; manual security and
+    performance gates; complex tenant identity behavior; and coordination of
+    images, SQL, Lambda, configuration, and ECS changes without one immutable
+    release manifest or evidenced partial-tenant recovery.
+  interServiceConnections: |
+    Cross-tier service connections are modeled as relationship objects. Imperva
+    WAF fronts HHD_Login, HHD_UI, and HHD_UP; HHD_UI and HHD_UP call HHD_API;
+    HHD_API accesses SQL Server, invokes Lambda background jobs, integrates with
+    Sofa King Asset Management / Trackweb, and reads S3 runtime configuration.
+  deliveryModel: |
+    CI and CD are manually dispatched GitHub Actions workflows. Each application
+    repository owns CI; WHM_HD_Configuration centrally owns ECS deployment.
+    CI is intentionally workflow_dispatch-only, and CD serializes deployments by
+    target environment so concurrent operators cannot update one ECS service.
+  continuousIntegration: |
+    CI validates the selected branch, runs application tests and build checks,
+    performs SonarQube and Snyk scanning, builds Dockerfile.GHA, and pushes
+    service-prefixed images to the shared brannock-helpdesk ECR repository. Release
+    builds should keep validation, security scanning, Docker build, and image
+    push enabled.
+  artifactModel: |
+    CI publishes human-readable immutable application-version tags and
+    workflow-run tags. CD resolves selected ECR tags to immutable image digests
+    before changing ECS, preserving unselected containers in the shared
+    multi-container task definition.
+  deploymentSafety: |
+    CD validates environment mappings, GitHub Environment selection, service
+    selection, mutable-tag policy, and production confirmation before AWS
+    changes. It permits exactly one service or all four services, uses GitHub
+    OIDC instead of long-lived AWS keys, checks ECS circuit-breaker rollback,
+    waits for stability when requested, and verifies deployed digests.
+  enabledDeploymentTargets: |
+    Centralized GitHub Actions CD is currently enabled for dev-poc, qa, stg, and
+    perf in the Brannock Software Dev account in us-east-1. dev1, stg2, and next
+    are disabled. val, beta, and prod are mapped to the production account but
+    remain disabled for engineering deployment and continue through manual
+    production-side release processes.
+  rollbackModel: |
+    ECS circuit-breaker rollback must be enabled. Operator rollback is an
+    intentional redeployment of the last known-good immutable tag or digest;
+    there is no separate one-click rollback workflow. ECS stability does not
+    replace application smoke testing.
+  pipelineSecurity: |
+    GitHub OIDC supplies AWS credentials. CI includes SonarQube quality-gate
+    inspection and Snyk scanning with a high-severity threshold. The API build
+    restores NuGet dependencies from Sofa King Artifactory and can optionally
+    install the Contrast .NET agent.
+  externalDependencies: |
+    Rob Hartley's August 4 owner-provided production inventory is treated as
+    the authoritative discovered scope. It confirms exactly six production
+    Lambdas: getHelp-createUpdateTicketFromEmail,
+    GetHelp-SendEmailFromTable, Process_SES_Bounce, SES_Delivery_Logging,
+    HCM_Onboarding, and SftpToS3Transfer. Their triggers are documented
+    respectively as S3 ObjectCreated from gethelp-prod-email, EventBridge every
+    minute, the SES_Complaint_Queue and SES_Bounce_Queue, the SES_Delivery SNS
+    topic, S3 ObjectCreated from whm-hd-sk-integrations, and EventBridge
+    hourly. The inventory also identifies Route53, brs-prod-redis-cluster,
+    tenant SES rules and attachment buckets, configuration/integration buckets,
+    scaling schedules, the nightly Asset Management sync, the HelpDesk Trigger
+    Mail Procedures job, identity providers, and the named product,
+    observability, analytics, experience, survey, and feature-flag
+    integrations. Discovery and owner attestation are complete; most
+    infrastructure and SaaS entries still require structural DRAFT Technology
+    Component references.
+  availabilityRequirement: 24x7
+  dataClassification: pii
+  failureDomain:
+    scope: platform-wide
+    description: |
+      The shared application tier creates a platform-wide failure domain, while
+      tenant isolation is primarily enforced at the SQL Server database layer.
+      Misalignment between image, SQL, Lambda, and configuration versions can
+      create cross-tenant operational impact.
+  deploymentTargets: |
+    The environment estate includes DEV/DEV1, QA/Sandbox, NEXT, STAGING,
+    VALIDATION, BETA, and PROD. The current centralized GitHub Actions catalog
+    enables dev-poc, qa, stg, and perf in us-east-1. dev1, stg2, next, val,
+    beta, and prod are disabled in that catalog; production-side releases remain
+    manual while the hosted architecture continues to use environment-specific
+    ECS clusters including GetHelp-Beta and GetHelp-Prod.
+  patternDeviations: |
+    GitHub Actions now automates application image CI and lower-environment ECS
+    CD, but the complete release unit is still mixed and coordinated: SQL
+    scripts, Lambda artifacts, S3 configuration, and disabled production-side
+    targets require release steps outside the centralized ECS workflow. CI and
+    CD are manual-dispatch by design, and rollback is a deliberate redeployment
+    rather than a dedicated one-click workflow.
+  tenantIsolationModel: |
+    HelpDesk / GetHelp is multi-tenant with a shared application tier and
+    tenant isolation primarily at the database layer through tenant-specific
+    SQL Server databases.
+  runtimeConfiguration: |
+    Runtime configuration is externalized to Amazon S3, including API
+    appsettings, UI config, login config, notification config, NGINX config,
+    Signal Sciences config, and maintenance assets. Runtime behavior depends on
+    alignment between image version, configuration version, SQL version, and
+    Lambda version.
+  runtimeWorkloads:
+    - HHD_Login: Angular SPA authentication entry point and launch experience.
+    - HHD_UI: Angular SPA for technician and admin workflows.
+    - HHD_UP: Angular SPA for the end-user portal experience.
+    - HHD_API: .NET Web API for business logic, routing, tenant-aware data access, integrations, and authorization.
+  releaseUnit:
+    - GitHub Actions-built container images for HHD_UI, HHD_UP, HHD_Login, and HHD_API
+    - SQL release scripts coordinated outside the application-image workflow
+    - Lambda artifacts coordinated outside the application-image workflow
+    - S3-hosted runtime configuration
+    - ECS task-definition registration and service update or recycle operations
+  observabilityCurrentState: |
+    Microsoft Application Insights and Amazon CloudWatch are the active
+    observability systems. CloudWatch centrally collects ECS and hosted-service
+    logs with one-month retention per log group and access restricted through
+    Dev-CloudWatch-Access. Lambda logs are collected but have no retention
+    expiry. Application Insights retains HD_Prod application telemetry for one
+    year, restricts access through Tech - Dev - WHM - PROD, derives tenant
+    context from request host or related fields, provides a production
+    dashboard, and alerts on network-related SQL exceptions. KPF alerts are
+    still being developed; privileged-action and audit logs are not centrally
+    collected, and no formal owner-attestation process exists. Dynatrace remains
+    excluded because the current setup is not working.
+  optionalDependencies: |
+    Redis is optional and emerging rather than a foundational runtime
+    dependency. The strongest documented value area is revoked JWT token
+    blacklisting in horizontally scaled API deployments.
+  dataTierTopology: |
+    SQL Server is the system of record. The July 13, 2026 HelpDesk Production
+    List maps 332 active site URLs to 328 distinct databases across
+    AWSBRSPRDLIST1, 2, 3, 4, and 6 on port 60173; it also records Asset
+    Management links, SSO types, and Salesforce account identifiers. Four
+    databases are mapped by more than one URL: GH-BrooksAcademy, GH-Brannock,
+    GH-BirchRegion, and GH-OakRegion. The shared Brannock platform documents
+    listener families 1 through 6, while HelpDesk release and tenant evidence
+    consistently excludes listener 5. Authority, ownership, update automation,
+    listener-selection logic, and the intentionality of alias mappings still
+    require confirmation.
+  dataPlatformAvailability: |
+    The shared production SQL platform pairs clustered primaries in us-east-1a
+    with secondary instances in us-east-2a and documents asynchronous AG
+    replication. This establishes cross-region platform redundancy. HelpDesk
+    has no defined RPO or RTO at this time. Automatic-failover behavior and a
+    tested tenant-level recovery procedure remain unconfirmed.
+  dataPlatformBackupBoundary: |
+    The connectivity inventory records Amazon FSx backup shares for production
+    clusters and Z-drive backup locations for non-production. It does not specify
+    HelpDesk backup schedules, retention, encryption, immutability, restore-test
+    results, or accountable ownership; those remain open evidence gaps.
+  nonProductionDataTopology: |
+    Development SQL hosts are documented as non-clustered. Staging uses a
+    synchronous availability group and BRSSTGLIST1 listener. The document does
+    not map individual HelpDesk lower environments or databases to those hosts.
+  sharedDataPlatformOperationalConstraints: |
+    HelpDesk has a confirmed nightly SQL Server Agent/SSIS dependency for
+    Asset Management staff and customer synchronization through the
+    IntegrationMiddleWay database. The shared platform also requires
+    mapped-drive validation after database-server reboots and manual SSISDB
+    master-key re-encryption after planned failover. The package, job, stored
+    procedures, repository, credential path, owner, failover sequencing,
+    monitoring, replay, and reconciliation evidence remain unconfirmed.
+  authenticationTopology: |
+    Authentication is tenant-specific. HHD_Login handles login and SSO redirect
+    flows, while HHD_API enforces backend authorization. Supported patterns
+    include SAML, Azure, Google, ClassLink, ADFS, Rapid Identity, OneLogin, and
+    non-SSO login flows.
+  nonCustomerEnvironmentInventory: |
+    VALIDATION is one of four websites running on BETA, the final pre-production
+    environment inside the AWS production account. Shared images establish
+    build-level parity, and BETA, VALIDATION, VALIDATIONSOLO, and SofaKingSD
+    share Cluster 4. WH-3463 covers role-based login, ticket
+    creation/edit/view, grids, routing, administration, pages, and User Portal.
+    Health is primarily checked in VALIDATION and email-to-ticket is tested
+    there as needed, but neither has a fixed schedule or linked result. No
+    linked result covers attachment upload, and the KPF reviewer signoff is
+    blank. BETA/VALIDATION uses synthetic data with no customer linkage.
+    Sandbox/QA and Staging/Regression use copy-then-sanitize production data:
+    email addresses and production settings are replaced, access is
+    permission-restricted, refresh is roughly annual, and an automated pruning
+    job applies a 30-day default retention policy. Authorized Jenkins copy
+    operations are logged. Manual BETA/VALIDATION changes are tracked in Jira
+    and shared deployment documentation, with OPS-87536 as a completed example.
+    Scale and data-volume parity with PROD remain unproven but are higher-level
+    parity concerns, not Turn 1 L1 requirements.
+  componentProjectInventory: |
+    HHD_Login maps to WHM_HD_Login, HHD_UI to WHM_HD_UI, HHD_UP to WHM_HD_UP,
+    and HHD_API to WHM_HD_API. The three web projects currently use Angular 7
+    and the API uses .NET Core 2.1. WH-2054 tracks the Angular upgrade path, and
+    WH-9331 tracks the API runtime upgrade; the .NET 10 statement remains future
+    state until deployed. Developers Rob Hartley, Arjun Malik, and Gabriel
+    Wilson are named repository owners. CODEOWNERS files and 10.130.2.0 release
+    tags are linked for all four application repositories and
+    WHM_HD_RELEASE_SCRIPTS. The remediation tickets satisfy Turn 1 tracking for
+    retained non-standard runtimes, while current deployed versions remain the
+    catalog baseline.
+  customerProvisioningBoundary: |
+    The July 2026 installation guide describes Jira- and Salesforce-initiated
+    customer provisioning through a parameterized Jenkins job, including DFS
+    directories, S3, database creation and updates, API and IIS site setup,
+    account creation, Salesforce updates, application verification, and manual
+    survey/user/group configuration. This is treated as provisioning evidence,
+    not the authoritative application-release path. Its relationship to the
+    ECS/GitHub Actions architecture, current ownership, source control,
+    approvals, idempotency, rollback, credential handling, and deprovisioning
+    require confirmation.
+  assetManagementIdentitySyncBoundary: |
+    The May 2026 synchronization description documents a nightly flow from
+    region CIS sources into Asset Management through IMS SSIS jobs and then
+    through IntegrationMiddleWay and a SQL Server Agent/SSIS package into
+    HelpDesk UserAccounts and UserAccountDetails. The
+    GetHelp.GetHelpEntityIntegration table maps Asset Management databases to
+    tenant HelpDesk databases and records Active, GHStaffUserActive,
+    GHCustomerUserActive, and SyncSites configuration; dbo.ProcessLogging records
+    execution. Staff and customers are keyed by EntityID plus EntityTypeUID
+    values 3 and 4. Exact job/package/procedure inventory, database-pair
+    validation, credential and PII controls, monitoring, retry/replay,
+    reconciliation, freshness, deactivation/deletion, and duplicate-identity
+    resolution remain unconfirmed. The page also claims independent customer
+    synchronization and login control while mapping both concepts to
+    GHCustomerUserActive, so implementation and schema evidence are required.
+  sofakingCentralOnboardingBoundary: |
+    The July 2026 onboarding procedure documents a second inbound personnel-data
+    path: Sofa King Central creates nightly staff and assignment exports,
+    Operations provisions an organization-specific folder on AWS SFTP,
+    credentials are retrieved from Secret Server and tested through FileZilla,
+    and the WHM team makes customer-specific HelpDesk adjustments. The ordered
+    schemas include identifiers, names, personal and organizational contact
+    details, supervisor, employment, location, department, and assignment data.
+    The HelpDesk-side consumer, account-versus-ticket outcome, tenant mapping,
+    authorization, file encryption at rest, retention/deletion, schema
+    versioning, failure detection, replay, reconciliation, and accountable
+    ownership are not documented.
+  customerDataExportBoundary: |
+    The May 2026 churn-export procedure requires privileged CREATE OR ALTER VIEW
+    access in a selected production tenant database, extracts tickets,
+    descriptions, comments, custom fields, attachment metadata, and users to
+    Excel, and requests a separate S3 attachment export through Operations.
+    Password and Salt are intentionally excluded, but ticket free text, user
+    identifiers, attachment locations, and custom fields may contain sensitive
+    or regulated data. Approval, tenant-selection verification, least privilege,
+    secure delivery, encryption, retention/deletion, access auditing,
+    reconciliation, and chain-of-custody controls are not established. The
+    cleanup SQL omits vw_HelpDeskExport_Tickets and drops an unexplained
+    vw_HelpDeskExport_ReferenceData view, requiring correction and review.
+  currentReleaseEvidence: |
+    OPS-06228 is a June 2026 production release request assigned to Kai Novak
+    and links the 10.1.3 deployment procedure; its only execution comment says
+    the deployment was reverted. The ordered procedure covers tenant SQL
+    migrations, configuration, manual Lambda work, feature flags, image
+    promotion, ECS restart, and testing. The 10.1.3 part-2 recap then records
+    successful database, feature-flag, application, SSO, email-to-ticket,
+    ticket-cycle, region, page, workflow, Application Insights, and CloudWatch
+    verification. This is useful release and rollback evidence, but not one
+    complete successful CR with approvals, immutable digests, every release-unit
+    version, formally attached results, and recovery detail.
+  rollbackEvidence: |
+    OPS-06228 records a reverted deployment, and the 10.1.3 post-mortem records
+    rollback of application code and database changes after a Google OAuth
+    issue while Lambda stayed at 10.1.3 because reverting it carried Python 3.7
+    compatibility risk. Database scripts are transaction-wrapped for exception
+    rollback. Together these demonstrate practiced rollback while confirming
+    that coordinated cross-component rollback, immutable release manifests, and
+    partial tenant SQL recovery remain incomplete.
+  ingressEvidenceStatus: |
+    The current architecture identifies Signal Sciences and NGINX as the active
+    runtime protection path, while the DRAFT object currently models Imperva as
+    the browser front door. The exact ordered request path, control ownership,
+    and whether both products remain active must be confirmed before the edge
+    topology is treated as final.
+  apiEndpointInventory: |
+    The March 3, 2026 HelpDesk API Endpoints List maps the HHD_API surface to
+    HelpDesk UI, User Portal, Login, and other service consumers. It confirms
+    endpoint families for authentication and SSO, tickets, automation, reports,
+    permissions, attachments, schedules, service groups, SLA, surveys, users,
+    Asset Management / Trackweb, HCM onboarding, and email-to-ticket processing.
+    It also identifies GET api/Home and GET api/Home/health as health endpoints.
+  apiControlEvidenceGap: |
+    The endpoint list is consumer-mapping evidence, not proof of deployed route
+    currency or control effectiveness. It does not document endpoint-level
+    authentication and authorization, tenant enforcement, public versus internal
+    exposure, rate limits, timeout/retry/idempotency behavior, sensitive-data
+    handling, API versioning, release-linked security tests, or KPF monitoring.
+    The inventory must be reconciled with deployed OpenAPI/Swagger output and
+    owner-attested production controls before those properties can be claimed.
+  authorizationModelEvidence: |
+    The June 2026 WH-5897 spike documents four user types. Support, Admin, and
+    ServiceDesk receive the same HelpDeskService JWT, end users receive
+    HelpDeskUser, and machine integrations use HelpDeskAPI. Staff-type separation
+    is therefore enforced below the controller role gate through business logic
+    and database-driven permission roles; the Angular clients also receive the
+    numeric user type for UI behavior. The spike audited 65 controllers and
+    identified inconsistent type checks, including one workflow change requiring
+    remediation, but does not prove the resulting fixes or regression tests were
+    deployed.
+  supportLoginControlGap: |
+    The tech-lead response states that the WH-5897 local Support login and SSO
+    bypass has not been deployed. It is therefore not modeled as an active
+    production control. Deployed-route or configuration evidence should confirm
+    its leave; any future implementation must define approved break-glass
+    controls for MFA or exception handling, named accounts, credential rotation,
+    lockout or rate limiting, network restriction, audit alerts, access review,
+    refresh-token lifecycle, and tenant-boundary testing.
+  kpfFailureDetectionEvidence: |
+    WH-6035 maps Email-to-Ticket to ProcessEmail/FinalizedEmailAttachments plus
+    the upstream getHelp-createUpdateTicketFromEmail Lambda; routing to ticket
+    create/change/manual rerun paths; SLA to SLATargetsRepository dependency and
+    exception telemetry; and attachments to AttachFile(s)/FinalizedAttachments.
+    The page is a draft research spike. It records unimplemented instrumentation,
+    alarms, permissions, action groups, thresholds, and ownership rather than
+    completed alert coverage.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Web Edge and Frontend Workloads
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-KJHA
+    notes: |
+      Region-facing web path for the three Angular SPAs HHD_Login, HHD_UI, and
+      HHD_UP hosted on the shared Amazon ECS container runtime. Signal Sciences and
+      NGINX are part of the runtime request path and browser traffic enters through
+      Imperva WAF.
+    externalInteractions:
+      - name: Identity Providers
+        type: external
+        notes: |
+          Tenant-specific identity integrations include SAML, Azure, Google,
+          ClassLink, ADFS, Rapid Identity, OneLogin, and configured non-SSO flows.
+          Modeled here as an external interaction rather than a first-class
+          relationship because no identity-provider catalog objects exist yet.
+        capabilities:
+          - 01KQQ4Q026-MHJM
+    deployableObjects:
+      - ref: 01KQQ5JT1D-MY47
+        diagramTier: application
+        networkZone: web
+        notes: Imperva WAF front door for region-facing browser traffic.
+      - ref: 01KSM38KFC-KKH6
+        diagramTier: presentation
+        networkZone: web
+        notes: HHD_Login Angular SPA - tenant login and SSO redirect entry point.
+      - ref: 01KSM38KFC-FM2A
+        diagramTier: presentation
+        networkZone: web
+        notes: HHD_UI Angular SPA - technician and admin help desk workflows.
+      - ref: 01KSM38KFC-WKD2
+        diagramTier: presentation
+        networkZone: web
+        notes: HHD_UP Angular SPA - end-user support portal experience.
+  - name: API and Tenant Application Services
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT02-KJHA
+    notes: |
+      HHD_API is the .NET backend for tenant-aware business logic, queue and
+      routing workflows, notification orchestration, authorization, and
+      integrations with adjacent systems, hosted on the shared Amazon ECS
+      container runtime.
+    externalInteractions:
+      - name: Sofa King Asset Management / Trackweb
+        type: external
+        notes: Asset-linked workflows, ticket context enrichment, and asset-aware request handling.
+        capabilities:
+          - 01KT0V5MCV-RZV0
+      - name: Email Infrastructure
+        type: external
+        notes: Supports outbound notifications and inbound email-to-ticket or update workflows.
+      - name: HCM Onboarding Integration
+        type: external
+        notes: HHD_API validates and processes onboarding records and exposes integration-status operations for the HCM consumer.
+      - name: Email-to-Ticket Processing
+        type: external
+        notes: Other services call ProcessEmail and FinalizedEmailAttachments to create or update tickets from inbound email.
+      - name: Sofa King Applications / Integrations
+        type: external
+        notes: Additional ecosystem integrations through HHD_API and surrounding platform services.
+    deployableObjects:
+      - ref: 01KSM38KFB-X6P1
+        diagramTier: application
+        networkZone: app
+        notes: Shared HHD_API backend for business rules, tenant context resolution, and integrations.
+  - name: Background Processing and Runtime Configuration
+    deploymentTarget: aws-us-east-1
+    substrate: 01KQQ5JT03-FGYJ
+    notes: |
+      Split execution model for asynchronous jobs, scheduled work, integration
+      processing, and shared runtime configuration. Lambda artifacts and S3
+      configuration are part of the coordinated release unit.
+    externalInteractions:
+      - name: Amazon S3 Runtime Configuration
+        type: external
+        notes: |
+          Stores API appsettings, UI and login config, notification config, NGINX
+          config, Signal Sciences config, and maintenance assets.
+        capabilities:
+          - 01KT0V5MCV-E9TN
+      - name: Microsoft Application Insights
+        type: external
+        notes: Working application telemetry for diagnostics and incident investigation.
+        capabilities:
+          - 01KQQ4Q026-NB1W
+      - name: Amazon CloudWatch
+        type: external
+        notes: Working infrastructure telemetry for ECS, Lambda, and platform-level monitoring.
+    deployableObjects:
+      - ref: 01KQQ5JT0M-PM3P
+        diagramTier: application
+        networkZone: ops
+        notes: Lambda-backed background jobs, scheduled tasks, and integration processing.
+  - name: Data Services
+    deploymentTarget: aws-us-east-1
+    notes: |
+      SQL Server is the system of record. The platform uses shared environment
+      databases plus many tenant-specific production databases such as HelpDesk,
+      HelpDeskTranslations, HelpDeskSandbox, HelpDeskBeta, GH-SofaKingSD, and
+      GH-Validation. HelpDesk production releases currently target shared Brannock
+      AG listeners AWSBRSPRDLIST1, 2, 3, 4, and 6 on port 60173. The underlying
+      platform documents asynchronous secondary instances in us-east-2a.
+      HelpDesk has no defined RPO or RTO at this time; backup policy and restore
+      testing remain unconfirmed.
+    deployableObjects:
+      - ref: 01KQQ5JT01-Z39K
+        diagramTier: application
+        networkZone: data
+        notes: |
+          Multi-tenant data tier with tenant isolation primarily enforced through
+          separate SQL Server databases on shared Always On availability-group
+          listener families. A listener or AG failure can affect multiple tenants.
+  - name: Runtime Security and Observability
+    deploymentTarget: aws-us-east-1
+    notes: |
+      Signal Sciences WAF is part of the ECS and NGINX runtime protection path.
+      Application Insights and CloudWatch are the active observability systems.
+      Dynatrace is intentionally not modeled as an active dependency because the
+      current setup is not working.
+    deployableObjects:
+      - ref: 01KQQ5JT1D-TK06
+        diagramTier: application
+        networkZone: ops
+        notes: Signal Sciences protection integrated into the ECS and NGINX request path.
+decisionRecords:
+  - ref: 01KT16XHNK-W2SJ
+    key: deploymentTargets
+  - ref: 01KT16XHNK-W2SJ
+    key: availabilityRequirement
+  - ref: 01KT16XHNK-W2SJ
+    key: dataClassification
+  - ref: 01KT16XHNK-W2SJ
+    key: failureDomain
+  - ref: 01KT16XHNK-W2SJ
+    key: patternDeviations
+  - ref: 01KT16XHNK-W2SJ
+    key: interServiceConnections
+  - ref: 01KTM7D5BW-778A
+    key: externalDependencies
+

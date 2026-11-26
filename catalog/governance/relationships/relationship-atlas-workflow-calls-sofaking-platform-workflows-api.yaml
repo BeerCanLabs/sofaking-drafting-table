@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: Q28MJW18G8-N4CY
+type: relationship
+name: Atlas Workflow → Sofa King Platform Workflows API
+description: 'WorkflowsApiClient instantiates, reads, lists and cancels workflow instances (one Platform workflow
+  per sub-request on Submit Request) and WorkflowTemplatesApiClient writes workflow templates, against PlatformWorkflowsApi:BaseUrl
+  (stage: https://workflow-stage-api.ss.sofaking.example).'
+catalogStatus: stub
+source: 01M5WY4E7P-YC9P
+externalTarget: Sofa King Platform Workflows API
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. WorkflowsApiClient instantiates, reads, lists and cancels
+    workflow instances (one Platform workflow per sub-request on Submit Request) and WorkflowTemplatesApiClient
+    writes workflow templates, against PlatformWorkflowsApi:BaseUrl (stage: https://workflow-stage-api.ss.sofaking.example).
+    Candidate catalog objects: Platform Msvc Workflowinstance (01KSM38KG0-B9ZX) and Platform Msvc Workflowdefinition
+    (01KSM38KG0-C36C); inferred from names, not confirmed.'
+  evidence: 'whm-unified-core develop: Service.Core.Workflows.Infrastructure/Clients/WorkflowsApiExtensions.cs,
+    Service.Core.Workflows.Core/Services/CatalogRequestService.cs, Service.Core.Workflows.App/Program.cs'

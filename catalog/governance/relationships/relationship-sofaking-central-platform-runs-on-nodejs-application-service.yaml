@@ -1,0 +1,13 @@
+schemaVersion: '1.0'
+uid: QK4YPK6W7A-Q2FY
+type: relationship
+name: Sofa King Central Platform → Node.js Application Service
+catalogStatus: stub
+source: 01KQQ5JT0K-TN7W
+target: 01KQQ5JT1E-W3TA
+label: runs on
+flow: outbound
+notes:
+  background: >-
+    Node.js runtime category identified in OPS-255153 for the legacy sand-*
+    remainder represented by this aggregate component.

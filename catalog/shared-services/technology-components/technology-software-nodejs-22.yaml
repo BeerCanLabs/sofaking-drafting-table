@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-83GS
+type: technology_component
+ownerRole: technology-admin
+name: Node.js 22
+description: Node.js 22 LTS runtime baseline for new JavaScript application services.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- app-runtime
+- nodejs
+classification: software
+vendor: OpenJS Foundation
+productName: Node.js
+productVersion: '22'
+vendorLifecycle:
+  mainstreamSupportEnd: 2027-04-30
+  extendedSupportEnd: 2027-04-30
+  notes: The official Node.js Release Working Group schedule lists Node.js 22 end of life on April 30, 2027.
+capabilities:
+- 01KT0V5MCV-RZV0

@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR4-SH1Y
+type: data_component
+ownerRole: engineer
+name: Customer Profile Store
+description: >-
+  DynamoDB single-table store owned by the Customer Profile service, holding
+  Customer, Contact, and CustomerContactAssociation entities. Table
+  SS_CustomerProfile_{Environment} uses a pk/sk key schema with three global
+  secondary indexes (gsi1, gsi2, gsi3), on-demand (PAY_PER_REQUEST) billing, and
+  DynamoDB Streams (NEW_AND_OLD_IMAGES) enabled for change-data-capture fanout.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+runsOn: 01KQQ5JT04-K58R
+targetEngine: dynamodb
+dataClassification: confidential
+containsPII: true
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - dynamodb
+  - single-table
+  - data-component
+tables:
+  - name: SS_CustomerProfile
+    description: >-
+      Single-table design (pk/sk + gsi1/gsi2/gsi3). Holds Customer, Contact, and
+      CustomerContactAssociation item types. Streams enabled (NEW_AND_OLD_IMAGES)
+      feeding an EventBridge Pipe → SNS fanout topic → SQS consumer queues.
+    containsPII: true
+retentionPolicy: >-
+  Point-in-time recovery enabled in non-dev environments. Formal retention and
+  purge policy not yet defined — recorded as an open item for the data team.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryPrimaryLanguage: C#
+  observedManifestPaths: >-
+    src/deploy/CustomerProfile.Deploy/Shared/Storage/DynamoDbTableResources.cs;
+    src/deploy/CustomerProfile.Deploy/CustomerProfileCoreStack.cs;
+    docker-compose.yml
+  keySchema: >-
+    Partition key pk (String), sort key sk (String); GSIs gsi1, gsi2, gsi3 each
+    with their own partition and sort keys. Billing PAY_PER_REQUEST. Encryption
+    AWS-managed (default).
+  classificationRationale: >-
+    Contains customer and family PII; treated as confidential pending Data/Security
+    confirmation of whether FERPA retail records warrant the restricted tier.

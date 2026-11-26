@@ -1,0 +1,90 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-ETDW
+type: product_component
+ownerRole: engineer
+name: Ottoman Invitation Service
+description: 'Ottoman service that manages invitations and the acceptance process that grants users access to applications and services.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - invitation
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-svc-invitation
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  runtimeRequirement: >-
+    Default-branch package.json and Dockerfile both pin Node.js 24.14.1; the
+    application is a TypeScript NestJS 11 service.
+  serviceAuthentication: >-
+    No authentication guard is implemented on incoming requests —
+    src/main.ts calls app.useGlobalGuards() with no arguments (a no-op); the
+    request authentication boundary is upstream (gateway/mesh). Outbound calls
+    to the IDM gateway (email queue) use an OAuth2 client-credentials flow
+    (src/common/emails/token.service.ts) to obtain a bearer token.
+  secretsManagement: >-
+    AWS Secrets Manager via an ExternalSecrets Operator ExternalSecret
+    (cd/dev/es.yml, secretStoreRef aws-secret-manager) materialized into a
+    Kubernetes Secret and mounted via envFrom. Confirmed secret keys:
+    REDIS_AUTH_HOST, REDIS_USERNAME, REDIS_PASSWORD, CONFIGCAT_SDK_KEY,
+    IDM_CLIENT_SECRET, TYPEORM_PASSWORD. Note: Redis secret keys are pulled but
+    no Redis client code or dependency was found in the repo — likely inherited
+    boilerplate rather than an active dependency. Flag: a plaintext Contrast
+    Security API key and service key are committed to source at
+    contrast_security.yaml — a secrets-hygiene finding, not remediated here.
+  serviceLogging: >-
+    nestjs-pino + pino-http + pino-pretty (src/common/logger/logger.module.ts).
+    Structured JSON in prod (LOG_FORMATTING=false), pretty-printed in dev;
+    redacts request/response headers; propagates correlation ID on outbound
+    calls; excludes /health* from auto-logging.
+  healthWelfareMonitoring: >-
+    @nestjs/terminus health module (src/health/health.controller.ts): GET
+    /health/live (process-only), /health/ready and /health/startup (Postgres
+    ping), and GET /health (full diagnostic, explicitly documented as not for
+    Kubernetes probes). Kubernetes wires all three probe types to port 3001.
+  availabilityModel: >-
+    Prod: 2 replicas, HPA min 2/max 10 (CPU 60%/mem 80%), PodDisruptionBudget
+    minAvailable 1. RollingUpdate maxUnavailable 0/maxSurge 50%. Resource
+    request/limit is cpu 300m/1, memory 1024Mi/1024Mi — no memory headroom
+    between request and limit.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization; no vertical or queue-depth-based scaling observed.
+  recoverabilityModel: >-
+    Manual retry loop (src/common/services/loveseat/loveseat.service.ts) around
+    Loveseat event publishing; no circuit-breaker library. Graceful shutdown is
+    NOT enabled — app.enableShutdownHooks() is commented out in src/main.ts
+    despite terminationGracePeriodSeconds 30 being configured at the k8s
+    level, so the app does not currently drain connections on SIGTERM. This is
+    a real operational gap worth flagging.
+  failureDomain: >-
+    Scoped to Ottoman invitation and access-grant workflows. Deployment is
+    namespace/environment-scoped (dev/stage/prod each have independent
+    manifests) with no cross-environment shared failure domain observed.
+  persistence: Aurora PostgreSQL database invitationservice, schema invitation.
+  publishesEvents: IdentityMatchTransaction events through Loveseat.
+  configcatDirectCall: >-
+    NON-CONFORMING: calls ConfigCat directly via configcat-node
+    (src/common/services/feature/featureflag.service.ts) rather than through
+    the Platform Feature Flag Service (01KSM38KFY-PB2S), gating the Domain
+    Service API version (v1 vs v2). Same pattern as the Kong Backplane finding
+    recorded on the Ottoman SDP (architectureNotes.configcatNonConformance).
+  dependencies:
+    - 01KSM38KFW-WA83
+  unconfirmedDependencies: >-
+    No code-level references to Organization Service, OrgPerson Service,
+    Passport Core, Okta, or Kong were found in this repo — those services are
+    reached, if at all, only through the shared gateway/mesh, not direct calls
+    from this codebase. Also newly observed and not yet in the catalog: the
+    IDM/msvc-EmailService gateway (IDM_GATEWAY_HOST), used to send invitation
+    emails via OAuth2 client-credentials.
+decisionRecords:
+  - ref: 01KT16XHPT-T7H6
+    key: runtimeRequirement

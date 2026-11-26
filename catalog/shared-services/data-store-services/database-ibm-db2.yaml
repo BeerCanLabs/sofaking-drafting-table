@@ -1,0 +1,75 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-5TYB
+type: data_store_service
+ownerRole: technology-admin
+name: IBM Db2 DBMS Service
+description: 'Provisional Db2 database service pattern for RT-ERP region deployments. Exact host topology, version, and HA mechanism require follow-up.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - db2
+category: service
+serviceCategory: database
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1R-SGGM
+architectureNotes:
+  serviceAuthentication: 'Database administrators and service identities are assumed to authenticate through centralized identity governance with database-local authorization.
+
+    '
+  serviceLogging: 'Db2 audit and engine logs are assumed to be forwarded beyond host-level logging into the shared observability platforms.
+
+    '
+  healthWelfareMonitoring: 'Service probes, engine health telemetry, and host monitoring are required to track region database welfare.
+
+    '
+  secretsManagement: 'Connection credentials and service identities are assumed to be stored in a centralized secret-management platform.
+
+    '
+  availabilityModel: 'Treated provisionally as a production database service that must satisfy the same high-availability expectations as the region application runtime.
+
+    '
+  scalabilityModel: 'Capacity is assumed to scale primarily through larger database nodes until a region-specific HA and replication design is confirmed.
+
+    '
+  recoverabilityModel: 'Failed nodes are rebuilt and rejoined through the region database recovery process backed by off-host backups.
+
+    '
+  failureDomain: 'Scoped to the Db2 deployment serving a single region.
+
+    '
+  backup:
+    strategy: unknown
+    platform: IBM Db2 native backup to managed storage
+    rto: unknown
+    rpo: unknown
+  ha:
+    mechanism: unknown
+  encryption:
+    atRest: required
+  accessControl:
+    model: unknown
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1R-SGGM
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ61-BDW0
+    key: availabilityModel
+  - ref: 01KT16XJ61-BDW0
+    key: recoverabilityModel
+  - ref: 01KT16XJ61-BDW0
+    key: failureDomain
+  - ref: 01KT16XJ61-BDW0
+    key: backup.platform
+  - ref: 01KT16XJ61-BDW0
+    key: encryption.atRest

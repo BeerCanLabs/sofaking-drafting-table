@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EE-CA4C
+name: Recliner Customer Profile Service → Recliner Region Instance Stores
+catalogStatus: stub
+source: 01KSM38KGE-BYBV
+label: reads and writes
+target: 01KZP9ZZ56-VW85
+notes:
+  background: "Customer Profile Service reads and writes the single-tenant Recliner region data boundary containing restricted customer records."
+capabilities: []

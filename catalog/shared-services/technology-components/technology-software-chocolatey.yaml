@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-YAD5
+type: technology_component
+ownerRole: technology-admin
+name: Chocolatey
+description: Windows package manager used by the Windows base automation to install common server utilities.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- package-management
+- windows
+classification: software
+vendor: Chocolatey Software
+productName: Chocolatey
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SRE automation uses Ansible win_chocolatey with latest package state.
+capabilities:
+- 01KT0XNZEY-7HWQ
+- 01KT0XNZEY-35Y2
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/windows_base/tasks/main.yml and vars/main.yml."

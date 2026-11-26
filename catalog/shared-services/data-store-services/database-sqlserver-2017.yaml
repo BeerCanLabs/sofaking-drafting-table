@@ -1,0 +1,63 @@
+schemaVersion: '1.0'
+uid: 01M0GDHSAM-586D
+type: data_store_service
+name: SQL Server 2017 DBMS Service
+description: 'Standard SQL Server 2017 database service. Fills the only gap in the generic database-sqlserver-*
+  series (2016, 2019, 2022 and 2025 already exist); the three existing SQL Server 2017 objects in this
+  catalog are all SOM-specific and are not reusable. Stubbed on 2026-08-20 during the Digital Stores
+  composition session because Digital Stores reported engine build 14.0.3495.9 and no generic 2017 service
+  existed to reference. Deliberately carries no availability, backup, encryption or access-control posture:
+  none of it was evidenced, and copying the 2019 or 2022 boilerplate would assert unverified facts. Shared
+  Services owns completing this object - see DraftingSession 01M0GBWMZJ-8XYB.'
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- service
+- dbms
+- sqlserver
+- stub
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-C74W
+primaryTechnologyComponent: 01KQQ5JT1T-QKGB
+deliveryModel: self-managed
+architectureNotes:
+  lifecycleRationale: SQL Server 2017 mainstream support ended 2022-10-11 and extended support ends 2027-10-12
+    per the Microsoft product lifecycle, as already recorded on TechnologyComponent 01KQQ5JT1T-QKGB. Set
+    to existing-only rather than deprecated because roughly fourteen months of extended support remain
+    as of 2026-08-20; the 2016 service by contrast is deprecated with its extended support ending 2026-07-14.
+    Expect this object to move to deprecated as the 2027 date approaches. See DecisionRecord 01M0GDHSAM-F64B.
+  hostSubstrate: 'Provisional, not confirmed. A self-managed DataStoreService must declare a host, so
+    this object references Windows Server 2019 on EC2 (01KQQ5JT03-C74W) - the substrate every existing
+    SQL Server 2017 object in this catalog already uses, and the closest era-matched host in the generic
+    series (the generic 2019 and 2022 services use Windows Server 2022 on EC2, 01KQQ5JT04-JKFX). The
+    substrate for the 2017 estate outside SOM was not confirmed by evidence: the only infrastructure
+    signal for Digital Stores is the database hostname aldb.dsh-aws.local, which indicates AWS but names
+    no OS version. Shared Services owns confirming or correcting this reference - see the open question
+    sqlserver-2017-shared-service-completion in DraftingSession 01M0GBWMZJ-8XYB.'
+  serviceAuthentication: Not confirmed. Shared Services to complete.
+  secretsManagement: Not confirmed. Shared Services to complete.
+  serviceLogging: Not confirmed. Shared Services to complete.
+  healthWelfareMonitoring: Not confirmed. Shared Services to complete.
+  availabilityModel: Not confirmed. The generic 2019 and 2022 services declare AlwaysOn Availability Groups;
+    whether the 2017 estate does is unverified and was not copied forward.
+  scalabilityModel: Not confirmed. Shared Services to complete.
+  recoverabilityModel: Not confirmed. Shared Services to complete.
+  failureDomain: Not confirmed. Shared Services to complete.
+  patchCurrency: One data point exists. The Digital Stores engine build was reported as 14.0.3495.9 on
+    2026-08-20, which is CU31 + GDR (KB5058714, released 2025-07-08). Seven later security GDR builds
+    have shipped since, the most recent being 14.0.3540.1 (KB5102337, 2026-07-14). Whether that build
+    is representative of the wider 2017 estate is unknown. See DecisionRecord 01M0GDHSAM-F64B.
+internalComponents:
+- ref: 01KQQ5JT1T-QKGB
+  role: function
+  configuration: default-tds-listener
+decisionRecords:
+- ref: 01M0GDHSAM-F64B
+  key: lifecycleRationale
+- ref: 01M0GDHSAM-F64B
+  key: patchCurrency

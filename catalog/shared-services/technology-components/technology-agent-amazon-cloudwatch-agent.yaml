@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-W022
+type: technology_component
+ownerRole: technology-admin
+name: Amazon CloudWatch Agent
+description: Agent installed by SRE automation to collect host metrics and logs for Amazon CloudWatch.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- observability
+- aws
+- agent
+classification: agent
+vendor: Amazon Web Services
+productName: Amazon CloudWatch Agent
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: Version is installed from the latest Windows AMD64 CloudWatch Agent package in SRE automation.
+capabilities:
+- 01KQQ4Q026-D04B
+- 01KQQ4Q026-98VD
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/cloudwatch/tasks/main.yml."

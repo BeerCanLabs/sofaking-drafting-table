@@ -1,0 +1,66 @@
+schemaVersion: '1.0'
+uid: 01KYAAZF97-HS3C
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Sofa King Central AWS Aurora PostgreSQL
+description: >-
+  AWS-managed Aurora PostgreSQL cluster used by Sofa King Central for
+  relational read models.
+version: 1.0.0
+deliveryModel: paas
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+tags:
+  - aws
+  - aurora
+  - postgresql
+  - sofaking-central
+  - database
+vendor: Amazon Web Services
+productName: Aurora PostgreSQL
+productVersion: '16.11'
+networkPlacement: vpc-private
+patchingOwner: aws-managed
+authenticationModel: other
+capabilities:
+  - 01KT0V5MCV-VD0Y
+notes:
+  sourceTicket: https://sofaking-example.atlassian.net/browse/OPS-561258
+  serviceAuthentication: >-
+    Sofa King Central uses PostgreSQL username and password authentication.
+    Kerberos is not enabled.
+  availabilityModel: >-
+    The cluster runs with one writer and two readers distributed across
+    multiple Availability Zones.
+  scalabilityModel: >-
+    Two Aurora readers provide read capacity in addition to the writer.
+  recoverabilityModel: >-
+    AWS Backup protects the cluster and creates immutable backup copies in S3.
+  failureDomain: >-
+    Scoped to the Sofa King Central Aurora cluster, its AWS account and VPC,
+    and the configured AWS region.
+deploymentConfigurations:
+  - id: username-password-authentication
+    name: Username and Password Authentication
+    description: >-
+      Sofa King Central applications authenticate with PostgreSQL usernames
+      and passwords; Kerberos is not enabled.
+  - id: multi-az-writer-readers
+    name: Multi-AZ Writer and Readers
+    description: >-
+      One writer and two readers are distributed across multiple Availability
+      Zones for availability and read capacity.
+    addressesQualities:
+      - availability
+      - scalability
+  - id: immutable-aws-backups
+    name: Immutable AWS Backups
+    description: >-
+      AWS Backup protects the Aurora cluster and creates immutable backup
+      copies in S3.
+    addressesQualities:
+      - recoverability

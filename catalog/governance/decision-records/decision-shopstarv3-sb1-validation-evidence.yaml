@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHZS-SN7A
+type: decision_record
+name: Shopstarv3 Sb1 Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KGD-A1F8
+linkedObject: 01KSM38KGD-A1F8
+decisionRationale: 'runtimeRequirement: Static web assets served by the hosting runtime; no standalone application runtime.'

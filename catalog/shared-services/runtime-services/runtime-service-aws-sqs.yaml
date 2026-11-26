@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-0C4P
+type: runtime_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Simple Queue Service (SQS)
+description: 'AWS-managed serverless message queuing service.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - messaging
+  - serverless
+vendor: Amazon Web Services
+productName: Simple Queue Service
+productVersion: managed
+authenticationModel: iam
+capabilities:
+  - 01KT0V5MCV-KT72
+architectureNotes:
+  resilienceModel: Managed multi-AZ high availability.
+  configurableSurface: Queue settings, visibility timeouts, and DLQ configurations.
+  failureDomain: Scoped to the AWS region.
+decisionRecords:
+  - ref: 01KSNAW2AK-79WP
+    key: resilienceModel
+  - ref: 01KSNAW2AK-79WP
+    key: configurableSurface
+  - ref: 01KSNAW2AK-79WP
+    key: failureDomain
+  - ref: 01KSNAW2AK-79WP
+    capability: 01KT0V5MCV-KT72
+deliveryModel: paas

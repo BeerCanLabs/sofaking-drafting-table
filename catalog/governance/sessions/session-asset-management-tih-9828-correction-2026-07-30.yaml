@@ -1,0 +1,317 @@
+schemaVersion: '1.0'
+uid: 01KYRVK1NJ-M3CN
+type: drafting_session
+name: Asset Management DRAFT Model Correction (TRH-9828)
+description: Corrects the DRAFT model for Asset Management (AM / Trackweb-IT) so it is described by exactly one accurate Software Deployment Pattern, satisfying APEX Architecture-vector L1 / DRAFT rubric Baseline (1). Repurposes 01KSM38KF8-TKMW as the single AM SDP, wires in the 12 real AM components with facts confirmed by reading the local repository clones, retires the redundant IMM-rebuild stub, folds AM content out of the bulk whm dump, and corrects two DecisionRecords whose evidence traced to the wrong system.
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- drafting-session
+- asset-management
+- trackweb
+- tih-5233
+- apex
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KF8-TKMW
+sourceArtifacts:
+- name: TRH-9828 - Correct the DRAFT model for AM to reach APEX Architecture L1
+  type: jira-ticket
+  location: https://sofaking-example.atlassian.net/browse/TRH-9828
+  notes: Primary implementation ticket, drafted from spike TRH-0231.
+- name: Asset Management Product Ownership and Component Verification Questions
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/~7120201cb9eab1a3cf41c0930d3cf95a4e749e/pages/16800335071/Asset+Management+Product+Ownership+and+Component+Verification+Questions
+  notes: Completed product-owner verification used for the 2026-08-06 catalog correction; confirms ownership, AWS deployment, availability, data classification, dependencies, failure domains, and remaining gaps.
+- name: AM in DRAFT - Current State & APEX Architecture-Vector Baseline Path (TRH-0231)
+  type: document
+  location: https://sofaking-example.atlassian.net/wiki/spaces/BRS/pages/11779547890/AM+in+DRAFT+Current+State+APEX+Architecture-Vector+Baseline+Path+TRH-0231
+  notes: Spike that diagnosed the SDP conflation and proposed the remediation plan; mirrored locally at spikes/TRH-0231/.
+- name: BeerCanLabs/sk-WHM_AM_App (+ WHM_AM_BuildArtifacts)
+  type: repository
+  location: C:\Codebase\AMWeb\WHM_AM_App
+  notes: Trackweb-IT primary application; read directly for confirmed auth/secrets/logging/monitoring/availability/scalability/recoverability/failure-domain facts.
+- name: BeerCanLabs/sk-WHM_AM_API
+  type: repository
+  location: C:\Codebase\WHM_AM_API
+  notes: Read directly, including ERP_Integration_Gap_Analysis.md and Integrations_API_Reference.md.
+- name: BeerCanLabs/sk-WHM_AM_SSIS
+  type: repository
+  location: C:\Codebase\WHM_AM_SSIS
+  notes: Read directly; confirmed Delinea/Thycotic Secret Server usage.
+- name: BeerCanLabs/sk-WHM_AM_ETL_MSA
+  type: repository
+  location: C:\Codebase\WHM_AM_ETL_MSA
+  notes: Read directly; confirmed AWS Lambda serverless architecture and per-MDM-system microservices.
+- name: BeerCanLabs/sk-WHM_AM_IDCore
+  type: repository
+  location: C:\Codebase\WHM_AM_IDCore
+  notes: Read directly; corrected a factually wrong prior DecisionRecord about its runtime nature.
+- name: BeerCanLabs/sk-WHM_Brannock_ETL
+  type: repository
+  location: C:\Codebase\WHM_Brannock_ETL
+  notes: Read directly; corrected a factually wrong prior DecisionRecord about its runtime nature.
+- name: BeerCanLabs/sk-WHM_Brannock_NET
+  type: repository
+  location: C:\Codebase\WHM_Brannock_NET
+  notes: Read directly; confirmed as a genuine compiled dependency of WHM_AM_API only.
+- name: BeerCanLabs/sk-WHM_AM_Mobile (+ Mobile_API)
+  type: repository
+  location: C:\Codebase\WHM_AM_Mobile ; C:\Codebase\Mobile\WHM_AM_Mobile_API
+  notes: Read directly; corrected the prior repository-discovery language/classification guess (Java/api-service -> Kotlin+Swift/other).
+- name: BeerCanLabs/sk-WHM_AM_Notifications
+  type: repository
+  location: C:\Codebase\WHM_AM_Notifications
+  notes: Read directly.
+- name: BeerCanLabs/sk-WHM_AM_ReportServer
+  type: repository
+  location: C:\Codebase\WHM_AM_ReportServer
+  notes: Read directly.
+generatedObjects:
+- name: Asset Management - Pattern
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KF8-TKMW
+  notes: Rewritten in place (same uid) to describe only AM; IMR/IMM content removed.
+- name: Whm Software Deployment Pattern
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KF8-G9FS
+  notes: 'AM entries removed and folded into TKMW; HelpDesk and IMM entries retained. A same-day follow-up briefly relocated the HelpDesk and IMM component files to separate team folders and retired this pattern as empty, but the product owner confirmed both belong under brannock-asset-management-engineering and the move was reverted the same day - files and this pattern are back to their original location/state.'
+- name: Asset Management runsOn Correction
+  type: decision_record
+  status: created
+  ref: 01KYSEGRA5-W41Q
+  notes: New DecisionRecord (2026-07-30 follow-up) repointing 6 AM components from a ".NET Core" stub to the correct IIS Standard Web Service runtime.
+- name: Display Materials Management Rebuild
+  type: software_deployment_pattern
+  status: created
+  ref: 01KSM38KF8-W03W
+  notes: Retired - redundant with 01KSM38KFD-1G0D.
+- name: Asset Management Scope Correction
+  type: decision_record
+  status: created
+  ref: 01KYRT1P14-Y2RH
+  notes: New DecisionRecord capturing the scope, merge, and disposition decisions for this session.
+- name: Asset Management - Pattern Validation Evidence
+  type: decision_record
+  status: created
+  ref: 01KT16XHKS-XBZJ
+  notes: Corrected so its evidence traces to AM, not IMR.
+- name: Whm Am Idcore Validation Evidence
+  type: decision_record
+  status: created
+  ref: 01KT16XHJY-YBXH
+  notes: Corrected - the original runtimeRequirement finding ("no application runtime") was factually wrong.
+- name: Whm Brannock Etl Validation Evidence
+  type: decision_record
+  status: created
+  ref: 01KT16XHK4-94ZA
+  notes: Corrected - the original runtimeRequirement finding ("static web assets, no runtime") was factually wrong.
+- name: Whm Am App (merged with retired Legacy Trackweb-IT Platform / VQ4B)
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-QFJ1
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am API
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-XZ3E
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Ssis
+  type: data_component
+  status: created
+  ref: 01KSM38KFB-FJX4
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Etl Msa
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-G3T3
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Idcore
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-YGSN
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Brannock Etl
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-VK1S
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Brannock Net
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-GX9G
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Mobile
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-27S3
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Mobile API
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-D6MJ
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Notifications
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-7ZWT
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Reportserver
+  type: product_component
+  status: created
+  ref: 01KSM38KFB-XABQ
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm Am Buildartifacts
+  type: data_component
+  status: created
+  ref: 01KSM38KFB-4JYM
+  notes: Enriched with confirmed facts from the real repository.
+- name: Whm SofaKingsecuritylibrary
+  type: product_component
+  status: created
+  ref: 01KSM38KFC-566V
+  notes: Enriched; distinguished from the HelpDesk-scoped _HD variant.
+- name: 17 relationship objects (AM internal edges + external dependencies)
+  type: relationship
+  status: created
+  ref: 01KYRV1VC4-7C3G
+  notes: 'First of 17 new relationships (see catalog/relationships/relationship-whm-am-*.yaml and relationship-whm-brannock-etl-*.yaml for the full set): internal AM edges plus external dependencies (SAP, Sofa King ERP, Google Workspace, JAMF, Intune, Mosyle, Delinea Secret Server, AWS Secrets Manager, Brannock.NET, SofaKingSecurityLibrary).'
+unresolvedQuestions:
+- id: runsOn-runtime-mismatch
+  question: 'Six AM components (QFJ1, XZ3E, YGSN, D6MJ, 7ZWT, XABQ) declare runsOn 01KQQ5JT1E-9CKW (".NET Core Application Service" stub), but all six are confirmed .NET Framework 4.x IIS-hosted applications, not .NET Core. What is the correct shared runtime_service/host pairing for AM''s legacy IIS estate?'
+  status: answered
+  reason: 'Resolved 2026-07-30 (user spotted the wrong technology rendering in the DRAFT browser for QFJ1 and asked directly). Repointed all 6 components to 01KQQ5JT1F-HZTZ (''IIS Standard Web Service'' - host 01KQQ5JT04-JKFX, Windows Server 2022 EC2, non-deprecated; technology Microsoft IIS 10), the same host the pre-merge hand-authored ''Legacy Trackweb-IT Platform'' stub (former VQ4B) already used, rather than either deprecated WS2016-on-EC2 alternative. See DecisionRecord 01KYSEGRA5-W41Q.'
+  currentBestGuess: HZTZ is a solid fit for the IIS/technology-stack correction. Whether the underlying host is truly EC2 or actually the on-prem brannocksoft.local network-share estate described in repo research remains a residual, lower-priority precision question - not reopened here since it doesn''t change the runtime_service selection.
+  impact: runsOn now correctly reflects .NET Framework/IIS instead of .NET Core; resolves both the browser display issue and the Established (2)/Apex (3) maturity gap.
+  relatedObjects:
+  - ref: 01KSM38KFB-QFJ1
+  - ref: 01KSM38KFB-XZ3E
+  - ref: 01KSM38KFB-YGSN
+  - ref: 01KSM38KFB-D6MJ
+  - ref: 01KSM38KFB-7ZWT
+  - ref: 01KSM38KFB-XABQ
+- id: helpdesk-sdp-disposition
+  question: Should HelpDesk (WHM_HD_*, filed under 01KSM38KF8-G9FS / brannock-asset-management-engineering) get its own dedicated SDP or team folder, mirroring what this ticket did for AM?
+  status: answered
+  reason: 'Resolved 2026-07-30: HelpDesk already has a dedicated SDP (01KQQ5JT1J-BRF4, GetHelp, in catalog/engineering/helpdesk-engineering/) that references these exact components by uid regardless of which folder the component files themselves sit in. A same-day attempt to also relocate the 7 WHM_HD_* files plus WHM_SofaKingSecurityLibrary_HD into helpdesk-engineering/ was reverted at the product owner''s direction - they confirmed these files are correctly kept under brannock-asset-management-engineering.'
+  currentBestGuess: File placement under brannock-asset-management-engineering is intentional and settled, not a gap. GetHelp's own objects (in helpdesk-engineering/) still declare owner.team brannock-asset-management-engineering rather than a dedicated HelpDesk team; that remains a separate, lower-priority open question if the user wants to revisit it later.
+  impact: No further action needed on file placement.
+  relatedObjects:
+  - ref: 01KQQ5JT1J-BRF4
+  - ref: 01KSM38KF8-G9FS
+- id: imr-imm-service-group-handoff
+  question: 'Three objects removed from TKMW during this correction have no home in 01KSM38KFD-1G0D yet: 01KQQ5JT05-HTRA and 01KQQ5JT05-0C4P (SNS/SQS messaging) and 01KQQ5JT05-CT7X (Glue/Lambda/Step Functions ETL, distinct from 1G0D''s own 12C2/WX2Z ETL pipeline). Where should these land?'
+  status: open
+  reason: This is explicitly the IMM fast-follow ticket's job (per spikes/TRH-0231/implementation-ticket-draft.md, Ticket 2), not this ticket's. A same-day attempt to relocate 1G0D and its component files (WHM_IM, WHM_Zebra_Tools, WHM_Integrations, trackweb-im-legacy, the IM IIS runtime service) to a new team folder was reverted at the product owner's direction - they belong under brannock-asset-management-engineering, confirmed 2026-07-30.
+  currentBestGuess: Product ownership confirmed IMR no longer exists. IMM engineering must determine whether these objects are current IMM infrastructure or obsolete IMR artifacts that should be retired.
+  impact: These three objects are currently unreferenced by any SDP until the IMM ticket picks them up.
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: secrets-management-inconsistency
+  question: Should AM standardize on Delinea Secret Server (already used by SSIS and ETL_MSA) for the legacy web/API/mobile tier, which currently stores secrets in plaintext config files?
+  status: open
+  reason: A real, confirmed architectural inconsistency surfaced during this correction, not previously visible because the tier's secrets fields all read "not confirmed by repository discovery."
+  currentBestGuess: Standardizing on Secret Server across the whole estate would close a real security gap, but this is a product/security decision beyond DRAFT modeling scope.
+  impact: Affects Established (2) maturity (approved technology, no deprecated/inconsistent patterns) - does not block Baseline (1).
+  relatedObjects:
+  - ref: 01KSM38KFB-QFJ1
+  - ref: 01KSM38KFB-XZ3E
+  - ref: 01KSM38KFB-D6MJ
+  - ref: 01KSM38KFB-7ZWT
+  - ref: 01KSM38KFB-XABQ
+- id: deployment-target-vocabulary-gap
+  question: Is the approved aws-us-east-1 deployment target accurate for AM, or is a new Brannock on-prem target required?
+  status: answered
+  reason: Product ownership confirmed on 2026-08-06 that AM is not on-premises; production and non-production run in separate AWS accounts and networks in us-east-1.
+  currentBestGuess: aws-us-east-1 is the correct approved deployment-target value for all AM tiers, including serverless ETL.
+  impact: Removes the stale on-prem vocabulary gap and corrects the serverless ETL service group from us-east-2 to us-east-1.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+- id: sql-version-and-store-model
+  question: How should the owner-reported SQL Server 2016/2008-compatibility estate map to the existing SQL Server 2019 shared service, and which listed databases are logical DataComponents versus independently deployed DataStoreServices?
+  status: open
+  reason: The questionnaire conflicts with the current shared service reference and leaves required metadata incomplete for several databases, including classification, PII status, ownership/callers, and sharing model. TIPIdentityCore and TrackwebAPI were requested but omitted from the completed database table.
+  currentBestGuess: Model one physical SQL Server deployment service plus distinct logical database/DataComponent records, but Architecture and the AM owner must confirm the actual topology and version before changing the shared service.
+  impact: Blocks asserting a complete and internally consistent L1 database inventory.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+  - ref: 01KQQ5JT01-QFN5
+- id: nonprod-ssis-host-verification
+  question: Is AWSBRSPRDLIST6 really the non-production SSIS host, or is the PRD-named value a copy/paste error?
+  status: open
+  reason: The completed non-production deployment answer names a production-pattern host.
+  currentBestGuess: Treat the hostname as unverified until AM engineering confirms it.
+  impact: Does not block the product boundary, but prevents accurate environment-specific deployment evidence.
+  relatedObjects:
+  - ref: 01KSM38KFB-FJX4
+- id: helpdesk-contract-library-model
+  question: Should whm_trackwebit_contract_helpdesk be modeled as an AM ProductComponent or only as an in-process library dependency, and which AM components consume it?
+  status: open
+  reason: The questionnaire identifies the missing repository and .NET Framework 4.5/library classification but does not provide its owning team, lifecycle, consumers, or deployment status.
+  currentBestGuess: It is likely a non-deployed contract library for the AM-to-HelpDesk boundary; do not create a network service or deployable component until confirmed.
+  impact: Blocks claiming the AM component/dependency inventory is exhaustive.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+- id: dependency-status-and-connection-conflicts
+  question: Which dependencies are active, planned, or retired, what is the AM-to-HelpDesk direction/authentication, and does AM Web call Brannock ETL over SQL/TDS or HTTP?
+  status: open
+  reason: Only SAP has an explicit lifecycle status; Salesforce may be mapping-only; the HelpDesk path lacks connection details; and the questionnaire's SQL/TDS answer conflicts with prior repository evidence for HTTP.
+  currentBestGuess: Preserve the known dependency inventory while leaving disputed relationship details incomplete.
+  impact: Blocks treating all dependency relationships as fully verified, but explicit tracking is sufficient for Baseline once validation passes.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+  - ref: 01KSM38KFC-VK1S
+- id: reference-architecture-fit
+  question: Should AM continue following Hybrid Legacy to Cloud Modernization (01KQQ5JT1D-DAAM), given that the reference contains on-prem and us-east-2 assumptions while AM is AWS-only in us-east-1?
+  status: open
+  reason: Product ownership could not name a fully applicable approved reference architecture; the current reference is catalogStatus incomplete and existing-only.
+  currentBestGuess: Retain it temporarily as the closest pattern with this explicit deviation, pending Architecture Review Board disposition.
+  impact: Does not block L1 Baseline; it is an Established-level governance decision.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+  - ref: 01KQQ5JT1D-DAAM
+- id: stale-fork-repository
+  question: Is C:\Codebase\whm-am-app-fork (a duplicate Trackweb-IT solution tree with no CLAUDE.md/context packs) safe to delete, or does it hold in-progress work?
+  status: open
+  reason: Confirmed with the user during this session to ignore it for DRAFT modeling purposes, but its disposition on disk was not otherwise addressed - out of scope for a DRAFT catalog change.
+  currentBestGuess: Likely a stale clone safe to remove, but this is a local filesystem question, not a catalog question, and needs the user's own confirmation before deletion.
+  impact: No catalog impact; purely local workspace hygiene.
+  relatedObjects: []
+nextSteps:
+- id: shared-services-runsOn-review
+  action: Ask Shared Services to confirm or author the correct runtime_service/host pairing for AM's legacy .NET Framework IIS estate and update runsOn on the 6 affected components.
+  status: open
+  owner: architecture-review-board
+  relatedObjects:
+  - ref: 01KSM38KFB-QFJ1
+- id: helpdesk-sdp-split-decision
+  action: Decide whether HelpDesk should be split out of 01KSM38KF8-G9FS into its own SDP.
+  status: open
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KF8-G9FS
+- id: imm-fast-follow-ticket
+  action: Execute the IMM fast-follow to make 1G0D IMM-only and determine whether HTRA/0C4P/CT7X are current IMM infrastructure or obsolete IMR artifacts to retire.
+  status: open
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KFD-1G0D
+- id: deployment-target-vocabulary-proposal
+  action: Confirm the deployment-target vocabulary after product-owner review.
+  status: done
+  owner: draft-admins
+  notes: Product ownership confirmed AM is AWS-only in us-east-1; no Brannock on-prem vocabulary value is needed for AM.
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW
+- id: validate-and-open-pr
+  action: Run validate.py, regenerate the browser, and open a PR for TRH-9828 after user review.
+  status: open
+  owner: brannock-asset-management-engineering
+  relatedObjects:
+  - ref: 01KSM38KF8-TKMW

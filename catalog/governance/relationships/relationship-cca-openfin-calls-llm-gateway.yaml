@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 8HQTEJTSFT-A37A
+type: relationship
+name: CCA Openfin Runtime → LLM Gateway (direct / rollback path)
+catalogStatus: incomplete
+source: 01KYWQE2F3-CZ2H
+label: calls (rollback)
+target: 01KYWQE2F8-GGGG
+description: >-
+  [DOCUMENTED] Direct Divan-to-LLM-Gateway path. This is now the ROLLBACK route:
+  the live default routes each Divan through the Guardfin guardrail first
+  (Divan → Guardfin → LLM Gateway → Bedrock). Divans never call models
+  directly on the internet; the Gateway enforces model-access policy and routes to
+  approved providers (AWS Bedrock only at PoC stage).
+technology: HTTPS (OpenAI-compatible API to LiteLLM)
+direction: synchronous
+flow: outbound
+tags:
+  - cca
+  - governed-automation
+  - model-routing

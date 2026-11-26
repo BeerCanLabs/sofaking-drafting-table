@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ04-FCEX
+type: relationship
+name: GRRFTP1 File Transfer Service -> Sofa King Central Pattern
+catalogStatus: incomplete
+source: 01KYN1RHK6-FTP1
+label: exchanges files with
+target: 01KQQ5JT1J-DWT1
+technology: FTP / FTPS / SFTP
+direction: asynchronous
+flow: bidirectional
+notes: >-
+  Confirmed active deployment. Owner research on 2026-08-03 verified that
+  SKIntegrationService is running as a Windows file-watcher service on the
+  Windows Server 2016 VMware VM GRRLVEUTIL1. It observes Sofa King Central export folders under
+  \\grrftp1.rotaprod.example\Usr\FC\Production\*\Exports and writes transformed
+  files under \\grrftp1.rotaprod.example\Usr\*\ToRota\. The Windows service runs
+  under the SVC_AES_PRD_UTIL_SCH service account on a single VMware VM with no
+  standby server; GRRLVEUTIL1 is restored from a VM backup after failure.
+  Nagios monitors GRRLVEUTIL1 host health but does not monitor the
+  SKIntegrationService Windows service. Current failure detection is
+  undocumented; the contributor conjectures that Sofa King users notice a
+  missing transformation and then RDP to GRRLVEUTIL1 to inspect the service.
+  SKIntegrationService is configured for automatic startup when the VM boots.
+  It is not configured to restart automatically after an isolated service
+  crash.
+  File-volume evidence, recovery objectives and test evidence, application
+  failure handling, processing and error-log destinations, current code
+  ownership, and the source repository remain undocumented.
+capabilities: []

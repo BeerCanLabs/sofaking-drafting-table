@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-V1BQ
+type: product_component
+ownerRole: engineer
+name: Legacy Service
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-legacy-service.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- legacy
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-legacy-service
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-legacy-service
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: .circleci/config.yml; Dockerfile; package-lock.json; package.json; test/data/CCStandardsContent.json; test/data/CCTree.json; test/data/ClientLicenses.json; test/data/ClientMCBit.json; test/data/ClientPersonnel.json; test/data/ClientPersonnelBookmark.json; test/data/ClientPersonnelContentFilters.json; test/data/ClientPersonnelDashboard.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

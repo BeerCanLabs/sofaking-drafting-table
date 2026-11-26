@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ0-8ENW
+type: object_patch
+name: Sofa King Configuration Management capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Configuration Management capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0XNZEY-35Y2
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1N-WH7R
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only for AWS instance configuration management and automation.
+    - ref: 01KQQ5JT1N-KJ19
+      lifecycleStatus: deprecated
+      notes: Assumed deprecated legacy Chef client.
+    - ref: 01KQQ5JT1N-DXHG
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only for remaining Chef-managed estates.
+    - ref: 01KQQ5JT1P-23A3
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only for Microsoft Configuration Manager managed estates.
+    - ref: 01KQQ5JT1Q-EFSQ
+      lifecycleStatus: existing-only
+      notes: Maintained for AWS command-line automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1Q-MVCF
+      lifecycleStatus: existing-only
+      notes: Maintained for AWS PowerShell automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1R-YAD5
+      lifecycleStatus: existing-only
+      notes: Maintained for Windows package installation automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1R-W4Y4
+      lifecycleStatus: existing-only
+      notes: Maintained for database administration automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1S-9ACG
+      lifecycleStatus: existing-only
+      notes: Maintained for PowerShell package provider workflows identified in SRE automation.
+    - ref: 01KQQ5JT1S-C50S
+      lifecycleStatus: retired
+      notes: PowerShell 7.3 is past vendor support and should be replaced by a supported PowerShell release.
+    - ref: 01KQQ5JT1S-YV7R
+      lifecycleStatus: existing-only
+      notes: Maintained for supported PowerShell 7 automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1T-3AJ9
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server administration workflows identified in SRE playbooks.
+    - ref: 01KQQ5JT1T-ZMYW
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server administration workflows identified in SRE playbooks.

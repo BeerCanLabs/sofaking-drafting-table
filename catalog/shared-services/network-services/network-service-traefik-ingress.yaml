@@ -1,0 +1,52 @@
+schemaVersion: '1.0'
+uid: 01KYAXMZ7H-72BR
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: Traefik Kubernetes Ingress Service
+description: >-
+  Shared EKS ingress service that routes HTTP and HTTPS requests from the
+  cluster edge to Kubernetes application Services using Traefik Proxy.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - traefik
+  - ingress
+  - reverse-proxy
+  - eks
+deliveryModel: self-managed
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KYAXMZ7H-X6CC
+capabilities:
+  - 01KSWVZSZ5-M0FR
+networkFunction: Kubernetes ingress and reverse proxy routing
+networkTopology: >-
+  Cluster-edge NodePort ingress on Sofa King EKS application clusters,
+  forwarding requests to product Services and pods.
+protocols:
+  - HTTP
+  - HTTPS
+internalComponents:
+  - ref: 01KYAXMZ7H-X6CC
+    role: function
+notes:
+  sourceEvidence: >-
+    Read-only inspection of chaise and le1 on 2026-07-24 confirmed active
+    Traefik v3.3.6 DaemonSets selected by NodePort Services on ports 80 and
+    443. HCM RH Ingress resources use the Traefik ingress class. OPS-933430
+    read-only inspection on 2026-08-10 found two Traefik-annotated Ingress
+    objects in ottm-dev, two in ottm-stage, and one in ottm-prod. Their status
+    fields were empty, the only registered IngressClass was alb, and named
+    public and internal Traefik ALBs were observed in the development and stage
+    AWS VPCs but not the production VPC. This records observed current state
+    without inferring controller ownership or a direct status mapping.
+  ottomanDisposition: >-
+    The Ottoman owner confirmed on 2026-08-10 that the current Traefik
+    arrangement is intentional.
+  ownershipStatus: >-
+    Recorded as an existing shared service pending lifecycle approval and
+    owner enrichment by Platform Engineering or the Architecture Review Board.

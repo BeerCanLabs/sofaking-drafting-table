@@ -1,0 +1,60 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT0K-TN7W
+type: product_component
+ownerRole: engineer
+name: Sofa King Central Estate
+aliases:
+- Sofa King Central Platform
+description: >-
+  Product-level aggregate for Sofa King Central. Carries the estate-wide facts that
+  belong to no single service: the ingress path, the hybrid runtime estate confirmed
+  under OPS-255153, Okta authentication, and central logging. Per-service persistence
+  and call edges are modelled on the individual components and are deliberately not
+  duplicated here.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- hcm
+- microservices
+- event-sourcing
+- hybrid-cloud
+- estate-aggregate
+- product-component
+repoUrl: TBD
+classification: api-service
+notes:
+  aggregateScope: >
+    Not a deployable service and has no repository - repoUrl is intentionally TBD. It
+    exists so cross-cutting facts have a single owner, and carries four kinds of edge:
+    inbound ingress (AWS Application Load Balancer, Kong Gateway and HAProxy route here,
+    with Imperva WAF forwarding to the ALB), runs-on for the four runtimes spanning the
+    estate, Okta authentication, and central logging. Anything belonging to one named
+    service belongs on that service instead.
+  supersededRole: >
+    Until 2026-07-29 this object doubled as a remainder placeholder for roughly 30
+    unmodelled services, and the whole product's data-store relationships hung off it.
+    Source inspection replaced that role: the sand-* public API tier, the event-sourced
+    msvc-* tier, CoreHR, the mesh BFF, the eventing workers and the UI libraries are now
+    modelled individually with their own persistence and call edges. The six aggregate
+    data-store calls edges were removed as redundant. The EventStoreDB edge in particular
+    is now expressed as 13 per-service edges, so removing the aggregate did not remove
+    EventStore from the catalog.
+  technologyStack: Built on .NET Framework, .NET Core, Angular, and Node.js.
+  deploymentModel: Hybrid hosting on EC2/IIS and EKS, with serverless components on
+    Lambda.
+  runtimeRequirement: >
+    Confirmed by product owner (2026-07-24, OPS-255153): hybrid runtime estate
+    spanning legacy .NET Framework/IIS on EC2, .NET Core/.NET containers on
+    EKS (.NET Core Application Service), SQS-triggered Lambda functions (AWS
+    Lambda Runtime), Node.js workloads (Node.js Application Service), and
+    Redis/ElastiCache caching. Cloud Engineering infrastructure code confirms
+    the IIS/EC2 fleet uses Windows Server 2022 images, represented by the IIS
+    Standard Web Service rather than the deprecated WS2016 runtime pattern.
+decisionRecords:
+- ref: 2YPE08XABA-QDW5
+  key: runtimeRequirement

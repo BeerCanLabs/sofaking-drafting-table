@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP87-2WW1
+type: relationship
+name: 'Settee Jarvis → Sofa King Central Msvc UI Config'
+catalogStatus: stub
+source: 01KSM38KGJ-MRK0
+target: 01KYQ4D9S1-D1J5
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Fetches Wingman and UI configuration at bootstrap.

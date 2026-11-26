@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-F6Q1
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server 2019
+description: Standard SQL Server 2019 database engine baseline for supported services.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- sqlserver
+classification: software
+vendor: Microsoft
+productName: SQL Server
+productVersion: '2019'
+vendorLifecycle:
+  mainstreamSupportEnd: 2025-02-28
+  extendedSupportEnd: 2030-02-28
+  notes: Extended support ends in February 2030.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-tds-listener
+  name: Default TDS Listener
+  description: Default SQL Server Database Engine listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 1433
+    protocol: TDS
+    direction: inbound
+    description: Default SQL Server Database Engine client listener.

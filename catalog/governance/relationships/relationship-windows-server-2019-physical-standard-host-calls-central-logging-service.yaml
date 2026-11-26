@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZA-DZZN
+name: Windows Server 2019 Physical Standard Host → Central Logging Service
+catalogStatus: stub
+source: 01KQQ5JT04-F2AX
+label: calls
+target: 01KQQ5JT1E-A6M5
+notes:
+  background: "Windows event and application logs are forwarded centrally."
+capabilities:
+- 01KQQ4Q026-D04B

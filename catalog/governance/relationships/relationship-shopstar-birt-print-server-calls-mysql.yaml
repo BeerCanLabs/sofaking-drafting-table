@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E2-CFPK
+name: Eclipse BIRT Reporting Service → MySQL 8 DBMS Service
+catalogStatus: incomplete
+source: 01KQQ5JT1F-V6XM
+label: reads from
+target: 01KQQ5JT00-WKWF
+description: >-
+  shopstar print workers on pr70phl through pr95phl connect directly to tenant
+  MySQL databases and render reports with BIRT embedded in each print-engine
+  JVM.
+technology: MySQL JDBC
+direction: synchronous
+flow: outbound
+tags:
+  - shopstar-v3
+  - printing
+  - source-reconciled
+notes:
+  background: >-
+    BIRT, printexport, and printmulti workloads are distributed across the
+    production print fleet. Normal BIRT reports do not flow through AccuRoute.
+    The target shared-service UID identifies the existing MySQL service family
+    only; its generic Group Replication, HA, RPO, and RTO characteristics do
+    not apply to shopstar.
+  unresolved: >-
+    Exact print-worker-to-tenant-database assignments are not yet documented.
+    The current engine migration inventory covers primary host groups only and
+    does not establish replica engine status independently.
+capabilities: []

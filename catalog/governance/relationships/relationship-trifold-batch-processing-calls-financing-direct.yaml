@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-CFW7
+type: relationship
+name: Trifold Batch Processing → Financing Direct (eMedNY)
+source: 01KX421X4P-FE7F
+externalTarget: Financing Direct / eMedNY Claims Submission Service
+label: submits claims to
+technology: EDI / file transfer
+direction: asynchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifold TFS codebase (MDClaimService.txt, MDClaimServiceBatch.txt, SK.Financing.eMedNY, SK.Financing.FinancingDirect.ServiceClient); no catalog object represents the external Financing claims platform.

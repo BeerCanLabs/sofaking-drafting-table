@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Q-6C5F
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft Windows Server 2019
+description: Current Windows Server 2019 baseline for supported production services.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- windows
+- os
+classification: operating-system
+vendor: Microsoft
+productName: Windows Server
+productVersion: '2019'
+vendorLifecycle:
+  mainstreamSupportEnd: 2024-01-09
+  extendedSupportEnd: 2029-01-09
+  notes: Extended support ends in January 2029.
+capabilities:
+- 01KQQ4Q026-QM2X

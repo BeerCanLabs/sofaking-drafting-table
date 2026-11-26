@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT04-6F8T
+type: network_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS CloudFront
+description: 'Global content delivery network (CDN) service.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - cdn
+  - edge
+vendor: Amazon Web Services
+productName: CloudFront
+productVersion: managed
+authenticationModel: other
+networkFunction: CDN and caching
+networkTopology: global edge network distribution serving static assets and dynamic content from origin targets
+protocols:
+  - HTTPS
+  - HTTP
+capabilities:
+  - 01KT0V5MCV-HZ37
+architectureNotes:
+  resilienceModel: Global edge network with multi-AZ origin redundancy.
+  configurableSurface: Distributions, origins, behaviors, and cache policies.
+  failureDomain: Global with regional edge failover.
+decisionRecords:
+  - ref: 01KSNAW2AK-MG67
+    key: resilienceModel
+  - ref: 01KSNAW2AK-MG67
+    key: configurableSurface
+  - ref: 01KSNAW2AK-MG67
+    key: failureDomain
+  - ref: 01KSNAW2AK-MG67
+    capability: 01KT0V5MCV-HZ37
+deliveryModel: paas

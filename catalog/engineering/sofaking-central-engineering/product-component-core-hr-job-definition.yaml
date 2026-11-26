@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KYQ4D9RV-KPHB
+type: product_component
+ownerRole: engineer
+name: Core HR Job Definition
+description: CoreHR job-definition service backing the jobDefinitions endpoint; successor to the legacy JobType model.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- source-inspection
+- sofaking-central
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-core-hr-job-definition
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-core-hr-job-definition
+  observedProjects: SK.CoreHR.JobDefinition.Service; SK.CoreHR.JobDefinition.Router; Cdk
+  observedTargetFrameworks: net8.0
+  observedPersistence: DynamoDB, Aurora PostgreSQL, S3. Publishes to SQS and SNS; includes Lambda components.
+  serviceAuthentication: Authentication model was not confirmed by source inspection; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by source inspection; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by source inspection; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by source inspection; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by source inspection.
+  scalabilityModel: Scalability model was not confirmed by source inspection.
+  recoverabilityModel: Recoverability model was not confirmed by source inspection.
+  failureDomain: Failure domain was not confirmed by source inspection.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-core-hr-job-definition
+  repositoryPrimaryLanguage: C#
+  publicRoute: core-hr-job-definition.use1.sofaking.example/api
+  consumedBy: msvc-List declares JobDefinitionService as a service dependency.
+  sourceEvidence: 'Local working-copy inspection 2026-07-29: project files, packages.config/*.csproj package references, and appsettings/Web.config connection strings.'

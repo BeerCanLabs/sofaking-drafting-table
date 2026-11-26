@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: QP3B6XMDYQ-377X
+name: Ottoman Sofa King Admin BFF → Ottoman Invitation Service
+catalogStatus: stub
+source: 01KSM38KFW-W42S
+label: calls
+target: 01KSM38KFX-ETDW
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via .env.example mesh URL and InvitationModule import in apps/plat-bff-sofaking-admin. Already recorded informally in architectureNotes.dependencies; formalized here as a Relationship object."
+capabilities: []

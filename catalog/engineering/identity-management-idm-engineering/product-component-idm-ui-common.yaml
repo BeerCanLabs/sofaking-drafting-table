@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFA-XPR2
+type: product_component
+ownerRole: engineer
+name: IDM UI Common
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-IDM-UI-Common.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: identity-management-idm-engineering
+  contact: identity-management-idm-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- idm
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-IDM-UI-Common
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-IDM-UI-Common
+  observedRuntimeSignals: node, readme, teamcity
+  observedManifestPaths: .vscode/launch.json; .vscode/tasks.json; package-lock.json; package.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

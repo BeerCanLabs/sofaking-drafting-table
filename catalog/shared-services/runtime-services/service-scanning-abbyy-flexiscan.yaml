@@ -1,0 +1,54 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-1YGS
+type: runtime_service
+ownerRole: technology-admin
+subtype: service
+name: ABBYY FlexiScan Scanning Service
+description: "Document scanning service running ABBYY FlexiScan on Windows Server 2016 on Amazon EC2. Lifecycle is deprecated - inherited from the WS2016 host. No Sofa King first-party code; this is a pure vendor runtime used off the shelf. Reusable by any product requiring document scanning capability.\n"
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - scanning
+  - vendor
+category: service
+serviceCategory: general
+host: 01KQQ5JT03-4A7S
+primaryTechnologyComponent: 01KQQ5JT1Q-ZK2J
+architectureNotes:
+  hostModel: AWS-hosted ABBYY FlexiScan workloads using this runtime run on Windows Server 2016 EC2 hosts. Database servers are not represented by this runtime and are modeled separately.
+  serviceAuthentication: Scanning service accounts and workflow credentials use centralized secret distribution.
+  scalingApproach: Single-instance deployment with vertical scale-up
+  serviceLogging: Scanning workflow logs are exported to centrally managed logging and retained with operational telemetry.
+  healthCheck: Service-process monitoring and synthetic scanning workflow test
+  healthWelfareMonitoring: Service-process monitoring and synthetic scanning workflow tests track service welfare.
+  secretsManagement: Runtime credentials sourced from centralized secret storage
+  availabilityModel: Single-instance scanning service with no built-in active redundancy.
+  scalabilityModel: Vertical scale-up on the assigned host.
+  recoverabilityModel: Rebuild the service on a replacement host and restore configuration and workflow dependencies.
+  failureDomain: Scoped to the scanning workflow service for the deployment that consumes it.
+internalComponents:
+  - ref: 01KQQ5JT03-4A7S
+    role: host
+  - ref: 01KQQ5JT1Q-ZK2J
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJEY-Z75B
+    key: serviceAuthentication
+  - ref: 01KT16XJEY-Z75B
+    key: secretsManagement
+  - ref: 01KT16XJEY-Z75B
+    key: serviceLogging
+  - ref: 01KT16XJEY-Z75B
+    key: availabilityModel
+  - ref: 01KT16XJEY-Z75B
+    key: scalabilityModel
+  - ref: 01KT16XJEY-Z75B
+    key: recoverabilityModel
+  - ref: 01KT16XJEY-Z75B
+    key: failureDomain

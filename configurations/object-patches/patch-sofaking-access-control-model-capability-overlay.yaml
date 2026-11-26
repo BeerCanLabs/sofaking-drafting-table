@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Y-D60P
+type: object_patch
+name: Sofa King Access Control Model capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Access Control Model capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-4JR6
+patch:
+  owner:
+    team: identity-management-idm-engineering
+    contact: identity-management-idm-eng@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1N-G3RK
+    lifecycleStatus: existing-only
+    notes: Assumed existing-only for endpoint privileged access control.
+  - ref: 01KQQ5JT1N-6M9E
+    lifecycleStatus: existing-only
+    notes: Assumed existing-only for endpoint posture and access-control enforcement.
+  - ref: 01KQQ5JT1P-M3XY
+    lifecycleStatus: existing-only
+    notes: Assumed existing-only for endpoint access-control and secure access enforcement.
+  - ref: 01KQQ5JT1R-WNCQ
+    lifecycleStatus: retired
+    notes: Cisco VPN Client 5.x is end-of-support and should be removed from acceptable use.
+  - ref: 01KQQ5JT1S-GGJW
+    lifecycleStatus: existing-only
+    notes: Maintained for legacy local administrator password management on supported older Windows platforms.

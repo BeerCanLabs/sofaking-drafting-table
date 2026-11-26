@@ -1,0 +1,78 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-191S
+type: runtime_service
+ownerRole: technology-admin
+name: Redis Caching Service
+description: 'Standard Redis service pattern for distributed caching and session management.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - cache
+  - in-memory
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-TQ84
+primaryTechnologyComponent: 01KQQ5JT1V-XEVK
+architectureNotes:
+  serviceAuthentication: 'Clients authenticate via Redis AUTH or integrated identity-based access control.
+
+    '
+  secretsManagement: 'Redis passwords and connection details are managed via a centralized secrets store.
+
+    '
+  serviceLogging: 'Redis logs and performance metrics are forwarded to centralized logging and monitoring.
+
+    '
+  healthWelfareMonitoring: 'Service welfare is monitored via Redis health checks and cluster metrics.
+
+    '
+  availabilityModel: 'High availability is achieved via Redis Sentinel or clustered modes with replication.
+
+    '
+  scalabilityModel: 'Scales vertically with host resources or horizontally via clustering.
+
+    '
+  recoverabilityModel: 'Data recovery is achieved through persistence (RDB/AOF) or cluster replication.
+
+    '
+  failureDomain: 'Impact is scoped to the Redis instance or cluster serving the dependent workloads.
+
+    '
+  backup:
+    strategy: daily snapshot to off-host storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: Redis Sentinel or Cluster
+  encryption:
+    atRest: required
+  accessControl:
+    model: Client authentication with role-based access.
+internalComponents:
+  - ref: 01KQQ5JT1V-XEVK
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJA5-ZW4B
+    key: serviceAuthentication
+  - ref: 01KT16XJA5-ZW4B
+    key: secretsManagement
+  - ref: 01KT16XJA5-ZW4B
+    key: serviceLogging
+  - ref: 01KT16XJA5-ZW4B
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJA5-ZW4B
+    key: availabilityModel
+  - ref: 01KT16XJA5-ZW4B
+    key: scalabilityModel
+  - ref: 01KT16XJA5-ZW4B
+    key: recoverabilityModel
+  - ref: 01KT16XJA5-ZW4B
+    key: failureDomain

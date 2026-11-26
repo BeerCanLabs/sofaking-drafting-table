@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR5-KTCX
+type: relationship
+ownerRole: engineer
+name: Customer Profile Event Publisher → Okta
+description: >-
+  The Event Publisher Lambda obtains OAuth client-credentials bearer tokens (scope
+  plat.loveseat) from Okta to authenticate to Loveseat. Moved from Sofa King IDM to Okta
+  in TBSPS-9834; Okta is the Loveseat auth provider for every Shared Customer Record
+  service.
+source: 01KXRSDP02-EVPB
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+tags:
+  - shared-customer-record
+  - identity

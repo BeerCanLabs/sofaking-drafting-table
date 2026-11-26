@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KYXH0DG6-XEYW
+type: runtime_service
+name: CCA JSM Intake Poller (Scheduled Lambda)
+description: >-
+  [DOCUMENTED] AWS Lambda invoked by an EventBridge schedule (every 5 minutes)
+  that polls the CCA JSM service desk over the Jira REST API (api.atlassian.com
+  gateway, JSM service-account credential) for matched service requests and
+  creates Staplepin work items via the Staplepin plugin API -- the automated
+  third entry point into the control plane, covering tickets filed directly in
+  JSM with no Console or Slack involved. Code is merged (cloud-divan-academy
+  PRs #37/#162/#163) but deployed dark: the enable_jsm_intake_poller gate is
+  OFF today; go-live is MVP-0 slim-path step 2 (planned 2026-08-04). Lookback
+  window is timezone-agnostic and replay rows are excluded from cap/watermark
+  accounting.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - intake
+  - jsm
+  - scheduled
+deliveryModel: paas
+vendor: Sofa King (Cloud Divan Academy)
+productName: cca-jsm-intake-poller
+productVersion: '1.0'
+networkPlacement: vpc-private

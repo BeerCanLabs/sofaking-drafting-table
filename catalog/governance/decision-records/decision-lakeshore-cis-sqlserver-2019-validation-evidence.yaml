@@ -1,0 +1,85 @@
+schemaVersion: '1.0'
+uid: 01KYP9DR00-7M4Q
+type: decision_record
+name: Lakeshore CIS SQL Server 2019 Validation Evidence
+description: Confirmed deployment facts and explicitly unresolved operational gaps for the Lakeshore CIS SQL Server 2019 Availability Group.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+  - lakeshore-cis
+  - sqlserver
+  - validation-evidence
+  - operational-risk
+category: risk
+status: open
+affectedComponent: 01KYP8DBR0-7H19
+linkedObject: 01KYP8DBR0-7H19
+impact: The deployment has no database encryption at rest, and several operational controls—including RTO, access control, secrets handling, service logging, and health monitoring—are not yet confirmed.
+mitigationPath: Confirm the unresolved operational controls, assess encryption-at-rest remediation or formal risk acceptance, and collect restore-test and failover-test evidence.
+decisionRationale: >-
+  backup.strategy: Cohesity performs a full backup nightly and transaction-log
+  backups hourly.
+
+
+  backup.platform: Cohesity in the LSRCN data center.
+
+
+  backup.rto: Not yet confirmed; this remains an open recovery-governance gap.
+
+
+  backup.rpo: One hour, confirmed by the Lakeshore CIS owner.
+
+
+  ha.mechanism: A two-node SQL Server AlwaysOn Availability Group has one
+  writable primary and one readable secondary with automatic failover. Commit
+  mode and failover-test evidence remain unconfirmed.
+
+
+  encryption.atRest: Database encryption at rest is not enabled; this is an
+  open security risk and is not recorded as compliant.
+
+
+  accessControl.model: Not yet confirmed; this remains an open
+  security-governance gap.
+
+
+  serviceAuthentication: SQL Server Authentication (owner-confirmed 2026-07-30),
+  not Active Directory/Windows-integrated authentication. Whether this is
+  used for both administrator and application access, or application access
+  only, has not been separately confirmed.
+
+
+  secretsManagement: Not yet confirmed; storage and rotation of database
+  service credentials remain an open security-governance gap.
+
+
+  serviceLogging: Not yet confirmed; collection and forwarding of SQL Server
+  audit and engine logs beyond host-level logging remain an open operations gap.
+
+
+  healthWelfareMonitoring: Not yet confirmed; the service-level monitoring
+  platform and alerting path remain an open operations gap.
+
+
+  availabilityModel: Two-node SQL Server AlwaysOn Availability Group with one
+  writable primary, one readable secondary, and automatic failover. Commit mode
+  and failover-test evidence remain unconfirmed.
+
+
+  scalabilityModel: Fixed two-node Availability Group is the currently
+  documented topology; capacity-growth and scale-out procedures are not yet
+  confirmed.
+
+
+  recoverabilityModel: Cohesity nightly full and hourly transaction-log
+  backups support a confirmed one-hour RPO. RTO, retention, offsite replication,
+  and restore-test evidence remain unconfirmed.
+
+
+  failureDomain: The documented deployment boundary is the LSRCN data center.
+  Node-level automatic failover is confirmed, but independence of power,
+  network, storage, and backup failure domains has not yet been established.

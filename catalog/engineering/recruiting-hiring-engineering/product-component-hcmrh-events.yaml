@@ -1,0 +1,78 @@
+schemaVersion: '1.0'
+uid: 01KSMB8K2P-E9VT
+type: product_component
+ownerRole: engineer
+name: HCMRH Events Library
+description: Event-driven messaging infrastructure library for inter-service communication using AWS EventBridge and SQS, enabling microservices to publish domain events and subscribe to events from other services asynchronously with idempotent handling, retry logic, and dead-letter queue support
+version: 1.0.12
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+- hcmrh
+- shared-library
+- events
+- eventbridge
+- sqs
+- async-messaging
+- dotnet
+repoUrl: https://github.com/BeerCanLabs/sk-hcmrh-events
+language: C#
+classification: library
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: IEventPublisher
+  description: Publish domain events to EventBridge
+  protocol: other
+- name: IEventHandler<TEvent>
+  description: Type-safe event handling interface
+  protocol: other
+- name: DomainEvent
+  description: Base class for all domain events
+  protocol: other
+- name: EventTypeRegistry
+  description: Centralized event type registration
+  protocol: other
+- name: SqsEventListener
+  description: Background service for SQS polling
+  protocol: other
+environmentConfiguration:
+- name: EventPublisher__EventBusName
+  type: EventBridge bus name
+  example: hcmrh-events-Prod
+  required: true
+  sensitive: false
+- name: EventPublisher__Source
+  type: event source identifier
+  example: hcmrh.organizations
+  required: true
+  sensitive: false
+- name: SqsListener__QueueUrl
+  type: SQS queue URL
+  required: true
+  sensitive: false
+  description: SQS queue URL for event consumption
+- name: SqsListener__MaxConcurrency
+  type: integer
+  example: 10
+  required: false
+  sensitive: false
+  description: Max concurrent message processing default 10
+- name: SqsListener__VisibilityTimeoutSeconds
+  type: integer
+  example: 300
+  required: false
+  sensitive: false
+  description: SQS visibility timeout default 300s
+architectureNotes:
+  framework: .NET 9.0 Class Library
+  distribution: NuGet package via Sofa King Artifactory
+  dependencies: AWSSDK.EventBridge 4.0.5.16, AWSSDK.SQS 4.0.2.15, Microsoft.Extensions.Hosting.Abstractions 9.0
+  pattern: Single Event Bus with Content-Based Routing via EventBridge rules
+  features: Type-safe event publishing and consuming, automatic correlation ID enrichment from HttpContext, idempotent handler support, background SQS polling with long polling (20s), concurrent message processing, automatic retry with DLQ routing after 3 failures
+  eventFlow: Publishers → EventBridge Bus → EventBridge Rules → SQS Queues → SqsEventListener → Consumers
+  awsServices: EventBridge for event bus with 90-day archive, SQS for queuing with visibility timeout 5 minutes and DLQ after 3 retries
+  observability: Structured logging for event publishing and consumption with EventType and CorrelationId
+  currentEvents: AgencyUpdatedEvent, StoreUpdatedEvent (Organizations Service), ApplicationSubmittedEvent (Applications Service), JobPostingCreated/Updated/Deleted (legacy SNS/SQS, migration planned)

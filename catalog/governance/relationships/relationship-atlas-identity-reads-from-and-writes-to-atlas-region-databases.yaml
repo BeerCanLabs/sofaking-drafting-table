@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 7HWD62YY4C-KT05
+type: relationship
+name: Atlas Identity → Atlas Region Databases
+description: Atlas user accounts (idm_user_accounts) in the per-region database through the tenant DbContext.
+catalogStatus: stub
+source: 01M5WY4E7P-JBTC
+target: 01M7D4BSC5-EJC5
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Atlas user accounts (idm_user_accounts) in the per-region
+    database through the tenant DbContext.
+  evidence: 'whm-unified-core develop: Service.Core.Identity.Infrastructure/DbContext/IdentityDbContext.cs'

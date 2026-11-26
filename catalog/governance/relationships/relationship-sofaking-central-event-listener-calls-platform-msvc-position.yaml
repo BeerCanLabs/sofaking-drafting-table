@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HSC8-QNSW
+type: relationship
+name: 'Sofa King Central Event Listener → Platform Msvc Position'
+catalogStatus: stub
+source: 01KYQ4D9SD-RPM9
+target: 01KSM38KFH-TM0Y
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Rehydrates entity current state over HTTP so the Aurora PostgreSQL read model can be written. Target resolved from HttpModelResolverSettings.

@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-F18D
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation DASL Agent
+description: Function unconfirmed. Product owner believes this is likely important but does not know what it does.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- customerinformation
+- dasl
+- drafting-2026-07-30
+- needs-owner-interview
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-dasl-agent
+language: C#
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery. Product owner flagged this as likely important (naming suggests it relates to DASL sync, alongside CIS Svc Syncer and CIS Util Customerinformation Syncer) but was unable to describe its function. High priority for a follow-up owner/team interview given the "likely important" flag paired with zero functional knowledge.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-dasl-agent
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

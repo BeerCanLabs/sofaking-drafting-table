@@ -1,0 +1,394 @@
+schemaVersion: '1.0'
+uid: Z8ZEXRM11J-FGJ6
+type: software_deployment_pattern
+name: CCA — Governed Automation Platform
+description: >
+  Cloud Divan Academy (CCA) reference architecture. A ticket-bound,
+  policy-constrained, validated, and audited automation platform where every
+  meaningful action is bound to a JSM service request, executes inside a
+  per-Divan IAM-scoped AWS sandbox, and is persisted to PostgreSQL for lineage.
+  The requester enters through the CCA Console; the Console opens the governing
+  Service Request server-side, so the run is ticket-bound without the requester
+  ever using the JSM portal (see decision record 01KZ6K57W5-APKF).
+
+  This is a PoC architecture under active design. Items below are labeled
+  [DOCUMENTED] when observed in code or AWS, [INTENDED] when target state and
+  not yet built, and [OPEN] when a decision is still pending. Do not treat
+  [INTENDED] items as implemented.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+businessContext:
+  pillar: business-pillar.enterprise-enablement
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - reference-architecture
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - agentic
+  - poc
+  - internal
+patternType: governed-agentic-automation
+networkZones:
+  - id: edge
+    name: Interaction Front Door
+    tier: frontend
+    description: >-
+      Human-facing entry surfaces. The CCA Console is the front door; a Slack
+      bridge is a planned near-future side door. Both are pure Staplepin
+      control-plane clients that hold no model credentials.
+  - id: governance
+    name: Governance, Approval and Ticket I/O
+    tier: frontend
+    description: >-
+      Under-the-hood governance surface (JSM / Atlassian). Not a user entry point:
+      the JSM Divan performs ticket I/O, and JSM carries the approval gate plus the
+      human-readable audit trail. Every governed run is ticket-bound.
+  - id: app
+    name: Application
+    tier: application
+    description: >-
+      Private in-VPC control plane and sandboxed execution runtime. Deny-by-default
+      egress, no public inbound, no public SSH.
+  - id: data
+    name: Data
+    tier: data
+    description: >-
+      Authoritative audit, lineage, and outcome persistence. Encrypted at rest.
+  - id: shared
+    name: Shared Governance Services
+    description: >-
+      RETIRED 2026-08-04 -- retained as a declaration only, with no members. This
+      zone previously held the safety, model-routing, and validation services and
+      described them as "owned centrally in the enterprise shared-services boundary
+      rather than by CCA." That was never accurate: Guardfin, the LLM Gateway, and
+      the in-VPC Harness validation layer are all CCA-owned and in-VPC, so they now
+      sit in the "app" zone alongside the rest of the private runtime. Nothing is
+      assigned to this zone; do not add members to it. No tier classification.
+architectureNotes:
+  governanceModel: >
+    Every meaningful action is ticket-bound, policy-constrained, validated, and
+    audited. If any one of the four is missing, the platform does not execute.
+    Plain language: nothing happens unless a JSM ticket asked for it, policy
+    permitted it, validation accepted the result, and the result was written to
+    audit storage.
+  frontDoorModel: >
+    The CCA Console is the human-facing front door: a person makes a plain-English
+    request in the Console, which drives the Staplepin control plane under the
+    hood. A Slack bridge is a planned near-future side door with the same
+    governance path. JSM (Jira Service Management) is NOT the user's entry point --
+    it is the under-the-hood governance, approval, and ticket-I/O surface: the JSM
+    Divan writes the tickets, and every governed run stays ticket-bound (no JSM
+    ticket = no execution). Plain language: people talk to the Console (soon also
+    Slack); the platform files and updates the governing JSM ticket for them.
+  executionIsolationModel: >
+    Each Divan runs inside a dedicated AWS sandbox path with its own IAM
+    identity scoped to the narrowest capability set the task requires. One
+    Divan = one identity = one narrow scope. Plain language: every agent gets
+    its own keycard that only opens the doors it needs.
+  egressModel: >
+    Private VPC with deny-by-default egress. The Divan sandbox cannot reach the
+    public internet unless an allow-list explicitly permits it. No public
+    inbound, no public SSH.
+  safetyLayerModel: >
+    [DOCUMENTED today] Guardfin is deployed and live in the Divan-to-LLM path
+    in OBSERVE mode: it inspects every request and logs findings to the
+    observability platform, but blocks nothing yet. [INTENDED] Action mode makes
+    it the primary deny-by-default blocking layer (a one-variable flip after
+    false-positive tuning). Plain language: today Guardfin watches and reports;
+    the intended end state is that it also stops bad actions. Until the action-mode
+    flip, the "blocks every unsafe action" invariant is a target, not present
+    enforcement.
+  modelAccessModel: >
+    The LLM Gateway is CCA's OWN self-hosted routing and governance layer for
+    model calls, running in-VPC (corrected 2026-08-04: previously described as
+    "enterprise-managed," which was never accurate -- there is no Sofa King-wide
+    gateway in scope for this PoC, and CCA builds, deploys, and operates this one).
+    Divans route model calls through it rather than calling providers directly.
+    Model-behavior controls (what the AI may say) and model-access controls
+    (which model the user may invoke) are kept as separate concerns.
+  validationModel: >
+    The Harness layer performs post-execution validation on Divan outputs
+    before any output is considered successful. Failed validation aborts
+    persistence and writes a failure record. "Harness" here means the
+    sofaking-guardfin-harness layer -- a validation stage inside
+    Guardfin, running in-VPC -- not a third-party validation platform.
+    Ratified 2026-08-02 (Leo Park); OPS-177566.
+  auditModel: >
+    PostgreSQL is the authoritative system of record for Divans, tool
+    invocations, lineage, and outcomes. AWS-native CloudTrail provides a
+    second independent audit trail. Both are immutable.
+  deliveryModel: >
+    Two-milestone delivery. Milestone A (Internal Supervised Divan, target
+    2026-06-15) is read-only, sandbox-only, team-only, manual JSM per run.
+    Milestone B (Auditable Divan, date set by readiness not calendar) adds
+    Deep-Check controls, JIT credentialing, integrated kill switch, anti-
+    affinity enforcement, and audience expansion.
+  patternRisks: >
+    Risks tracked in repo and Confluence: (1) source drift across Confluence,
+    Jira, and code; (2) undefined milestone B date; (3) open questions on
+    runtime surface priority, deployment topology, and risk-classification
+    logic; (4) scope sprawl into too many connectors or user surfaces too
+    early.
+  noApplicablePattern: >
+    No existing Sofa King ReferenceArchitecture matches this deployment shape.
+    CCA is a novel governed-agentic automation platform (ticket-bound,
+    policy-constrained, validated, audited) with no precedent pattern in the
+    catalog. It is itself intended to become the reference pattern for future
+    governed-automation work, so it does not follow a prior reference
+    architecture.
+  deploymentTargets: >
+    Five execution contexts. (1) The human-facing front door (CCA Console; a Slack
+    side door is planned) runs on the AWS us-east-1 sandbox cluster, while the
+    under-the-hood governance, approval, and audit surface (JSM + Confluence) runs
+    in Atlassian Cloud SaaS (saas-atlassian) and is reached via the JSM Divan, not
+    by the user directly. (2) Control plane (Staplepin) and (3) the sandboxed
+    execution runtime (Openfin) run in AWS us-east-1 (aws-us-east-1) —
+    specifically AWS account 151930920086, VPC vpc-704325323934be3a5
+    (USE1-DEV-CCA-VPC), CIDR 10.203.8.0/22, a private deny-by-default-egress
+    VPC. Account/VPC/CIDR specifics are environment parameters, not the
+    architecture boundary. (4) The safety and model-routing services (Guardfin,
+    LLM Gateway) are CCA-OWNED and run in the same VPC as the runtime
+    (aws-us-east-1) -- corrected 2026-08-04; they were previously modeled under
+    enterprise-shared-services as "owned centrally rather than by CCA," which was
+    never accurate. Both are ECS services in account 151930920086 / VPC
+    vpc-704325323934be3a5, deployed from CCA's own Terraform and operated by the
+    CCA team. Neither is an enterprise shared service, and no Sofa King-wide LLM
+    gateway is in scope for this PoC.
+    (5) Post-execution validation runs in the Harness layer inside Guardfin,
+    in-VPC in AWS us-east-1 -- no validation payload leaves Sofa King
+    infrastructure. The authoritative audit store (PostgreSQL) and second audit
+    trail (CloudTrail, KMS) live alongside the runtime in AWS us-east-1.
+  availabilityRequirement: >
+    Best-effort / business-hours for the PoC. CCA is a candidate-stage,
+    team-only platform with no production SLA in Milestone A (Internal
+    Supervised Divan). Because every action is human-initiated through a JSM
+    ticket and is read-only/sandbox-only in Milestone A, there is no continuous
+    uptime obligation; an outage delays manual runs rather than impacting a
+    customer-facing service. A formal availability tier will be set when
+    Milestone B (Auditable Divan) defines its audience and write scope.
+  externalDependencies: >
+    External systems CCA interacts with beyond its own deployable components,
+    each modeled as a deployable object and relationship on the relevant service
+    group: Atlassian JSM (under-the-hood governance, approval, and ticket I/O --
+    reached via the JSM Divan, the Console BFF's scoped Service-Request
+    credential, and the gated intake poller; never the user's entry point) and Confluence
+    (runbook/audit) in saas-atlassian; the user-facing front door is the CCA
+    Console (with a planned Slack side door), not Atlassian.
+    AWS-native CloudTrail and KMS in aws-us-east-1. Guardfin (safety, including
+    its in-VPC Harness validation layer) and the LLM Gateway (model
+    routing/governance) are deliberately NOT listed here: they are CCA-owned
+    in-VPC components, not external dependencies (corrected 2026-08-04).
+    Per-Divan IAM identity provisioning
+    routes through IT and the SaaS Identity team. No additional undisclosed
+    integrations exist at PoC stage.
+  dataClassification: >
+    Internal / confidential. The platform processes Sofa King corporate
+    operational data: JSM ticket content, Divan tool-invocation records,
+    execution lineage, and outcomes persisted to PostgreSQL. No customer PII is
+    in scope for the Milestone A PoC (read-only, sandbox-only, team-only). Audit
+    records and any credentials/secrets handled by scoped IAM identities are
+    treated as confidential and encrypted at rest via KMS. Data-classification
+    scope will be re-reviewed if Milestone B expands the audience or introduces
+    write actions against systems holding customer records.
+  failureDomain: >
+    Blast radius is bounded per Divan and per AWS region. Each Divan executes
+    under its own narrowly scoped IAM identity inside the private us-east-1
+    sandbox VPC, so a compromised or misbehaving Divan cannot exceed its own
+    capability scope (one Divan = one identity = one narrow scope). The runtime,
+    control plane, and audit store are single-region (aws-us-east-1); a regional
+    outage halts all CCA execution but, because runs are human-initiated and
+    sandbox-only, causes no customer-facing impact. Corrected 2026-08-04: Guardfin,
+    the LLM Gateway, and the in-VPC Harness validation layer were previously listed
+    here as "enterprise shared services" and "shared cross-product dependencies."
+    They are none of those things -- all three are CCA-owned and run in CCA's own
+    VPC, so their failure is an INTERNAL failure domain, not a dependency on another
+    team's platform. Their loss still pauses execution rather than corrupting it:
+    deny-by-default means losing the safety or validation layer blocks execution
+    rather than allowing unsafe action. The only genuine shared cross-product
+    dependency is the Atlassian SaaS surface (JSM / Confluence), whose outage pauses
+    intake and ticket I/O.
+  noPatternDeviations: >
+    Not applicable in the conventional sense: CCA does not follow a prior
+    ReferenceArchitecture (see noApplicablePattern), so there are no deviations
+    from a selected pattern to document. The architecture conforms fully to its
+    own governance model (ticket-bound, policy-constrained, validated, audited).
+  interServiceConnections: >
+    Primary cross-boundary paths, all funneled through the governance model, now
+    formalized as relationship objects in catalog/governance/relationships/:
+    (1) the human front door CCA Console → Staplepin control plane (aws-us-east-1)
+    — the primary inbound entry; a planned Slack side door → Staplepin is the
+    near-future second entry; (2) Staplepin → Openfin runtime (aws-us-east-1) to
+    launch a scoped Divan; (3) the governed model path — each Divan → Guardfin
+    guardrail → LLM Gateway → Bedrock (direct Divan → LLM Gateway is the rollback
+    path); no direct model access; (4) two credentialed writers to JSM (saas-atlassian),
+    both under the hood, never a user entry: the Console BFF creates the
+    governing Service Request directly (its own scoped service-account
+    credential), and Openfin (JSM Divan) writes/updates run-lifecycle state on
+    the ticket; (5) Divan outputs → the Harness validation layer inside
+    Guardfin (in-VPC) for post-execution validation; (6) outcomes → PostgreSQL + CloudTrail
+    (aws-us-east-1) for audit, Staplepin being the sole Postgres writer; (7) the
+    JSM intake poller (scheduled Lambda, merged but gated off until MVP-0 step 2)
+    polls the service desk and creates Staplepin work items -- the automated
+    third entry into Staplepin for tickets filed directly in JSM. The
+    sandbox VPC is deny-by-default egress with no public inbound and no public
+    SSH; the reachable inbound entries are the Console (and, soon, Slack) →
+    Staplepin, plus the gated JSM-intake path.
+serviceGroups:
+  - name: Interaction Front Door
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYX7W8V9-PABC
+        networkZone: edge
+        diagramTier: presentation
+        notes: >-
+          [DOCUMENTED] The CCA Console is the human-facing front door: a person
+          makes a plain-English request in the Console, and its BFF proxies to the
+          Staplepin control plane. Reached privately over an SSM port-forward
+          today (internal ALB + Okta OIDC is a later milestone); no public inbound.
+      - ref: 01KYX7W8VC-DFDB
+        networkZone: edge
+        diagramTier: presentation
+        notes: >-
+          [INTENDED] The Slack bridge is a planned near-future side door -- start
+          and interact with a governed run from Slack, alongside the Console. Same
+          governance path; a pure Staplepin client. Not yet built or deployed.
+  - name: Governance, Approval and Ticket I/O (under the hood)
+    deploymentTarget: saas-atlassian
+    deployableObjects:
+      - ref: 01KYWQE2EY-55NE
+        networkZone: governance
+        diagramTier: presentation
+        notes: >-
+          [DOCUMENTED] JSM is reached UNDER THE HOOD, not by the user: the JSM
+          Divan performs ticket I/O, and JSM carries the approval gate plus the
+          human-readable audit trail. Every governed run is ticket-bound
+          (no JSM ticket = no execution), but the human enters through the Console,
+          not JSM. Confluence runbook (page 39606059032) is the companion audit
+          surface; see architectureNotes.auditModel.
+  - name: Control Plane
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYWQE2F1-14MN
+        networkZone: app
+        diagramTier: application
+        notes: >-
+          [INTENDED] Staplepin turns an approved JSM ticket into a scoped Divan
+          invocation, mediates identity assumption, and is the sole writer of
+          lifecycle, lineage, and outcome events to the audit store.
+      - ref: 01KYXH0DG6-XEYW
+        networkZone: app
+        diagramTier: application
+        notes: >-
+          [DOCUMENTED] JSM intake poller: a scheduled Lambda (EventBridge, every
+          5 minutes) that polls the CCA service desk and creates Staplepin work
+          items -- the automated third entry for tickets filed directly in JSM.
+          Merged but gated off (enable_jsm_intake_poller = false); go-live is
+          MVP-0 slim-path step 2 (planned 2026-08-04).
+  - name: Execution Runtime (sandboxed)
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYWQE2F3-CZ2H
+        networkZone: app
+        diagramTier: application
+        notes: >-
+          [INTENDED] Openfin hosts the Divan, loads its per-Divan scoped IAM
+          identity (one Divan = one identity = one narrow scope), and executes the
+          single policy-permitted task inside the private VPC. Deny-by-default
+          egress, no public inbound, no public SSH; the only inbound path is via
+          Staplepin. Per-Divan IAM provisioning and the VPC egress policy are
+          environment controls, documented in architectureNotes, not separate
+          topology nodes.
+  - name: Safety, Routing & Policy
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYWQE2F5-96MQ
+        networkZone: app
+        diagramTier: utility
+        notes: >-
+          [DOCUMENTED] Guardfin is live as an ECS service in the CCA VPC and
+          inspects every model call on the Divan path -- all Divans route their
+          model traffic to it, and it classifies and logs each request.
+          [OPEN] It runs in OBSERVE mode and therefore BLOCKS NOTHING today.
+          Deny-by-default enforcement (action mode) is the intended end state and
+          is not yet enabled; the flip is tracked on OPS-640842. Do not read this
+          object as an enforcing control in its current state.
+      - ref: 01KYWQE2F8-GGGG
+        networkZone: app
+        diagramTier: utility
+        notes: >-
+          [DOCUMENTED] The LLM Gateway (LiteLLM) is live as an ECS service in the
+          CCA VPC and is CCA-owned -- it is CCA's own model routing and governance
+          layer, NOT a Sofa King-wide shared gateway. Every Divan is configured to
+          reach models through the Guardfin guardrail in front of it; no Divan is
+          configured to call a model directly. PoC providers are AWS Bedrock only
+          (Anthropic direct deferred pending procurement). Corrected 2026-08-04:
+          previously labeled [INTENDED] and placed in enterprise-shared-services,
+          both of which were inaccurate.
+  - name: Validation
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYWQE2FA-XVTG
+        networkZone: app
+        diagramTier: utility
+        notes: >-
+          [INTENDED] The Harness layer validates Divan outputs against the declared
+          expected outcome. A run is not successful until validation accepts the
+          output; failed validation aborts persistence and writes a failure record.
+          "Harness" is the sofaking-guardfin-harness layer -- a stage inside
+          Guardfin, running in-VPC on the cca-guardfin ECS service, not a
+          vendor platform (ratified 2026-08-02, OPS-177566). RESOLVED 2026-08-04:
+          the inconsistency flagged here previously -- the parent Guardfin service
+          being modeled under enterprise-shared-services while its own validation
+          layer was in-VPC -- is fixed. The "Safety, Routing & Policy" group now
+          carries deploymentTarget aws-us-east-1, matching where Guardfin and the
+          LLM Gateway actually run. Ratified by Leo Park (Lead Architect).
+  - name: Audit, Lineage & Reporting
+    deploymentTarget: aws-us-east-1
+    deployableObjects:
+      - ref: 01KYWQE2FD-1TW6
+        networkZone: data
+        diagramTier: data
+        notes: >-
+          [INTENDED] PostgreSQL (Amazon RDS) is the authoritative system of record
+          for Divans, tool invocations, lineage, and outcomes; Staplepin is the
+          sole writer. AWS-native CloudTrail (account-wide) and KMS
+          encryption-at-rest are documented companion audit/encryption controls in
+          architectureNotes.auditModel, not separate topology nodes. Schema and
+          retention model are open questions.
+applicableDefinitionChecklist:
+  - "Every meaningful action is bound to a JSM service request before it executes. The requester enters through the CCA Console, which opens that request server-side under a scoped identity; the requester is not required to use the JSM portal. No governing request means no execution."
+  - "Every Divan runs under a dedicated IAM identity scoped to the minimum capabilities required by the task."
+  - "Every Divan execution path is reachable only from inside the private VPC; no public inbound, no public SSH."
+  - "Guardfin inspects every model call in the Divan path and emits observability signals (live today in observe mode); blocking unsafe actions before execution is the intended action-mode state, not yet enforced."
+  - "Every model call routes through LLM Gateway; no direct model calls from Divans."
+  - "Every Divan output passes Harness validation before being considered successful."
+  - "Every action, approval, validation, and outcome is persisted to PostgreSQL and additionally observable in CloudTrail."
+  - "No write actions and no audience expansion beyond the core team are permitted in Milestone A."
+decisionRecords:
+  - ref: 01KZ6K57W5-APKF
+  - ref: A167KVYYG2-X831
+  - ref: 62GNEE8S2T-W4GV
+  - ref: 4TG85QEKZ3-ZTFS
+  - ref: N0X30P3VJ7-42VK
+  - ref: 01KT16XJ4R-19E8
+    key: noApplicablePattern
+  - ref: 01KT16XJ4R-19E8
+    key: deploymentTargets
+  - ref: 01KT16XJ4R-19E8
+    key: externalDependencies
+  - ref: 01KT16XJ4R-19E8
+    key: dataClassification
+  - ref: 01KT16XJ4R-19E8
+    key: failureDomain
+  - ref: 01KT16XJ4R-19E8
+    key: noPatternDeviations
+  - ref: 01KT16XJ4R-19E8
+    key: interServiceConnections
+  - ref: 01KTM7D5BY-TQAJ
+    key: availabilityRequirement
+requirementImplementations: []
+

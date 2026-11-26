@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFR-PRVB
+type: product_component
+ownerRole: engineer
+name: CIS UI Backpack Design
+description: Sofa King UI Design Library
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+  - repository-discovery
+  - sis
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-ui-backpack-design
+language: JavaScript
+classification: web-application
+architectureNotes:
+  origin: Confirmed by product owner on 2026-07-31 — Node.js build (apps/storybook, apps/icons). Produces CSS and a Storybook, both published to S3, plus NPM packages consumed by other CIS apps as a design-system dependency.
+  repositoryName: BeerCanLabs/sk-cis-ui-backpack-design
+  observedRuntimeSignals: github_actions, node, readme
+  observedManifestPaths: .changeset/config.json; .github/workflows/release.yml; apps/icons/package.json; apps/storybook/package.json; apps/storybook/tsconfig.app.json; apps/storybook/tsconfig.base.json; apps/storybook/tsconfig.json; apps/storybook/tsconfig.node.json; deploy/backpack/cdk.json; deploy/backpack/package.json; deploy/backpack/tsconfig.json; deploy/infrastructure/cdk.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Node.js build producing static assets (CSS, Storybook) hosted in S3, and NPM packages consumed by other apps; no standalone application runtime of its own.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHTX-THF0
+    key: runtimeRequirement

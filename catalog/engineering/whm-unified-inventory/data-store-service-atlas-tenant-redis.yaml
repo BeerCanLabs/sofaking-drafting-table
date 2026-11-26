@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01M7BNBY4G-2M0B
+type: data_store_service
+ownerRole: engineer
+name: Atlas Tenant Redis
+description: Per-region Redis used by Atlas for user sessions (Identity) and tenant-scoped caches such as the
+  IDM token cache (Domain). Each region's redis_connection_string is held in the TenantDirectory regions table;
+  a region without one falls back to an in-process cache.
+version: 0.1.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- whm
+- redis
+- cache
+- deployment-specific
+vendor: unknown
+productName: Redis
+productVersion: unknown
+deliveryModel: paas
+authenticationModel: TBD
+architectureNotes:
+  provenance: Source inspection 2026-11-13. Evidence is the client library (StackExchange.Redis in Library.Shared.Cache),
+    Cache:Provider=Redis in the Identity and Domain appsettings, and the global migration V1.0.0.0.002__add_regions_redis_connection_string.sql.
+  inferred: deliveryModel paas, vendor and hosting service (for example ElastiCache) are not stated in any repository
+    read and must be confirmed with the team; the dev tenant secret in docker/.env carries an empty redis_connection_string.
+  keyNamespaces: usercontext (Identity sessions, sliding window 59 minutes), idmtoken (Domain IDM client-credentials
+    token cache).
+  dataClassification: Session and token material; classification not confirmed.

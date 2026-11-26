@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZV-1JA4
+name: Nagios Monitoring Service → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT1F-E2CC
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Administrative access is integrated with Active Directory."
+capabilities:
+- 01KQQ4Q026-MHJM

@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SP-J1TG
+type: product_component
+ownerRole: engineer
+name: CIS App Parent Admin Mobile
+description: React Native mobile app owned by the Mobile team, not the LS CIS team. Out of scope for this catalog directory; cataloged here only to record the whiteboard resolution.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+- sis
+- lakeshore
+- tillbook
+- mobile
+- parent-access
+- out-of-scope
+- drafting-2026-07-30
+repoUrl: 'N/A — owned and cataloged by the Mobile team, not LS CIS'
+classification: other
+runtimeRequirement: React Native
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Resolved on 2026-07-30 per product owner — this is a React Native app owned by the Mobile team, not LS CIS. Retired from this catalog directory as out of scope; the Mobile team's catalog (if any) is the correct home for it.
+  hostingModel: Distributed client application on end-user devices; no self-managed Host Standard applies.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

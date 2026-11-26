@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP6K-Z6TP
+type: relationship
+name: 'Settee UI Module Universal Settings → Sofa King Central Msvc Preferences'
+catalogStatus: stub
+source: 01KSM38KGM-365N
+target: 01KQQ5JT0K-VRT2
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Resolved from the endpoint key this surface reads out of window.buildConfig.endpoint, mapped to its backing service through the Jarvis production env-config endpoint map.

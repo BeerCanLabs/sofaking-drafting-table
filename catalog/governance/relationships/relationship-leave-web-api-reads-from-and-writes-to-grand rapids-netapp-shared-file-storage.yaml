@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYN1RJ02-NAP1
+type: relationship
+name: Leave Web API -> Grand Rapids NetApp Shared File Storage
+catalogStatus: incomplete
+source: 01KQQ5JT0A-7VKB
+label: reads from and writes to
+target: 01KYN1RHK4-NAPP
+technology: SMB
+direction: synchronous
+flow: outbound
+notes: >-
+  Represents the Leave Management application tier's use of the
+  Leave-only GRRFILES1 SMB Storage VM on the shared GRRNAP1CLU1 NetApp
+  cluster (owner-confirmed 2026-07-29). Time & Attendance does not use
+  GRRFILES1.
+capabilities: []

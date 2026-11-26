@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFQ-X2TJ
+type: product_component
+ownerRole: engineer
+name: CIS BFF Exago
+description: Exago BFF Service
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+  - repository-discovery
+  - sis
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-bff-exago
+language: C#
+classification: web-application
+architectureNotes:
+  origin: Runtime corrected on 2026-07-31 via direct repository inspection — ExagoBff.Web.Api.csproj targets TargetFrameworkVersion v4.8, with Global.asax, Web.config, App_Start, and a WebApiConfig/ReportsController ASP.NET Web API structure. This is a deployed .NET Framework 4.8 API, not static web assets; the prior runtimeRequirement decision (linked below) is superseded.
+  repositoryName: BeerCanLabs/sk-cis-bff-exago
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: src/ExagoBff.Configuration/ExagoBff.Configuration.csproj; src/ExagoBff.Data/ExagoBff.Data.csproj; src/ExagoBff.Integration.VendorExtracts/ExagoBff.Integration.VendorExtracts.csproj; src/ExagoBff.Integration/ExagoBff.Integration.csproj; src/ExagoBff.Services/ExagoBff.Services.csproj; src/ExagoBff.Web.Api.Client.Integration.CentralAdmin/ExagoBff.Web.Api.Client.Integration.CentralAdmin.csproj; src/ExagoBff.Web.Api/Exago/Config/Other/StorageMgmtSchema.json; src/ExagoBff.Web.Api/Exago/Config/Other/cdataconfig.json; src/ExagoBff.Web.Api/Exago/Config/Other/dbconfigs.json; src/ExagoBff.Web.Api/Exago/Config/Other/tagwhitelist.json; src/ExagoBff.Web.Api/Exago/Licenses/getopt-license.json; src/ExagoBff.Web.Api/Exago/NetHelp/js/nodejs/settings.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+runtimeRequirement: .NET Framework 4.8
+decisionRecords:
+  - ref: 01KT16XHTG-K7MS
+    key: runtimeRequirement

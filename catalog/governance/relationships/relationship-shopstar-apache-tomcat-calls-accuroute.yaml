@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E1-AVY0
+name: shopstar v3 Application → AccuRoute (OmTool)
+catalogStatus: incomplete
+source: 01KSM38KGD-WYH7
+label: requests services from
+target: 01KS4DGJVK-Q9GY
+description: >-
+  The shopstar v3 application requests cover-sheet services from legacy
+  AccuRoute. Normal BIRT reports do not use this path; AccuRoute's separate
+  ingestion and archive-routing responsibilities are not application calls
+  represented by this relationship.
+technology: HTTP
+direction: synchronous
+flow: outbound
+tags:
+  - shopstar-v3
+  - document-routing
+  - legacy
+notes:
+  background: This edge remains pointed at the legacy service until the AccuRoute 8 AWS cutover is confirmed.
+  unresolved: The complete operation set, endpoint paths, authentication, and timeout/retry behavior are not yet confirmed.
+capabilities: []

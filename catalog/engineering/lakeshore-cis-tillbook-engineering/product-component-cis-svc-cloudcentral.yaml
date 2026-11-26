@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-M9SZ
+type: product_component
+ownerRole: engineer
+name: CIS Svc CloudCentral
+description: Not a separate product. A specially-configured instance of CIS App Centraladmin, hosted in Azure, that issues auth tokens for 3rd-party vendor API calls.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- sis
+- lakeshore
+- tillbook
+- azure
+- vendorlink
+- drafting-2026-07-28
+- drafting-2026-07-31
+repoUrl: https://github.com/BeerCanLabs/sk-cis-app-centraladmin
+classification: api-service
+language: C#
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28. Resolved on 2026-07-30 per product owner — this is a special deployment/configuration of CIS App Centraladmin (BeerCanLabs/sk-cis-app-centraladmin), not a separate codebase. Runtime corrected on 2026-07-31 to match CIS App Centraladmin — .NET Framework 4.8, not Node.js.
+  role: 'Auth entry point for 3rd-party VendorLink API calls. Flow confirmed by product owner on 2026-07-31: a 3rd-party vendor obtains an OAuth2/IdentityServer3 auth token from CloudCentral, then calls the Azure API Management gateway (01KYWB8RS3-6KVB). API Management only reads a custom routing claim in the token to route the call to the correct ITC — it does not validate the token. The call reaches that ITC''s copy of CIS Svc Vendorlink, which validates the token itself against trusted-issuer data stored in that ITC''s CIS App Centraladmin (CloudCentral is configured there as a trusted issuer). Un-retired from the earlier 2026-07-30 resolution now that this auth role is understood — it is a live, load-bearing identity boundary, not just a routing label.'
+  serviceAuthentication: IdentityServer3 (same technology as CIS App Centraladmin); issues OAuth2 tokens carrying the ITC-routing claim consumed by Azure API Management.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

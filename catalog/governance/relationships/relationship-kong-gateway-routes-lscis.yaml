@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: 01KYNXWY26-PFFR
+type: relationship
+name: Kong Gateway Service -> LSCIS (Sofa King CIS - Lakeshore)
+description: Kong Gateway is the ingress point that hosts LSCIS's authentication layer, fronting the per-ITC web application tier.
+catalogStatus: incomplete
+source: 01KQQ5JT1E-SW3X
+label: routes requests to
+target: 01KSM38KFQ-K5NB
+technology: HTTPS
+direction: synchronous
+flow: outbound
+capabilities:
+- 01KT0V5MCV-3A6F
+tags:
+- sis
+- lakeshore
+- lscis
+- kong
+- ottoman
+- ingress
+notes: Confirmed by the product owner on 2026-07-28, correcting an earlier draft that had dropped Kong Gateway from the LSCIS topology as an apparent mismatched auto-discovery artifact. Exact route/host placement relative to the per-ITC web tier is not modeled at this level of detail — see DraftingSession session-lakeshore-cis-infrastructure-2026-07-28.

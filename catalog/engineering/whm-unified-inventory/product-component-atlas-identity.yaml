@@ -1,0 +1,51 @@
+schemaVersion: '1.0'
+uid: 01M5WY4E7P-JBTC
+type: product_component
+name: Atlas Identity
+aliases:
+- Atlas Identity (front door)
+description: Session and token service for Atlas. Validates Okta-issued bearer tokens against Sofa King Identity,
+  resolves the region from the Kong-injected x-sk-userinfo header, keeps the user session in the tenant's Redis,
+  and answers every other Atlas service's IdentityValidator gRPC call. Also serves user accounts over gRPC (UserDirectory)
+  and issues dev tokens locally.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: whm-unified-inventory
+  contact: ltorvik@sofaking.example
+tags:
+- atlas
+- unified-inventory
+- identity
+repoUrl: https://github.com/BeerCanLabs/sk-whm-unified-core
+language: C#
+classification: api-service
+architectureNotes:
+  sourcePath: Service.Core.Identity
+  runtimeEvidence: .NET 10 microservice in the whm-unified-core monorepo (default branch develop).
+  authenticationNote: Locally issues dev JWTs. In deployed environments validates Okta-issued tokens; org resolution
+    from the token is a documented placeholder pending Sofa King Identity integration.
+  sourceInspection: Source inspection 2026-11-13 of whm-unified-core (develop, eece62e).
+  notAFrontDoor: The code reaches Identity directly (/api/auth/*) beside the other services; it does not proxy traffic.
+    The reverse proxy in the monorepo (Service.Core.Gateway) is a local stand-in for Sofa King's Kong edge and has
+    no deployed workload.
+runtimeSpec:
+  ports:
+  - number: 8082
+    protocol: HTTP
+    direction: inbound
+    name: rest
+    description: REST listener (HTTP/1.1). Port from the local compose table in README.md; deployed ports come from
+      the SERVICE_ENDPOINTS secret.
+  - number: 8092
+    protocol: HTTP/2
+    direction: inbound
+    name: grpc
+    description: gRPC listener for service-to-service calls, guarded by ServiceTokenMiddleware (x-whm-service-token).
+      REST port + 10.
+  dependencies:
+  - ref: 01KWF3RGCF-T2HM
+    purpose: Startup configuration. Library.Shared.GlobalConstants fetches SERVICE_ENDPOINTS, SERVICE_TOKEN, GLOBAL_DATABASE_CONNECTION_STRING,
+      OKTA_TOKEN_* and M2M_OKTA_* under the whm/unified/<env>/ prefix when AWS_REGION is set.
+    interface: AWS SDK (GetSecretValue)

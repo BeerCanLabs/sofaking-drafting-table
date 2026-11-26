@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZK-7ZME
+name: Recliner .NET Core 8 on EKS Application Runtime → Platform Service Mesh
+description: >-
+  Recliner BFF and core-service workloads are intended to participate in the
+  shared Kong Mesh through Kuma control planes and Envoy-based data planes.
+catalogStatus: incomplete
+source: 01KRZX0C11-QH66
+label: participates in
+target: 01KYAXMZ7H-KJT2
+technology: Kuma / Envoy data plane
+direction: synchronous
+flow: bidirectional
+capabilities:
+  - 01KT0V5MCV-RM8M
+tags:
+  - recliner
+  - kong-mesh
+  - kuma
+  - envoy
+notes: >-
+  The Recliner Infrastructure Architecture documents the intended Platform
+  Service Mesh participation. Helm chart evidence gathered 2026-08-05 for
+  OPS-306834 shows this intent is only partially realized: the som-recliner
+  repository's recliner-loveseat-subscriber chart sets
+  `kuma.io/sidecar-injection: enabled`, but the recliner-bff, recliner-backend,
+  recliner-user-profile, and recliner-entity-locking charts carry no mesh
+  sidecar-injection annotations. The BFF and core-service workloads that make
+  up the primary Recliner runtime are therefore not currently evidenced as mesh
+  participants. Exact namespace injection policy, mesh name, traffic
+  policies, and live sidecar state for recliner-loveseat-subscriber remain deferred
+  until AWS SSO access is refreshed or deployment manifests are linked.

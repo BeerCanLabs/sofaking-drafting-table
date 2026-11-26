@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYRV2CA0-SEYK
+type: relationship
+name: Trackweb-IT App → SAP
+catalogStatus: complete
+source: 01KSM38KFB-QFJ1
+label: calls
+externalTarget: SAP NetWeaver Application Server (ERP)
+description: Trackweb-IT synchronizes asset and location change data with SAP via a SOAP/WCF binding (zbn_trackweb_asset_chg) against SAP NetWeaver [PRO/010].
+technology: SOAP/WCF
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- erp-integration
+notes:
+  background: Confirmed via system.serviceModel bindings for BasicHttpBinding_IAssetsService/ILocationsService in web.config, with SAPLogin/SAPPassword credentials.
+capabilities: []

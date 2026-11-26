@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KWF4ASYJ-YNSW
+type: technology_component
+ownerRole: technology-admin
+name: BestSync
+description: 'File synchronization software installed locally on the Webloom Bitvise SFTP server. BestSync jobs watch local folders and move inbound files to the correct customer file location on the Webloom central file server.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - file-transfer
+  - file-sync
+  - webloom
+  - legacy
+vendor: Unknown
+productName: BestSync 2018
+productVersion: 13.0.0.7
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: BestSync version is BestSync 2018, version 13.0.0.7. Vendor and support posture require confirmation from Webloom/SOM operations.
+capabilities:
+  - 01KT0XNZEY-K1J3
+configurations:
+  - id: folder-watch-file-mover
+    name: Folder Watch File Mover
+    description: Watches local inbound folders and moves files to customer-specific locations on the Webloom central file server.
+    capabilities:
+      - 01KT0XNZEY-K1J3

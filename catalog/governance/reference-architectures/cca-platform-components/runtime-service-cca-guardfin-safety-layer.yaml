@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2F5-96MQ
+type: runtime_service
+name: CCA Guardfin Safety and Control Layer
+description: >-
+  Guardfin is the safety and control layer in the Divan-to-LLM path.
+  [DOCUMENTED today] It is deployed and live in OBSERVE mode: it inspects every
+  request and signals the observability platform, but blocks nothing yet.
+  [INTENDED] Its end-state job is to BLOCK unsafe Divan actions before they
+  execute (deny-by-default: loss of the safety layer blocks execution rather than
+  allowing unsafe action) -- a one-variable action-mode flip after false-positive
+  tuning. Classified as a governance-framework member, not a compensating control.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - safety-layer
+  - guardfin
+  - policy
+  - intended
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYWQZ7C5-YQG0
+networkPlacement: internal
+authenticationModel: iam

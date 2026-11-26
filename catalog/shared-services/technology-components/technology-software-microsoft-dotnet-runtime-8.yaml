@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-EHW4
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft .NET Runtime 8
+description: Current supported .NET runtime baseline for new application services.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dotnet
+classification: software
+vendor: Microsoft
+productName: .NET Runtime
+productVersion: '8'
+vendorLifecycle:
+  mainstreamSupportEnd: 2026-11-10
+  extendedSupportEnd: 2026-11-10
+  notes: .NET 8 is the current long-term supported baseline through November 2026.
+capabilities:
+- 01KT0V5MCV-RZV0

@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 1D2G7SYD94-CKHB
+type: decision_record
+name: WHM Display Materials IIS Web Service Design
+description: Architectural design decisions for the WHM_IM Trackweb ASP.NET WebForms IIS service. Initial values captured from repository discovery and code search; fields marked TBD require owner interview to confirm.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - whm
+  - design
+  - adr
+category: decision
+status: accepted
+affectedComponent: Q8J31D44E3-F22K
+decisionRationale: >
+  WHM_IM is an ASP.NET WebForms application (.NET Framework 4.6.1, VB.NET) running on IIS 10 on Windows Server 2022 EC2. Service authentication uses centralized identity; the exact model (SAML, Windows auth, or application-layer auth) requires owner confirmation. Secrets management approach is not confirmed by repository discovery and requires owner interview. IIS and application logs are forwarded to centralized logging. Health and welfare monitoring uses IIS application pool health probes; synthetic URL checks require owner confirmation. Availability, scalability, and recoverability models are not confirmed by repository discovery. The failure domain is scoped to the IIS application pool and host for WHM_IM. Third-party control libraries (Telerik UI for ASP.NET AJAX 2015.3, AjaxControlToolkit 17.1, GrapeCity ActiveReports 15) are deployed from the ThirdPartyControls\ vendor directory and are bundled with the application deployment.

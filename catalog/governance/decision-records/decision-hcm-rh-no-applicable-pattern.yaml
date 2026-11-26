@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KTGG6XFP-YNGM
+type: decision_record
+name: New Recruiting & Hiring - No Applicable Reference Architecture
+description: Reference-architecture-conformance decision for the New Recruiting & Hiring deployment pattern, recording that no existing DRAFT reference architecture applies.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: open
+affectedComponent: 01KSM38KG7-42XD
+linkedObject: 01KSM38KG7-42XD
+decisionRationale: 'noApplicablePattern: No existing DRAFT reference architecture matches this dual-application (Retailjobspot + Recruit & Hire) .NET Core and Node.js microservices pattern on Kubernetes with event-driven AWS SNS/SQS messaging and a Kuma service mesh. Recorded as noApplicablePattern pending definition of a suitable reference architecture. Status open pending recruiting-hiring team / ARB ratification.'

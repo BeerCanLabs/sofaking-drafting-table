@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-KV7W
+type: decision_record
+name: Shared Customer Record External Dependencies
+description: Inventory of the external platforms and managed services the Shared Customer Record deployment depends on, and how each is represented in the catalog.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - shared-customer-record
+  - dependencies
+  - decision-record
+category: decision
+status: open
+affectedComponent: 01KXR9XAR5-K0FT
+linkedObject: 01KXR9XAR5-K0FT
+decisionRationale: >-
+  Dependencies outside the pattern's own components, confirmed from repository and
+  specification evidence on 2026-10-20. Registered as catalog objects: Okta
+  (01KQQ5JT1D-SHXD), which is the auth provider for Loveseat for every service (all
+  three event publishers and the Customer Profile Service's Loveseat subscription), validates
+  caller JWTs for all three APIs, and issues Customer Membership's machine-to-machine
+  clients; Sofa King IDM (01KXK7BD4N-8Z19), used by the Customer Profile Service to call
+  the Ottoman msvc-org-person service and by Customer Membership to call Core HR Org Unit;
+  Platform Msvc Org Person (msvc-org-person, 01KSM38KFH-NYK5), which the Customer Profile Service reads to validate
+  caller-supplied orgPersonIds (read-only; the OrgPerson Worker and provisioning were
+  removed by ADR-006); Core HR Org Unit (01KYQ4D9RR-T700), the service Sofa King
+  relies on to retrieve site information, owned by the HCM Sofa King Central team and
+  confirmed by the owner on 2026-10-20, validated by Customer Membership; AWS Secrets
+  Manager (01KWF3RGCF-T2HM), SNS and SQS (shared services), and Traefik and ArgoCD.
+  Not registered, modeled as an external target: the Loveseat event bus, which every
+  publisher posts to and which Customer Profile also receives identity-match callbacks
+  and registers subscriptions with; a shared Loveseat service object has been proposed
+  to Shared Services. Build-time only: the Artifactory NuGet feed for the shared
+  canonical models package, which is outside the runtime topology. Core HR Org Unit's
+  endpoint contract for site existence checks (base URL, IDM scope, SLO) is not yet
+  documented.

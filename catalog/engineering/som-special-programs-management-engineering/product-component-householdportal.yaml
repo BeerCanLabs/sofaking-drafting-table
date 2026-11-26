@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYMYCJTS-KZRE
+type: product_component
+ownerRole: engineer
+name: Salesdesk Household Portal
+description: >-
+  Parent-facing ASP.NET web application for the Salesdesk (SEM) platform,
+  paired with its own SEMData data-access project. Discovered from the
+  SEM/Websites/Householdportal folder of the SE-SEM repo.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - salesdesk
+  - sem
+  - special-retail
+  - parents-portal
+  - repository-discovery
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-SE-SEM
+language: C#
+classification: web-application
+notes:
+  sourceRepository: SEM/Websites/Householdportal
+  repositoryName: BeerCanLabs/sk-SE-SEM
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: >-
+    ASP.NET web application with a dedicated SEMData data-access project.
+    IIS-hosted; no Dockerfile present.
+  observedManifestPaths: >-
+    SEM/Websites/Householdportal/Householdportal/Householdportal.csproj,
+    SEM/Websites/Householdportal/DataAccess/SEMData.csproj

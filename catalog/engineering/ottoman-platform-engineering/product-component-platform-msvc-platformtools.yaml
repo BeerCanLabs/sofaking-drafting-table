@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFZ-CB4T
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Platformtools
+description: This is the main API that exposes functionality used by the Sofa King Platform Tools app. Platform tools allow CS to manage Users & Orgs.  This API orchestrates calls to the Org Msvc, Lists Msvc, and the various app specific Platform Tools APIs which provide the ability to manage org mappings and platform features in their respective apps.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-PlatformTools
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-msvc-PlatformTools
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; SK.PlatformTools.Service.sln; IntegrationTester/IntegrationTester.csproj; SwaggerSpecification/PlatformToolsApplicationSwagger.json; cd/codefresh-deploy-manual.yml; cd/codefresh-deploy-triggered.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/ingress.yml; cd/prod/service.yml; cd/qa/cm.yml; cd/qa/deploy.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

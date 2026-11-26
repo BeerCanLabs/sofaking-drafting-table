@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEW-VCQS
+type: product_component
+ownerRole: engineer
+name: SOM Job Server
+description: 'Scheduled and background job execution for SOM. Contains Sofa King-authored .NET code. Currently single instance — unintentional SPOF. See ard.som.004.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+runsOn: 01KQQ5JT1E-HQZ6
+tags:
+- som
+- jobs
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  serviceAuthentication: Job-server identities and administrative access use centralized identity and secret distribution.
+  secretsManagement: Runtime secrets are sourced from centralized secret storage.
+  serviceLogging: Job execution logs are forwarded to centralized logging beyond the underlying runtime tier.
+  healthWelfareMonitoring: Job execution telemetry, scheduler health checks, and runtime monitoring track service welfare.
+  availabilityModel: Intended to run as a highly available job-processing tier, though current deployment remains a single instance.
+  scalabilityModel: Horizontal scale-out across additional job workers once job concurrency controls are established.
+  recoverabilityModel: Failed instances are rebuilt from the deployment package and pending jobs are resumed through the scheduling workflow.
+  failureDomain: Scoped to the SOM job-processing service within a single sub-environment.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

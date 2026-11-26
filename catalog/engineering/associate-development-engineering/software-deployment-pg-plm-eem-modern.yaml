@@ -1,0 +1,283 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-8WVS
+type: software_deployment_pattern
+ownerRole: engineer
+name: 'PG: PLM/EEM — Cloud Services'
+aliases:
+  - PLM/EEM Modern Deployment Pattern
+  - Professional Learning Management / Employee Evaluation Management (cloud tier)
+description: >-
+  The cloud-hosted tier of Sofa King Associate Development's PLM (Professional
+  Learning Management) and EEM (Employee Evaluation Management) product. A
+  TypeScript front end and .NET API on Amazon EKS, supported by Lambda-based
+  integration and workflow services, DynamoDB, S3, and AWS Step Functions.
+  Deployed to AWS us-east-1 with a us-east-2 disaster-recovery target, fronted
+  by the shared Traefik Kubernetes ingress. Authored for APEX L1 Baseline under
+  SKPG-19589; unresolved items are tracked in DraftingSession 01M1F8WB4E-0GSN
+  rather than asserted here.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Associate Development
+  notes: >-
+    Pillar carried over from the sibling PG LCR pattern and NOT yet confirmed by
+    product ownership. Tracked as an unresolved question in DraftingSession
+    01M1F8WB4E-0GSN; treat as provisional.
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - software-deployment-pattern
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+notes:
+  preProductionContent: >-
+    Added under SKPG-19589 review. One component in this pattern is
+    pre-production: msvc-pg-forms (01KSM38KG3-8PKZ) is lifecycleStatus
+    candidate and has almost certainly never been deployed to production, on
+    five independent signals recorded on the component itself. Its two
+    exclusive dependencies - AWS API Gateway (01M1HJY7E4-RPTG) and the PG Form
+    Service DocumentDB cluster (01M1HJY7E4-3NGA) - are therefore also
+    pre-production and must not be read as production architecture. They are
+    retained in the pattern for visibility rather than removed, because removal
+    would lose the discovery. Confirm with the owner and then either promote
+    them or move all three out of this pattern; see DraftingSession
+    01M1F8WB4E-0GSN, form-service-production-status.
+  awsAccountInventoryIncomplete: >-
+    The deploymentTargets note records AWS accounts 157401542232 and
+    736016846305 from the repositories. A third account is in use:
+    Sofa King_STL (248376931381) holds the Route 53 entries for
+    skilltrail.example and the pg-queueprocessor-prod EC2 instance (Confluence
+    648381633). That instance suggests the STL integration queue processor half
+    of STL-Identity (01KSM38KG2-Y4KV) may run on EC2 rather than Lambda, which
+    would make this pattern's runtime record for that component only half
+    right. Tracked in DraftingSession 01M1F8WB4E-0GSN.
+  boundaryQuestionRaised: >-
+    Two PLM/EEM-named services with live PG deployment pipelines sit outside
+    this pattern and outside the session's documented boundary review, which
+    only considered the 29 objects in the associate-development-engineering
+    folder. Both are catalogued under ottoman-platform-engineering:
+    plm-Dashboard-BFF (product-component-plm-dashboard-bff) and Rubric Designer
+    (product-component-platform-msvc-rubricdesigner, with production EKS pods
+    per OPS-57657). Rubrics are core EEM functionality and the BFF is
+    PLM-named, so whether the Ottoman placement is deliberate or an artifact
+    of import needs an owner decision. Tracked in DraftingSession
+    01M1F8WB4E-0GSN.
+deploymentTargets: >-
+  aws-us-east-1 for all three service groups in production. Confirmed from
+  production ingress hosts (pg-plm-eem-api.use1.sofaking.example,
+  pg-reportwriteragent.use1.sofaking.example) and from the Step Function
+  ARNs in the production ConfigMap, which are all
+  arn:aws:states:us-east-1. Two AWS accounts are named in the repositories:
+  157401542232 and 736016846305; a third, Sofa King_STL (248376931381), is
+  evidenced in infrastructure documentation - see the
+  awsAccountInventoryIncomplete note. A parallel cd/dr/ manifest set targets
+  aws-us-east-2 with use2 hostnames; that is a declared disaster-recovery
+  target, not a second production target, and cross-region failover has not
+  been tested. Note this is the reverse of the Sofa King default — the
+  deployment-targets vocabulary makes aws-us-east-2 primary and treats
+  us-east-1 as "reference only when explicitly labeled east-1", which this
+  pattern does explicitly.
+availabilityRequirement: >-
+  Not confirmed by owner interview. The EKS workloads ship Horizontal Pod
+  Autoscaler manifests (cd/prod/hpa.yml, cd/prod-ottoman/hpa.yml) for both
+  pg-msvc-plm-eem-api and PG-ReportWriterAgent, and a parallel cd/dr/ manifest
+  set targets us-east-2, which together evidence a multi-replica, DR-capable
+  posture. Replica bounds, an availability tier, and an RTO/RPO have not been
+  ratified by the owning team. Tracked in DraftingSession 01M1F8WB4E-0GSN.
+dataClassification: >-
+  Confidential — associate personal data. PLM/EEM stores professional-learning
+  records and employee evaluation data for RETAIL region staff, which is
+  personally identifiable employment information about named associates.
+  Evaluation content is additionally sensitive as employment-decision material.
+  File uploads and imported artifacts land in the S3 buckets listed under the
+  Data service group. Not yet reviewed by Information Security; classification
+  is the authoring team's assessment and requires ratification. Tracked in
+  DraftingSession 01M1F8WB4E-0GSN.
+failureDomain: >-
+  Single AWS region for production (us-east-1) with a declared disaster-recovery
+  manifest set for us-east-2. Blast radius is the PG namespace on the shared
+  Ottoman EKS cluster plus the PG-owned AWS accounts 157401542232 and
+  736016846305. Loss of the shared Traefik ingress or the Ottoman cluster
+  removes all inbound access to the production workloads in this tier. This tier
+  also depends on the STL SQL Server estate in the legacy pattern
+  (01M1F8WB4E-RWQB), so a legacy database outage degrades cloud services that
+  read region and evaluation data. Cross-region failover has not been tested;
+  the DR manifests evidence intent, not a proven capability.
+patternDeviations: >-
+  Not applicable — no reference architecture has been selected for this pattern
+  (see decision record 01M1F8WB4E-AP1E), so there are no deviations from a
+  selected pattern to record. Non-standard technology choices are recorded
+  separately as decision records 01M1F8WB4E-2ND0 (New Relic), 01M1F8WB4E-9C7X
+  (LaunchDarkly and Avalara), 01M1HJY7E4-CJ8C (Salesforce) and
+  01M1F8WB4E-BE9M (uncatalogued platform technology, principally ASP.NET
+  Core 10).
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+serviceGroups:
+  - name: PLM/EEM Web Tier
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Public entry point. Traefik terminates ingress for the API at
+      pg-plm-eem-api.use1.sofaking.example; the UI is served at
+      associate-development-ui.retail.sofaking.example. The DR manifest set
+      publishes the same hosts under use2.
+    deployableObjects:
+      - ref: 01KSM38KG3-027C
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          pg-plm-ui — the PLM front end (TypeScript, containerised, nginx-served).
+          Deployed from cd/prod and cd/stage Kubernetes manifests.
+      - ref: 01KYAXMZ7H-72BR
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Shared Traefik Kubernetes Ingress Service, reused rather than
+          re-declared per the DRAFT reuse model. Confirmed from
+          kubernetes.io/ingress.class:traefik in every cd/*/ingress.yml across
+          pg-msvc-plm-eem-api and PG-ReportWriterAgent. This is the only
+          production edge path into this tier; the API Gateway path below
+          belongs to a pre-production service.
+      - ref: 01M1HJY7E4-RPTG
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          AWS API Gateway REST API — a second edge path, but PRE-PRODUCTION.
+          SK.PG.FormService.CDK/FormServiceLambdaStack.cs publishes a RestApi
+          named "pgformservice" with a per-environment Stage, five
+          LambdaIntegration methods under /org/{orgId}/form[/{formId}], and a
+          Lambda TokenAuthorizer reading the Authorization header. It exists
+          only to front msvc-pg-forms (01KSM38KG3-8PKZ), which has no
+          deployment pipeline and does not appear in the PG pipeline inventory,
+          so this path is not believed to be live. Two configuration concerns
+          are recorded on the object itself - a wildcard CORS origin combined
+          with AllowCredentials, and an authorizer whose IDM endpoint is
+          hardcoded to a QA host - and are pre-production hygiene rather than
+          live exposure while that holds.
+  - name: PLM/EEM Application Services
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Container and serverless application tier. The API runs on the Ottoman
+      EKS cluster; the integration and workflow services run as Lambda functions
+      deployed by CDK.
+    deployableObjects:
+      - ref: 01KSM38KG3-P3SC
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          pg-msvc-plm-eem-api — the primary PLM/EEM API (.NET 10), running on
+          the PG ASP.NET Core 10 on EKS Application Runtime (01M1HJY7E4-V1HG).
+          Its earlier runsOn defect, which recorded the AWS Lambda Serverless
+          Host against Kubernetes manifests, was corrected under SKPG-19589.
+      - ref: 01KSM38KG3-8PKZ
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          msvc-pg-forms — PLM/EEM forms microservice, PRE-PRODUCTION
+          (lifecycleStatus candidate). Five .NET 6 Lambda handlers plus a
+          Node.js 14 token authorizer, fronted by API Gateway and persisting to
+          DocumentDB. The repository has no cd/ directory and no Codefresh
+          pipeline, and the service is absent from the PG pipeline inventory in
+          Confluence 39199080479, so it is not believed ever to have reached
+          production. CORRECTION carried forward: its
+          rds-combined-ca-bundle.p7b was originally read as evidence of an AWS
+          RDS dependency; the CDK provisions Amazon DocumentDB, which uses the
+          same certificate bundle for TLS. See DraftingSession
+          01M1F8WB4E-0GSN, form-service-production-status.
+      - ref: 01KSM38KG2-Y4KV
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          STL-Identity — the STL integration queue processor and PG Lambda
+          estate (ActivityService, ApprovalService, ArtifactImport,
+          BuildingService, BulkResubmit, CSWebRegUserTool and others). This
+          component bridges the cloud and legacy tiers; see decision record
+          01M1F8WB4E-7DRZ. Its runtime record may be incomplete: a
+          pg-queueprocessor-prod EC2 instance exists in the Sofa King_STL
+          account, which suggests the queue-processor half does not run on
+          Lambda. See the awsAccountInventoryIncomplete note.
+      - ref: 01KSM38KG3-2X43
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          PG-ReportWriterAgent — EKS worker paired with the legacy
+          PG-ReportWriter (01KSM38KG3-PN95) in pattern 01M1F8WB4E-RWQB. The pair
+          spans both patterns; the cross-pattern path is recorded in decision
+          record 01M1F8WB4E-7DRZ.
+      - ref: 01KQQ5JT05-WX2Z
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          AWS Step Functions. Three production state machines are configured:
+          use1-int-sk-pg-prod-ActivityBulkCopy, sk-pg-prod-EemEvalRightsAutomation,
+          and use1-int-sk-pg-prod-PgDataImport.
+      - ref: 01KQQ5JT05-0C4P
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          AWS SQS. Evidenced by the STL-Identity CDK stacks and the FORMIX
+          ArchiveFilesExport utility (AWSSDK.SQS).
+      - ref: 01KQQ5JT05-HTRA
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          AWS SNS. Evidenced by sns-subscriptions constructs across the
+          STL-Identity and EemEvaluationRightsAutomation CDK applications.
+  - name: PLM/EEM Cloud Data
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Cloud-native persistence. Relational data for this tier lives in the STL
+      SQL Server estate catalogued under the legacy pattern.
+    deployableObjects:
+      - ref: 01KQQ5JT04-K58R
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          AWS DynamoDB. Tables are prefixed by environment
+          (AwsDynamoTablePrefix: prod) and provisioned by the
+          EemEvalRights CDK stack. Individual table inventory not yet captured.
+      - ref: 01KQQ5JT05-KT3Z
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          Amazon S3. Five production buckets are configured:
+          sk-pg-sp-eem-prod-artifact-uploads, sk-pg-prod-fileuploadstaging,
+          sk-pg-prod-fileuploadperma, sk-pg-prod-cswr2, and
+          use1-prod-sk-pg-bulk-activity-copy2.
+      - ref: 01M1HJY7E4-3NGA
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          PG Form Service DocumentDB cluster — PRE-PRODUCTION. The forms
+          service's own persistence, in its own dedicated VPC separate from the
+          EKS estate. Recorded as candidate, not established: its only consumer
+          is msvc-pg-forms, which has no deployment pipeline, and its CDK
+          leaves DeletionProtection commented out pending go-live. The
+          Mongo-compatibility question against the deprecated MongoDB Atlas
+          object, and the CDK's placement of the cluster in public subnets, are
+          recorded on the object and referred on - both are pre-production
+          concerns while the service is not live.
+decisionRecords:
+  - ref: 01M1F8WB4E-72BP
+    key: externalDependencies
+  - ref: 01M1F8WB4E-7DRZ
+    key: interServiceConnections
+  - ref: 01M1F8WB4E-AP1E
+    key: noApplicablePattern

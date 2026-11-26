@@ -1,0 +1,59 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1E-W3TA
+type: runtime_service
+ownerRole: technology-admin
+name: Node.js Application Service
+description: Stub application service for Node.js workloads identified in Axonius inventory.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - app
+  - nodejs
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-PK8G
+primaryTechnologyComponent: 01KQQ5JT1V-83GS
+architectureNotes:
+  minNodes: 3
+  autoscaling: required
+  loadBalancer: required
+  serviceAuthentication: Application identities and administrative access use centralized identity and secret distribution.
+  scalingApproach: horizontal autoscaling behind load balancer
+  serviceLogging: Node.js application logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: application readiness endpoint monitored by the load balancer
+  healthWelfareMonitoring: Readiness probes, synthetic monitoring, and APM telemetry monitor service welfare.
+  secretsManagement: runtime secrets sourced from centralized secret store
+  availabilityModel: Multi-node Node.js application tier behind load balancing.
+  scalabilityModel: Horizontal autoscaling behind the load balancer.
+  recoverabilityModel: Failed Node.js instances are replaced and rejoined to the active service pool.
+  failureDomain: Scoped to the Node.js application tier deployment unit.
+deploymentConfigurations:
+  - id: high-availability
+    name: High Availability
+    description: Multiple Node.js application nodes provide active service redundancy.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: elastic-scale
+    name: Elastic Scale
+    description: Node.js application nodes scale horizontally based on workload demand.
+    addressesQualities:
+      - scalability
+internalComponents:
+  - ref: 01KQQ5JT02-PK8G
+    role: host
+  - ref: 01KQQ5JT1V-83GS
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJC5-XMWA
+    key: serviceAuthentication
+  - ref: 01KT16XJC5-XMWA
+    key: secretsManagement
+  - ref: 01KT16XJC5-XMWA
+    key: failureDomain

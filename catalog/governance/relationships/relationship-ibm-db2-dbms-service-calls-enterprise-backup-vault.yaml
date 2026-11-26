@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Y5-4HSA
+name: IBM Db2 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT00-5TYB
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Provisional off-host backup target pending Db2 platform confirmation."

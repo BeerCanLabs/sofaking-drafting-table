@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KXK8178A-CAKJ
+type: product_component
+ownerRole: engineer
+name: Trifold Messaging Service
+description: >-
+  Public web endpoint (messaging.cdpdirect.example) for the Trifold product
+  family, discovered via the CDP Direct - WAF Info Confluence page. May be a
+  thin application/API layer over the already-reused shared RabbitMQ
+  Messaging Service RuntimeService (ref 01KQQ5JT1E-JBCV), or a separate
+  product entirely — not confirmed by source repository review.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - messaging-service
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: api-service
+notes:
+  sourceRepository: >-
+    Not yet identified — evidence is a live public DNS/WAF entry
+    (messaging.cdpdirect.example), not a code repository.
+  sourcePage: CDP Direct - WAF Info (Confluence, SKENG space, page 35904193026)
+  relatedInfra: >-
+    Possible relationship to the shared RabbitMQ Messaging Service
+    RuntimeService (ref 01KQQ5JT1E-JBCV) already reused elsewhere in this
+    product family (see software-deployment-ct-data-extraction-tool.yaml).
+    Not modeled as a relationship pending confirmation of what this
+    endpoint actually serves.

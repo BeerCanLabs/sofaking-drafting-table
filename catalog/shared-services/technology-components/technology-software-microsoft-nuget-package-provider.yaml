@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1S-9ACG
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft NuGet Package Provider
+description: PowerShell package provider used by SRE automation to install PowerShell modules.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- powershell
+- package-management
+classification: software
+vendor: Microsoft
+productName: NuGet Package Provider
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SRE automation installs NuGet through Install-PackageProvider, sometimes with minimum version 2.8.5.208.
+capabilities:
+- 01KT0XNZEY-7HWQ
+- 01KT0XNZEY-35Y2
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/common/nuget/tasks/main.yml and related SQL automation tasks."

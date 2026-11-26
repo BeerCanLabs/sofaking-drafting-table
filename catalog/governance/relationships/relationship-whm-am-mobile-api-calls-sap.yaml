@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV2X1R-3NRQ
+type: relationship
+name: AM Mobile API → SAP
+catalogStatus: complete
+source: 01KSM38KFB-D6MJ
+label: calls
+externalTarget: SAP NetWeaver Application Server (ERP)
+description: The mobile backend API synchronizes asset and location change data with SAP via the same SOAP binding pattern used by Trackweb-IT.
+technology: SOAP/WCF
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- erp-integration
+- mobile
+notes:
+  background: Confirmed via system.serviceModel BasicHttpBinding_IAssetsService/ILocationsService bindings in the Mobile API's Web.config, with plaintext SAPLogin/SAPPassword.
+capabilities: []

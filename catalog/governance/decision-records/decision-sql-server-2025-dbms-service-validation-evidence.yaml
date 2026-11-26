@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJ8D-S0PS
+type: decision_record
+name: SQL Server 2025 DBMS Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KRZVZXDK-7XC1
+linkedObject: 01KRZVZXDK-7XC1
+decisionRationale: "serviceAuthentication: Active Directory integrated identities govern administrator and service access to the database.\n\nsecretsManagement: Service accounts and connection secrets stored centrally.\n\nserviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.\n\nfailureDomain: Scoped to the SQL Server availability group serving the dependent application estate.\n\nbackup.strategy: daily full plus hourly log backup\n\nbackup.platform: SQL Server native backup to managed storage\n\nbackup.rto: 1h\n\nbackup.rpo: 1h\n\nha.mechanism: AlwaysOn Availability Groups\n\nencryption.atRest: TDE enabled on all production databases\n\naccessControl.model: Active Directory integrated access with role-based SQL permissions"

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHR4-G7AW
+type: decision_record
+name: Platform Msvc Rl Eventprocessor Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG7-5WAF
+linkedObject: 01KSM38KG7-5WAF
+decisionRationale: 'runtimeRequirement: Infrastructure configuration (HCL/Terraform); no application runtime.'

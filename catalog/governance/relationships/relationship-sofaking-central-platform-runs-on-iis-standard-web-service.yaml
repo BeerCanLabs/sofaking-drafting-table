@@ -1,0 +1,15 @@
+schemaVersion: '1.0'
+uid: K0JG3TB3AH-4GY5
+type: relationship
+name: Sofa King Central Platform → IIS Standard Web Service
+catalogStatus: complete
+source: 01KQQ5JT0K-TN7W
+target: 01KQQ5JT1F-HZTZ
+label: runs on
+flow: outbound
+notes:
+  background: >-
+    Legacy .NET Framework services run on IIS/EC2. The current Sofa King
+    Central Packer definitions select the Windows Server 2022 base image, so
+    the existing-only IIS Standard Web Service is the accurate runtime
+    service; the deprecated Windows Server 2016 variant does not apply.

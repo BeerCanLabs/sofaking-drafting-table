@@ -1,0 +1,241 @@
+schemaVersion: '1.0'
+uid: 01KZP9ZZ56-JV14
+type: drafting_session
+name: Project Recliner Data Domain Review (OPS-046456)
+description: >-
+  Data-domain catalog advancement for OPS-046456 using the Recliner
+  Infrastructure Architecture draft and SME follow-up. This session makes the
+  three documented SQL data boundaries explicit, records the confirmed
+  codebase and Application Instance Store boundary, and preserves the platform
+  decisions and operational controls that remain with other owners.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+sessionStatus: blocked
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - session
+  - recliner
+  - ops-103057
+  - data-domain
+  - draft-l1
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KSM38KGH-A6GC
+sourceArtifacts:
+  - name: OPS-046456 - Recliner Data Domain Review for DRAFT L1
+    type: ticket
+    location: https://sofaking-example.atlassian.net/browse/OPS-046456
+    notes: >-
+      Closure criteria require a confirmed data owner and database platform,
+      accurate SQL/S3/Snowflake/Redis mappings, explicit logical data
+      boundaries, Recliner-specific governance evidence, and validation on final
+      main.
+  - name: OPS-046456 comment 2171304 - data-domain approver confirmation
+    type: interview
+    location: https://sofaking-example.atlassian.net/browse/OPS-046456?focusedCommentId=2171304
+    notes: >-
+      Confirms Theo Kane, Reid Sumner, and Sunil Pradhan as the
+      accountable Recliner data-domain SMEs/approvers.
+  - name: Reid Sumner data-domain response in Slack - 2026-08-14
+    type: interview
+    notes: >-
+      Confirms the three SQL Server Database Project paths; identifies
+      CorvidGroup.Business.Services.Restful and ReclinerSystemDbContext as the
+      Application Instance Store consumer; confirms that store has no customer
+      or user identifier columns; records current S3 controls; and states the
+      intended Platform AI Gateway direction. Defers database platform and SQL
+      operations to Sunil Pradhan's team, Redis implementation to Thomas
+      Kane, and Snowflake implementation to Bharat Menon.
+  - name: Recliner Infrastructure Architecture [DRAFT]
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SS/pages/17155479503/Recliner+Infrastructure+Architecture+DRAFT
+    notes: >-
+      Establishes the proposed User Store, Application Instance Store, and
+      region Instance Store boundaries; RDS and SQL Server direction; Redis
+      session/cache use; S3 document lifecycle; and Snowflake analytics role.
+      It does not establish final platform decisions or operational controls.
+generatedObjects:
+  - name: Recliner Global User Store
+    type: data_component
+    status: created
+    ref: 01KZP9ZZ56-R5MT
+    notes: Explicit logical data boundary with SQL Server Database Project path confirmed; platform and operational controls remain open.
+  - name: Recliner Application Instance Store
+    type: data_component
+    status: created
+    ref: 01KZP9ZZ56-QKZP
+    notes: Explicit configuration-data boundary with project path, consumer, DbContext, schema scope, and no-PII posture confirmed.
+  - name: Recliner Region Instance Stores
+    type: data_component
+    status: created
+    ref: 01KZP9ZZ56-VW85
+    notes: Explicit single-tenant region data boundary for restricted customer records with SQL Server Database Project path confirmed.
+  - name: Project Recliner (National SOM)
+    type: software_deployment_pattern
+    status: created
+    ref: 01KSM38KGH-A6GC
+    notes: Added the three data components to the Data and Analytics service group.
+  - name: Recliner User Service to Recliner Global User Store
+    type: relationship
+    status: created
+    ref: 01KSR5D4EF-G6GT
+    notes: Retargeted the existing stable relationship UID from the generic SQL service to the explicit user data boundary.
+  - name: Recliner Customer Profile Service to Recliner Region Instance Stores
+    type: relationship
+    status: created
+    ref: 01KSR5D4EE-CA4C
+    notes: Retargeted the existing stable relationship UID from the generic SQL service to the explicit region data boundary.
+  - name: Recliner Report Data Provider Service to Recliner Region Instance Stores
+    type: relationship
+    status: created
+    ref: 01KSR5D4EK-V9SC
+    notes: Retargeted the existing stable relationship UID from the generic SQL service to the explicit region data boundary.
+unresolvedQuestions:
+  - id: authoritative-database-platform
+    question: Is the approved Recliner baseline Amazon RDS for SQL Server 2025, or is Aurora PostgreSQL still a viable production choice?
+    status: open
+    reason: >-
+      Reid Sumner deferred the platform decision to Sunil Pradhan's team.
+      That team is setting up dedicated databases in the development, test,
+      and stage AWS environment accounts, but the final engine and production
+      substrate were not confirmed.
+    currentBestGuess: SQL Server 2025 on Amazon RDS remains the intended direction, with dedicated per-environment databases, but it is not treated as an approved final decision.
+    impact: The three data components currently target MSSQL and reference the existing candidate SQL Server 2025 service; both may need revision.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+      - ref: 01KRZVZXDK-7XC1
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+  - id: data-codebase-locations
+    question: Which repository paths own the schemas and migrations for each Recliner SQL data boundary?
+    status: answered
+    reason: Reid Sumner supplied all three SQL Server Database Project paths in the som-recliner repository.
+    currentBestGuess: >-
+      Application Instance Store is at
+      src/recliner-database/ReclinerApplicationInstanceStore/; Region Instance
+      Store is at src/recliner-database/ReclinerRegionInstanceStore/; and Global
+      User Store maps to src/recliner-database/ReclinerUserProfileStore/.
+    impact: The three DataComponents now carry repository provenance; platform and operational-control gaps remain independent.
+    relatedObjects:
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+  - id: sql-operational-controls
+    question: What are Recliner's backup and restore testing, region-level restore, encryption and KMS, access, residency, multi-AZ, RTO/RPO, retention, and deletion controls?
+    status: open
+    reason: >-
+      Reid Sumner explicitly deferred SQL operational evidence to Sunil
+      Pradhan's team and noted that SOMDEVDB01 operations are not owned by
+      the Recliner team.
+    currentBestGuess: Managed AWS capabilities may provide part of the control surface, but no Recliner-specific settings are asserted until Sunil's team supplies evidence.
+    impact: OPS-046456 cannot close and the managed database substrate cannot be marked complete.
+    relatedObjects:
+      - ref: 01KRZVZXDK-7XC1
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+  - id: application-store-pii-and-consumer
+    question: Which Recliner service reads or writes the Application Instance Store, and can its region configuration contain user or customer identifiers?
+    status: answered
+    reason: >-
+      Reid Sumner confirmed that CorvidGroup.Business.Services.Restful
+      consumes the store through ReclinerSystemDbContext and that its
+      organization/system schema contains no customer or user identifier columns.
+    currentBestGuess: >-
+      The store holds assortment standards, state and region directories,
+      lookups, validation rules, and other organization/system configuration;
+      containsPII remains false.
+    impact: The consumer and no-PII boundary are documented. A relationship remains deferred until the consuming code boundary is represented as a ProductComponent.
+    relatedObjects:
+      - ref: 01KZP9ZZ56-QKZP
+  - id: redis-deployment-and-controls
+    question: Is Recliner Redis self-managed, ElastiCache, or another managed service, and what are its TTL, persistence, encryption, and failover settings?
+    status: open
+    reason: Ryan confirmed Redis is planned for caching and identified Theo Kane as the implementation SME, but did not provide deployment or control details.
+    currentBestGuess: No deployment model is assumed from the generic shared Redis catalog entry; the current relationship remains planned rather than deployed evidence.
+    impact: The BFF cache relationship remains a stub and Redis operational posture is unresolved.
+    relatedObjects:
+      - ref: 01KSR5D4EC-A06A
+      - ref: 01KQQ5JT00-191S
+  - id: s3-snowflake-and-ai-governance
+    question: What remaining retention, deletion, residency, audit, recovery, and vendor-processing controls apply to Recliner S3, Snowflake, and future Platform AI Gateway data flows?
+    status: open
+    reason: >-
+      Ryan confirmed one S3 document bucket with SSE-S3, public access blocked,
+      versioning disabled, a one-day expiry only under staging/, and no retention
+      rule for final document paths. Snowflake is planned but not finalized,
+      and future AI features are intended to use Platform AI Gateway rather than
+      call Bedrock directly.
+    currentBestGuess: >-
+      Document Service writes S3 under the confirmed basic controls. Snowflake
+      remains a planned reporting/analytics boundary owned for follow-up by
+      Bharat Menon. No AI data flow is deployed yet; Platform AI
+      Gateway is the intended boundary when AI features are implemented.
+    impact: Basic S3 posture and AI direction are documented, but final-path retention, detailed S3 controls, Snowflake controls, and future AI/FERPA processing evidence remain open.
+    relatedObjects:
+      - ref: 01KSR5D4EG-8EW5
+      - ref: 01KSR5D4EJ-T14W
+assumptions:
+  - id: draft-page-is-proposed-intent
+    statement: >-
+      The Confluence page is used as evidence of proposed logical data
+      boundaries, not as proof that those services or controls are deployed.
+    rationale: The page title is marked DRAFT and the introduction calls the diagram proposed.
+    impact: New data components remain incomplete and candidate until owners supply operational evidence.
+    relatedObjects:
+      - ref: 01KSM38KGH-A6GC
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+  - id: mssql-is-current-working-target
+    statement: The three data components use MSSQL as the current working target engine.
+    rationale: The page's latest database-cluster section says SQL Server 2025 will be used, while preserving Aurora PostgreSQL as an unresolved alternative.
+    impact: A final Aurora decision requires changing the target engine and managed data-store reference.
+    relatedObjects:
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+nextSteps:
+  - id: record-codebase-and-boundary-evidence
+    action: Record the three SQL project paths and confirmed Application Instance Store consumer and PII boundary in the catalog.
+    status: done
+    owner: som-special-programs-management-engineering
+    relatedObjects:
+      - ref: 01KZP9ZZ56-R5MT
+      - ref: 01KZP9ZZ56-QKZP
+      - ref: 01KZP9ZZ56-VW85
+  - id: owner-review
+    action: Have Sunil Pradhan's team confirm the final database engine, production substrate, and environment topology.
+    status: blocked
+    owner: data-platform-team
+  - id: platform-model
+    action: Model the confirmed managed database substrate instead of inheriting the generic self-managed SQL Server 2025 baseline.
+    status: blocked
+    owner: data-platform-team
+    relatedObjects:
+      - ref: 01KRZVZXDK-7XC1
+  - id: control-evidence
+    action: Add Recliner-specific SQL, Redis, remaining S3, Snowflake, and future AI data-control evidence after the named SMEs respond.
+    status: blocked
+    owner: som-special-programs-management-engineering
+    notes: Sunil Pradhan owns database/SQL follow-up, Theo Kane owns Redis follow-up, and Bharat Menon owns Snowflake follow-up.
+  - id: final-validation
+    action: Merge approved catalog corrections, rerun validation on final main, and record the result in OPS-951140.
+    status: blocked
+    owner: cloud-engineering-infrastructure
+notes:
+  accountableDataDomainApprovers:
+    - name: Theo Kane
+      accountId: 557058:9ad6e045-b42c-44d5-94d1-c0b1d33abb26
+    - name: Reid Sumner
+      accountId: 712020:111d0029-ac07-4a52-b211-42c0014c5594
+    - name: Sunil Pradhan
+      accountId: 6054cbd63adeca0067fad8e0
+  approverConfirmation: >-
+    Confirmed in OPS-046456 comment 2171304 on 2026-08-10. This resolves the
+    accountable data-domain approver gap. Reid Sumner's 2026-08-14 response
+    resolves codebase provenance and the Application Instance Store boundary;
+    the delegated platform and control decisions remain open with their named owners.

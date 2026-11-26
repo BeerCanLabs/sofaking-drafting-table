@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG7-4Y2R
+type: product_component
+ownerRole: engineer
+name: RH Mobile Retailjobspot iOS App
+description: RETAIL Job Spot Mobile repository
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- rh
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-rh-mobile-retailjobspot-ios-app
+language: Swift
+classification: api-service
+runtimeRequirement: Swift
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-rh-mobile-retailjobspot-ios-app
+  observedRuntimeSignals: github_actions, readme
+  observedManifestPaths: .github/workflows/ios-ci.yml; .github/workflows/pr-validation.yml; .swiftlint.yml; Retailjobspot/Resources/Assets.xcassets/AccentColor.colorset/Contents.json; Retailjobspot/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json; Retailjobspot/Resources/Assets.xcassets/Contents.json; project.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

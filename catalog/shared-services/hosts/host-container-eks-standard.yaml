@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-75QN
+type: host
+ownerRole: technology-admin
+name: Amazon EKS Standard Container Host
+description: Standard host pattern representing an Amazon EKS worker and pod runtime context for Sofa King containerized product services.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- container
+- eks
+category: host
+architectureNotes:
+  minNodes: 1
+  autoscaling: optional
+  loadBalancer: none
+  securityMonitoringApproach: Workload, node, and audit telemetry integrated with AWS-native and security monitoring
+  patchManagementApproach: Node patching is performed through managed node group rotation and rolling updates
+  externalInteractionRationales:
+    Amazon EKS Control Plane: The EKS control plane is modeled to show the managed Kubernetes scheduling and cluster-state boundary for container workloads.
+    Central Logging Service: Central logging is modeled to show pod, node, and control-plane telemetry routing for this container runtime pattern.
+    Active Directory Authentication Service: Enterprise identity is modeled to show how cluster and workload administration is mediated through identity and Kubernetes RBAC.
+    Nagios Monitoring Service: Nagios is modeled for cluster and runtime health visibility for the container host standard.
+  internalComponentRationales:
+    01KQQ5JT1P-A24W: Amazon EC2 is modeled as the worker-node compute substrate behind the EKS runtime context.
+internalComponents:
+- ref: 01KQQ5JT1P-A24W
+  role: hardware

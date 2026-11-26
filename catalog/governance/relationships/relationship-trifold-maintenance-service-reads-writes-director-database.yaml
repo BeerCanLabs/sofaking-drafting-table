@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+uid: 01KX421X4R-CFW3
+type: relationship
+name: Trifold Maintenance Service → Trifold Director Database
+source: 01KX421X4Q-YSDR
+target: 01KX421X49-VNRW
+label: reads from and writes to
+technology: SQL Server wire protocol
+direction: synchronous
+flow: outbound
+catalogStatus: stub
+notes: Discovered from KIOTrifold TFS codebase (MaintenanceService.txt, MaintenanceRoutine.txt); connection details not yet confirmed by owner interview.

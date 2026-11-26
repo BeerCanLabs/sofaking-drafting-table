@@ -1,0 +1,68 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1F-V6XM
+type: runtime_service
+ownerRole: technology-admin
+name: Eclipse BIRT Reporting Service
+description: 'Standard BIRT reporting engine service pattern for document generation.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - reporting
+  - java
+category: service
+serviceCategory: general
+host: 01KQQ5JT03-AQA9
+primaryTechnologyComponent: 01KQQ5JT1R-CA33
+architectureNotes:
+  serviceAuthentication: 'Authentication is inherited from the parent application or print service host.
+
+    '
+  secretsManagement: 'Configuration and credentials are managed via the host''s standard  configuration mechanisms.
+
+    '
+  serviceLogging: 'BIRT engine logs are captured as part of the application or service logs.
+
+    '
+  healthWelfareMonitoring: 'Welfare is monitored via the health of the parent JVM or host.
+
+    '
+  availabilityModel: 'Availability is tied to the host or application instances where the  engine is integrated.
+
+    '
+  scalabilityModel: 'Scales vertically with host resources or horizontally with additional  application instances.
+
+    '
+  recoverabilityModel: 'Recovery is achieved through host or application restarts.
+
+    '
+  failureDomain: 'Impact is scoped to the host or JVM running the BIRT engine.
+
+    '
+internalComponents:
+  - ref: 01KQQ5JT1R-CA33
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJEF-6TJT
+    key: serviceAuthentication
+  - ref: 01KT16XJEF-6TJT
+    key: secretsManagement
+  - ref: 01KT16XJEF-6TJT
+    key: serviceLogging
+  - ref: 01KT16XJEF-6TJT
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJEF-6TJT
+    key: availabilityModel
+  - ref: 01KT16XJEF-6TJT
+    key: scalabilityModel
+  - ref: 01KT16XJEF-6TJT
+    key: recoverabilityModel
+  - ref: 01KT16XJEF-6TJT
+    key: failureDomain

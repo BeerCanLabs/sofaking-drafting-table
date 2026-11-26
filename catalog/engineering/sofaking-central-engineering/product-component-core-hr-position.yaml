@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KYQ4D9RN-XNGS
+type: product_component
+ownerRole: engineer
+name: Core HR Position
+description: CoreHR position and assignment service. DynamoDB-native with an Aurora PostgreSQL read model, deployed via CDK.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: sofaking-central-engineering
+  contact: dist_development_HCM_FC@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- source-inspection
+- sofaking-central
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-core-hr-position
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-core-hr-position
+  observedProjects: SK.CoreHR.Position.Service; SK.CoreHR.Position.Router; Cdk
+  observedTargetFrameworks: net8.0
+  observedPersistence: DynamoDB (table suffix per environment, cross-account assume-role) and Aurora PostgreSQL. Publishes to SQS and SNS.
+  observedServiceDiscovery: Direct base URLs in appsettings ServiceDiscoveryConfig rather than Consul.
+  serviceAuthentication: Authentication model was not confirmed by source inspection; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by source inspection; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by source inspection; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by source inspection; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by source inspection.
+  scalabilityModel: Scalability model was not confirmed by source inspection.
+  recoverabilityModel: Recoverability model was not confirmed by source inspection.
+  failureDomain: Failure domain was not confirmed by source inspection.
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-core-hr-position
+  repositoryPrimaryLanguage: C#
+  dependencyStyle: 'Unlike the sand-*/msvc-* tier this service does not use Consul; it configures PermissionsService, Loveseat, ListService, core-hr-org-unit, core-hr-job-definition and EmployeeService base URLs directly.'
+  clientAllowList: Accepts positionSvc, employeeSvc, settee, ottomanLite, fcReactFrontendProd, recruitHcmEmployerApp, rhSvc, recruitHcmOrganizationSvc.
+  sourceEvidence: 'Local working-copy inspection 2026-07-29: project files, packages.config/*.csproj package references, and appsettings/Web.config connection strings.'

@@ -1,0 +1,32 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG8-HW97
+type: product_component
+ownerRole: engineer
+name: Sofa King Recruiting & Hiring (Hiretrack Core)
+description: 'Legacy single-tenant ASP.NET Web Forms / VB.NET application core. Includes AspexRoot subscribing file model and OLA2Common shared code.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT1F-HZTZ
+tags:
+- recruiting
+- hiring
+- hiretrack
+- legacy
+- .net-webforms
+- product-component
+- rh
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  technologyStack: ASP.NET Web Forms, VB.NET, Classic ASP.
+  tenancyModel: Single-tenant per client (IIS app + SQL DB).
+  codeSharingModel: AspexRoot subscribing file model with OLA2Common.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

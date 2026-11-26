@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFQ-7WZC
+type: product_component
+ownerRole: engineer
+name: CIS Msvc Platform Identity Event Listener
+description: Event Listener for Platform Events needed for Person Identity Integration
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- sis
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-msvc-platform-identity-event-listener
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-cis-msvc-platform-identity-event-listener
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: deploy/ServiceInstallerConfig.json; deploy/package/stage/config/platform.json; src/IdentityEventListener.Domain/IdentityEventListener.Domain.csproj; src/IdentityEventListener.Service.Tests/IdentityEventListener.Service.Tests.csproj; src/IdentityEventListener.Service/Config/ConstraintTemplates/identityMatchTransaction.json; src/IdentityEventListener.Service/Config/ConstraintTemplates/personProfileType.json; src/IdentityEventListener.Service/Config/connectionStrings.json; src/IdentityEventListener.Service/Config/logging.json; src/IdentityEventListener.Service/Config/platform.json; src/IdentityEventListener.Service/IdentityEventListener.Service.csproj; src/IdentityEventListener.Service/Properties/launchSettings.json; src/IdentityEventListener.Service/appsettings.json
+  serviceAuthentication: Okta (Sofa King Identity). Confirmed by product owner on 2026-07-31 — this is a platform service, and platform services authenticate via Okta rather than the suite's IdentityServer3 (CIS App Centraladmin).
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

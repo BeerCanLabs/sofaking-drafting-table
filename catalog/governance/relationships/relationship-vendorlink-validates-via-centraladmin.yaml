@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYWPDHE5-AEYC
+type: relationship
+name: CIS Svc Vendorlink -> CIS App Centraladmin
+description: CIS Svc Vendorlink validates incoming vendor OAuth2 tokens against trusted-issuer data held in this ITC's local CIS App Centraladmin, allowing it to accept tokens issued by CIS Svc CloudCentral.
+catalogStatus: incomplete
+source: 01KSM38KFR-1TFV
+label: validates vendor tokens via
+target: 01KSM38KFP-Z4NW
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- vendorlink
+- centraladmin
+- authentication
+notes: Confirmed by the product owner on 2026-07-31 during a review of VendorLink and 3rd-party auth.

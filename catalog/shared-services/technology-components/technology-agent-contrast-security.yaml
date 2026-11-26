@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-4850
+type: technology_component
+ownerRole: technology-admin
+name: Contrast Security Agent
+description: Application security IAST/RASP agent providing runtime vulnerability detection.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- agent
+- security
+- application-security
+capabilities:
+- 01KQQ4Q026-RTWC
+classification: agent
+vendor: Contrast Security
+productName: Contrast Agent
+productVersion: current
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: This stub ABB does not declare fixed lifecycle dates because a public vendor lifecycle for the standalone Contrast Agent was not identified during catalog update research.

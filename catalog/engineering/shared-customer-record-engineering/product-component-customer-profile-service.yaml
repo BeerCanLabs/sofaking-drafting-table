@@ -1,0 +1,175 @@
+schemaVersion: '1.0'
+uid: 01KXR9XAR4-BES0
+type: product_component
+ownerRole: engineer
+name: Customer Profile Service
+description: >-
+  ASP.NET Core (.NET 10) HTTP API for core customer identity and family
+  relationships — Customer, Contact, and CustomerContactAssociation. Reads and
+  writes the Customer Profile DynamoDB single-table store and exposes REST
+  endpoints (with Swagger, FluentValidation, and health checks). Containerized and
+  deployed on AWS EKS.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+runsOn: 01M5CS4D96-RT10
+language: C#
+classification: api-service
+runtimeRequirement: .NET 10
+tags:
+  - customer-solutions
+  - shared-customer-record
+  - api-service
+  - dotnet
+  - eks
+  - product-component
+interfaces:
+  - name: Customer Profile REST API
+    protocol: REST
+    path: /api/orgs/{orgId}/customers
+    authenticationModel: oauth
+    description: >-
+      CRUD operations for customers, contacts, and customer-contact associations.
+      Callers supply personId / orgPersonId on customer and contact create, and the
+      API validates it against the Ottoman msvc-org-person service before writing
+      (the former org-person assignment endpoint and OrgPerson Worker were removed
+      in ADR-006). Contacts live at /api/orgs/{orgId}/contacts and
+      customer-contact associations are addressable from either side
+      (/customers/{customerId}/contact-associations and
+      /contacts/{contactId}/customer-associations). Scopes ss.profile.read,
+      ss.profile.write, and ss.profile.delete; deny by default. Health probes at
+      /health/live and /health/ready are anonymous.
+  - name: Loveseat Events Callback
+    protocol: REST
+    path: /api/events/identity-match
+    authenticationModel: oauth
+    description: >-
+      Inbound Loveseat callback (scope ss.profile.events) that receives
+      IdentityMatchTransaction events and updates the affected customer and contact
+      profiles. Events that cannot be processed are written to an SQS quarantine
+      queue. Documented in the Scalar reference in dev only.
+  - name: Loveseat Subscriptions
+    protocol: REST
+    path: /api/subscriptions
+    authenticationModel: oauth
+    description: >-
+      Lists the API's Loveseat subscriptions (scope ss.profile.events). The API can
+      register its Loveseat subscription on startup (Events:SubscribeOnStartup).
+runtimeSpec:
+  ports:
+    - number: 8080
+      protocol: HTTP
+      direction: inbound
+      name: web
+      description: HTTP API listener (container port 8080).
+  dependencies:
+    - ref: 01KXR9XAR4-SH1Y
+      purpose: Primary persistence for customer, contact, and association data.
+      interface: DynamoDB table SS_CustomerProfile
+    - ref: 01KSM38KFH-NYK5
+      purpose: Validate the caller-supplied orgPersonId before creating a customer or contact (read-only; unknown ids return 400, unavailability returns 503).
+      interface: msvc-org-person REST API GET orgPersons/{orgPersonId} (X-SK-ORG-ID header; IDM client credentials)
+    - ref: 01KWF3RGCF-T2HM
+      purpose: Retrieve downstream service credentials and configuration secrets, including the Loveseat client secret (customer-profile/api/events) and the OrgPerson IDM client secret.
+      interface: AWS Secrets Manager
+    - ref: 01KQQ5JT05-0C4P
+      purpose: Quarantine inbound Loveseat events that cannot be processed.
+      interface: SQS quarantine queue (Events:QuarantineQueueUrl)
+environmentConfiguration:
+  - name: Events__SubscribeOnStartup
+    description: Whether the hosted service registers the Loveseat subscription on startup.
+    required: false
+    sensitive: false
+  - name: Events__QuarantineQueueUrl
+    description: SQS queue URL for unprocessable inbound events (from the core CDK stack output).
+    required: true
+    sensitive: false
+  - name: AWS__DynamoDb__TableName
+    description: DynamoDB table name (SS_CustomerProfile_{Environment}).
+    required: true
+    sensitive: false
+  - name: Jwt__Authority
+    description: Okta authority used to validate caller bearer tokens; null by default so a misconfigured deploy fails closed.
+    required: true
+    sensitive: false
+  - name: Jwt__Audience
+    description: Expected token audience.
+    required: true
+    sensitive: false
+  - name: Events__LoveseatService__AuthorityUrl
+    description: Okta authority for the Loveseat client-credentials token (scope plat.loveseat) used to register the API's Loveseat subscription.
+    required: false
+    sensitive: false
+  - name: Events__LoveseatService__BaseUrl
+    description: Per-service Loveseat endpoint (loveseat-ss-customer-profile-{env}.ss.sofaking.example).
+    required: false
+    sensitive: false
+  - name: Events__LoveseatService__Scope
+    description: Okta scope for Loveseat (plat.loveseat).
+    required: false
+    sensitive: false
+  - name: Events__LoveseatService__ClientId
+    description: Okta client id for the Loveseat subscription.
+    required: false
+    sensitive: false
+  - name: Events__CallbackBaseUrl
+    description: Public per-service hostname Loveseat calls back (customer-profile-{env}.ss.sofaking.example).
+    required: false
+    sensitive: false
+  - name: OrgPersonService__AuthorityUrl
+    description: Sofa King IDM authority for client-credentials tokens used to call the Ottoman msvc-org-person service, which uses IDM auth.
+    required: true
+    sensitive: false
+  - name: OrgPersonService__BaseUrl
+    description: Ottoman msvc-org-person service base URL for orgPersonId validation (orgperson.int.sofaking.example/api/v2).
+    required: true
+    sensitive: false
+  - name: OrgPersonService__Scope
+    description: IDM scope for the OrgPerson service (skapi.internal).
+    required: true
+    sensitive: false
+  - name: OrgPersonService__ClientId
+    description: IDM client id for the OrgPerson call.
+    required: true
+    sensitive: false
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryName: BeerCanLabs/sk-ss-msvc-customer-profile
+  repositoryPrimaryLanguage: C#
+  observedRuntimeSignals: dotnet (net10.0), docker, aspnet-core, dynamodb
+  observedManifestPaths: >-
+    src/CustomerProfile.slnx; src/Directory.Build.props;
+    src/service/CustomerProfile.Api/CustomerProfile.Api.csproj;
+    src/service/CustomerProfile.Api/Program.cs; Dockerfile.service;
+    docker-compose.yml; src/service/CustomerProfile.Api/appsettings.json
+  runtimeSubstrateRationale: >-
+    Runtime taken as AWS EKS per the repository's CLAUDE.md ("Runtime: .NET 10,
+    ASP.NET Core Controllers, DynamoDB, AWS EKS"), overriding a Dockerfile-based
+    ECS/Fargate assumption from initial discovery.
+  environments: >-
+    Deployed to the le1 EKS cluster in dev and stage (ArgoCD applications
+    le1.ss-msvc-customer-profile-{dev,stage}, namespace ss-msvc-customer-profile, 1
+    replica, requests 100m/256Mi, limits 800m/2048Mi, Traefik ingress hosts
+    customer-profile-{dev,stage}.ss.sofaking.example; confirmed in
+    k8s-deployments 2026-10-20). No prod overlay; production is intended for
+    Chaise. Kong is not in the request path.
+  inboundEvents: >-
+    Unlike Academic Calendar and Customer Membership, which are outbound-only,
+    Customer Profile also consumes Loveseat IdentityMatchTransaction events through its
+    own API (api/events/identity-match) and registers a Loveseat subscription.
+    Recrawled 2026-10-20; this surface was missing from the 2026-07-17 model.
+  orgPersonValidation: >-
+    OrgPerson provisioning and the Customer Profile OrgPerson Worker were removed
+    (ADR-006, TBSPS-4319); the API no longer creates or matches OrgPersons. Callers
+    supply orgPersonId on create and the API validates it through the read-only
+    OrgPerson client (TBSPS-7902, implemented per the owner and the repo's resolver
+    and system tests). The OrgPerson service uses IDM auth, so this call uses an IDM
+    token while Loveseat and caller-token validation use Okta.
+  supportingLibraries: >-
+    Non-deployable class libraries in the same repo: CustomerProfile.Domain,
+    CustomerProfile.Application, CustomerProfile.Infrastructure,
+    CustomerProfile.SecretsConfiguration.

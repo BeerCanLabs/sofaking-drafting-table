@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5YA-H2V8
+name: SQL Server 2019 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT01-QFN5
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Off-host backup target and retention management."

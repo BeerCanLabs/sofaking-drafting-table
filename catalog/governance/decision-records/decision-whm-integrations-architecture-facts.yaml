@@ -1,0 +1,130 @@
+schemaVersion: '1.0'
+uid: 01M0DH79Q9-B3AP
+type: decision_record
+name: WHM Integrations Architecture Facts
+description: Corrects WHM_Integrations' (01KSM38KFC-EN0P) architecture notes with facts confirmed by direct repository read, replacing repository-tree-discovery placeholders and two incorrect inferred assumptions (primary language, PII status), per TRK-870 AC item 5 (component stub enrichment). Updated 2026-08-25 with the runtime host mapping supplied by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - tip-279
+  - adr
+  - whm-integrations
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFC-EN0P
+linkedObject: 01KSM38KFC-EN0P
+decisionRationale: >
+  repositoryShape / targetEngine: Supersedes the repository-discovery
+  assumption that this is a single TSQL codebase or a shared library. A
+  file-extension census (git ls-files) found 456 .sql, 346 .dtsx (SSIS,
+  embedding C# Script Tasks), 166 .database (SSDT), 164 .dtproj, 130 .sln, 95
+  .py, 78 .cs, 25 .js, and 15 .ts across 126 top-level folders. API_Packages/
+  is structurally identical to a per-region folder (one SSIS project), not
+  a shared library. The dominant, verifiable pattern is one SSIS+SSDT project
+  per region run as a SQL Server Agent job — targetEngine is corrected from
+  "other" to "mssql" on that basis — but C#, Python, and JS/TS are current,
+  first-class parts of the codebase (2 always-on Windows Services, Python ETL
+  pipelines including an LLM-based log monitor, and an AWS Lambda/Node.js
+  microservice stack under BrannockIntegratorAws/), not vestigial.
+
+
+  containsPII: Supersedes the repository-discovery assumption of
+  containsPII=false. KestrelregionIT/CustomersIntegration/Create_StagingCustomersKestrelregion.sql
+  defines a staging table with full customer and parent directory PII
+  (name, grade, home room, phone, email, address) keyed by CustomerID. Multiple
+  other regions (e.g. BTSD, Millbrookregion) stage CustomerID-linked financial
+  charge/payment records. containsPII is corrected to true.
+
+
+  serviceAuthentication / secretsManagement: Authentication is heterogeneous
+  by source system - Windows Integrated Security internally, a vendor-specific
+  ARBOR-CERT header for Arbor' API, and OAuth 1.0 HMAC-SHA1 plus a
+  client-credentials token exchange for OneRoster. Secrets management is of
+  mixed maturity: SSIS projects use ProtectionLevel="EncryptSensitiveWithUserKey"
+  (a real control), but six Python ETL config.yaml files are tracked in git
+  and not gitignored, despite one of them (AI_Log_Monitor/config.yaml.example)
+  containing a comment claiming they are gitignored - that comment is false
+  for this repository. File contents were not opened, per the workspace's
+  secrets-handling rule; the fact of being tracked, and one call site
+  (_Python_Integration/CIS_ETLPipeLine/Arbor/src/api_client.py) logging the
+  Arbor API certificate value on every call, are the findings. This is a
+  live security-hygiene gap - developer review and credential rotation is
+  recommended - tracked as a separate concern from this catalog correction in
+  DraftingSession 01M07T82GS-87MN, structurally analogous to the hardcoded
+  credential found in WHM_Zebra_Tools (01M0CVDXKH-B9BW). As of 2026-08-25 no
+  remediation ticket has been filed for these findings, in contrast to the
+  Zebra Tools credential which is tracked as TRK-686.
+
+
+  serviceLogging / healthWelfareMonitoring: No pollable health-check endpoint
+  exists anywhere in the repository (no equivalent to Trackweb-IM's
+  SiteDbCheck.ashx/SiteRenderCheck.aspx). Logging and monitoring are reactive
+  and inconsistent across four independent mechanisms (Windows Event Log,
+  SQL Server Database Mail failure reports embedded in SSIS packages, Python
+  stdlib logging to local files, and Node file-based logging), plus a
+  purpose-built post-job tool (_Python_Integration/AI_Log_Monitor) that runs
+  LLM-based analysis after each SQL Agent job and emails alerts on
+  ERROR/CRITICAL severity.
+
+
+  availabilityModel / scalabilityModel / recoverabilityModel / failureDomain:
+  No single model applies. The dominant pattern is 238 SQL Server Agent jobs
+  across 4 named shared production hosts (AWSBRSPRDLIST1-4.brannocksoft.local),
+  scaling by adding jobs to a shared host per new region rather than
+  isolated infrastructure, with retry_attempts=0 on all 268 sampled job steps
+  (no scheduler-level retry - recovery is alert-and-manual-intervention or
+  explicit T-SQL rollback). A shared host or shared IntegrationMiddleWay
+  database failure would affect every region scheduled there, making the
+  effective failure domain the shared host, not the individual region,
+  despite each region having its own source-level project. Two always-on
+  Windows Services and an event-driven AWS Lambda/Node stack
+  (BrannockIntegratorAws/) are architecturally separate runtimes from the SQL
+  Agent jobs.
+
+
+  runtimeHostMapping (partially resolved 2026-08-25): The Trackweb-IM
+  development team supplied host detail via the IMM DRAFT L1 developer
+  questionnaire, naming the AWS Console as the authoritative source. Both
+  always-on Windows Services - Data Integration Service and Brannock Integration
+  Service - run on the same SQL Server instances per environment: prod
+  BRSSSISPRDDB1\BRSSSISPRDDB1,58776; stage
+  AWSBRSPRDLIST6.brannocksoft.local\AWSBRSPRDLIST6,60173; dev
+  BRSDEVDB1.brannocksoft.local\BRSDEVDB1,64121 and
+  BRSDEVDB2.brannocksoft.local\BRSDEVDB2,64121. Environment labels were supplied
+  as Production/Staging/Development and are mapped here to the DRAFT standard
+  prod/stage/dev; no test environment was reported. The AWS Lambda/Node
+  "Brannock" stack runs in AWS account 675180657723, us-east-1. Its IaC source
+  remains unidentified - no serverless.yml, SAM/CloudFormation template, or
+  GitHub Actions workflow exists in WHM_Integrations, so it is deployed from
+  outside this repository and needs CloudOps to identify the deploying
+  repository or pipeline.
+
+
+  runsOn (still not resolved by this record): The existing runsOn value
+  (01KQQ5JT01-QFN5, a single SQL Server host) still does not represent the
+  real infrastructure. The four shared SQL Server Agent hosts
+  (AWSBRSPRDLIST1-4) have no DRAFT or CMDB identifiers recorded - the
+  questionnaire's host-identifier column was left blank - so there is nothing
+  valid to point runsOn at, and the field is left unchanged rather than
+  guessed. DRAFT's runsOn is also single-valued and cannot express the three
+  coexisting runtime substrates; the component's availabilityModel and
+  failureDomain carry that detail instead. Tracked in DraftingSession
+  01M07T82GS-87MN.
+
+
+  classificationFit (not resolved by this record): This repository's true
+  shape - 2 always-on Windows Services plus an AWS Lambda/Node application
+  stack, alongside the SSIS/SQL-Agent/schema majority - sits awkwardly under
+  data_component's definition as first-party data-structure code. The
+  questionnaire records the team answering "Yes" to splitting the Windows
+  Services and the Brannock AWS stack into separate product_component records
+  while SSIS/SQL remains the data_component, but no decision owner or date
+  was recorded against that answer, so it is carried as a direction rather
+  than an accepted decision. Left as one data_component object here; tracked
+  as an open question in DraftingSession 01M07T82GS-87MN.
+relatedDecisionRecords:
+  - 01M0CVDXKH-B9BW

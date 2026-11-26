@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KZPC4E3A-3A5V
+type: relationship
+name: CIS Svc Syncer -> CIS Db LSRCN Pristine
+description: The central DASLSync API reads the LSRCN Pristine copy of CustomerInformation for distribution to per-ITC syncer clients.
+catalogStatus: incomplete
+source: 01KYNVC9SQ-PAC8
+label: reads static CustomerInformation data from
+target: 01KYNVC9SP-9ARM
+technology: SQL Server TDS
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- sync
+- lsrcn
+- database
+- data-zone
+notes: This is the confirmed central half of the DASLSync flow.

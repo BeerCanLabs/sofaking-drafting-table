@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-5B7C
+type: host
+ownerRole: technology-admin
+name: Amazon Linux 2023 Physical Standard Host
+description: Stub host for Amazon Linux 2023 workloads on physical Dell PowerEdge infrastructure.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- host
+- linux
+- physical
+- aws
+category: host
+operatingSystemComponent: 01KQQ5JT1P-9ARF
+computePlatformComponent: 01KQQ5JT1P-9G0K
+internalComponents:
+- ref: 01KQQ5JT1P-9ARF
+  role: os
+- ref: 01KQQ5JT1P-9G0K
+  role: hardware
+- ref: 01KQQ5JT1N-32F0
+  role: agent
+- ref: 01KQQ5JT1N-9MHG
+  role: agent

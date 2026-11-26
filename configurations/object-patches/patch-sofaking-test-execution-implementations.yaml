@@ -1,0 +1,13 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-HX4B
+type: object_patch
+name: Sofa King capability.test-execution implementations
+description: Sofa King workspace owner assignment for test execution. No Technology Components are currently mapped here.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-58Q3
+patch:
+  owner:
+    team: ottoman-platform-engineering
+    contact: platform-engineering-ottoman-eng@sofaking.example
+  implementations: []

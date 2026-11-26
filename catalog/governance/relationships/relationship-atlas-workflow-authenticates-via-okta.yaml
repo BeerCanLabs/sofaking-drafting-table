@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: WQ0WWB3RHR-P5RH
+type: relationship
+name: Atlas Workflow → Okta
+description: Client-credentials tokens for the Platform Tasks and Workflows APIs are minted by one Atlas M2M client
+  against M2M_OKTA_AUTHORITY (Platform's Okta authorization server, distinct from the user-token authority) and
+  cached per scope set.
+catalogStatus: stub
+source: 01M5WY4E7P-YC9P
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. Client-credentials tokens for the Platform Tasks and Workflows
+    APIs are minted by one Atlas M2M client against M2M_OKTA_AUTHORITY (Platform's Okta authorization server, distinct
+    from the user-token authority) and cached per scope set.
+  evidence: 'whm-unified-core develop: Libraries/BuildingBlocks/M2MOktaAuth, Libraries/BuildingBlocks/GlobalConstants/Library.Shared.GlobalConstants/PortalConstants.cs,
+    .github/workflows/README.md'

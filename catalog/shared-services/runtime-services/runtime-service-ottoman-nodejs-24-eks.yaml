@@ -1,0 +1,110 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHN-N024
+type: runtime_service
+ownerRole: technology-admin
+name: Ottoman Node.js 24 on EKS Application Runtime
+description: >-
+  Shared Ottoman EKS application runtime for the in-scope Node.js 24 workloads
+  confirmed from repository manifests and container build definitions.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - runtime
+  - application
+  - nodejs
+  - nodejs-24
+  - eks
+  - ottoman
+  - ops-104695
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KZ2MRPH2-N024
+architectureNotes:
+  minNodes: 1
+  autoscaling: workload-specific
+  loadBalancer: required
+  repositoryEvidence: >-
+    Node.js 24.14.1 is pinned by the Passport monorepo, Domain Service,
+    Invitation Service, Organization Service, msvc-org-person, and Ottoman Test
+    Application build definitions. All except msvc-org-person are TypeScript;
+    msvc-org-person is JavaScript.
+  governanceDisposition: >-
+    Node.js 24 is a supported LTS release but is currently a candidate rather
+    than the preferred Sofa King Node.js 22 baseline. Its broad Ottoman use is
+    recorded as accepted candidate current state for OPS-433061. By user
+    direction, this review creates neither a promotion proposal nor a migration
+    remediation for these workloads.
+  clusterInventory: >-
+    The mapped workloads were observed on 2026-07-31 across ottm-dev,
+    ottm-stage, and ottm-prod as independent RollingUpdate Deployments. Every
+    running in-scope application pod included a Kuma sidecar.
+  serviceAuthentication: >-
+    The repository documents Ottoman identity and Kong integration; detailed
+    service-to-service policy remains subject to owner confirmation.
+  secretsManagement: >-
+    The README documents required environment variables, but the Kubernetes
+    secret delivery mechanism was intentionally not inspected.
+  serviceLogging: >-
+    Several service repositories use Pino-based logging; forwarding to the
+    central logging destination was not confirmed.
+  healthWelfareMonitoring: >-
+    The repository includes NestJS Terminus and observed Kubernetes containers
+    were ready; alert configuration was not inspected.
+  availabilityModel: >-
+    Replica and disruption profiles are workload-specific. Core production APIs
+    use multiple replicas and PodDisruptionBudgets, while UI and test workloads
+    include single-replica deployments.
+  scalabilityModel: >-
+    Horizontal Pod Autoscalers are configured for the observed BFF and core API
+    workloads. UI and auxiliary workloads do not consistently have HPAs.
+  recoverabilityModel: >-
+    Kubernetes pod replacement and RollingUpdate deployment provide the observed
+    recovery mechanisms.
+  failureDomain: >-
+    Failures are scoped to independently deployed namespaces and environments;
+    worker capacity spans two availability zones.
+deploymentConfigurations:
+  - id: per-workload-scaling
+    name: Per-Workload Kubernetes Scaling
+    description: >-
+      Keep each Ottoman workload in an independent Deployment and apply an HPA
+      where its current capacity profile requires horizontal scaling.
+    addressesQualities:
+      - scalability
+      - availability
+  - id: kubernetes-rolling-recovery
+    name: Kubernetes Rolling Recovery
+    description: >-
+      Use RollingUpdate Deployments, pod replacement, and workload-specific
+      PodDisruptionBudgets for recovery without coupled service lifecycles.
+    addressesQualities:
+      - recoverability
+      - availability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KZ2MRPH2-N024
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceAuthentication
+  - ref: 01KZ2MRPHR-0PS1
+    key: secretsManagement
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceLogging
+  - ref: 01KZ2MRPHR-0PS1
+    key: healthWelfareMonitoring
+  - ref: 01KZ2MRPHR-0PS1
+    key: availabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: scalabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: recoverabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: failureDomain

@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHXB-3HR8
+type: decision_record
+name: Ts UI Common Vendor Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG4-D0FR
+linkedObject: 01KSM38KG4-D0FR
+decisionRationale: 'runtimeRequirement: Static web assets served by the hosting runtime; no standalone application runtime.'

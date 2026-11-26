@@ -1,0 +1,301 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGN-Y95A
+type: software_deployment_pattern
+ownerRole: engineer
+name: CIS Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: CIS
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- sis
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KFQ-5HAA
+    repositoryName: BeerCanLabs/sk-cis-lib-som-api-clients
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-lib-som-api-clients
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-BX10
+    repositoryName: BeerCanLabs/sk-cis-msvc-learning-center
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-msvc-learning-center
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: docker, dotnet, readme, serverless
+  - productService: 01KSM38KFQ-NZ4F
+    repositoryName: BeerCanLabs/sk-cis-msvc-notifications
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-msvc-notifications
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-7WZC
+    repositoryName: BeerCanLabs/sk-cis-msvc-platform-identity-event-listener
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-msvc-platform-identity-event-listener
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-3K21
+    repositoryName: BeerCanLabs/sk-cis-msvc-platform-migration
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-msvc-platform-migration
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-06YG
+    repositoryName: BeerCanLabs/sk-cis-svc-tillbook-identity-management
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-identity-management
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFR-3H0Q
+    repositoryName: BeerCanLabs/sk-cis-svc-tillbook-customersearch
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-customersearch
+    repositoryPrimaryLanguage: unknown
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFR-4GGC
+    repositoryName: BeerCanLabs/sk-cis-svc-tillbook-web-help
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-web-help
+    repositoryPrimaryLanguage: unknown
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFR-1TFV
+    repositoryName: BeerCanLabs/sk-cis-svc-vendorlink
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-vendorlink
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-X2TJ
+    repositoryName: BeerCanLabs/sk-cis-bff-exago
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-bff-exago
+    repositoryPrimaryLanguage: CSS
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFP-YGZ8
+    repositoryName: BeerCanLabs/sk-cis-db-salesbook-region
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-db-salesbook-region
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KFP-1J9Y
+    repositoryName: BeerCanLabs/sk-cis-db-salesbook-master
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-db-salesbook-master
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KFP-25CX
+    repositoryName: BeerCanLabs/sk-cis-db-customerinformation
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-db-customerinformation
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KFR-GHVK
+    repositoryName: BeerCanLabs/sk-cis-svc-tillbook-reporting
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-reporting
+    repositoryPrimaryLanguage: CSS
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFR-0GDT
+    repositoryName: BeerCanLabs/sk-cis-util-exago-migrator
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-util-exago-migrator
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFP-BWR2
+    repositoryName: BeerCanLabs/sk-cis-util-internal-database-prep
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-util-internal-database-prep
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KFR-1C9G
+    repositoryName: BeerCanLabs/sk-cis-util-customerinformation-data-conversion
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-data-conversion
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, java, readme
+  - productService: 01KSM38KFR-PRVB
+    repositoryName: BeerCanLabs/sk-cis-ui-backpack-design
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-ui-backpack-design
+    repositoryPrimaryLanguage: CSS
+    observedRuntimeSignals: github_actions, node, readme
+  - productService: 01KSM38KFR-5K63
+    repositoryName: BeerCanLabs/sk-cis-util-tillbook-web-deploy
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-util-tillbook-web-deploy
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KFP-WBNG
+    repositoryName: BeerCanLabs/sk-cis-app-mobile-cis-admin
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-mobile-cis-admin
+    repositoryPrimaryLanguage: unknown
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFQ-0HE2
+    repositoryName: BeerCanLabs/sk-cis-svc-mobile-api
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-svc-mobile-api
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFP-Z4NW
+    repositoryName: BeerCanLabs/sk-cis-app-centraladmin
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-centraladmin
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KFP-7MN9
+    repositoryName: BeerCanLabs/sk-cis-app-datamap
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-datamap
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFP-FTNZ
+    repositoryName: BeerCanLabs/sk-cis-app-salesbook
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-salesbook
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFP-9B43
+    repositoryName: BeerCanLabs/sk-cis-app-salesbook-lms-app-integration
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-salesbook-lms-app-integration
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFQ-247S
+    repositoryName: BeerCanLabs/sk-cis-app-householdaccess
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-householdaccess
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFQ-Y8PJ
+    repositoryName: BeerCanLabs/sk-cis-app-reportbuilder
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-reportbuilder
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-65XY
+    repositoryName: BeerCanLabs/sk-cis-app-specialservices
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-specialservices
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFQ-N7HY
+    repositoryName: BeerCanLabs/sk-cis-app-specialservices-classic
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-specialservices-classic
+    repositoryPrimaryLanguage: ASP.NET
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KFQ-KQ7G
+    repositoryName: BeerCanLabs/sk-cis-app-customerinformation
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-app-customerinformation
+    repositoryPrimaryLanguage: Visual Basic .NET
+    observedRuntimeSignals: dotnet, node, readme
+  - productService: 01KSM38KFR-ASKR
+    repositoryName: BeerCanLabs/sk-cis-vla-exporter
+    sourceRepository: https://github.com/BeerCanLabs/sk-cis-vla-exporter
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KFQ-5HAA
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-BX10
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-NZ4F
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-7WZC
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-3K21
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-06YG
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFR-3H0Q
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFR-4GGC
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFR-1TFV
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-X2TJ
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFP-YGZ8
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFP-1J9Y
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFP-25CX
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFR-GHVK
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFR-0GDT
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFP-BWR2
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFR-1C9G
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KFR-PRVB
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFR-5K63
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFP-WBNG
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFQ-0HE2
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFP-Z4NW
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFP-7MN9
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFP-FTNZ
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFP-9B43
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-247S
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-Y8PJ
+    diagramTier: application
+    networkZone: web
+  - ref: 01KSM38KFQ-65XY
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-N7HY
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFQ-KQ7G
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KFR-ASKR
+    diagramTier: application
+    networkZone: app

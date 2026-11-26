@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-4QE5
+type: product_component
+ownerRole: engineer
+name: API Developer Dashboard
+description: Developer Dashboard
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+  - repository-discovery
+  - api
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-api-developer-dashboard
+language: HTML
+classification: web-application
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-api-developer-dashboard
+  observedRuntimeSignals: node, readme, serverless
+  observedManifestPaths: __tests__/postman/Dashboard - localhost.json; __tests__/postman/Dashboard.json; coverage/coverage-final.json; package-lock.json; package.json; serverless.yml; src/dash.yaml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHP1-Q0TG
+    key: runtimeRequirement

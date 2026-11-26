@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZX-X362
+name: ABBYY FlexiScan Scanning Service → Nagios Monitoring Service
+catalogStatus: stub
+source: 01KQQ5JT1F-1YGS
+label: calls
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: "Host and scanning service telemetry monitored centrally."
+capabilities:
+- 01KQQ4Q026-98VD

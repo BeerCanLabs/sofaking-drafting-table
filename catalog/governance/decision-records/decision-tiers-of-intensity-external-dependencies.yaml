@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01KYMPWBAY-JDQ4
+type: decision_record
+name: Tiers of Intensity External Dependencies
+description: Accepted inventory of the external platforms and managed services required to operate the standalone Tiers of Intensity deployment.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - tiers-of-intensity
+  - som
+  - dependencies
+  - decision-record
+category: decision
+status: accepted
+affectedComponent: 01KYMPHRH4-9VP1
+linkedObject: 01KYMPHRH4-9VP1
+approver: SOM Special Orders Management Engineering
+approvalDate: '2026-07-28'
+decisionRationale: >-
+  The complete deployment dependency set is Traefik ingress, Amazon EKS,
+  ArgoCD, AWS SNS, AWS SQS, AWS Lambda, and Amazon CloudWatch Logs. ArgoCD
+  deploys the API Kubernetes resources; Terraform provisions the managed AWS
+  integration resources. The calculation service is stateless and does not
+  depend on a database or other durable application data store. Product event
+  publishers and result-topic consumers are outside this deployment boundary
+  and interact through the documented SNS interfaces.

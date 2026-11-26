@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4EF-G6GT
+name: Recliner User Service → Recliner Global User Store
+catalogStatus: stub
+source: 01KSM38KGE-BE0M
+label: reads and writes
+target: 01KZP9ZZ56-R5MT
+notes:
+  background: "User Service reads and writes the global Recliner User Profile / User Store; the component currently targets the candidate SQL Server 2025 service."
+capabilities: []

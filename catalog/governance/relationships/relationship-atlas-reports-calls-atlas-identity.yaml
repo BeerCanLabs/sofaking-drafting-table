@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: H75Y470BD9-DKCP
+type: relationship
+name: Atlas Reports → Atlas Identity
+description: AddDownstreamIdentity registers the IdentityValidator gRPC client; DownstreamIdentityMiddleware calls
+  GetUserContext on every user request to validate the session and token.
+catalogStatus: stub
+source: 01M5WY4E7P-66ZP
+target: 01M5WY4E7P-JBTC
+label: calls
+technology: gRPC
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. AddDownstreamIdentity registers the IdentityValidator gRPC
+    client; DownstreamIdentityMiddleware calls GetUserContext on every user request to validate the session and
+    token.
+  evidence: 'whm-unified-core develop: Service.Core.Reporting/Service.Core.Reporting.App/Program.cs; Libraries/BuildingBlocks/Identity/Library.Shared.Identity/DownstreamIdentityMiddleware.cs'

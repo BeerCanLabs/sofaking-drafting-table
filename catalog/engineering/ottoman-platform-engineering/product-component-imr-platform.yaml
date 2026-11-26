@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFF-RRWF
+type: product_component
+ownerRole: engineer
+name: IM Refresh (IMR) Platform
+description: 'Greenfield microservices-based replacement for Trackweb-IM.  Built on .NET Core, React, and Dapr, hosted on AWS EKS.
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- imr
+- microservices
+- dotnet-core
+- react
+- eks
+- dapr
+- product-component
+repoUrl: TBD
+classification: api-service
+architectureNotes:
+  technologyStack: Built on .NET Core, React, and GraphQL.
+  deploymentModel: Containerized microservices on AWS EKS with Dapr sidecars.
+  runtimeRequirement: 'Runtime not determined by repository discovery; component owner must confirm.
+
+    '

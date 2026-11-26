@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFR-GHVK
+type: product_component
+ownerRole: engineer
+name: CIS Svc Tillbook Reporting
+description: Exago integration components for the Tillbook Suite. Retired — product owner confirmed on 2026-07-31 this was replaced by CIS BFF Exago (BeerCanLabs/sk-cis-bff-exago).
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+  - repository-discovery
+  - sis
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-cis-svc-tillbook-reporting
+language: CSS
+classification: web-application
+architectureNotes:
+  origin: Marked retired on 2026-07-31 per product owner — replaced by CIS BFF Exago (01KSM38KFQ-X2TJ).
+  repositoryName: BeerCanLabs/sk-cis-svc-tillbook-reporting
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Tillbook.Reporting.Builds/Tillbook.Reporting.Builds.csproj; Tillbook.Reporting.Client.Tests/Tillbook.Reporting.Client.Tests.csproj; Tillbook.Reporting.Client/Tillbook.Reporting.Client.csproj; Tillbook.Reporting.Data/Tillbook.Reporting.Data.csproj; Tillbook.Reporting.ExagoIntegration.VendorExtract/Tillbook.Reporting.ExagoIntegration.VendorExtract.csproj; Tillbook.Reporting.ExagoIntegration/Tillbook.Reporting.ExagoIntegration.csproj; Tillbook.Reporting.ExagoScheduler.Common/Tillbook.Reporting.ExagoScheduler.Common.csproj; Tillbook.Reporting.ExagoScheduler.Config/Tillbook.Reporting.ExagoScheduler.Config.csproj; Tillbook.Reporting.ExagoScheduler.Setup/Tillbook.Reporting.ExagoScheduler.Setup.csproj; Tillbook.Reporting.SharedModels/Tillbook.Reporting.SharedModels.csproj; Tillbook.Reporting.Web/Exago/Config/Other/cdataconfig.json;
+    Tillbook.Reporting.Web/Exago/Config/Other/dbconfigs.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  runtimeRequirement: 'Static web assets served by the hosting runtime; no standalone application runtime.
+
+    '
+decisionRecords:
+  - ref: 01KT16XHTP-BQ5C
+    key: runtimeRequirement

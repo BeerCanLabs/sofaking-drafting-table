@@ -1,0 +1,37 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1V-Y71K
+type: technology_component
+ownerRole: technology-admin
+name: RabbitMQ 3.13
+description: 'RabbitMQ open source messaging broker used for asynchronous workload decoupling and queue-based integration patterns.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- messaging
+vendor: RabbitMQ
+productName: RabbitMQ
+productVersion: '3.13'
+classification: software
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: RabbitMQ lifecycle policy varies by release train and distribution source.
+capabilities:
+- 01KT0V5MCV-KT72
+configurations:
+- id: default-amqp-listener
+  name: Default AMQP Listener
+  description: Default RabbitMQ AMQP listener for broker client connections.
+  capabilities:
+  - 01KT0V5MCV-KT72
+  networkBindings:
+  - port: 5672
+    protocol: AMQP
+    direction: inbound
+    description: Default RabbitMQ AMQP client listener.

@@ -1,0 +1,73 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-9YH4
+type: product_component
+ownerRole: engineer
+name: Platform Compliance Frontend
+description: >-
+  React single-page application for selecting compliance products, managing
+  product policies, authoring and approving immutable CEL rule versions, and
+  evaluating approved rules in an interactive playground. The production image
+  serves the compiled application from an unprivileged NGINX container.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+repoUrl: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+runsOn: 01KQQ5JT02-75QN
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js 22 build environment and NGINX 1.27 unprivileged runtime
+tags:
+  - platform-compliance-engine
+  - frontend
+  - react
+  - nginx
+  - eks
+  - product-component
+interfaces:
+  - name: Platform Compliance Web UI
+    protocol: REST
+    path: /
+    authenticationModel: TBD
+    description: >-
+      Browser interface for product and policy management, rule authoring,
+      immutable rule-version editing, approval, filtering, evaluation, and
+      validation-run review. The repository does not yet document the production
+      user authentication model.
+networkBindings:
+  - port: 8080
+    protocol: HTTP
+    direction: inbound
+    description: Unprivileged NGINX listener and container health-check endpoint.
+runtimeSpec:
+  ports:
+    - number: 8080
+      protocol: HTTP
+      name: web
+      direction: inbound
+      description: Serves the compiled React SPA.
+  dependencies:
+    - ref: 01KY5775KP-FZPJ
+      purpose: Reads compliance checks and manages and evaluates compliance rules.
+      interface: /api
+notes:
+  sourceRepository: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+  repositoryName: BeerCanLabs/sk-platform-compliance-engine
+  sourceCommit: 5c391fbe3afc342f0d711e8c768684af9bd15b55
+  repositoryPrimaryLanguage: TypeScript
+  observedRuntimeSignals: >-
+    react 18, react-router 6, vite 6, typescript 5.7,
+    nginx-unprivileged 1.27, docker, eks
+  observedManifestPaths: >-
+    frontend/package.json; frontend/Dockerfile; frontend/nginx.conf;
+    frontend/vite.config.ts; frontend/src/App.tsx; frontend/src/api/client.ts;
+    frontend/src/context/ProductContext.tsx; frontend/src/pages/Policies.tsx;
+    frontend/src/pages/RulesList.tsx; frontend/src/pages/EditRule.tsx
+  sourceEvidence: >-
+    The NGINX configuration states that the EKS ALB Ingress routes /api directly
+    to the API Service. The current UI implements Product → Policy → Rule
+    navigation, product and policy filtering, immutable rule-version editing, and
+    validation-run history. Docker Compose is treated as local-development
+    evidence.

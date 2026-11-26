@@ -1,0 +1,61 @@
+schemaVersion: '1.0'
+uid: 01KS4DGJVK-Q9GY
+type: network_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: AccuRoute (OmTool)
+description: >-
+  Existing shopstar v3 document-routing appliance used for coversheet generation
+  and scan-to-archive ingestion. It runs on Windows Server 2003 R2 with SQL
+  Server 2000 and remains distinct from the candidate AccuRoute 8 AWS service.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - legacy
+  - document-routing
+  - appliance
+  - shopstar
+  - eol
+vendor: OmTool
+productName: AccuRoute
+productVersion: unknown
+networkPlacement: internal
+patchingOwner: organization-scheduled
+complianceCerts: []
+architectureNotes:
+  operatingSystem: Windows Server 2003 R2 — end-of-life. Upgrade tracked in epic DATA-2196 (target Q2 2026).
+  databaseVersion: SQL Server 2000 — end-of-life. Migration blocked on OS upgrade; included in epic DATA-2196.
+  resilienceModel: Single appliance with no HA pair. Failure domain is bounded to the appliance.
+  failureDomain: Single AccuRoute appliance; no geographic redundancy.
+  configurableSurface: OmTool administration console for routing rules and queue configuration.
+  authenticationAccessModel: Not confirmed in source catalog; requires follow-up during owner interview.
+  logAuditVisibility: Not confirmed in source catalog; requires follow-up during owner interview.
+  healthStatusVisibility: Not confirmed in source catalog; requires follow-up during owner interview.
+  currentEnvironmentEvidence: >-
+    The September 2025 shopstar Environment Guide still lists accuroute2 in GRR
+    on Windows Server 2003 R2 and SQL Server 2000.
+  modernizationTarget: 01KYRAQ0KC-MPJQ
+  migrationStatus: >-
+    Candidate AWS Windows Server 2022 infrastructure exists in dev and stage,
+    but application installation is explicitly manual and production had not
+    run in the June 2026 AAP record. Do not treat the legacy appliance as
+    retired yet.
+capabilities:
+  - 01KQQ5JT1W-V8SY
+deliveryModel: appliance
+networkFunction: document-routing
+networkTopology: internal-only
+protocols:
+  - http
+  - smtp
+decisionRecords:
+  - ref: 01KT16XJ8X-TWCF
+    key: resilienceModel
+  - ref: 01KT16XJ8X-TWCF
+    key: configurableSurface
+  - ref: 01KT16XJ8X-TWCF
+    key: failureDomain

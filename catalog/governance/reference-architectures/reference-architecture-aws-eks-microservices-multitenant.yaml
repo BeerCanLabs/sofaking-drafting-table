@@ -1,0 +1,64 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-D614
+type: reference_architecture
+name: AWS EKS Multi-Tenant Microservices
+description: Reference Architecture for a cloud-native Sofa King product built on AWS EKS with managed ingress, microservices, managed data services, asynchronous messaging, and centralized operations.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- aws
+- eks
+- microservices
+- multitenant
+patternType: aws-eks-microservices
+serviceGroups:
+- name: Web Edge and SPA Delivery
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1D-MY47
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-6F8T
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-P7QJ
+    diagramTier: presentation
+- name: Application Microservices
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT02-75QN
+    diagramTier: application
+  - ref: 01KQQ5JT1E-SW3X
+    diagramTier: application
+- name: Messaging Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT05-HTRA
+    diagramTier: application
+  - ref: 01KQQ5JT05-0C4P
+    diagramTier: application
+- name: Data Services
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT00-X90C
+    diagramTier: data
+  - ref: 01KQQ5JT05-KT3Z
+    diagramTier: data
+  - ref: 01KQQ5JT00-191S
+    diagramTier: data
+- name: Observability and Delivery
+  deploymentTarget: aws-us-east-2
+  deployableObjects:
+  - ref: 01KQQ5JT1E-HCBR
+    diagramTier: utility
+  - ref: 01KQQ5JT1E-01JZ
+    diagramTier: utility
+architectureNotes:
+  lifecycleRationale: Cloud-forward EKS microservices pattern with no currently end-of-support Technology Components in the referenced Standards.
+  availabilityModel: EKS workloads and managed data stores should be distributed across multiple availability zones.
+  tenancyModel: Multi-tenant services must declare tenant isolation at the application, database, or row-security layer.
+  deploymentModel: GitOps or pipeline automation should own application and cluster addon rollout.
+  patternRisks: Service mesh choice, data isolation, and platform dependency blast radius must be explicitly documented.

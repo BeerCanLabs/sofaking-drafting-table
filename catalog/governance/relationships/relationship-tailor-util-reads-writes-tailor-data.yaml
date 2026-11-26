@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: B1KCC7G87N-CGME
+name: Tailor Utility Integrations -> Tailor SQL Server Data
+catalogStatus: incomplete
+source: JZ5P3J7CM4-WM1F
+label: reads/writes
+target: 73F2M1GSPK-PNGJ
+technology: SQL Server/TDS
+direction: asynchronous
+flow: outbound
+notes:
+  background: The Tailor utility role registers Windows services and scheduled tasks for inbound/outbound CIS, SFTP, test-score, custom-report, and Trifold integration jobs. These jobs are modeled as asynchronous integration workloads that interact with the Tailor SQL Server data tier.
+capabilities: []

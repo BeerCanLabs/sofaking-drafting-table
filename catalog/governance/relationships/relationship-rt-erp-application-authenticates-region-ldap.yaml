@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 9BNNQXN7WY-GZCD
+type: relationship
+name: RT ERP Application Server → Region LDAP Servers
+catalogStatus: incomplete
+source: 01KSM38KEX-PX7B
+label: authenticates region users against
+externalTarget: Region-Hosted LDAP Servers
+technology: LDAPS port 636
+direction: synchronous
+flow: outbound
+notes: >-
+  Region LDAP is a region-specific alternate identity path. The Tomcat
+  Java client uses LDAPS 636 and must account for referrals and appropriately
+  scoped base distinguished names.
+capabilities:
+  - 01KQQ4Q026-MHJM

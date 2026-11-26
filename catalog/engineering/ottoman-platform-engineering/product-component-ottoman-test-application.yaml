@@ -1,0 +1,52 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHT-TAPP
+type: product_component
+ownerRole: engineer
+name: Ottoman Test Application
+description: >-
+  A Ottoman product component used to exercise and validate the platform in
+  development, stage, and production Kubernetes environments.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - product-component
+  - test-application
+  - kubernetes
+repoUrl: https://github.com/BeerCanLabs/sk-plat-ottoman-testapp
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+runtimeSpec:
+  ports:
+    - number: 5100
+      protocol: TCP
+      direction: inbound
+architectureNotes:
+  evidenceSource: >-
+    Read-only Kubernetes observations from ottm-dev, ottm-stage, and ottm-prod
+    on 2026-07-31.
+  observedDeployment: >-
+    plat-ottoman-testapp is a single-replica RollingUpdate Deployment in all
+    three environments. Observed images end in .363 in development and stage
+    and .356 in production; each running pod includes a kuma-sidecar.
+  repositoryEvidence: >-
+    The default-branch package.json and Dockerfile both pin Node.js 24.14.1.
+    package.json and the README identify a TypeScript NestJS 11 server-rendered
+    web application. The repository URL was confirmed by the user on 2026-07-31.
+  serviceAuthentication: Authentication behavior has not been confirmed.
+  secretsManagement: Secret delivery was not inspected during this review.
+  serviceLogging: Application log forwarding was not inspected during this review.
+  availabilityModel: >-
+    One desired replica was observed in each environment; no higher availability
+    target has been confirmed.
+  scalabilityModel: No confirmed HorizontalPodAutoscaler was observed.
+  recoverabilityModel: Recoverability requirements have not been confirmed.
+  failureDomain: >-
+    Observed on multi-AZ EKS worker capacity, but a component-specific zone
+    placement policy was not found.

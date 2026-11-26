@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: DGE1TY4YTN-RHCT
+name: PRTG Monitoring Service → Email Alert Delivery
+catalogStatus: incomplete
+source: 01KYWJ47V9-F3BJ
+label: sends alerts via
+externalTarget: Email Alert Delivery Service
+direction: asynchronous
+flow: outbound
+notes:
+  background: Owner-corrected on 2026-07-31 that PRTG sends operational alerts through both Opsgenie and email. The SMTP relay or email-delivery platform used by PRTG remains unconfirmed.
+capabilities:
+- 01KT0XNZEY-KPTW

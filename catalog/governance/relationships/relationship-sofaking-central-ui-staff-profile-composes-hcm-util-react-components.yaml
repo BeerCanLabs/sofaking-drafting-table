@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP34-KMA5
+type: relationship
+name: 'Sofa King Central UI Staff Profile → HCM Util React Components'
+catalogStatus: stub
+source: 01KQQ5JT0M-4MNA
+target: 01KSM38KFF-2XDH
+label: composes
+technology: npm package
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: npm dependency observed in package.json 2026-07-29.

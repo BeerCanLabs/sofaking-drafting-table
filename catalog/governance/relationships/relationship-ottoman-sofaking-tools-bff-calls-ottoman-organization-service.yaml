@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 34P1MKCNA6-F87T
+name: Ottoman Sofa King Tools BFF → Ottoman Organization Service
+catalogStatus: stub
+source: 01KSM38KFX-J6Z2
+label: calls
+target: 01KSM38KFX-DQGA
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via .env.example mesh URL pattern in apps/plat-bff-sofaking-tools (plat-passport-monorepo). Already recorded informally in architectureNotes.dependencies; formalized here as a Relationship object."
+capabilities: []

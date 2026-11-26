@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KXK81789-KW2Q
+type: product_component
+ownerRole: engineer
+name: CDP Viewer
+description: >-
+  Public web application (viewer.cdpdirect.example, beta at
+  viewerbeta.cdpdirect.example) for the Trifold product family, discovered via
+  the CDP Direct - WAF Info Confluence page. No source repository evidence
+  has been reviewed yet, and its function is unknown beyond the DNS/WAF
+  entry name.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - trifold
+  - cdp-viewer
+  - repository-discovery
+  - product-component
+repoUrl: TBD
+classification: web-application
+notes:
+  sourceRepository: >-
+    Not yet identified — evidence is a live public DNS/WAF entry
+    (viewer.cdpdirect.example), not a code repository. Function is unknown.
+  sourcePage: CDP Direct - WAF Info (Confluence, SKENG space, page 35904193026)

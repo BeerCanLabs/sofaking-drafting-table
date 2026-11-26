@@ -1,0 +1,74 @@
+schemaVersion: '1.0'
+uid: 01M25X9W0R-GKSK
+type: decision_record
+name: Digital Stores Has No Recorded Availability Target And No Tested Recovery
+category: risk
+status: open
+catalogStatus: complete
+lifecycleStatus: existing-only
+description: >-
+  Digital Stores has no expressible availability target, RTO or RPO. Asked for the production
+  availability target and SLA in question 2.1 of the DRAFT L1 Baseline Questionnaire, and again for
+  the SQL Server tier RPO and RTO in question 4.2, the engineering owner answered "100%" on
+  2026-09-08. That is not an availability target: it states no measurement window, no allowance, and
+  no recovery objective, and 100 percent uptime is not achievable by any architecture. It is also
+  contradicted by the deployed posture confirmed in the same round of evidence. Each of the four
+  environment tiers runs its region databases on a single SQL Server EC2 instance with no AlwaysOn
+  availability group, no failover partner and no read replica, and the 2026-01-28 AWS API discovery of
+  account 472468972873 found zero RDS instances in any region, so there is no managed multi-AZ
+  failover anywhere in the estate. DS_Admin, the routing catalog every request depends on, is a single
+  point of failure whose loss removes access for all regions - confirmed by the owner in answer 2.3.
+  Only the production and sandbox web tiers have redundancy: production runs an Auto Scaling group
+  behind PRLB-155628125.us-west-1.elb.amazonaws.com and sandbox runs SBWeb behind
+  SBLB-3852661381.us-west-1.elb.amazonaws.com, while QA and alpha run a single web host each.
+  Recovery is restore-from-backup only, through AWS Backup EBS snapshots taken Monday through Thursday
+  and weekly Friday AMIs retained 30 days, with no SQL Server native or log backup schedule recorded,
+  which puts the practical RPO at up to roughly 24 hours. No restore has ever been timed, so there is
+  no RTO figure at all. Non-production tiers are additionally powered off outside scheduled hours
+  through AWS Instance Scheduler and are therefore not continuously available by design (corrected
+  2026-10-20 from Park My Cloud; see SoftwareDeploymentPattern 01KRZ1GCH3-99RF notes.scheduledJobs
+  for the evidence and the open configuration questions. Needs Validation.).
+version: 1.0.1
+owner:
+  team: digital-stores-engineering
+  contact: digital-stores-eng@sofaking.example
+tags:
+- digital-stores
+- availability
+- disaster-recovery
+- backup
+- single-point-of-failure
+- owner-confirmed
+linkedObject: 01KRZ1GCH3-99RF
+affectedComponent: 01M25X9W0R-VQJ3
+impact: >-
+  Blocks a satisfied disposition on the availability-requirement entry of the mandatory
+  software_deployment_pattern requirement group (01KQQ4Q027-VK45), which is why the Digital Stores
+  pattern records that requirement as not-compliant and keeps catalogStatus at incomplete. The
+  architectural consequence is larger than the catalog one. Without a stated target there is no
+  standard against which the single-instance data tier can be judged adequate or inadequate, no basis
+  for a capacity or redundancy investment decision, and no commitment to hold an incident response
+  against. Three specific exposures follow. One, a lost database host takes an entire tier offline and
+  the only recovery is a snapshot or AMI restore of unknown duration; production is one host,
+  PRAngDB1. Two, up to a day of region transactions can be lost in that restore, because
+  infrastructure snapshots are the only recorded backup mechanism and there is no transaction-log
+  chain to roll forward. Three, the estate has the same shape as the Kent County Customer Health
+  Management outage, where a SQL Server cluster with insufficient failover became unrecoverable when
+  replacement capacity was unavailable; hardware redundancy and infrastructure snapshots are not a
+  temp for tested failover and tested restore. Bears on Hearthstone HCF.03.1.2 and HCF.03.2.1 indirectly
+  through the unpatched engine builds tracked in DecisionRecord 01M0GDHSAM-F64B.
+mitigationPath: >-
+  Five steps. First, have the Digital Stores product and engineering owners state a real availability
+  target with a measurement window, an RTO and an RPO, distinguishing production from the scheduled
+  lower environments; "100%" cannot be recorded in DRAFT as a target and this record cannot close
+  against it. Second, revalidate the backup posture against the live AWS account before treating it as
+  confirmed - the AWS Backup Service page it comes from is dated 2023-02-28 and is written
+  prospectively as a plan rather than as an implemented state. Third, decide whether SQL Server
+  native backups with transaction-log backups are required to meet the stated RPO, because
+  infrastructure snapshots alone cannot deliver a sub-daily recovery point. Fourth, perform and time
+  an actual restore of a region database and of DS_Admin, and record the measured RTO here; an
+  untested restore is not a recovery capability. Fifth, take the DS_Admin single point of failure and
+  the single-instance data tier to the Architecture Review Board with the stated target in hand, so
+  the decision to accept or remediate is made against a requirement rather than in the abstract; the
+  reference architecture this pattern is filed against expects a highly available shard-scoped data
+  tier, and the deviation is recorded in DecisionRecord 01M25X9W0R-0Q0X.

@@ -1,0 +1,127 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT01-QFN5
+type: data_store_service
+ownerRole: technology-admin
+name: SQL Server 2019 DBMS Service
+description: Standard SQL Server 2019 database service for supported application platforms.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+category: service
+serviceCategory: database
+host: 01KQQ5JT04-JKFX
+primaryTechnologyComponent: 01KQQ5JT1T-F6Q1
+architectureNotes:
+  minNodes: 3
+  autoscaling: none
+  loadBalancer: optional
+  serviceAuthentication: Active Directory integrated identities govern administrator and service access to the database.
+  scalingApproach: scale-up database nodes with read replicas where required
+  serviceLogging: Database audit and engine logs are forwarded to centralized logging beyond host-level collection.
+  healthCheck: SQL listener probe and AG replica health monitoring
+  healthWelfareMonitoring: SQL listener probes, replica telemetry, and platform monitoring track service welfare.
+  secretsManagement: service accounts and connection secrets stored centrally
+  availabilityModel: AlwaysOn Availability Groups provide multi-node database availability.
+  scalabilityModel: Vertical scale-up of primary nodes with optional read replicas where required.
+  recoverabilityModel: Failed nodes are replaced and rejoined to the AG while backups support point-in-time recovery.
+  failureDomain: Scoped to the SQL Server availability group serving the dependent application estate.
+  backup:
+    strategy: daily full plus hourly log backup
+    platform: SQL Server native backup to managed storage
+    rto: 1h
+    rpo: 1h
+  ha:
+    mechanism: AlwaysOn Availability Groups
+  encryption:
+    atRest: TDE enabled on all production databases
+  accessControl:
+    model: Active Directory integrated access with role-based SQL permissions
+deploymentConfigurations:
+  - id: alwayson-availability
+    name: AlwaysOn Availability
+    description: AlwaysOn Availability Groups provide multi-node database availability and recovery tolerance.
+    addressesQualities:
+      - availability
+      - recoverability
+  - id: scale-up-with-read-replicas
+    name: Scale Up With Read Replicas
+    description: Capacity grows through larger primary nodes with optional read replicas where required.
+    addressesQualities:
+      - scalability
+  - id: backup-and-pitr
+    name: Backup And Point-In-Time Recovery
+    description: Daily full backups plus hourly log backups support restoration and point-in-time recovery.
+  - id: encrypted-storage
+    name: Encrypted Storage
+    description: TDE is enabled on production databases to protect data at rest.
+  - id: database-password-mfa-baseline
+    name: Database Password And MFA Baseline
+    description: Database administrative and service identities follow strong password, lockout, timeout, and MFA expectations through centralized identity policy.
+  - id: database-mfa-vault-baseline
+    name: Database MFA And Vault Baseline
+    description: Privileged database credentials are protected through MFA-capable identity flows and managed secret vaulting.
+  - id: database-risk-reauthentication
+    name: Database Risk Based Reauthentication
+    description: Database administrative access can require periodic or risk-based reauthentication and compromised credential handling.
+internalComponents:
+  - ref: 01KQQ5JT04-JKFX
+    role: host
+  - ref: 01KQQ5JT1T-F6Q1
+    role: function
+requirementImplementations:
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-password-mfa-baseline
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.2
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-mfa-vault-baseline
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.04.4.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: database-risk-reauthentication
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.10.2.1
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: backup-and-pitr
+  - requirementGroup: 01KQQ5JT20-M5R2
+    requirementId: HCF.11.2.3
+    status: satisfied
+    mechanism: deploymentConfiguration
+    key: encrypted-storage
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ80-JHA2
+    key: serviceAuthentication
+  - ref: 01KT16XJ80-JHA2
+    key: secretsManagement
+  - ref: 01KT16XJ80-JHA2
+    key: serviceLogging
+  - ref: 01KT16XJ80-JHA2
+    key: failureDomain
+  - ref: 01KT16XJ80-JHA2
+    key: backup.strategy
+  - ref: 01KT16XJ80-JHA2
+    key: backup.platform
+  - ref: 01KT16XJ80-JHA2
+    key: backup.rto
+  - ref: 01KT16XJ80-JHA2
+    key: backup.rpo
+  - ref: 01KT16XJ80-JHA2
+    key: ha.mechanism
+  - ref: 01KT16XJ80-JHA2
+    key: encryption.atRest
+  - ref: 01KT16XJ80-JHA2
+    key: accessControl.model

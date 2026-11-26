@@ -1,0 +1,144 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG6-65T4
+type: product_component
+ownerRole: engineer
+name: Platform Msvc Hcmrh Applications
+description: Application lifecycle management microservice handling job application submission, hiring pipeline configuration, stage management, applicant notifications, survey configuration, and PDF generation with audit trails and view history tracking
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- recruiting-hiring
+- applications
+- microservice
+- dotnet
+- pipeline-management
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-msvc-hcmrh-applications
+language: C#
+classification: api-service
+runtimeRequirement: .NET 9.0
+interfaces:
+- name: Application Management API
+  protocol: REST
+  path: /api/{orgId}/applications
+  authenticationModel: oauth
+  description: Employer application management, filtering, and pipeline operations
+- name: Job Application API
+  protocol: REST
+  path: /api/{personId}/job-applications
+  authenticationModel: oauth
+  description: Job seeker application submission and management
+- name: Pipeline Management API
+  protocol: REST
+  path: /api/{orgId}/job-posting-pipelines
+  authenticationModel: oauth
+  description: Hiring pipeline configuration and template management
+- name: Survey Configuration API
+  protocol: REST
+  path: /api/{orgId}/job-posting-survey-configuration
+  authenticationModel: oauth
+  description: Custom survey question configuration per job posting
+- name: Notes API
+  protocol: REST
+  path: /api/{orgId}/applications/{applicationId}/notes
+  authenticationModel: oauth
+  description: Internal notes on applications with visibility levels
+- name: Applicant Notifications API
+  protocol: REST
+  path: /api/{orgId}/applicant-notifications
+  authenticationModel: oauth
+  description: Bulk email notifications to applicants
+- name: Job Seeker Event Handler
+  protocol: REST
+  path: /api/applications/jobseeker-events
+  authenticationModel: TBD
+  description: Processes job seeker deletion events from Loveseat
+networkBindings:
+- port: 5000
+  protocol: HTTP
+  direction: inbound
+  description: Main API service endpoint
+environmentConfiguration:
+- name: MongoDB__ConnectionString
+  description: MongoDB connection string for applications database
+  required: true
+  sensitive: true
+- name: MongoDB__DatabaseName
+  description: MongoDB database name (e.g., hcmrh_prod)
+  required: true
+  sensitive: false
+- name: ConnectionStrings__Redis
+  description: Redis connection string for output caching
+  required: true
+  sensitive: true
+- name: FileService__Url
+  description: File service endpoint for document storage
+  required: true
+  sensitive: false
+- name: PdfRendererService__Url
+  description: PDF generator service endpoint for application PDFs
+  required: true
+  sensitive: false
+- name: NotificationService__Url
+  description: HCMRH Core notification service endpoint
+  required: true
+  sensitive: false
+- name: TokenService__Uri
+  description: OAuth token service endpoint for service-to-service authentication
+  required: true
+  sensitive: false
+- name: TokenService__ClientId
+  description: OAuth client ID for service identity
+  required: true
+  sensitive: false
+- name: TokenService__ClientSecret
+  description: OAuth client secret
+  required: true
+  sensitive: true
+- name: ConfigCat__SdkKey
+  description: ConfigCat SDK key for feature flags
+  required: true
+  sensitive: true
+architectureNotes:
+  framework: ASP.NET Core Web API on .NET 9.0
+  dataStore: MongoDB (8 collections - applications, pipelines, templates, surveys, notes, view history, legacy)
+  caching: Redis output caching for HTTP responses
+  htmlRendering: Razor.Templating.Core for notification and PDF content generation
+  externalIntegrations: FileService (document storage), PdfRendererService (application PDFs), NotificationService (multi-channel notifications), TokenService (OAuth)
+  serviceAuthentication: Ottoman trusted header injection (x-sk-userinfo) for user context; OAuth 2.0 client credentials for service-to-service
+  secretsManagement: Kubernetes secrets and AWS Secrets Manager
+  serviceLogging: Structured JSON logging via Serilog with correlation IDs and request context enrichment
+  healthWelfareMonitoring: Kubernetes liveness and readiness probes; health check endpoints
+  availabilityModel: Multi-replica deployment with horizontal pod autoscaling; rolling updates with maxSurge 50%, maxUnavailable 0
+  scalabilityModel: Horizontal scaling via Kubernetes HPA; MongoDB indexing on OrganizationId, PersonId, CurrentStage
+  recoverabilityModel: MongoDB automatic backups; Kubernetes self-healing
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  circuitBreaker: Polly resilience with 15s attempt timeout, 90s total timeout, 45s circuit breaker sampling
+  eventConsumption: Loveseat job seeker deletion events for application cleanup
+  auditTrail: Application view history tracking for compliance and analytics
+  externalDependencies:
+    serviceDependencies:
+      - name: PdfRendererService
+        service: hcmrh-pdf-generator
+        purpose: Application PDF document generation
+      - name: TokenService
+        service: SK Identity Gateway
+        purpose: OAuth 2.0 service-to-service authentication
+      - name: FileService
+        endpoint: fileservice.sofaking.example
+        purpose: Document and resume storage
+      - name: NotificationService
+        service: SK Notification
+        purpose: Multi-channel applicant notifications
+      - name: CoreService
+        service: hcmrh-core
+        purpose: Central notification and orchestration
+    internalPackages:
+      - Hcmrh.Logging 1.0.22
+notes:
+  background: "Production-ready microservice managing complete application lifecycle from submission to hire, including customizable hiring pipelines, stage transitions, survey configuration, and multi-channel applicant notifications. Integrates with PDF generation service for application documents and file service for resume storage. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

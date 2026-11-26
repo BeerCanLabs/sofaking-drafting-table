@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KTM7D5BW-778A
+type: decision_record
+name: Help Desk - Pattern - External Dependencies
+description: External Dependencies decision for the Help Desk - Pattern deployment pattern, promoted from catalog architecture notes to a committed DecisionRecord so DRAFT requirement evidence is traceable.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+- validation-cleanup
+- adr
+category: decision
+status: open
+affectedComponent: 01KQQ5JT1J-BRF4
+linkedObject: 01KQQ5JT1J-BRF4
+decisionRationale: 'externalDependencies: External dependencies modeled as first-class relationship objects in
+
+  catalog/governance/relationships/: HHD_API → Sofa King Asset Management /
+
+  Trackweb (WHM Asset Management API) and HHD_API → Amazon S3 runtime
+
+  configuration. Additional external interactions are documented as
+
+  serviceGroup externalInteractions rather than relationships because no
+
+  catalog target objects exist yet: tenant identity providers (SAML, Azure,
+
+  Google, ClassLink, ADFS, Rapid Identity, OneLogin), email infrastructure,
+
+  Microsoft Application Insights, and Amazon CloudWatch. These remain
+
+  incomplete pending catalog objects to point at. Status open pending brannock-asset-management-engineering / ARB ratification.'

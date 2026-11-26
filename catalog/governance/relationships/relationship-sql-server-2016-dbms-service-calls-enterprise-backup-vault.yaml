@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Y9-45Z2
+name: SQL Server 2016 DBMS Service → Enterprise Backup Vault
+catalogStatus: stub
+source: 01KQQ5JT01-Z39K
+label: calls
+externalTarget: Enterprise Backup Vault
+notes:
+  background: "Off-host backup target and retention management."

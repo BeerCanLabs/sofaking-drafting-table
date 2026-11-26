@@ -1,0 +1,111 @@
+schemaVersion: '1.0'
+uid: 01KY5YYDNN-4DTD
+type: software_deployment_pattern
+ownerRole: engineer
+name: WSERP Portal Hosted
+aliases: [WSERP Portal, Velocity, Employee Portal]
+description: >-
+  Hosted deployment pattern for the WSERP Portal product. Velocity Web and API
+  plus SK-API/Dispatch run on shared Windows IIS virtual machines in XCOLO. Portal
+  uses the same per-customer SQL database as WSERP Desktop and Web and calls the
+  Proxy application in the separate Web tier for reports and Documents access.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.ws-erp-abacus-engineering
+  productFamily: WSERP
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, portal, velocity, windows, vmware, iis, hosted]
+notes:
+  documentationScope: Infrastructure-evidenced current state; application, network, database, and file-cluster details await owning-team validation.
+  availabilityRequirement: High; no numeric SLO, SLA, RPO, or RTO has been confirmed.
+  dataClassification: Restricted PII exists in the customer database and Documents share.
+  failureDomain:
+    scope: service-group
+    description: Portal IIS failures can affect all hosted Portal customers; shared SQL, Web Proxy, Grizzly, or Documents failures can also disrupt Portal functions.
+  deploymentTargets: Hosted production and customer Test/UAT run at XCOLO; engineering Dev/QA/Stage run at High Point.
+  virtualization: VMware is used in XCOLO and High Point.
+  operatingSystem: Windows Server 2022 is widely deployed, with a few Windows Server 2019 hosts remaining.
+  sizing: Production 4 vCPU/64 GB RAM/100 GB disk; Test/UAT 2 vCPU/36 GB RAM/100 GB disk.
+  ingress: Internet -> Imperva WAF -> Fortinet FortiGate -> F5 BIG-IP -> Portal IIS.
+  availability: Two nodes in production and two in Test/UAT; active/passive with manual failover; no autoscaling.
+  proxyDependency: Portal calls Proxy on the WSERP Web tier over HTTPS 443 using the encrypted timestamp ept header for reports and Documents access.
+  onlineShopping: >-
+    Dispatch handles OL6 PunchOut vendor callbacks and writes FinReqCheckOut.
+    Portal relays OL5 browser checkout responses to Desktop WebComm over HTTP 8001.
+  fileAccess: Portal has no direct Documents share access; Proxy performs SMB access on its behalf.
+  operations: >-
+    VM creation is template-based; Windows/IIS setup is manual; Automox patches
+    monthly; Nagios XI, Dynatrace, and Pingdom monitor infrastructure and URLs;
+    capacity is reactive; no drift detection or scheduled failover testing exists.
+  recoverability: Lost VMs restore from Veeam; schedule, retention, offsite protection, restore testing, RPO, and RTO remain unconfirmed.
+  noApplicablePattern: No approved reference architecture accurately represents this shared active/passive legacy IIS deployment and its Web-tier Proxy dependency.
+networkZones:
+  - id: public-edge
+    name: Public Edge
+    tier: frontend
+    description: Imperva, FortiGate, and F5 ingress.
+  - id: portal-app
+    name: Portal Application
+    tier: application
+    description: Shared Portal IIS tier, separate from Web IIS VMs.
+  - id: data
+    name: Shared Customer Data
+    tier: data
+    description: Customer-specific database on shared SQL clusters.
+serviceGroups:
+  - name: Portal IIS Servers
+    deploymentTarget: xcolo-datacenter
+    substrate: 01KQQ5JT04-A7W8
+    notes: Shared active/passive IIS virtual machines hosting Velocity and Dispatch.
+    deployableObjects:
+      - ref: 01KSM38KF3-PR89
+        diagramTier: presentation
+        networkZone: portal-app
+      - ref: 01KSM38KF3-WNCP
+        diagramTier: application
+        networkZone: portal-app
+      - ref: 01KSM38KF3-0S7A
+        diagramTier: application
+        networkZone: portal-app
+  - name: Customer Database
+    deploymentTarget: xcolo-datacenter
+    notes: Separate database per customer on shared SQL Server clusters; DMT owns platform details.
+    deployableObjects:
+      - ref: 01KSM38KF3-3RT8
+        diagramTier: data
+        networkZone: data
+tierVariants:
+  - tier: WYMZEMZ80T-9Y2B
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Portal IIS Servers
+        replicaCount: 2
+        autoscaling: {enabled: false}
+        notes: Active/passive with manual failover.
+  - tier: AYQ5RCPK7C-MK58
+    deploymentTarget: {provider: on-premises, region: XCOLO Data Center (OCRC)}
+    serviceGroupVariants:
+      - serviceGroup: Portal IIS Servers
+        replicaCount: 2
+        autoscaling: {enabled: false}
+    notes: Test is true UAT using unmasked production database restores; production Documents are not copied and production security applies.
+  - tier: SZJVW70BTN-V6GX
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering development topology; exact replica counts are unconfirmed.
+  - tier: FQ696EE1DA-SWEN
+    deploymentTarget: {provider: on-premises, region: High Point Data Center}
+    notes: Engineering QA/staging topology; exact replica counts are unconfirmed.
+decisionRecords:
+  - {ref: 01KY5YYDNN-8YVZ, key: noApplicablePattern}
+  - {ref: 01KY5YYDNN-8YVZ, key: deploymentTargets}
+  - {ref: 01KY5YYDNN-8YVZ, key: availabilityRequirement}
+  - {ref: 01KY5YYDNN-8YVZ, key: dataClassification}
+  - {ref: 01KY5YYDNN-8YVZ, key: failureDomain}
+  - {ref: 01KY5YYDNN-8YVZ, key: patternDeviations}
+  - {ref: 01KY5YYDNN-8YVZ, key: externalDependencies}
+  - {ref: 01KY5YYDNN-8YVZ, key: interServiceConnections}

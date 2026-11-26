@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-WGMF
+type: relationship
+ownerRole: engineer
+name: Customer Membership Event Publisher → Loveseat Event Bus
+description: >-
+  The Event Publisher Lambda publishes canonical CustomerstoreAssociation events to
+  the Sofa King Loveseat event bus over HTTPS. Loveseat has no dedicated shared-service
+  catalog object today, so it is recorded as an external target — see session
+  next-step route-loveseat-shared-service-gap.
+source: 01M5CS4D94-NXJ3
+externalTarget: Loveseat Event Bus
+label: sends events to
+technology: HTTPS
+direction: event
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - loveseat
+  - planned

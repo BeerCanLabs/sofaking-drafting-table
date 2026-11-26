@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KZPC4E3A-BN4W
+type: relationship
+name: CIS App Customerinformation -> CIS Db Customerinformation
+description: The per-ITC CustomerInformation web application reads and writes its CustomerInformation database on the Lakeshore CIS SQL Server 2019 Availability Group.
+catalogStatus: incomplete
+source: 01KSM38KFQ-KQ7G
+label: reads and writes
+target: 01KSM38KFP-25CX
+technology: SQL Server TDS
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- customerinformation
+- database
+- data-zone
+notes: The target data component runs on deployment-specific data-store service 01KYP8DBR0-7H19, the two-replica Lakeshore CIS SQL Server 2019 AlwaysOn Availability Group.

@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-Y52T
+type: technology_component
+ownerRole: technology-admin
+name: Oracle MySQL 8
+description: MySQL 8 bug-fix release track retained while platforms migrate to the newer LTS model.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- software
+- dbms
+- mysql
+classification: software
+vendor: Oracle Corporation
+productName: MySQL
+productVersion: '8'
+vendorLifecycle:
+  mainstreamSupportEnd: 2026-04-30
+  extendedSupportEnd: 2026-04-30
+  notes: Oracle states MySQL 8.0 reaches end of life in April 2026.
+capabilities:
+- 01KT0V5MCV-VD0Y
+configurations:
+- id: default-mysql-listener
+  name: Default MySQL Listener
+  description: Default MySQL listener for client database connections.
+  capabilities:
+  - 01KT0V5MCV-VD0Y
+  networkBindings:
+  - port: 3306
+    protocol: MySQL
+    direction: inbound
+    description: Default MySQL client listener.

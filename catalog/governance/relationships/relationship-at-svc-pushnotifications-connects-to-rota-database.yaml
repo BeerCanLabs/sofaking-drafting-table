@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+uid: 01KZ6ZASW4-AGTN
+type: relationship
+name: at-svc-pushnotifications connects to Rota Database
+description: Observed direct SQL Server access from both standard and ML chaise workload instances to the production Rota database.
+source: 01KQQ5JT09-45J2
+target: 01KQQ5JT06-0KZE
+label: connects to
+technology: Microsoft SQL Server TDS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+notes: Dynatrace client spans observed prdlvadbcnl1.rotaprod.example:60173 from at-svc-pushnotifications and at-svc-pushnotifications-ml across four complete, unsampled six-hour windows reviewed on 2026-08-04.
+tags: [leave, database-access, dynatrace-evidence]

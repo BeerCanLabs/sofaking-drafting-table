@@ -1,0 +1,72 @@
+schemaVersion: '1.0'
+uid: X5EM83VCQP-721F
+type: product_component
+ownerRole: engineer
+name: Plat Ottoman Core
+description: >-
+  Local developer-environment orchestrator for the Ottoman platform. Provides
+  a Docker Compose stack that pulls pre-built ECR images for the Ottoman
+  services (Kong, Domain Service, Invitation Service, OrgPerson Service,
+  Organization Service, a mock Loveseat, Passport Core, Sofa King Tools,
+  Sofa King Administration, and the Ottoman test app) plus a `core-cli`
+  (`yarn core ...`) for init/login/setup/bootstrap. It is not itself deployed
+  to any environment.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - ottoman
+  - developer-tooling
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-ottoman-core
+language: JavaScript
+classification: cli
+runtimeRequirement: Not deployed; runs locally via Docker Compose on a developer workstation.
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-ottoman-core
+  notDeployed: >-
+    This repository has no Kubernetes/Helm manifests, no CI/CD deploy
+    pipeline (.github contains only CODEOWNERS; no cd/ or ci/ directories),
+    and no application src/ directory of its own — it is CLI tooling
+    (core-cli/, entry point core-cli/core.js, using yargs) plus a
+    docker-compose.yml that wires together locally-run containers for
+    development and QA. It should NOT be added as a deployable object in the
+    Ottoman SDP's service groups, since it has no runtime placement. Flagging
+    for the engineering leader whether it belongs in the catalog at all, or
+    only as a documented developer-tooling reference.
+  runtimeRequirement: >-
+    No pinned Node.js engine/volta field in package.json. docs/workspace.md
+    documents Node.js v20.12.2 / Yarn Classic v1.22.19 as the developer
+    workstation provisioning image, not a runtime for a deployed service.
+  secretsManagement: >-
+    AWS Secrets Manager via @aws-sdk/client-secrets-manager with SSO
+    credentials (core-cli/init.js), fetching secret plat/ottoman-core/secrets
+    (us-east-1) for OKTA_CLIENT_SECRET, OKTA_CLIENT_TOKEN, CONFIGCAT_SDK_KEY,
+    and IDM_CLIENT_SECRET, then writing them into a git-ignored local .env.
+  localStackTemps: >-
+    Provisions local Postgres (custom-built, single ottoman-core database
+    shared across services via distinct schemas — domain, invitation,
+    organization, passportcore, skadmin — matching the schema names observed
+    in the real services), MongoDB 7.0.14 (for OrgPerson Service), a Gremlin
+    (Apache TinkerPop) graph database standing in for AWS Neptune, and Redis
+    7.0.7. None of these are the real managed AWS services.
+  dependencies:
+    - 01KSM38KFX-QMDW
+    - 01KSM38KFW-WA83
+    - 01KSM38KFX-ETDW
+    - 01KSM38KFH-NYK5
+    - 01KSM38KFX-DQGA
+    - 01KSM38KFX-9EHD
+    - 01KSM38KFX-J6Z2
+    - 01KSM38KFW-W42S
+    - 01KZ2MRPHT-TAPP
+notes:
+  background: >-
+    Added during the Dev-team repository linking pass alongside
+    plat-svc-domain, plat-svc-invitation, plat-svc-organization,
+    msvc-org-person, and plat-passport-monorepo. Unlike those repos, this one
+    had no prior catalog entry — it surfaced as genuinely new during
+    discovery.

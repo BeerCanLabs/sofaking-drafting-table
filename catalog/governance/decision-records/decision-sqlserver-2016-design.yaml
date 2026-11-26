@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KSNAW2AK-4CFS
+type: decision_record
+name: SQL Server 2016 DBMS Service Design
+description: Architectural design decisions captured during service catalog completion for this object.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- design
+- adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT01-Z39K
+decisionRationale: >
+  SQL Server 2016 uses AlwaysOn Availability Groups for multi-node HA with a minimum of 3 nodes and vertical scale-up with optional secondary replicas. Service authentication uses Active Directory integrated identities. Database audit and engine logs are forwarded to centralized logging. SQL listener probes, replica telemetry, and platform monitoring track service welfare. Service accounts and connection secrets are stored centrally. Backup strategy is daily full plus hourly log backup to SQL Server native managed storage, with 1-hour RTO and RPO. TDE is enabled on all production databases. Administrative access uses Active Directory integrated access with role-based SQL permissions. Autoscaling is not applicable; load balancer is optional.

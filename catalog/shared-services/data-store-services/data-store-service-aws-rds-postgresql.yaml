@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-YBP0
+type: data_store_service
+ownerRole: technology-admin
+name: AWS RDS for PostgreSQL
+description: >-
+  Candidate AWS-managed PostgreSQL database service stub requested for Platform
+  Compliance Engine. Cloud Engineering must complete and approve the reusable
+  service standard before broader adoption.
+version: 1.0.0
+deliveryModel: paas
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - aws
+  - rds
+  - postgresql
+  - database
+  - candidate-standard
+vendor: Amazon Web Services
+productName: Amazon RDS for PostgreSQL
+productVersion: managed
+networkPlacement: vpc-private
+patchingOwner: aws-managed
+authenticationModel: TBD
+capabilities:
+  - 01KT0V5MCV-VD0Y
+notes:
+  sourceTicket: https://sofaking-example.atlassian.net/browse/OPS-362835
+  configurableSurface: >-
+    Engine version, instance class, Multi-AZ topology, parameter groups, storage,
+    backup retention, encryption, authentication, and network access remain to be
+    defined by Cloud Engineering.
+  lifecycleRationale: >-
+    Candidate stub only. The catalog's preferred AWS Aurora PostgreSQL object is
+    not assumed equivalent to the RDS for PostgreSQL service explicitly requested
+    in OPS-362835.

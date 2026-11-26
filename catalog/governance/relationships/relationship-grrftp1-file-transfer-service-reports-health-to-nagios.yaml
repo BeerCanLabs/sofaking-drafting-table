@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 1MPZ1RB8CZ-GSGW
+name: GRRFTP1 File Transfer Service → Nagios Monitoring Service
+catalogStatus: incomplete
+source: 01KYN1RHK6-FTP1
+label: reports health to
+target: 01KQQ5JT1F-E2CC
+notes:
+  background: Owner-confirmed on 2026-07-31 that Nagios monitors GRRFTP1 server and Globalscape EFT health. The specific checks, thresholds, and alert-routing configuration remain undocumented.
+capabilities:
+- 01KQQ4Q026-98VD

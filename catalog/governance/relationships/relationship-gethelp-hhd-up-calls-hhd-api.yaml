@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KT0XSJE1-KGJN
+name: HelpDesk HHD_UP → HelpDesk HHD_API
+catalogStatus: stub
+source: 01KSM38KFC-WKD2
+label: calls
+target: 01KSM38KFB-X6P1
+notes:
+  background: "The HHD_UP end-user portal SPA calls the shared HHD_API backend on port 443 with the authenticated tenant session."
+capabilities: []

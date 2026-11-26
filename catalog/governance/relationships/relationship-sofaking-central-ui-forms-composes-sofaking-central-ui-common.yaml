@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4RP3T-5ZTM
+type: relationship
+name: 'Sofa King Central UI Forms → Sofa King Central UI Common'
+catalogStatus: stub
+source: 01KQQ5JT0K-HHQY
+target: 01KQQ5JT0K-KSXR
+label: composes
+technology: npm package
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+- ui-composition
+notes:
+  background: npm dependency observed in package.json 2026-07-29.

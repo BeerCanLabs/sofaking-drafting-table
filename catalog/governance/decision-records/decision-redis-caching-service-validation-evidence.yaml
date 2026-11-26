@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XJA5-ZW4B
+type: decision_record
+name: Redis Caching Service Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT00-191S
+linkedObject: 01KQQ5JT00-191S
+decisionRationale: "serviceAuthentication: Clients authenticate via Redis AUTH or integrated identity-based access control.\n\nsecretsManagement: Redis passwords and connection details are managed via a centralized secrets store.\n\nserviceLogging: Redis logs and performance metrics are forwarded to centralized logging and monitoring.\n\nhealthWelfareMonitoring: Service welfare is monitored via Redis health checks and cluster metrics.\n\navailabilityModel: High availability is achieved via Redis Sentinel or clustered modes with replication.\n\nscalabilityModel: Scales vertically with host resources or horizontally via clustering.\n\nrecoverabilityModel: Data recovery is achieved through persistence (RDB/AOF) or cluster replication.\n\nfailureDomain: Impact is scoped to the Redis instance or cluster serving the dependent workloads."

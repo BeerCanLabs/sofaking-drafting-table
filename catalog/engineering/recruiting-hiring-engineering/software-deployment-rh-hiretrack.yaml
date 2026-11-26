@@ -1,0 +1,122 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG8-20BZ
+type: software_deployment_pattern
+ownerRole: engineer
+name: Legacy Recruiting & Hiring - Pattern
+aliases:
+  - Sofa King Recruiting & Hiring (Hiretrack / Classic)
+description: 'Sofa King Recruiting & Hiring (Hiretrack / Classic) is a legacy, single-tenant ASP.NET Web Forms/VB.NET application hosted primarily on Windows Server 2012 R2 in the Grand Rapids (GRR) datacenter, with non-prod and DR footprints in AWS.
+
+  Source Documentation: - https://sofaking-example.atlassian.net/wiki/spaces/AD/pages/146228956/Architecture+Overview - https://sofaking-example.atlassian.net/wiki/spaces/SAAS/pages/1232696031/Recruiting+Hiring+-+Environment+Guide - https://sofaking-example.atlassian.net/wiki/spaces/SAAS/pages/10583179/Recruiting+Hiring+-+Data+-+Hiretrack+Database+Servers+Overview
+
+  '
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: Recruiting & Hiring
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+tags:
+  - sdm
+  - recruiting-hiring
+  - hiretrack
+  - legacy
+  - grr-datacenter
+  - rh
+followsReferenceArchitecture: 01KQQ5JT1D-VFBP
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  availabilityRequirement: 'High (customer-facing ATS / hiring platform; outages directly affect region hiring operations).
+
+    '
+  dataClassification: 'PII (applicant and staff data, resumes, evaluations, application forms, background info);  FERPA-aligned where store HR data is involved.
+
+    '
+  failureDomain: 'Primary failure domains are individual web servers, SQL instances, and GRR datacenter. Web tier is horizontally scaled; loss of a single IIS node is tolerable.  SQL Server cluster nodes share storage.
+
+    '
+  deploymentTargets: 'Production Primary: GRR Datacenter (Windows web farm + SQL cluster + NetApp + F5). Non-prod/Stage/QA: AWS us-east-1. DR: AWS us-east-2 (DR SQL cluster + CloudEndure).
+
+    '
+  patternDeviations:
+    - Heavily customized single-tenant architecture with per-client IIS apps and dbs.
+    - Transactional replication with updatable subscriptions (deprecated feature).
+    - Subscribing file model (AspexRoot + OLA2Common) for code sharing.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: Web Edge & Routing
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT1F-HZTZ
+        diagramTier: application
+        networkZone: web
+        notes: grrpytarr1-2 and AWS ARR nodes.
+      - ref: 01KQQ5JT00-Z6WV
+        diagramTier: application
+        networkZone: ops
+        notes: Primary load balancer and SSL termination.
+  - name: Application Web Tier
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KSM38KG8-HW97
+        diagramTier: application
+        networkZone: web
+        notes: grrpytweb1-41 farm and QA/Stage web servers.
+  - name: Identity & Authentication
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT1F-HZTZ
+        diagramTier: application
+        networkZone: app
+        notes: grrpytidp1-3 and AWS IDP nodes.
+  - name: Database Services
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: application
+        networkZone: data
+        notes: GRRPYTSQL clusters and AWS SQL instances.
+  - name: File Storage & Replication
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT1F-HZTZ
+        diagramTier: application
+        networkZone: data
+        notes: AspexRoot + subscribing file model and grrpytft1 replicator.
+  - name: Logging & Observability
+    deploymentTarget: grr-datacenter
+    deployableObjects:
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: application
+        networkZone: ops
+        notes: Shared ElasticSearch and Dynatrace SaaS.
+decisionRecords:
+  - ref: 01KT16XHYT-0TT2
+    key: deploymentTargets
+  - ref: 01KT16XHYT-0TT2
+    key: availabilityRequirement
+  - ref: 01KT16XHYT-0TT2
+    key: dataClassification
+  - ref: 01KT16XHYT-0TT2
+    key: failureDomain
+  - ref: 01KT16XHYT-0TT2
+    key: patternDeviations

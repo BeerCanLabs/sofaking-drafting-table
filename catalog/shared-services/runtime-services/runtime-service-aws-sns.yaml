@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-HTRA
+type: runtime_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS SNS (Simple Notification Service)
+description: 'Managed pub/sub messaging service.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - aws
+  - paas
+  - messaging
+  - pub-sub
+vendor: Amazon Web Services
+productName: Simple Notification Service
+productVersion: managed
+authenticationModel: iam
+capabilities:
+  - 01KT0V5MCV-KT72
+architectureNotes:
+  resilienceModel: Regional managed service with high availability.
+  configurableSurface: Topics, subscriptions, access policies, delivery retries, and encryption settings.
+  failureDomain: Scoped to the AWS region.
+  dataEncryption: Encrypted at rest using KMS.
+decisionRecords:
+  - ref: 01KSNAW2AK-MHJ2
+    key: resilienceModel
+  - ref: 01KSNAW2AK-MHJ2
+    key: configurableSurface
+  - ref: 01KSNAW2AK-MHJ2
+    key: failureDomain
+  - ref: 01KSNAW2AK-MHJ2
+    capability: 01KT0V5MCV-KT72
+deliveryModel: paas

@@ -1,0 +1,16 @@
+schemaVersion: '1.0'
+uid: 01KYQ3TZ28-W96R
+type: relationship
+name: 'Platform Sand Employee → Sofa King Central AWS Aurora PostgreSQL'
+catalogStatus: stub
+source: 01KSM38KFT-VQP6
+target: 01KYAAZF97-HS3C
+label: reads from and writes to
+technology: PostgreSQL wire protocol
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Declared by sand-Employee source inspection 2026-07-29. Persistence held in the public API tier rather than behind an internal microservice.

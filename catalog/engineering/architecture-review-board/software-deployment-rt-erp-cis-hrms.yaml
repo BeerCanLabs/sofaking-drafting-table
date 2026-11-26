@@ -1,0 +1,249 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEY-JC4K
+type: software_deployment_pattern
+ownerRole: engineer
+name: RT ERP & CIS - Pattern
+aliases:
+  - RT-ERP/CIS/HRMS (Sofa King ERP)
+description: 'Software Distribution Manifest for Sofa King RT-ERP/CIS/HRMS. Single-tenant monolithic Java application deployed per region in AWS ECS. Current cloud scope covers the region-hosted AWS deployment model only; on-premise deployments are intentionally excluded from this SDM and should be captured separately.
+
+  '
+version: 1.1.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.rt-erp-cis-engineering
+  additionalPillars:
+    - business-pillar.customer-solutions
+    - business-pillar.people-solutions
+  productFamily: RT-ERP/CIS/HRMS
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+  - sdm
+  - rt-erp
+  - sis
+  - hrms
+  - erp
+followsReferenceArchitecture: 01KQQ5JT1C-HM5H
+architectureNotes:
+  interServiceConnections: >-
+    Internet traffic follows Imperva WAF → region AWS ALB → RT ERP
+    application. Customer database access follows the customer-hosted stunnel
+    server → region Gateway-A → the selected region database, while
+    Sofa King operational access uses Netskope Private Access publishers.
+    Application mail follows RT ERP application → Gateway-B Postfix → Amazon
+    SES. Region LDAP uses LDAPS 636, and region-owned Synergis clocks call
+    the public teamsws HTTPS endpoint.
+  availabilityRequirement: 'The production target remains high availability aligned to 99.95% service availability expectations. The current region database tier does not meet that target: it has one writable primary and a read-only replica with no automatic promotion or failover. See architectureNotes.databaseAvailabilityModel and risk 01KZ9A3RR6-NA48.
+
+    '
+  deploymentTargets: 'Cloud-hosted scope only. Each region deployment runs in its own AWS account with separate production and non-production ECS clusters. On-premise deployments are out of scope for this SDM and will require a separate manifest.
+
+    '
+  dataClassification: 'Highly regulated customer, employee, and financial data. FERPA-adjacent customer records, HR/personnel records, payroll data, and cardholder/PHI handling concerns require explicit control treatment across the runtime.
+
+    '
+  failureDomain: 'The intended failure domain is per-region, single-tenant isolation. Central shared observability platforms remain external dependencies and can create wider blast radius when degraded.
+
+    '
+  noPatternDeviations: 'Current cloud-hosted scope is being treated as aligned to the selected single-tenant ECS monolith pattern. Remaining modeling uncertainty is captured in linked ARDs rather than treated as intentional pattern deviations.
+
+    '
+  externalDependencies: >-
+    External dependencies are modeled through relationships where catalog
+    objects exist: Imperva, AWS ALB, Postfix, Nagios, and Central Logging.
+    Amazon SES, the customer-hosted stunnel server, Netskope publishers,
+    region LDAP, and region-owned Synergis time clocks remain external
+    relationship targets because they are outside this cloud SDP boundary.
+    CloudWatch, Glowroot, Sofa King IDM, and database-local authentication
+    remain provisional external interactions pending lower-level catalog
+    artifacts.
+  databasePlatformSelection: 'RT-ERP/CIS has always been single-tenant: each region deployment runs in its own dedicated AWS account with its own database instance running exactly one platform, co-resident with the ECS application services. The selected platform is one of IBM Db2, SQL Server 2019, or PostgreSQL 17. The three entries in the Data Services group are mutually exclusive per-region alternatives, not concurrently deployed platforms. Oracle exists only in developer/test and legacy configurations and is out of scope for this cloud-hosted SDM. See decision record 01KQQ5JT02-0MBH.'
+  databaseAvailabilityModel: >-
+    The current RT-ERP region database baseline applies to whichever one of
+    Db2, SQL Server, or PostgreSQL is selected for that region: one writable
+    primary plus a read-only replica. The replica is not configured as an
+    automatically promoted failover target, so this is not a true
+    high-availability database topology. Loss of the writable primary
+    interrupts database writes and makes the database tier a region-scoped
+    single point of failure. Read-only replication and backup/restore controls
+    support read or recovery needs but must not be counted as database HA. See
+    risk 01KZ9A3RR6-NA48.
+  deploymentAutomation: 'Nested CloudFormation stacks define the ALB, ECS cluster, EC2 capacity provider and Auto Scaling Group, task definitions, services, EFS attachments, CloudWatch dashboards, and SNS notifications. CodeBuild updates each region stack from versioned parameters and ECR images.'
+  sourceDocumentation: >-
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/126553380/BS+-+Sofa King+RT+ERP+CIS+TEAMS+Prologic;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18148348211/ERP+cloudformation+Pipeline;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/15070946046;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/14005231828;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/18412167515;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/11672883976;
+    https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/164452088;
+    https://sofaking-example.atlassian.net/browse/OPS-188334
+  infrastructureSource: 'https://github.com/BeerCanLabs/sk-erp_cloudformation_ecs and https://github.com/BeerCanLabs/sk-erp-automation/tree/cf-update-pipeline-v2'
+scalingUnits:
+  - name: region-deployment
+    type: replicable
+    instanceCount: 50
+    notes: 'Each region receives its own isolated deployment boundary in a separate AWS account.
+
+      '
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services including UIs, public APIs, and edge components.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores, caches, message brokers, and persistence services.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+  - name: External Edge Protection
+    deploymentTarget: saas-imperva
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KQQ5JT1D-MY47
+        diagramTier: presentation
+        networkZone: web
+        notes: Imperva protects each region's public web path before traffic reaches the region AWS account.
+  - name: Region AWS Ingress
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KQQ5JT04-P7QJ
+        diagramTier: presentation
+        networkZone: web
+        notes: Region ALB receives accepted HTTPS traffic from Imperva and routes it to ECS application targets.
+  - name: Region Gateway-A Connectivity
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KYT589B4-1XSE
+        diagramTier: utility
+        networkZone: ops
+        riskRef: 01KYT589B4-B0Y1
+        notes: Per-region TLS tunnel gateway; customer stunnel and Netskope publisher endpoints remain outside the SDP.
+  - name: Region Gateway-B Mail Relay
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KQQ5JT1E-TT1N
+        diagramTier: utility
+        networkZone: ops
+        notes: Uses deployment configuration rt-erp-gateway-b-single-relay and relays outbound mail through Amazon SES.
+  - name: RT-ERP Application Server
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    substrate: 01KYQN2WDV-223J
+    deployableObjects:
+      - ref: 01KSM38KEX-PX7B
+        diagramTier: application
+        networkZone: app
+        riskRef: 01KQQ5JT02-ZR18
+  - name: Data Services
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KQQ5JT00-5TYB
+        diagramTier: application
+        networkZone: data
+        riskRef: 01KZ9A3RR6-NA48
+        notes: 'Mutually exclusive per-region platform option (one of three). When selected, RT-ERP uses one writable primary and a read-only replica without automatic promotion or failover; the primary is a region-scoped single point of failure. See architectureNotes.databasePlatformSelection and architectureNotes.databaseAvailabilityModel.'
+      - ref: 01KQQ5JT01-QFN5
+        diagramTier: application
+        networkZone: data
+        riskRef: 01KZ9A3RR6-NA48
+        notes: 'Mutually exclusive per-region platform option (one of three). When selected, RT-ERP uses one writable primary and a read-only replica without automatic promotion or failover; the primary is a region-scoped single point of failure. See architectureNotes.databasePlatformSelection and architectureNotes.databaseAvailabilityModel.'
+      - ref: 01KQQ5JT00-X90C
+        diagramTier: application
+        networkZone: data
+        riskRef: 01KZ9A3RR6-NA48
+        notes: 'Mutually exclusive per-region platform option (one of three). When selected, RT-ERP uses one writable primary and a read-only replica without automatic promotion or failover; the primary is a region-scoped single point of failure. See architectureNotes.databasePlatformSelection and architectureNotes.databaseAvailabilityModel.'
+  - name: Observability Services
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    externalInteractions:
+      - name: AWS CloudWatch
+        type: external
+        notes: 'Provisional runtime observability dependency. CloudWatch is being treated as agent-backed host or workload telemetry until dedicated DRAFT runtime artifacts are added.
+
+          '
+        capabilities:
+          - 01KQQ4Q026-98VD
+      - name: Glowroot Agent Telemetry
+        type: external
+        notes: 'Region-local Glowroot instrumentation forwards application performance telemetry to the central collector service.
+
+          '
+        capabilities:
+          - 01KQQ4Q026-NB1W
+      - name: Centralized Log Forwarding
+        type: external
+        notes: 'Runtime logs are forwarded into the shared central ELK stack outside this SDM boundary.
+
+          '
+        capabilities:
+          - 01KQQ4Q026-D04B
+  - name: Reporting Services
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    deployableObjects:
+      - ref: 01KQQ5JT1F-737K
+        diagramTier: application
+        networkZone: ops
+        riskRef: 01KQQ5JT02-T523
+  - name: External Identity Services
+    deploymentTarget: aws-us-east-2
+    scalingUnit: region-deployment
+    externalInteractions:
+      - name: Sofa King IDM
+        type: external
+        notes: Primary authentication path for region users and administrators.
+        capabilities:
+          - 01KQQ4Q026-MHJM
+      - name: Region LDAP Servers
+        type: external
+        notes: Provisional alternate authentication path for regions not using Sofa King IDM.
+        capabilities:
+          - 01KQQ4Q026-MHJM
+      - name: Database Authentication
+        type: external
+        notes: 'Provisional alternate local authentication path where regions are not integrated with Sofa King IDM or LDAP.
+
+          '
+        capabilities:
+          - 01KQQ4Q026-MHJM
+decisionRecords:
+  - ref: 01KQQ5JT02-ZR18
+  - ref: 01KQQ5JT02-0MBH
+  - ref: 01KZ9A3RR6-NA48
+    key: databaseAvailabilityGap
+  - ref: 01KQQ5JT02-V402
+  - ref: 01KQQ5JT02-T523
+  - ref: 01KQQ5JT02-DHQV
+  - ref: 01KT16XHHG-CNGQ
+    key: deploymentTargets
+  - ref: 01KT16XHHG-CNGQ
+    key: dataClassification
+  - ref: 01KT16XHHG-CNGQ
+    key: failureDomain
+  - ref: 01KT16XHHG-CNGQ
+    key: externalDependencies
+  - ref: 01KT16XHHG-CNGQ
+    key: interServiceConnections
+  - ref: 01KYT589B4-B0Y1
+    key: gatewayAOperationalBaseline
+  - ref: 01KTM7D5BT-P86A
+    key: availabilityRequirement
+  - ref: 01KTM7D5BV-01S8
+    key: noPatternDeviations

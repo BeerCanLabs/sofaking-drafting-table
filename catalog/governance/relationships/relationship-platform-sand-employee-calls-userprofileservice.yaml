@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+uid: 01KYQ4HS51-RM1K
+type: relationship
+name: 'Platform Sand Employee → UserProfileService'
+catalogStatus: stub
+source: 01KSM38KFT-VQP6
+externalTarget: UserProfileService
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Consul service discovery (Util-ServiceDiscovery); declared in ServiceDependencyConfiguration.
+  unmodelledTarget: UserProfileService is a declared dependency with no catalog object; recorded as an external target rather than stubbing a component for another team.

@@ -1,0 +1,119 @@
+schemaVersion: '1.0'
+uid: 01KYQN2WDV-223J
+type: runtime_service
+ownerRole: technology-admin
+name: Java Application Service on Amazon ECS
+description: |
+  Reusable Java application runtime for containerized workloads deployed as
+  Amazon ECS services on EC2-backed ECS clusters. The runtime covers the ECS
+  task, service, capacity-provider, load-balancer, image-delivery, and
+  CloudFormation-managed replacement behavior used by RT ERP region
+  deployments. It does not represent AWS Fargate.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - runtime
+  - application
+  - java
+  - ecs
+  - ec2
+  - aws
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-KJHA
+primaryTechnologyComponent: 01KQQ5JT1V-KSVC
+notes:
+  deploymentModel: |
+    Java containers run as ECS services on ECS-optimized Amazon Linux 2023 EC2
+    capacity. ECS capacity providers and Auto Scaling Groups supply cluster
+    capacity; AWS Fargate is not part of this runtime.
+  provisioningModel: |
+    Nested CloudFormation stacks define the ECS cluster, task definitions,
+    services, Application Load Balancer, Auto Scaling Groups, EFS attachments,
+    CloudWatch dashboards, and SNS notifications. CodeBuild assumes the
+    region deployment role and updates the root CloudFormation stack.
+  imageDelivery: Container images are versioned in Amazon ECR and referenced by ECS task definitions.
+  observedServiceTopology: |
+    A representative production region cluster observed on 2026-07-29
+    contained separate replica-scheduled services for Tomcat, Tomcat batch,
+    general batch, payroll batch, report batch, notification batch, Filebeat,
+    Jasper, and Jasper 9. Desired task counts are independently configured;
+    some batch or migration services can remain at zero when idle.
+  serviceAuthentication: |
+    Application authentication remains the responsibility of the deployed
+    ProductComponent. Administrative AWS access uses region deployment roles
+    and IAM rather than application credentials.
+  secretsManagement: |
+    Runtime parameters and sensitive application configuration are supplied
+    through AWS Systems Manager and the region deployment configuration; they
+    are not embedded in container images.
+  serviceLogging: |
+    ECS task and service telemetry is sent to Amazon CloudWatch. Application
+    logs can also be forwarded to the product's centralized logging service.
+  healthWelfareMonitoring: |
+    ECS desired-state reconciliation, Application Load Balancer health checks,
+    CloudWatch telemetry, and product APM or synthetic monitoring provide
+    workload-health coverage.
+  availabilityModel: |
+    Desired task counts and EC2 capacity are configured per environment.
+    Application Load Balancer routing and ECS replacement maintain service
+    availability within the region deployment boundary.
+  scalabilityModel: |
+    Each ECS service role has an independent desired task count. Workload
+    capacity changes through those desired counts, while cluster capacity
+    changes through the ECS capacity provider and its EC2 Auto Scaling Group.
+  recoverabilityModel: |
+    Failed tasks and EC2 instances are replaced by ECS and Auto Scaling.
+    CloudFormation and versioned ECR images provide repeatable runtime rebuilds.
+  failureDomain: |
+    A runtime instance is isolated to the ECS cluster and AWS account for one
+    region environment.
+  sourceEvidence: |
+    RT ERP CloudFormation templates:
+    https://github.com/BeerCanLabs/sk-erp_cloudformation_ecs
+    Deployment automation:
+    https://github.com/BeerCanLabs/sk-erp-automation/tree/cf-update-pipeline-v2
+deploymentConfigurations:
+  - id: ecs-service-capacity
+    name: ECS Service and Capacity Provider
+    description: |
+      ECS desired task counts and an EC2 Auto Scaling Group capacity provider
+      allow application and cluster capacity to be adjusted independently.
+    addressesQualities:
+      - availability
+      - scalability
+      - recoverability
+  - id: cloudformation-rebuild
+    name: CloudFormation-Managed Rebuild
+    description: |
+      Nested CloudFormation stacks and versioned ECR images recreate failed or
+      replaced runtime infrastructure consistently.
+    addressesQualities:
+      - recoverability
+internalComponents:
+  - ref: 01KQQ5JT02-KJHA
+    role: host
+  - ref: 01KQQ5JT1V-KSVC
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KYQN2Z6F-F3XG
+    key: serviceAuthentication
+  - ref: 01KYQN2Z6F-F3XG
+    key: secretsManagement
+  - ref: 01KYQN2Z6F-F3XG
+    key: serviceLogging
+  - ref: 01KYQN2Z6F-F3XG
+    key: healthWelfareMonitoring
+  - ref: 01KYQN2Z6F-F3XG
+    key: availabilityModel
+  - ref: 01KYQN2Z6F-F3XG
+    key: scalabilityModel
+  - ref: 01KYQN2Z6F-F3XG
+    key: recoverabilityModel
+  - ref: 01KYQN2Z6F-F3XG
+    key: failureDomain

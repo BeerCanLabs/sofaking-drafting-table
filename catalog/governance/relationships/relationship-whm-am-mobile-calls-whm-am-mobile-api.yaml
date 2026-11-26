@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYRV2MP3-FXZP
+type: relationship
+name: AM Mobile Client → AM Mobile API
+catalogStatus: complete
+source: 01KSM38KFB-27S3
+label: calls
+target: 01KSM38KFB-D6MJ
+description: The native Android/iOS asset-scanning client authenticates and exchanges data with its backend Web API.
+technology: HTTPS
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- mobile
+notes:
+  background: Confirmed via UseCaseLogin.kt (Android) posting to a per-region base URL and RefreshTokenCaller.kt handling token refresh against the Mobile API.
+capabilities: []

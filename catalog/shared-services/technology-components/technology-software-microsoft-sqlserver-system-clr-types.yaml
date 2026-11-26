@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1T-VQD5
+type: technology_component
+ownerRole: technology-admin
+name: Microsoft SQL Server 2012 System CLR Types
+description: SQL Server 2012 shared runtime component installed for Salesdesk web reporting dependencies.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- sql-server
+- runtime
+classification: software
+vendor: Microsoft
+productName: SQL Server System CLR Types
+productVersion: '2012'
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2022-07-12'
+  notes: The pinned SRE download URL is for SQL Server 2012 System CLR Types, which is past vendor support.
+capabilities:
+- 01KT0XNZEY-70Y6
+- 01KT0V5MCV-VD0Y
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/som/salesdesk_web/tasks/main.yml and vars/main.yml."

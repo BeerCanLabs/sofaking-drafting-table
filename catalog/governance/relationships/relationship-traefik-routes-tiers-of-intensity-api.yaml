@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KYMPKNDS-NMZB
+type: relationship
+name: Traefik Kubernetes Ingress Service → Tiers of Intensity Service
+description: >-
+  Environment-specific internal AWS load balancers deliver HTTPS traffic to
+  Traefik, which routes Tiers of Intensity requests to the API ClusterIP
+  Service and EKS pods.
+source: 01KYAXMZ7H-72BR
+target: 01KX18GPWW-93YA
+label: routes requests to
+technology: HTTP port 80
+direction: synchronous
+flow: outbound
+catalogStatus: complete
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - tiers-of-intensity
+  - traefik
+  - ingress
+notes: >-
+  Checked-in dev, QA, stage, and production Ingress resources use the Traefik
+  ingress class and forward to ClusterIP Services on port 80, targeting the API
+  container's HTTP port 8080. The confirmed stage endpoint on LE1 is
+  dualstack.internal-le1-ilb-traefik-ss-38425194.us-east-1.elb.amazonaws.com;
+  the confirmed production endpoint on Chaise is
+  dualstack.chaise-xalb-ssl-traefik-fe-393192678.us-east-1.elb.amazonaws.com.

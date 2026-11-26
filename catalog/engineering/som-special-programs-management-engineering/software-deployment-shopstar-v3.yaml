@@ -1,0 +1,571 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGG-871T
+type: software_deployment_pattern
+ownerRole: engineer
+name: shopstar v3 - Pattern
+aliases:
+  - SOM - shopstar v3
+  - shopstar - Households Portal - Pattern
+  - Shopstar Software Deployment Pattern
+description: >-
+  Multi-tenant special orders management platform whose main shopstar-v3 Java
+  application runs across every production Tomcat pool. Separately deployed
+  account and IdM integration services, embedded BIRT print workers,
+  state-partitioned databases in an active MyISAM-to-InnoDB transition,
+  RabbitMQ, and AccuRoute complete the production estate. This pattern is shopstar
+  V3 only; inactive shopstar V5 architecture is excluded.
+version: 1.8.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: shopstar
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - som
+  - shopstar
+  - java
+  - mysql
+  - on-prem
+  - legacy
+followsReferenceArchitecture: 01KQQ5JT1D-JW5N
+architectureNotes:
+  noCrossBoundaryConnections: >-
+    Primary tier crossings are represented by first-class relationship
+    objects: F5 BIG-IP to Apache Tomcat; Tomcat to MySQL and legacy AccuRoute;
+    BIRT print workers to MySQL; legacy AccuRoute to MySQL; and IDM Integration
+    to RabbitMQ. Sofa King IdM and Ottoman/Okta authentication paths, Account
+    API access to admin2, LDAP, and SMTP, Account API and IDM Integration F5
+    service-pool monitoring, current GRRSHS3TC* membership in the established
+    Tomcat F5 pools, and same-zone utility and batch-job interactions remain
+    incomplete as first-class relationships. Product-specific firewall rule
+    identifiers, source and destination ranges, protocols and ports, the
+    complete DNS-to-WAF-to-firewall-to-F5-to-Tomcat sequence, TLS termination,
+    and network-control ownership are not yet verified.
+  availabilityRequirement: high-availability
+  dataClassification: pii
+  failureDomain:
+    scope: service-group
+    description: >-
+      State and workload partitioning limits some database-group failures, but
+      all production primary and secondary MySQL replicas are in Grand Rapids.
+      The replicas are read-only copies and cannot be used as a failover tier.
+      No production secondary MySQL replicas exist in AWS. Grand Rapids is
+      therefore the production database failure domain; datacenter recovery
+      requires new AWS infrastructure and restoration from S3. GRR also hosts
+      the production application and edge path. shopstar is listed as an occupant
+      of the CIS DMZ behind GRR firewalls 100 and 101, making the shared GRR
+      site and perimeter a broader production failure domain. The documented
+      internet service uses active/passive HSRP and is dual-threaded, but the
+      firewall and F5 pair topology and failure behavior are not established
+      by the selected sources.
+  deploymentTargets: >-
+    Production application, print, database, IDM, SMTP, and utility workloads
+    are hosted in the Grand Rapids data center on VMware. The GRR facility is
+    identified as the Lakeshore Data Centers location, formerly Datavault.
+    Non-production is hosted in High Point/Holland VMware environments. The
+    February 2026 GRR network diagram was confirmed by the network SME as
+    current for GRR production, but it does not include the new shopstar
+    development environment being built in AWS. The AccuRoute modernization
+    path targets isolated shopstar AWS accounts in us-east-1; dev and stage AAP
+    jobs have succeeded, while production jobs were still unexecuted in the
+    June 18, 2026 AAP record.
+  grrNetworkEdgeEvidence: >-
+    GRR internet access is documented as a Datavault-provided DIA service using
+    active/passive HSRP and dual-threaded connectivity, with 2 Gbps committed
+    capacity and a 2.2 Gbps burst allowance; excess traffic is dropped
+    upstream. shopstar is explicitly listed in the CIS DMZ protected by GRR
+    firewalls 100 and 101. The documented DMZ ranges are DMZ 10, VLAN 56,
+    172.19.56.0/22 and DMZ 9, VLAN 50, 172.19.50.0/23. Observed shopstar Tomcat,
+    IDM, and AccuRoute addresses in 172.16.58.0/24 fall within DMZ 10. The
+    documented internal server ranges include 10.173.0.0/16, which contains
+    observed shopstar database, print, and batch addresses. This address-based
+    mapping is catalog evidence, not a temp for the missing shopstar
+    firewall rules, F5 configuration, or current WAF records.
+  patternDeviations: >-
+    The estate is a mixed-generation platform rather than a single legacy
+    stack. The operator-triggered, parameterized shopstar-v3-production Jenkins
+    pipeline partially automates application delivery, while deployment units
+    and conditional database upgrades are selected manually for each release.
+    VMware infrastructure uses Terraform plus Ansible but still includes
+    manual operational steps. The AccuRoute AWS path is being developed
+    through AAP/Ansible with an alternative unmerged Terraform design. The
+    2026-08-17 migration inventory records InnoDB complete for RT1, RT2, RT3,
+    RT4, RT7, NI, MA1, and MA2; RT5 and RT6 are pending confirmation or
+    approval for a documented 2026-08-28 through 2026-08-30 target window.
+    Replication uses primary/read-only reporting replicas rather than the
+    MySQL Group Replication declared by the generic shared-service object.
+    Production replicas are confined to GRR; no secondary MySQL replicas exist
+    in AWS, so datacenter recovery depends on AWS infrastructure rebuild and
+    S3 restore. Current Tomcat hosts use Ubuntu 22.04; old RHEL/CentOS Tomcat
+    inventories are historical. The Windows Server 2003 R2 / SQL Server 2000
+    AccuRoute appliance remains a current legacy dependency.
+  osMigrationStrategy: >-
+    The current Ubuntu shopstar estate is provisioned from Ubuntu 22.04 VM
+    templates. The current Tomcat hosts use the GRRSHS3TC* naming family with
+    PRC, PRT, and PRS role segmentation. Older RHEL/CentOS Tomcat inventories
+    are historical and are not asserted as current infrastructure.
+  databasePartitioning: >-
+    MySQL 8 production data is partitioned by state and workload across named
+    primary and read-only/reporting replica instances. Confirmed mappings are:
+    RT1 grrv3db1ppr/ptxcmb1m to grrv3db1prpl/ptxcmb1s; RT2
+    grrv3db2ppr/ptxcmb2m to grrv3db2prpl/ptxcmb2s; RT3
+    grrv3db3ppr/ptxcmb3m to grrv3db3prpl/ptxcmb3s; RT4
+    grrv3db4ppr/ptxcmb4m to grrv3db4prpl/ptxcmb4s; RT5
+    grrv3db5ppr/ptxcmb5m to grrv3db5prpl/ptxcmb5s; RT6
+    grrv3db6ppr/ptxcmb6m to grrv3db6prpl/ptxcmb6s; RT7
+    grrv3db7ppr/ptxcmb7m to grrv3db7prpl/ptxcmb7s; NI
+    grrv3db8ppr/pnicmb1m to grrv3db8prpl/pnicmb1s; and MA1/MA2
+    grrv3db10ppr/pmacmb1m+pmacmb2m to
+    grrv3db10prpl/pmacmb1s+pmacmb2s. This is not MySQL Group Replication.
+    Production primaries and replicas are all hosted in GRR; no production
+    secondary MySQL replicas exist in AWS. The migration inventory tracks
+    primary host groups and does not establish replica engine status
+    independently. An approved promotion and application-reconnection path for
+    the GRR replicas remains unresolved.
+  databaseBackupAndRecovery: >-
+    Production full backups run from the GRR replica hosts. Transactional
+    replicas are split across alternating 6 PM Eastern schedules: database
+    groups 1, 5, 7, 8, and 10 run Monday/Wednesday/Friday; groups 2, 3, 4, and
+    6 run Tuesday/Thursday/Saturday; group 9 runs daily at 6 PM; and groups 11
+    and 13 run daily at 8 PM. The archive/history replica (group 12) runs
+    Monday and Saturday at 8 PM. Static history groups 14-16 have no replicas
+    and use one-time, on-demand, or annual full backups. Cloudberry uploads
+    start six hours after each database backup and write to daily, monthly, or
+    annual S3 buckets in the sk_datum AWS account. Backups use Percona
+    XtraBackup and an S3 restore runbook covers encrypted-backup download,
+    restoration to a validation instance, integrity checks, and Jira evidence.
+    Database backup encryption credentials are held in Secret Server. The
+    legacy transactional backup/restore operational SLA is 48-72 hours; it is
+    not a formal RTO. The documented operational exposure is seven days for
+    archive data and on-demand/yearly for static history.
+    Remaining MyISAM workloads do not support the required transaction-log
+    backup approach; migrated InnoDB workloads are part of the active recovery
+    improvement path. The 2025 DR tabletop recorded a 24-hour RPO target, a
+    48-hour RPO estimate that missed that target, an undefined RTO, and an
+    estimated 77-hour recovery. The current documented RPO is 24 hours; the
+    formal RTO remains undefined. A DR tabletop and restore procedures exist,
+    but the most recent successful actual restore test and its evidence remain
+    unresolved.
+  databasePatchingConstraint: >-
+    OS and database patching must align with the full-backup schedule, which
+    can require weekday patching. Increasing on-premises S3 bandwidth and
+    moving from MyISAM to InnoDB are documented improvement paths. The InnoDB
+    conversion is an active project. InnoDB is complete for the RT1, RT2, RT3,
+    RT4, RT7, NI, MA1, and MA2 primary host groups. RT5 and RT6 are pending
+    confirmation or approval for the documented 2026-08-28 through 2026-08-30
+    target window. The most recent successful actual restore-test evidence
+    remains unresolved.
+  databaseDisasterRecovery: >-
+    A Grand Rapids datacenter loss is recovered by selecting the AWS VPC and
+    availability zone, deploying replacement EC2 database hosts with Terraform
+    and Ansible, restoring Percona full backups from S3, validating database
+    integrity and connectivity, and sharing the replacement endpoints with the
+    application team. Primary hosts are restored first; replicas follow after
+    service recovery. This is rebuild-and-restore recovery, not replica
+    failover.
+  databaseResilienceRisks: >-
+    Documented single points of failure are: each active primary is the sole
+    production write dependency for its database group; the GRR read replicas
+    cannot be used as a failover tier; all primaries and read replicas share
+    the GRR datacenter failure domain; and static history groups 14-16 are
+    primary-only with no replicas. There are no production secondary MySQL
+    replicas in AWS, so a GRR site loss requires AWS infrastructure rebuild,
+    S3 restore, validation, and application reconnection. MyISAM lacks
+    transactional crash recovery and the required transaction-log backup
+    capability for the RT5 and RT6 primary host groups pending migration
+    confirmation, increasing the effect and recovery duration of those
+    failures while the InnoDB conversion proceeds. The generic MySQL
+    shared-service object's Group Replication and one-hour RPO/RTO
+    characteristics do not apply to this estate.
+  databaseAdministrativeAccess: >-
+    Database administrators reach production through Microsoft My Applications
+    using Sofa King credentials, select shopstar AWS SSO, and start terminal
+    sessions through AWS Systems Manager Fleet Manager. OS-level root access is
+    documented as DBA-only, and database passwords are retrieved from Delinea
+    Secret Server. MySQL Workbench 8.0 with a managed shopstar connection bundle
+    is also documented for client administration.
+  databaseAccessGovernance: >-
+    Documented RBAC separates Developer/Customer Support, QA, and Data/DBA
+    access. Developer/support and QA roles receive limited permissions while
+    the Data/DBA role has administrative privileges. New production users must
+    reset temporary passwords at first login. The v3 shared-account inventory
+    maps application/reporting, audit, print, integration, privileged,
+    replication, and monitoring identities to Dev, Integration, and DBRE
+    owners; several legacy entries still lack a complete purpose or owner and
+    require review.
+  databaseAuditControl: >-
+    The security guide defines MySQL Enterprise Audit Plugin coverage for
+    logins, DML/DDL, schema changes, and privileged activity, with JSON audit
+    logs, filters, rotation, alerting, and optional SIEM integration. The guide
+    describes intended implementation rather than evidence that the plugin,
+    alerts, retention, and centralized forwarding are enabled on every
+    production instance.
+  nonProductionDatabaseTopology: >-
+    QA and RC MySQL v3 environments are documented on separate Ubuntu 22.04
+    hosts in the Holland/High Point non-production estate. The selected
+    sources do not establish whether non-production uses synthetic or masked
+    production data, nor their refresh, access, retention, purge, and manual
+    change-control processes.
+  tenancyModel: >-
+    Every production Tomcat server runs the same shopstar-v3 Java application.
+    F5 routes login.cusord.example, tx.cusord.example, and cobblestone.cusord.example to
+    preferred pools, but URLs do not enforce tenant isolation. All Tomcat
+    pools connect to the shared Admin DB; DD_DATASOURCES selects a tenant
+    database by orgID, and PRI_ORGS_PLATFORM_MAP maps Sofa King platform
+    organizations to shopstar organizations.
+  tenantDatabaseInventory: >-
+    Active tenant databases are RT1-RT7, MA1-MA2, and Lakeside NI. PA, IL,
+    NC, and WI are churned and excluded from active topology. NI remains active
+    but is planned to churn. Exact orgID-to-database mappings and the NI churn
+    date are not yet documented in the catalog.
+  databaseEngineTransition: >-
+    The current migration inventory, updated 2026-08-17, records InnoDB
+    complete for RT1 grrv3db1ppr/ptxcmb1m, RT2
+    grrv3db2ppr/ptxcmb2m, RT3 grrv3db3ppr/ptxcmb3m, RT4
+    grrv3db4ppr/ptxcmb4m, RT7 grrv3db7ppr/ptxcmb7m, NI
+    grrv3db8ppr/pnicmb1m, and MA1/MA2
+    grrv3db10ppr/pmacmb1m+pmacmb2m. RT5 grrv3db5ppr/ptxcmb5m and RT6
+    grrv3db6ppr/ptxcmb6m are pending migration confirmation or approval for a
+    documented 2026-08-28 through 2026-08-30 target window. These statuses
+    apply to primary host groups only; replica engine status is not claimed.
+  sharedDatabaseServiceApplicability: >-
+    MySQL 8 DBMS Service (01KQQ5JT00-WKWF) is reused only to identify the
+    existing MySQL service family. Its generic MySQL Group Replication,
+    clustered HA, one-hour RPO/RTO, and point-in-time-recovery characteristics
+    are not inherited by shopstar. shopstar uses primary/read-only replica topology
+    in GRR, a documented 24-hour RPO, and an undefined formal RTO. The legacy
+    48-72 hour transactional backup/restore SLA is not treated as the RTO.
+  applicationComponents: >-
+    shopstar-v3 is the main Java/Tomcat application. shopstar-account-api and
+    shopstar-idm-integration are separately deployed services on grrshs3idm01 and
+    grrshs3idm02, listening on ports 8888 and 8889 respectively. RabbitMQ also
+    runs on both IDM hosts. util-idm-auth4j is a shared Java library rather
+    than a deployed service; its consumers and deployed version remain
+    unresolved.
+  authenticationFlows: >-
+    Sofa King Identity users authenticate through the Sofa King IdM gateway
+    using OIDC. Ottoman users authenticate through the Ottoman/Okta OIDC
+    flow. Legacy and pass-through users use FE-prefixed PBKDF2 password hashes
+    in PRI_USERS. PRI_ORGS_PLATFORM_MAP connects platform and shopstar organization
+    identities. Exact gateway endpoints, token-validation boundaries, and
+    relationship targets remain unresolved.
+  accountApiBehavior: >-
+    shopstar-account-api is a Spring Boot JAR listening over HTTP on port 8888. It
+    connects to admin2, validates PBKDF2 and configured LDAP credentials, and
+    supports password reset through SMTP. An F5 service pool applies HTTP
+    health monitoring. The admin2 database engine and exact catalog binding are
+    not confirmed. The exact LDAP service, SMTP relay, Java version, runtime
+    secret injection, and F5 health-check URI remain unresolved.
+  identitySynchronization: >-
+    RabbitMQ carries asynchronous organization, user, permission, and
+    enable-user synchronization for shopstar-idm-integration, which listens over
+    HTTP on port 8889 on both IDM hosts. Historical V3 documentation defines a
+    two-node RabbitMQ cluster with mirrored user-sync queues. Current cluster
+    membership, mirroring policy, exchanges, exact queues, routing keys, retry
+    behavior, dead-letter behavior, runtime credential injection, and the F5
+    HTTP health-check URI remain unresolved.
+  printProcessing: >-
+    Production print engines run on pr70phl through pr95phl. BIRT is embedded
+    in the print-engine JVMs, whose workers connect directly to tenant MySQL
+    databases. Normal BIRT reports do not flow through AccuRoute.
+  productionDocumentRouting: >-
+    AccuRoute remains a production dependency for cover sheets, scan/email/fax
+    ingestion, conversion, and archive routing. It is not in the normal BIRT
+    report path.
+  currentInfrastructureEvidence: >-
+    Current shopstar infrastructure uses Ubuntu 22.04 VMware templates. The
+    GRRSHS3TC* Tomcat hosts are segmented into PRC, PRT, and PRS roles; old
+    RHEL/CentOS Tomcat nodes are not current. The April and May 2026 server
+    guides and the 2026-08-17 database migration inventory confirm MySQL
+    8.0.35 Enterprise primary/read-only-replica topology, the active primary
+    and replica mappings, and the current print-worker fleet.
+  terraformAutomationEvidence: >-
+    sys-shopstar-terraform branch shopstar-terraform-grr-a2c-idm provisions Ubuntu
+    22.04 VMware VMs with the HashiCorp vSphere provider, stores state in an
+    encrypted S3 backend with DynamoDB locking, creates time-limited AWS SSM
+    hybrid activations, renders per-host Ansible inventory, and invokes shopstar
+    Ansible playbooks. Environment and batch variation is held under
+    Terraform/tfbackends. Separate unmerged feature branches model AccuRoute
+    on Windows EC2 using launch templates, Auto Scaling Groups, IAM, encrypted
+    EBS, CloudWatch alarms, S3, and SQS.
+  ansibleAutomationEvidence: >-
+    ansible_playbooks_sre configures the Ubuntu host baseline, including Java,
+    Tomcat where applicable, networking, users, certificates and keystores,
+    application/runtime configuration, Nagios agent, Dynatrace OneAgent, AWS
+    SSM/Fleet Manager, CrowdStrike, Nessus, and Automox. Provisioning is
+    substantially automated but retains manual operational steps. The
+    repository also contains the active shopstar_accuroute_servers branch. The
+    AccuRoute AWS playbook assumes environment-specific AWS roles, creates
+    security groups and EC2 instances, bootstraps WinRM, joins the Windows
+    domain, configures IIS and Windows baselines, prepares SQL Server and
+    AccuRoute prerequisites, and installs Automox, CrowdStrike, and Nagios.
+    AccuRoute 8 application install and database/service configuration are
+    currently disabled for manual completion in the checked-in environment
+    variables.
+  applicationDeliveryEvidence: >-
+    The current production application pipeline is Jenkins
+    shopstar-v3-production. It is operator triggered, parameterized, and partially
+    automated. Operators manually select deployment units according to release
+    contents, while the development team conditionally selects database
+    upgrade steps. Environment progression is QA to RC to Production, with RC
+    serving as the pre-production release-validation environment.
+    shopstar-v3-production-new was temporary during the Ubuntu migration and is
+    not part of the current production topology. Application delivery is
+    distinct from Terraform infrastructure provisioning and Ansible host
+    configuration.
+  secretsManagementEvidence: >-
+    Secret Server stores operational, server, and database credentials;
+    Ansible Vault is used by infrastructure automation; and database-backup
+    encryption credentials are stored in Secret Server. Exact runtime secret
+    injection for OIDC client secrets, RabbitMQ credentials, SMTP credentials,
+    LDAP credentials, and application JDBC credentials remains unresolved.
+  observabilityEvidence: >-
+    Current V3 Ubuntu hosts run Nagios agent and Dynatrace OneAgent and are
+    managed through AWS Systems Manager/Fleet Manager. MySQL Enterprise Monitor
+    covers database availability, host and instance state, primary/replica
+    monitoring, performance and query statistics, and Critical/Emergency event
+    handling. This monitoring evidence does not imply MySQL Group Replication.
+    Account API and IDM Integration have F5 HTTP health monitoring, but the
+    exact health-check URI remains unresolved. Centralized V3 application-log
+    aggregation or SIEM integration is not established by current evidence.
+  accurouteModernizationEvidence: >-
+    Legacy AccuRoute remains documented on Windows Server 2003 R2 and SQL
+    Server 2000. The candidate replacement is Upland AccuRoute 8 on private
+    Windows Server 2022 EC2 instances in shopstar dev, stage, and prod accounts.
+    AAP documents successful dev/stage infrastructure and configuration jobs,
+    a single discovered host in each environment, and no production host.
+  externalDependencies: >-
+    Material dependencies include the Lakeshore Data Centers GRR facility, the
+    Datavault-provided DIA service, GRR firewalls 100 and 101, F5 BIG-IP ingress,
+    public DNS and WAF services, Mimecast/Exchange email delivery into legacy
+    AccuRoute, Sofa King IdM and Ottoman/Okta OIDC, configured LDAP and SMTP
+    dependencies for the Account API, Jenkins application delivery,
+    AAP/Ansible configuration, Delinea Secret Server credential retrieval,
+    VMware vSphere, Microsoft My Applications-backed AWS SSO, AWS Systems
+    Manager Fleet Manager, MySQL Workbench administration, AWS S3 and DynamoDB
+    for Terraform state, AWS Systems Manager hybrid
+    management, MySQL Enterprise Monitor, Nagios, Dynatrace, and shopstar AWS
+    accounts for the AccuRoute target.
+  hcf_03_1_1: Vulnerability management program reference is not documented for shopstar v3 yet.
+  hcf_03_1_3: Patch management report review cadence is not documented for shopstar v3 yet.
+  hcf_03_3_1: EOL components are tracked. AccuRoute runs on Windows Server 2003 R2 and SQL Server 2000 (both end-of-life); upgrade tracked in epic DATA-2196 targeting Q2 2026. Current Tomcat infrastructure uses GRRSHS3TC* Ubuntu 22.04 hosts provisioned through Terraform and Ansible; old RHEL/CentOS Tomcat inventories are historical, not current.
+  hcf_04_2_1: MySQL RBAC, DBA-only OS root access, Sofa King credential and AWS SSO entry, first-login password reset, shared-account ownership, and Secret Server storage are documented. Secret Server also stores operational/server/database credentials and backup encryption credentials, while Ansible Vault supports infrastructure automation. Exact application runtime secret injection, approval workflow, periodic recertification, service-account rotation, and 24-hour access removal evidence remain undocumented.
+  hcf_05_3_1: Change management process for shopstar v3 infrastructure and application changes is not documented at the SDP level.
+  hcf_09_1_1: shopstar v3 is segmented across web, application, data, and operations zones in GRR. shopstar is documented in the CIS DMZ behind firewalls 100 and 101; DMZ 10 is VLAN 56 at 172.19.56.0/22, DMZ 9 is VLAN 50 at 172.19.50.0/23, and internal server ranges include 10.173.0.0/16. Observed shopstar 172.25.58.x hosts fall within DMZ 10 and observed database, print, and batch hosts fall within 10.173.0.0/16. Exact firewall rules, ports and protocols, WAF and F5 mappings, TLS termination, monitoring ownership, and failover evidence remain open.
+  hcf_10_1_1: Full-backup schedules, Percona XtraBackup on production replica hosts, scheduled S3 transfer, Secret Server-managed backup encryption credentials, the encrypted S3 restore runbook, the DR tabletop, and the AWS rebuild-and-restore procedure are documented. The current RPO is 24 hours and the formal RTO is undefined; the legacy 48-72 hour transactional backup/restore SLA is not the RTO. The most recent successful actual restore test and its evidence remain unresolved, as does explicit BIA linkage.
+  hcf_10_1_2: Alternative business processes and out-of-band communication channels are not documented for shopstar v3.
+  hcf_11_3_1: Secure sharing methods and production-data handling in non-production environments are not documented for shopstar v3.
+  hcf_11_4_1: shopstar v3 is classified as processing PII customer data (CDP/504 records). Approved AI tool list, shadow AI monitoring, and sensitive-data location audit evidence are not yet documented.
+  hcf_14_1_1: Secure code training evidence for shopstar v3 developers and reviewers is not documented at the SDP level.
+  hcf_14_1_3: GRR (production) and High Point/Holland (non-production) are separate deployment environments. DBA-only OS root access through AWS SSO and Systems Manager is documented, but SBOM risk review and proof that all developer production access is monitored are not documented.
+  patternConsolidation: >-
+    On 2026-07-29 this pattern absorbed the repository-discovered "shopstar -
+    Households Portal - Pattern" stub (01KSM38KEX-DF2H), which is now deprecated
+    and supersededBy this pattern. shopstar-parent and shopstar-user-sync were added
+    to service groups below as the parent-facing web tier and shared
+    IDM/user-sync eventing respectively. shopstar-sandbox (never deployed) was
+    not carried forward. shopstar and shopstar-scheduler are shopstar V5 components and
+    were intentionally excluded from this V3-only pattern. shopstar V5 is inactive
+    and no V5 architecture, infrastructure, messaging, printing, monitoring,
+    incidents, deployment patterns, or documentation is used as V3 evidence.
+  sourceRepositories:
+    - productService: 01KSM38KGC-DDE9
+      repositoryName: BeerCanLabs/sk-shopstar-account-api
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-account-api
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-4Q9H
+      repositoryName: BeerCanLabs/sk-shopstar-idm-integration
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-idm-integration
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-1Q90
+      repositoryName: BeerCanLabs/sk-shopstar-parent
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-parent
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-EVQY
+      repositoryName: BeerCanLabs/sk-shopstar-user-sync
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-user-sync
+      repositoryPrimaryLanguage: Java
+      observedRuntimeSignals: java, readme
+    - productService: 01KSM38KGD-WYH7
+      repositoryName: BeerCanLabs/sk-shopstar-v3
+      sourceRepository: https://github.com/BeerCanLabs/sk-shopstar-v3
+      repositoryPrimaryLanguage: HTML
+      observedRuntimeSignals: github_actions, java, node, readme
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services and edge-facing application hosts in the GRR CIS DMZ; observed 172.25.58.x shopstar hosts fall within DMZ 10, VLAN 56, 172.19.56.0/22.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services, APIs, microservices, and background workers; exact firewall flows to and from the CIS DMZ remain unverified.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores and persistence services in GRR internal server space; observed database addresses fall within the documented 10.173.0.0/16 range.
+  - id: ops
+    name: Operations
+    description: Operational, print, batch, SMTP, and infrastructure services; observed print and batch addresses fall within 10.173.0.0/16. No tier classification.
+serviceGroups:
+  - name: Web Application Tier
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Every production GRRSHS3TC* Apache Tomcat server runs the same shopstar-v3
+      application on Ubuntu 22.04, segmented into PRC, PRT, and PRS roles. F5
+      BIG-IP routes login.cusord.example, tx.cusord.example, and cobblestone.cusord.example to
+      hostname-specific sticky-session pools on port 9080; hostname selection
+      does not enforce tenant isolation. The established pool names are
+      Prod_Cusord_dunmoreV3_9080, Prod_Cusord_cobblestoneV3_9080, and
+      Prod_Cusord_v3_login_9080. Current GRRSHS3TC* membership in those pools
+      remains unresolved, and no replacement pool names are asserted.
+    productServices:
+      - id: 01KSM38KGD-WYH7
+        name: shopstar v3 Application
+      - id: 01KSM38KGD-1Q90
+        name: Shopstar Parent
+    deployableObjects:
+      - ref: 01KQQ5JT1E-9CDM
+        diagramTier: application
+        networkZone: web
+      - ref: 01KQQ5JT00-Z6WV
+        diagramTier: presentation
+        networkZone: web
+  - name: Print Services
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Production print engines run on pr70phl through pr95phl. Eclipse BIRT is
+      embedded in the print-engine JVMs rather than deployed as a separate
+      server. Print workers connect directly to tenant MySQL databases; normal
+      BIRT reports do not flow through AccuRoute. Ubuntu 22.04 print workers
+      run printbirt, printexport, and printmulti workloads partitioned across
+      state database instances.
+    deployableObjects:
+      - ref: 01KQQ5JT1F-V6XM
+        diagramTier: application
+        networkZone: app
+  - name: Database Tier
+    deploymentTarget: grr-datacenter
+    notes: >-
+      MySQL 8.0.35 Enterprise primary/replica hosts are partitioned by state,
+      organization, and archive workload. All Tomcat pools connect to the same
+      shared Admin DB, and DD_DATASOURCES chooses tenant databases by orgID.
+      Active tenant databases are RT1-RT7, MA1-MA2, and Lakeside NI; PA, IL,
+      NC, and WI are churned and excluded, while NI remains active but is
+      planned to churn. The 2026-08-17 primary-host inventory records InnoDB
+      complete for RT1, RT2, RT3, RT4, RT7, NI, MA1, and MA2. RT5 and RT6 are
+      pending confirmation or approval for the documented 2026-08-28 through
+      2026-08-30 target window. Replication is primary/read-only reporting
+      replica, not MySQL Group Replication. Replica engine status is not
+      inferred from the primary migration inventory. All production
+      primaries and replicas are in GRR; no production secondary MySQL replicas
+      exist in AWS. Full Percona backups run on the GRR replicas on
+      alternating three-day, daily, or twice-weekly schedules; static history
+      groups 14-16 are primary-only and use one-time/on-demand or annual
+      backups. Cloudberry sends each backup to the sk_datum daily, monthly, or
+      annual S3 bucket six hours later. Datacenter recovery rebuilds primary
+      hosts in AWS and restores from S3 rather than failing over a replica.
+    deployableObjects:
+      - ref: 01KQQ5JT00-WKWF
+        diagramTier: data
+        networkZone: data
+        notes: >-
+          Reused only as the MySQL 8 service-family object. Do not inherit its
+          generic Group Replication, clustered HA, one-hour RPO/RTO, or PITR
+          declarations. shopstar has a documented 24-hour RPO, an undefined formal
+          RTO, and a legacy 48-72 hour transactional backup/restore SLA that is
+          not treated as the RTO.
+  - name: Identity & Eventing
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Shopstar Account API and Shopstar IDM Integration are deployed separately from
+      the main Tomcat application on grrshs3idm01 and grrshs3idm02. The Account
+      API listens over HTTP on port 8888, and IDM Integration listens over HTTP
+      on port 8889. RabbitMQ also runs on both production IDM hosts and carries
+      asynchronous organization, user, permission, and enable-user
+      synchronization. F5 service pools apply HTTP health monitoring to both
+      application services. Historical V3 documentation describes a two-node
+      RabbitMQ cluster with mirrored user-sync queues; current cluster and
+      mirroring verification, detailed messaging configuration, exact runtime
+      secret injection, and the F5 health-check URI remain open.
+    productServices:
+      - id: 01KSM38KGD-4Q9H
+        name: Shopstar IDM Integration
+      - id: 01KSM38KGC-DDE9
+        name: Shopstar Account API
+      - id: 01KSM38KGD-EVQY
+        name: Shopstar User Sync
+    deployableObjects:
+      - ref: 01KQQ5JT1E-JBCV
+        diagramTier: application
+        networkZone: app
+        notes: >-
+          Reused only to identify RabbitMQ messaging. The generic shared
+          service's three-node quorum topology, host binding, and HA behavior
+          are not confirmed for shopstar and are not inherited here.
+  - name: Legacy Document Routing
+    deploymentTarget: grr-datacenter
+    notes: >-
+      Existing AccuRoute/OmTool appliance on Windows Server 2003 R2 with SQL
+      Server 2000. It remains a production dependency for cover sheets,
+      scan/email/fax ingestion, conversion, and archive routing. Normal BIRT
+      reports bypass AccuRoute. It remains the documented production service
+      until the AWS replacement is confirmed operational.
+    deployableObjects:
+      - ref: 01KS4DGJVK-Q9GY
+        diagramTier: application
+        networkZone: app
+  - name: AccuRoute AWS Modernization
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      Candidate AccuRoute 8 service on private Windows Server 2022 EC2 hosts.
+      Dev and stage AAP infrastructure/configuration jobs succeeded, but the
+      checked-in configuration leaves vendor application installation and
+      database/service configuration manual, and production had not run.
+    deployableObjects:
+      - ref: 01KYRAQ0KC-MPJQ
+        diagramTier: application
+        networkZone: app
+requirementImplementations:
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: reference-architecture-conformance
+    status: satisfied
+    mechanism: field
+    key: followsReferenceArchitecture
+    ref: 01KQQ5JT1D-JW5N
+    notes: shopstar v3 references the on-premises Java/Tomcat Reference Architecture.
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: service-groups
+    status: satisfied
+    mechanism: field
+    key: serviceGroups
+    notes: The SDP declares Web Application Tier (Tomcat + F5), Print Services (BIRT), Database Tier (MySQL), Identity & Eventing (RabbitMQ), and Legacy Document Routing (AccuRoute) service groups.
+  - requirementGroup: 01KQQ4Q027-VK45
+    requirementId: additional-interactions
+    status: satisfied
+    mechanism: decisionRecord
+    key: externalDependencies
+    ref: 01KT16XJ0Y-KZ9C
+    notes: Delivery-plane, infrastructure, email-routing, and management dependencies are documented under architectureNotes.externalDependencies.
+decisionRecords:
+  - ref: 01KT16XJ0Y-KZ9C
+    key: deploymentTargets
+  - ref: 01KT16XJ0Y-KZ9C
+    key: availabilityRequirement
+  - ref: 01KT16XJ0Y-KZ9C
+    key: dataClassification
+  - ref: 01KT16XJ0Y-KZ9C
+    key: failureDomain
+  - ref: 01KT16XJ0Y-KZ9C
+    key: patternDeviations
+  - ref: 01KT16XJ0Y-KZ9C
+    key: noCrossBoundaryConnections
+  - ref: 01KT16XJ0Y-KZ9C
+    key: externalDependencies

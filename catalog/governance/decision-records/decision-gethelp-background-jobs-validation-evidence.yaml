@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHMT-37VV
+type: decision_record
+name: GetHelp Background Jobs Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KQQ5JT0M-PM3P
+linkedObject: 01KQQ5JT0M-PM3P
+decisionRationale: 'runtimeRequirement: AWS Lambda-based background execution supporting the shared GetHelp platform.'

@@ -1,0 +1,30 @@
+schemaVersion: '1.0'
+uid: 01M7TVNRRW-KE44
+type: data_component
+ownerRole: engineer
+name: AP Desk Database
+description: PostgreSQL database owned by the AP Desk service; schema managed with Flyway. Defined in Terraform as an RDS PostgreSQL instance.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: candidate
+owner:
+  team: ap-desk-engineering
+  contact: msorrell@sofaking.example
+runsOn: 01KY5775KP-YBP0
+tags:
+- ap-desk
+- postgresql
+- data-component
+repoUrl: https://github.com/BeerCanLabs/sk-bs-ap-desk
+targetEngine: postgresql
+dataClassification: restricted
+containsPII: true
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-bs-ap-desk
+  observedManifestPaths: infra/dev/main.tf; service/pom.xml; docker-compose.yml
+  hostingModel: Amazon RDS for PostgreSQL in the Sofa King Integration AWS account (owner interview). Dev instance per infra/dev/main.tf is Postgres 16, db.t4g.micro, 20 GB, encrypted, 7-day backups, deletion protection on, private subnets.
+  piiDeclaration: Owner confirmed restricted classification with PII (vendors, invoices, payment details, approver identities).
+  serviceAuthentication: Master user with password held in an AWS secret (infra/dev); application credential handling not further confirmed.
+  availabilityModel: Not yet defined; to be set by the Business Solutions tech lead before production.
+  recoverabilityModel: Dev has 7-day automated backups only; RPO/RTO not yet defined.
+  failureDomain: Not yet defined; to be set by the Business Solutions tech lead before production.

@@ -1,0 +1,18 @@
+schemaVersion: '1.0'
+uid: 01KYQ3TZ2D-FCSN
+type: relationship
+name: 'Platform Sand Employee → SQL Server 2019 DBMS Service'
+catalogStatus: stub
+source: 01KSM38KFT-VQP6
+target: 01KQQ5JT01-QFN5
+label: reads from and writes to
+technology: TDS
+direction: synchronous
+flow: outbound
+tags:
+- source-inspection
+- sofaking-central
+notes:
+  background: Declared by sand-Employee source inspection 2026-07-29. Persistence held in the public API tier rather than behind an internal microservice.
+  variantScope: Microsoft.Data.SqlClient is referenced only by the EmployeeApi.NetCore variant, not the net-fx variant. Whether this is a live dependency or an unused transitive reference is an open question for the service owner.
+  confidence: unconfirmed

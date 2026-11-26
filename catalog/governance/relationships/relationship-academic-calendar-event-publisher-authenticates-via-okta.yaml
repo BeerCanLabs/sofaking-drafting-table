@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D93-CT1H
+type: relationship
+ownerRole: engineer
+name: Academic Calendar Event Publisher → Okta
+description: >-
+  The Event Publisher Lambda obtains OAuth client-credentials bearer tokens (scope
+  plat.loveseat) from Okta to authenticate to Loveseat. Okta is the Loveseat auth provider
+  for every Shared Customer Record service (owner-confirmed 2026-10-20; the calendar
+  spec's mention of IDM is superseded).
+source: 01M5CS4D93-XYNH
+target: 01KQQ5JT1D-SHXD
+label: authenticates via
+technology: OAuth 2.0 / HTTPS
+direction: synchronous
+flow: outbound
+catalogStatus: incomplete
+tags:
+  - shared-customer-record
+  - identity

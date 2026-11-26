@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT06-RTMW
+type: product_component
+ownerRole: engineer
+name: Leave Lambdafunctions
+description: Multi-function .NET AWS Lambda component for Leave production event processing and scheduled workloads.
+version: 1.0.8
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT03-FGYJ
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-abs-lambdafunctions
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-abs-lambdafunctions
+  observedRuntimeSignals: dotnet, readme, serverless
+  observedManifestPaths: abs-func-add-new-sub-to-default-pref-list/abs-func-add-new-sub-to-default-pref-list.sln;
+    abs-func-add-new-sub-to-default-pref-list/src/Properties/launchSettings.json;
+    abs-func-add-new-sub-to-default-pref-list/src/abs.func.add.newsub.to.defaultpreflist.csproj;
+    abs-func-add-new-sub-to-default-pref-list/src/appsettings.Development.json; abs-func-add-new-sub-to-default-pref-list/src/appsettings.Production.json;
+    abs-func-add-new-sub-to-default-pref-list/src/appsettings.QA.json; abs-func-add-new-sub-to-default-pref-list/src/appsettings.Stage.json;
+    abs-func-add-new-sub-to-default-pref-list/src/appsettings.json; abs-func-add-new-sub-to-default-pref-list/src/aws-lambda-tools-defaults.json;
+    abs-func-ivr-tts-processor/abs-func-ivr-tts-processor.sln; abs-func-ivr-tts-processor/src/Properties/launchSettings.json;
+    abs-func-ivr-tts-processor/src/abs.func.ivr.tts.processor.csproj
+  productionRuntimeEvidence: AWS console evidence supplied on 2026-08-05 confirms four Zip-package functions in Production Microservices account 736016846305. use1-lambda-prd-abs-ivr-tts-processor and use1-lambda-prd-abs-func-add-new-sub-to-default-pref-list use .NET 6; use1-lambda-prd-abs-partner-billing-processor and use1-lambda-prd-abs-mpn-syncuserregistrationstatus use .NET 8.
+  infrastructureEvidence: Authenticated GitHub search on 2026-08-05 maps all four functions to source under BeerCanLabs/sk-abs-lambdafunctions and production Terraform under BeerCanLabs/sk-abs-infrastructure.
+  inactiveOrUnconfirmedProjects: abs-func-jag-purge-processor exists in the source repository but was not observed in the current production AWS Lambda inventory on 2026-08-05; no production instance is modeled.
+  productionLoggingEvidence: Production Terraform configures CloudWatch log groups for all four confirmed functions. Retention is 30 days for IVR TTS and add-new-sub, 180 days for partner-billing, and 0 (never expire) for MPN sync. No CloudWatch alarm or Dynatrace instrumentation was found in the reviewed function Terraform.
+  runtimeLifecycleRisk: IVR TTS and add-new-sub run on Microsoft .NET 6, which the approved technology catalog records as end of support since 2024-11-12; remediation or exception evidence remains unconfirmed.
+  productionTriggerEvidence: IVR TTS consumes use1-sqs-prd-abs-ivr-tts-processor and uses use1-s3-prd-abs-ivrorgfiles. Add-new-sub consumes use1-sqs-prd-abs-add-new-sub-to-default-pref-list associated with use1-sns-prd-abs-messagebus.fifo. MPN sync subscribes to use1-sns-prd-abs-mpn-userregistrationstatus and has function and subscription dead-letter queues. Partner billing has two enabled monthly EventBridge Scheduler schedules in America/New_York.
+  partnerBillingDataEvidence: Source configuration names PartnerBillingDb and PartnerBillingDbReadOnly connections to an RotaBilling database. Owner confirmation on 2026-08-05 places RotaBilling on the same shared Grand Rapids SQL Server 2022 physical failover cluster as the main Rota database and confirms restricted classification with PII; the endpoint and authoritative schema repository remain unconfirmed.
+  productionNetworkEvidence: IVR TTS, add-new-sub, and partner billing use private VPC subnets in us-east-1a and us-east-1c with the production private security group. MPN sync has no vpc_config block in its production function Terraform.
+  unresolvedReportClassification: The contributor cannot confirm whether use1-s3-prd-abs-partner-billing-reports contains PII or requires restricted classification; this is assigned to the Leave data owner.
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

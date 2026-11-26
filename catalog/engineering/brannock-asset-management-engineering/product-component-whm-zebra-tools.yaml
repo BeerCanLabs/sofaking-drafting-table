@@ -1,0 +1,64 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-0A26
+type: product_component
+ownerRole: engineer
+name: Whm Zebra Tools
+aliases:
+  - WHM Zebra Tools
+description: WinForms desktop client (VB.NET) for Zebra barcode label printing, distributed to region workstations. Includes an InstallShield packaging project for building the distributable installer.
+version: 1.2.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+  - repository-discovery
+  - whm
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_Zebra_Tools
+language: Visual Basic .NET (VB.NET)
+classification: other
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_Zebra_Tools
+  observedRuntimeSignals: dotnet
+  observedManifestPaths: .vs/ProjectSettings.json; .vs/VSWorkspaceState.json; Zebra Tools.sln; Zebra/Zebra.vbproj; ZebraNew/ZebraNew.vbproj
+  classificationNote: No classification value in the DRAFT vocabulary describes a locally-installed Windows desktop client precisely; "other" was chosen over "api-service" (the prior, incorrect value — this component exposes no API) and over "cli" (it is a GUI app, not a command-line tool).
+  serviceAuthentication: 'Corrected by direct repository read — no application-level authentication. The app authenticates to SQL Server using a single hardcoded shared SQL login embedded in source (Zebra/global.vb, Zebra/frmMain.vb), identical across every region install. Not per-region, not integrated with region/Windows auth. Remediation is tracked as TRK-686, owner Kamal Shaw.'
+  secretsManagement: 'Corrected by direct repository read — none. The SQL Server password is hardcoded in plaintext in source and therefore in the compiled binary shipped to every region. This is a live security exposure (shared, unrotatable credential in a distributed executable), tracked separately from this catalog correction as TRK-686, owner Kamal Shaw; the credential value itself is intentionally not reproduced here.'
+  serviceLogging: 'Corrected by direct repository read — none. No logging framework, EventLog, or Trace calls exist anywhere in the codebase. One exception handler silently swallows errors (Zebra/RawPrinterHelper.vb SendStringToPrinter); another has a stale unimplemented TODO for error logging (SendFileToPrinter).'
+  healthWelfareMonitoring: 'Corrected by direct repository read — not applicable. This is a locally-installed desktop application, not a hosted service; no health-check or uptime-monitoring concept applies to the client itself.'
+  availabilityModel: 'Corrected by direct repository read — not applicable in the hosted-service sense; one install per workstation. The component''s real availability dependency is the region''s shared Trackweb SQL Server, which this app connects to directly at runtime.'
+  scalabilityModel: 'Corrected by direct repository read — not applicable. Single workstation, single printer per install; not a scaled or multi-tenant service.'
+  recoverabilityModel: 'Corrected by direct repository read — no automated retry/recovery. The app does handle one specific race condition manually (re-checks a shared accession-number counter in Trackweb and prompts the user to retry if another workstation printed first), but has no broader recovery mechanism.'
+  failureDomain: 'Corrected by direct repository read — scoped to the local workstation and the shared region Trackweb SQL Server it connects to. If that SQL Server is unavailable, printing fails region-wide; if a single workstation''s install or local printer fails, the impact is isolated to that workstation.'
+  runtimeRequirement: 'Corrected by direct repository read — the prior "Windows installer build tool; no application runtime on the hosting service" claim was inaccurate. Zebra.vbproj builds a WinForms desktop application with a real runtime that connects directly to the region''s Trackweb SQL Server to look up book/accession data and print labels. The "Zebra Tools Setup" InstallShield project (previously miscatalogued as Inno Setup) only packages that application for distribution — it does not describe the whole repository''s runtime behavior. A second, unbuilt prototype form (ZebraNew) exists in the repo but is not referenced by Zebra Tools.sln and is not part of the shipped application.'
+  deploymentTarget: 'Confirmed 2026-08-25 by the Trackweb-IM development team via the IMM DRAFT L1 developer questionnaire, replacing the prior unconfirmed placeholder. The application is deployed to and runs on region-operated Windows workstations, so 1G0D''s Client Tooling service group is customer-hosted. The installer is built manually with InstallShield inside Visual Studio by the Trackweb-IM development team — there is no build pipeline and no automated build (consistent with the leave of .github/workflows in the repository). The completed installer is kept only on the builder''s local machine; it is deliberately not archived or checked in because it is an executable. Regions obtain it by file share or email. Packaging, publishing, versioning, and support are all owned by the Trackweb-IM development team. The solution file''s legacy CD_ROM/DVD-5/SingleImage build configurations are confirmed distribution history, not current practice.'
+  platformRequirement: 'Confirmed by direct repository read and owner confirmation — the shipped application (Zebra/Zebra.vbproj) targets .NET Framework 4.5, which implies Windows 7 SP1 or later. No supported Windows version is stated anywhere in the repository and none was supplied by the owner, so the client-side OS support matrix remains undocumented rather than confirmed. The unbuilt ZebraNew prototype targets v2.0 but does not ship and is not referenced by Zebra Tools.sln.'
+  artifactLifecycle: 'Confirmed 2026-08-25 by the Trackweb-IM development team — there is no rollback process and no previous-installer process, and no archived copy of any released installer exists. Combined with a manual, local-only build, a previously released version cannot be reliably reproduced or reinstated, and there is no artifact provenance for installers already deployed in regions. Recorded as a supportability risk rather than a documentation gap — tracked in DraftingSession 01M07T82GS-87MN, question zebra-tools-artifact-lifecycle.'
+decisionRecords:
+  - ref: 01M0CVDXKH-B9BW
+    key: runtimeRequirement
+  - ref: 01M0CVDXKH-B9BW
+    key: serviceAuthentication
+  - ref: 01M0CVDXKH-B9BW
+    key: secretsManagement
+  - ref: 01M0CVDXKH-B9BW
+    key: serviceLogging
+  - ref: 01M0CVDXKH-B9BW
+    key: healthWelfareMonitoring
+  - ref: 01M0CVDXKH-B9BW
+    key: availabilityModel
+  - ref: 01M0CVDXKH-B9BW
+    key: scalabilityModel
+  - ref: 01M0CVDXKH-B9BW
+    key: recoverabilityModel
+  - ref: 01M0CVDXKH-B9BW
+    key: failureDomain
+  - ref: 01M0CVDXKH-B9BW
+    key: deploymentTarget
+  - ref: 01M0CVDXKH-B9BW
+    key: platformRequirement
+  - ref: 01M0CVDXKH-B9BW
+    key: artifactLifecycle

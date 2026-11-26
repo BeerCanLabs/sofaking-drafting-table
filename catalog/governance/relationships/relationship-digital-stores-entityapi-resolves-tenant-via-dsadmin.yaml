@@ -1,0 +1,22 @@
+schemaVersion: '1.0'
+uid: NNXSQXP5N1-8S7Y
+type: relationship
+name: Digital Stores EntityAPI → Digital Stores SQL Server 2017 Estate (DS_Admin catalog)
+catalogStatus: incomplete
+source: 01M0GBWMZJ-E0NF
+label: resolves tenant via
+target: 01M25X9W0R-VQJ3
+technology: TDS (SQL Server native protocol)
+direction: synchronous
+flow: outbound
+notes: >-
+  Confirmed by direct repository read on 2026-08-20 and by the owner on 2026-09-08: on every request,
+  BaseController resolves the request subdomain to an AdminRegionEL through
+  DSAdminRegions.Instance[subDomain], and AllRegions maps RegionId to DatabaseName using the
+  DSAdmin connection string against the central DS_Admin catalog. DS_Admin is not a separate DRAFT
+  object - it is a database inside the same per-tier SQL Server instance as the region databases -
+  so this relationship targets the same data store service (01M25X9W0R-VQJ3) as the region-data
+  crossing, but is registered separately because it is a distinct interaction (tenant resolution
+  against a platform-wide catalog, confirmed as a single point of failure) rather than per-region
+  business data access. Registers the second of three service crossings named in DecisionRecord
+  01M263WKS2-NR3T (inter-service-connections, not-compliant).

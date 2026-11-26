@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KYNVC9SQ-DPNP
+type: product_component
+ownerRole: engineer
+name: CIS Svc LSRCN Sync Website
+description: Duplicate whiteboard entry — this is the same component as CIS Svc Syncer (the DASLSync API). Retired in favor of that entry.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- lsrcn
+- drafting-2026-07-28
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-syncer
+classification: other
+language: Visual Basic .NET
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Captured from an architecture whiteboard diagram provided by the product owner on 2026-07-28, labeled "Server at LSRCN — Separate Service" with the explicit note "need to locate Sync website & pristine DB." Resolved on 2026-07-30 per product owner — this is the Sync API from BeerCanLabs/sk-cis-util-customerinformation-syncer, the same component already cataloged as CIS Svc Syncer. Retired here as a duplicate; see CIS Svc Syncer for the maintained entry. Runtime corrected on 2026-07-31 to match CIS Svc Syncer — .NET Framework 4.8.
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

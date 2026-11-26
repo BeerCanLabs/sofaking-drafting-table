@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KSM38KF0-QYHD
+type: product_component
+ownerRole: engineer
+name: ERP-WS Desktop Client (OL5)
+description: 'Legacy .NET 3.5 client-server desktop application for Oregon ERP (Abacus). Provides core Finance, HR, and Payroll functionality.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+runsOn: 01KQQ5JT03-2NEW
+tags:
+- erp
+- dotnet-legacy
+- desktop
+- oregon
+- product-component
+repoUrl: TBD
+classification: cli
+language: C# / .NET Framework 3.5
+notes:
+  technologyStack: Built on .NET Framework 3.5 with Visual Studio 2010.
+  runtimeRequirement: The Desktop Client is installed on the user's Windows workstation; it does not directly access server file shares.

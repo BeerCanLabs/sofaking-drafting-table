@@ -1,0 +1,53 @@
+schemaVersion: '1.0'
+uid: 3PMDBQGRN1-SM3X
+type: product_component
+ownerRole: engineer
+name: Tailor CIS Importer Workstation
+description: Tailor CIS importer and support workstation role for installer payloads, Oracle client access, FileZilla, F5 VPN automation, and local SQL Express support.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+runtimeRequirement: 'Windows Server runtime with SQL Server Express 2022, Oracle Client 19c, FileZilla, Chrome, and F5 BIG-IP Edge Client.'
+tags:
+  - tailor
+  - sis
+  - importer
+  - oracle-client
+  - vpn
+  - sql-express
+  - ansible-discovered
+repoUrl: TBD
+classification: worker
+runtimeSpec:
+  dependencies:
+    - ref: 73F2M1GSPK-PNGJ
+      purpose: Supports CIS import and integration workflows that ultimately feed the Tailor SQL Server data tier.
+architectureNotes:
+  sourceRepository: BeerCanLabs/sk-ansible_playbooks_sre
+  sourceBranch: Tailor_Servers
+  sourcePaths:
+    - playbooks/tailor-playbook.yml
+    - playbooks/roles/sk_apps/som/tailor_cis/tasks/main.yml
+    - playbooks/roles/sk_apps/som/tailor_cis/vars/main.yml
+    - playbooks/roles/common/sql_server_express_2022/tasks/main.yml
+    - playbooks/roles/common/sql_server_express_2022/vars/main.yml
+  installerSource: TailorInstaller.zip from Sofa King Artifactory.
+  localDatabaseSupport: The playbook includes SQL Server Express 2022 installation for sis and ssis application targets.
+  clientDependencies: Installs Google Chrome, Oracle Client 19c, FileZilla, and F5 BIG-IP Edge Client when not already present.
+  vpnAutomation: Creates daily scheduled tasks to stop and start F5 VPN batch files.
+  aapHostInventory:
+    production:
+      aapTemplate: grr-tailor-prd-cis-playbook
+      provisioningTemplate: grr-tailor-prd-cis-vsphere
+      inventoryLimit: Datacenters_GRR_vm_Tailor_App_2022
+      hosts:
+        - GRRTLRSIS21
+        - GRRTLRSIS22
+        - GRRTLRSIS23
+        - GRRTLRSIS24
+        - GRRTLRSIS25
+  ownerInterviewNeeded: Confirm whether this is a production integration host, an operator workstation pattern, or a transitional migration support host.

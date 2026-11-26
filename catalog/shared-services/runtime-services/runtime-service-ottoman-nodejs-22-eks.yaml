@@ -1,0 +1,107 @@
+schemaVersion: '1.0'
+uid: 01KZ2MRPHN-N022
+type: runtime_service
+ownerRole: technology-admin
+name: Ottoman Node.js 22 on EKS Application Runtime
+description: >-
+  Preferred Ottoman Node.js 22 EKS application runtime selected as the upgrade
+  target for workloads leaving unsupported Node.js versions.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: cloud-engineering-infrastructure
+  contact: cloud-engineering@sofaking.example
+tags:
+  - runtime
+  - application
+  - nodejs
+  - nodejs-22
+  - eks
+  - ottoman
+  - ops-104695
+category: service
+serviceCategory: general
+host: 01KQQ5JT02-75QN
+primaryTechnologyComponent: 01KQQ5JT1V-83GS
+architectureNotes:
+  minNodes: 1
+  autoscaling: optional
+  loadBalancer: required
+  clusterInventory: >-
+    No current in-scope workload was confirmed on Node.js 22 after repository
+    reconciliation. Ottoman Load Test is planned to migrate here from Node.js
+    14.15.0. The target EKS environments span two availability zones.
+  serviceAuthentication: >-
+    Observed workloads participate in the Ottoman Kuma service mesh and use
+    the platform identity boundary described by the Ottoman SDP. The precise
+    workload-to-workload authentication policy was not inspected in this L1
+    review and remains subject to owner confirmation.
+  secretsManagement: >-
+    Secret values were intentionally not inspected. The workload secret
+    delivery mechanism remains an explicit follow-up for the product and Cloud
+    Engineering owners.
+  serviceLogging: >-
+    Namespace metadata associates the observed workloads with the environment
+    Dynatrace agents. Application-log forwarding was not inspected and remains
+    to be confirmed.
+  healthWelfareMonitoring: >-
+    Target workloads are expected to use Kubernetes probes, Kuma sidecars, and
+    the environment Dynatrace agents; implementation must be verified after
+    migration.
+  availabilityModel: >-
+    Availability remains workload-specific and must be verified when a component
+    migrates to this target runtime.
+  scalabilityModel: >-
+    Horizontal Pod Autoscalers are configured for the observed BFF and core
+    API workloads. UI and auxiliary workloads do not consistently have HPAs.
+  recoverabilityModel: >-
+    Target workloads use Kubernetes RollingUpdate Deployments and pod
+    replacement; workload-specific disruption controls must be verified.
+  failureDomain: >-
+    Workload failures are scoped to an independently deployed namespace and
+    Deployment. Cluster failures are isolated by environment; current worker
+    capacity spans two availability zones.
+deploymentConfigurations:
+  - id: per-workload-scaling
+    name: Per-Workload Kubernetes Scaling
+    description: >-
+      Keep each Ottoman workload in an independent Deployment and apply an HPA
+      where its current capacity profile requires horizontal scaling.
+    addressesQualities:
+      - scalability
+      - availability
+  - id: kubernetes-rolling-recovery
+    name: Kubernetes Rolling Recovery
+    description: >-
+      Use RollingUpdate Deployments, pod replacement, and workload-specific
+      PodDisruptionBudgets to recover without coupling service lifecycles.
+    addressesQualities:
+      - recoverability
+      - availability
+  - id: kuma-sidecar-participation
+    name: Ottoman Kuma Sidecar Participation
+    description: >-
+      Inject a Kuma sidecar into each observed application pod so the workload
+      participates in the Ottoman service mesh.
+    addressesQualities:
+      - availability
+internalComponents:
+  - ref: 01KQQ5JT02-75QN
+    role: host
+  - ref: 01KQQ5JT1V-83GS
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceAuthentication
+  - ref: 01KZ2MRPHR-0PS1
+    key: secretsManagement
+  - ref: 01KZ2MRPHR-0PS1
+    key: serviceLogging
+  - ref: 01KZ2MRPHR-0PS1
+    key: healthWelfareMonitoring
+  - ref: 01KZ2MRPHR-0PS1
+    key: recoverabilityModel
+  - ref: 01KZ2MRPHR-0PS1
+    key: failureDomain

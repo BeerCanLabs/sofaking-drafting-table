@@ -1,0 +1,94 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT00-1KK0
+type: data_store_service
+serviceRole: instance  # external service consumed over relationships, not a definition deployed by patterns
+ownerRole: technology-admin
+name: EventStoreDB Service
+description: 'Standard EventStoreDB service pattern for event sourcing.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - database
+  - event-sourcing
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-4A7S
+primaryTechnologyComponent: 01KQQ5JT1R-QQ9J
+architectureNotes:
+  serviceAuthentication: 'Authentication is managed via EventStore''s internal user manager or  integrated identity provider.
+
+    '
+  secretsManagement: 'Credentials and connection strings are stored in a centralized secrets store.
+
+    '
+  serviceLogging: 'Database logs are forwarded centrally via the host''s logging agent.
+
+    '
+  healthWelfareMonitoring: 'Service welfare is monitored via EventStore''s health API and host metrics.
+
+    '
+  availabilityModel: 'Availability is achieved via clustered nodes in a primary-secondary topology.
+
+    '
+  scalabilityModel: 'Scales vertically with host resources or through addition of cluster nodes.
+
+    '
+  recoverabilityModel: 'Failed nodes are rebuilt and rejoined to the cluster; support for  backups and snapshots.
+
+    '
+  failureDomain: 'Impact is scoped to the EventStore cluster serving the dependent workloads.
+
+    '
+  backup:
+    strategy: daily full snapshots
+    platform: EventStoreDB native backup to managed storage
+    rto: 4h
+    rpo: 1h
+  ha:
+    mechanism: Clustered Replication
+  encryption:
+    atRest: required
+  accessControl:
+    model: Internal RBAC or integrated authentication.
+internalComponents:
+  - ref: 01KQQ5JT1R-QQ9J
+    role: function
+deliveryModel: self-managed
+decisionRecords:
+  - ref: 01KT16XJ5R-BDGS
+    key: serviceAuthentication
+  - ref: 01KT16XJ5R-BDGS
+    key: secretsManagement
+  - ref: 01KT16XJ5R-BDGS
+    key: serviceLogging
+  - ref: 01KT16XJ5R-BDGS
+    key: healthWelfareMonitoring
+  - ref: 01KT16XJ5R-BDGS
+    key: availabilityModel
+  - ref: 01KT16XJ5R-BDGS
+    key: scalabilityModel
+  - ref: 01KT16XJ5R-BDGS
+    key: recoverabilityModel
+  - ref: 01KT16XJ5R-BDGS
+    key: failureDomain
+  - ref: 01KT16XJ5R-BDGS
+    key: backup.strategy
+  - ref: 01KT16XJ5R-BDGS
+    key: backup.platform
+  - ref: 01KT16XJ5R-BDGS
+    key: backup.rto
+  - ref: 01KT16XJ5R-BDGS
+    key: backup.rpo
+  - ref: 01KT16XJ5R-BDGS
+    key: ha.mechanism
+  - ref: 01KT16XJ5R-BDGS
+    key: encryption.atRest
+  - ref: 01KT16XJ5R-BDGS
+    key: accessControl.model

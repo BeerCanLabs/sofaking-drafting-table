@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYTB1KTJ-BQWM
+type: product_component
+ownerRole: engineer
+name: CIS Util Salesbook Nightly Integration
+description: Windows Service that processes data exported by CustomerInformation and loads it into Salesbook.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- salesbook
+- customerinformation
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-salesbook-nightly-integration
+classification: worker
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a Windows Service that loads CustomerInformation-exported data into Salesbook nightly. GitHub's detected primary language is Inno Setup (installer packaging); the actual application implementation language was not independently confirmed. CIS Util Salesbook Attendance Syncher runs after this completes. Runtime confirmed by product owner on 2026-07-31 — .NET Framework 4.8.
+  repositoryName: BeerCanLabs/sk-cis-util-salesbook-nightly-integration
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

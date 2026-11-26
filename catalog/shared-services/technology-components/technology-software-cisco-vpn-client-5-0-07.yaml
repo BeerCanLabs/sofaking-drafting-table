@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1R-WNCQ
+type: technology_component
+ownerRole: technology-admin
+name: Cisco VPN Client 5.0.07
+description: Legacy Cisco VPN client package installed as part of the Salesdesk Connex integration bundle.
+version: 1.0.0
+catalogStatus: stub
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- inferred-from-ansible-playbooks-sre
+- vpn
+- legacy
+classification: software
+vendor: Cisco
+productName: VPN Client
+productVersion: 5.0.07.0290
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: '2014-07-29'
+  notes: Cisco VPN Client 5.x is treated as end-of-support; package appears in a legacy Connex installer bundle.
+capabilities:
+- 01KQQ4Q026-4JR6
+notes:
+  background: "Inferred from ansible_playbooks_sre playbooks/roles/sk_apps/som/salesdesk_connex/tasks/main.yml."

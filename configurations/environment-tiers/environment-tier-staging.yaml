@@ -1,0 +1,42 @@
+schemaVersion: '1.0'
+uid: FQ696EE1DA-SWEN
+type: environment_tier
+name: Staging
+tierId: staging
+catalogStatus: complete
+purpose: staging
+availabilityExpectation: high-availability
+costPosture: balanced
+description: |
+  Pre-production validation environment mirroring production architecture.
+  Deployed from release branches. Used for final QA, load testing, and
+  release sign-off. Must satisfy SOC 2 and RT-RAMP controls.
+complianceScope:
+- 01KQQ4Q027-T3CA
+- 01KQQ4Q027-7JN2
+- 01KQQ4Q027-1GHC
+parameterSurface:
+- name: awsAccountId
+  description: AWS account ID for the staging environment
+  required: true
+  sensitive: false
+- name: awsRegion
+  description: AWS region for the staging environment
+  required: true
+  sensitive: false
+- name: vpcId
+  description: VPC ID where services are deployed
+  required: true
+  sensitive: false
+- name: deployRoleArn
+  description: IAM role ARN the pipeline assumes to deploy
+  required: true
+  sensitive: false
+- name: certificateArn
+  description: ACM certificate ARN for HTTPS termination
+  required: true
+  sensitive: false
+notes: >
+  Staging mirrors production replica counts and autoscaling configuration.
+  SOC 2 (01KQQ4Q027-7JN2) and RT-RAMP (01KQQ4Q027-1GHC) controls are in
+  scope. Use the same AWS region as production for realistic latency testing.

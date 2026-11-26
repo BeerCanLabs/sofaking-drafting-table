@@ -1,0 +1,75 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1D-NMRQ
+type: reference_architecture
+name: Sharded Multi-Tenant AWS SQL Server
+description: Reference Architecture for AWS-hosted products that scale by replicated sub-environments, with shared services and SQL Server data tiers scoped to shard boundaries.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: deprecated
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- reference-architecture
+- aws
+- sharded
+- multitenant
+- sqlserver
+patternType: sharded-multitenant-aws-sqlserver
+scalingUnits:
+- name: shard
+  type: replicable
+  instanceCount: 1
+  notes: A shard or sub-environment hosts a subset of tenants.
+- name: shared-services
+  type: shared
+  notes: Shared services support all shards and create broader blast radius.
+serviceGroups:
+- name: Frontend UI
+  deploymentTarget: aws-us-east-2
+  scalingUnit: shard
+  deployableObjects:
+  - ref: 01KQQ5JT1D-MY47
+    diagramTier: presentation
+  - ref: 01KQQ5JT04-P7QJ
+    diagramTier: presentation
+- name: Application Services
+  deploymentTarget: aws-us-east-2
+  scalingUnit: shard
+  deployableObjects:
+  - ref: 01KQQ5JT1E-HQZ6
+    diagramTier: application
+- name: Data Services
+  deploymentTarget: aws-us-east-2
+  scalingUnit: shard
+  deployableObjects:
+  - ref: 01KQQ5JT01-QFN5
+    diagramTier: data
+- name: Shared File and Bulk Ingestion
+  deploymentTarget: aws-us-east-2
+  scalingUnit: shared-services
+  deployableObjects:
+  - ref: 01KQQ5JT05-FMR5
+    diagramTier: data
+  - ref: 01KQQ5JT05-BZFX
+    diagramTier: utility
+  - ref: 01KQQ5JT05-KT3Z
+    diagramTier: data
+- name: Shared Event Processing
+  deploymentTarget: aws-us-east-2
+  scalingUnit: shared-services
+  deployableObjects:
+  - ref: 01KQQ5JT1E-JBCV
+    diagramTier: utility
+applicableDefinitionChecklist:
+  - "Each shard is a replicated, isolated sub-environment hosting a defined subset of tenants with independent failure domain."
+  - "Shared services are explicitly scoped to the shared-services scaling unit and their broader blast radius is documented."
+  - "SQL Server data tiers are shard-scoped; no cross-shard data dependencies are permitted without an explicit decision record."
+  - "Shard placement decisions, capacity boundaries, and shared-service coupling are captured as explicit decision records or risks."
+  - "Migration from this pattern to a modern target architecture requires a separate modernization SDM."
+notes:
+  lifecycleRationale: Previously maintained as an explicit exception for existing sharded AWS and SQL Server systems while referenced Windows Server and SQL Server Technology Components remained in extended support. Set to deprecated because TechnologyComponent 01KQQ5JT1S-D14E reaches extendedSupportEnd on 2026-11-10 (required by DRAFT validation). It should not be treated as cloud-forward target state. The Architecture Review Board should confirm this status and decide whether any extended-support arrangement applies.
+  availabilityModel: Shard-level failure domains should contain most tenant impact; shared services must document broader blast radius.
+  tenancyModel: Tenants are assigned to replicated sub-environments based on capacity and operations decisions.
+  deploymentModel: Shard and shared-service release processes must be separately documented.
+  patternRisks: Shared services, single-instance debt, and shard placement decisions must be captured as explicit decisions or risks.

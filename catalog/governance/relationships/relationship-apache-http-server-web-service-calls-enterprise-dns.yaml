@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5ZX-DYSY
+name: Apache HTTP Server Web Service → Enterprise DNS
+catalogStatus: stub
+source: 01KQQ5JT1F-NKX3
+label: calls
+externalTarget: Enterprise DNS
+notes:
+  background: "Service registration and name resolution for web endpoints."

@@ -1,0 +1,21 @@
+schemaVersion: '1.0'
+uid: 01KZPC4E3A-70VD
+type: relationship
+name: CIS Svc CloudCentral -> CIS Db Azure Central
+description: The Azure-hosted CloudCentral deployment of CentralAdmin uses the Azure Central copy of CustomerInformation.
+catalogStatus: incomplete
+source: 01KYNVC9SQ-M9SZ
+label: reads and writes
+target: 01KYNVC9SN-SQ01
+technology: SQL Server TDS
+direction: synchronous
+flow: outbound
+tags:
+- sis
+- lakeshore
+- lscis
+- cloudcentral
+- azure
+- database
+- data-zone
+notes: Confirmed in the Lakeshore CIS architecture reconciliation; Azure Central is distinct from the per-ITC databases and LSRCN Pristine.

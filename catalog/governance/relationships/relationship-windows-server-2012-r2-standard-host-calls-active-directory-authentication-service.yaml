@@ -1,0 +1,12 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV5Z2-NSDW
+name: Windows Server 2012 R2 Standard Host → Active Directory Authentication Service
+catalogStatus: stub
+source: 01KQQ5JT03-BEFY
+label: calls
+target: 01KQQ5JT1E-6R0B
+notes:
+  background: "Domain-based authentication and administrative access."
+capabilities:
+- 01KQQ4Q026-MHJM

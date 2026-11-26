@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01M1F8WB4E-7DRZ
+type: decision_record
+name: PG PLM/EEM Cloud Services - Inter-Service Connections
+description: >-
+  Inter-service connection decision for the PLM/EEM cloud services deployment pattern, recorded for APEX L1 Baseline under SKPG-19589.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - associate-development
+  - plm
+  - eem
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  interServiceConnections: Four cross-boundary paths are evidenced. (1) Presentation-to-application: inbound HTTPS terminates on the shared Traefik Kubernetes Ingress Service (01KYAXMZ7H-72BR) and routes to pg-msvc-plm-eem-api at pg-plm-eem-api.use1.sofaking.example, confirmed by kubernetes.io/ingress.class:traefik in every cd/*/ingress.yml. (2) Application-to-data: the API and forms service reach DynamoDB and five S3 buckets; msvc-pg-forms ships an RDS CA bundle indicating an additional managed-database client path that is not yet catalogued. (3) Application-to-application asynchronous: three Step Function state machines coordinate ActivityBulkCopy, EemEvalRightsAutomation, and PgDataImport, with SNS and SQS carrying events between the Lambda estate in STL-Identity and the API. (4) Cross-pattern: this tier reads the STL SQL Server estate catalogued in the legacy pattern 01M1F8WB4E-RWQB, and PG-ReportWriterAgent here is paired with PG-ReportWriter there. Which pattern should own STL-Identity, the bridge component, is NOT settled. No first-class relationship objects have been authored yet; that is deferred past L1 Baseline and tracked in DraftingSession 01M1F8WB4E-0GSN. Status open pending Associate Development engineering ratification.

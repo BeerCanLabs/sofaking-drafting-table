@@ -1,0 +1,445 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGH-A6GC
+type: software_deployment_pattern
+ownerRole: engineer
+name: Project Recliner (National SOM)
+description: 'Next-generation national Special Orders Management (SOM) platform from the Customer
+
+  Solutions LOB. Per-region, AWS-hosted, microservices-based architecture. Angular
+
+  micro-frontends (MFEs) in an Nx monorepo delivered via CloudFront/S3; a public
+
+  Backend-for-Frontend (BFF) layer on EKS; internal Recliner core microservices on EKS;
+
+  per-region SQL Server databases on RDS with regional clustering; document storage
+
+  in a single S3 bucket; Snowflake is planned for analytics. Current repository evidence
+
+  shows a dedicated internet-facing Traefik ALB as BFF ingress; the proposed
+
+  Kong/Ottoman gateway hop remains unconfirmed. Okta (Ottoman) is the stated identity
+
+  provider, and mesh participation is currently evidenced only for the Loveseat subscriber.
+
+  Each state is logically isolated at the network, data, and service layers to
+
+  support compliance, data separation, versioning, and scalability.
+
+  '
+version: 1.8.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+businessContext:
+  pillar: business-pillar.customer-solutions
+  productFamily: SOM Recliner
+  notes: Customer Solutions LOB. Confirmed via the Recliner Infrastructure Architecture Confluence page (Customer Solutions space).
+owner:
+  team: som-special-programs-management-engineering
+  contact: special-programs-management-som-eng@sofaking.example
+tags:
+  - som
+  - recliner
+  - microservices
+  - mfe
+  - aws
+  - eks
+  - cloud-native
+  - nx-monorepo
+  - bff
+  - traefik-ingress
+  - kong-proposed
+  - okta-ottoman
+  - platform-service-mesh
+  - server-driven-validation
+followsReferenceArchitecture: 01KQQ5JT1D-D614
+architectureNotes:
+  edgeNetworkStrategy: >-
+    Angular static assets are delivered from S3 through AWS CloudFront. The
+    Recliner BFF's public API hostname (recliner-bff-api*.ss.sofaking.example)
+    is a Route53 CNAME that resolves directly to a dedicated internet-facing
+    Traefik ALB (see relationship 01KZ9NXCX5-M6SK) — confirmed in the
+    som-recliner repository's infra/platform Terraform (aws_services.tf,
+    variables.tf, and the per-environment terraform.tfvars files). Kong
+    Gateway does not appear anywhere in the som-recliner repository's
+    infrastructure code, and no Kong hop is evidenced between that Traefik
+    ALB and the BFF. Internal Recliner services (backend, user-profile,
+    entity-locking, loveseat-subscriber) are separately exposed through their
+    own ingress objects behind a distinct internal-scheme ALB, also fronted by
+    Traefik rather than Kong. The Recliner Infrastructure Architecture Confluence
+    page still describes a proposed Kong/Ottoman gateway in front of the BFF;
+    that page is explicitly a "proposed" design (page title carries a [DRAFT]
+    suffix) and is superseded here for this specific claim by the checked-in
+    infra code. Whether Kong or another gateway still sits upstream of the
+    Imperva-fronted browser app-route hostname (customer*.stage-retail.ss...,
+    distinct from the BFF's own hostname) remains unresolved — see the
+    exact-platform-ingress-path item in DraftingSession 01KYN60WJC-7D4Z.
+  availabilityRequirement: critical
+  dataClassification: 'FERPA-protected customer records; PII. Per-region data isolation with logical
+
+    separation by state to meet compliance, data separation, and data residency
+
+    requirements.
+
+    '
+  failureDomain:
+    scope: service-group
+    description: 'Per-region SQL Server databases on RDS are logically and operationally isolated
+
+      by region and clustered per region. Global User and ApplicationStore databases
+
+      are co-located on a us-east cluster initially. Frontend, BFF, and core microservice
+
+      failures are scoped within each region''s EKS cluster. Identity (Okta/Ottoman) is
+
+      a shared cross-product dependency. Shared mesh impact applies to the Loveseat
+
+      subscriber where sidecar injection is evidenced; mesh participation is not
+
+      currently evidenced for the primary BFF and core-service workloads.
+
+      '
+  patternDeviations: 'Product is pre-production. SQL Server 2025 is the stated direction and the
+
+    Data & Analytics group references the new SQL Server 2025 DBMS Service
+
+    (01KRZVZXDK-7XC1). Aurora w/ PostgreSQL remains under consideration as an
+
+    alternative. Database clusters are intended to be deployable across multiple
+
+    AWS regions, but only us-east is in scope today. The transitional Recliner
+
+    Identity Service exists only until full Ottoman integration is complete.
+
+    '
+  frontendStrategy: 'Single Nx monorepo with Angular micro-frontends (MFEs). Independently deployable
+
+    MFEs share libraries through a single source of truth to prevent version drift.
+
+    Nx orchestrates builds, tests, and linting via its workspace project graph and
+
+    affected-graph execution. Static assets (JS, CSS, fonts, images) are served via
+
+    CloudFront; the application entry point (index.html) is served from the BFF. The
+
+    frontend''s configured API base URL and any gateway hop upstream of the evidenced
+
+    Traefik ingress remain deferred for owner confirmation.
+
+    '
+  databaseStrategy: 'SQL Server 2025 on RDS as the current direction (Aurora w/ PostgreSQL under
+
+    consideration). Logical separation by concern: User Profile / User Store;
+
+    Application Instance Store (system/region configs; equivalent to DirectorMaster
+
+    in Trifold); per-region Instance Stores. Multiple SQL databases enforce tenant
+
+    and region isolation. Global databases (User, ApplicationStore) are hosted on
+
+    a single us-east cluster initially. The data platform team is setting up dedicated
+
+    databases in the development, test, and stage AWS environment accounts; the
+
+    production substrate and final engine decision remain unconfirmed.
+
+    '
+  identityStrategy: >-
+    Okta (Ottoman) is the stated system of record for authentication and token
+    issuance. The checked-in som-recliner infrastructure routes the BFF hostname
+    through a dedicated Traefik ALB and does not evidence Kong token validation
+    in that path. The proposed Kong policy hop and the frontend's actual API base
+    URL remain deferred for owner confirmation. A transitional Recliner Identity
+    Service may remain in-cluster until full Ottoman integration is complete.
+  serviceMeshStrategy: >-
+    Confluence documents intended Platform Service Mesh participation for
+    Recliner alongside Ottoman, BFF, Loveseat, and other Platform backend APIs.
+    Checked-in Helm charts show that intent is only partially realized today:
+    `kuma.io/sidecar-injection: enabled` is present solely on the
+    recliner-loveseat-subscriber chart. The recliner-bff, recliner-backend,
+    recliner-user-profile, and recliner-entity-locking charts carry no mesh
+    sidecar-injection labels, so the primary Recliner BFF and core-service
+    runtime (01KRZX0C11-QH66) is not currently evidenced as a mesh
+    participant. See relationship 01KSKZV5ZK-7ZME.
+  validationStrategy: 'Server-driven validation. All business rules live in the BFF rules engine.
+
+    Frontend components surface violations declaratively via the reclinerValidate
+
+    directive and a component-scoped ValidationScope state manager built on Angular
+
+    Signals. Frontend models extend DomainEntity; service endpoints implement
+
+    IModelValidatorAsync<T> on /<entity>/validate; responses use ReclinerResponse<T>
+
+    with violations and required populated by the backend. Snapshot diffing avoids
+
+    duplicate validation HTTP calls when the model has not changed.
+
+    '
+  storageStrategy: >-
+    Recliner uses one S3 bucket for document storage with SSE-S3 encryption,
+    public access blocked, and versioning disabled. Only objects under the
+    staging/ prefix have a lifecycle rule, which expires them after one day;
+    final document paths have no configured retention rule. Snowflake is
+    planned for reporting and analytics, but its implementation and controls
+    are not finalized.
+  computeStrategy: >-
+    The Recliner BFF and core microservices run as independently scalable
+    Kubernetes Deployments on the Recliner EKS runtime. Recliner does not use AWS
+    Fargate. Tiers of Intensity is a standalone product boundary and its Lambda
+    worker is not part of the Recliner compute inventory.
+  deploymentTargets: >-
+    Recliner owns four environment-specific EKS clusters in AWS us-east-1:
+    recliner-dev for development, recliner-test for test, recliner-stage for stage, and
+    recliner-prod for production. The product uses ArgoCD GitOps for Kubernetes
+    delivery. Each environment is an isolated cluster boundary.
+  sourceMaterial: >-
+    Initial architecture came from the Recliner Infrastructure Architecture,
+    Recliner Front End Architecture, and Validation In Recliner Confluence pages.
+    Operational evidence was refreshed on 2026-07-28 from the Platform EKS
+    inventory, completed Recliner ArgoCD onboarding tickets, local cluster
+    contexts, and owner confirmation recorded in OPS-374037. The edge and
+    network model was reconciled for OPS-749918 against the current DRAFT
+    CloudFront, Traefik, Okta, Kong Gateway, and Kong Mesh services. Exact product DNS,
+    certificate, WAF, and platform ingress-hop details upstream of the
+    Imperva-fronted browser app route remain deferred operational evidence.
+    Those current sources supersede the proposed Fargate wording in the older
+    architecture. For OPS-306834 (DRAFT L1 Baseline Adoption, 2026-08-05), the
+    som-recliner repository (github.com/BeerCanLabs/sk-som-recliner) was read
+    directly as the source of truth and supersedes the Confluence-only
+    narrative for two specific claims: the BFF's public ingress path (Traefik
+    ALB, not Kong — see edgeNetworkStrategy) and current mesh sidecar
+    injection coverage (loveseat-subscriber only — see serviceMeshStrategy). See
+    DraftingSession 01KZ9NXCX5-3BT5 for the L1 Baseline confirmation,
+    OPS-621219 cleanup, and evidence trail.
+    For OPS-046456 (Data Domain Review, 2026-08-10), the architecture page was
+    re-read and used to model the global User Store, Application Instance Store,
+    and region Instance Stores as explicit incomplete DataComponents. The
+    page does not resolve the final SQL Server versus Aurora choice, managed
+    database substrate, schema repositories, or Recliner-specific operational
+    controls; those gaps are preserved in DraftingSession 01KZP9ZZ56-JV14.
+    Reid Sumner's 2026-08-14 data-domain response subsequently confirmed
+    all three SQL Server Database Project paths, the Application Instance Store
+    consumer and no-PII boundary, current S3 controls, and the intended Platform
+    AI Gateway direction. Database-platform and SQL operations evidence remains
+    with Sunil Pradhan's team; Redis details remain with Theo Kane; and
+    Snowflake implementation details remain with Bharat Menon.
+    The follow-up availability review inspected every deployable object and the
+    current som-recliner production Helm values. The recliner-bff, recliner-backend,
+    recliner-user-profile, and recliner-entity-locking workloads each request three
+    production replicas. Shared and managed services with an evidenced HA model
+    are explicitly marked `intent: ha`. Redis and the four SQL/data boundaries
+    are explicitly marked `intent: sa` until Recliner-specific replication,
+    Multi-AZ, or failover configuration is evidenced; `sa` records the current
+    catalog evidence gap and does not preclude a future HA production design.
+networkZones:
+  - id: web
+    name: Web
+    tier: frontend
+    description: Internet-facing services - CloudFront-delivered Angular MFEs and the Traefik-fronted BFF entry point; a proposed Kong hop remains unconfirmed.
+  - id: app
+    name: Application
+    tier: application
+    description: Internal application services - Recliner BFF, Recliner core microservices, and the in-cluster identity/token-validation flow.
+  - id: data
+    name: Data
+    tier: data
+    description: Data stores - per-region SQL Server on RDS, global User and ApplicationStore, Redis session/cache, S3 document storage, and Snowflake analytics.
+  - id: ops
+    name: Operations
+    description: Operational and infrastructure services - ArgoCD GitOps delivery, VictoriaMetrics monitoring, and Platform Service Mesh participation.
+serviceGroups:
+  - name: Web Edge & Frontend
+    deploymentTarget: aws-us-east-2
+    notes: 'Angular MFEs hosted on S3 and distributed via CloudFront. Single Nx monorepo;
+
+      independently deployable MFEs. Static assets are served via CloudFront to reduce
+
+      separate static delivery from the BFF; the application starting index.html stays
+      on the BFF.
+
+      '
+    deployableObjects:
+      - ref: 01KQQ5JT04-6F8T
+        diagramTier: presentation
+        networkZone: web
+        notes: CloudFront distribution for Angular MFE static assets (JS, CSS, fonts, images); HA intent follows the managed global edge service boundary.
+      - ref: 01KSM38KGE-1JFK
+        diagramTier: presentation
+        networkZone: web
+        notes: Recliner Web Shell ProductComponent - Angular MFE shell + remote MFEs in an Nx monorepo. Its static delivery path uses the HA CloudFront/S3 boundary; the application entry point uses the three-replica BFF.
+  - name: BFF & Ingress
+    deploymentTarget: aws-us-east-1
+    substrate: 01KRZX0C11-QH66
+    notes: >-
+      A dedicated internet-facing Traefik ALB and Traefik Kubernetes Ingress
+      route requests to the .NET 8 Recliner BFF running on the Recliner EKS
+      application runtime. Redis backs BFF session management and caching. A
+      proposed Kong/Ottoman hop is retained as an incomplete relationship but
+      is not part of the evidenced active service group.
+    deployableObjects:
+      - ref: 01KYAXMZ7H-72BR
+        diagramTier: presentation
+        networkZone: web
+        notes: >-
+          Traefik Kubernetes Ingress Service (reused shared object). The
+          Recliner BFF's public Route53 CNAME (recliner-bff-api*.ss.sofaking.example)
+          resolves directly to a dedicated internet-facing Traefik ALB per
+          environment, confirmed in infra/platform/aws_services.tf and the
+          per-environment terraform.tfvars files in the som-recliner repository.
+          The shared ingress service runs Traefik as a DaemonSet behind the
+          managed ALB, so this ingress boundary is classified HA.
+      - ref: 01KSM38KGD-063V
+        diagramTier: application
+        networkZone: app
+        notes: Recliner BFF API ProductComponent - .NET Core 8. Performs request aggregation, authorization enforcement, and API shaping. Hosts the /<entity>/validate endpoints for server-driven validation. The application starting index.html is served from here. Production Helm values configure three replicas.
+      - ref: 01KQQ5JT00-191S
+        diagramTier: data
+        networkZone: data
+        notes: Redis for session management and BFF caching. Recliner-specific Sentinel, cluster, or managed-cache replication is not evidenced, and the current BFF draft store is in-memory; retain SA until the deployed cache topology is confirmed.
+  - name: Core Backend Services
+    deploymentTarget: aws-us-east-1
+    substrate: 01KRZX0C11-QH66
+    notes: >-
+      Eight logical Recliner services are catalogued on the shared Recliner .NET 8
+      EKS runtime. The repository currently evidences shared recliner-backend plus
+      independently named recliner-user-profile and recliner-entity-locking Helm
+      deployments; the finer logical boundaries remain stubs. Platform Service
+      Mesh sidecar injection is not evidenced for these core charts.
+    deployableObjects:
+      - ref: 01KSM38KGD-ACDC
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Identity Service ProductComponent (transitional - retires once Ottoman integration is complete). Logical capability hosted by the shared three-replica production backend deployment.
+      - ref: 01KSM38KGE-BE0M
+        diagramTier: application
+        networkZone: app
+        notes: Recliner User Service ProductComponent. Production user-profile and shared backend Helm deployments each configure three replicas.
+      - ref: 01KSM38KGE-BYBV
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Customer Profile Service ProductComponent. Logical capability hosted by a three-replica production user-profile or shared backend deployment boundary.
+      - ref: 01KSM38KGD-0JQM
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Entity Locking Service ProductComponent. Production entity-locking Helm values configure three replicas.
+      - ref: 01KSM38KGE-R4FM
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Translation Service ProductComponent. Logical capability hosted by the shared three-replica production backend deployment.
+      - ref: 01KSM38KGD-RFS7
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Report Data Provider Service ProductComponent - reads from SQL Server and Snowflake to feed DevExpress/Ad-hoc reporting. Logical capability hosted by the shared three-replica production backend deployment.
+      - ref: 01KSM38KGD-TY40
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Document Service ProductComponent - reads/writes S3 with lifecycle tiering. Logical capability hosted by the shared three-replica production backend deployment.
+      - ref: 01KSM38KGD-6BPH
+        diagramTier: application
+        networkZone: app
+        notes: Recliner Document Sharing and Transferring Service ProductComponent. Logical capability hosted by the shared three-replica production backend deployment.
+  - name: Data & Analytics
+    deploymentTarget: aws-us-east-2
+    notes: 'Logical separation by concern: User Profile / User Store, Application Instance
+
+      Store, and per-region Instance Stores. Global databases (User, ApplicationStore)
+
+      hosted on a us-east cluster initially; per-region region clusters planned.
+
+      Snowflake is planned for analytics workloads but is not finalized. A single
+
+      S3 bucket holds documents with SSE-S3 and public access blocked; only the
+
+      staging/ prefix expires after one day, and final paths have no retention rule.
+
+      '
+    deployableObjects:
+      - ref: 01KRZVZXDK-7XC1
+        diagramTier: data
+        networkZone: data
+        notes: 'SQL Server 2025 DBMS Service (RDS-hosted for Recliner). Catalog entry
+
+          database-sqlserver-2025.yaml was added 2026-05-19 to match Confluence''s
+
+          stated SQL Server 2025 direction. The catalog entry models the
+
+          self-managed Windows 2025 EC2 host baseline; Recliner''s deployment runs on
+
+          AWS RDS for SQL Server. No Recliner-specific RDS Multi-AZ, replica, or
+
+          failover configuration is currently evidenced, so this remains SA.
+
+          '
+      - ref: 01KZP9ZZ56-R5MT
+        diagramTier: data
+        networkZone: data
+        notes: Global Recliner User Profile / User Store data boundary. Its SQL Server Database Project is at src/recliner-database/ReclinerUserProfileStore/; database substrate and replication/failover controls remain unconfirmed, so this remains SA.
+      - ref: 01KZP9ZZ56-QKZP
+        diagramTier: data
+        networkZone: data
+        notes: Global application and region-configuration store. CorvidGroup.Business.Services.Restful consumes it through ReclinerSystemDbContext; the schema has no customer or user identifier columns. Database substrate and replication/failover controls remain unconfirmed, so this remains SA.
+      - ref: 01KZP9ZZ56-VW85
+        diagramTier: data
+        networkZone: data
+        notes: Single-tenant region database boundary for restricted customer and application records. Its SQL Server Database Project is at src/recliner-database/ReclinerRegionInstanceStore/. The architecture intends regional clustering, but no Recliner-specific Multi-AZ or failover configuration is evidenced, so this remains SA.
+      - ref: 01KQQ5JT1D-NR4R
+        diagramTier: data
+        networkZone: data
+        notes: Snowflake Data Cloud is planned for analytics and reporting workloads, but implementation details and controls are not finalized. HA intent follows the managed SaaS service boundary and its vendor availability commitment.
+      - ref: 01KQQ5JT05-KT3Z
+        diagramTier: data
+        networkZone: data
+        notes: 'Single Amazon S3 document bucket with SSE-S3, public access blocked, and versioning disabled. Only staging/ has a lifecycle rule (one-day expiry); final document paths have no retention rule. HA intent follows the regional multi-AZ managed service model.'
+  - name: Platform Observability & Delivery
+    deploymentTarget: aws-us-east-1
+    notes: >-
+      ArgoCD GitOps delivery and VictoriaMetrics monitoring for the
+      environment-specific Recliner EKS clusters.
+    deployableObjects:
+      - ref: 01KQQ5JT1E-01JZ
+        diagramTier: utility
+        networkZone: ops
+        notes: ArgoCD - GitOps continuous delivery for application and cluster addon rollouts on EKS. The reused shared service is modeled as an HA EKS deployment.
+      - ref: 01KQQ5JT1E-HCBR
+        diagramTier: utility
+        networkZone: ops
+        notes: VictoriaMetrics - platform monitoring and metrics. The reused shared service is modeled as a clustered HA deployment.
+notes:
+  sourceRepositories:
+    - productService: 01KSM38KGD-063V
+      componentRefs:
+        - 01KSM38KGD-063V
+        - 01KSM38KGD-6BPH
+        - 01KSM38KGD-TY40
+        - 01KSM38KGD-0JQM
+        - 01KSM38KGD-ACDC
+        - 01KSM38KGD-RFS7
+        - 01KSM38KGE-BYBV
+        - 01KSM38KGE-R4FM
+        - 01KSM38KGE-BE0M
+        - 01KSM38KGE-1JFK
+      repositoryName: BeerCanLabs/sk-som-recliner
+      sourceRepository: https://github.com/BeerCanLabs/sk-som-recliner
+      repositoryPrimaryLanguage: C# and TypeScript
+      observedRuntimeSignals: dotnet (.NET 8), angular, nx, docker, helm, terraform, eks
+  discoveryBoundary: >-
+    Direct repository review confirms the BFF, shared backend, user-profile,
+    entity-locking, and Loveseat subscriber deployment units. The additional
+    named Recliner service objects are retained as logical catalog stubs from the
+    architecture inventory until engineering confirms whether each is an
+    independent runtime deployment.
+decisionRecords:
+  - ref: 01KT16XJ29-8QG9
+    key: deploymentTargets
+  - ref: 01KT16XJ29-8QG9
+    key: availabilityRequirement
+  - ref: 01KT16XJ29-8QG9
+    key: dataClassification
+  - ref: 01KT16XJ29-8QG9
+    key: failureDomain
+  - ref: 01KT16XJ29-8QG9
+    key: patternDeviations
+  - ref: 01KT16XJ29-8QG9
+    key: externalDependencies
+  - ref: 01KT16XJ29-8QG9
+    key: interServiceConnections

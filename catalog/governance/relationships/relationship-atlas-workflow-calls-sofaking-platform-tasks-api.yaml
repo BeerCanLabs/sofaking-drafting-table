@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: 9J11QAKQZZ-FQQJ
+type: relationship
+name: Atlas Workflow → Sofa King Platform Tasks API
+description: 'Typed clients TasksApiClient (scope plat.ss.tasks.read), TasksApiWriteClient (plat.ss.tasks.write)
+  and TaskTemplatesApiClient against PlatformTasksApi:BaseUrl (stage: https://task-stage-api.ss.sofaking.example),
+  header x-api-version 1.0, bearer tokens from the Atlas M2M Okta client.'
+catalogStatus: stub
+source: 01M5WY4E7P-YC9P
+externalTarget: Sofa King Platform Tasks API
+label: calls
+technology: HTTPS/REST
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: 'Declared by source inspection 2026-11-13. Typed clients TasksApiClient (scope plat.ss.tasks.read),
+    TasksApiWriteClient (plat.ss.tasks.write) and TaskTemplatesApiClient against PlatformTasksApi:BaseUrl (stage:
+    https://task-stage-api.ss.sofaking.example), header x-api-version 1.0, bearer tokens from the Atlas M2M
+    Okta client. No catalog object was found for the Platform Tasks API.'
+  evidence: 'whm-unified-core develop: Service.Core.Workflows.Infrastructure/Clients/TasksApiExtensions.cs, Service.Core.Workflows.App/appsettings.json'

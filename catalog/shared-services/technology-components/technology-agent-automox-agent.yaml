@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1N-9MHG
+type: technology_component
+ownerRole: technology-admin
+name: Automox Agent
+description: Patch management and endpoint automation agent installed on supported hosts.
+version: 1.0.0
+catalogStatus: complete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- agent
+- patching
+classification: agent
+vendor: Automox
+productName: Agent
+productVersion: current
+platformDependency: external.ops.automox-platform
+vendorLifecycle:
+  mainstreamSupportEnd: null
+  extendedSupportEnd: null
+  notes: SaaS-managed agent lifecycle follows the Automox service model.
+capabilities:
+- 01KQQ4Q026-BH6E

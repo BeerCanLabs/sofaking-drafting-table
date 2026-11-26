@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGJ-NQSQ
+type: product_component
+ownerRole: engineer
+name: Settee Framework Angularjs
+description: WIP - Angularjs framework for the Settee platform
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- settee
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-Settee-Framework-Angularjs
+language: JavaScript
+classification: web-application
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Settee-Framework-Angularjs
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: dependency-sets/credentials/config.json; dependency-sets/digital-signature/config.json; dependency-sets/effectivity/config.json; dependency-sets/employee-assignment/config.json; dependency-sets/employee-profile/config.json; dependency-sets/fc-common/config.json; dependency-sets/form-date/config.json; dependency-sets/highcharts/config.json; dependency-sets/job-type/config.json; dependency-sets/ui-tour/config.json; dependency-sets/viz-institute-insights/config.json; dependency-sets/viz-simple-charts/config.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

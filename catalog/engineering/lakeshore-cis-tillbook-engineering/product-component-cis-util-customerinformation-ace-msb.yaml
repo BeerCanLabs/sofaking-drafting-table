@@ -1,0 +1,35 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-1SS8
+type: product_component
+ownerRole: engineer
+name: CIS Util Customerinformation ACE MSB
+description: ACE Master Schedule Builder. Console app or scheduled service; exact function not well documented.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- customerinformation
+- scheduling
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-customerinformation-ace-msb
+language: Visual Basic .NET
+classification: worker
+runtimeRequirement: .NET Framework
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery. Product owner confirmed the name expands to "ACE Master Schedule Builder" and that it is a console app or scheduled service, but does not have detailed knowledge of its function. Requires owner/team interview for full detail.
+  repositoryName: BeerCanLabs/sk-cis-util-customerinformation-ace-msb
+  serviceAuthentication: Not confirmed; requires owner interview.
+  secretsManagement: Not confirmed; requires owner interview.
+  serviceLogging: Not confirmed; requires owner interview.
+  healthWelfareMonitoring: Not confirmed; requires owner interview.
+  availabilityModel: Not confirmed; requires owner interview.
+  scalabilityModel: Not confirmed; requires owner interview.
+  recoverabilityModel: Not confirmed; requires owner interview.
+  failureDomain: Not confirmed; requires owner interview.

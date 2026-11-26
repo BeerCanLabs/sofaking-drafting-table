@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4E5-86JB
+name: Imperva Web Application Firewall → HelpDesk HHD_Login
+catalogStatus: stub
+source: 01KQQ5JT1D-MY47
+label: calls
+target: 01KSM38KFC-KKH6
+notes:
+  background: "Imperva WAF fronts region-facing browser traffic to the HHD_Login SPA on port 443."
+capabilities: []

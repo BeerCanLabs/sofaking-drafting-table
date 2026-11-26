@@ -1,0 +1,31 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT02-0MBH
+type: decision_record
+name: Data Services — Multiple Database Platforms Represented Concurrently
+description: 'The RT-ERP SDM initially listed Db2, SQL Server, and PostgreSQL in the same Data Services group, which could be read as all three running simultaneously in one region deployment. This record clarifies the pre-existing single-tenant architecture: each region has always run exactly one database platform in its own dedicated AWS account. The SDM entries are mutually exclusive per-region alternatives; see decisionRationale.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- ard
+- risk
+- rt-erp
+- database
+category: risk
+status: resolved
+affectedComponent: Data Services
+impact: 'The SDM listed three database platforms in one Data Services group without making clear they are mutually exclusive per-region alternatives, which could overstate the footprint of a single region deployment. Residual risk is limited to misreading the Data Services group as co-deployed platforms if the documented single-tenant selection rule is overlooked.
+
+  '
+mitigationPath: 'Clarified the pre-existing single-tenant architecture in the SDM via architectureNotes.databasePlatformSelection and per-entry notes marking the three data store entries as mutually exclusive per-region alternatives. No architectural change was made; this record captures a documentation clarification only.
+
+  '
+decisionRationale: 'RT-ERP/CIS has operated as a single-tenant product for many years. Each region deployment runs in its own dedicated AWS account containing its own database instance running exactly one platform selected from IBM Db2, SQL Server 2019, or PostgreSQL 17. The database instance co-resides in the same region AWS account as the ECS application services. The three Data Services entries in the SDM are therefore mutually exclusive per-region alternatives, not concurrently deployed platforms. Oracle appears only in developer/test and legacy configurations (dev-named JDBC hosts, no production client connection strings) and is out of scope for the cloud-hosted SDM. This record documents an existing architectural fact first captured in DRAFT on 2026-06-17.
+
+  '
+linkedObject: 01KSM38KEY-JC4K

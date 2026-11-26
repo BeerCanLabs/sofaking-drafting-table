@@ -1,0 +1,49 @@
+schemaVersion: '1.0'
+uid: 01M1HJY7E4-CJ8C
+type: decision_record
+name: PG PLM/EEM - Salesforce Is Established at Sofa King but Absent from the Catalog
+description: >-
+  Records Salesforce as a dependency of PLM/EEM that is demonstrably used across
+  multiple Sofa King products yet has no Technology Component or service object
+  in the DRAFT catalog. Split out of decision record 01M1F8WB4E-9C7X after
+  Trevor Lane's review, because Salesforce needs a different outcome from
+  LaunchDarkly and Avalara.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: associate-development-engineering
+  contact: associate-development-eng@sofaking.example
+tags:
+  - adr
+  - non-standard-technology
+  - associate-development
+  - plm
+  - eem
+  - saas
+  - salesforce
+  - apex-l1
+  - skpg-50273
+category: decision
+status: open
+affectedComponent: 01M1F8WB4E-8WVS
+linkedObject: 01M1F8WB4E-8WVS
+decisionRationale: >-
+  nonStandardTechnology: The PLM/EEM cloud tier depends on Salesforce for SSO
+  and API access - the production ConfigMap sets SalesforceBaseUrl to a
+  sofaking-example.my.site.com/PDEval community endpoint and SalesforceApiBaseUrl to
+  sofaking-example.my.salesforce.com. Salesforce has NO Technology Component and no
+  service object in the DRAFT catalog, so this dependency cannot reference an
+  approved component. However, unlike the other uncatalogued SaaS dependencies,
+  Salesforce is plainly established at Sofa King: fourteen catalog files
+  reference it, including the Inventory and Asset Management deployment pattern,
+  the GetHelp deployment pattern, product-component-whm-am-app, and both the
+  Ottoman sofaking-admin-bff and sofaking-tools-bff components. A
+  saas-salesforce deployment target also exists in the vocabulary. The correct
+  remedy is therefore to CATALOGUE Salesforce as a Technology Component with an
+  accompanying service object, not to carry it as a Associate Development
+  exception - PG is simply the team that surfaced the gap. This is a
+  catalog-completeness action with organisation-wide precedent to cite. Status
+  open pending Architecture Review Board direction on who authors the shared
+  Salesforce objects. ACTION REQUIRED: APEX Architecture L1 criterion 5 requires
+  a Jira tracking item; none exists yet beyond SKPG-19589.

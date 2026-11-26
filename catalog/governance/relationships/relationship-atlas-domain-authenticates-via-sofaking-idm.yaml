@@ -1,0 +1,24 @@
+schemaVersion: '1.0'
+uid: N70EJ55GPG-N8HA
+type: relationship
+name: Atlas Domain → Sofa King IDM
+description: AddIdmOidcAuth registers a client-credentials token provider against IDM_OIDC_AUTHORITY, which PortalConstants
+  documents as used for Core HR calls.
+catalogStatus: stub
+source: 01M5WY4E7P-GJHM
+target: 01KXK7BD4N-8Z19
+label: authenticates via
+technology: OIDC / OAuth 2.0
+direction: synchronous
+flow: outbound
+tags:
+- atlas
+- unified-inventory
+- source-inspection
+notes:
+  background: Declared by source inspection 2026-11-13. AddIdmOidcAuth registers a client-credentials token provider
+    against IDM_OIDC_AUTHORITY, which PortalConstants documents as used for Core HR calls. Today only the diagnostic
+    IdmAuthCheckController exercises it; no Core HR HTTP client exists in the repository yet. The mapping to the
+    Sofa King IDM catalog object is inferred from the name and not confirmed.
+  evidence: 'whm-unified-core develop: Service.Core.Domain.App/Program.cs, Service.Core.Domain.App/Controllers/IdmAuthCheckController.cs,
+    Libraries/BuildingBlocks/IdmOidcAuth'

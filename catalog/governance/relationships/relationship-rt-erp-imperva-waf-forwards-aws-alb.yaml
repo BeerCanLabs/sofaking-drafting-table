@@ -1,0 +1,17 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KVAX8VWG-KHD3
+name: RT ERP Imperva WAF → AWS Application Load Balancer
+catalogStatus: incomplete
+source: 01KQQ5JT1D-MY47
+label: forwards HTTPS to
+target: 01KQQ5JT04-P7QJ
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes: |
+  Imperva fronts inbound region traffic and forwards accepted HTTPS traffic
+  to the region AWS Application Load Balancer. The ALB-to-application hop is
+  modeled separately so the documented edge path is not collapsed.
+capabilities:
+  - 01KSWVZSZ5-M0FR

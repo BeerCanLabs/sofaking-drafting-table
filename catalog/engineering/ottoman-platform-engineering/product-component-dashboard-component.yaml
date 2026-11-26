@@ -1,0 +1,33 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFW-Z8KG
+type: product_component
+ownerRole: engineer
+name: Dashboard Component
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-dashboard-component.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT1E-W3TA
+tags:
+- repository-discovery
+- dashboard
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-dashboard-component
+language: JavaScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-dashboard-component
+  observedRuntimeSignals: node, readme
+  observedManifestPaths: bower.json; circle.yml; features/steps/header-e2e/header-e2e.json; features/steps/widget-catalogs-e2e/mock-catalogs-api-course-result.json; features/steps/widget-catalogs-e2e/mock-catalogs-api-no-results.json; features/steps/widget-catalogs-e2e/mock-catalogs-api-video-result.json; features/steps/widget-catalogs-e2e/mock-catalogs-api-with-results.json; features/steps/widget-content-queue-e2e/mock-attributes.json; features/steps/widget-content-queue-e2e/mock-content-queue-api-no-results.json; features/steps/widget-content-queue-e2e/mock-content-queue-api-with-results.json; features/steps/widget-courses-e2e/mock-courses-api-no-results.json; features/steps/widget-courses-e2e/mock-courses-api-with-results.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

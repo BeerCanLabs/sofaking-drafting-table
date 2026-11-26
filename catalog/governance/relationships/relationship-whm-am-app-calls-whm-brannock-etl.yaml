@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV23WW-T0ZK
+type: relationship
+name: Trackweb-IT App → Brannock.ETL.Hangfire
+catalogStatus: complete
+source: 01KSM38KFB-QFJ1
+label: calls
+target: 01KSM38KFC-VK1S
+description: Trackweb-IT's MDMTriggerService calls the shared Brannock.ETL.Hangfire service's configurable base URL to enable/disable GSuite MDM batch jobs.
+technology: HTTP
+direction: synchronous
+flow: outbound
+tags:
+- asset-management
+- etl
+- mdm
+notes:
+  background: Not a compiled code dependency - confirmed as an HTTP integration endpoint referenced from Trackweb-IT's RegionPreferenceName.ETLServerBaseURL config setting.
+capabilities: []

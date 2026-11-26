@@ -1,0 +1,348 @@
+schemaVersion: '1.0'
+uid: 01KY5775KP-70E1
+type: drafting_session
+ownerRole: engineer
+name: Platform Compliance Engine Repository Intake
+description: >-
+  Drafting session that entered Platform Compliance Engine into DRAFT from the
+  implementation repository, refreshed it at commit
+  5c391fbe3afc342f0d711e8c768684af9bd15b55, and reconciled it with
+  OPS-507039, linked infrastructure request OPS-362835, owner-confirmed business
+  and environment context, and Atlassian EKS documentation.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+sessionStatus: open
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - drafting-session
+  - platform-compliance-engine
+  - repository-discovery
+  - architecture-review
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KY5775KP-RYCC
+sourceArtifacts:
+  - name: Platform Compliance Engine repository
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-platform-compliance-engine
+    notes: >-
+      Main commit 5c391fbe3afc342f0d711e8c768684af9bd15b55 crawled
+      read-only on 2026-07-27. It implements a React/NGINX frontend,
+      Node.js/Express API, Product → Policy → immutable Rule behavior,
+      rule-validation audit runs, a consolidated PostgreSQL migration, Docker
+      images, local Compose topology, and a Kubernetes database-migration Job
+      skeleton.
+  - name: OPS-507039 Architecture Review for msvc-platform-compliance
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/OPS-507039
+    notes: >-
+      Architecture-review work item requiring entry into DRAFT. It identifies an
+      initial two-service deployment to LE1 and Chaise and calls out database and
+      Lambda connectivity as unresolved.
+  - name: OPS-362835 infrastructure and CI/CD request
+    type: document
+    location: https://sofaking-example.atlassian.net/browse/OPS-362835
+    notes: >-
+      Planned deployment source for EKS, RDS PostgreSQL, ALB, HPA, namespaces,
+      and additional AWS services. Its Python/FastAPI and asynchronous workflow
+      description conflicts with the current Node/Express implementation.
+  - name: Atlassian EKS cluster documentation
+    type: document
+    location: https://sofaking-example.atlassian.net/wiki/spaces/SKENG/pages/13331336293/EKS+cluster+Infrastructure
+    notes: >-
+      Confirms LE1 as a lower-environment EKS cluster and Chaise as the
+      production EKS cluster; related External Secrets documentation places both
+      in AWS us-east-1 account contexts.
+  - name: Platform Compliance Engine environment placement confirmation
+    type: owner-confirmation
+    notes: >-
+      The architecture owner confirmed on 2026-07-27 that staging deploys to the
+      LE1 EKS cluster and production deploys to the Chaise EKS cluster. No
+      development target was supplied or asserted.
+  - name: Platform Compliance Engine deployment-method confirmation
+    type: owner-confirmation
+    notes: >-
+      The architecture owner confirmed on 2026-07-27 that ArgoCD is the
+      deployment method for Platform Compliance Engine.
+  - name: Platform Compliance Engine service-mesh confirmation
+    type: owner-confirmation
+    notes: >-
+      The architecture owner confirmed on 2026-07-27 that Platform Compliance
+      Engine will be connected to the shared service mesh.
+generatedObjects:
+  - name: Platform Compliance Engine
+    type: software_deployment_pattern
+    status: created
+    ref: 01KY5775KP-RYCC
+  - name: Platform Compliance Frontend
+    type: product_component
+    status: created
+    ref: 01KY5775KP-9YH4
+  - name: Platform Compliance API
+    type: product_component
+    status: created
+    ref: 01KY5775KP-FZPJ
+  - name: Platform Compliance Database
+    type: data_component
+    status: created
+    ref: 01KY5775KP-AXH7
+  - name: Platform Compliance Database Migrator
+    type: product_component
+    status: created
+    ref: 01KYJEE22K-42CS
+    notes: >-
+      Candidate workload from the checked-in Kubernetes Job skeleton; delivery
+      image and pipeline implementation remain open.
+  - name: Platform Compliance Database Migrator → Platform Compliance Database
+    type: relationship
+    status: created
+    ref: 01KYJEG9DB-EJB9
+  - name: AWS RDS for PostgreSQL
+    type: data_store_service
+    status: stubbed
+    ref: 01KY5775KP-YBP0
+    notes: Candidate shared-service stub for Cloud Engineering completion.
+  - name: Platform Compliance Engine Deployment Decisions
+    type: decision_record
+    status: created
+    ref: 01KY5775KP-6HWY
+  - name: Platform Compliance Frontend → Platform Compliance API
+    type: relationship
+    status: created
+    ref: 01KY5775KP-N717
+  - name: Platform Compliance API → Platform Compliance Database
+    type: relationship
+    status: created
+    ref: 01KY5775KP-WJJW
+  - name: AWS Application Load Balancer → Platform Compliance Frontend
+    type: relationship
+    status: created
+    ref: 01KY5775KP-VF63
+  - name: AWS Application Load Balancer → Platform Compliance API
+    type: relationship
+    status: created
+    ref: 01KY5775KP-KQBW
+  - name: Platform Compliance Frontend → Kong Mesh Service
+    type: relationship
+    status: created
+    ref: 7QPZQGXQ2M-KXW3
+  - name: Platform Compliance API → Kong Mesh Service
+    type: relationship
+    status: created
+    ref: FMHGZCRGHF-SKKG
+unresolvedQuestions:
+  - id: reconcile-ticket-and-implementation
+    question: >-
+      Is the Python/FastAPI, S3, Lambda, SQS, Bedrock, and EKS-worker flow in
+      OPS-362835 still the intended target, or has the Node/Express two-service
+      implementation replaced it?
+    status: open
+    reason: The Jira design and current repository materially disagree.
+    currentBestGuess: >-
+      The current Node/Express API and React/NGINX frontend define the initial
+      deployment; the AWS asynchronous workflow is a future phase.
+    impact: >-
+      Determines whether worker and Lambda ProductComponents and AWS dependency
+      relationships must be added.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+      - ref: 01KY5775KP-FZPJ
+  - id: confirm-rds-standard
+    question: >-
+      What RDS PostgreSQL engine version, Multi-AZ topology, authentication,
+      encryption, backup, retention, RTO, and RPO should the deployed service use?
+    status: open
+    reason: OPS-362835 names RDS PostgreSQL but does not define its configuration.
+    currentBestGuess: Private AWS-managed RDS PostgreSQL; exact standard pending Cloud Engineering.
+    impact: The candidate AWS RDS for PostgreSQL service cannot be approved or marked complete.
+    relatedObjects:
+      - ref: 01KY5775KP-YBP0
+      - ref: 01KY5775KP-AXH7
+  - id: confirm-data-classification
+    question: >-
+      Is internal/no-PII the correct classification for compliance policy,
+      rules, and validation-run context and audit metadata?
+    status: open
+    reason: >-
+      The observed schema has no explicitly named PII fields, but
+      rule_validation_run.context_json accepts caller-supplied evaluation input
+      and governance classification was not documented.
+    currentBestGuess: internal; containsPII false
+    impact: Drives data protection, retention, and active-control requirements.
+    relatedObjects:
+      - ref: 01KY5775KP-AXH7
+      - ref: 01KY5775KP-RYCC
+  - id: confirm-authentication
+    question: What user and service authentication protects the web UI and REST API?
+    status: open
+    reason: No authentication middleware or production ingress configuration is present in the repository.
+    currentBestGuess: Platform-standard identity at ingress or application layer; not yet evidenced.
+    impact: Identity, access-control, and secrets requirements cannot be closed.
+    relatedObjects:
+      - ref: 01KY5775KP-9YH4
+      - ref: 01KY5775KP-FZPJ
+  - id: network-zone-elicitation
+    question: Are ingress, application pods, and database segmented into distinct network zones in LE1 and Chaise?
+    status: open
+    reason: The required Network Zone and Connection Elicitation interview has not been run.
+    currentBestGuess: ALB ingress, private EKS application, and private data boundaries; not asserted in the SDP.
+    impact: Network-zone assignments and boundary-crossing relationships may be incomplete.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: availability-and-dr
+    question: What production availability target, replica range, RTO, RPO, and disaster-recovery posture apply?
+    status: open
+    reason: HPA is planned for stage/prod, but service-level objectives and recovery posture are absent.
+    currentBestGuess: HPA on Chaise with provider-managed EKS recovery; database HA unresolved.
+    impact: Availability and failure-domain decisions remain incomplete.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+      - ref: 01KY5775KP-YBP0
+  - id: confirm-mesh-onboarding-details
+    question: >-
+      Which Kubernetes namespaces, mesh name, injection labels or annotations,
+      and traffic policies will onboard the frontend and API to Kong Mesh?
+    status: open
+    reason: >-
+      Mesh participation is owner-confirmed future architecture, but the
+      workload and namespace manifests are not yet linked.
+    currentBestGuess: >-
+      The frontend and API use injected Envoy-based data planes in the shared
+      default Kuma mesh; the migration Job is not mesh-injected.
+    impact: >-
+      Exact workload identity, mTLS, traffic policy, and sidecar behavior cannot
+      be verified until the deployment manifests are available.
+    relatedObjects:
+      - ref: 01KY5775KP-9YH4
+      - ref: 01KY5775KP-FZPJ
+      - ref: 01KYAXMZ7H-KJT2
+assumptions:
+  - id: current-source-precedence
+    statement: The current Node/Express and React/NGINX source tree is implementation reality; conflicting Jira details are planned architecture.
+    rationale: Repository manifests and source are direct implementation evidence and OPS-507039 confirms an initial two-service deployment.
+    impact: Ticket-only AWS workflow components are deferred rather than represented as deployed.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: cluster-region
+    statement: Staging deploys to LE1 and production deploys to Chaise; both are EKS deployment contexts in AWS us-east-1.
+    rationale: >-
+      The architecture owner confirmed the stage/production cluster split on
+      2026-07-27; Atlassian EKS and External Secrets documentation supplies the
+      region/account context.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: team-vocabulary-mapping
+    statement: Platform Engineering maps to the approved Ottoman / Platform Engineering team.
+    rationale: The owner selected Platform Engineering and that is the matching approved team entry.
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: rds-service-stub
+    statement: AWS RDS for PostgreSQL is modeled as a candidate shared-service stub rather than substituting the existing Aurora PostgreSQL standard.
+    rationale: OPS-362835 explicitly requests RDS PostgreSQL, and Aurora is not assumed equivalent.
+    relatedObjects:
+      - ref: 01KY5775KP-YBP0
+  - id: argocd-gitops-delivery
+    statement: >-
+      Platform Compliance Engine is delivered through ArgoCD GitOps to staging
+      on LE1 and production on Chaise.
+    rationale: >-
+      The architecture owner confirmed ArgoCD as the deployment method, and DRAFT
+      already provides the preferred shared ArgoCD GitOps Service
+      (01KQQ5JT1E-01JZ).
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+      - ref: 01KQQ5JT1E-01JZ
+  - id: kong-mesh-participation
+    statement: >-
+      The frontend and API application workloads will participate in the shared
+      Kong Mesh through Kuma/Envoy data planes; mesh participation is not
+      asserted for the one-shot database migration Job.
+    rationale: >-
+      The architecture owner confirmed that the service will be mesh-connected.
+      The repository separates the service into frontend, API, and migration
+      workloads, and the shared Kong Mesh standard already covers LE1 and
+      Chaise.
+    relatedObjects:
+      - ref: 01KY5775KP-9YH4
+      - ref: 01KY5775KP-FZPJ
+      - ref: 01KYAXMZ7H-KJT2
+nextSteps:
+  - id: reconcile-target-architecture
+    action: Platform Engineering confirms whether the OPS-362835 async AWS workflow remains in scope and identifies its implementation repositories or manifests.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: complete-rds-standard
+    action: Cloud Engineering completes and lifecycle-approves the AWS RDS for PostgreSQL shared-service standard.
+    status: open
+    owner: cloud-engineering-infrastructure
+    relatedObjects:
+      - ref: 01KY5775KP-YBP0
+  - id: run-network-elicitation
+    action: Run the Network Zone and Connection Elicitation procedure with Platform Engineering for LE1 and Chaise.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+  - id: implement-database-migration-image
+    action: >-
+      Build and publish the dbmate image containing db/migrations, update the
+      Kubernetes Job image, and run the Job to completion before API rollout.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KYJEE22K-42CS
+  - id: link-argocd-delivery-evidence
+    action: >-
+      Link the ArgoCD Application, Project, and LE1/Chaise environment-manifest
+      paths and confirm that the database migration Job completes before the API
+      rollout.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+      - ref: 01KQQ5JT1E-01JZ
+      - ref: 01KYJEE22K-42CS
+  - id: link-mesh-onboarding-evidence
+    action: >-
+      Link the LE1 and Chaise namespace and workload manifests, confirm the mesh
+      name and injection labels or annotations, and verify the frontend and API
+      Envoy sidecars and applicable mTLS and traffic policies.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-9YH4
+      - ref: 01KY5775KP-FZPJ
+      - ref: 01KYAXMZ7H-KJT2
+  - id: disposition-hearthstone-controls
+    action: Disposition the active Hearthstone Cybersecurity Requirement Group against the SDP and candidate RDS service before approval.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+      - ref: 01KY5775KP-YBP0
+  - id: confirm-auth-data-availability
+    action: Confirm authentication, data classification, availability target, and recovery objectives with Platform Engineering and Information Security.
+    status: open
+    owner: ottoman-platform-engineering
+    relatedObjects:
+      - ref: 01KY5775KP-RYCC
+resumptionContext:
+  confirmedPillar: business-pillar.platform
+  confirmedOwnerTeam: ottoman-platform-engineering
+  stagingCluster: LE1
+  productionCluster: Chaise
+  developmentCluster: not asserted
+  deploymentMethod: ArgoCD GitOps
+  meshConnectivity: >-
+    Shared Kong Mesh/Kuma with Envoy data planes for the frontend and API;
+    migration Job participation not asserted
+  awsRegion: us-east-1
+  scopeDecision: >-
+    Model the frontend and API services plus the database-migration workload
+    evidenced by the current repository, and preserve the broader AWS workflow
+    in OPS-362835 as planned architecture until reconciled.
+  matchedReferenceArchitecture: none; decision 01KY5775KP-6HWY records the gap

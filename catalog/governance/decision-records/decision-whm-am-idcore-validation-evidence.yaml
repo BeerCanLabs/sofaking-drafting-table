@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KT16XHJY-YBXH
+type: decision_record
+name: Whm Am Idcore Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord. Corrected 2026-07-30 (TRH-9828) after reading the real repository - the original repository-discovery guess was factually wrong.
+version: 1.1.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KFB-YGSN
+linkedObject: 01KSM38KFB-YGSN
+decisionRationale: 'runtimeRequirement: Corrected - this is a real ASP.NET web application (System.Web, .NET Framework) with an application runtime, packaged and shipped via an InstallShield installer for per-region/per-environment installation. The original repository-discovery finding ("Windows installer build tool; no application runtime on the hosting service") was incorrect; it mistook the InstallShield packaging project for the entire repository''s purpose and missed the TIPIdentityCore ASP.NET project itself. Confirmed by reading TIPIdentityCore.csproj, Web.config, and Global.asax.cs directly.'

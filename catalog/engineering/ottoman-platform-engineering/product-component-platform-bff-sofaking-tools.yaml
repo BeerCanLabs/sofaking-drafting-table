@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-AF27
+type: product_component
+ownerRole: engineer
+name: Platform BFF Sofa King Tools
+description: Sofa King Tools API
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KQQ5JT02-75QN
+tags:
+- repository-discovery
+- platform
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-bff-sofaking-tools
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-plat-bff-sofaking-tools
+  observedRuntimeSignals: docker, node, readme
+  observedManifestPaths: Dockerfile; cd/codefresh-deploy-manual.yml; cd/dev/cm.yml; cd/dev/deploy.yml; cd/dev/service.yml; cd/prod/cm.yml; cd/prod/deploy.yml; cd/prod/service.yml; cd/stage/cm.yml; cd/stage/deploy.yml; cd/stage/service.yml; ci/codefresh-build.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.
+  retirementEvidence: >-
+    Confirmed retired 2026-08-04: GitHub's last commit to
+    BeerCanLabs/sk-plat-bff-sofaking-tools (2022-09-06) is itself titled
+    "add note regarding decommissioning of repo," and a Ottoman developer
+    confirmed plat-passport-monorepo is the only way this service deploys
+    today. Superseded by Ottoman Sofa King Tools BFF (01KSM38KFX-J6Z2).

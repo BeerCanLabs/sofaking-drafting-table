@@ -1,0 +1,39 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT08-K88Q
+type: product_component
+ownerRole: engineer
+name: Leave Time Msvc Twiliowebagent
+description: Repository-discovered Product Service stub for BeerCanLabs/sk-at-msvc-TwilioWebAgent.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+- repository-discovery
+- leave-time
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-at-msvc-TwilioWebAgent
+language: C#
+classification: worker
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-at-msvc-TwilioWebAgent
+  observedRuntimeSignals: docker, dotnet, readme
+  observedManifestPaths: Dockerfile; TwilioWebAgent.sln; cd/cm.qa.yml; cd/cm.stage.yml;
+    cd/codefresh-deploy.yml; cd/deployment.qa.yml; cd/deployment.stage.yml; cd/ingress.qa.yml;
+    cd/ingress.stage.yml; cd/service.qa.yml; cd/service.stage.yml; cd/twiliowebagent-ns.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

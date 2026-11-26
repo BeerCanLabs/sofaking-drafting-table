@@ -1,0 +1,63 @@
+schemaVersion: '1.0'
+uid: 01KWF5PCRR-ZJE9
+type: data_store_service
+ownerRole: technology-admin
+name: SOM SSISDB SQL Server 2017 Integration Service
+description: 'SQL Server 2017 with SQL Server Integration Services for SOM/Quickfit data integration workloads. SSIS operates against both AWS and Webloom client databases.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - dbms
+  - sqlserver
+  - ssis
+  - som
+  - quickfit
+category: service
+serviceCategory: database
+host: 01KQQ5JT03-C74W
+primaryTechnologyComponent: 01KQQ5JT1T-QKGB
+architectureNotes:
+  sqlPlatform: Microsoft SQL Server 2017 Enterprise with SSISDB.
+  ssisScope: SSIS service is installed on all SQL Servers. SSIS operates against both AWS and Webloom client databases.
+  ssisdbScope: SSISDB exists once per SQL Server.
+  dataFlowScope: SSIS reads from and writes to client-specific databases.
+  workloadScope: SSIS is used for imports, reporting, warehouse feeds, state reporting, migrations, and Financing/claims extracts.
+  schedulingModel: SSIS packages may be scheduled on the SSIS server or through SQL Agent jobs local to the SQL Server.
+  serviceAuthentication: SSIS uses a SQL password service account.
+  secretsManagement: Storage and rotation process for the SSIS SQL password account requires confirmation.
+  serviceLogging: SSIS package status and errors are logged and notifications are sent. SQL logs are local today and are not shipped off box yet; local SQL/log retention is approximately 90 days with automatic cleanup. Dynatrace Logging is planned to centralize log collection.
+  healthWelfareMonitoring: SQL Server health is monitored through standard Nagios tooling; package-level monitoring requires confirmation.
+  availabilityModel: SSIS follows the SQL Server deployment where it is installed. AWS SQL uses two-node Always On clusters; Webloom SQL has no HA and no clustering.
+  scalabilityModel: SSIS package capacity and schedule concurrency model require confirmation.
+  recoverabilityModel: Restore/rebuild process for SSISDB and package schedules requires confirmation.
+  failureDomain: SSIS failures can affect imports, reporting feeds, state reporting, Snowflake feeds, migrations, and Financing/claims extract workflows for the customer databases targeted by the packages.
+  downstreamDataFlows: Snowflake feeds are populated through SOM data pulls, with extract work still in progress. State reporting and Financing/claims extracts are generated through SSIS packages.
+  fileProcessingBoundary: Database-side import/export processing uses local SSIS packages and SFTP/customer file locations for most operations; the exact FSx handoff boundary with application-owned ingestion still requires Development confirmation.
+  backup:
+    strategy: Full, differential, and transaction-log backups.
+    platform: SQL Server DBA Tools create backups; CloudBerry uploads backups to S3.
+    retention: Annual backups retained for 7 years, monthly backups retained for 12 months, and full backups retained for 30 days. Local backup copies are retained for roughly one week.
+    s3RetentionControls: S3 backups are encrypted and protected by compliance lock controls, requiring appropriate decryption keys for restore.
+  encryption:
+    atRest: EBS volumes and SQL backups are encrypted at rest where the SQL Server runs in AWS; SQL backups are encrypted at rest for both AWS and Webloom.
+    inTransit: SQL connections are not believed to be encrypted in transit because internal PKI is not a strong current practice.
+internalComponents:
+  - ref: 01KQQ5JT03-C74W
+    role: host
+    notes: Placeholder host pattern for SOM SSISDB until exact SSIS deployment target and host inventory are confirmed.
+  - ref: 01KQQ5JT1T-QKGB
+    role: function
+    configuration: default-tds-listener
+  - ref: 01KQQ5JT1V-646V
+    role: integration-runtime
+notes:
+  internalComponentRationales:
+    01KQQ5JT1V-646V: SQL Server Integration Services provides the package execution runtime for imports, reporting, warehouse feeds, state reporting, migrations, and Financing/claims extracts.
+deliveryModel: self-managed

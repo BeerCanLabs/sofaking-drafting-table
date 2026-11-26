@@ -1,0 +1,38 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT05-12C2
+type: data_store_service
+ownerRole: technology-admin
+category: service
+serviceCategory: paas
+name: AWS Glue
+description: 'Serverless data integration service for discovery, preparation, and transformation.
+
+  '
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- aws
+- etl
+- serverless
+vendor: Amazon Web Services
+productName: AWS Glue
+productVersion: managed
+authenticationModel: iam
+capabilities:
+- 01KT0XNZEY-A7GK
+architectureNotes:
+  resilienceModel: Managed multi-AZ high availability.
+  configurableSurface: Glue jobs, crawlers, and triggers.
+  failureDomain: Scoped to the AWS region.
+decisionRecords:
+- ref: 01KSNAW2AK-06KC
+  key: resilienceModel
+- ref: 01KSNAW2AK-06KC
+  key: configurableSurface
+- ref: 01KSNAW2AK-06KC
+  key: failureDomain
+deliveryModel: paas

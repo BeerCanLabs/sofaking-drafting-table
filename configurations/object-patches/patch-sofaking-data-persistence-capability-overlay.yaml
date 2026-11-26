@@ -1,0 +1,66 @@
+schemaVersion: '1.0'
+uid: 01KT16XJJ4-S1PD
+type: object_patch
+name: Sofa King Data Persistence capability overlay
+description: Sofa King workspace owner and implementation mapping for the native DRAFT Data Persistence capability.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KT0V5MCV-VD0Y
+patch:
+  owner:
+    team: architecture-review-board
+  implementations:
+    - ref: 01KQQ5JT1R-QQ9J
+      lifecycleStatus: deprecated
+      notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+    - ref: 01KQQ5JT1R-SGGM
+      lifecycleStatus: candidate
+      notes: Assumed candidate from the IBM Db2 Database Standard.
+    - ref: 01KQQ5JT1S-N4TF
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only from the MariaDB 10 Database Standard.
+    - ref: 01KQQ5JT1T-WE6A
+      lifecycleStatus: deprecated
+      notes: Assumed deprecated from the SQL Server 2016 Database Standard.
+    - ref: 01KQQ5JT1T-QKGB
+      lifecycleStatus: deprecated
+      notes: Assumed deprecated because SQL Server 2019 is existing-only and SQL Server 2022 is the preferred baseline.
+    - ref: 01KQQ5JT1T-F6Q1
+      lifecycleStatus: existing-only
+      notes: Assumed existing-only from the SQL Server 2019 Database Standard.
+    - ref: 01KQQ5JT1T-92JG
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the SQL Server 2022 Database Standard.
+    - ref: 01KQQ5JT1T-Y52T
+      lifecycleStatus: deprecated
+      notes: MySQL 8 reached vendor end of support on 2026-04-30; keep only for existing workloads while migrating to MySQL 9 or another supported data persistence standard.
+    - ref: 01KQQ5JT1T-EVCT
+      lifecycleStatus: candidate
+      notes: Assumed candidate as the next MySQL major version without an approved Database Standard.
+    - ref: 01KQQ5JT1V-N4AK
+      lifecycleStatus: preferred
+      notes: Assumed preferred from the PostgreSQL 17 Database Standard.
+    - ref: 01KQQ5JT1V-SFDE
+      lifecycleStatus: candidate
+      notes: Assumed candidate as the next PostgreSQL major version without an approved Database Standard.
+    - ref: 01KQQ5JT1R-W4Y4
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server administration automation identified in SRE playbooks.
+    - ref: 01KQQ5JT1T-3PWG
+      lifecycleStatus: retired
+      notes: SQL Server Native Client 11 is not recommended for application use and should be migrated to a supported SQL driver.
+    - ref: 01KQQ5JT1T-C2C6
+      lifecycleStatus: existing-only
+      notes: Maintained as SQL Server 2025 media referenced by SRE automation.
+    - ref: 01KQQ5JT1T-3AJ9
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server administration workflows identified in SRE playbooks.
+    - ref: 01KQQ5JT1T-ZMYW
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server administration workflows identified in SRE playbooks.
+    - ref: 01KQQ5JT1T-E7EQ
+      lifecycleStatus: existing-only
+      notes: Maintained for SQL Server Reporting Services 2022 workloads identified in SRE automation.
+    - ref: 01KQQ5JT1T-VQD5
+      lifecycleStatus: retired
+      notes: SRE automation uses SQL Server 2012-era System CLR Types, which are past vendor support.

@@ -1,0 +1,45 @@
+schemaVersion: '1.0'
+uid: 01KY5YYDNN-P9A4
+type: decision_record
+name: WSERP Web Pattern Validation Evidence
+description: Current-state WSERP Web deployment decisions confirmed through the infrastructure interview and internal documentation research.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: existing-only
+owner:
+  team: ws-erp-abacus-engineering
+  contact: abacus-eng@sofaking.example
+tags: [wserp, web, ledgerline, validation-cleanup, adr]
+category: decision
+status: accepted
+affectedComponent: 01KY5YYDNN-5DEA
+linkedObject: 01KY5YYDNN-5DEA
+decisionRationale: >-
+  noApplicablePattern: No approved reference architecture accurately represents
+  this shared single-node legacy IIS deployment and its cross-product
+  dependencies.
+
+  deploymentTargets: Hosted production and customer Test/UAT run on VMware in
+  XCOLO; engineering Dev/QA/Stage run on VMware in High Point.
+
+  availabilityRequirement: High, without a confirmed numeric SLO or SLA.
+
+  dataClassification: Restricted PII exists in customer databases and Documents.
+
+  failureDomain: The single Web IIS VM is a shared failure domain affecting all
+  hosted Web customers and Portal functions that depend on Proxy or Grizzly.
+
+  patternDeviations: Web is single-node; Windows and IIS configuration is manual;
+  capacity review is reactive; no automated drift detection or scheduled
+  recovery exercises are in place; Veeam policy and recovery objectives remain
+  unconfirmed.
+
+  externalDependencies: Imperva, FortiGate, F5 BIG-IP, Pingdom, Dynatrace,
+  Nagios XI, Automox, CrowdStrike Falcon, Tenable Nessus, Veeam, SQL Server,
+  clustered Documents storage, WSERP Portal Dispatch, SendGrid, Twilio, banks,
+  and online-shopping vendors are documented dependencies.
+
+  interServiceConnections: Browser traffic uses HTTPS 443. Ledgerline accesses
+  SQL and Documents, calls Grizzly directly over HTTPS 443, and calls Dispatch in
+  the Portal tier for OL6 PunchOut. Proxy serves Portal report and attachment
+  requests over HTTPS 443 using the ept header and accesses Grizzly and Documents.

@@ -1,0 +1,20 @@
+schemaVersion: '1.0'
+uid: 01KT16XHSV-NVYC
+type: decision_record
+name: Ottoman Platform Validation Evidence
+description: Architecture decisions promoted from existing catalog notes so DRAFT 0.41 validation can trace requirement evidence to a committed DecisionRecord.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+tags:
+  - validation-cleanup
+  - adr
+category: decision
+status: accepted
+affectedComponent: 01KSM38KG2-ZB6W
+linkedObject: 01KSM38KG2-ZB6W
+decisionRationale: "deploymentTargets: Production runs in AWS us-east-1 VPC USE1-PRD-MORPH-VPC (vpc-0d49f0e96ba662130) with disaster recovery and failover in AWS us-east-2 VPC USE2-PRD-MORPH-VPC (vpc-0a917ec697c46280d). Stage runs in AWS us-east-1 VPC USE1-STG-MORPH-VPC (vpc-01245ba9b96afbcce) and AWS us-east-2 VPC USE2-STG-MORPH-VPC (vpc-09e23f06442f45af7). Development runs in AWS us-east-1 VPC USE1-DEV-MORPH-VPC (vpc-0c7d07d0dd293cf3e).\n\navailabilityRequirement: high-availability\n\ndataClassification: confidential PII and identity data; CCPA and SOC II scoped.\n\nfailureDomain: Multi-AZ primary operation in AWS us-east-1 with disaster recovery and failover infrastructure in us-east-2. Shared identity, gateway, mesh, and data services create platform-level dependencies for products adopting Ottoman.\n\nnoPatternDeviations: No deviations from the selected Reference Architecture are recorded yet. Mesh-specific implementation details still need reusable catalog objects where lower-level
+  platform components are not modeled.\n\nnoCrossBoundaryConnections: Cross-boundary (tier and zone) service connections are documented in serviceGroups[].connections entries across the Administration & UI Tier, Gateway & Service Mesh Tier, Identity & Authentication Tier, Platform Core Services, and Serverless Functions service groups. Same-zone connections (Kong Backplane → microservices, Lambda-to-Lambda) have not been enumerated and are deferred to a follow-up session.\n\nexternalDependencies: External interactions are declared in serviceGroups[].externalInteractions: Kuma Control Planes, Envoy Sidecar Proxies, ConfigCat, MongoDB / DocumentDB, Loveseat Platform Event Bus, AWS SQS, AWS KMS, AWS Cognito, Prometheus, Velero, Terraform."

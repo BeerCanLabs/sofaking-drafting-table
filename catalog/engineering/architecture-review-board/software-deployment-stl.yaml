@@ -1,0 +1,93 @@
+schemaVersion: '1.0'
+uid: 01KSM38KEX-4G72
+type: software_deployment_pattern
+ownerRole: engineer
+name: Stl Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+businessContext:
+  pillar: business-pillar.people-solutions
+  productFamily: STL
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: architecture-review-board
+  contact: dana.whitfield@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- stl
+architectureNotes:
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KG2-YBRS
+    repositoryName: BeerCanLabs/sk-STL-Elevate
+    sourceRepository: https://github.com/BeerCanLabs/sk-STL-Elevate
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: docker, node, readme
+  - productService: 01KSM38KG2-Y4KV
+    repositoryName: BeerCanLabs/sk-STL-Identity
+    sourceRepository: https://github.com/BeerCanLabs/sk-STL-Identity
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, serverless
+  - productService: 01KSM38KG2-8JV3
+    repositoryName: BeerCanLabs/sk-STL-FORMIX
+    sourceRepository: https://github.com/BeerCanLabs/sk-STL-FORMIX
+    repositoryPrimaryLanguage: JavaScript
+    observedRuntimeSignals: dotnet, readme
+  - productService: 01KSM38KG3-2N7T
+    repositoryName: BeerCanLabs/sk-STL-LDMS-Legacy
+    sourceRepository: https://github.com/BeerCanLabs/sk-STL-LDMS-Legacy
+    repositoryPrimaryLanguage: Classic ASP
+    observedRuntimeSignals: dotnet, github_actions, readme
+  - productService: 01KSM38KG3-05HQ
+    repositoryName: BeerCanLabs/sk-STL-LDMS.Net
+    sourceRepository: https://github.com/BeerCanLabs/sk-STL-LDMS.Net
+    repositoryPrimaryLanguage: C#
+    observedRuntimeSignals: dotnet, readme, teamcity
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KG2-YBRS
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG2-Y4KV
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG2-8JV3
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-2N7T
+    diagramTier: application
+    networkZone: app
+  - ref: 01KSM38KG3-05HQ
+    diagramTier: application
+    networkZone: app

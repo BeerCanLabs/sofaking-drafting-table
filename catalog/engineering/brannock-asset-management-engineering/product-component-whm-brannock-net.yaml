@@ -1,0 +1,36 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFC-GX9G
+type: product_component
+ownerRole: engineer
+name: Whm Brannock Net
+description: Brannock.NET - a small, dependency-light multi-targeted (netstandard2.0/net452) shared class library providing an APIRequest/APIResponse wrapper pattern and a block-timing performance helper. Confirmed real compile-time NuGet dependency of WHM_AM_API (01KSM38KFB-XZ3E); not used by WHM_AM_App or WHM_AM_ETL_MSA.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: brannock-asset-management-engineering
+  contact: Group_dev_whm@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- whm
+- product-component
+- asset-management
+- shared-library
+repoUrl: https://github.com/BeerCanLabs/sk-WHM_Brannock_NET
+language: C#
+classification: library
+runtimeRequirement: .NET (netstandard2.0 and net452 multi-targeted class library; no hosting model of its own - consumed as a compiled NuGet reference).
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-WHM_Brannock_NET
+  observedRuntimeSignals: dotnet
+  observedManifestPaths: Brannock.NET.sln; Brannock.NET/Brannock.NET.csproj
+  serviceAuthentication: Not applicable - the library performs no authentication itself; it provides an APIRequest/APIResponse wrapper pattern for consumers (APIRequest.cs, APIResponse.cs).
+  secretsManagement: Not applicable - no secrets used or handled by this library.
+  serviceLogging: Uses NLog internally for its own diagnostic logging (catches/logs exceptions inside APIRequest.ProcessAndMeasure* helpers) but does not configure any NLog targets itself - that is left to the consuming application.
+  healthWelfareMonitoring: Provides a reusable block-timing helper (Performance/Measure.cs - Measure.Block, Measure.TaskBlock) used by consumers to emit elapsed-time telemetry/log entries; a lightweight instrumentation helper, not a monitoring system itself.
+  availabilityModel: Distributed as a versioned NuGet package (Publish-nuget.cmd, targets netstandard2.0 and net452), consumed as a compiled reference by other applications rather than deployed/run independently.
+  scalabilityModel: Not applicable - a library, not a runtime service; scalability is entirely inherited from the consuming application.
+  recoverabilityModel: Not applicable - no persistence or state of its own.
+  failureDomain: Contained to whatever call the consuming app makes through APIRequest.ProcessAndMeasure*/ProcessAsTask - these wrap consumer code in try/catch and normalize failures into a well-formed APIResponse.Error(...), so a failure here is scoped to the specific consumer call.
+  externalDependencies: None beyond two NuGet dependencies of its own (Newtonsoft.Json, NLog) - no network/DB/cloud SDK calls in the library itself.
+  primaryDataStores: None - no database access code in this repository.

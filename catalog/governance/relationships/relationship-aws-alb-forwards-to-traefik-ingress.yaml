@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KZPGKK4K-3H3T
+type: relationship
+name: AWS Application Load Balancer → Traefik Kubernetes Ingress Service
+description: >-
+  Named public and internal Traefik Application Load Balancers provide the
+  observed AWS edge path for Ottoman Traefik-tagged Kubernetes Ingress
+  resources in development and stage.
+catalogStatus: incomplete
+source: 01KQQ5JT04-P7QJ
+target: 01KYAXMZ7H-72BR
+label: provides edge traffic to
+technology: HTTPS
+direction: synchronous
+flow: outbound
+capabilities:
+  - 01KSWVZSZ5-M0FR
+tags:
+  - aws
+  - alb
+  - traefik
+  - ottoman
+notes: >-
+  OPS-933430 read-only inspection on 2026-08-10 observed named Traefik ALBs in
+  the development and stage VPCs and Traefik-annotated Ingress resources in all
+  three clusters. Kubernetes Ingress status was empty and no named Traefik ALB
+  was observed in the production VPC, so the production and object-level
+  mappings remain unconfirmed. The owner confirmed the arrangement is
+  intentional.

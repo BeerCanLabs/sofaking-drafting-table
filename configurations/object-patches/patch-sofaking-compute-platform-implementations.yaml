@@ -1,0 +1,28 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-7Z9N
+type: object_patch
+name: Sofa King capability.compute-platform implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.compute-platform.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-1HZP
+patch:
+  owner:
+    team: cloud-engineering-infrastructure
+    contact: cloud-engineering@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1P-A24W
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-S24C
+    lifecycleStatus: retired
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-VH6M
+    lifecycleStatus: existing-only
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-9G0K
+    lifecycleStatus: existing-only
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1P-NCBF
+    lifecycleStatus: deprecated
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.

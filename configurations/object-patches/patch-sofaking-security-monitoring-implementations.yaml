@@ -1,0 +1,25 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1Z-PK1X
+type: object_patch
+name: Sofa King capability.security-monitoring implementations
+description: Sofa King workspace mapping of approved Technology Components for capability.security-monitoring.
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+target: 01KQQ4Q026-JW52
+patch:
+  owner:
+    team: information-security
+    contact: information-security@sofaking.example
+  implementations:
+  - ref: 01KQQ5JT1N-32F0
+    lifecycleStatus: preferred
+    notes: Migrated from pre-0.6 Technology Component lifecycle disposition.
+  - ref: 01KQQ5JT1N-CP3J
+    lifecycleStatus: deprecated
+    notes: Assumed deprecated legacy endpoint security sensor where CrowdStrike is the preferred pattern.
+  - ref: 01KQQ5JT1P-FV8A
+    lifecycleStatus: candidate
+    notes: Wiz Sensor is not an preferred security-monitoring implementation yet.
+  - ref: 01KQQ5JT1P-BPHH
+    lifecycleStatus: existing-only
+    notes: Maintained for vulnerability scanning agent coverage identified in SRE automation.

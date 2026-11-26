@@ -1,0 +1,101 @@
+schemaVersion: '1.0'
+uid: 01KYP8DBR0-7H19
+type: data_store_service
+ownerRole: engineer
+name: Lakeshore CIS SQL Server 2019 Always On Availability Group
+aliases:
+  - LSCIS LSRCN SQL Server Cluster
+  - Lakeshore CIS SQL Server 2019 Availability Group
+description: Deployment-specific Microsoft SQL Server 2019 Always On availability group supporting the per-ITC Lakeshore CIS databases in the LSRCN data center.
+version: 1.0.2
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+tags:
+  - sis
+  - lakeshore
+  - tillbook
+  - lsrcn
+  - sqlserver
+  - database
+  - deployment-specific
+vendor: Microsoft
+productName: SQL Server
+productVersion: SQL Server 2019 RTM-CU29-GDR (KB5046860)
+deliveryModel: self-managed
+patchingOwner: organization-scheduled
+authenticationModel: other
+host: 01KQQ5JT04-F2AX
+primaryTechnologyComponent: 01KQQ5JT1T-F6Q1
+decisionRecords:
+  - ref: 01KYP9DR00-7M4Q
+    key: backup.strategy
+  - ref: 01KYP9DR00-7M4Q
+    key: backup.platform
+  - ref: 01KYP9DR00-7M4Q
+    key: backup.rto
+  - ref: 01KYP9DR00-7M4Q
+    key: backup.rpo
+  - ref: 01KYP9DR00-7M4Q
+    key: ha.mechanism
+  - ref: 01KYP9DR00-7M4Q
+    key: encryption.atRest
+  - ref: 01KYP9DR00-7M4Q
+    key: accessControl.model
+  - ref: 01KYP9DR00-7M4Q
+    key: serviceAuthentication
+  - ref: 01KYP9DR00-7M4Q
+    key: secretsManagement
+  - ref: 01KYP9DR00-7M4Q
+    key: serviceLogging
+  - ref: 01KYP9DR00-7M4Q
+    key: healthWelfareMonitoring
+  - ref: 01KYP9DR00-7M4Q
+    key: availabilityModel
+  - ref: 01KYP9DR00-7M4Q
+    key: scalabilityModel
+  - ref: 01KYP9DR00-7M4Q
+    key: recoverabilityModel
+  - ref: 01KYP9DR00-7M4Q
+    key: failureDomain
+notes:
+  serviceAuthentication: SQL Server Authentication (owner-confirmed 2026-07-30); not Active Directory/Windows-integrated authentication. authenticationModel is set to 'other' because this governed field has no SQL-native-authentication enum value.
+  relatedGenericCatalogEntry: 01KQQ5JT01-QFN5
+  genericEntryApplicability: The generic SQL Server 2019 DBMS service does not describe this Lakeshore CIS deployment. Its three-node minimum, SQL-native backup platform, and TDE-at-rest claims must not be inherited by this deployment.
+  hostReferenceScope: The shared Windows Server 2019 physical host represents the confirmed operating-system generation and self-managed hosting boundary. Exact server and hardware inventory remains to be confirmed.
+  hosting:
+    location: LSRCN data center
+    operatingSystem: Windows Server 2019
+  productionTopology:
+    mechanism: SQL Server Always On availability groups
+    replicas:
+      - role: primary
+        access: writable
+      - role: secondary
+        access: readable
+    failover: automatic
+    commitMode: Not yet confirmed.
+    failoverTesting: Not yet confirmed.
+  recoverability:
+    rpo: 1 hour
+    rto: Not yet confirmed.
+    backup:
+      platform: Cohesity
+      location: LSRCN data center
+      fullBackupSchedule: Nightly
+      transactionLogBackupSchedule: Hourly
+      retention: Not yet confirmed.
+      offsiteReplication: Not yet confirmed.
+      restoreTesting: Not yet confirmed.
+  encryption:
+    atRest: Not enabled.
+    inTransit: Not yet confirmed.
+  dataClassification:
+    currentCatalogClassification: PII
+    additionalClassifications: FERPA and other regulated-data classifications require confirmation.
+  knownOperationalRisks:
+    - Database encryption at rest is not enabled.
+    - RTO, backup retention, offsite replication, restore testing, access-control model, and encryption in transit remain unconfirmed.
+    - Automatic failover is confirmed, but synchronous-commit configuration and failover-test evidence remain unconfirmed.

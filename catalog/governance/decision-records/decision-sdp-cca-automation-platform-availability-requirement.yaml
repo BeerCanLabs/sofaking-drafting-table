@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KTM7D5BY-TQAJ
+type: decision_record
+name: CCA — Governed Automation Platform - Availability Requirement
+description: Availability Requirement decision for the CCA — Governed Automation Platform deployment pattern, promoted from catalog architecture notes to a committed DecisionRecord so DRAFT requirement evidence is traceable.
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+- validation-cleanup
+- adr
+category: decision
+status: open
+affectedComponent: Z8ZEXRM11J-FGJ6
+linkedObject: Z8ZEXRM11J-FGJ6
+decisionRationale: 'availabilityRequirement: Best-effort / business-hours for the PoC. CCA is a candidate-stage, team-only platform with no production SLA in Milestone A (Internal Supervised Divan). Because every action is human-initiated through a JSM ticket and is read-only/sandbox-only in Milestone A, there is no continuous uptime obligation; an outage delays manual runs rather than impacting a customer-facing service. A formal availability tier will be set when Milestone B (Auditable Divan) defines its audience and write scope. Status open pending aiops / ARB ratification.'

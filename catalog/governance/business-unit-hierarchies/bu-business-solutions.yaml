@@ -1,0 +1,29 @@
+schemaVersion: '1.0'
+uid: 01KV2A0B79-63NF
+type: business_unit_hierarchy
+name: Business Solutions Hierarchy
+businessUnit: business-pillar.business-solutions
+catalogStatus: complete
+description: Organizational hierarchy for the Business Solutions pillar covering ERP, CIS, and asset/inventory management products.
+hierarchy:
+  - id: division.whm
+    name: WHM
+    type: pillar
+    children:
+      - id: team.brannock-asset-management-engineering
+        name: Brannock / Asset Management Engineering
+        type: team
+  - id: division.rt-erp
+    name: RT ERP
+    type: pillar
+    children:
+      - id: team.rt-erp-cis-engineering
+        name: RT ERP/CIS Engineering
+        type: team
+  - id: division.ws-erp
+    name: WS ERP
+    type: pillar
+    children:
+      - id: team.ws-erp-abacus-engineering
+        name: WS ERP (Abacus) Engineering
+        type: team

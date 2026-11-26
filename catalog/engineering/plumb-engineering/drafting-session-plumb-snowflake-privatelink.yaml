@@ -1,0 +1,239 @@
+schemaVersion: '1.0'
+uid: 01M3PJVR74-DNXW
+type: drafting_session
+name: Plumb Snowflake PrivateLink DraftingSession
+aliases:
+- Plumb Snowflake PrivateLink DraftingSession
+description: >
+  Captures the finalized target-state AWS network architecture for Plumb's
+  private connectivity to Snowflake (including Gong data delivered via
+  GONG_ZEROCOPY), based on Jira Initiative OPS-581859 and its child Epics/
+  Stories, a Snowflake-provided best-practices document, and a finalized
+  architecture diagram. This is a proposal capturing target-state design and
+  known gaps, not a validated Product record. Product registration and L1
+  evaluation are separately tracked in OPS-549944/109759/109760.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+sessionStatus: open
+owner:
+  team: architecture-review-board
+  contact: Drew Colton, Jake Benton
+notes:
+  ownerTeamRationale: >
+    owner.team is set to architecture-review-board because DraftingSession
+    is a governance artifact type without its own product-engineering
+    team, and 'Enterprise Systems Engineering' (the team actually running
+    this work) is not in the approved teams vocabulary. The Plumb
+    product's confirmed product owner is Drew Colton and Jake Benton
+    (Enterprise Systems Engineering) per owner.contact above; this should
+    be revisited once Plumb is registered as a governed Product with its
+    own team assignment.
+tags:
+- drafting-session
+- plumb
+- snowflake
+- privatelink
+- gong
+- aws-transit-gateway
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: null
+sourceArtifacts:
+- name: Plumb Snowflake PrivateLink AWS Network Architecture (Jira Initiative)
+  type: other
+  location: https://sofaking-example.atlassian.net/browse/OPS-581859
+  notes: >
+    Parent Initiative and full Epic/Story hierarchy (OPS-240010 through
+    OPS-436524) tracking DRAFT intake, network design, Snowflake account
+    setup, network implementation, CI/CD validation, standardization, and
+    architecture review for this work.
+- name: Snowflake AWS Networking best-practices document
+  type: document
+  location: Provided by Snowflake during vendor call; marked CONFIDENTIAL by
+    Snowflake Inc. Original file not stored in this repo per Snowflake's
+    sharing restriction. Summary captured as a Jira comment on OPS-205798/
+    OPS-754640-linked tickets.
+  notes: >
+    Source for the security-group (443 + 80/OCSP) requirement, PrivateLink-
+    specific Account URL / OCSP URL DNS behavior via
+    SYSTEM$ALLOWLIST_PRIVATELINK, and the recommendation to validate with
+    SnowCD before applying a Snowflake network policy lockdown.
+- name: "Finalized architecture diagram: Snowflake PrivateLink via Existing
+    Transit Gateway"
+  type: diagram
+  location: Shared in Jira comments on OPS-581859/OPS-903439/OPS-946991/
+    OPS-421881/OPS-467193; not separately filed in this repo.
+  notes: >
+    Source for reusing the existing TGW, the two-PrivateLink-VPC split
+    (shared Non-prod for Dev+Stage, dedicated Prod), GONG_ZEROCOPY as a
+    fully separate account/VPC reached via Snowflake Secure Data Sharing,
+    and the Netskope private-endpoint path into the same TGW for corporate/
+    CLI users.
+generatedObjects:
+- name: Plumb (product)
+  type: product_component
+  status: deferred
+  proposedUid: 01M3PJVR7A-VRSP
+  notes: >
+    Product ownership confirmed as Drew Colton and Jake Benton (Enterprise
+    Systems Engineering), per direct confirmation on 2026-09-29. Technical
+    owner and domain owner are still unconfirmed (OPS-549944). Do not
+    register as a governed Product until those are also confirmed.
+- name: Plumb AWS Snowflake PrivateLink Deployment
+  type: software_deployment_pattern
+  status: proposed
+  proposedUid: 01M3PJVR75-VSDP
+  notes: >
+    Represents the target-state network path: existing AWS Transit Gateway
+    shared across Netskope (corporate/CLI), Dev, Stage, and Prod; two
+    PrivateLink VPCs (shared Non-prod, dedicated Prod). Not yet authored as
+    a full SDP pending Plumb product registration and confirmed deployment
+    targets.
+- name: Shared Non-prod PrivateLink VPC (Dev+Stage)
+  type: network_service
+  status: proposed
+  proposedUid: 01M3PJVR76-SNPV
+  notes: Requires SYSTEM$AUTHORIZE_PRIVATELINK grant from Snowflake Support
+    before it can be shared across Dev and Stage (see unresolved question
+    below).
+- name: Dedicated Prod PrivateLink VPC
+  type: network_service
+  status: proposed
+  proposedUid: 01M3PJVR77-DPVP
+  notes: No cross-environment sharing prerequisite; isolated to Prod.
+- name: GONG_ZEROCOPY PrivateLink endpoint
+  type: network_service
+  status: proposed
+  proposedUid: 01M3PJVR78-GZCP
+  notes: Separate account/VPC/endpoint from Plumb Dev/Stage/Prod. Reached by
+    Plumb environments only via Snowflake Secure Data Sharing, not over this
+    AWS network path.
+- name: Existing AWS Transit Gateway (reused)
+  type: network_service
+  status: deferred
+  proposedUid: 01M3PJVR79-ATGW
+  notes: >
+    Searched catalog/shared-services/network-services/ for an existing TGW
+    object before proposing this — none found. This TGW pre-existed this
+    initiative and is owned by the networking team (Rex Yates, Kurt Fenn,
+    Derek); it should be authored once as a Shared Services object and
+    reused here rather than modeled as Plumb-specific, per the DRAFT reuse
+    model. Deferred to Shared Services rather than created here.
+unresolvedQuestions:
+- id: plumb-ownership
+  question: Who are the confirmed technical owner and domain owner for
+    Plumb? (Product ownership is now confirmed — see below.)
+  status: open
+  reason: L1 baseline requires explicit product, technical, and domain
+    ownership. Product ownership is now confirmed; technical and domain
+    ownership are still open (OPS-549944).
+  currentBestGuess: Product owner confirmed as Drew Colton and Jake Benton
+    (Enterprise Systems Engineering), per direct confirmation on
+    2026-09-29. No confirmed technical/domain owner yet.
+  impact: Blocks Product registration and final L1 confirmation until
+    technical and domain ownership are also named.
+- id: bce-licensing-status
+  question: Is Snowflake Business Critical Edition actually confirmed/applied
+    on all four accounts (Plumb Dev, Plumb Stage, Plumb Prod, GONG_ZEROCOPY),
+    or only identified as required?
+  status: open
+  reason: BCE is a hard PrivateLink prerequisite; OPS-946991 treats this as
+    still needing confirmation per account, not yet verified.
+  currentBestGuess: Required and identified; confirmation status per account
+    unknown.
+  impact: PrivateLink cannot function on any account without this; blocks
+    Network Infrastructure Implementation (OPS-867221).
+- id: privatelink-authorization-grant
+  question: Has the SYSTEM$AUTHORIZE_PRIVATELINK grant been requested from
+    and/or issued by Snowflake Support for the shared Non-prod endpoint?
+  status: open
+  reason: Required to share one PrivateLink VPC endpoint across Dev+Stage;
+    currently only flagged as a to-do in Jira comments (OPS-421881/
+    OPS-467193), with no dedicated tracking ticket.
+  currentBestGuess: Not yet requested.
+  impact: Blocks the shared Non-prod PrivateLink endpoint from being usable
+    by both Dev and Stage.
+- id: cicd-runner-location
+  question: Where do the GitHub Actions runners for Plumb CI/CD (service
+    principal PLUMB_CICD_Prod) actually execute relative to the new private
+    network?
+  status: open
+  reason: Explicitly unresolved; tracked as OPS-115743, currently blocked
+    pending input from Rex Yates/Kurt Fenn.
+  currentBestGuess: Unknown.
+  impact: Determines whether CI/CD can reach Snowflake over PrivateLink or
+    needs a different path.
+- id: netskope-routing-conflict
+  question: Does attaching the two new PrivateLink VPCs to the existing TGW
+    conflict with the existing Netskope private-endpoint path for corporate/
+    CLI users?
+  status: open
+  reason: Flagged as an open confirmation item on OPS-421881/OPS-467193; now
+    has a dedicated ticket, OPS-031338, but not yet resolved.
+  currentBestGuess: Expected to be compatible; not yet tested.
+  impact: Could require additional TGW route table segmentation before
+    go-live.
+- id: build-vs-design-state
+  question: Has any of this infrastructure actually been provisioned yet, or
+    does everything in this session reflect design/target state only?
+  status: open
+  reason: All child Story tickets in OPS-581859's hierarchy are currently in
+    OPS Triage/To Do status as of this session; no completion evidence was
+    found.
+  currentBestGuess: Design/target state only; nothing provisioned yet.
+  impact: This session's generatedObjects must not be marked created/
+    validated until implementation and SME confirmation occur.
+assumptions:
+- id: existing-tgw-capacity
+  statement: The existing AWS Transit Gateway has enough capacity to accept
+    the two new PrivateLink VPC attachments.
+  rationale: Assumed by the finalized design, but OPS-903439 explicitly
+    flags this as needing confirmation from the networking team.
+  impact: If capacity is insufficient, the two-VPC design may need rework or
+    a TGW capacity increase.
+- id: business-pillar-assignment
+  statement: Plumb is provisionally associated with the Enterprise &
+    Enablement business pillar (business-pillar.enterprise-enablement) given
+    its Enterprise Systems Engineering origin.
+  rationale: No explicit pillar assignment exists yet in Jira or DRAFT; this
+    is the closest match in .draft/workspace.yaml's declared business
+    taxonomy.
+  impact: Should be confirmed or corrected by Draft Admins/Plumb ownership
+    once named.
+nextSteps:
+- id: confirm-ownership
+  action: Confirm technical and domain ownership for Plumb. Product
+    ownership is now confirmed (Drew Colton, Jake Benton).
+  status: open
+  owner: Jake Benton / Drew Colton (Enterprise Systems Engineering)
+  notes: Tracked in Jira as OPS-549944.
+- id: run-l1-gap-eval
+  action: Catalog Plumb services in DRAFT and run the L1 gap evaluation once
+    ownership and this session's proposed objects are reviewed.
+  status: open
+  owner: Cloud Engineering / Plumb technical lead (TBD)
+  notes: Tracked in Jira as OPS-684141.
+- id: sme-validation-session
+  action: Hold SME validation session and confirm final L1 status.
+  status: open
+  owner: Cloud Engineering
+  notes: Tracked in Jira as OPS-563910.
+- id: confirm-licensing
+  action: Confirm Business Critical Edition licensing status for all four
+    Snowflake accounts.
+  status: open
+  owner: Plumb technical lead / Snowflake account owner
+  notes: Tracked in Jira as OPS-946991.
+- id: resolve-netskope-routing
+  action: Confirm Netskope private-endpoint routing does not conflict with
+    the new PrivateLink TGW attachments.
+  status: open
+  owner: Networking team (Rex Yates, Kurt Fenn, Derek)
+  notes: Tracked in Jira as OPS-031338.
+- id: author-shared-tgw-object
+  action: Author the existing AWS Transit Gateway as a reusable Shared
+    Services NetworkService object rather than modeling it per-product.
+  status: open
+  owner: Shared Services / networking team
+  notes: No existing TGW object found in catalog/shared-services/
+    network-services/ during this session.

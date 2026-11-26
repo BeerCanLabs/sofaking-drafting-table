@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KYWQE2F8-GGGG
+type: runtime_service
+name: CCA LLM Gateway (Model Routing and Governance)
+description: >-
+  [DOCUMENTED] LLM Gateway is CCA's self-hosted model routing and governance
+  layer (LiteLLM, in-VPC). Corrected 2026-08-04: this was previously described
+  as [INTENDED] with the code "gated off pending re-enable," which is stale --
+  it is live in ECS (service cca-litellm, account 151930920086, us-east-1) since
+  the Stage 5 gate-flip on 2026-06-08 (iac/envs/dev-cca/main.tf,
+  enable_litellm_gateway = true). All model traffic is configured to flow
+  through the Gateway; every Divan is configured to route through the
+  Guardfin guardrail in front of it rather than calling models directly. It
+  enforces model-access controls (which model a caller may invoke) and is the
+  seam for model-behavior policy. PoC providers are AWS Bedrock only. Not a
+  Sofa King-wide gateway.
+version: 0.1.0
+catalogStatus: incomplete
+lifecycleStatus: candidate
+owner:
+  team: aiops
+  contact: lpark@sofaking.example
+tags:
+  - cca
+  - cloud-divan-academy
+  - governed-automation
+  - llm-gateway
+  - litellm
+  - model-routing
+deliveryModel: self-managed
+host: 01KYWQZ7BS-61RJ
+primaryTechnologyComponent: 01KYWQZ7C9-R9JV
+networkPlacement: vpc-private
+authenticationModel: api-key

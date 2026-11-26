@@ -1,0 +1,34 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG5-KKEQ
+type: product_component
+ownerRole: engineer
+name: Hiretrack Selection
+description: (Formerly "Polaris")
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KQQ5JT1E-9CKW
+tags:
+- repository-discovery
+- hiretrack
+- product-component
+- rh
+repoUrl: https://github.com/BeerCanLabs/sk-Hiretrack-Selection
+language: Visual Basic .NET
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  repositoryName: BeerCanLabs/sk-Hiretrack-Selection
+  observedRuntimeSignals: dotnet, readme
+  observedManifestPaths: Hiretrack-Selection.sln; Polaris/JavaScript/jQuery/_docs/_json_data.json; Polaris/JavaScript/jQuery/_docs/_search_data.json; Polaris/JavaScript/jQuery/_docs/_search_result.json; Polaris/UINet/UINet.sln; Polaris/UINet/UINet.vbproj; Polaris/js/_docs/_json_data.json; Polaris/js/_docs/_search_data.json; Polaris/js/_docs/_search_result.json
+  serviceAuthentication: Authentication model was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery; assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

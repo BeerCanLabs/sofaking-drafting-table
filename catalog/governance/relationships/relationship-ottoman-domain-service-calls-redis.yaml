@@ -1,0 +1,11 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSR5D4DQ-2CAA
+name: Ottoman Domain Service → Redis Caching Service
+catalogStatus: stub
+source: 01KSM38KFW-WA83
+label: calls
+target: 01KQQ5JT00-191S
+notes:
+  background: "Domain Service reads and writes the authorization profile cache and handles cache invalidation."
+capabilities: []

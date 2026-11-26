@@ -1,0 +1,40 @@
+schemaVersion: '1.0'
+uid: 01KWF4ASYK-X6EV
+type: runtime_service
+ownerRole: technology-admin
+name: BestSync File Mover - Webloom
+description: 'Self-managed BestSync file-mover automation installed locally on the Webloom Bitvise SFTP server. BestSync jobs watch local folders and move inbound files to the correct customer file location on the Webloom central file server.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: existing-only
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+  - service
+  - file-transfer
+  - file-sync
+  - webloom
+  - legacy
+host: 01KQQ5JT03-BEFY
+primaryTechnologyComponent: 01KWF4ASYJ-YNSW
+architectureNotes:
+  serviceAuthentication: BestSync job execution identity and file-share access model require confirmation.
+  secretsManagement: BestSync credential storage approach requires confirmation.
+  serviceLogging: BestSync job and transfer logs are stored locally on the Webloom Windows Server 2012 R2 host.
+  healthWelfareMonitoring: Webloom-local Zabbix monitoring exists for this file-mover service; Webloom monitoring has mostly migrated to Nagios across SOM.
+  availabilityModel: Single install on the Webloom Bitvise SFTP Windows Server 2012 R2 host; no HA pair and no standby instance.
+  scalabilityModel: Scales with the underlying single Windows Server 2012 R2 host and configured BestSync jobs.
+  recoverabilityModel: Recovery depends on restoring the Windows host and BestSync job configuration; backup approach requires confirmation.
+  failureDomain: Impact is scoped to Webloom legacy SOM bulk import file movement from Bitvise local storage to customer-specific central file-server locations unless the central file server or shared databases are affected.
+internalComponents:
+  - ref: 01KWF4ASYJ-YNSW
+    role: function
+    configuration: folder-watch-file-mover
+  - ref: 01KWF4MDGM-PQ49
+    role: monitoring-agent
+    configuration: webloom-local-monitoring
+    notes: Zabbix is the Webloom-local monitoring path for this file-mover service; Webloom monitoring has mostly migrated to Nagios across SOM.
+deliveryModel: self-managed

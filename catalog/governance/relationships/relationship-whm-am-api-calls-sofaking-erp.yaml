@@ -1,0 +1,19 @@
+schemaVersion: '1.0'
+uid: 01KYRV35E7-YB61
+type: relationship
+name: AM Integration API → Sofa King ERP
+catalogStatus: incomplete
+source: 01KSM38KFB-XZ3E
+label: calls
+externalTarget: Sofa King ERP
+description: Existing inbound integration surface (api/v2/Integrations/* - Products, PurchaseOrders), JWT-protected. A planned Phase 1 bidirectional expansion (Product Catalog Sync, Procure-to-Pay/PO Shell Sync, Goods Received Notification, PO Receipt Status Poll) is documented but not yet built - treat as target-state, not current-state.
+technology: REST/HTTPS
+direction: synchronous
+flow: bidirectional
+tags:
+- asset-management
+- erp-integration
+- planned
+notes:
+  background: Confirmed via the repository's own ERP_Integration_Gap_Analysis.md and Integrations_API_Reference.md. The planned outbound flow (POST /receipts) is explicitly missing retry/backoff, idempotency keys, and an SQS dead-letter queue per the gap analysis.
+capabilities: []

@@ -1,0 +1,90 @@
+schemaVersion: '1.0'
+uid: 01KSM38KGN-BNJ8
+type: software_deployment_pattern
+ownerRole: engineer
+name: ERP CIS Software Deployment Pattern
+description: Repository-discovered Software Deployment Pattern stub grouping first-party services inferred from Sofa King GitHub repositories.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: deprecated
+businessContext:
+  pillar: business-pillar.business-solutions
+  ownerNode: team.rt-erp-cis-engineering
+  additionalPillars:
+  - business-pillar.customer-solutions
+  productFamily: ERP CIS
+  notes: Initial pillar assignment inferred from Sofa King product names and current catalog grouping; confirm with product ownership.
+owner:
+  team: rt-erp-cis-engineering
+  contact: business-solutions-erp-cis-rt-eng@sofaking.example
+tags:
+- software-deployment-pattern
+- repository-discovery
+- erp-cis
+architectureNotes:
+  lifecycleRationale: 'Deprecated 2026-06-17. Superseded by the curated RT ERP & CIS - Pattern (01KSM38KEY-JC4K), which is the authoritative, interviewed deployment model for the cloud-hosted RT-ERP/CIS/HRMS system. This repository-discovered pattern is retained for provenance. Its member components (JasperSoft, reporting, database obfuscation) still require individual reconciliation against the curated SDM — tracked in the RT-ERP SDM session.'
+  supersededBy: 01KSM38KEY-JC4K
+  noCrossBoundaryConnections: Cross-boundary service connections have not been documented for this pattern; no material cross-zone traffic has been identified during catalog import.
+  patternType: repository-discovered
+  noApplicablePattern: Reference Architecture conformance has not been confirmed by owner interview.
+  deploymentTargets: Deployment targets were not confirmed by repository discovery.
+  availabilityRequirement: Availability requirement was not confirmed by repository discovery.
+  noAdditionalInteractions: External interactions were not inferred from repository tree discovery and require owner interview.
+  dataClassification: Data classification was not confirmed by repository discovery.
+  failureDomain: Failure domain was not confirmed by repository discovery.
+  noPatternDeviations: Pattern deviations were not confirmed by repository discovery.
+  deploymentQualities: Availability, scalability, recoverability, and failure-domain details require owner interview.
+  discoveryBoundary: This pattern was inferred from repository names, GitHub metadata, and safe file-tree signals only.
+  sourceRepositories:
+  - productService: 01KSM38KGM-FNV0
+    repositoryName: BeerCanLabs/sk-erp-cis-database-obfuscation
+    sourceRepository: https://github.com/BeerCanLabs/sk-erp-cis-database-obfuscation
+    repositoryPrimaryLanguage: Groovy
+    observedRuntimeSignals: readme
+  - productService: 01KSM38KGM-A8RR
+    repositoryName: BeerCanLabs/sk-erp-cis-jasper-server
+    sourceRepository: https://github.com/BeerCanLabs/sk-erp-cis-jasper-server
+    repositoryPrimaryLanguage: XSLT
+    observedRuntimeSignals: docker, helm, java, kubernetes, readme
+  - productService: 01KSM38KGM-3A6W
+    repositoryName: BeerCanLabs/sk-erp-cis-reporting
+    sourceRepository: https://github.com/BeerCanLabs/sk-erp-cis-reporting
+    repositoryPrimaryLanguage: TSQL
+    observedRuntimeSignals: docker, github_actions, java, readme
+  - productService: 01KSM38KGM-ZYY2
+    repositoryName: BeerCanLabs/sk-erp-cis
+    sourceRepository: https://github.com/BeerCanLabs/sk-erp-cis
+    repositoryPrimaryLanguage: Java
+    observedRuntimeSignals: java, readme, serverless
+networkZones:
+- id: web
+  name: Web
+  tier: frontend
+  description: Internet-facing services including UIs, public APIs, and edge components.
+- id: app
+  name: Application
+  tier: application
+  description: Internal application services, APIs, microservices, and background workers.
+- id: data
+  name: Data
+  tier: data
+  description: Data stores, caches, message brokers, and persistence services.
+- id: ops
+  name: Operations
+  description: Operational and infrastructure services. No tier classification.
+serviceGroups:
+- name: Repository Discovered Services
+  deploymentTarget: owner-interview-required
+  deployableObjects:
+  - ref: 01KSM38KGM-FNV0
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGM-A8RR
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGM-3A6W
+    diagramTier: application
+    networkZone: data
+  - ref: 01KSM38KGM-ZYY2
+    diagramTier: application
+    networkZone: app

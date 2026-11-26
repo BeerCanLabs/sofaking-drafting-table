@@ -1,0 +1,90 @@
+schemaVersion: '1.0'
+uid: 01KSM38KFX-DQGA
+type: product_component
+ownerRole: engineer
+name: Ottoman Organization Service
+description: 'Ottoman service that manages organization and domain data, including organization-level configuration, service enablement, and domain provisioning.
+
+  '
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+owner:
+  team: ottoman-platform-engineering
+  contact: platform-engineering-ottoman-eng@sofaking.example
+runsOn: 01KZ2MRPHN-N024
+tags:
+  - ottoman
+  - organization
+  - product-component
+repoUrl: https://github.com/BeerCanLabs/sk-plat-svc-organization
+language: TypeScript
+classification: api-service
+runtimeRequirement: Node.js 24.14.1 on Amazon EKS
+architectureNotes:
+  runtimeRequirement: >-
+    Default-branch package.json and Dockerfile both pin Node.js 24.14.1; the
+    application is a TypeScript NestJS 11 service.
+  serviceAuthentication: >-
+    No guard/middleware validating incoming request tokens was found; combined
+    with Kuma service-mesh sidecar injection (kuma.io/sidecar-injection:
+    enabled) on the deployment, incoming request auth appears delegated to the
+    gateway/mesh layer. Outbound calls to IDM (Retail Institution API) use
+    an OAuth2 client-credentials flow (src/common/services/token/token.service.ts,
+    scope skapi.internal) to obtain a bearer token.
+  secretsManagement: >-
+    Non-secret config comes from a Kubernetes ConfigMap; secrets come from a
+    native Kubernetes Secret manifest (cd/*/secret.yml) whose real values
+    (IDM_CLIENT_SECRET, CONFIGCAT_SDK_KEY) are injected at deploy time by
+    Codefresh rather than sourced from AWS Secrets Manager/ExternalSecrets —
+    a different secrets-management mechanism than Invitation Service and the
+    Passport monorepo apps, which both use ExternalSecrets against AWS
+    Secrets Manager. Worth reconciling across the platform.
+  serviceLogging: >-
+    nestjs-pino + pino-http + pino-pretty (src/common/logger/logger.module.ts),
+    same redaction/correlation-ID pattern as sibling services. Prod sets
+    LOG_LEVEL=debug with LOG_FORMATTING=false (raw JSON) — debug-level logging
+    in production is worth flagging as a possible noise/cost concern.
+  healthWelfareMonitoring: >-
+    @nestjs/terminus health module: GET /health/live, /health/ready and
+    /health/startup (Postgres ping via TypeOrmHealthIndicator), and GET
+    /health (general). Kubernetes wires all three probe types with specific
+    timings (startup initialDelay 10s/period 5s/failureThreshold 10; readiness
+    period 10s/failureThreshold 3; liveness period 15s/failureThreshold 3).
+  availabilityModel: >-
+    Dev/stage: 2 replicas, HPA min 2/max 4 (CPU 70%/mem 80%). Prod: 10
+    replicas, HPA min 10/max 25 (CPU 60%/mem 80%, scale-up +5 pods/30s,
+    scale-down -1 pod/60s after 300s). PodDisruptionBudget maxUnavailable 1 in
+    all environments. RollingUpdate maxUnavailable 0/maxSurge 50%. Resource
+    request/limit cpu 300m/3000m, memory 1024Mi/2048Mi.
+  scalabilityModel: Horizontal Pod Autoscaler on CPU and memory utilization; no vertical or queue-depth-based scaling observed.
+  recoverabilityModel: >-
+    terminationGracePeriodSeconds 30 with a preStop sleep 5, combined with
+    Kuma sidecar readiness gating (kuma.io/wait-for-dataplane-ready). No
+    explicit app.enableShutdownHooks() call found in src/main.ts — graceful
+    drain relies on the k8s/mesh-level preStop delay rather than NestJS
+    lifecycle hooks. A generic retryWithDelay() helper and a manual 3-attempt
+    retry loop cover Loveseat publishing; a 3000ms request timeout is enforced
+    (src/common/interceptors/timeout.interceptor.ts); a dedicated dead-letter
+    queue module (src/deadLetterQueue/) persists failed async messages to
+    Postgres for replay. No circuit-breaker library found.
+  failureDomain: Scoped to Ottoman organization and domain provisioning workflows.
+  persistence: Aurora PostgreSQL database organizationservice, schema organization.
+  configcatDirectCall: >-
+    NON-CONFORMING: calls ConfigCat directly via configcat-node/configcat-common
+    (src/common/services/featureflag/feature-flag.service.ts) rather than
+    through the Platform Feature Flag Service (01KSM38KFY-PB2S). Same pattern
+    as the Kong Backplane finding recorded on the Ottoman SDP
+    (architectureNotes.configcatNonConformance).
+  dependencies:
+    - 01KSM38KFW-WA83
+  unconfirmedDependencies: >-
+    PASSPORT_SVC_BASE_URL and PRODUCT_ACCESS_URL are present in config with no
+    corresponding client code found under src/ — usage is unconfirmed. Newly
+    observed, not yet in the catalog: Retail Institution API
+    (EDU_INSTITUTION_API_BASE_URL, code-confirmed), Slack webhook notifications
+    (SLACK_WEBHOOK_URL, @slack/web-api, code-confirmed), and Redis/ElastiCache
+    used for caching (not a service dependency).
+decisionRecords:
+  - ref: 01KT16XHQR-0CAN
+    key: runtimeRequirement

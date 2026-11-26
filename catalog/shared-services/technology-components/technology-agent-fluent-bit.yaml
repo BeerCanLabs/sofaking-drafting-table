@@ -1,0 +1,27 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT1P-11K0
+type: technology_component
+ownerRole: technology-admin
+name: Fluent Bit
+description: Log collection and forwarding agent used to send platform and workload logs to the central logging standard.
+version: 1.0.0
+catalogStatus: incomplete
+owner:
+  team: architecture-review-board
+  contact: architecture-review-board@sofaking.example
+tags:
+- logging
+- observability
+- agent
+vendor: Fluent Bit Project
+productName: Fluent Bit
+productVersion: current
+classification: agent
+capabilities:
+- 01KQQ4Q026-D04B
+configurations:
+- id: opensearch-forwarding
+  name: OpenSearch Log Forwarding
+  description: Collects platform or workload logs and forwards them to AWS OpenSearch Service for centralized storage and search.
+  capabilities:
+  - 01KQQ4Q026-D04B

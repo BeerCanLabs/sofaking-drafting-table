@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01KYTAHA3S-X670
+type: product_component
+ownerRole: engineer
+name: CIS Util Tillbook Identity Migration
+description: One-time data migration utility for Tillbook Suite Identity Management. Retired.
+version: 1.0.0
+catalogStatus: stub
+lifecycleStatus: retired
+owner:
+  team: lakeshore-cis-tillbook-engineering
+  contact: marcus.bell@sofaking.example
+runsOn: 01KQQ5JT04-A7W8
+tags:
+- sis
+- lakeshore
+- tillbook
+- identity
+- migration
+- drafting-2026-07-30
+repoUrl: https://github.com/BeerCanLabs/sk-cis-util-tillbook-identity-migration
+classification: worker
+runtimeRequirement: .NET Framework 4.8
+architectureNotes:
+  origin: Identified on 2026-07-30 via GitHub repository discovery, confirmed by product owner as a one-time data migration utility, now retired. Runtime confirmed by product owner on 2026-07-31 — .NET Framework 4.8.
+  repositoryName: BeerCanLabs/sk-cis-util-tillbook-identity-migration

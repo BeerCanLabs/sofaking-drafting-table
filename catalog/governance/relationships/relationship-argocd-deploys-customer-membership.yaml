@@ -1,0 +1,26 @@
+schemaVersion: '1.0'
+uid: 01M5CS4D94-86FC
+type: relationship
+ownerRole: engineer
+name: ArgoCD GitOps Service → Customer Membership Service
+description: >-
+  ArgoCD reconciles the Customer Membership Service Kubernetes manifests (ServiceAccount, ConfigMap,
+  Deployment, Service, Ingress) from k8s-deployments into le1 for development and
+  stage via the applications le1.ss-msvc-customer-membership-{dev,stage}.
+source: 01KQQ5JT1E-01JZ
+target: 01KXR9XAR4-HKKE
+label: deploys manifests for
+technology: ArgoCD GitOps and Kubernetes API
+direction: asynchronous
+flow: outbound
+catalogStatus: incomplete
+capabilities:
+  - 01KT0XNZEY-Q2TF
+tags:
+  - shared-customer-record
+  - argocd
+  - gitops
+  - eks
+notes: >-
+  Dev and stage sync automatically with Image Updater tag write-back. No production
+  application exists yet; production is intended for Chaise.

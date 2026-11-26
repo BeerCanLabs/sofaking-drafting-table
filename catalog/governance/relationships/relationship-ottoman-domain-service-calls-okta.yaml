@@ -1,0 +1,14 @@
+schemaVersion: '1.0'
+type: relationship
+uid: Q4P5SRM74H-AXWB
+name: Ottoman Domain Service → Okta
+catalogStatus: stub
+source: 01KSM38KFW-WA83
+label: authenticates via
+target: 01KQQ5JT1D-SHXD
+technology: HTTPS
+direction: synchronous
+flow: outbound
+notes:
+  background: "Confirmed via src/common/services/okta.service.ts, authenticating to the Okta Management API with an SSWS token for IdP/SAML/ACS metadata lookups."
+capabilities: []

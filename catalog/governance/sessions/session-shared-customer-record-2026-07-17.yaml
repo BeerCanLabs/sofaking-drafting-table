@@ -1,0 +1,572 @@
+schemaVersion: '1.0'
+uid: 01KXRSDP0D-SESS
+type: drafting_session
+ownerRole: engineer
+name: Shared Customer Record SDP Drafting Session
+description: >-
+  Drafting session that created the Shared Customer Record SoftwareDeploymentPattern
+  and its components from an owner-authorized read-only crawl of the three
+  Customer Services ss-msvc-* repositories on 2026-07-17. Resumed 2026-10-20 after
+  the platform was rebranded from Customer Data Platform to Shared Customer Record
+  (SSR): ss-msvc-calendar (Academic Calendar) is now modeled from its
+  implementation and spec, ss-msvc-customer-membership from its Ready-to-build spec
+  with implementation in progress, and the Customer Profile model was gap-filled.
+  ss-msvc-course-catalog is deferred until its spec is complete.
+version: 1.0.0
+catalogStatus: incomplete
+lifecycleStatus: preferred
+sessionStatus: open
+owner:
+  team: shared-customer-engineering
+  contact: wmercer@sofaking.example
+tags:
+  - session
+  - customer-solutions
+  - shared-customer-record
+  - repository-discovery
+  - drafting
+primaryObjectType: software_deployment_pattern
+primaryObjectUid: 01KXR9XAR5-K0FT
+sourceArtifacts:
+  - name: ss-msvc-customer-profile repository
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+    notes: >-
+      Implemented .NET 10 microservice. Crawled read-only on 2026-07-17: API
+      (ASP.NET Core), EventPublisher and OrgPersonWorker Lambdas, DynamoDB
+      single-table store with Streams → EventBridge Pipe → SNS → SQS fanout, and
+      outbound dependencies on Loveseat, Ottoman OrgPerson, Sofa King IDM, and AWS
+      Secrets Manager. Runtime substrate taken as AWS EKS from the repo CLAUDE.md.
+      The OrgPersonWorker and OrgPerson provisioning were later removed (ADR-006,
+      TBSPS-4319); see the 2026-10-20 recrawl entry.
+  - name: ss-msvc-customer-membership repository
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-ss-msvc-customer-membership
+    notes: >-
+      Recrawled read-only 2026-10-20. docs/architecture/membership-service-spec.md
+      (Ready to build, 2026-09-29), CONTEXT.md, CDK stacks, and Terraform IRSA
+      exist; the API controllers are not yet present. Modeled from the spec.
+  - name: ss-msvc-calendar repository
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-ss-msvc-calendar
+    notes: >-
+      Recrawled read-only 2026-10-20. Implemented: controllers for Calendar,
+      Session, and PricingPeriod, CDK stacks, event publisher, spec, and security
+      docs. Stage host academic-calendar-stage.ss.sofaking.example on le1.
+      The repo CLAUDE.md "scaffold" line is stale.
+  - name: ss-msvc-customer-profile repository (recrawl)
+    type: repository
+    location: https://github.com/BeerCanLabs/sk-ss-msvc-customer-profile
+    notes: >-
+      Recrawled 2026-10-20 for gap-fill: scopes, full route surface, and the
+      inbound Loveseat identity-match callback, subscriptions endpoint, and SQS
+      quarantine queue that the July model missed. Also found that ADR-006 removed
+      the OrgPerson Worker and provisioning; the API now validates a caller-supplied
+      orgPersonId through a read-only OrgPerson client (IDM auth), and the Event
+      Publisher moved from IDM to Okta (TBSPS-9834).
+generatedObjects:
+  - name: Shared Customer Record
+    type: software_deployment_pattern
+    status: created
+    ref: 01KXR9XAR5-K0FT
+  - name: Customer Profile API
+    type: product_component
+    status: created
+    ref: 01KXR9XAR4-BES0
+  - name: Customer Profile Event Publisher
+    type: product_component
+    status: created
+    ref: 01KXRSDP02-EVPB
+  - name: Customer Membership Service
+    type: product_component
+    status: created
+    ref: 01KXR9XAR4-HKKE
+  - name: Academic Calendar Service
+    type: product_component
+    status: created
+    ref: 01KXR9XAR4-N2VN
+  - name: Academic Calendar Event Publisher
+    type: product_component
+    status: created
+    ref: 01M5CS4D93-XYNH
+  - name: Academic Calendar Store
+    type: data_component
+    status: created
+    ref: 01M5CS4D93-EWK0
+  - name: Academic Calendar Service → Academic Calendar Store
+    type: relationship
+    status: created
+    ref: 01M5CS4D93-TKHH
+  - name: Academic Calendar Event Publisher → Loveseat Event Bus
+    type: relationship
+    status: created
+    ref: 01M5CS4D93-3ZND
+  - name: Academic Calendar Event Publisher → Okta
+    type: relationship
+    status: created
+    ref: 01M5CS4D93-CT1H
+  - name: Customer Membership Event Publisher
+    type: product_component
+    status: created
+    ref: 01M5CS4D94-NXJ3
+  - name: Customer Membership Store
+    type: data_component
+    status: created
+    ref: 01M5CS4D93-GMYC
+  - name: Customer Membership Service → Customer Membership Store
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-SH4K
+  - name: Customer Membership Service → Customer Profile API
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-SXFS
+  - name: Customer Membership Service → Academic Calendar Service
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-G1C7
+  - name: Customer Membership Service → Core HR Org Unit
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-VVC0
+  - name: Customer Membership Event Publisher → Loveseat Event Bus
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-WGMF
+  - name: Customer Membership Event Publisher → Okta
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-Z16T
+  - name: Customer Profile API ← Loveseat Event Bus (identity-match)
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-Y9QZ
+  - name: Shared Customer Record External Dependencies
+    type: decision_record
+    status: created
+    ref: 01M5CS4D94-KV7W
+  - name: Shared Customer Record Inter-service Topology
+    type: decision_record
+    status: created
+    ref: 01M5CS4D94-CSKS
+  - name: Traefik Kubernetes Ingress Service → Customer Profile API
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-FCE6
+  - name: Traefik Kubernetes Ingress Service → Academic Calendar Service
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-2ARZ
+  - name: Traefik Kubernetes Ingress Service → Customer Membership Service
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-RHV0
+  - name: ArgoCD GitOps Service → Customer Profile API
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-TT3N
+  - name: ArgoCD GitOps Service → Academic Calendar Service
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-DK5G
+  - name: ArgoCD GitOps Service → Customer Membership Service
+    type: relationship
+    status: created
+    ref: 01M5CS4D94-86FC
+  - name: Customer Profile Store
+    type: data_component
+    status: created
+    ref: 01KXR9XAR4-SH1Y
+  - name: Customer Profile API → Customer Profile Store
+    type: relationship
+    status: created
+    ref: 01KXRSDP07-R1DB
+  - name: Customer Profile Event Publisher → Loveseat Event Bus
+    type: relationship
+    status: created
+    ref: 01KXR9XAR5-GFQS
+  - name: Customer Profile Event Publisher → Okta
+    type: relationship
+    status: created
+    ref: 01KXR9XAR5-KTCX
+  - name: Customer Profile API → Platform Msvc Org Person
+    type: relationship
+    status: created
+    ref: 01M5CT6KT0-YDQR
+  - name: Customer Profile API → Sofa King IDM
+    type: relationship
+    status: created
+    ref: 01M5CT6KT0-CR2N
+  - name: Customer Profile API → Okta
+    type: relationship
+    status: created
+    ref: 01M5CT6KT0-MEP8
+  - name: Academic Calendar Service → Okta
+    type: relationship
+    status: created
+    ref: 01M5CT6KT0-Z833
+  - name: Customer Membership Service → Okta
+    type: relationship
+    status: created
+    ref: 01M5CT6KT0-7VJ4
+  - name: Customer Profile API → AWS Secrets Manager
+    type: relationship
+    status: created
+    ref: 01M5D0EPG0-6NB5
+  - name: Customer Membership Service → AWS Secrets Manager
+    type: relationship
+    status: created
+    ref: 01M5D0EPG0-RDK0
+  - name: Academic Calendar Service → AWS Secrets Manager
+    type: relationship
+    status: created
+    ref: 01M5D0EPG0-FBD6
+  - name: Customer Profile API → AWS SQS (events quarantine)
+    type: relationship
+    status: created
+    ref: 01M5D0EPG0-PZ3F
+unresolvedQuestions:
+  - id: data-classification-confirm
+    question: >-
+      Should the Customer Profile Store be classified confidential or restricted?
+      It holds FERPA-protected customer and family PII.
+    status: open
+    currentBestGuess: confidential
+    impact: Drives data-tier control requirements (encryption, retention, access review).
+    relatedObjects:
+      - ref: 01KXR9XAR4-SH1Y
+  - id: edge-exposure-unconfirmed
+    question: >-
+      What edge sits in front of the Customer Profile API — Kong only, or also an
+      ALB, CloudFront, and/or WAF (Imperva / Signal Sciences)?
+    status: answered
+    reason: >-
+      Answered 2026-10-20 by the owner: none of these services use Kong or the Kong
+      Mesh; Traefik is the only ingress. The SDP's Kong API Gateway group was
+      replaced with the Traefik Kubernetes Ingress group.
+    currentBestGuess: Traefik only. Load-balancer, WAF, and CDN placement in front of Traefik is tracked in edge-in-front-of-traefik.
+    impact: Presentation tier now modeled as Traefik; web-edge requirements still depend on edge-in-front-of-traefik.
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: edge-in-front-of-traefik
+    question: What load balancer, WAF, or CDN sits in front of the le1 Traefik ingress for these services, and what is the production edge on Chaise?
+    status: answered
+    reason: >-
+      Answered 2026-10-20 through elicitation: an internal Traefik ALB is the only thing
+      in front of Traefik for dev and stage, with no WAF or CDN. The production edge on
+      Chaise was not elicited (see prod-edge-chaise).
+    currentBestGuess: Internal AWS ALB (01KQQ5JT04-P7QJ) to Traefik; ALB added to the SDP ingress group.
+    impact: Presentation tier now models the ALB and Traefik. Prod edge remains open.
+    relatedObjects:
+      - ref: 01KYAXMZ7H-72BR
+      - ref: 01KQQ5JT04-P7QJ
+      - ref: 01KXR9XAR5-K0FT
+  - id: prod-edge-chaise
+    question: What is the edge, zone layout, and service-to-service path for the SSR services on Chaise in production?
+    status: open
+    reason: Production on Chaise is intended but not provisioned; elicitation covered dev and stage on le1 only.
+    currentBestGuess: Same pattern as le1 (ALB and Traefik), per the Tiers of Intensity precedent.
+    impact: Production zones, edge, and failure domain are undocumented.
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: service-to-service-path-rule
+    question: Does Operations mandate or prefer a service-to-service path for the SSR services (through the Traefik hostname, or in-cluster ClusterIP), for example through NetworkPolicy or egress rules?
+    status: open
+    reason: >-
+      Customer Membership's calls to Customer Profile and Academic Calendar are recorded as
+      going through the Traefik hostnames (owner-confirmed), but the BaseUrls are not yet
+      configured (TBSPS-9657). The platform api-design.md says internal reads MUST use the
+      service mesh, which the SSR services deliberately do not use; no rule on the
+      alternative paths was found.
+    currentBestGuess: Through the Traefik hostnames, as the owner stated.
+    impact: If Operations requires in-cluster or mesh paths, the Membership relationships and zone crossings would change.
+    relatedObjects:
+      - ref: 01M5CS4D94-SXFS
+      - ref: 01M5CS4D94-G1C7
+  - id: calendar-api-secrets-grant
+    question: What does the Academic Calendar API read from Secrets Manager under calendar/api/, and does its runtime role actually grant GetSecretValue?
+    status: open
+    reason: The ConfigMap sets SECRETS_NAMESPACE calendar/api/ and the owner confirmed the API reads Secrets Manager, but the calendar spec says only the publisher Lambda is granted GetSecretValue.
+    currentBestGuess: The API reads secrets under calendar/api/; the spec is stale.
+    impact: Secrets-management evidence for the Calendar API is inconsistent between spec and deployment.
+    relatedObjects:
+      - ref: 01KXR9XAR4-N2VN
+      - ref: 01M5D0EPG0-FBD6
+  - id: loveseat-shared-service-gap
+    question: >-
+      Should Loveseat be modeled as a shared RuntimeService/NetworkService object
+      instead of an externalTarget?
+    status: open
+    reason: >-
+      Loveseat is a company-wide event bus but has no dedicated catalog service
+      object; it is currently modeled only through Ottoman publisher/connector
+      components and per-service ingest endpoints.
+    currentBestGuess: Model as externalTarget for now; propose a shared Loveseat service object to Shared Services.
+    impact: Event-publish dependencies across many services cannot point at a single reusable Loveseat object.
+    relatedObjects:
+      - ref: 01KXR9XAR5-GFQS
+  - id: connection-elicitation-pending
+    question: Have network zones and cross-tier/zone connections been confirmed with the platform owner?
+    status: answered
+    reason: >-
+      Answered 2026-10-20: the Network Zone and Connection Elicitation procedure was run
+      with the owner. The four network zones and the zone assignment were confirmed.
+      Tier and zone crossings were confirmed (Traefik to APIs, APIs to stores, Membership
+      to Profile and Calendar and Loveseat to Profile through the Traefik hostnames, APIs
+      to Secrets Manager, Profile API to SQS quarantine). Same-tier connections were not
+      reviewed, per the procedure.
+    currentBestGuess: Zones and connections as recorded in 01M5CS4D94-CSKS (now accepted).
+    impact: Same-tier connections and the production topology on Chaise remain unreviewed.
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+      - ref: 01M5CS4D94-CSKS
+  - id: eks-cluster-identity
+    question: Which EKS cluster / ingress hosts the Customer Profile API, and is it the shared Ottoman platform cluster?
+    status: answered
+    reason: >-
+      Answered 2026-10-20: dev and stage run on the le1 cluster (ArgoCD applications
+      le1.ss-msvc-*-{dev,stage}); production is intended for Chaise. Whether le1 is
+      the shared Ottoman platform cluster was not asked.
+    currentBestGuess: le1 via the shared .NET Core Application Service runtime (01KQQ5JT1E-9CKW).
+    impact: Cluster-level blast radius is recorded in the SDP failureDomain; le1 availability characteristics are not elicited.
+    relatedObjects:
+      - ref: 01KXR9XAR4-BES0
+  - id: cross-account-role-purpose
+    question: What is the purpose and trusted principal of the CrossAccountRuntimeAccessRole in the CDK?
+    status: open
+    reason: The role allows other AWS accounts to invoke the Lambdas, but the specific accounts/patterns were not visible in the crawl.
+    currentBestGuess: Likely CI/CD or cross-account deployment orchestration.
+    impact: Cross-account trust boundary is undocumented.
+    relatedObjects:
+      - ref: 01KXRSDP02-EVPB
+  - id: site-service-identity
+    question: Is the "site service" that Customer Membership validates siteId and nextYearStoresiteId against Core HR Org Unit, owned by the HCM Sofa King Central team?
+    status: answered
+    reason: >-
+      Answered 2026-10-20: the owner confirmed Core HR Org Unit is the service
+      Sofa King relies on to retrieve site information (the OrganizationalUnit
+      service, owned by the HCM Sofa King Central team). The membership spec itself
+      only says "site service (platform)".
+    currentBestGuess: Core HR Org Unit (01KYQ4D9RR-T700); the assumption tag was removed.
+    impact: Endpoint, base URL, IDM scope, and SLO for the site existence check are still undocumented (see confirm-site-service-with-hcm-fc).
+    relatedObjects:
+      - ref: 01KYQ4D9RR-T700
+      - ref: 01M5CS4D94-VVC0
+  - id: loveseat-auth-authority
+    question: Do the event publishers authenticate to Loveseat through IDM or Okta?
+    status: answered
+    reason: >-
+      Answered 2026-10-20: Okta is the Loveseat auth provider for every service. The
+      Customer Profile publisher moved from IDM to Okta in TBSPS-9834, and the
+      Academic Calendar spec's mention of IDM is superseded.
+    currentBestGuess: All three publishers and the Customer Profile API's Loveseat subscription use Okta (scope plat.loveseat).
+    impact: Identity edges updated; IDM remains only for the OrgPerson and Core HR Org Unit calls.
+    relatedObjects:
+      - ref: 01M5CS4D93-CT1H
+      - ref: 01M5CS4D94-Z16T
+  - id: calendar-data-classification
+    question: Is internal sufficient for the Academic Calendar Store, which holds no customer PII, given the platform treats all customer data as protected?
+    status: open
+    currentBestGuess: internal
+    impact: Drives data-tier control requirements for the calendar table.
+    relatedObjects:
+      - ref: 01M5CS4D93-EWK0
+  - id: membership-data-classification
+    question: Should the Customer Membership Store be confidential or restricted (customerId plus membership and exit dates)?
+    status: open
+    currentBestGuess: confidential
+    impact: Drives data-tier control requirements for the membership table.
+    relatedObjects:
+      - ref: 01M5CS4D93-GMYC
+  - id: prod-not-provisioned
+    question: When are the SSR services (Customer Profile, Academic Calendar, Customer Membership) provisioned in prod on Chaise (ArgoCD overlay, VPC, IRSA, Jwt authority and audience, ECR pull)?
+    status: open
+    reason: >-
+      Owner confirmed 2026-10-20 that dev and stage are deployed to le1 and production
+      is intended to live on Chaise. No prod overlay or ArgoCD application exists for
+      any of the three services, and no production availability target is defined.
+    currentBestGuess: Production on Chaise; modeled with deploymentTarget aws-us-east-1 for all and no prod-specific objects.
+    impact: Prod blast radius and deployment topology are undocumented.
+    relatedObjects:
+      - ref: 01KXR9XAR4-N2VN
+      - ref: 01KXR9XAR4-HKKE
+  - id: membership-impl-drift
+    question: Does the Customer Membership implementation match its spec as it lands (routes, scopes, hosts, dependency clients)?
+    status: open
+    reason: The membership model is derived from the spec; only CDK, publisher, and scaffolding code exist in the repo.
+    currentBestGuess: Spec is accurate; ingress hosts are proposed and unconfirmed.
+    impact: Catalog may overstate membership until verified.
+    relatedObjects:
+      - ref: 01KXR9XAR4-HKKE
+assumptions:
+  - id: api-runs-on-eks
+    statement: The Customer Profile API runs on AWS EKS via the shared .NET Core Application Service runtime.
+    rationale: >-
+      The repository CLAUDE.md explicitly states "Runtime: .NET 10, ASP.NET Core
+      Controllers, DynamoDB, AWS EKS", overriding an initial Dockerfile-based
+      ECS/Fargate assumption from discovery.
+    relatedObjects:
+      - ref: 01KXR9XAR4-BES0
+  - id: dynamodb-data-tier-substitution
+    statement: The data tier uses AWS DynamoDB rather than the RA's PostgreSQL/S3/Redis data services.
+    rationale: The service is built on a DynamoDB single-table design; DynamoDB is a preferred DataStoreService.
+    impact: Recorded as a reference-architecture deviation on the SSR SDP, not a validator bypass.
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+      - ref: 01KXR9XAR4-SH1Y
+  - id: stub-services-reserved
+    statement: >-
+      Superseded 2026-10-20. Academic Calendar is implemented and modeled in full;
+      Customer Membership is spec-complete with implementation in progress and is
+      modeled from its spec as incomplete / candidate.
+    rationale: Owner confirmed Academic Calendar (ss-msvc-calendar) is the former Calendar Service stub and that Membership is spec-complete.
+    impact: Membership facts are planned, not observed, until the service is deployed.
+    relatedObjects:
+      - ref: 01KXR9XAR4-HKKE
+      - ref: 01KXR9XAR4-N2VN
+  - id: site-service-is-core-hr-org-unit
+    statement: >-
+      Confirmed: Core HR Org Unit, an external service owned by the HCM Sofa King
+      Central team, is the service Sofa King relies on to retrieve site information.
+    rationale: Confirmed by the owner on 2026-10-20; matches the catalog object 01KYQ4D9RR-T700. The membership spec does not name it.
+    impact: Referenced, not edited, since another team owns the object. Its endpoint contract is still undocumented.
+    relatedObjects:
+      - ref: 01KYQ4D9RR-T700
+  - id: orgperson-worker-removed
+    statement: >-
+      The Customer Profile OrgPerson Worker and OrgPerson provisioning no longer exist.
+      Callers supply orgPersonId on customer and contact create, and the API validates
+      it against the Ottoman msvc-org-person service using an IDM token before writing.
+    rationale: >-
+      Owner confirmed 2026-10-20 and the repo records it in ADR-006 (TBSPS-4319);
+      validation is implemented through the read-only OrgPerson client and resolver
+      (TBSPS-7902). The July model of the worker is therefore retired.
+    impact: >-
+      The worker component and its three relationships were deleted. Other teams'
+      objects (Ottoman org-person-service and the Ottoman SDM session) still carry
+      the old worker coupling and the retargeting question; see the follow-up step.
+    relatedObjects:
+      - ref: 01KXR9XAR4-BES0
+      - ref: 01KSM38KFH-NYK5
+  - id: platform-rebrand
+    statement: The Customer Data Platform was rebranded to Shared Customer Record (SSR) and the catalog was renamed to match.
+    rationale: Owner direction 2026-10-20. Other teams' objects and sessions that still say Customer Data Platform were deferred.
+    impact: Stale name remains in several other-team files until a follow-up pass.
+  - id: le1-hosting
+    statement: Academic Calendar and Customer Membership run on EKS in the le1 cluster alongside Customer Profile.
+    rationale: Owner confirmed Academic Calendar stage host on le1; both specs place the services on the shared EKS cluster.
+    impact: Modeled on the shared .NET Core Application Service runtime; cluster-level detail not elicited.
+    relatedObjects:
+      - ref: 01KXR9XAR4-N2VN
+      - ref: 01KXR9XAR4-HKKE
+nextSteps:
+  - id: notify-ottoman-orgperson-worker-removal
+    action: >-
+      Tell the Ottoman team that the Customer Profile OrgPerson Worker is gone (ADR-006)
+      so the Ottoman org-person-service object and the Ottoman SDM session can drop
+      the worker coupling and the obsolete customer-data-platform-orgperson-sync-target
+      question. Done in this change: the dangling references to the deleted worker
+      relationship were corrected in those two Ottoman files, since deleting the
+      relationship would otherwise have left them stale. The Ottoman team should still
+      be told, and may want to add the Customer Profile API as a known consumer of
+      msvc-org-person (01KSM38KFH-NYK5).
+    status: done
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KSM38KFH-NYK5
+  - id: run-connection-elicitation
+    action: >-
+      Run the Network Zone and Connection Elicitation procedure with the platform owner
+      to confirm zones, edge exposure, and remaining connections. Done 2026-10-20 for dev
+      and stage on le1; same-tier connections and the production edge on Chaise were not
+      covered.
+    status: done
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: route-loveseat-shared-service-gap
+    action: Propose a shared Loveseat event-bus service object to Shared Services so event-publish dependencies can reference a single reusable object.
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KXR9XAR5-GFQS
+  - id: confirm-data-classification
+    action: Confirm Customer Profile Store data classification (confidential vs restricted) with Data/Security given FERPA scope.
+    status: open
+    owner: information-security
+    relatedObjects:
+      - ref: 01KXR9XAR4-SH1Y
+  - id: hearthstone-requirement-disposition
+    action: Disposition the active sofaking-hearthstone RequirementGroup (01KQQ5JT20-M5R2) against the SSR SDP and components.
+    status: open
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: add-codeowners-and-team-vocab
+    action: >-
+      CODEOWNERS entry for catalog/engineering/shared-customer-record-engineering/
+      added 2026-10-20 (matches the other engineering folders). Still open: adopt the
+      shared-customer-engineering team into the teams vocabulary (see vocabulary
+      proposal).
+    status: open
+    owner: architecture-review-board
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: model-services-when-built
+    action: Re-crawl Customer Membership as its implementation lands and replace spec-derived facts with observed ones.
+    status: open
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KXR9XAR4-HKKE
+  - id: model-course-catalog
+    action: >-
+      Model the course-catalog service once its spec is complete (expected the week
+      of 2026-10-26): component, store, event publisher, and relationships.
+    status: open
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KXR9XAR5-K0FT
+  - id: confirm-site-service-with-hcm-fc
+    action: >-
+      Core HR Org Unit is confirmed as the site service. Obtain its site existence-check
+      endpoint, base URL, IDM scope, and SLO from the HCM Sofa King Central team, and
+      consider uppricing the Core HR Org Unit stub.
+    status: open
+    owner: shared-customer-engineering
+    relatedObjects:
+      - ref: 01KYQ4D9RR-T700
+      - ref: 01M5CS4D94-VVC0
+  - id: sweep-other-team-customer-data-platform-references
+    action: >-
+      Deferred by the owner as a separate change because these mentions are plain
+      text and break nothing: update remaining "Customer Data Platform" mentions in
+      other teams' files (technology-component-microsoft-aspnet-core-10,
+      decision-imm-scope-correction,
+      decision-pg-plm-eem-uncatalogued-platform-technology, and the pg-plm and imm
+      sessions) and the same wording in session-ottoman-sdm-draft. Suggested
+      wording: "Shared Customer Record (formerly Customer Data Platform)".
+    status: open
+    owner: shared-customer-engineering
+  - id: run-validator
+    action: >-
+      Done 2026-10-20: validate.py runs from a venv on Python 3.14 (PyYAML has no
+      wheel for 3.15) and passes with 2057 catalog files.
+    status: done
+    owner: shared-customer-engineering
+resumptionContext:
+  matchedReferenceArchitecture: 01KQQ5JT1D-D614
+  confirmedPillar: business-pillar.customer-solutions
+  confirmedOwnerTeam: shared-customer-engineering (non-standard; vocabulary proposal filed)
+  deploymentTarget: aws-us-east-1
+  scopeDecision: >-
+    The SSR SDP covers the ss-msvc-* Customer Services microservices. Customer Profile
+    and Academic Calendar are implemented and modeled; Customer Membership is modeled
+    from its spec (implementation in progress); Course Catalog is deferred. Shared
+    infrastructure (EKS host, .NET runtime, Kong, SNS, SQS, DynamoDB,
+    Secrets Manager, Lambda) is referenced, not duplicated.
+notes:
+  validationStatus: >-
+    Not run (2026-07-17 and again 2026-10-20). Python is not installed in the
+    authoring environment, so tools/validate.py and tools/generate_browser.py could
+    not be executed. YAML was authored to the framework schemas by hand; run
+    validation before merge.

@@ -1,0 +1,41 @@
+schemaVersion: '1.0'
+uid: 01KQQ5JT07-Z0CX
+type: product_component
+ownerRole: engineer
+name: Leave API Platformsyncpublic
+description: API endpoints for use in provisioning user data from the Global Directory
+version: 1.0.1
+catalogStatus: stub
+lifecycleStatus: existing-only
+owner:
+  team: leave-time-engineering
+  contact: leave-time-eng@sofaking.example
+runsOn: 01KQQ5JT02-KJHA
+tags:
+- repository-discovery
+- leave
+- product-component
+repoUrl: https://github.com/BeerCanLabs/sk-at-api-PlatformSyncPublic
+language: C#
+classification: api-service
+runtimeRequirement: .NET
+architectureNotes:
+  productionStatus: The product owner confirmed on 2026-08-04 that at-api-PlatformSyncPublic is not running in production. It must not appear in a production Software Deployment Pattern service group unless that status changes.
+  repositoryName: BeerCanLabs/sk-at-api-PlatformSyncPublic
+  observedRuntimeSignals: docker, dotnet, node, readme
+  observedManifestPaths: Dockerfile; SK.AT.PlatformSyncPublic.sln; cd/codefresh-deploy-manual.yml;
+    cd/codefresh-deploy-triggered.yml; cd/qa/cm.yml; cd/qa/deploy.yml; cd/qa/ingress.yml;
+    cd/qa/service.yml; cd/stage/cm.yml; cd/stage/deploy.yml; cd/stage/ingress.yml;
+    cd/stage/service.yml
+  serviceAuthentication: Authentication model was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  secretsManagement: Secrets management approach was not confirmed by repository tree
+    discovery; Draftsman must interview the owner.
+  serviceLogging: Logging approach was not confirmed by repository tree discovery;
+    assume central logging is required until confirmed.
+  healthWelfareMonitoring: Health and welfare monitoring was not confirmed by repository
+    tree discovery; assume service health checks are required until confirmed.
+  availabilityModel: Availability target was not confirmed by repository tree discovery.
+  scalabilityModel: Scalability model was not confirmed by repository tree discovery.
+  recoverabilityModel: Recoverability model was not confirmed by repository tree discovery.
+  failureDomain: Failure domain was not confirmed by repository tree discovery.

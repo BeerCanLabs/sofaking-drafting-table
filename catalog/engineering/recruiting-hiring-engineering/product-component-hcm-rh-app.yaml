@@ -1,0 +1,80 @@
+schemaVersion: '1.0'
+uid: 01KSM38KG5-49X9
+type: product_component
+ownerRole: engineer
+name: HCM RH App
+description: Next.js monorepo housing two frontend applications - Retailjobspot (job seeker app with public job search, profile management, and applications) and Recruit & Hire (employer app with job posting management, application review, and permissions management)
+version: 1.0.0
+catalogStatus: complete
+lifecycleStatus: preferred
+owner:
+  team: recruiting-hiring-engineering
+  contact: recruiting-hiring-eng@sofaking.example
+runsOn: 01KYAVGDVV-EKJ2
+tags:
+- recruiting-hiring
+- frontend
+- next-js
+- react
+- typescript
+- monorepo
+- hcmrh
+repoUrl: https://github.com/BeerCanLabs/sk-hcmrh-app
+language: TypeScript
+classification: web-application
+runtimeRequirement: Node.js 20+
+interfaces:
+- name: Retailjobspot Application
+  protocol: REST
+  path: /
+  authenticationModel: oauth
+  description: Job seeker application - public job search (unauthenticated), profile management, applications, saved jobs, and career goals (authenticated)
+- name: Recruit & Hire Application
+  protocol: REST
+  path: /
+  authenticationModel: oauth
+  description: Employer application - job posting CRUD, application review pipeline, candidate management, funnel configuration, permissions management, and analytics dashboards
+networkBindings:
+- port: 3002
+  protocol: HTTP
+  direction: inbound
+  description: Retailjobspot job seeker app
+- port: 3003
+  protocol: HTTP
+  direction: inbound
+  description: Recruit & Hire employer app
+environmentConfiguration:
+- name: NEXT_PUBLIC_API_BASE_URL
+  description: Backend API gateway base URL
+  required: true
+  sensitive: false
+- name: NEXT_PUBLIC_OTTOMAN_URL
+  description: Ottoman authentication service URL
+  required: true
+  sensitive: false
+- name: NODE_ENV
+  description: Node environment (development, production)
+  required: true
+  sensitive: false
+architectureNotes:
+  framework: Next.js 16 with React 19, TypeScript, Tailwind CSS, and Jotai for state management
+  monorepoStructure: Turborepo with two apps (job-seeker on port 3002, employer on port 3003) and shared packages
+  jobSeekerFeatures: Public job search (external jobs, unauthenticated), organization browsing, authenticated profile management, applications, saved jobs, goals, multi-language support (i18n), goal-based job matching, access to internal jobs from user's organization
+  employerFeatures: Job posting CRUD with visibility options (external/internal/both), application review pipeline, candidate management, funnel configuration, permissions management, analytics dashboards
+  authentication: Ottoman gateway with x-sk-userinfo header injection providing Person ID, Domain ID, Organization ID, Role, and user details
+  stateManagement: Jotai for atomic state management
+  styling: Tailwind CSS for utility-first styling
+  sharedComponents: HCM Util React Components library (@sofaking/hcm-util-react-components) with 50+ reusable UI components
+  apiIntegration: REST API calls to backend microservices (Job Postings, Applications, Job Seeker, Organizations, Permissions)
+  serviceAuthentication: Ottoman trusted header injection for user context
+  secretsManagement: Environment variables via Kubernetes ConfigMaps
+  serviceLogging: Client-side logging to browser console; server-side Next.js logging
+  healthWelfareMonitoring: Kubernetes liveness and readiness probes
+  availabilityModel: Multi-replica deployment with horizontal pod autoscaling
+  scalabilityModel: Horizontal scaling via Kubernetes HPA; static asset CDN for performance
+  recoverabilityModel: Kubernetes self-healing; stateless application design
+  failureDomain: AWS availability zones; Kubernetes node distribution
+  deployment: Containerized via Docker, deployed to Kubernetes, separate deployments for job-seeker and employer apps
+  buildOptimization: Next.js optimizations including code splitting, image optimization, and SSR/SSG support
+notes:
+  background: "Production-ready Next.js monorepo serving dual audiences - job seekers (Retailjobspot) and employers (Recruit & Hire). Job seeker app includes public unauthenticated job search for external jobs and authenticated features for profile, applications, and goal-based matching with access to internal organizational jobs. Employer app provides comprehensive hiring workflow from job posting creation through application review and candidate selection with customizable pipelines and permissions. Part of nextgen HCMRH platform (Retailjobspot and Recruit & Hire)."

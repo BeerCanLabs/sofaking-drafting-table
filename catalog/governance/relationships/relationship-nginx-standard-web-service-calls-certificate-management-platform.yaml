@@ -1,0 +1,10 @@
+schemaVersion: '1.0'
+type: relationship
+uid: 01KSKZV601-PB75
+name: NGINX Standard Web Service → Certificate Management Platform
+catalogStatus: stub
+source: 01KQQ5JT1F-7VJE
+label: calls
+externalTarget: Certificate Management Platform
+notes:
+  background: "TLS certificate issuance and renewal for public and internal endpoints."
