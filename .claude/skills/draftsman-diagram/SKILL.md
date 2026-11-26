@@ -1,0 +1,103 @@
+---
+name: draftsman-diagram
+description: Use when someone wants to see or change a DRAFT deployment-pattern diagram, fix the catalog objects behind it, record a box order, or get Mermaid or C4 text. Needs the Author profile from draftsman-core.
+generated: true
+source_sha256: "1bf99bc7be88e0416d67c14d10fe14a82876e717c83510c2ed12a194c9bb377f"
+---
+
+# Draftsman Diagram
+
+Load `draftsman-core` first. This skill needs the **Author profile** for anything that edits the catalog or runs a command. With only the Query profile, send the link to the published page and describe the architecture in words.
+
+Nothing here requires an AI session to produce a diagram. The published site already carries them; this skill explains how to read them and how to change the objects behind them.
+
+## Send people to the published page first
+
+The browser generator (`generate_browser.py`) renders one diagram page per deployment pattern into `docs/diagrams/` beside the browser. The pattern's detail page in the browser embeds the two figures as its Application and Deployment sections, each with a Fit width / Actual size toggle and an `Open full page` link to the standalone diagram page; each standalone page links back to the browser. Give the user the detail page or the standalone page, not a fresh render and not a drawing. Run the standalone generator only for an unpublished draft or a pattern not yet in the published catalog.
+
+The generator is the only path for the two views (`framework/tools/generate_diagram.py`, the same code the browser generator runs). Hand-drawn SVG is forbidden for the logical or deployment view, including quick sketches and edits to a generated file; hand layouts differ between runs and cannot be tested.
+
+## How to read the page
+
+- **All connections are shown** by default. Hovering, focusing or pinning a box (click a box; the same uid is highlighted in both figures) brings that box's connections forward and fades the others.
+- **Colours.** Purple lines are calls the box makes (outbound); orange lines are calls it receives (inbound). Small dots move along each line toward the arrowhead (off under reduced motion). A relationship that names its listener (`targetListener`) has one arrowhead, at the listener end, whatever its legacy `flow`; one that names none draws as its `flow` says (`inbound` at the source, `bidirectional` at both ends). Dashed lines are asynchronous, dotted are event flows.
+- **Show all connections.** A checkbox under each figure is checked by default; unchecking it hides the connections until a box is hovered, focused or pinned.
+- **Labels** show with their line, at the end farthest from the selected box, inside that box's width. In the Application view a label is two lines (the label, then its technology) when a technology is recorded, otherwise one. In the Deployment view the second line is the technology, or the resolved port chain, or `technology · chain`, and exists even without a recorded technology. Each line is clipped to the box width. Labels appear only for the edges of the hovered, focused or pinned box; the `Show all connections` checkbox does not add them. The full text is in the tooltip and in the callout shown when a single line is hovered.
+- **Logical application diagram.** Components and data components in bands: presentation, application, data, utility. Placed infrastructure is not drawn in the logical view; unplaced infrastructure a component depends on still appears in the External interactions lane.
+- **Deployment pattern diagram.** Deployment target, then service group container (captioned by its substrate), then network-zone lane, then component box. Placed infrastructure (network, runtime, host, AI gateway, data store services) appears only here. Each data component sits inside a container named for the data store service in its `runsOn`; that store has no box of its own unless it hosts no data component. `data store not recorded` means `runsOn` is absent or unresolved.
+- **External interactions lane.** The right-hand lane holds dependencies of the pattern that it does not place, captioned with the pattern that places them, `placed in N other patterns`, `not placed in any pattern`, or `external` for an `externalTarget` string. It shows dependencies only: consumers that merely call into the pattern are not drawn, and neither is any line between two outside objects.
+- **Dashed borders.** A dashed border marks one of three things: a box with a derived tier (no recorded `diagramTier`), a retired or deprecated object, and a `data store not recorded` container. A dashed service group container has an inferred substrate. Say which applies; derived values are not recorded.
+- **Recorded conflicts section** appears only when a placed component's `runsOn` names something other than its group's substrate. Both values are shown and nothing is resolved. Quote both and ask which is right.
+- **Embedded sections.** The pattern detail page shows the Application and Deployment sections only after the shell is refreshed on an existing install (`generate_browser.py --refresh-shell`); if they are missing, say so and give the standalone page path instead. A pattern with no generated diagram page shows a one-sentence note in each section.
+- **Browser additions.** The pattern's Service Groups rows show `Exposed through: <devices>` (`not exposed` for `exposedThrough: none`, nothing when undetermined), and the Connections table has an Interface column (the relationship's `targetInterface`) and a Listener column (the `targetListener`'s name with protocol, port and endpoint, blank when none is named). A product component, data component or external system detail page has an Owned Listeners section listing the Listener objects it owns (protocol, port, endpoint, authenticationModel, catalogStatus), in listener order.
+- **Relationships table.** `Source` reads `relationship object` or `inline dependency`. Placement (`runsOn`, `host`) is never an edge.
+
+## Model rules behind the picture
+
+A pattern owns application components and data components. Service definitions (data stores, runtimes, hosts, load balancers) are deployed through `substrate` on a service group and `runsOn` on a data component, and appear only in the deployment view. External services (Okta, Secrets Manager, SaaS) are External interactions reached by relationships.
+
+1. **Document, do not infer (R1, R3).** Boxes and lines come from recorded catalog data. No relationship means no line. Never add one because it seems likely.
+2. **Show gaps.** Retired and deprecated objects stay, styled as such; a missing label, technology or tier shows as not recorded.
+3. **Report conflicts, do not resolve them.** Quote both recorded values and let the user choose.
+4. **Use the user's scope.** With several patterns and none named, run `--list` and ask.
+
+## Ports and the edge device chain
+
+- **Application view:** one entrance per Listener object a box owns (ordered by port, protocol, endpoint, uid), entered through the relationship's `targetListener`; a box with no Listener objects keeps one entrance per declared `interface`. Never a port, never a device.
+- **Port chain (Deployment view only).** A connection's label ends in the resolved port: `SQL 5432`, `gRPC 8092`, `https 443 → http 8080`. The target's port is the port of the Listener object its `targetListener` names when that listener has one; otherwise it is resolved as below. Each device in the chain adds its listener matching the protocol family, else its single listener, else no port, before the target's. Technology prints alone when absent or equal to the chain's first protocol word (case-insensitive), else `technology · chain` (`PostgreSQL wire protocol · SQL 5432`); a gRPC interface served by an `HTTP/2` port prints `gRPC 8092`. The callout adds `via <device>`.
+- **Device chain.** An exposed group draws its edge devices (firewall, web-application-firewall, load-balancer, api-gateway, ingress, in that order) as a row at the top of its own container. They appear because the group has a north door and protection (firewall, WAF), availability or performance (load balancer) and routing (ingress, gateway) requirements apply; no caller is drawn. Connections from outside the deployment target route through the chain; same-target traffic never does. `exposedThrough: none` draws nothing; a group of only data components is not exposed by default.
+- **Listeners.** Every relationship names its `targetListener` (ratcheted rule `relationship-target-listener`). A missing one is fixed in the catalog with Listener Lookup Before Create (`.draft/framework/docs/draftsman.md`), never by inventing a port.
+- **Page lacks a port:** the infrastructure team declares `listeners` on the definition (runtime, data store, network service or host), or the component records an inbound `runtimeSpec.ports` entry. Do not invent a port.
+- **Page lacks a device:** fill the edge slot with `fills` on the reference architecture entry, or set `exposedThrough` on the service group.
+- **Edge enters the wrong entrance:** name the target interface in the relationship's `targetInterface` (required when the target is a product component; ratcheted rule `relationship-target-interface`).
+- Hostnames, IPs, endpoints, security-group rules, certificates and health checks are not recorded in DRAFT.
+
+## Fixing the objects behind a picture
+
+When a diagram looks wrong, the fix is a catalog change, then a pull request, never an edit to the page.
+
+- **Wrong band:** set the right `diagramTier` on the deployable object entry in the pattern.
+- **Missing data component:** add the `data_component` to the pattern's service group with `runsOn` naming its data store service.
+- **A standard placed as a deployable object:** a service definition listed in `deployableObjects` belongs in `substrate` (service group) or `runsOn` (data component). Move it; do not draw it as a component.
+- **A relationship recorded on a definition:** relationships sourced by a placed definition that point to objects in other patterns are not drawn here. Record the relationship on the application component that really makes the call.
+- **Ownership rules.** `sdp-placement-types` rejects any `deployableObjects` ref that is not a `product_component` or `data_component` (runtime, host, data store, network service, AI gateway, or an instance); `relationship-definition-endpoint` rejects a relationship whose source or target is a service definition. Both are ratcheted: existing violations sit in `.draft/validation-baseline.yaml`, and an object you change must be fixed. An external service that lives in the definitions folder takes `serviceRole: instance` so it can be a relationship endpoint.
+- **Wrong placement:** `duplicate placement` and `undeclared network zone` warnings mean the pattern entry needs correcting.
+- Validate with `python3 framework/tools/validate.py`, then open the pull request. A `baseline:` warning is a known violation on an unchanged object; one on an object you changed is an error to fix. Do not run `validate.py --write-baseline` to silence a violation in an object you are editing.
+
+## Recording a box order
+
+People can reorder boxes within their band or zone lane; the order is a `diagram_layout` object beside the pattern file (schema `framework/schemas/diagram-layout.schema.yaml`), and every render honours it. Tiers and zones stay catalog facts.
+
+1. Render the editable local page (never published, never used by workflows):
+   `python3 framework/tools/generate_diagram.py --sdp "<name, alias or uid>" --editable --output FILE`
+2. Drag boxes, or focus one and press Alt with an arrow key, within its own band, zone lane or data store container (store containers are fixed; only the data components inside them move); ordinals renumber per container. Reloading discards changes.
+3. Choose `Export layout` and save the YAML it shows to a file. Its `uid` is `NEW` when no layout existed.
+4. Write it: `python3 framework/tools/generate_diagram.py --sdp "<uid>" --write-layout --layout-from FILE --output /tmp/layout-check.html` (the command also renders a page, so send it to a temp path). `--layout-from` requires `--write-layout`. An existing uid is kept, a new layout gets a fresh uid, and every `ref` must be a drawn node.
+5. Run `python3 framework/tools/validate.py`, then open the pull request. The published page picks the order up on the next browser build.
+
+`--write-layout` without `--layout-from` writes the layout from the current drawn order. It cannot combine with `--placed-only`. An update rewrites the layout file and drops hand-written comments. More than one layout for a pattern warns, and the lowest uid wins.
+
+## Standalone generator (unpublished drafts only)
+
+```bash
+python3 framework/tools/generate_diagram.py --list [--workspace PATH]
+python3 framework/tools/generate_diagram.py --sdp "<name, alias or uid>" [--workspace PATH] [--output FILE] [--placed-only] [--svg-dir DIR]
+python3 framework/tools/generate_diagram.py --all --output-dir DIR [--svg-dir DIR] [--workspace PATH]
+```
+
+In a vendored workspace use `.draft/framework/tools/generate_diagram.py` with `--workspace` set to the workspace root. `--sdp` is optional when there is one pattern; an ambiguous selector is an error, so use `--list`. Exit 0 means rendered, 1 means a pattern failed or none exist, 2 means a usage error or no `catalog/`. Without `--output` the page is `<pattern-name>-architecture.html`. Give the user the file path to open, or publish it if your harness can. Scope is placed objects plus what they depend on; `--placed-only` keeps only placed objects.
+
+## Warnings to read back
+
+The generator prints `N warnings`, then each distinct warning once. Repeat the ones that matter:
+
+- `derived tier: <name> (<uid>) -> <tier>`: ask whether to record `diagramTier`.
+- `conflict: <component> runsOn <X>; group substrate is <Y>`: see Recorded conflicts.
+- `substrate also listed as deployable object`, `unknown substrate uid`, `substrate ... has type ...`: the substrate is recorded inconsistently.
+- `data store not recorded: <name> (<uid>) ...`: ask which store the data component runs on.
+- `duplicate placement`, `undeclared network zone`, `unknown flow`: correct the entry.
+- `multiple diagram layouts for <sdp>`, `layout position for undrawn object <ref>`: remove the stale layout or entry.
+
+## Mermaid and C4 text
+
+For a conversational answer, embeddable text, or a sequence or component view of one object, write text from `references/mermaid.md`. It is outside the determinism guarantee and is never a diagram of record. The detail page does not show Mermaid; its Application and Deployment sections carry the generated figures.

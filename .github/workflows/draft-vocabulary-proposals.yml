@@ -21,10 +21,10 @@ permissions:
 
 jobs:
   propose-vocabulary-values:
-    runs-on: [self-hosted, linux, docker]
+    runs-on: ubuntu-latest
     steps:
       - name: Check out workspace
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Apply vocabulary proposals
         run: python .draft/framework/tools/apply_vocabulary_proposals.py --workspace .

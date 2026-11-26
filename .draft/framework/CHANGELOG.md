@@ -1,0 +1,6265 @@
+## 1.22.3 - 2026-11-25
+
+### Compatibility Impact
+
+- No schema, validation, or catalog-contract change. `update-branch` now sends `update_method=merge`. A sync pull request that the merge skips because of its author, or because the shared index files are not a fresh generation, gets one comment saying that head was not auto-merged and must not be merged by hand without a new sync. Later runs do not repeat the comment. Cancel looks for the workflow named by `--validate-workflow` or `DRAFT_VALIDATE_WORKFLOW`, default `Validate Catalog`, and also cancels runs in `action_required`.
+
+### Added
+
+- `sdp_sync.py publish` and `sdp_sync.py merge` take `--validate-workflow`. When the flag is omitted, `DRAFT_VALIDATE_WORKFLOW` is used, and otherwise the name is `Validate Catalog`. The receiver publish step and **DRAFT Sync Pull Request Merge** both pass `VALIDATE_WORKFLOW`, which must stay the same string as the merge workflow's `workflows:` list.
+
+### Changed
+
+- A publish mismatch says the pull request stayed open only when `gh pr close` fails. A failed comment on a pull request that did close is reported as closed.
+- Cancelling validation runs includes status `action_required`.
+- An author mismatch and an index check that skips the merge each leave the pull request comment described above.
+- `update-branch` is called with `update_method=merge`.
+
+### Fixed
+
+- Comparing shared index files fails closed unless the trusted generators write exactly `docs/assets/draft-indexes.json` and `.draft/AI_INDEX.md`. The `tools` copy of `generate_ai_index.py` writes `AI_INDEX.md` beside the framework, so that fallback no longer makes a blended `.draft/AI_INDEX.md` look clean.
+
+### Migration Notes
+
+- Copy the updated receiver and merge workflow templates onto the central repository. If the validation workflow is not named `Validate Catalog`, set `workflows:` and `VALIDATE_WORKFLOW` in `drafting-table-sync-merge.yml` to that name, and set `VALIDATE_WORKFLOW` on the receiver's publish step to the same name. No new GitHub App permission is required.
+
+## 1.22.2 - 2026-11-25
+
+### Compatibility Impact
+
+- No schema, validation, or catalog-contract change. A receiver that does not copy the updated workflow templates keeps its current behavior. After the templates are copied, a sync pull request opened by an account other than the receiver App is skipped instead of failing the merge job, and an updated head whose shared index files do not match the trusted generators is not merged. Product repositories that copy the dispatch template mint the App token from the same pinned action commit. Ruleset C on `draft-sync/**` is still required.
+
+### Added
+
+- On a publish mismatch, `sdp_sync.py publish` comments on the sync pull request, closes it, and tries to cancel in-progress and queued `Validate Catalog` runs for the other commit before it force-pushes the receiver commit again and fails. The cancel uses the token already passed to publish. That token has contents write and pull-requests write, so GitHub may refuse it. A refusal is included in the failure and does not by itself decide the job. Closing the pull request is what stops the merge workflow from accepting that commit. It does not stop another token from pushing, and it does not cover a merge that already completed.
+
+### Changed
+
+- `templates/github/drafting-table-receiver.yml.tmpl`, `templates/github/drafting-table-sync-merge.yml.tmpl`, and `templates/github/product-repo-sync.yml.tmpl` pin `actions/create-github-app-token` to commit `d72941d797fd3113feb6b93fd0dec494b13a2547` (`v1.12.0`). In the receiver workflow, Python setup and the PyYAML install now use `if: always()`, as checkout already does, so a failed App-token mint still leaves `sdp_sync.py report` able to import PyYAML.
+- `sdp_sync.py merge` treats a pull request author other than the receiver App, including an existing sync pull request from `github-actions[bot]`, as a logged skip. The job stays green. The pusher check is unchanged and still fails the job when `workflow_run.actor` is not the receiver App.
+- Before merging a head with more than one parent (the commit `update-branch` creates), `sdp_sync.py merge` regenerates `docs/assets/draft-indexes.json` and `.draft/AI_INDEX.md` with the trusted generators in a temporary worktree and compares them with that head. A difference, or a generator that cannot be run, skips the merge. The next sync rebuilds the branch from the default branch. A one-parent sync commit is merged without that comparison. The updated head is not rewritten, because that commit would not be the one `validate` passed.
+
+### Fixed
+
+- The 1.22.1 notes said a failed token mint still lets the report write the job summary, and that the publish tip check stops another Contents-write token from having the receiver App open a pull request on a replacement commit. Checkout ran after a failed mint, but Python setup and the PyYAML install did not, so the report could not import PyYAML. The tip check restored the receiver commit and failed, and it left the pull request open, so a validation of the other commit could still be merged. The report steps now run after a failed mint. The mismatch path closes the pull request and attempts the cancel described above. Ruleset C remains required for both.
+
+### Migration Notes
+
+- Copy `templates/github/drafting-table-receiver.yml.tmpl` and `templates/github/drafting-table-sync-merge.yml.tmpl` onto the central repository's default branch, and copy `templates/github/product-repo-sync.yml.tmpl` into product repositories that dispatch syncs, so the App token action stays on the pinned commit. No new GitHub App permission is required. The documented App still has Contents: Read and write and Pull requests: Read and write, and the cancel of a `Validate Catalog` run will usually be refused. Keep ruleset C on `draft-sync/**` with bypass mode **Always** for the receiver App. After enabling the receiver App, close each open `draft-sync/*` pull request once. The next sync opens a new one as the App. An updated head that the merge skips is replaced by that next sync; do not merge the blended index files by hand.
+
+## 1.22.1 - 2026-11-25
+
+### Compatibility Impact
+
+- No schema, validation, or catalog-contract change. A central receiver that does not set `DRAFT_RECEIVER_APP_ID` and `DRAFT_RECEIVER_APP_PRIVATE_KEY` still publishes and reports with `github.token`. Product repositories and the dispatch App (`DRAFT_APP_ID`, `DRAFT_APP_PRIVATE_KEY`, Contents read and write on the central repository only) are unchanged.
+
+### Added
+
+- Opt-in receiver App in `templates/github/drafting-table-receiver.yml.tmpl`. When both repository secrets are set, the workflow mints an `actions/create-github-app-token` installation token scoped to the central repository before checkout, checks out with that token (`persist-credentials` stays on), and passes it as `GH_TOKEN` to `sdp_sync.py publish` and `report`. The force-push then authenticates as the App, so the validation workflow runs on the sync pull request without waiting under **Approve workflows to run**. One secret without the other fails the run. If minting fails, checkout still runs with `GITHUB_TOKEN` so the report can write the job summary.
+- `templates/github/drafting-table-sync-merge.yml.tmpl` and `sdp_sync.py merge`. After the validation workflow succeeds, the receiver App squash-merges the open same-repository `draft-sync/<product>` pull request whose head SHA is the SHA that just validated, whose author is the receiver App, and whose validating run was pushed by that App (`workflow_run.actor`, not `triggering_actor`). The diff must still be confined to that product's cache folder. The legacy flat file counts only when it is deleted. The merge token requests contents write and pull-requests write, because the merge API rejects contents read. If the pull request is behind the default branch, the App updates the branch and waits for `validate` on the new head instead of merging stale indexes. Merges are serialized with concurrency group `draft-sdp-merge`. GitHub auto-merge does not honor a ruleset bypass actor, so this path does not use `gh pr merge --auto`.
+- `docs/decentralized-sdp-setup.md` section **Fully automatic merge**: a second App installed only on the central repository (Contents: Read and write, Pull requests: Read and write), and three rulesets. The approval ruleset bypass is **For pull requests only**. The `draft-sync/**` ruleset bypass is **Always**, because a force-push is not a pull-request merge. The dispatch App must not be the bypass actor. Pin `repository.id` (and optionally `repository.ownerId`) before enabling an unattended merge; that pin is the main gate on the receive path.
+
+### Changed
+
+- The setup guide's Tokens and Permissions table distinguishes `GITHUB_TOKEN` from the receiver App token. `GITHUB_TOKEN` `pull_request` `opened`, `synchronize`, and `reopened` runs are created and held for **Approve workflows to run**; they do not go green unattended. An App token runs them without that prompt. With no receiver App, `publish` can still arm auto-merge, and a required review still blocks it. The dispatch App's permissions stay Contents read and write and nothing else.
+
+### Fixed
+
+- A later sync's force-push can run the required `validate` check without an approval prompt when the receiver App token is configured. The push uses the credentials `actions/checkout` persisted. A `GITHUB_TOKEN` push's `pull_request` run is held for approval and does not go green unattended. Repositories that leave the new secrets unset keep that behavior.
+- A failed token mint no longer skips checkout, so `sdp_sync.py report` can still write the job summary.
+- A merge API error other than HTTP 409 for a moved head, or HTTP 422 from `update-branch` naming `expected_head_sha`, fails the merge job. A ruleset message that merely contains "must match" is not treated as success.
+- `sdp_sync.py publish` reads the branch tip and the pull request head after it opens or updates the pull request. If either is not the commit it just pushed, it force-pushes that commit again and fails. For an `opened` run, `workflow_run.actor` is the account that opened the pull request, so this check is what stops another Contents-write token from replacing the tip in that window.
+
+### Migration Notes
+
+- No action is required to keep the current receiver. Product repositories do not need new secrets. To merge confined sync pull requests without a human review, copy both updated workflow templates onto the central repository's default branch, create a second GitHub App installed only there, store `DRAFT_RECEIVER_APP_ID` and `DRAFT_RECEIVER_APP_PRIVATE_KEY` as secrets of that repository only, set the approval ruleset bypass to **For pull requests only**, set the `draft-sync/**` ruleset bypass to **Always**, and follow the setup in `docs/decentralized-sdp-setup.md`. Do not grant the dispatch App a review bypass. Pin `repository.id` before turning the unattended merge on. Set `workflows:` in the merge workflow to the validation workflow's `name:` if it is not `Validate Catalog`.
+
+## 1.22.0 - 2026-11-25
+
+### Compatibility Impact
+
+- `product_registration` gains two optional fields, `repository.id` and `repository.ownerId`. Registrations that omit them stay valid. `sdp_sync.py receive` still matches those by repository name, and an accepted result now includes a warning asking a Draft Admin to pin the ids. A registration that sets either field is rejected when the GitHub Actions OIDC token does not carry the same numeric id. The receive result JSON always includes a `warnings` list, and the reported outcome (`draft-sdp-sync-result/1`) includes that list and appends it to the message when it is not empty. The product run stays successful for the warning. No catalog migration is required.
+
+### Added
+
+- `repository.id` and `repository.ownerId` on ProductRegistration, GitHub's permanent repository and owner ids (OIDC claims `repository_id` and `repository_owner_id`). When `repository.id` is set, `receive` requires the token's `repository_id` to match, so a deleted and recreated repository cannot sync as the registered product and a rename still can after `repository.url` is updated. `repository.ownerId` is checked only when set. When `repository.id` is omitted, the name match stands and the result warns. The receiver does not write the id into the catalog.
+
+### Changed
+
+- The product-registration schema, validator, template, object-type doc, decentralized SDP setup guide, and the Draftsman registration protocol describe the pins and how to look them up with `gh api repos/OWNER/NAME --jq .id` and `--jq .owner.id`. The setup guide no longer lists name-only matching as an open follow-up.
+
+### Fixed
+
+- A repository that was deleted and recreated with the same `owner/name` no longer passes the receiver when its ProductRegistration pins `repository.id`.
+
+### Migration Notes
+
+- No immediate change is required. To close the recreate gap, set `repository.id` from `gh api repos/OWNER/NAME --jq .id` and `repository.ownerId` from `gh api repos/OWNER/NAME --jq .owner.id` on each ProductRegistration. Write a positive integer or a decimal digit string with no leading zeros. Look the ids up for the repository you intend to register; do not copy them from a sync warning. Until `repository.id` is set, each accepted sync warns in the receive result and in the outcome reported to the product run. Existing sync workflows do not need a template change for this check.
+
+## 1.21.5 - 2026-11-22
+
+### Compatibility Impact
+
+- No schema, validation, or catalog-contract change. The inline YAML editor was already unreachable, and removing it does not change how objects validate.
+- The published `docs/` browser does change. `--refresh-shell` brings `docs/` up to the catalog and shell that have been in the tree since 2026-11-21, and drops `editorSchema` at the same time. `browser-data.js` goes from 324 objects to 339. The new objects are three listeners, the Billing Export and Image Import product components, their two decision records, seven relationships, and the PagerDuty system. The payload gains a `listener` filter value, `ownedListeners` (populated for Billing Export Service and Image Import Service), and `targetListener` on SDP connections. The Security and Security Compliance RequirementGroup requirement count goes from 16 to 18. Per-object `referencedBy` is regenerated with that catalog: two existing objects gain references, and five of the new objects have inbound references. The docs copies of `draft-browser.js` and `draft-browser-sdp.css` gain the Listener column and the Owned Listeners section that were already in the framework shell. The OpenStack IaaS diagram footer moves from framework version 1.6.0 to 1.21.4.
+- No compatibility impact from removing the unreachable Cytoscape SDP graph. SDP diagrams stay on Mermaid and the standalone SVG pages. The cytoscape script remains for the detail relationship graph (`detailCy`). `sdpConnections` is unchanged.
+- No compatibility impact from removing the legacy Executive View panels. The live Overview uses the home tiles and `executiveSidebarMarkup`. The `executiveDrilldown` state was write-only after those panels stopped rendering.
+- No compatibility impact from removing the remaining unreachable browser helpers. The per-object `referencedBy` field stays in each object. The unused top-level `lifecycleValues`, `referencedBy`, and `repoUrl` keys are removed. `repository_web_url()` stays.
+
+### Added
+
+- The published browser now includes those 15 example-catalog objects, the `listener` filter, `ownedListeners`, `targetListener`, and the Listener column and Owned Listeners section in the generated shell.
+
+### Changed
+
+- Removed the unused `js-yaml@4.1.0` script and the empty `#editor-overlay` container from the browser shell.
+- Removed the dead inline YAML editor and requirement-importer JavaScript, including the listener that called the nonexistent `openEditor()`, and the unused `.editor-*`, `.import-card*`, and `.structured-preview` CSS.
+- `generate_browser.py` no longer loads schemas to build `editorSchema` entries in `browser-data.js`. `repository_web_url()` is unchanged. Schema selection in `validate.py` is unchanged.
+- Regenerated `docs/` with `generate_browser.py --refresh-shell` on framework 1.21.4 so the browser data, shell copies, and OpenStack diagram page match the generator. The daily date in `docs/company-vocabulary.html` is left as it was.
+- Removed the unreachable Cytoscape SDP graph from `draft-browser.js`: `SDP_GRAPH_PROTOCOL_COLORS`, `SDP_GRAPH_TIER_COLORS`, `buildSdpGraphElements`, `sdpGraphCy`, and `renderSdpGraph`. `destroySdpGraphCy()` still calls `_sdpTeardown()` so Mermaid embed cleanup keeps working.
+- Removed the unused Executive View builders `executiveMetricTile`, `executiveLifecyclePanelMarkup`, `executiveDomainPanelMarkup`, `executiveArchitecturePanelMarkup`, and `executiveControlDrilldownMarkup`, their CSS, the write-only `executiveDrilldown` state, its `drill` hash parameter, and the `controls` / `clear-drilldown` navigation branches. `executiveSidebarMarkup` stays.
+- Removed unreachable helpers from `draft-browser.js` (`referencedByIndex`, `repoUrl`, `DEPLOYABLE_OBJECT_TYPES`, `lifecycleValues`, `deployableTypes`, `capabilityClass`, `syncHashForImpactView`, `rerenderCurrentView`, `interactionCapabilities`, `referencedTechnologyComponents`, `businessContextMarkup`, `sourceRepositoryMarkup`, `sdmRisksMarkup`, `shortRefLabel`, `deploymentTargetPresentation`, `supportEntryTier`, `outboundCatalogRefs`, `inboundCatalogRefs`, `traverseDown`, `traverseUp`) and from `generate_browser.py` (`CATALOG_FOLDERS`, the unused service-classification predicates, and the unused top-level `lifecycleValues`, `referencedBy`, and `repoUrl` payload keys). The per-object `referencedBy` field and `repository_web_url()` stay.
+
+### Fixed
+
+- The generated browser no longer ships an unused CDN dependency, an empty editor overlay, or unused `editorSchema` payloads.
+- The published browser and the OpenStack IaaS diagram page are no longer stuck on the pre-2026-11-21 snapshot and the 1.6.0 framework stamp.
+- The catalog browser no longer carries an unreachable Cytoscape builder for `#sdp-graph-cy` and `#sdp-graph-legend`, which are not in the page.
+- The Overview hash no longer writes a `drill` parameter that nothing rendered.
+- `browser-data.js` no longer carries top-level `lifecycleValues`, `referencedBy`, or `repoUrl` fields that the live browser did not read.
+
+### Migration Notes
+
+- No catalog migration is required. Company workspaces do not need new object types. Refreshing an install with `python3 tools/generate_browser.py --refresh-shell` drops `editorSchema`, publishes the listener shell that is already in the framework source, drops the unused Cytoscape SDP graph and the legacy Executive View panels, and drops the unused top-level `lifecycleValues`, `referencedBy`, and `repoUrl` keys. The 15 additional browser objects are example-catalog content in this repository. Bookmarks that included `drill=controls` still open the Overview. The per-object `referencedBy` field remains, with the references produced by this refresh.
+
+## 1.21.4 - 2026-11-22
+
+### Compatibility Impact
+
+- No workspace migration. The removed files were not copied by workspace bootstrap. New workspaces still receive `.draft/framework.lock` from `framework_lock_data()`, and workspace creation, validation, CLI commands, and the browser are unchanged.
+
+### Added
+
+- No new objects, commands, schemas, or templates.
+
+### Changed
+
+- Removed the unused workspace templates `templates/workspace/.draft/framework.lock.tmpl` and `templates/workspace/.gitignore.tmpl`. The lock template still named the pre-rename framework URL and was never read. The gitignore template was not installed into new workspaces.
+- The Draft Admins onboarding guide no longer tells administrators to copy a `.gitignore` from the workspace templates.
+
+### Fixed
+
+- `AI_INDEX.md` no longer lists the two removed templates.
+
+### Migration Notes
+
+- No action is required. Company workspaces that already have a `.gitignore` or `.draft/framework.lock` keep those files. Refreshing the vendored framework does not delete or rewrite them from these templates.
+
+## 1.21.3 - 2026-11-22
+
+### Compatibility Impact
+
+- No migration is required. Diagram HTML, SVG, and CLI behavior are unchanged. The helpers tests call (`layout_ordinals`, `export_layout_document`, `build_diagram_model`, `DEPLOY_BORDER_CLEAR`, and `Model.warning_count_line`) stay in place.
+
+### Added
+
+- No new diagram behavior or public API.
+
+### Changed
+
+- Removed unreachable symbols from `tools/generate_diagram.py`: `CHIP_W`, `CHIP_H`, `border_point`, `LOGICAL_LANE_GAP`, and `_max_chars`. `CHIP_W` and `CHIP_H` were only the default size arguments of `border_point`. The `math` import is removed with them because `border_point` was its only use.
+
+### Fixed
+
+- No diagram defect is corrected. This change only deletes code with no callers.
+
+### Migration Notes
+
+- No action is required after refreshing the framework. Company workspaces do not call these symbols, and rendered diagram pages stay the same.
+
+## 1.21.2 - 2026-11-22
+
+### Compatibility Impact
+
+- No migration is required. `framework/personalities/` was already removed, and vendoring only copied that directory when it existed. Dropping the leftover directory name, path rewrites, and workspace documentation does not change validation, Draftsman behavior, or any live catalog object.
+
+### Added
+
+- No new framework objects, commands, or configuration. This change only removes references to the deleted Personality Packs directory.
+
+### Changed
+
+- Removed `personalities` from `FRAMEWORK_VENDOR_DIRS` and from the `framework/personalities` path rewrites in `draft_table/repo.py`.
+- Removed the same directory name and path rewrites from `templates/github/draft-framework-update.yml` and `templates/workspace/.github/workflows/draft-framework-update.yml.tmpl`.
+- Removed the Personality Packs section from `docs/workspaces.md`, including its broken link to `framework/personalities/README.md`.
+
+### Fixed
+
+- Framework update and workspace vendoring no longer list a directory that is not in the framework tree, and workspace docs no longer tell companies to activate a pack the framework does not ship.
+
+### Migration Notes
+
+- No action is required. A later framework refresh stops copying or documenting Personality Packs. Historical changelog entries that mention the removed directory are unchanged.
+
+## 1.21.1 - 2026-11-22
+
+### Compatibility Impact
+
+- No workspace migration. The removed symbols were never called, so catalog validation, CLI subcommands, MCP server tools, ASVS import, UID repair, decentralized SDP export, and the 0.10.0 taxonomy migration CLI keep the same behavior.
+
+### Added
+
+- No new framework objects, commands, or configuration fields.
+
+### Changed
+
+- Removed the unused `sys.path` insertion and the unused `indexes` import (`build_catalog_indexes`, `sorted_objects`) from `tools/mcp_server.py`. `TOOLS_ROOT` and `REPO_ROOT` stay.
+- Removed the unused `dump_yaml` helper from `tools/repair_uids.py`. UID repair still writes YAML with `yaml.safe_dump`.
+- Removed the unused `FRAMEWORK_ROOT` constant from `tools/import_asvs.py`.
+- Removed the unused `typing.Any` import from `tools/decentralize_sdp.py`. The script itself stays.
+- Removed the unused `shutil` import and the unused `is_mapping` helper from `tools/migrations/0.10.0/migrate_object_taxonomy.py`. The historical migration CLI stays.
+
+### Fixed
+
+- No user-facing defect. These imports and helpers had no callers inside their scripts or elsewhere in the repository.
+
+### Migration Notes
+
+- No action is required. Company workspaces do not need to refresh catalogs or rerun a migration because of this cleanup.
+
+## 1.21.0 - 2026-11-22
+
+### Compatibility Impact
+
+- No change to validation results, object contracts, schemas, or workspace behavior. `RELATIONSHIP_ENDPOINT_TYPES` and `interaction_capabilities` in `tools/validate.py` were unused and are removed. Existing catalogs validate the same way.
+
+### Added
+
+- No new framework capability. This release only deletes validator symbols that nothing in the repository called.
+
+### Changed
+
+- Removed `RELATIONSHIP_ENDPOINT_TYPES` and `interaction_capabilities` from `tools/validate.py`. Neither symbol was referenced by the validator, other tools, tests, skills, or string lookups.
+
+### Fixed
+
+- No defect in validation output. The deletion removes dead definitions so they cannot be mistaken for an active relationship or interaction rule.
+
+### Migration Notes
+
+- No action is required. Company workspaces do not reference these symbols, and refreshing the framework does not change catalog validation.
+
+## 1.20.15 - 2026-11-22
+
+### Compatibility Impact
+
+- None. This removes an accidentally tracked empty gitlink from the framework repository. Schemas, validation, tools, templates, and company workspace behavior are unchanged.
+
+### Added
+
+- `.gitignore` ignores `.claude/worktrees/` so a local Claude Code worktree cannot be staged again.
+
+### Changed
+
+- The repository index no longer records `.claude/worktrees/agent-a699b6c2`. `.claude/commands/draft.md` is unchanged.
+
+### Fixed
+
+- Removed the bare gitlink `.claude/worktrees/agent-a699b6c2` (mode 160000, commit `5a6ede2d`) that was committed in `637dfd9` with no `.gitmodules` entry and no references in the tree.
+
+### Migration Notes
+
+- No action is required. Company workspaces do not vendor this path. After pulling, Git drops the gitlink; anything under `.claude/worktrees/` stays untracked.
+
+## 1.20.14 - 2026-11-22
+
+### Compatibility Impact
+
+- No workspace, schema, or CLI behavior change. `draft_table/cli.py` no longer defines the unused `run_command` helper or imports `subprocess` and `sys`. Every existing subcommand, argument, and printed result stays the same.
+
+### Added
+
+- No new commands, options, or public helpers. This release only records the removal of dead code from the DRAFT Table CLI module.
+
+### Changed
+
+- `draft_table/cli.py` drops `run_command` and the `subprocess` and `sys` imports that existed only to support that helper.
+
+### Fixed
+
+- The DRAFT Table CLI module no longer carries an unused helper and unused imports that nothing in the package or tests called.
+
+### Migration Notes
+
+- No action is required. `run_command` was not a CLI subcommand and had no callers in this repository.
+
+## 1.20.13 - 2026-11-21
+
+### Compatibility Impact
+
+- None. Documentation only; no tool, template or schema changes.
+
+### Added
+
+- `docs/proposals/sdp-return-path.md` (#195): a design, not built, for how central changes (review findings, shared-service updates, corrections) reach a product repository. It recommends "central publishes, product pulls": requests are reviewed central catalog content, and each product repository's own workflow reads its requests with the App token it already has and opens an issue with its own `GITHUB_TOKEN`, so no central credential ever touches a product repository. It sets out who owns each step (the central side asks, the product team changes) and the open questions.
+- `tests/test_sdp_sync_docs.py`: the setup guide names every secret, variable, workflow and constant the templates and `sdp_sync.py` use, documents the known limits, and has valid example UIDs; the return-path proposal stays design only.
+
+### Changed
+
+- `docs/decentralized-sdp-setup.md` rewritten for the tested pipeline: one-time setup (central settings, the GitHub App with Contents access on the central repository only, registration with the now-required `defaultBranch`, product repository variables), a tokens-and-permissions table, the OIDC audience and checks, the `draft-sdp-sync/1` payload and limits, what the receiver accepts, the cache layout, the pull-request flow and auto-merge, how failures reach the product team, deletion, security notes and known limits, troubleshooting by message, and the upgrade from flat `external_sdps` files and the original templates.
+
+### Fixed
+
+- The setup guide now documents two limits found while building #195: a live OIDC token can be resent with different files for the same commit during its lifetime (and what limits that risk), and required status checks do not run on sync pull requests opened with `GITHUB_TOKEN` (with the two ways to handle it and the repository settings involved).
+
+### Migration Notes
+
+- No action is required by this release. Teams adopting or upgrading the sync should follow the new "One-Time Setup" and "Upgrading from the Original Sync" sections of `docs/decentralized-sdp-setup.md`, and decide how to handle required status checks on `draft-sync/*` pull requests before enabling `DRAFT_SYNC_AUTO_MERGE`.
+
+## 1.20.12 - 2026-11-21
+
+### Compatibility Impact
+
+- Both sync templates change again. The receiver's last step, "Report Sync Result" (`if: always()`), writes a job summary for every outcome and, when the sender's identity was verified, records the outcome as `results/<owner>__<name>/<correlationId>.json` on a `draft-sync-results` branch it creates from the default branch (with the `contents: write` it already has). The sender's new last step, "Await Central Result", reads that file with the App token it already uses for the dispatch and fails the product repository's run with the receiver's message. No new permission or secret; the sender's run now lasts until the central result arrives (default up to 20 minutes, repository variable `DRAFT_SYNC_AWAIT_MINUTES`).
+
+### Added
+
+- `sdp_sync.py report` (receiver) and `sdp_sync.py await-result` (sender) (#195 gap 7). An outcome is `accepted` (with the pull request), `rejected` (with the receiver's reason) or `failed` (validation failures, listed with the product's own files first and paths relative to the workspace; a failed pull request; or a run that stopped early), plus the commit, correlation id and receiver run link. `await-result` polls only its own correlation id, retries while the file does not exist, stops at once on 401/403, and prints the outcome as an escaped `::error` annotation and a job summary.
+- `tests/test_sdp_sync_report.py` with a fake GitHub contents API and command runner.
+- `receive` results now include `identityVerified`.
+
+### Changed
+
+- `templates/github/drafting-table-receiver.yml.tmpl`: "Validate Workspace Architecture" runs with `shell: bash` and keeps its output in `$RUNNER_TEMP/validate.log` for the report.
+- `templates/github/product-repo-sync.yml.tmpl`: adds "Await Central Result" after the dispatch.
+
+### Fixed
+
+- A rejected or invalid sync now fails the product repository's sync run with the reason, instead of appearing only in the central workspace's Actions log.
+
+### Migration Notes
+
+- Update both templates. Payloads rejected before the sender's identity is verified (old template, malformed payload) are shown only in the central run's summary, so the product run times out with a hint to check the central repository's Actions. Result files accumulate on `draft-sync-results`, one small file per sync; delete the branch at any time to clear them (the next report recreates it).
+
+## 1.20.11 - 2026-11-21
+
+### Compatibility Impact
+
+- The central receiver no longer commits to its default branch. Copy the new `templates/github/drafting-table-receiver.yml.tmpl`: it needs `pull-requests: write` (added to the template) and the repository setting "Allow GitHub Actions to create and approve pull requests". Each product's sync becomes one pull request from `draft-sync/<owner>__<name>`, updated by later syncs; synced content reaches the catalog when someone merges it. The `stefanzweifel/git-auto-commit-action` step is gone. Product repositories need no change.
+
+### Added
+
+- `sdp_sync.py publish` (#195 gap 6): after `receive`, validation and index regeneration, it commits the changed files (never Python bytecode) to `draft-sync/<product>` on top of the default branch, force-updates that branch, and opens the product's pull request or updates the open one (title, body with repository, commit, registration, correlation id and the changed files). With `--auto-merge true` (template: repository variable `DRAFT_SYNC_AUTO_MERGE=true`) it requests squash auto-merge only when every change is inside that product's cache folder (or its old flat file) plus the regenerated `docs/assets/draft-indexes.json` and `.draft/AI_INDEX.md`; a later update that reaches further turns auto-merge off. Every git and gh call is an argument list. The outcome is added to the result file under `publish`.
+- `tests/test_sdp_sync_publish.py`: a fake command runner for every branch of the flow, plus the template's own publish script against a real git repository with a fake `gh`.
+
+### Changed
+
+- `templates/github/drafting-table-receiver.yml.tmpl`: `permissions` adds `pull-requests: write`; a `draft-sdp-sync` concurrency group runs syncs one at a time; the last step is "Publish Sync Pull Request" (`GH_TOKEN` from `github.token`, base from the event's default branch).
+
+### Fixed
+
+- A sync can no longer change the central workspace's default branch without a pull request.
+
+### Migration Notes
+
+- Enable "Allow GitHub Actions to create and approve pull requests" in the central repository (Settings, Actions, General) before updating the receiver. To use auto-merge, also enable "Allow auto-merge" and set the `DRAFT_SYNC_AUTO_MERGE` variable to `true`. Pull requests opened with `GITHUB_TOKEN` do not start other workflows, so required status checks on the default branch will not run on them; leave such checks off for these branches or merge by hand.
+
+## 1.20.10 - 2026-11-21
+
+### Compatibility Impact
+
+- `sdp_sync.py pack` now sends every YAML file under the product repository's `.draft/catalog/` with `.draft/sdp.yaml`, and the receiver now rejects a sync whose objects reference a UID that is neither in the same sync nor already in the central workspace. A product whose SDP points at an object the central workspace does not have must sync or register that object first. Files under `.draft/catalog/` that are not product-owned types, hidden paths, unreadable YAML and symbolic links now stop the sender before it dispatches.
+
+### Added
+
+- `sdp_sync.py` product catalog sync (#195 gap 5): `pack` collects `.draft/sdp.yaml` plus `.draft/catalog/**/*.yaml|yml` (other files are ignored) and checks each the way the receiver will. `receive` stores them under `.draft/external_sdps/<owner>__<name>/catalog/` and runs a reference check: every UID-shaped value (collected like `validate.py`) must be an object in the sync or resolve in the workspace's framework and provider configurations, `catalog/`, community content or another product's cache. The product's own previous snapshot does not count, so a reference to an object the product stopped syncing is caught. The rejection names each file and its missing UIDs.
+- Tests in `tests/test_sdp_sync.py` and `tests/test_sdp_sync_templates.py`.
+
+### Changed
+
+- The UID ownership and reference scans read multi-document YAML files.
+
+### Fixed
+
+- A missing `.draft/sdp.yaml` sends a delete that removes every file cached for the product, including its catalog objects, even when `.draft/catalog/` still has files; a resync drops catalog files the product removed.
+
+### Migration Notes
+
+- Before updating the receiver, check that each product's `.draft/sdp.yaml` and `.draft/catalog/` reference only objects they sync or that the central workspace holds. Deleting a product's SDP leaves central objects that referenced its components dangling; `validate.py` reports them.
+
+## 1.20.9 - 2026-11-21
+
+### Compatibility Impact
+
+- The SDP receiver now requires a GitHub Actions OIDC token in every sync payload (`oidcToken`) and rejects payloads without one. Product repositories and the central workspace update together again: copy the new `templates/github/product-repo-sync.yml.tmpl` (its job already has `permissions: id-token: write`; the pack step now passes `--central-repository`) and `templates/github/drafting-table-receiver.yml.tmpl` (passes `--central-repository`). Only the registered default branch (`repository.defaultBranch` on the ProductRegistration, which is now required) can sync. `sdp_sync.receive()` now takes `central_repository=` and optional `keys=` and `now=` arguments.
+
+### Added
+
+- `sdp_sync.py` sender identity (#195 gap 4): `pack --central-repository OWNER/NAME` asks the runner for an OIDC token with audience `draft-sdp-sync:<central owner>/<central name>` and attaches it; `receive --central-repository OWNER/NAME` verifies its RS256 signature against GitHub's published key set (`https://token.actions.githubusercontent.com/.well-known/jwks`) with the standard library only, and checks the issuer, the audience, expiry and not-before (60 seconds of clock skew allowed), that the token's `repository` is the payload's registered repository, that its `ref` is `refs/heads/<defaultBranch>` and that its `ref` and `sha` match the payload. Every rejection names its reason; the token is never written to the cache, the result file or the log. `receive --jwks FILE` reads a key set from a file for tests and offline checks.
+- `tests/test_sdp_sync_oidc.py` and `tests/sdp_sync_identity.py`, which sign test tokens with a fixed test-only key (`tests/fixtures/sdp_sync/oidc_test_key.json`) and inject its key set.
+
+### Changed
+
+- `templates/github/product-repo-sync.yml.tmpl` and `templates/github/drafting-table-receiver.yml.tmpl` pass the central workspace's name to `sdp_sync.py` through an environment variable. The App token step is unchanged.
+
+### Fixed
+
+- A workflow in another repository, a fork, or a feature branch can no longer sync as a registered product by putting that product's name in the payload.
+
+### Migration Notes
+
+- Make sure each syncing product's ProductRegistration sets `repository.defaultBranch` to the branch that syncs. Update the central receiver and each product's sync workflow from the templates in the same change window; a product still on the old template is rejected with a message asking for the update. The receiver needs outbound HTTPS to `token.actions.githubusercontent.com` (GitHub-hosted runners have it).
+
+## 1.20.8 - 2026-11-21
+
+### Compatibility Impact
+
+- The SDP receiver now rejects a sync unless exactly one ProductRegistration under the central `catalog/` has `repository.url` for the sending repository (GitHub, any common URL form, case-insensitive). Products that sync today without a registration must be registered first. Synced objects must be product-owned types, use UIDs that neither the central catalog nor another product owns, and only describe the product's own objects. Existing cached files are not changed until that product syncs again.
+
+### Added
+
+- `sdp_sync.py receive` acceptance checks (#195 gap 3): ProductRegistration match (`find_registration`, `normalize_github_url`), a type allowlist (`software_deployment_pattern`, `product_component`, `data_component`, `listener`, `relationship`, `decision_record`), UID ownership against the central catalog and every other product's cache (including old flat files), and a rule that a synced relationship's `source`, listener's `owner.ref` and decision record's `linkedObject` must be objects in the same sync. Every rejection names its reason, and the result file records the registration UID.
+- `tests/test_sdp_sync_acceptance.py`.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- A repository that is not registered, or registered to a different product, can no longer overwrite or delete another product's cached SDP.
+
+### Migration Notes
+
+- Before updating the receiver, make sure every syncing product has a ProductRegistration whose `repository.url` is its GitHub repository, and that no product syncs a copy of an object the central catalog already holds (move such objects to the product repository or out of the sync).
+
+## 1.20.7 - 2026-11-21
+
+### Compatibility Impact
+
+- The sync workflow templates change. Product repositories and the central workspace adopt them by copying the new `templates/github/product-repo-sync.yml.tmpl` and `templates/github/drafting-table-receiver.yml.tmpl`; both sides must update together, because the receiver now accepts only the `draft-sdp-sync/1` payload and rejects the old `sdp_content` shape with an upgrade message. Product repositories need no new secrets; an optional `DRAFT_FRAMEWORK_REF` repository variable pins the sync tool to the central workspace's framework version (default `main`).
+
+### Added
+
+- `tests/test_sdp_sync_templates.py`: no `run:` step in either template contains a `${{ }}` expression, no template reads `client_payload` through an expression, the sender packs with the framework tool and dispatches the payload file, the receiver receives from the event file before validating, and the templates' own scripts, run with hostile repository names and an SDP full of shell metacharacters, treat them as data.
+
+### Changed
+
+- `templates/github/product-repo-sync.yml.tmpl`: checks out `getdraft/draftsman` (`tools` only) at `DRAFT_FRAMEWORK_REF`, runs `sdp_sync.py pack` with values passed as environment variables, and sends the payload file with `jq --slurpfile` and `curl --fail-with-body`. A deleted `.draft/sdp.yaml` now sends a delete instead of skipping. The App token step is unchanged.
+- `templates/github/drafting-table-receiver.yml.tmpl`: runs `sdp_sync.py receive` on `$GITHUB_EVENT_PATH` before validation; the commit message no longer includes a payload value. It still commits to the default branch until the pull-request flow (#448).
+
+### Fixed
+
+- #195 gap 1: the receiver stores the SDP as YAML, so a single quote no longer breaks it and validation sees an SDP object rather than a string.
+- #195 gap 8: no payload value is interpolated into script text in either template.
+
+### Migration Notes
+
+- Replace both workflow files from the new templates at the same time (central receiver first is safest: until a product repository updates, its syncs are rejected with a clear message rather than stored wrongly). Optionally set `DRAFT_FRAMEWORK_REF` in each product repository to the central workspace's framework version tag.
+
+## 1.20.6 - 2026-11-21
+
+### Compatibility Impact
+
+- None yet. `tools/sdp_sync.py` is new and the sync workflow templates do not call it until the next change, so existing product and central workspaces behave as before. The tool's cache layout is `.draft/external_sdps/<owner>__<name>/`; `validate.py` already reads every YAML file under `.draft/external_sdps/`, including the old flat `<owner>_<name>.yaml` files, which the tool removes when it stores that product's new snapshot.
+
+### Added
+
+- `tools/sdp_sync.py` (#195): `pack` builds a versioned `repository_dispatch` payload (`draft-sdp-sync/1`: repository, commit, ref, action, correlation id and the files' text) from a product repository, packing a delete when `.draft/sdp.yaml` is missing, and refuses payloads over GitHub's limits (10 top-level properties, 64 KB). `receive` reads the payload or the GitHub event file, checks every field, stores each file as the exact YAML text sent (never a JSON-quoted string), replaces the product's cache folder as a snapshot, refuses paths outside `.draft/sdp.yaml` and `.draft/catalog/**.yaml`, and writes a result file. Nothing is written when a payload is rejected, and every rejection names its reason.
+- Fixture product repository and central workspace in `tests/fixtures/sdp_sync/`, and `tests/test_sdp_sync.py`: a round trip through both commands that `validate.py` accepts, the old payload shape, resync and delete, size limits and rejections.
+
+### Changed
+
+- `tests/test_flow_retirement_examples.py` finds the #368 adoption note in whichever release section holds it, so it keeps passing after release promotion.
+
+### Fixed
+
+- The stored SDP is YAML rather than a quoted JSON string, and a single quote in the YAML no longer breaks the write (#195 gap 1), once the receiver template calls `sdp_sync.py receive` in the next change.
+
+### Migration Notes
+
+- No workspace migration required yet.
+
+## 1.20.5 - 2026-11-21
+
+### Compatibility Impact
+
+- None for existing content. New example objects only, plus documentation. This release completes #368: `flow: inbound`, `flow: bidirectional` and free-text `externalTarget` are deprecated, not removed. They keep loading, validating and rendering; removing them is left for a later major version.
+
+### Added
+
+- Examples of the listener target model in `examples/catalog/`: Billing Export Service and Image Import Service each own an SFTP listener on TCP port 22 at `/` (look-alike listeners, different owners, so two listeners), and the PagerDuty `system` owns one Events API v2 listener that the Ops Console, Billing Export Service and Image Import Service all target. All of them validate without the baseline.
+- `tests/test_flow_retirement_examples.py`.
+
+### Changed
+
+- `docs/object-types.md` states the target model for a call (caller as `source`, listener owner as `target`, `targetListener`, no `flow` or `externalTarget`).
+- `docs/how-to-add-objects.md` (Add A Listener) asks about near matches and walks through the new examples.
+- `docs/assets/draft-indexes.json` and `AI_INDEX.md` regenerated for the new examples.
+
+### Fixed
+
+- `draft_table.catalog.load_effective_catalog` now loads Listener objects from `catalog/engineering/listeners/` (and `catalog/listeners/`), so the lookup helpers find listeners stored where the docs say to put them.
+
+### Migration Notes
+
+- Adoption path for the relationship deprecations (#368), a strangler migration:
+  1. Refresh the framework (`/draft update`).
+  2. Run `python3 .draft/framework/tools/validate.py --workspace . --write-baseline` and commit `.draft/validation-baseline.yaml`. Existing uses of the deprecated fields become `baseline:` warnings under `relationship-flow-deprecated`, `relationship-external-target-freetext` and `relationship-source-is-listener-side` (and `relationship-target-listener`), so nothing fails.
+  3. Migrate on touch: a new relationship, or an edited one, is checked as an error again. Before editing one, run `/draft migrate` (or `migrate_relationships.py --object <uid>`) for reviewed proposals: caller as `source`, a `system` object and its listener instead of `externalTarget`, no `flow`.
+  4. Optionally migrate a whole SDP or folder at a time with `/draft migrate sdp <uid>` or `folder <path>`, then re-run `--write-baseline` to drop the cleared entries.
+
+## 1.20.4 - 2026-11-21
+
+### Compatibility Impact
+
+- `draft_table.catalog.link_or_stub_listener` and `record_authored_listener` now return `action: near_match` with `candidates` instead of creating a listener when an existing listener of the same owner and protocol differs only by an API version in the path, by an extending path on the same port, or by the port. Pass `confirmed_new=True` once the user says none is the same listener to get the previous behaviour. Exact matches, owner resolution and stubs with no near match behave as before. Catalog content, validation and diagrams are unchanged.
+- `migrate_relationships.py` asks about a near-match listener instead of proposing a new stub beside it.
+
+### Added
+
+- `/draft migrate [object|sdp|folder]` (`draft-actions/migrate.md`): runs `migrate_relationships.py` with the report and patch outside `catalog/`, presents its proposals for review, asks each needs-input question, and applies only what the user approves before validating (#368).
+- `draft_table.catalog.near_match_listeners` and `listener_near_match`: listeners that look like the one described (version, path or port difference, same owner and protocol) but are not an exact match.
+- `tests/test_listener_near_match.py`.
+
+### Changed
+
+- Listener Lookup Before Create (`docs/draftsman.md`) gains step 4, "Ask about near matches": never link a near match silently. The `draftsman-author` and `draftsman-core` skills carry the same rule.
+- `/draft` routing (`commands/draft.md`), the help tables in `templates/workspace/AGENTS.md.tmpl`, `templates/workspace/README.md.tmpl`, `docs/draftsman-ai-configuration.md` and `docs/operations-guide.md`, and the Cursor and Windsurf integrations list `migrate`.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Tools that call `link_or_stub_listener` or `record_authored_listener` should handle `near_match` by asking the user, then call again with `confirmed_new=True` if it is a different listener. Existing workspaces pick up `/draft migrate` on their next framework update; regenerated workspace files list it in the help table.
+
+## 1.20.3 - 2026-11-21
+
+### Compatibility Impact
+
+- None. `migrate_relationships.py` is a new opt-in tool that only writes a report and a patch outside `catalog/`; workspaces, validation and diagrams are unchanged until a reviewed patch is applied.
+
+### Added
+
+- `tools/migrate_relationships.py`: proposes listener-based replacements for deprecated relationship fields (#368). `flow: bidirectional` becomes `outbound`; `flow: inbound` swaps source and target (and asks for the listener); an inbound call from an unknown outside party is proposed for removal, with its protection to record on the listener; free-text `externalTarget` links an existing System (by name or alias) and Listener, or proposes System and Listener stubs when the protocol has a default port and the caller is a company component. Ambiguous matches, multi-object files and unknown protocols are reported as needing input. Scope with `--object`, `--sdp` or `--folder`; output a Markdown report, a `git apply` patch, or JSON. UIDs of proposed stubs are stable across runs.
+- `tests/test_migrate_relationships.py`.
+
+### Changed
+
+- `docs/draftsman.md` (Deprecated Relationship Fields) describes the migration helper.
+
+### Fixed
+
+- `draft_table.catalog`: a listener owner of kind `external_system` now resolves `system` objects, not only `external_system` ones, so Listener Lookup Before Create links outside parties recorded as Systems.
+
+### Migration Notes
+
+- Optional: run `migrate_relationships.py`, review the report, apply the patch on a branch and run `validate.py`. Not running it keeps the existing baseline warnings.
+
+## 1.20.2 - 2026-11-21
+
+### Compatibility Impact
+
+- Diagrams change only for relationships that name a listener: a relationship with a `targetListener` the target owns (or any Listener object, for an `externalTarget`) now draws one arrowhead at the listener end, and its moving dots run from the caller, even when it still carries `flow: inbound` or `flow: bidirectional`. Relationships that name no listener draw exactly as before, so a framework refresh does not redraw existing diagrams (the golden SVGs are unchanged and the bundled examples name no listeners).
+
+### Added
+
+- `ListenerArrowheadTests` in `tests/test_generate_diagram.py`: one head at the listener for migrated calls (catalog and external targets, both views), legacy relationships unchanged, a listener owned by another object not counting, the flow overlay direction, and a deterministic mixed workspace (#368).
+
+### Changed
+
+- `tools/generate_diagram.py`: an edge whose relationship names its listener takes `outbound` flow for drawing.
+- `docs/software-deployment-patterns.md` (new Arrowheads bullet; the migration example names `targetListener` instead of `flow`) and the `draftsman-diagram` skill describe the rule.
+
+### Fixed
+
+- A relationship already moved to a listener but still carrying `flow: inbound` no longer draws its arrowhead at the caller.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.20.1 - 2026-11-21
+
+### Compatibility Impact
+
+- None. Tests and a test fixture only.
+
+### Added
+
+- `tests/fixtures/legacy_v155_workspace/`: a workspace with relationships authored before the listener model (`flow: bidirectional`, `flow: inbound`, free-text `externalTarget`, an `inbound` call from an outside party, and no `targetListener`), with no baseline file (#368).
+- `tests/test_legacy_relationship_compat.py`: copying that workspace and running `validate.py --write-baseline`, as a framework refresh does, gives exit code 0 with only `baseline:` warnings for every ratcheted rule; without a baseline the new rules are errors; editing one relationship turns only that relationship's violations into errors while the untouched ones stay warnings; and migrating the edited one clears its deprecated-field errors.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.20.0 - 2026-11-21
+
+### Compatibility Impact
+
+- Ratcheted only, so a framework refresh stays clean: after `validate.py --write-baseline`, existing relationships with `flow: inbound`, `flow: bidirectional` or free-text `externalTarget` are `baseline:` warnings. A new relationship, or an edited one, that still uses them fails validation. Workspaces that skip `--write-baseline` after refreshing see these as errors, as with every ratcheted rule. The repo's example and diagram-fixture baselines are refreshed in this release (12 and 56 new entries; no existing entry changes).
+
+### Added
+
+- Ratcheted rule `relationship-flow-deprecated`: an authored relationship with `flow: inbound` or `flow: bidirectional`, with the fix for each (#368).
+- Ratcheted rule `relationship-external-target-freetext`: an authored relationship with free-text `externalTarget`; the fix is a `system` object with a listener, then `target` and `targetListener`.
+- Ratcheted rule `relationship-source-is-listener-side`: a heuristic on `flow: inbound` only, when the source owns a listener or the other end is an outside party, so it never fails content the flow rule does not already flag.
+- `tests/test_relationship_deprecation_rules.py`.
+
+### Changed
+
+- `examples/.draft/validation-baseline.yaml` and `tests/fixtures/diagram_workspace/.draft/validation-baseline.yaml` record the existing deprecated uses.
+- `docs/draftsman.md` (Deprecated Relationship Fields) and the relationship schema `aiHint` name the three rules.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- After refreshing the framework, run `python3 .draft/framework/tools/validate.py --write-baseline` and commit `.draft/validation-baseline.yaml` (the documented Framework Updates steps). Fix a baselined relationship when you next edit it.
+
+## 1.19.0 - 2026-11-21
+
+### Compatibility Impact
+
+- None. `flow: inbound`, `flow: bidirectional` and free-text `externalTarget` are deprecated in documentation only: they stay in the schema, existing relationships keep loading, validating and rendering exactly as before, and no new warning or error is raised in this release. Ratcheted rules that flag them only on new or edited content follow in a later release (#368). Removal is deferred to a later major version.
+
+### Added
+
+- `docs/draftsman.md`: a "Deprecated Relationship Fields" section with the replacement for each deprecated value: `bidirectional` becomes `outbound` with `direction: synchronous`, `inbound` becomes a relationship with the caller as `source` (or the protection noted on the listener for an unknown outside caller), and `externalTarget` becomes `target: <system uid>` plus `targetListener`.
+- `tests/test_relationship_deprecation.py` pins that the values are still accepted and the deprecation wording in the schema, template, docs and author skill.
+
+### Changed
+
+- `schemas/relationship.schema.yaml`: `aiHint` and field descriptions mark `flow: inbound`, `flow: bidirectional` and `externalTarget` deprecated (enum and fields unchanged).
+- `templates/relationship.yaml.tmpl`: defaults to `flow: outbound`, adds `targetListener`, and drops the `externalTarget` line (comments explain the replacement).
+- Relationship authoring guidance in `draftsman.md`, `object-types.md` (new Relationship row), `how-to-add-objects.md`, `yaml-schema-reference.md`, `sdp-completion-interview.md`, `software-deployment-patterns.md` and the `draftsman-author` skill: the caller is always `source`, omit `flow`, and target an external party's `system` object instead of `externalTarget`.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required. Existing relationships need no change now; a migration helper that proposes the conversions as a reviewable patch is planned under #368.
+
+## 1.18.5 - 2026-11-21
+
+### Compatibility Impact
+
+- None for catalog content. The generated browser for catalogs without Listener objects changes only by the new, empty Listener column in a pattern's Connections table and an empty `ownedListeners` / `targetListener` field in the browser data. Run `generate_browser.py --refresh-shell` on an existing install to pick up the new column and section.
+
+### Added
+
+- Browser: a pattern's Connections table gains a Listener column after Interface. It shows the relationship's `targetListener` name with its protocol, port and endpoint (`Orders API (HTTPS 443 /orders)`), or is blank when no Listener object is named (#341 E5).
+- Browser: a product component, data component or external system detail page has an Owned Listeners section listing the Listener objects it owns through `owner.ref` (name, protocol, port, endpoint, authenticationModel, catalogStatus), in the renderer's listener order (port, protocol, endpoint, uid). Each name links to the listener's own page.
+- `connection_listener`, `listener_summary` and `build_owned_listeners` in `tools/generate_browser.py`; browser objects carry `ownedListeners`, and pattern connections carry `targetListener`.
+- `ListenerBrowserTests` in `tests/test_generate_browser.py`.
+
+### Changed
+
+- `docs/software-deployment-patterns.md` and the `draftsman-diagram` skill describe the Listener column and the Owned Listeners section.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.18.4 - 2026-11-21
+
+### Compatibility Impact
+
+- None for catalogs without Listener objects: their diagrams are byte-identical (golden tests unchanged, and the generated browser for the bundled examples is identical). In a pattern whose relationships name Listener objects through `targetListener`, the Deployment view's far-end port now comes from that listener, so those labels can change.
+
+### Added
+
+- Deployment view: when a relationship's `targetListener` names a Listener object with a port (#341 E5), the far-end technology line uses that port, ahead of today's port resolution: `http 8080`, `gRPC 8092`, `SQL 5432`. For a catalog target the target must own the listener. For an `externalTarget`, any Listener object counts, so external calls can show a port too. Device hops in an exposed group's chain pick their listener by the called listener's protocol family (`https 443 → http 8080 via <device>`), and same-deployment-target traffic still never hops.
+- `Model._called_listener` in `tools/generate_diagram.py`.
+- `ListenerPortTests` in `tests/test_generate_diagram.py` cover the listener port over component ports, the technology-line rules, hop ports and family through a chain, no hop inside one deployment target, fallback (a listener owned by another object, a listener without an integer port, no `targetListener`), an external target's listener, and no port in the Application view.
+
+### Changed
+
+- `docs/software-deployment-patterns.md` and the `draftsman-diagram` skill describe the listener port and the fallback.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.18.3 - 2026-11-21
+
+### Compatibility Impact
+
+- None for catalogs without Listener objects: their diagrams are byte-identical (golden tests unchanged, and the generated browser for the bundled examples is identical). A pattern whose components own Listener objects now draws one entrance per listener instead of one per declared interface, so those diagrams change.
+
+### Added
+
+- Application and Deployment views draw one attachment point per Listener object a box owns (#341 E5), on the box's top edge. Listeners are ordered by port, then protocol (case-insensitive), then endpoint path, then uid, so the order never depends on file order (D15). A relationship enters through the listener its `targetListener` names, and a runtime dependency enters through the listener its `interface` names. Each counts only when the target owns that listener.
+- `owned_listeners` and `entrance_keys` in `tools/generate_diagram.py`; `DiagramNode.listeners` and `DiagramEdge.target_listener`.
+- `ListenerEntranceTests` in `tests/test_generate_diagram.py` cover the fixed order and tie-breaks, entrance selection (`targetListener` over `targetInterface`), edges entering the named listener in both views, a listener owned by another object being ignored, a derived dependency naming a listener, no port in the Application view, and output independent of file order.
+
+### Changed
+
+- A box with no Listener objects keeps its per-interface entrances (AC5). `docs/software-deployment-patterns.md` and the `draftsman-diagram` skill describe both.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.18.2 - 2026-11-21
+
+### Compatibility Impact
+
+- None. This release changes skills, documentation and tests only. Validation results are unchanged. Workspaces pick up the new skill text on the next framework refresh; re-run `setup_ide.py` so the `.claude/skills/` projections match (`validate_skills.py` reports stale ones).
+
+### Added
+
+- `draftsman-author` skill section "Calls land on listeners" (#341 E3). Every relationship sets `targetListener`. It carries the five-step Listener Lookup Before Create procedure (resolve the owner and ask when ambiguous, normalize the key, link an exact match without asking, otherwise stub and link, upgrade a stub in place), the vendor-stub, completeness-gate and `interface_unprotected` rules, and the `draft_table.catalog` helpers.
+- `draftsman-author/references/guide.md` repository-scan rows for a served route (a listener on the component) and a client call (a relationship with `targetListener`).
+- `draftsman-query` rows for listener questions ("What port does X listen on?" reads listener objects first; "Which endpoint does X call on Y?" reads `targetListener`), and a rule that a stub listener is not a recorded fact.
+- `tests/test_listener_docs.py` `ListenerSkillTests`: each skill points to the procedure, the author steps and key statements match the docs, the named helpers exist, every mention of guessing an owner or inventing a port is a prohibition, and scan-row protocols are schema enum values.
+
+### Changed
+
+- `draftsman-core` Author profile: every call lands on a listener object; never guess its owner or invent a port.
+- `draftsman-diagram`: a missing `targetListener` is fixed in the catalog with the lookup procedure.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required. After refreshing the framework, run `python3 .draft/framework/tools/setup_ide.py` to update projected skills.
+
+## 1.18.1 - 2026-11-21
+
+### Compatibility Impact
+
+- None. This release changes documentation and tests only. Validation results are unchanged.
+
+### Added
+
+- `docs/draftsman.md` section "Listener Lookup Before Create" (#341 E3): what a listener object is, and the procedure for finding or creating the listener a call lands on. Resolve the owner (several matches are listed, never picked), normalize the key (owner + protocol + port + endpoint), link an exact match without asking, otherwise create and link a stub, and upgrade a stub in place when the real listener is authored. It also covers the vendor-owned stub rule, the SDP completeness gate, the `none` authentication decision record and the `draft_table.catalog` helpers.
+- `docs/how-to-add-objects.md` section "Add A Listener", and a Listener row in the Engineering Objects table of `docs/object-types.md`.
+- `tests/test_listener_docs.py`: the procedure's steps and key statements, plus checks that the documented owner kinds, default ports, helper names and endpoint normalization match `validate.py` and `draft_table/catalog.py`.
+
+### Changed
+
+- Relationship Authoring in `docs/draftsman.md` adds a `targetListener` step. `how-to-add-objects.md` and `object-types.md` say every relationship names a `targetListener`, and separate Listener objects from the older `listeners` field on definitions.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required.
+
+## 1.18.0 - 2026-11-21
+
+### Compatibility Impact
+
+- None. Diagram and browser output are unchanged: the generated browser for the bundled examples is byte-identical before and after this change. Validation results are unchanged.
+
+### Added
+
+- `tools/exposure.py`, the one exposure resolver (E4). It holds `EDGE_SLOTS` and the precedence: `exposedThrough: none` turns exposure off, an explicit uid or list is the chain, otherwise the followed reference architecture's filled edge slots apply except to a data tier. Functions: `slot_chain`, `pattern_slot_chain`, `group_chain`, `resolve_pattern_exposure`.
+- `tests/test_exposure.py`: precedence cases, edge slot order, lenient handling of bad values, a single `EDGE_SLOTS` shared by the renderer and validator, and agreement between the resolver, the deployment diagram model and the browser's exposure column on the diagram fixture and every example pattern.
+- `docs/reference-architectures.md` section "Filled Edge Slots".
+
+### Changed
+
+- `generate_diagram.py` delegates `_slot_chain` and `_group_chain` to `exposure.py`; `validate.py` and `generate_diagram.py` take `EDGE_SLOTS` from it. The browser keeps reading the renderer's model, so it uses the same resolver.
+- `docs/software-deployment-patterns.md` names the resolver. The vendored-layout diagram test copies `exposure.py` beside `generate_diagram.py`.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required. A vendored framework must include `tools/exposure.py`; the normal framework refresh copies the whole `tools/` folder.
+
+## 1.17.0 - 2026-11-21
+
+### Compatibility Impact
+
+- Reference architecture `fills` problems are now validation errors instead of warnings (E4, not ratcheted, so no baseline entry hides them). An RA entry fails when `fills` is set on a slot that is not an edge slot (or on an entry with no slot), names an unknown uid, a non-network_service or a network_service instance, or names a definition that does not satisfy the entry's `capability`. Reference architectures with valid fills are unaffected.
+
+### Added
+
+- `validate_fills` in `tools/validate.py`. It reports the group and entry index, the slot and the offending uid, and uses the same definition-or-instance test as `exposedThrough`.
+- Tests in `tests/test_validate_ownership.py` for a clean fill on every edge slot, a non-edge slot, an entry with no slot, a non-network_service, an unknown uid, an instance (by `serviceRole` and by folder), a missing capability, a capability satisfied through a technology component, and an end-to-end run that exits 1 and that `--write-baseline` does not clear.
+
+### Changed
+
+- `validate_exposure_refs` is replaced by `validate_fills`; exposure validation no longer emits warnings.
+- `schemas/reference-architecture.schema.yaml` lists all five edge slots for `fills` (it omitted `firewall`) and describes the failures.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Run `validate.py`. For each `fills` failure, move `fills` to an edge slot entry (`firewall`, `web-application-firewall`, `load-balancer`, `api-gateway`, `ingress`), point it at a network_service definition, or give that definition (or its technology component) the slot's capability. In a workspace with no service definitions folder configured, a network_service without `serviceRole` is accepted.
+
+## 1.16.0 - 2026-11-21
+
+### Compatibility Impact
+
+- `serviceGroups[].exposedThrough` problems are now validation errors instead of warnings (E4, not ratcheted, so no baseline entry hides them). A pattern that lists an unknown uid, a non-network_service, a network_service instance, `none` inside a list, an empty list or a repeated uid now fails validation. Patterns with valid values are unaffected.
+
+### Added
+
+- `validate_exposed_through` in `tools/validate.py`. It fails each bad `exposedThrough` value with the group index and the offending uid, and rejects a repeated uid in a chain.
+- Tests in `tests/test_validate_ownership.py` for each valid and invalid `exposedThrough` form, including a network_service instance (by `serviceRole` and by folder), a workspace with no definitions folder configured, and an end-to-end run that exits 1.
+
+### Changed
+
+- `validate_exposure_refs` now covers reference architecture `fills` only; `exposedThrough` checks moved to `validate_exposed_through`.
+- `schemas/software-deployment-pattern.schema.yaml` describes the `exposedThrough` failures.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Run `validate.py`. For each `exposedThrough` failure, replace the value with the uid of a network_service definition (an object with `serviceRole: definition`, or one in the service definitions folder), or with `none`. List each device once, in chain order. In a workspace with no service definitions folder configured, a network_service without `serviceRole` is accepted.
+
+## 1.15.1 - 2026-11-20
+
+### Compatibility Impact
+
+- None. This release changes documentation and tests only. Validation results are unchanged.
+
+### Added
+
+- `docs/decision-records.md` section "Unprotected Listener Justification". It covers what upstream DRAFT defines (`interface-protection`, `interface-unprotected-justification`, committed DecisionRecords keyed `interface_unprotected`) and where company exception policy lives (company requirement groups and DecisionRecord approval policy).
+- Tests in `tests/test_validation.py`:
+  - the bundled group names no accepted exceptions
+  - the upstream mechanism alone accepts a committed decision
+  - a company requirement group adds a stricter rule that its own committed decision satisfies
+  - an approval policy routes the justification to the company's approver
+- Tests in `tests/test_release_notes.py` that the released notes for the listener protection and SDP completeness work are complete, and that requirement-group and listener schema changes count as contract changes.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No workspace migration required. To restrict which unauthenticated listeners are acceptable, add a company requirement group or a DecisionRecord approval rule as described in `docs/decision-records.md`.
+
+## 1.15.0 - 2026-11-20
+
+### Compatibility Impact
+
+- The `sdp-internal-stub-listener` baseline hash now covers the pattern and its dependent objects. A baseline entry for this rule written by 1.14.0 no longer matches; run `validate.py --write-baseline` once, as the framework update procedure already does. Other ratcheted rules keep their per-object hash.
+
+### Added
+
+- Ratcheted rules can register a `digest` function that sets the baseline content hash. `sdp-internal-stub-listener` uses it to hash the pattern together with its deployable objects, every relationship from the pattern or those objects, and every listener those calls target.
+- Tests in `tests/test_validate_ratchet.py` for the gate without a baseline, unchanged content, a framework version change alone, unrelated changes, and changes to the pattern, a deployable object, a relationship, a new call, or a called listener, plus a finished listener clearing the gate.
+
+### Changed
+
+- The software deployment pattern `catalogStatus` description records what re-arms the gate.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- After updating the framework, run `python3 .draft/framework/tools/validate.py --workspace . --write-baseline` and commit `.draft/validation-baseline.yaml`.
+
+## 1.14.0 - 2026-11-20
+
+### Compatibility Impact
+
+- A `complete` software deployment pattern whose calls target a stub listener owned by an internal product or data component now fails the ratcheted `sdp-internal-stub-listener` rule. Run `validate.py --write-baseline` to keep existing patterns as baseline warnings until they change. Patterns that are not `complete`, and stubs owned by external systems, are unaffected.
+
+### Added
+
+- Ratcheted rule `sdp-internal-stub-listener`: the SDP completeness gate. It traverses the pattern's calls (relationships with `targetListener` from the pattern and its service groups' deployable objects, and their `runtimeSpec.dependencies[].interface` listener UIDs), names each internally owned stub listener with its caller and call, and blocks completion. Stub listeners owned by an `external_system` do not block.
+- Tests in `tests/test_validation.py` for relationship and runtime-dependency traversal, several calls, mixed internal and external ownership, non-stub listeners, incomplete patterns, calls from outside the pattern, and an end-to-end failure.
+
+### Changed
+
+- The software deployment pattern `catalogStatus` description and the SoftwareDeploymentPattern RequirementGroup description record the gate.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Before marking a pattern `complete`, finish every internally owned stub listener it calls, or run `validate.py --write-baseline` to grandfather existing patterns until they change.
+
+## 1.13.0 - 2026-11-20
+
+### Compatibility Impact
+
+- Workspaces that activate the bundled security requirement group (`01KQQ4Q027-T3CA`) now require a committed DecisionRecord for every listener whose `authenticationModel` is `none`. A `complete` listener without one fails; a `stub` or `incomplete` one warns. Other requirement groups are unchanged: `committedOnly` is opt-in, and existing conditional requirements still need `naAllowed: true`.
+
+### Added
+
+- Conditional `interface-unprotected-justification` requirement on `listener` in the bundled security requirement group. It applies when `authenticationModel` equals `none`, is satisfied only by a committed DecisionRecord referenced with `key: interface_unprotected`, and sets `naAllowed: false`.
+- `committedOnly: true` on a `decisionRecord` satisfaction mechanism: only an `accepted`, `mitigated` or `resolved` DecisionRecord satisfies it, never an `open` draft, including through a `decisionRecord` requirementImplementation.
+- Listeners accept `decisionRecords` and `requirementImplementations`.
+- Tests in `tests/test_validation.py` rejecting missing, unreferenced, wrongly keyed, draft and not-applicable justifications, accepting committed ones, and covering the narrow `naAllowed` exception and `committedOnly` shape checks.
+
+### Changed
+
+- A conditional requirement may set `naAllowed: false` only when every `canBeSatisfiedBy` entry is a `committedOnly` decisionRecord. Every other conditional requirement still needs `naAllowed: true`.
+- The DecisionRecord `status` description records that `open` is a draft and `accepted`, `mitigated` and `resolved` are committed.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- For each listener with `authenticationModel: none` in a workspace that activates the security group, commit a DecisionRecord and reference it from the listener's `decisionRecords` with `key: interface_unprotected`.
+
+## 1.12.0 - 2026-11-20
+
+### Compatibility Impact
+
+- Workspaces that activate the bundled security requirement group (`01KQQ4Q027-T3CA`) now check listeners. A `complete` listener whose `authenticationModel` is `TBD` fails `interface-protection`; a `stub` or `incomplete` one only warns. Workspaces that do not activate the group are unchanged.
+
+### Added
+
+- Mandatory `interface-protection` requirement on `listener` in the bundled security requirement group. It is satisfied by `authenticationModel`: `none` and every other recorded model satisfy it, `TBD` does not, and `naAllowed` is false.
+- `notIn` on a `field` satisfaction mechanism lists values that never satisfy it.
+- Tests in `tests/test_validation.py` for listener protection with `oauth`, `none` and `TBD`, the stub warning, and `notIn` shape checks.
+
+### Changed
+
+- `listener` is a supported requirement scope, and listeners are checked against applicable requirement groups.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Before marking a listener `complete` in a workspace that activates the security group, record its real `authenticationModel` instead of `TBD`.
+
+## 1.11.0 - 2026-11-20
+
+### Compatibility Impact
+
+- None. Legacy `product_component.interfaces` remains valid. Existing relationships without `targetListener` stay baseline warnings after `validate.py --write-baseline` until they change.
+
+### Added
+
+- Tests in `tests/test_validate_ratchet.py` for baseline preservation, changed relationships, internal and external targets after a baseline write, duplicate baseline prevention, stub listener upgrade, and legacy `interfaces` retention under the `relationship-target-listener` rule.
+
+### Changed
+
+- `product_component.interfaces` schema description records it as the legacy surface.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Run `python tools/validate.py --write-baseline` once after vendoring so existing relationships stay warnings.
+
+## 1.10.1 - 2026-11-20
+
+### Compatibility Impact
+
+- None. Existing catalog files and validation results are unchanged. This release adds listener lookup-before-create helpers in `draft_table.catalog` for tools that resolve or author listeners.
+
+### Added
+
+- Listener catalog lookup in `draft_table/catalog.py`: a normalized identity key, owner resolution (with ambiguity returned for human choice), lookup-before-create that links an existing listener or creates a stub, authored upgrade of a stub without a new UID, and a vendor-owned stub rule that requires a company-internal relationship owner before the stub can leave `catalogStatus: stub`.
+- Tests in `tests/test_listener_lookup.py` for lookup, stub creation, upgrade, ambiguity, and the vendor rule.
+
+### Changed
+
+- `upgrade_listener_stub` sets `catalogStatus` to `incomplete` unless the authored listener supplies one, and drops a stub `authenticationModel: TBD` placeholder when the authored listener does not supply a model.
+- `record_authored_listener` applies `vendor_stub_problem` on both create and upgrade paths.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Nothing is required for existing catalogs. Tools that create or update listeners should call the new lookup-before-create helpers so existing listeners are reused and vendor-owned stubs cannot leave stub status without a company-internal relationship owner.
+
+## 1.10.0 - 2026-11-20
+
+### Compatibility Impact
+
+- New ratcheted rule `relationship-target-listener`: every relationship must name a real listener via `targetListener`. For a catalog target the listener must be owned by that target; an `externalTarget` relationship only needs a real listener. Existing relationships without `targetListener` are recorded in `.draft/validation-baseline.yaml`, so they warn until the relationship changes. A product component `runtimeSpec.dependencies[].interface` that is a listener UID must be owned by that dependency's ref. Protocol or technology disagreement with the named listener is an unratcheted warning.
+
+### Added
+
+- Ratcheted rule `relationship-target-listener` in `tools/validate.py`, the `targetListener` field on `schemas/relationship.schema.yaml`, and tests in `tests/test_validate_ratchet.py`.
+- `examples/.draft/validation-baseline.yaml` entries for existing example relationships that do not yet name a `targetListener`.
+
+### Changed
+
+- The `runtimeSpec.dependencies[].interface` description in `schemas/product-component.schema.yaml` notes that a listener UID must be owned by that dependency's ref.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- After vendoring this release, run `python tools/validate.py --write-baseline` once so existing relationships without `targetListener` stay warnings. New or changed relationships must name a real `targetListener`; for a catalog target, that listener must be owned by the target.
+
+## 1.9.0 - 2026-11-20
+
+### Compatibility Impact
+
+- None. The listener protocol enum and `authenticationModel` values are unchanged; this release settles and documents them.
+
+### Added
+
+- Test `ListenerCatalogTests.test_listener_protocol_enum_and_auth_none_are_settled` in `tests/test_validation.py`, which pins the listener protocol set (SQL, Redis, Kafka, SQS, SNS, S3, gRPC and others) and `authenticationModel: none`.
+
+### Changed
+
+- The listener `protocol` field description in `schemas/listener.schema.yaml` lists the approved set and records gRPC-web as gRPC.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Nothing is required. Authors record gRPC-web listeners with protocol `gRPC`.
+
+## 1.8.0 - 2026-11-20
+
+### Compatibility Impact
+
+- None. No existing catalog content or validation result changes; the listener identity key is not yet enforced by any rule.
+
+### Added
+
+- `listener_identity(obj)` and `normalize_listener_endpoint(endpoint)` in `tools/validate.py`: a listener's exact identity is owner kind and ref, lowercased protocol, port (protocol default when omitted: HTTP 80, HTTPS 443) and the endpoint normalized to a path with templated parameters (`{name}` or `:name`) as `{}`. A leading scheme and host are discarded and never part of identity, so distinct owners never collapse. Query strings and fragments are dropped. A `://` that appears after a leading slash is left in the path (not parsed as a host).
+- Tests `ListenerIdentityTests` in `tests/test_validation.py`.
+
+### Changed
+
+- The listener `endpoint` field description documents templated path parameters and that the host is not stored.
+
+### Fixed
+
+- `normalize_listener_endpoint` only strips a scheme and host when the endpoint begins with a URI scheme. Path-only endpoints that contain `://` (for example `/proxy/http://x/{id}`) stay distinct, and query strings and fragments are not part of the identity key. A `?` or `#` that ends the authority (for example `https://host?x=/a/b`) no longer lets a later `/` in the query or fragment become the path; such endpoints normalize to `/`.
+
+### Migration Notes
+
+- Nothing is required. Authors should write endpoints as paths without the host.
+
+## 1.7.0 - 2026-11-19
+
+### Compatibility Impact
+
+- New object type `listener` (`schemas/listener.schema.yaml`) and new ratcheted rule `listener-owner`: a listener's `owner.ref` must name an existing catalog object whose type matches `owner.kind`. No existing content declares listeners, so no existing file changes validation result.
+
+### Added
+
+- `listener` schema: a UID-addressable endpoint with `owner` (`kind` and `ref`), `protocol`, `port`, `endpoint`, `authenticationModel` (including `none`), optional `methods`, `description` and `catalogStatus` (`stub`, `incomplete`, `complete`).
+- Tests `ListenerCatalogTests` in `tests/test_validation.py` for valid and invalid listener fields and owners.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Nothing is required. Adopters who add listeners should set `owner.kind` to `product_component`, `data_component` or `external_system`; an `external_system` owner must be a `system` object.
+
+## 1.6.0 - 2026-11-16
+
+### Compatibility Impact
+
+- New ratcheted rule `relationship-target-interface`: a relationship whose target is a product component must carry `targetInterface` naming one of its `interfaces`. Existing violations bind again when the relationship changes unless recorded in `.draft/validation-baseline.yaml`, so adopters run `validate.py --write-baseline` once after vendoring this release. Data components, `externalTarget`, instances and derived relationships are exempt.
+- A `targetInterface` naming a surface its target lacks is an error that is never baselined; on a target with no `interfaces` list (that is not a data component) or on an `externalTarget` it is a warning.
+- Deployment-view labels and geometry change for patterns that declare the new fields. Labels change only for connections whose target resolves a port from listeners or component ports. Geometry changes only when the pattern follows a reference architecture with a filled edge slot (`fills` is new) or a group sets `exposedThrough`: exposed zone lanes gain an edge device row and connections from other deployment targets route through it. The Application view never shows a port.
+- A component that already declares two or more `interfaces` gets one entrance per interface on the top edge in both views, so its entrances and the edges into them move (today the examples' ops console). Components with one interface or none, and every data component without `interfaces`, render as before.
+- Nothing else changes for content without the new fields: every new field is optional, and no error reads them beyond the ratcheted rule.
+
+### Added
+
+- Optional `interfaces` on `data_component` (the `product_component` shape), `targetInterface` on `relationship`, `listeners` on `runtime_service`, `data_store_service`, `network_service` and `host`, `fills` on a reference architecture deployable object entry, and `exposedThrough` (a uid, a list of uids, or `none`) on a software deployment pattern service group.
+- The interface protocol enum of `product_component` and `data_component` gains SQL, Redis, Kafka, SQS, SNS, S3 and DynamoDB; a listener's protocol adds HTTP, HTTPS, TCP and UDP.
+- `tools/protocol_families.py` with `family(text)`, the single protocol-family table that `validate.py` and `generate_diagram.py` share. `validate.py` also gains an `interface_names` helper.
+- Ratcheted rule `relationship-target-interface` with the error and warning branches above; the fixture workspace baseline records its existing violations.
+- Three warnings, never errors and never ratcheted: a service group `exposedThrough` that is neither `none` nor one or more `network_service` uids; a reference architecture `fills` whose target is not a `network_service`, whose slot is not an edge slot (firewall, web-application-firewall, load-balancer, api-gateway, ingress), or whose definition does not satisfy the slot's `capability` (an entry with no `capability` is not checked); and a relationship whose `technology` and its target interface's protocol resolve to different known protocol families (the text names both protocols). Derived relationships never produce the family warning.
+- Derived dependency relationships carry the raw `runtimeSpec.dependencies[].interface` string as `_interface`.
+- The deployment view resolves the port a connection reaches its target on and prints it in the technology line of the far-end label and the hover callout: a product component's own inbound `runtimeSpec.ports` entry (by protocol family, then by the interface's name), then the listener of its substrate; a data component's store listener; an instance or other definition's own listener. A port prints as `<protocol> <port>` (`SQL 5432`, `gRPC 8092`); a REST, HTTP or HTTPS listener prints its lower-cased name (`https 443`). The technology line reads the port alone when no technology is recorded or it equals the protocol word, else `technology · port`.
+- The deployment view draws an exposed group's edge device chain. A group is exposed when `exposedThrough` names one or more `network_service` definitions, or, without it, when the pattern follows a reference architecture with a filled edge slot (the chain is then the filled slots in the order firewall, web-application-firewall, load-balancer, api-gateway, ingress); `exposedThrough: none` and a group whose deployable objects are all data components are not exposed by the slot default. Each exposed group draws one row of `network` boxes at the top of its first zone lane, inside its own container, whether or not a connection enters it; groups never share a row. A device also placed in the pattern is drawn only in the row.
+- A connection from another deployment target into an exposed group (a box, a data store container or the group's own container) enters the first device of the target group's chain at its top, passes device to device, and leaves the last device's bottom for the target's entrance; connections within one deployment target, and connections into a device of the chain itself, never take the hop, and the source group's own chain is never used. The port chain lists each device's port (its listener of the connection's protocol family, else its single listener) before the target's (`https 443 → https 443 → http 8080`), and the callout adds `via <device name>` per device. Hop segments carry `data-via`.
+- The browser pattern view shows each service group's exposure on its Service Groups row (`Exposed through: <device names in chain order>`, `not exposed` for `exposedThrough: none`, nothing when undetermined), taken from the diagram renderer's model so the browser never recomputes slot logic. The Connections table gains an Interface column (a relationship's `targetInterface`, or a derived dependency's `_interface` when it names an interface of the target; blank otherwise). Object detail lists a component's or data component's interfaces (name, protocol, path) and a definition's listeners (name, protocol, port).
+- Docs and the `draftsman-diagram` skill describe the split by owner (product teams record `interfaces` and `targetInterface`; the infrastructure team records `listeners` and fills edge slots; `exposedThrough` is the exception), the Application view that never shows ports, the Deployment view's port chain, and the edge device chain drawn because the group is exposed and its protection, availability, performance and routing requirements apply (no caller is drawn).
+
+### Changed
+
+- Both diagram views draw one entrance per declared interface on a box's top edge (data components with `interfaces` too). An edge enters through the interface its `targetInterface` names, or a derived dependency's `interface` when it names one, else through the first entrance; labels keep clear of the extra entrances.
+- At a box with several entrances in use, the far-end labels of each entrance take their own block of label rows, stacked upward from the box in entrance order, so labels entering one box from different sources through different entrances never overlap when all are shown; the label band above such a box grows by those rows. Boxes with one entrance are unchanged.
+- A component port or listener matched to the target interface by protocol family prints the interface's protocol, not the recorded one: a gRPC interface served by a port recorded as `HTTP/2` reads `gRPC 8092`, not `gRPC · HTTP/2 8092`. Web listeners keep their lower-cased name (`http 8080`, `rest 8082`), and a single-listener fallback of another family prints as recorded.
+- `validate.py` and `generate_diagram.py` import the shared protocol-family helper (the diagram renderer uses it to match listeners to interfaces); validation output does not change.
+
+### Fixed
+
+- Application view: when a caller left of a multi-interface box called a higher entrance than a caller right of it, the two in-runs crossed each other's stubs. The gutter edges into such a box now arrive from the left for the lower entrances and from the right for the higher ones; the box moves the fewest edges to the other side, and nothing moves for a box already in order.
+
+### Migration Notes
+
+- Run `validate.py --write-baseline` when vendoring this release to record existing relationships to product components in `.draft/validation-baseline.yaml`.
+- The infrastructure team declares `listeners` on runtime services, data store services, network services and hosts, and fills edge slots (`fills`) in reference architectures.
+- Product teams add `interfaces` to their components and `targetInterface` to relationships as they touch them; that clears the baseline entry.
+- Set `exposedThrough` on a service group only for exceptions the reference architecture's filled slots do not describe.
+- Nothing is required for validation to pass after the baseline. Resolve any new `exposedThrough`, `fills` or protocol-family warning when convenient; none of them fails validation.
+
+## 1.5.5 - 2026-11-15
+
+### Compatibility Impact
+
+- The pattern detail view's Topology and Mermaid Diagrams sections are replaced by Application and Deployment sections that embed the generated figures. Adopters refresh the browser shell with `generate_browser.py --refresh-shell` to get them.
+- Diagram figures default to all connections shown instead of hidden until a box is hovered, focused or pinned.
+- Figure output of `tools/generate_diagram.py` changes for existing patterns: the logical view draws five columns per band and the deployment view four per zone lane, and a figure never draws narrower than its natural width. The golden images are regenerated.
+- An edge between two boxes in the same zone lane or tier band now routes inside that container, which changes existing edge paths.
+- No catalog file changes.
+
+### Added
+
+- The pattern detail view has Application and Deployment sections that embed the logical and deployment figures from the pattern's diagram page, each with a Fit width / Actual size toggle (fit by default) and an Open full page link. A pattern without a generated diagram page shows a one-sentence note per section.
+- Each deployable-object row in the detail view's Service Groups section shows its `riskRef` as the decision badge (accepted decision, risk, or missing record) beside the object's name, linking to the decision record; this replaces the HA Decision row of the removed service drawer.
+- Tests for same-container routing, the show-all default, the column counts and natural width, and byte-identical output for the examples workspace.
+
+### Changed
+
+- Diagram pages show all connections by default (the toolbar checkbox is checked); hovering, focusing or pinning a box dims the other connections to opacity .15 and brings its own forward.
+- The logical view draws five columns per band and the deployment view four per zone lane; the figure wrapper scrolls horizontally instead of shrinking the figure. Edges between boxes in the same zone lane (deployment view) or tier band (logical view) route inside that container.
+- The detail view's section nav is Application, Deployment, Service Groups, Decisions, Connections, Tier Variants, Metadata.
+- The detail view no longer shows the Topology section, the Mermaid Diagrams section, the tier filter chips or the hero Diagrams link. The topology grid, tier filter chips and service drawer are removed along with their code and styles; the sidebar Topology tool and the catalog Diagrams tool are unchanged.
+- `software-deployment-patterns.md`, `sdp-completion-interview.md` and the `draftsman-diagram` skill (SKILL.md and `references/mermaid.md`) describe the Application and Deployment sections, the fit toggle, the Open full page link and `diagramTier` as the band a component sits in.
+
+### Fixed
+
+- Same-lane and same-band edges no longer leave their container through the channel or band gap.
+- The detail view's section nav now sticks flush at the top of the content while the sections scroll and releases after the last one, and section anchors scroll to just below it.
+
+### Migration Notes
+
+- None for workspaces. Adopters run `generate_browser.py --refresh-shell` to get the new detail view; no catalog change.
+
+## 1.5.4 - 2026-11-14
+
+### Compatibility Impact
+
+- None for workspaces. Templates, documentation and the OpenStack example no longer mention the legacy `intent` field; no previously valid catalog file fails validation.
+
+### Added
+
+- None.
+
+### Changed
+
+- The `software-deployment-pattern` and `reference-architecture` templates, `how-to-add-objects.md`, `software-deployment-patterns.md` and the OpenStack IaaS platform example no longer mention the `intent` field. The examples validation baseline hash for `STCK000001-SDP1` is refreshed because the pattern content changed. Test: `tests/test_validation.py::IntentRemovalDocsTests`.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Owners may delete `intent:` lines from their catalog files; they are optional and ignored.
+
+## 1.5.3 - 2026-11-14
+
+### Compatibility Impact
+
+- None for workspaces. Catalog files that still carry the legacy `intent` field continue to validate; there is no validation change.
+
+### Added
+
+- None.
+
+### Changed
+
+- `browser-data.js` no longer includes the legacy `intent` field from catalog entries. `tools/generate_browser.py` drops `intent` at every depth (top-level objects, service groups, deployable objects and the embedded detail JSON) before building browser output. Test: `tests/test_generate_browser.py::LegacyIntentTests`.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None. Regenerate the browser to drop `intent` from `browser-data.js`.
+
+## 1.5.2 - 2026-11-14
+
+### Compatibility Impact
+
+- None for workspaces. This is a browser stylesheet change only; catalog files and validation are unaffected.
+
+### Added
+
+- None.
+
+### Changed
+
+- The generated browser stylesheets no longer style `intent`: the intent badge, tag and dot rules are removed from `browser/draft-browser.css` and `browser/draft-browser-sdp.css`. The `.zone-tag` rules are kept.
+- At viewports 1180px wide and narrower, the SDP KPI strip is now a 2x2 grid of four cards.
+
+### Fixed
+
+- The SDP service-group row grid now has three columns (`200px 90px 1fr`) matching the service, zone and notes cells, so notes use the flexible track instead of a stale empty intent column.
+- The SDP KPI strip uses four columns at wide widths to match its four cards, with no empty fifth column.
+
+### Migration Notes
+
+- None. Regenerate the browser to pick up the stylesheet changes.
+
+## 1.5.1 - 2026-11-14
+
+### Compatibility Impact
+
+- None for workspaces. The generated browser no longer shows `intent`; catalog files that still carry the field continue to validate.
+
+### Added
+
+- None.
+
+### Changed
+
+- The generated browser no longer renders `intent`. The intent badge, tag and dot, the drawer "Intent" row, the "HA Components" KPI card, the topology legend "Intent" group and the topology-node intent slot are removed from `browser/draft-browser.js`. The `riskRef` display is unchanged.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Standalone entries without a `riskRef` no longer show the "Explicit architecture decision" icon in topology nodes. This is an accepted effect of removing `intent`. No workspace action is required.
+
+## 1.5.0 - 2026-11-14
+
+### Compatibility Impact
+
+- No previously valid file fails. Files that still contain `intent` on a deployable object entry validate with no failure or warning.
+
+### Added
+
+- None.
+
+### Changed
+
+- The `intent` field is removed from the SoftwareDeploymentPattern and ReferenceArchitecture schemas and from the hardcoded `ha`/`sa` check in `tools/validate.py`. The removal is silent: there is no deprecation warning.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Owners may delete `intent` lines from their patterns and reference architectures. No action is required for validation to pass.
+
+## 1.4.1 - 2026-11-14
+
+### Compatibility Impact
+
+- None for workspaces. The upstream Generate Derived Assets workflow now opens a pull request instead of pushing to `main`.
+
+### Added
+
+- None.
+
+### Changed
+
+- `docs/object-types.md` gains a decision test for `serviceRole` on shared-services objects: a definition is a standard each product deploys for itself (two consumers, two deployments); an instance is one shared service everyone calls (two consumers, one endpoint). It names the five object types that carry the field, the folder defaults, and when a gateway is an edge slot rather than a shared instance.
+
+### Fixed
+
+- The Generate Derived Assets workflow pushed regenerated browser, diagram pages and AI index straight to `main`, which branch protection rejects (pull requests only, `validate` required). It now commits to `chore/derived-assets` with the release bot token and opens or updates a pull request, so the required check runs and the assets reach `main` through review.
+
+### Migration Notes
+
+- No file changes are required. Owners of shared-services objects should read the new "Deciding `serviceRole`" section of `docs/object-types.md` and, for every object in the definitions folder that is one shared endpoint everyone calls, set `serviceRole: instance`; objects that each product deploys for itself stay unmarked or `definition`. Adopters that mirrored the Generate Derived Assets workflow need no change unless their `main` is protected, in which case they take the pull-request form of the commit step.
+
+## 1.4.0 - 2026-11-14
+
+### Compatibility Impact
+
+- The rules `sdp-placement-types` and `relationship-definition-endpoint` are ratcheted: an existing pattern that lists in `deployableObjects` anything other than a product component or data component (a runtime, host, data store, network service, AI gateway or an instance), or an existing relationship that touches a service definition, is an error unless it is recorded in `.draft/validation-baseline.yaml`. Adopters run `validate.py --write-baseline` when vendoring this release so existing content stays green; an object that changes while it violates a rule is an error.
+- The default node scope of `tools/generate_diagram.py` changes in this release. It is no longer every object owned by the same team; it is the objects placed in the pattern plus the objects they depend on (unplaced objects that a placed object has a relationship to; unplaced objects that only call into the pattern are not drawn). Output for an existing pattern can therefore show fewer components than before. `--placed-only` keeps its meaning.
+- The HTML page of `tools/generate_diagram.py` is reassembled: it shows the logical application diagram and the deployment pattern diagram, in that order, followed by the recorded relationships, conflicts, characteristics, open questions and object inventory. The old flat topology figure is gone, so existing pages look different.
+- Single-mode warnings go to stderr as a `N warnings` count line followed by each distinct warning in sorted order, without the earlier `warning:` prefix. Scripts that parsed the old prefix must read the new form.
+- `validate.py` gains the `--write-baseline` and `--no-baseline` flags and a baseline file, `.draft/validation-baseline.yaml`. No existing rule changes behaviour and no schema or catalog content changes. With no baseline file a workspace validates as before except that every ratcheted violation is an error, so adopters run `validate.py --write-baseline` once when vendoring this version and commit the file.
+- The `Diagrams` link in the pattern detail view comes from the browser shell, and shell assets are install-once: an existing browser install needs `generate_browser.py --refresh-shell` (or the generate-browser workflow) before the link appears. Diagram pages and the `diagramPage` data are written on every run without a refresh.
+
+### Added
+
+- `generate_diagram.py --sdp NAME --editable` renders the page with an edit mode: boxes can be dragged, or moved with Alt and the arrow keys, within their own band (logical view) or zone lane inside their group (deployment view); dropping renumbers that container, and an `Export layout` control fills a text box with a complete `diagram_layout` document (uid `NEW` when the pattern has no layout) and copies it to the clipboard where the browser allows. The page stores nothing and makes no network request; without `--editable` the page is unchanged. `--editable` cannot be combined with `--all` or `--list`.
+- `generate_diagram.py --write-layout --layout-from FILE` writes the layout from an exported document instead of the drawn order: an existing layout keeps its uid (`NEW` becomes a fresh uid when there is none), and a ref the pattern does not draw is an error (exit 1) that names it.
+- Validation ratchet in `tools/validate.py`: ratcheted rules with stable rule ids are checked against `.draft/validation-baseline.yaml`. `--write-baseline` writes the file (`rule`, `uid`, content `hash` per object, sorted) and then validates as a normal run, exiting 1 if errors remain; it refuses to write the file when a YAML parse or patch failure occurs; a violation recorded with an unchanged hash is a `baseline:` warning, any other ratcheted violation is an error, and entries that no longer apply print a `stale baseline entry` warning. `--no-baseline` ignores the file.
+- The `draftsman-update` skill, its steps and `docs/workspaces.md` tell adopters to run `validate.py --write-baseline` when vendoring a new framework version and to commit the baseline with the update. Schema notes document the baseline file.
+- `generate_browser.py` publishes every deployment pattern's diagram page and SVGs into `diagrams/` beside the browser (same code path and file names as `generate_diagram.py --all`), records `diagramPage` per pattern in the browser data, and the pattern detail view shows a `Diagrams` link. Each page's footer links back to the browser. A pattern that fails to render is reported and skipped; `--skip-diagrams` turns the step off.
+- Test fixture `tests/fixtures/diagram_workspace/`: two small invented patterns that cover each diagram feature, and a large seeded synthetic pattern regenerated byte for byte by `make_large.py`. Test-only; nothing ships to users.
+- Tests `tests/test_diagram_fixture.py`, `tests/test_diagram_fixture_hygiene.py` (no real account ids, addresses, hostnames or banned terms in the fixture) and `tests/test_python_floor.py` (generator parses as Python 3.9 syntax).
+- Public seam `build_from_catalog(catalog, selector, placed_only)` in `generate_diagram.py` (renders from an already loaded catalog; output unchanged), plus model data classes and stubs for later work. Test harness `tests/diagram_harness.py` (golden comparison with `UPDATE_GOLDEN=1`, determinism property helpers) and `tests/test_skip_reasons.py`. Test-only otherwise.
+- `tools/generate_diagram.py` gains `--svg-dir DIR`, which writes `<slug>-logical.svg` and `<slug>-deployment.svg` beside the HTML page, and `--all --output-dir DIR`, which renders every deployment pattern in the workspace: one HTML page per pattern, one summary line per pattern, and exit code 1 if any pattern fails while the others still render. Option combinations that do not make sense (for example `--all` without `--output-dir`, or `--list` with `--sdp`) exit with code 2. Pattern names that slugify to the same file name get the lower-cased uid appended to theirs.
+- New catalog type `diagram_layout` (`schemas/diagram-layout.schema.yaml`): per-pattern box order for the two diagram views. `validate.py` requires `pattern` to be a software deployment pattern and warns on a `ref` that resolves to nothing; `generate_diagram.py` draws positioned boxes first in each band or lane (lowest uid wins when a pattern has several layouts), and `--sdp NAME --write-layout` writes or updates the layout file beside the pattern file from the drawn order without changing the page.
+
+### Changed
+
+- New ratcheted rule `sdp-placement-types`: every `serviceGroups[].deployableObjects[].ref` on a software deployment pattern must resolve to a `product_component` or `data_component`; the message names the object, its type and the field that should carry it (`substrate`, a data component's `runsOn`, or a relationship from the consuming component).
+- New ratcheted rule `relationship-definition-endpoint`: a relationship whose `source` or `target` is a service definition is an error; record it on the component or instance, or set `serviceRole: instance` on an external service that lives in the definitions folder.
+- Infrastructure schemas (`runtime_service`, `data_store_service`, `network_service`, `host`, `ai_gateway`) gain optional `serviceRole: definition | instance`. When absent, an object under `paths.serviceDefinitionsFolder` (else the `shared-services` catalog folder named in `paths.catalogFolders`) is a definition; any other object is an instance.
+- Schema and doc text no longer tells authors to list a data store, runtime, host or network service in a pattern's `deployableObjects` or to record a relationship on a shared standard. A pattern places only product and data components; runtimes and hosts go in `substrate`, data stores in `runsOn`, edge services come from the followed reference architecture, and a service definition is never a relationship endpoint. Affects the SDP and relationship schema hints, `object-types.md`, `draftsman.md`, `setup-mode.md`, `reference-architectures.md`, `sdp-completion-interview.md` and the `draftsman-author` skill. Text only here; the ratcheted rules `sdp-placement-types` and `relationship-definition-endpoint` land in this release (see below).
+- `generate_diagram.py` draws placed infrastructure (`network_service`, `runtime_service`, `host`, `ai_gateway`, `data_store_service`) in the deployment diagram only. The logical diagram shows components and data components, and unplaced infrastructure that a placed object depends on stays in its External interactions lane. Edges to infrastructure are drawn in the deployment diagram and keep their rows in the relationships table.
+- A relationship sourced by a placed infrastructure object is dropped (not drawn, not tabled, target not in scope) when its target is placed in another pattern and not in this one, so a shared network service stops carrying other patterns' flows; relationships to an `externalTarget` or to an object no pattern places are kept. A data component whose `runsOn` is a data store service is no longer compared with the group substrate or used to derive it.
+- In the deployment diagram each data component is drawn inside a container named for the data store service in its `runsOn` (`data store not recorded`, with a warning, when it is absent or unresolved). Data components of one group on one store share a container, and a store drawn that way has no box; a store with no data components stays a box. The page intro text and the `draftsman-diagram` skill describe both figures accordingly.
+- `generate_diagram.py` edge labels: every labelled edge carries two labels, one under its source box (or container) and one above its target box (or container), placed inside that box on the side of its own stub with more room (left-aligned at the box edge plus 5 px, or right-aligned at the other edge minus 5 px) and clipped with an ellipsis to that side, so its own stub never crosses the text; the page shows the one at the far end from the selected box (target end for `out` edges, source end for `in` edges). Each row gap and free band reserves label rows only where a labelled edge ends, so labels sit between boxes and tracks, not on a track or a node box, and edges between the same ordered pair stack their labels one row apart. Each label is two lines (the phrase, then the recorded technology, left out when none is recorded), each clipped with an ellipsis, so a label row is 28 px where a technology is recorded and 14 px otherwise and gaps grow by 14 px per row that holds one. Row gaps and bands are taller by those rows, and boxes with self-loops reserve 40 px above them. Labels show only for the edges of a hovered, focused or pinned box; hovering a single line shows a callout with the full label and technology. The permanent-label limit of eight edges is gone. Golden SVGs are regenerated; the hover callout shows the full text on one line.
+- The outside lane of `generate_diagram.py` is captioned `External interactions` and holds only objects a placed object depends on: consumers (unplaced objects that only call into the pattern) and relationships between two unplaced objects are no longer drawn or tabled.
+- The diagram model reports derived tiers (a placed entry without `diagramTier`), outside-pattern captions, `ext:` external nodes for `externalTarget` relationships, and duplicate placements, and counts undrawn relationships under `--placed-only`. A `runs on` relationship derived from `runsOn` or `host` is never drawn or listed; a `runtimeSpec.dependencies` entry is drawn and listed as an inline dependency. A `serviceGroups` value that is not a list is reported as `error:` with exit code 1.
+- The diagram model derives a container for each service group, captioned from its recorded `substrate` (or a `runsOn` that every placed component agrees on, marked `derived`), records `runsOn` disagreements as conflicts, assigns placed objects to network-zone lanes in `networkZones` order (zone `tier` is informational only), and reports warnings once each in sorted order with a `N warnings` count line. Objects that are only a group's substrate are drawn as containers in the deployment view and not as boxes.
+- `generate_diagram.py` renders the logical application view as a deterministic SVG (`render_logical_svg`): four bands (presentation, application, data, utility) that wrap to several rows, barycentre ordering with uid tie-break, positions on a fixed grid, an outside lane at the right edge with captions for objects outside the pattern and `externalTarget` nodes, edges drawn by the vocabulary below, escaped catalog text, and a `<desc>` holding only the generator name and pattern uid. Committed golden SVGs for the three fixture patterns. The HTML page assembles these figures.
+- `generate_diagram.py` renders the deployment pattern view as a deterministic SVG (`render_deployment_svg`): deployment targets, service group containers captioned from the model, and network-zone lanes (in `networkZones` order, then `zone not recorded`) around the shared node boxes, all in document order. A substrate is drawn as a container only and keeps its `data-id`; a group whose only listed object is its own substrate is drawn as that container. Every edge leaves its source (box or container) through the bottom and enters its target through the top, container ends sitting on the bottom or top border, and runs in free bands and channels sized for the tracks they need, so no edge crosses a box or a caption. Box positions lie on the 10 px grid. Groups with no drawable objects are named in a caption; the outside lane sits right of the channels. Committed golden SVGs for the three fixture patterns.
+- The HTML page assembles both figures in a fixed order, with a header that names the pattern, its lifecycle, owner team and reference architecture when that resolves, and a counts line that under `--placed-only` reports the recorded relationships left undrawn. The relationships table has a Source column (`relationship object` or `inline dependency`). A Recorded conflicts section appears only when a placed component's `runsOn` disagrees with its group substrate. Tier variants and scaling units are quoted as text in the characteristics section. The inventory's Language / runtime column uses the same technology rule as the figure boxes. One pin script highlights a uid in both figures. The framework version is stamped only in the page footer. Property tests check that rendering twice, reversed file discovery and a seeded shuffle of the catalog give identical HTML.
+- The diagram page hides every connection until a box is hovered, focused or pinned, then shows only that box's connections: purple for calls it makes, orange for calls it receives, with small dots moving along each line toward its arrowhead (switched off under `prefers-reduced-motion`). A `Show all connections` checkbox under each figure restores the full drawing.
+- Connection lines in both diagram figures are routed so they stay readable: every line leaves its source box or container through the bottom and enters its target through the top; all lines of one source share one attachment point and one run until they part, and so do all lines into one target; lines that can be shown together (they share a box) never share a track, while lines with no box in common may; and row gaps, gutters and bands grow only by the tracks they need (5 px apart), not by their number of lines. Container ends no longer sit at the border point nearest the other box. Fixture goldens are regenerated.
+- The `draftsman-diagram` skill is rewritten around the published diagram pages: it sends people to the page under `docs/diagrams/` first (generator runs are for an unpublished draft), explains the hover display, purple and orange direction colours, moving dots, the `Show all connections` toggle, clipped far-end labels, the External interactions lane, infrastructure only in the deployment view and data components inside their data store container, and reads the Recorded conflicts section and warnings back to the user. Its main job is correcting the objects behind a picture (a wrong `diagramTier`, a missing data component, a standard placed as a deployable object, a relationship recorded on a definition) and recording layouts through the editable render, export, `--write-layout --layout-from`, validation and a pull request. Agents still must not hand-draw SVG for the two views; Mermaid and C4 text stays for conversational answers and is outside the determinism guarantee. The user manual's browser section points at the published page.
+- The diagram figures draw the edge and node vocabulary: dashed edges for asynchronous, dotted for event, arrowheads by `flow` (an unknown flow warns and is read as absent), edge labels with the recorded technology, a type chip and technology line on each node box, and CSS custom properties with light and dark values. Retired and deprecated objects carry their lifecycle classes. The golden SVGs were regenerated for the new styling and labels.
+- The diagram page highlights the hovered, focused or pinned box in teal and its connections by direction (purple for calls it makes, orange for calls it receives), drawn above the other edges, instead of fading everything else.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Re-render diagram pages after upgrading if a page relied on the team-wide default scope. Run `validate.py --write-baseline` once and commit the baseline file (see Compatibility Impact). Run `generate_browser.py --refresh-shell` on an existing browser install to show the `Diagrams` link. No catalog content changes are required.
+
+## 1.3.1 - 2026-11-08
+
+### Compatibility Impact
+
+- Additive only. No schema, object model, validation, or workspace content changes. Existing workspaces are unaffected.
+
+### Added
+
+- None.
+
+### Changed
+
+- `tools/check_release_notes.py` no longer judges the promote-release bot's own commit as a standalone change. A commit that changes `CHANGELOG.md` and `draft-framework.yaml` (and optionally the regenerated `AI_INDEX.md`), leaves no `## Unreleased` section, and moves the version to the next patch, minor or major is a promotion of an entry that was already checked on its pull request, so the bump type is not checked again; skipped or lowered versions still fail. Any other file in the diff, or a remaining `## Unreleased` section, keeps the exact-bump rule. Tests are in `tests/test_release_notes.py`.
+
+### Fixed
+
+- Promoting a minor release (for example 1.2.1 to 1.3.0) failed the Validate Catalog check on the promotion commit, which demanded the next patch version, and the tag job was skipped, so no release tag was created. Minor releases now validate and tag normally.
+
+### Migration Notes
+
+- No migration required.
+
+## 1.3.0 - 2026-11-08
+
+### Compatibility Impact
+
+- The Draftsman is now delivered as portable skills under `skills/`, not as a DRAFT-operated agent. These are **removed**: the whole `agent/` directory (agent spec, `SOUL.md`, skills, MCP server copy, runtime bindings and deployment docs), `integrations/slack/` and `integrations/discord/`, `tools/validate_agent_package.py`, and `docs/soul.md` (its character content now lives in `skills/draftsman-core/references/character.md`). `integrations/cursor/` and `windsurf/` stay.
+- `tools/validate.py` no longer runs the agent-package check. It is a contract path, so the release version bump is a minor bump (the bump tooling never selects major).
+- Any consumer that read `agent/`, the chat integration manifests, or `soul.md` must load `skills/` instead.
+
+### Added
+
+- Added `skills/draftsman-core/SKILL.md`: the always-loaded core skill with the Recorded / Inferred / Unknown table, Evidence Discipline rules R1-R6 and the Query and Author capability profiles. R6 is new text for agents reading catalog files directly.
+- Added the RFC `docs/proposals/rfc-draftsman-skill-pack.md` describing the skill-pack replacement for the deployed agent.
+- Added `skills/draftsman-core/references/character.md` (carried over from `docs/soul.md`, which this release removes) and `references/onboarding.md` (the onboarding playbook with channel wording removed); `soul.md` is removed in this release.
+- Added Evidence Discipline fixtures `tests/fixtures/evidence_discipline/R1.json` to `R6.json` (one per rule, each with `id`, `rule`, `question`, `index_excerpt`, `forbidden_phrases`, `required_phrases`) and `tests/test_evidence_discipline_fixtures.py`, which checks the fixture set and that `draftsman-core` contains each rule's key phrase. The fixtures are not run against a live model.
+- Added `tools/validate_skills.py` (pyyaml only, read-only): checks SKILL.md frontmatter, line budgets (150 for `draftsman-core`, 200 for other skills), relative link and `scripts/` path integrity, and rejects links that escape the skill directory. Fenced code is excluded, and unreadable files and NUL-byte paths are reported as FAIL lines, not tracebacks. It exits 1 when a skills directory has no skill subdirectories and 2 when the directory is missing. Tests are in `tests/test_validate_skills.py`.
+- Added workflow skills under `skills/`: `draftsman-author` (with `references/guide.md`, the conversational flow and repository-scan mapping, merged from the guide action and the authoring and autodiscovery skills), `draftsman-query` (with `references/standards.md`, merged from the query and standards skills), `draftsman-review` and `draftsman-update` (a one-line summary per step in `SKILL.md`, the verbatim action-file steps in `references/steps.md`), and `draftsman-maturity` (the engineering maturity skill without company-specific agent names). Each states the capability profile it needs. The skills add guardrails that the old skills did not state: never ask the user for credentials or tokens, never copy a secret value into the catalog, mark scanned values as inferred (R6), and say so when a needed capability is missing. `draftsman-autodiscover` is merged into `draftsman-author` and `draftsman-standards` into `draftsman-query`; `switch-game-architect` is not ported. `draftsman-diagram` (Author profile, moved from `agent/skills/` to `skills/` with the Mermaid and C4 guidance kept in `references/mermaid.md`) documents the rendered-page generator `tools/generate_diagram.py` and the Mermaid and C4 output, with the generator's no-inference rules.
+- Added `skills/draftsman-core/references/role.md` (product registration, repository initialisation and architecture-question protocols) and a workflow-skill index in `draftsman-core`.
+- Added `tests/test_skill_set.py` (exact skill set, `switch-game-architect` absent, frontmatter checks, each workflow skill names its profile, script paths exist) and `tests/test_skill_step_lists.py` with heading fixtures in `tests/fixtures/skills/step_lists/` (every `##` and `###` heading of the review and update action files must appear in the matching skill).
+- CI now runs `python tools/validate_skills.py` in `.github/workflows/validate-catalog.yml`.
+- Added `tools/skill_hash.py` (shared sha256 and marker helpers). `tools/setup_ide.py` now also projects each skill into `.claude/skills/<name>/` as a copy (never a symlink), with `generated: true` and `source_sha256` added to the SKILL.md frontmatter (frontmatter stays first), and writes a managed skill index block into `AGENTS.md` that starts with a marker comment. An existing `AGENTS.md` keeps all its text and line endings; only the managed block is added or replaced, and a file with an unmatched or repeated marker is left untouched with a warning. `setup_ide.py` never overwrites a `.claude/skills/<name>/` directory that is not a generated projection. The framework repo itself gets projections only locally (`.claude/skills/` is git-ignored) and its tracked `AGENTS.md` is left alone.
+- Added `python3 tools/validate_skills.py --workspace <path>`: fails when a projection under `.claude/skills/` is missing, unmarked, stale against `.draft/framework/skills/`, or edited (every projected file is compared with the expected copy, including extra or missing files), or when the `AGENTS.md` skill index is missing, stale or malformed. No lock file is involved. Tests are in `tests/test_skill_distribution.py`, including a vendoring refresh test and an independently computed sha256.
+- Added the portability lint to `tools/validate_skills.py`: it fails on case-insensitive banned terms (`slack`, `discord`, `hermes`, `fargate`, `archie`, `central chat`, `switch-game-architect`, `ANTHROPIC_API_KEY`, `Pattern 2`) anywhere under `skills/`, with word boundaries so bare words such as "switch" and "hierarchy" pass. Tests are in `tests/test_validate_skills.py`.
+- Added `docs/bring-your-own-agent.md`: the four-point contract for giving your own agent the skills (load them, provide the profile's capabilities, publish the index from CI if needed, keep credentials in the harness), plus the optional MCP adapter's launch configuration and index-loading environment variables, which used to live under `agent/`.
+
+### Changed
+
+- Ignored `.sdlc/` run artifacts in `.gitignore`.
+- `draft_table/repo.py` now vendors `skills/` into `.draft/framework/skills/` on refresh and rewrites `skills` paths like the other vendored directories (a governed `draft_table/` path change).
+- `/draft guide`, `/draft review` and `/draft update` action files are now routers to the `draftsman-author`, `draftsman-review` and `draftsman-update` skills; the full step text lives in the skills. `/draft validate` stays a direct action.
+- `KPF-DFT-004` now describes the optional MCP adapter and points at `tests/test_mcp_server.py` (renamed from `tests/test_agent_mcp_tools.py` and retargeted to `tools/mcp_server.py`).
+- Replaced the "Interaction Modes" and "Dual AI Agent Modes" text in `docs/draftsman.md` and `docs/decentralized-sdp-setup.md` with the Query and Author capability profiles, and rewrote `integrations/README.md` for Cursor and Windsurf only.
+- Rewrote the agent sections of `README.md` to describe the skill pack.
+- Added `tests/test_no_agent_delivery_content.py` (no tracked file outside an explicit allowlist names the removed delivery model) and `tests/test_doc_links.py` (no markdown link points at a deleted path).
+
+### Fixed
+
+- `tools/mcp_server.py` answered `check_compliance` with a fixed "compliant" verdict for any product and drew `get_c4_diagram` from a fixed template. Both now read the catalog index: an unknown product or an object with nothing assessed is reported as `unknown`, gaps are reported as `non_compliant`, and the diagram shows the recorded relationships. A name fragment that matches several objects is reported as unknown instead of picking one, and diagram labels are escaped. This brings it in line with the tool logic that `agent/mcp/server.py` already had.
+- `tools/mcp_server.py` sent the read token to any URL containing the text "github". It now sends it only over https to `github.com` and `githubusercontent.com` hosts, judged by parsed hostname, and drops it on any redirect that leaves those hosts. With no index file found it used to fail with an internal error; it now answers from an empty index and says so on stderr.
+
+### Migration Notes
+
+- If you used the DRAFT agent package, its Slack or Discord manifests, or `soul.md`, load the skills in `skills/` into your own agent instead. A workspace gets them as `.draft/framework/skills/` on the next framework refresh; run `python3 .draft/framework/tools/setup_ide.py` to project them. There is no deprecation window.
+
+## 1.2.1 - 2026-11-08
+
+### Compatibility Impact
+
+- Additive only. No schema, object model, validation, or workspace content changes. Existing workspaces are unaffected.
+
+### Added
+
+- Added `tools/generate_diagram.py`, a deterministic generator that renders a Software Deployment Pattern as a self-contained HTML page with an inline SVG topology diagram (zones from service groups, boxes from placed objects, arrows only from recorded relationships), a relationships table, the pattern's recorded characteristics, open Drafting Session questions, and a filterable object inventory. Supports `--list`, `--sdp`, `--output`, and `--placed-only`.
+- Added `tests/test_generate_diagram.py` covering rendering, determinism, the no-inference rule (no relationship, no arrow), unplaced objects, unknown references, self-relationships, duplicate placement, malformed service groups, missing targets and labels, HTML escaping, and CLI error handling.
+
+### Changed
+
+- Extended the `draftsman-diagram` agent skill with a "Rendered Diagram Pages" mode: when to use the generator instead of hand-written Mermaid, the document-do-not-infer rules, how to report conflicting catalog fields, and how to deliver the page.
+
+### Fixed
+
+- Regenerated `docs/assets/draft-indexes.json`, which was stale on `main` and failed the generated-index check.
+
+### Migration Notes
+
+- No migration required. Companies that vendor the framework get `generate_diagram.py` and the updated skill on their next framework refresh.
+
+## 1.2.0 - 2026-08-28
+
+### Compatibility Impact
+
+- Consolidates `draftsman` (Factory Agent) and `draftsman-engineer` (Product Engineering Agent) into a single canonical **Draftsman Agent** (`draftsman`).
+- Establishes Environment-Aware Execution Modes: Central Chat Mode (Slack/Discord/Web UI) operates in Read-Only Query & Guidance Mode, while Connected IDE Mode (Cursor/Claude/Antigravity) operates in Authoring & Scaffolding Mode under the developer's local Git identity.
+
+### Added
+
+- Added Dual-Mode Operational identity to `agent/SOUL.md` and `agent/skills/draftsman/SKILL.md`.
+
+### Changed
+
+- Updated `agent/agent-spec.yaml`, `agent/bindings/hermes/agent.yaml`, `agent/docs/DEPLOYMENT.md`, `README.md`, and `docs/COMPOSITION_ROADMAP.md` to reference the unified Draftsman agent.
+- Bumped framework version to `1.2.0` in `draft-framework.yaml`.
+
+### Fixed
+
+- Removed redundant `agent/skills/draftsman-engineer/` skill directory.
+
+### Migration Notes
+
+- Existing agent factory deployments and IDE connections automatically pick up the unified `draftsman` agent definition.
+
+## 1.1.1 - 2026-08-28
+
+### Compatibility Impact
+
+- Incorporates multi-persona adoption feedback from Acme Corp simulation (CTO, Infra, SWE).
+- Clarifies core Vibe Coding principle: AI drafts architectural intent (`.draft/sdp.yaml`); the composition engine (`compose_iac.py`) composes infrastructure (`main.tf`).
+- Enforces mandatory local auto-validation in `draftsman-engineer` AI agent skill.
+
+### Added
+
+- Added Pattern 2 token push sync sequence diagram to `docs/engineering-onboarding.md`.
+- Added Inter-Module Variable Binding and Application Credential & Secret Handoff (`infra/outputs.json`) contracts to `docs/SHARED_SERVICE_COMPOSITION_SPEC.md`.
+- Added mass module upgrade tooling specification (`tools/upgrade_modules.py`) to `docs/COMPOSITION_ROADMAP.md`.
+- Added mandatory local auto-validation rule to `agent/skills/draftsman-engineer/SKILL.md`.
+
+### Changed
+
+- Updated `README.md` with explicit Core Vibe Coding Principle note.
+- Explicitly labeled `EnvironmentProfile` as `[Roadmap Phase 2 Specification]` in `SHARED_SERVICE_COMPOSITION_SPEC.md`.
+- Bumped framework version to `1.1.1`.
+
+### Migration Notes
+
+- AI agent prompt updates take effect automatically on new agent sessions.
+
+## 1.1.0 - 2026-08-28
+
+### Compatibility Impact
+
+- Reframes DRAFT around **Enterprise-Grade Vibe Coding** (speed with automatic compliance by composing approved, versioned shared service building blocks).
+- Introduces `provisioningModel: deployable | reference-only` and `deployablePackage` contract across shared service schemas (`host`, `runtime_service`, `data_store_service`, `network_service`, `ai_gateway`).
+- Enforces validator catalog status caps: SDPs relying on `reference-only` shared services are capped at `catalogStatus: documentation` and cannot be marked `complete` or `deployment-ready`.
+
+### Added
+
+- Added `provisioningModel` (`deployable` | `reference-only`) and `deployablePackage` (`registry`, `source`, `version`, `modulePath`) to `host.schema.yaml`, `runtime-service.schema.yaml`, `data-store-service.schema.yaml`, `network-service.schema.yaml`, and `ai-gateway.schema.yaml`.
+- Added validator status cap enforcement in `tools/validate.py` for SDPs depending on `reference-only` shared services.
+- Added migration helper tool `tools/migrate_shared_services_provisioning_model.py`.
+- Added design specification `docs/SHARED_SERVICE_COMPOSITION_SPEC.md` and follow-on roadmap document `docs/COMPOSITION_ROADMAP.md`.
+
+### Changed
+
+- Rewrote `README.md` to center DRAFT's outcome around Enterprise-Grade Vibe Coding and clean up legacy app positioning.
+- Updated `docs/shared-services-onboarding.md` with `deployable` vs `reference-only` publishing playbooks.
+- Bumped framework version to `1.1.0`.
+
+### Migration Notes
+
+- Run `python3 .draft/framework/tools/migrate_shared_services_provisioning_model.py --workspace .` in company workspaces to set explicit `provisioningModel: reference-only` across legacy catalog entries.
+
+## 1.0.7 - 2026-08-27
+
+### Compatibility Impact
+
+- Merges PR #191 (closes #191) and resolves issues #189 & #190: requires strict evidence discipline in `agent/SOUL.md`, projects relationship endpoints into catalog index, enables real C4 topology rendering, and syncs agent manifest version strings.
+
+### Added
+
+- Added strict evidence discipline rules to `agent/SOUL.md` requiring the agent to distinguish recorded facts from inferences and unrecorded values.
+- Added relationship endpoint fields (`source`, `target`, `label`, `technology`, `direction`) to `build_object_index` in `tools/indexes.py`.
+- Added real C4 graph topology rendering and dual ASCII text + Mermaid block output to `get_c4_diagram` in `agent/mcp/server.py`.
+
+### Changed
+
+- Synchronized agent specification version to `1.0.7` in `agent/agent-spec.yaml` and `agent/bindings/hermes/agent.yaml`.
+- Bumped framework version to `1.0.7`.
+
+### Fixed
+
+- Fixed Issue #189: agent manifest version string drift across releases.
+- Fixed Issue #190: inability of `get_c4_diagram` to draw real relationship topology due to stripped relationship endpoints in catalog index.
+
+### Migration Notes
+
+- Run `python3 tools/validate_agent_package.py` and `python3 -m unittest tests/test_agent_mcp_tools.py` to verify release integrity.
+
+## 1.0.6 - 2026-08-27
+
+### Compatibility Impact
+
+- Encodes explicit 4-step developer IDE onboarding playbook into factory agent prompts (`agent/SOUL.md`, `agent/skills/draftsman/SKILL.md`, `agent/skills/draftsman-query/SKILL.md`).
+
+### Added
+
+- Added explicit 4-step developer onboarding guidance protocol (Connecting IDE assistant, Product Registration, `/draft init` local repo initialization, and Least-Privilege Pattern 2 auto-sync).
+
+### Changed
+
+- Updated `agent/SOUL.md` to reinforce Read-Only chat identity boundary and instruct factory agent to redirect authoring to local IDE tools (`draftsman-engineer`).
+- Bumped framework version to `1.0.6`.
+
+### Fixed
+
+- Fixed missing developer onboarding guidance in Slack, Discord, and Web UI factory agent personas.
+
+### Migration Notes
+
+- Re-deploy factory agent container image or update `agent/` vendor files to pick up new onboarding guidance personas.
+
+## 1.0.5 - 2026-08-26
+
+### Compatibility Impact
+
+- Fixes issue #188: guards `validate_agent_package` in `tools/validate.py` to execute only when `agent/agent-spec.yaml` exists, unblocking workspace catalog validation and browser generation for all vendored company workspaces (`.draft/framework/`).
+
+### Added
+
+- Added `try/except ImportError` handling and `agent_dir.exists()` manifest presence checks to `tools/validate.py`.
+
+### Changed
+
+- Bumped framework version to `1.0.5`.
+
+### Fixed
+
+- Fixed false-positive `Missing agent-spec.yaml` validation failures in vendored company DRAFT workspaces (`.draft/framework/`).
+
+### Migration Notes
+
+- Re-run `python3 .draft/framework/tools/validate.py --workspace .` in company workspaces to verify clean validation.
+
+## 1.0.4 - 2026-08-26
+
+### Compatibility Impact
+
+- Merges PR #187 (closes #186): enables real catalog data querying (`objects` projection index), dynamic architecture compliance auditing (`check_compliance`), and stdio tool testing (`tests/test_agent_mcp_tools.py`).
+
+### Added
+
+- Added `build_object_index` to `tools/indexes.py` emitting lightweight searchable `objects` index projections (`uid`, `name`, `type`, `catalogStatus`, `description`, `domain`).
+- Added end-to-end stdio tool unit test suite in `tests/test_agent_mcp_tools.py`.
+
+### Changed
+
+- Updated `query_architecture` tool in `agent/mcp/server.py` to search `index_data["objects"]`.
+- Updated `check_compliance` tool in `agent/mcp/server.py` to evaluate actual `requirementImplementations.rows` and return `compliant`, `non_compliant` (naming unsatisfied requirement IDs), or `unknown` (with reason).
+- Updated `get_c4_diagram` tool to verify object existence before rendering.
+
+### Fixed
+
+- Fixed empty query results when calling `query_architecture`.
+- Fixed constant hardcoded compliance responses when calling `check_compliance`.
+
+### Migration Notes
+
+- Run `python3 -m unittest tests/test_agent_mcp_tools.py` to verify stdio MCP tool execution.
+
+## 1.0.3 - 2026-08-26
+
+### Compatibility Impact
+
+- Fixes issue #185: ships self-contained MCP server (`agent/mcp/server.py` and `agent/mcp/indexes.py`) directly inside the `agent/` package directory, eliminating all implicit external dependencies.
+
+### Added
+
+- Added self-contained stdio MCP server (`agent/mcp/server.py`) and index loader (`agent/mcp/indexes.py`) inside `agent/mcp/`.
+- Added hermetic sandbox execution testing to `tools/validate_agent_package.py` (copies `agent/` to an isolated temp directory before executing stdio JSON-RPC handshake).
+
+### Changed
+
+- Updated `agent/mcp/draftsman-mcp.json` to point `args` to `["agent/mcp/server.py"]`.
+- Bumped agent and framework versions to `1.0.3`.
+
+### Fixed
+
+- Fixed `ModuleNotFoundError` when agent factories deploy the standalone `agent/` directory into clean containers.
+
+### Migration Notes
+
+- Run `python3 tools/validate_agent_package.py` to verify hermetic agent package execution.
+
+## 1.0.2 - 2026-08-26
+
+### Compatibility Impact
+
+- Fixes issue #184: implements executable stdio MCP server (`tools/mcp_server.py`), index access contracts (`DRAFT_CATALOG_INDEX_URL`, `DRAFT_CATALOG_INDEX_PATH`, `GITHUB_READ_TOKEN`), and functional stdio MCP handshake validation.
+
+### Added
+
+- Added executable stdio JSON-RPC MCP server (`tools/mcp_server.py`) exposing `query_architecture`, `get_c4_diagram`, `check_compliance`, and `validate_yaml_object`.
+- Added runtime index resolution order (`DRAFT_CATALOG_INDEX_URL` -> `DRAFT_CATALOG_INDEX_PATH` -> local workspace fallback) with optional `GITHUB_READ_TOKEN` authorization support for private GitHub catalog repositories.
+- Added live stdio MCP `initialize` & `tools/list` handshake test to `tools/validate_agent_package.py`.
+
+### Changed
+
+- Updated `agent/mcp/draftsman-mcp.json` to point `args` to `["-m", "framework.tools.mcp_server"]`.
+- Updated `agent/agent-spec.yaml` and `agent/bindings/hermes/agent.yaml` to declare `GITHUB_READ_TOKEN` in `requirements.secrets` and bumped agent version to `1.0.2`.
+- Updated `agent/docs/DEPLOYMENT.md` with explicit Pattern A (Private GitHub repo with `GITHUB_READ_TOKEN`) and Pattern B (Published index URL `DRAFT_CATALOG_INDEX_URL` / `DRAFT_CATALOG_INDEX_PATH`).
+
+### Fixed
+
+- Fixed non-executable MCP server entrypoint in `agent/mcp/draftsman-mcp.json`.
+- Fixed missing index access contract declarations in agent specifications.
+
+### Migration Notes
+
+- Run `python3 tools/validate_agent_package.py` to verify agent package and live stdio MCP server execution.
+
+## 1.0.1 - 2026-08-26
+
+### Compatibility Impact
+
+- Fixes issue #183: resolves agent package manifest mismatches and separates factory singleton agent (`draftsman`) from local product engineering agent (`draftsman-engineer`).
+
+### Added
+
+- Added `web_ui` channel support (`web_ui: true`) to `agent/agent-spec.yaml` and `agent/bindings/hermes/agent.yaml`.
+- Added `agent/mcp/draftsman-mcp.json` MCP configuration file.
+- Added `agent/skills/draftsman-engineer/SKILL.md` skill definition for product engineering IDE assistants.
+- Added automated agent package validator tool (`tools/validate_agent_package.py`) integrated into framework validation (`validate.py`).
+
+### Changed
+
+- Separated agent personas: `draftsman` (Factory Agent: Read-Only Query, Diagrams, Guidance) vs. `draftsman-engineer` (IDE Agent: Product Registration, Local Scaffolding, Authoring, Autodiscovery).
+- Removed authoring capabilities and orphaned `github-workflow` skill reference from `draftsman` factory agent.
+- Updated `agent/docs/DEPLOYMENT.md` to document `web_ui` channel and clarify singleton factory vs. developer IDE/CLI identity models.
+
+### Fixed
+
+- Fixed manifest drift between `agent/agent-spec.yaml` and `agent/bindings/hermes/agent.yaml`.
+- Fixed missing MCP path references in agent manifests.
+
+### Migration Notes
+
+- Run `python3 tools/validate_agent_package.py` to verify agent package integrity.
+
+## 1.0.0 - 2026-08-26
+
+### Compatibility Impact
+
+- DRAFT Framework 1.0.0 General Availability release.
+- Introduces `product_registration` contract and decentralized `.draft/sdp.yaml` manifests for engineering product repositories.
+- Backward Compatible: Existing central catalog SDPs continue to validate and render without breaking changes.
+
+### Added
+
+- Added `product_registration` schema contract (`schemas/product-registration.schema.yaml`) for registering engineering products in `drafting-table`.
+- Added decentralized `.draft/sdp.yaml` manifest support in engineering product repositories.
+- Added Pattern 2 Least-Privilege GitHub Action templates (`templates/github/drafting-table-receiver.yml.tmpl` and `templates/github/product-repo-sync.yml.tmpl`) using ephemeral GitHub App tokens.
+- Added Read-Only Slack App Manifest (`integrations/slack/manifest.yaml`) and Discord Application Manifest (`integrations/discord/application.json`) for Draftsman AI in Query & Guidance Mode.
+- Added `decentralize_sdp.py` migration utility (`tools/decentralize_sdp.py`) to convert central catalog SDPs into product registrations and starter manifests.
+
+### Changed
+
+- Established three clear content groups: Product Content, Shared Services & Infrastructure (Internal Providers), and External Provider Hooks.
+- Defined dual interaction modes for Draftsman AI: Query & Guidance Mode (Slack/Discord/Web - Read-Only) vs. Authoring & Execution Mode (IDE/CLI).
+- Updated validator (`tools/validate.py`) and indexers (`tools/generate_indexes.py`) to discover and aggregate decentralized product SDPs into `catalog_indexes.json`.
+
+### Fixed
+
+- N/A
+
+### Migration Notes
+
+- Run `python3 tools/validate.py --workspace .` to verify existing catalog files.
+- To decentralize a legacy catalog SDP, run `python3 tools/decentralize_sdp.py --sdp <path-to-sdp.yaml>`.
+
+## 0.63.4 - 2026-07-29
+
+### Compatibility Impact
+
+- None. Browser diagram rendering improvements only.
+
+### Added
+
+- N/A
+
+### Changed
+
+- Updated Mermaid initialization defaults (`nodeSpacing`, `rankSpacing`, `curve`) to produce tighter, more readable layouts for dense/complex application diagrams.
+- Updated diagram slot CSS so SVGs scale gracefully when the user zooms out (`max-width: 100%; height: auto`), allowing more content to be visible on complex diagrams.
+
+### Fixed
+
+- N/A
+
+### Migration Notes
+
+- No manual migration required. Run `generate_browser.py --refresh-shell` (or update the framework) to pick up the improved diagram rendering.
+
+## 0.63.3 - 2026-07-24
+
+### Compatibility Impact
+
+- None. Two browser-only fixes; no schema, validator, or CLI changes.
+
+### Added
+
+- Added regression test asserting SDP initial render waits for `DOMContentLoaded`.
+- Added regression test asserting `businessPillarForObject` checks `pillar` before `ownerNode`.
+
+### Changed
+
+- N/A
+
+### Fixed
+
+- Fixed diagram load-order race on direct/bookmarked SDP pages (gated initial render on `DOMContentLoaded`). Closes #177.
+- Fixed business pillar grouping to prefer primary `pillar` over `ownerNode` per documented model. Closes #176.
+
+### Migration Notes
+
+- No manual migration required.
+
+## 0.63.2 - 2026-07-24
+
+### Compatibility Impact
+
+- None. Fixes a browser-only initial-render timing bug; no schema, validator, or CLI changes.
+
+### Added
+
+- Added a regression test asserting the SDP detail page's initial render is gated on `DOMContentLoaded` rather than called synchronously at the bottom of `draft-browser.js`.
+
+### Changed
+
+- N/A
+
+### Fixed
+
+- Fixed a load-order race in the generated browser bundle where a direct or bookmarked Software Deployment Pattern detail URL could render without its scoped diagram section. `draft-browser.js` and `mermaid-config.js` both load with `defer` and execute in document order before `DOMContentLoaded` fires, but `draft-browser.js` called `applyRouteFromHash()` (the initial page render) synchronously at the bottom of the script — before `mermaid-config.js`, next in the defer queue, had installed `window.DraftDiagrams`. The initial render (`initSidebarNav`, `initPalette`, `applyRouteFromHash`, and the background world-atlas warm-up) is now wrapped in `initialRender()` and gated on `DOMContentLoaded`, guaranteeing every deferred script has already run. Closes #177.
+
+### Migration Notes
+
+- No manual migration required. Downstream company workspaces receive the fix through a normal framework update.
+
+## 0.63.1 - 2026-07-02
+
+### Compatibility Impact
+
+- None. Additive change to the generated browser bundle only.
+
+### Added
+
+- Added `browser/mermaid-config.js`, loaded after `draft-browser.js`, which: (1) patches `mermaid.initialize` to raise `maxTextSize` from Mermaid's 50 KB default to 1 MB, since generated C4 diagrams for catalogs with many deployable objects were exceeding that limit and failing to render; (2) replaces the catalog-wide Diagrams view's diagram generation with a `flowchart LR` renderer scoped to `system` objects and, new in this release, individual Software Deployment Patterns (grouped by service group, connected via relationship objects), rather than a single dump-everything fallback; (3) exposes a `window.DraftDiagrams` API (`buildSdpDiagram`, `buildMermaid`, `objectBadge`, `ensureStyles`, `renderDiagramsIntoSlots`) so a single SDP's diagram can be embedded elsewhere in the bundle.
+- Added a "Diagrams" section to the Software Deployment Pattern detail page (`_sdpDiagramsMarkup` in `draft-browser.js`), between Topology and Service Groups, showing that SDP's own container diagram via the new `window.DraftDiagrams` API — scoped to just that pattern's deployable objects, rather than requiring a trip to the catalog-wide Diagrams view. The section is omitted when an SDP has no deployable objects, matching the existing Connections/Tier Variants sections' pattern.
+
+### Changed
+
+- Reordered `<script>` tags in `browser/index.template.html` so `assets/mermaid-config.js` loads after `assets/draft-browser.js`.
+
+### Fixed
+
+- Fixed "maximum text size in diagram exceeded" errors on the catalog-wide Diagrams view for catalogs with enough deployable objects to exceed Mermaid's default text-size limit.
+
+### Migration Notes
+
+- No manual migration required. Consumers running `generate_browser.py --refresh-shell` (or a first-time install) will pick up `mermaid-config.js` automatically; existing local-only patches some consumers may have made ahead of this change (e.g. downstream repos that vendored a similar workaround before it landed upstream) should be reconciled against this version to avoid double-patching `mermaid.initialize`.
+
+## 0.63.0 - 2026-06-24
+
+### Compatibility Impact
+
+- Reference Architecture constraints (`constraints`) now support declarative topological relationship validation via the `requireRelationships` field, permitting architectural patterns to mandate or forbid connections between services based on diagram tiers, slots, object types, and capabilities.
+- Software Deployment Patterns (`software_deployment_pattern`) can now specify multiple Reference Architectures in the `followsReferenceArchitecture` field as a list of strings, checking conformance against all referenced RAs. Backward compatibility for a single string is fully preserved.
+
+### Added
+
+- Added `requireRelationships` constraints validation to `evaluate_ra_constraints` in `tools/validate.py`.
+- Added helpers `_sdp_deployable_entries` and `_matches_endpoint_filter` to resolve and match SDP service group deployable objects against catalog relationships.
+- Added support for multiple Reference Architectures in `validate_software_deployment_pattern` in `tools/validate.py`.
+- Added unit tests in `tests/test_validation.py` checking list layout of `followsReferenceArchitecture`, required topological relationships, and forbidden topological relationships.
+
+### Changed
+
+- Updated `schemas/reference-architecture.schema.yaml` to include `requireRelationships` schema details under `raConstraint`, `raRelationshipConstraint`, and `raRelationshipEndpointFilter`.
+- Updated `schemas/software-deployment-pattern.schema.yaml` to declare `followsReferenceArchitecture` field validation.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No manual migration is required. Existing single-string `followsReferenceArchitecture` references and custom Reference Architecture schemas will continue to validate correctly.
+
+## 0.62.0 - 2026-06-23
+
+### Compatibility Impact
+
+- No breaking changes.
+
+### Added
+
+- Added `validate_capability_ownership_patches` validator check in `validate.py` to warn when capabilities have zero implementations and no active capability-ownership patches are defined in the workspace.
+- Added capability-ownership template files (and missing workflow/CODEOWNERS templates) to workspace templates scaffolding in `draft_table/repo.py` and the `draft-framework-update` template workflow.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- Fixed duplicate derived relationships being generated when hand-authored relationship objects already exist for the same source and target, or when multiple inline references define the same link.
+- Fixed a bug where `repair_uids.py` crashed when loading multi-document YAML files by adding multi-document YAML support (load/dump) to the tool.
+
+### Migration Notes
+
+- No manual migration actions are required. The new validators, templates, and bug fixes apply automatically during regular catalog verification and scaffolding.
+
+## 0.61.0 - 2026-06-22
+
+### Compatibility Impact
+
+- **Validation integration:** `generate_browser.py` now runs `validate.py` automatically before generating the browser, refusing to output browser files if validation fails (a `--skip-validation` option is provided to bypass).
+- **Multi-value enum fields:** The schema validator (`validate.py`) now accepts either a single string or a list of strings for enums defined as `enumFields` (such as `authenticationModel` inside services or interfaces) to support fronting multiple authentication mechanisms simultaneously.
+- No breaking changes. Existing workspaces and workflows are unaffected.
+
+### Added
+
+- Added support for auto-deriving deterministic virtual relationships from `runsOn` (on product and data components) and `host` (on self-managed services) fields, automatically populating topology diagrams.
+- Added support for auto-deriving relationships from `product_component` `runtimeSpec.dependencies`.
+- Added empty configurations/requirement-groups/ scaffolding to the workspace bootstrap template.
+- Added unit tests in `tests/test_inline_relationships.py` to verify deterministic UID generation and relationship parsing.
+
+### Changed
+
+- Updated `tools/uid_utils.py` to include `derive_inline_relationships` and `generate_relationship_uid` helper functions.
+- Updated `tools/validate.py` to merge derived inline relationships before executing validation and requirement satisfaction checks.
+- Updated `tools/generate_browser.py` to merge derived inline relationships into the browser registry and recursively scan catalog folders by default.
+- Updated `tools/generate_c4.py` to load and merge derived inline relationships for rendering C4 container diagrams.
+- Updated schemas and templates with explicit inline documentation for `applicability` structure and `activeRequirementGroups` activation.
+
+### Fixed
+
+- Fixed missing connections in C4 container diagrams and the catalog browser for workspaces using inline dependencies.
+- Fixed topology diagram line styling in `draft-browser-sdp.css` by adding fallback default connection colors for custom protocols.
+- Fixed a bug where always-on (`activation: always`) requirement groups rendered as inactive in the browser payload.
+
+### Migration Notes
+
+- No manual migration is required. Workspaces using `runtimeSpec.dependencies` or `runsOn`/`host` fields will automatically have virtual first-class relationships generated.
+
+## 0.60.0 - 2026-06-22
+
+### Compatibility Impact
+
+- Always-on (`activation: always`) requirement groups listed in the workspace configuration (`activeRequirementGroups`) will now trigger a warning rather than blocking catalog validation with a hard failure.
+- No breaking changes.
+
+### Added
+
+- Added empty catalog and empty governance warnings to the browser generator payload builder (`generate_browser.py`) to notify the user if no catalog or governance objects were loaded.
+
+### Changed
+
+- Demoted the validator's check for always-on requirement groups in `activeRequirementGroups` from a hard failure to a validation warning.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required.
+
+## 0.59.0 - 2026-06-21
+
+Introduces the Unreleased PR pattern: PRs write changelog entries under `## Unreleased` and leave `draft-framework.yaml` alone. The new `promote-release` GitHub Actions workflow converts `Unreleased` to a numbered version automatically on every merge to `main`, eliminating version-number conflicts between concurrent PRs.
+
+Closes a security gap in the catalog validator's plaintext-secret scanner and fixes a crash in the C4 diagram generator for system-less workspaces.
+
+### Compatibility Impact
+
+- **Inline context field rename**: Renamed inline context field `architectureNotes`/`architecturalDecisions` to `notes` globally across schemas, validator, templates, catalog, docs, and browser code. Existing company workspaces will need to rename this field to pass validation.
+- **Mechanism rename**: Replaced legacy mechanism `architecturalDecision` / `architectureNote` with `decisionRecord` and `note` globally. Inline notes are scratchpads and do not satisfy compliance requirements; exception-handling must use `decisionRecord` objects.
+- No breaking changes. Existing workspaces and workflows are unaffected. The change affects only the contributor/AI-agent release workflow for this repository.
+- The catalog validator's plaintext-secret scanner now inspects every key in a mapping even when a sibling key is named `secretReference`. Workspaces with a plaintext secret hidden alongside a `secretReference` key will now correctly fail validation. No other validation behavior changes.
+- No breaking changes for decision record approval. Existing workspaces are unaffected unless they configure the optional `decisionRecordApproval` policy in `workspace.yaml`.
+- No breaking changes for reference architecture slot validation. While SoftwareDeploymentPatterns following a ReferenceArchitecture must now satisfy all capability slots of the RA, all example catalog files have been updated and remain fully compliant.
+- The `/draft audit` and `/draft triage` verbs are removed from company workspaces. All functionality is available under `/draft review` with equivalent arguments. The `/draft validate` verb continues to work as a standalone alias but is no longer listed in the help table.
+
+### Added
+
+- Added `templates/relationship.yaml.tmpl` to provide a template for first-class relationship objects.
+- Added documentation for the standalone `deploymentConfiguration` pattern in `docs/how-to-add-objects.md` and linked to the new relationship template.
+- Added schema validation coverage for `decisionRecords` in service and component schemas (fixing a silent validation bypass where `decisionRecords` collections on components were not locally defined).
+- Added `upstream/` directory at the repository root for maintainer-only tooling that must not be vendored into company workspaces. Includes `upstream/README.md` explaining the directory's purpose.
+- Added `draft-actions/review.md`: the new `/draft review` verb that handles PR review, catalog quality review, and security/compliance audit in a single command routed by argument.
+- Added `.github/workflows/promote-release.yml`: fires on push to `main`, detects `## Unreleased` in CHANGELOG.md, computes the next version (minor if contract-path files changed, patch otherwise), promotes the entry, bumps `draft-framework.yaml`, and regenerates `AI_INDEX.md` in a follow-up bot commit.
+- Added `detect_bump_type()` helper and `--detect-bump` CLI flag to `tools/check_release_notes.py` so the promote workflow can compute the correct version bump type.
+- Added support for the `decisionRecordApproval` workspace policy in `.draft/workspace.yaml` allowing workspaces to declare central or decentralized approval routing (by category, domain, requirement, or owning team) and validator-enforced markings/scoping checks. Added optional fields `approver` and `approvalDate` to `decision_record` schema. Added unit tests and documentation.
+- Added Reference Architecture capability slot validation in `tools/validate.py`. When a SoftwareDeploymentPattern follows a ReferenceArchitecture, it validates that each capability slot specified in the ReferenceArchitecture's service groups is satisfied by a deployable object in the SDP of the matching `objectType` and `diagramTier` (if specified), or is explicitly bypassed via a matching `DecisionRecord` referenced on the SDP.
+- Added unit tests in `tests/test_validation.py` for reference architecture slot validation success, failure, and DecisionRecord bypass behaviors.
+
+### Changed
+
+- Renamed `architectureNotes` -> `notes` (type `dict`) in schemas: `ai-gateway`, `data-component`, `data-store-service`, `host`, `network-service`, `product-component`, `reference-architecture`, `runtime-service`, and `software-deployment-pattern`.
+- Renamed `addsArchitecturalDecisions` -> `addsNotes` in service and host schemas.
+- Updated `tools/validate.py` to use `notes` instead of `architectureNotes` and reject `note` mechanism as a requirement satisfaction.
+- Updated `browser/draft-browser.js` (and `docs/assets/draft-browser.js`) UI panel and labels to show "Notes" instead of "Architecture Decisions".
+- Updated all 300+ example catalog files and reference architectures to conform to the new `notes` schema field.
+- Simplified the `/draft` command family for company workspaces from six verbs to three: `guide`, `review`, `update`. The `validate` verb still works as a convenience alias but is no longer in the help table. The `audit` and `triage` verbs are retired.
+- Moved `draft-actions/review-framework.md` to `upstream/review-framework.md` so it is not vendored into company workspaces. The `review-framework` verb routes to `upstream/review-framework.md` and gracefully reports unavailability if the file is not found.
+- Updated all references to `/draft audit`, `/draft triage`, and the retired action files across `operations-guide.md`, `security-and-compliance-controls.md`, `draftsman.md`, `draftsman-ai-configuration.md`, `setup-mode.md`, `ticketing.md`, `integrations/`, and all workspace templates.
+- `check_release_notes.py`: governed file changes with an `## Unreleased` entry and no version bump are now accepted (the promote workflow handles versioning). `Unreleased` entries always require `Migration Notes` (full five-section quality).
+- Updated `VERSIONING.md` AI Release Decision Procedure to document the new PR pattern and retire the manual version-bump-in-PR requirement.
+- Updated `AGENTS.md` Editing Rules to tell AI agents to use `## Unreleased` in PRs and not touch `draft-framework.yaml`.
+- Updated example TechnologyComponents (`technology-haproxy-29`, `technology-mariadb-1011`, `technology-openstack-nova`) and the `sdp-openstack-iaas-platform` SoftwareDeploymentPattern in the example catalog to declare capabilities and decision records satisfying their reference architecture slots.
+
+### Fixed
+
+- Fixed silent schema validation bypass where `decisionRecords` arrays on services/components were skipped due to missing local `decisionRecordRef` definitions.
+- Fixed template-schema mismatch where default templates used the deprecated `architecturalDecisions` field.
+- `tools/validate.py`: `scan_for_secrets` no longer skips an entire mapping when it contains a `secretReference` key. The function now skips only the `secretReference` key itself and continues scanning siblings, so a plaintext `password`, `token`, `secret`, `apiKey`, or `privateKey` can no longer hide next to an approved secret-reference.
+- `tools/generate_c4.py`: C4 export no longer crashes with `AttributeError: 'list' object has no attribute 'values'` for catalogs that contain relationships but no `system` object. The system-less branch now correctly passes the full catalog dict to `relationships_for_containers`, which also restores relationship rendering for those catalogs.
+- `draft-actions/update.md`: moved cleanup of the temporary clone to run after the commit SHA capture, resolving a bug where the `rev-parse HEAD` command failed due to the clone directory having already been deleted. Also resolved a minor singular/plural grammar typo.
+- Fixed authorization failure in the automated version-promotion workflow by switching the checkout step to use the repository's `RELEASE_BOT_PAT` secret.
+
+### Migration Notes
+
+- **Field migration in workspaces**: Company workspaces must rename the inline `architectureNotes` field to `notes` in all YAML catalog files to comply with version 0.59.0 schemas and validator.
+- **Mechanism migration in requirements**: RequirementGroups specifying `mechanism: architecturalDecision` or `mechanism: architectureNote` must use `mechanism: decisionRecord` (for compliant exceptions) or `mechanism: note` (which will fail validation for completed items but serve as scratchpads).
+- Replace `/draft audit` with `/draft review` in any runbooks, CI scripts, or documented procedures. Replace `/draft triage` with `/draft review` (or `/draft review pr` for explicit PR review). No catalog YAML changes required.
+- No workspace migration required. This only changes how contributors and AI agents author PRs to this upstream framework repository.
+- From now on: write `## Unreleased` in CHANGELOG.md in your PR, omit any change to `draft-framework.yaml`, and the promote workflow assigns the version on merge.
+- After refreshing the framework, re-run `python3 .draft/framework/tools/validate.py --workspace .`. If validation now reports a plaintext secret, move that value to a `secretReference` mapping so no literal secret sits in a sibling field. No other workspace changes are required.
+- No immediate action required. To activate validation-enforced decision record approvals, add a `decisionRecordApproval` section to `.draft/workspace.yaml` (see `docs/decision-records.md` for options).
+- SoftwareDeploymentPatterns following a ReferenceArchitecture must satisfy all required capability slots. If a slot is bypassed, add a corresponding `DecisionRecord` with a key or capability/concern matching the slot's name or capability UID.
+
+## 0.58.2 - 2026-06-20
+
+Fixes documentation and template drift surfaced by the same 2026-06-12 framework review: nonexistent tooling references, stale flat catalog paths, wrong vendored-framework paths, an invalid `catalogStatus` repair value, and `serverless` listed as a delivery model.
+
+### Compatibility Impact
+
+- No breaking changes. Documentation and template corrections only; no schema, object contract, or validation behavior changed. Workspaces can update immediately.
+
+### Added
+
+- None.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- Removed references to the nonexistent `generate_codeowners.py` script in `operations-guide.md` and `draft-admins-onboarding.md`; CODEOWNERS is seeded by copying `.draft/framework/templates/workspace/CODEOWNERS.tmpl` to `.github/CODEOWNERS` and maintained by hand, and the docs now describe that mechanism.
+- Corrected `templates/workspace/CODEOWNERS.tmpl` to use the real role-layered catalog paths (`catalog/shared-services/...`, `catalog/engineering/...`, `catalog/governance/decision-records/`) instead of nonexistent flat paths, and refreshed the engineering example block to the default object-type layout.
+- Fixed three docs that dropped the `framework/` segment from the vendored framework path: `setup-mode.md`, `draftsman.md`, and `workspaces.md` now point at `.draft/framework/templates/...`.
+- Corrected the `/draft session` catalog path to `catalog/governance/sessions/` in `draft-actions/session.md` and `workspaces.md`.
+- Corrected the lifecycle repair guidance in `draftsman.md` to set `lifecycleStatus: deprecated` (the value the validator actually emits and a valid enum value) instead of the invalid `catalogStatus: deprecated`.
+- Removed `serverless` from the `deliveryModel` guidance in `draftsman.md` and `software-deployment-patterns.md`; valid delivery models are `self-managed`, `paas`, `saas`, and `appliance`. Legitimate references to serverless runtimes were left intact.
+
+### Migration Notes
+
+- None required. These are upstream documentation and template corrections; refreshing the framework picks them up with no workspace changes needed.
+
+## 0.58.1 - 2026-06-18
+
+Allows company-specific AI instruction overlays outside of the vendored framework directory.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces can adopt the overlay without breaking current AGENTS.md, CLAUDE.md, GEMINI.md, or Copilot instruction behavior.
+
+### Added
+
+- Added support for `.draft/instructions/` as a reserved company-owned folder for AI instruction/prompt overlays.
+- Updated workspaces documentation (`docs/workspaces.md`) to document purpose, precedence, and load order of the instruction overlays.
+
+### Changed
+
+- Updated all standard workspace templates (`AGENTS.md.tmpl`, `CLAUDE.md.tmpl`, `GEMINI.md.tmpl`, `llms.txt.tmpl`, `.cursor/rules/draftsman.mdc.tmpl`, `.windsurfrules.tmpl`, `.github/copilot-instructions.md.tmpl`) to explicitly instruct connected AI tools to read this directory when present.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can optionally create `.draft/instructions/` and add custom markdown instruction/prompt files.
+
+## 0.58.0 - 2026-06-13
+
+Fixes schema and documentation contradictions surfaced by the 2026-06-12 full framework review.
+
+
+### Compatibility Impact
+
+- No breaking changes. `decisionRecord` was already the documented valid value; this release makes the schema match. Any workspace that had `mechanism: note` in a `requirementImplementations` entry will now fail validation — change those to `mechanism: decisionRecord`.
+
+### Added
+
+- Added `diagramTier` field (`presentation` / `application` / `data` / `utility`) to `deployableObjectEntry` in `software-deployment-pattern.schema.yaml`, matching the existing RA schema.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- Replaced `note` with `decisionRecord` in `requirementImplementation.mechanism` enum across all 9 object schemas (`host`, `runtime-service`, `data-store-service`, `network-service`, `software-deployment-pattern`, `data-component`, `ai-gateway`, `reference-architecture`, `product-component`).
+- Removed `serverless` from the `deliveryModel` repair procedure in `draftsman.md`; it is not a valid enum value in any schema.
+- Removed duplicate "Add A RequirementGroup" section from `how-to-add-objects.md`; the shorter incomplete copy is gone and the fuller canonical section is retained.
+
+### Migration Notes
+
+- If any `requirementImplementations` entry uses `mechanism: note`, change it to `mechanism: decisionRecord`.
+
+## 0.57.5 - 2026-06-12
+
+Documents personality pack resolution, activation, and custom pack lookup.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflows remain unaffected.
+### Added
+
+- None.
+
+### Changed
+
+- Updated `docs/workspaces.md`, `docs/draftsman.md`, and `docs/soul.md` to document personality pack resolution, activation, and custom pack lookup order.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can update immediately.
+
+## 0.57.4 - 2026-06-12
+
+Introduces new 3rd-party personality (cast) packs to customize Draftsman personas.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflows remain unaffected.
+
+### Added
+
+- Added `framework/personalities/` directory with three alternative cast packs: `friends`, `big-bang-theory`, and `cheers`.
+- Added `framework/personalities/README.md` documenting personality pack activation and customization.
+
+### Changed
+
+- Updated `draft_table/repo.py` and automated update workflows to support copying and path-replacing the `personalities/` framework directory.
+- Updated `generate_ai_index.py` to index the new `framework/personalities/README.md` entrypoint.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can update immediately.
+
+## 0.57.3 - 2026-06-12
+
+Fixes a bug where document summaries in `AI_INDEX.md` showed `---` due to OKF frontmatter, and removes the hardcoded timestamp from `AI_INDEX.md`.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflows remain unaffected.
+
+### Added
+
+- None.
+
+### Changed
+
+- Updated `generate_ai_index.py` to strip and parse YAML frontmatter from documentation before extracting titles and summaries, and removed the hardcoded `timestamp` field from the generated `AI_INDEX.md` frontmatter.
+
+### Fixed
+
+- Fixed bug where `AI_INDEX.md` doc summaries showed `---` after OKF frontmatter was added in `v0.57.1`.
+
+### Migration Notes
+
+- None required. Workspaces can update to this framework release immediately.
+
+## 0.57.2 - 2026-06-12
+
+Introduces documentation for the Draftsman Soul, clarifying its character, beliefs, Cast of personas, and session contracts.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflows remain unaffected.
+
+### Added
+
+- Added `docs/soul.md` containing the Draftsman Soul specification, detailing the core personality, principles, and personas (Nora, Marcus, Yuki, Reid, Ellis) that guide Draftsman architectural sessions.
+
+### Changed
+
+- Updated `docs/draftsman.md` to reference `soul.md` for role character and interaction design.
+- Updated `generate_ai_index.py` and regenerated `AI_INDEX.md` to document the new `soul.md` entrypoint.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can update to this framework release immediately.
+
+## 0.57.1 - 2026-06-12
+
+Uplifts the core DRAFT documentation and instruction Markdown files to support Google's Open Knowledge Format (OKF) v0.1 spec.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflows remain unaffected.
+
+### Added
+
+- None.
+
+### Changed
+
+- Prepended OKF v0.1 compliant YAML frontmatter blocks containing `type`, `title`, `description`, `tags`, and `timestamp` fields to all framework instruction files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) and all 30 Markdown documentation files under `docs/`.
+- Updated `generate_browser.py` to strip the YAML frontmatter before rendering Markdown to HTML, keeping the generated browser shell clean.
+- Updated `generate_ai_index.py` to output the OKF frontmatter in the generated `AI_INDEX.md` file.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can update to this framework release immediately.
+
+## 0.57.0 - 2026-06-12
+
+Introduce opt-in `community/` layer for framework starter content.
+
+### Compatibility Impact
+- ReferenceArchitectures previously located under `configurations/reference-architectures/` have been moved to `community/reference-architectures/`.
+- These RAs now ship at `lifecycleStatus: candidate` instead of `preferred`.
+- They are **not** vendored by default into company workspaces during `draft-framework-update`.
+
+### Added
+- New top-level `community/reference-architectures/` directory for framework-provided starter patterns.
+- All seven baseline ReferenceArchitectures moved and downgraded to `candidate`.
+
+### Changed
+- Updated `docs/reference-architectures.md` to document the new community layer and opt-in model.
+- Regenerated `AI_INDEX.md` and browser data.
+
+### Fixed
+- Framework starter ReferenceArchitectures no longer implicitly become `preferred` in company workspaces upon framework upgrade.
+
+### Migration Notes
+- Workspaces that previously relied on framework RAs at `preferred` status should explicitly adopt the desired RAs from the `community/` layer and set the lifecycle status they endorse.
+- Compliance RequirementGroups remain under `framework/` and are unaffected.
+
+## 0.56.2 - 2026-06-12
+
+Fixes a bug where several framework directories were not copied or path-replaced during automated updates or local workspace vendoring.
+
+### Compatibility Impact
+
+- No breaking changes. Existing workspaces and workflow files remain unaffected.
+
+### Added
+
+- None.
+
+### Changed
+
+- Updated local vendoring scripts (`draft_table/repo.py`) and workflow templates (`draft-framework-update.yml` and its `.tmpl` workspace counterpart) to ensure all 10 framework subdirectories are copied and path-replaced.
+
+### Fixed
+
+- Fixed copying and path-replacement of `draft-actions/`, `reviews/`, `commands/`, `integrations/`, and `templates/` directories in framework updates.
+
+### Migration Notes
+
+- None required. Workspaces can update to this framework release immediately.
+
+## 0.56.1 - 2026-06-12
+
+Introduces the AI-Enabled Application ReferenceArchitecture, establishing the standard composition pattern and traffic-routing constraints for LLM-integrated systems.
+
+### Compatibility Impact
+
+- No breaking changes. Existing ReferenceArchitectures and SoftwareDeploymentPatterns remain unaffected.
+- The new ReferenceArchitecture is additive.
+
+### Added
+
+- Added `AI-Enabled Application Pattern` ReferenceArchitecture ([ra-ai-enabled-application.yaml](configurations/reference-architectures/ra-ai-enabled-application.yaml)), UID: `01KTWYEE98-D3QV`.
+- Added the `ai-applications-require-ai-gateway` architecture constraint to enforce routing LLM traffic through an `ai_gateway`.
+
+### Changed
+
+- Regenerated documentation mapping index and static browser data to include the new ReferenceArchitecture.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can begin following the new `AI-Enabled Application Pattern` ReferenceArchitecture immediately.
+
+## 0.56.0 - 2026-06-12
+
+Introduces native support for AI and Machine Learning as a strategic domain, defining a new first-class `ai_gateway` service object type, core capabilities, and base requirements.
+
+### Compatibility Impact
+
+- No breaking changes. Existing service types (`runtime_service`, `network_service`, `data_store_service`) remain unaffected.
+- The new `ai_gateway` service type is additive.
+
+### Added
+
+- Added `ai_gateway` service type schema ([ai-gateway.schema.yaml](schemas/ai-gateway.schema.yaml)).
+- Added `AI & Machine Learning` strategic domain ([ai-ml.yaml](configurations/domains/ai-ml.yaml)) governed by the AI Platform / MLOps team.
+- Added `AI Gateway` capability ([capability-ai-gateway.yaml](configurations/capabilities/capability-ai-gateway.yaml)) and `Model Inference & Serving` capability ([capability-model-inference.yaml](configurations/capabilities/capability-model-inference.yaml)).
+- Added `AI Gateway RequirementGroup` ([requirement-group-ai-gateway.yaml](configurations/requirement-groups/requirement-group-ai-gateway.yaml)) containing baseline requirements: `model-routing`, `token-rate-limiting`, `pii-masking`, and `audit-logging`.
+
+### Changed
+
+- Registered `ai_gateway` as a valid deployable service type in Reference Architectures and the validation engine.
+- Regenerated the documentation index and static browser outputs to incorporate the new domain and capabilities.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- None required. Workspaces can begin using the `ai_gateway` service type and the `AI Gateway` capability immediately.
+
+## 0.55.0 - 2026-06-10
+
+SDP governance requirements can now be satisfied structurally via fields on the SoftwareDeploymentPattern (or via data components for data-classification) in addition to DecisionRecord. DecisionRecords are now reserved for documented non-conformance.
+
+### Compatibility Impact
+- No breaking changes. Existing SDPs that use DecisionRecords continue to work.
+- New structural paths are additive.
+
+### Added
+- `field` satisfaction mechanism for `availability-requirement`, `data-classification`, `failure-domain`, `deployment-targets`, and `pattern-deviations` in the SoftwareDeploymentPattern RequirementGroup.
+- Structural satisfaction for `data-classification` via data components declaring `dataClassification` or `containsPII`.
+- `sdp_requirement_satisfied` now accepts direct fields on the SDP.
+
+### Changed
+- Updated gap messages to suggest the field option first.
+- Updated `requirement-group-software-deployment-pattern.yaml` to declare `field` as a valid satisfaction mechanism.
+
+### Fixed
+- SDP governance requirements no longer force DecisionRecord-as-attestation for normal/conformant cases.
+
+### Migration Notes
+- None required. Workspaces may now satisfy governance qualities with fields instead of (or in addition to) DecisionRecords.
+
+# Changelog
+
+All notable DRAFT Framework changes are recorded here. Every release requires
+notes, including patch releases.
+
+## 0.55.0 - 2026-06-10
+
+Adds capability-based ReferenceArchitecture starter patterns and SDP conformance validation.
+
+### Compatibility Impact
+
+- ReferenceArchitecture `serviceGroups[].deployableObjects[]` entries may now declare `slot` and `capability` in addition to existing `objectType` and `ref` fields. Existing RAs remain valid.
+- RA constraints may now require a deployable object to satisfy a Capability. Workspaces that opt into those constraints must map the selected service or underlying TechnologyComponent to the required Capability.
+
+### Added
+
+- Added capability-slot schema fields and documentation for ReferenceArchitectures.
+- Added starter ReferenceArchitectures for Two-Tier, Containerized Microservices, Event-Driven, and Strangler Migration patterns.
+- Added capability-aware RA constraint validation and regression coverage for Capability implementation mapping.
+
+### Changed
+
+- Updated existing Three-Tier, Serverless Event-Driven, and Multi-Tenant SaaS starter ReferenceArchitectures to expose capability slots while preserving existing object-type constraints.
+- Regenerated AI and browser outputs for the expanded ReferenceArchitecture set.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Existing workspaces do not need immediate changes. To use capability-slot conformance, populate Capability `implementations` or service `capabilities` for the shared services that satisfy selected ReferenceArchitecture slots.
+
+## 0.54.0 - 2026-06-09
+
+Tightens DecisionRecord key matching for requirement implementations.
+
+### Compatibility Impact
+
+- Requirement implementations that satisfy a requirement via `mechanism: decisionRecord` and a `key` now require a matching `decisionRecords[].key` or `decisionRecords[].concern`, instead of accepting any referenced DecisionRecord.
+
+### Added
+
+- Added a validation regression test covering mismatched DecisionRecord keys on explicit requirement implementations.
+
+### Changed
+
+- Updated `implementation_resolves` so key-scoped DecisionRecord requirement implementations use the same matching behavior as declarative DecisionRecord mechanisms.
+
+### Fixed
+
+- Fixed DecisionRecord-backed requirement implementations so unrelated DecisionRecords no longer satisfy key-scoped requirements.
+
+### Migration Notes
+
+- If validation newly reports an unsatisfied key-scoped DecisionRecord implementation, update the owning object's `decisionRecords` entry to use the required `key` or `concern`, or reference the correct DecisionRecord.
+
+## 0.53.0 - 2026-06-09
+
+Resolves owner contact handling for team vocabulary metadata.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing inline `owner.contact` values remain valid; validation now warns when they drift from the declared team vocabulary contact.
+- No compatibility impact. Existing workspaces that use DecisionRecords for SoftwareDeploymentPattern requirement satisfaction remain valid.
+
+### Added
+
+- Added owner contact derivation in browser payloads from `vocabulary.teams[].contact` when catalog objects declare `owner.team` but omit `owner.contact`.
+- Added validation tests for omitted owner contacts and drift warnings.
+- Added regression coverage documenting that SoftwareDeploymentPattern `notes` placeholders do not satisfy requirements that must be committed as `decision_record` references.
+
+### Changed
+
+- Documented teams vocabulary `contact` as the source of truth for owner contact metadata.
+
+### Fixed
+
+- Fixed duplicate owner contact maintenance by allowing `owner.contact` to be omitted when a team vocabulary contact exists.
+
+### Migration Notes
+
+- Teams can remove redundant inline `owner.contact` values from catalog objects after adding contacts to `.draft/workspace.yaml` teams vocabulary.
+
+## 0.52.3 - 2026-06-09
+
+Adds workspace contribution onboarding defaults and guidance.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Added generated `.github/CONTRIBUTING.md` workspace guidance for branching and pull request process.
+- Added `contribution.branchingStrategy` defaulting to `github-flow` in generated workspace configuration.
+
+### Changed
+
+- Updated workspace `AGENTS.md` to treat `.github/CONTRIBUTING.md` as the single source of truth for branching and PR process.
+- Updated setup mode to ask and record the workspace branching strategy.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Existing workspaces can add `contribution.branchingStrategy: github-flow` and generate `.github/CONTRIBUTING.md` during their next framework refresh if they want the new guidance.
+
+## 0.52.2 - 2026-06-07
+
+Resolves workspace Copilot template path lookup in setup_ide.py.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Added automated IDE setup test suite `tests/test_setup_ide.py` to verify company workspace template lookup.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- Fixed the Copilot template lookup path in `setup_ide.py` for company workspaces to search in `.draft/templates/` before falling back to the framework directory.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.52.1 - 2026-06-07
+
+Tightens Copilot setup detection in the automated IDE onboarding script.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Added automated IDE setup test suite `tests/test_setup_ide.py` to verify copilot setup detection behavior.
+
+### Changed
+
+- Updated `setup_ide.py` to search for `/draft` instead of the substring `Draftsman` to identify if Copilot instructions are already configured, preventing false positives.
+
+### Fixed
+
+- Fixed false positives in Copilot onboarding setup where a pre-existing custom instruction file mentioning the Draftsman name was incorrectly treated as fully configured.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.52.0 - 2026-06-07
+
+Fixes the SoftwareDeploymentPattern hardcoded validator to support DecisionRecords referenced via decisionRecords.
+
+### Compatibility Impact
+
+- **Breaking Change**: Inline `notes` are no longer accepted to satisfy SoftwareDeploymentPattern verification requirements. SDPs must now reference `decision_record` objects via `decisionRecords` to satisfy these requirements.
+
+### Added
+
+- Added `sdp_requirement_satisfied` helper to evaluate requirement satisfaction via referenced `decisionRecord` objects.
+
+### Changed
+
+- Updated SoftwareDeploymentPattern hardcoded checks in `validate.py` (for conformance, targets, availability, interactions, classification, failure domain, and deviations) to use the new satisfaction helper, resolving the contradiction with the declarative RequirementGroup.
+- Added validation unit test `test_software_deployment_pattern_with_decision_records_satisfaction` to verify that SDPs containing only referenced DecisionRecords are successfully validated.
+
+### Fixed
+
+- Fixed hardcoded SDP validation gaps where valid DecisionRecords were ignored, forcing redundant `notes` fields.
+
+### Migration Notes
+
+- Promote inline notes in SoftwareDeploymentPatterns (e.g. `deploymentTargets`, `availabilityRequirement`, `dataClassification`, `failureDomain`, etc.) to separate `decision_record` objects and reference them in the SDP's `decisionRecords` list.
+
+## 0.51.3 - 2026-06-06
+
+Locks squash-merging as the only allowed pull request merge method on the upstream repository.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Updated `RELEASE.md` to document the squash-merge policy.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.51.2 - 2026-06-06
+
+Adds an automated onboarding/setup helper script to configure DRAFT integrations for Claude Code, Cursor, Windsurf, and GitHub Copilot.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Added `tools/setup_ide.py` onboarding script to automatically create directories and symlink/copy IDE rules.
+- Updated `setup-mode.md` documentation to introduce the automated helper script as the recommended setup step.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.51.1 - 2026-06-06
+
+Adds automated git tag creation and pushing to the Validate Catalog CI workflow for version-impacting commits on the main branch.
+
+### Compatibility Impact
+
+- No compatibility impact. Existing workspaces remain valid.
+
+### Added
+
+- Added `Create and push git tag` step in `.github/workflows/validate-catalog.yml` to automatically create and push a git tag for the new version when a PR is merged into `main`.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.51.0 - 2026-06-06
+
+Adds support for hierarchical business taxonomy with federated business unit ownership.
+
+### Compatibility Impact
+
+- This release adds new optional schema `business_unit_hierarchy` and fields. Existing workspace and catalog configurations remain valid.
+
+### Added
+
+- Added `business_unit_hierarchy` schema under `schemas/` to define federated business unit hierarchy files.
+- Added `businessContext.ownerNode` field to SoftwareDeploymentPattern schema to allow mapping patterns directly to specific business hierarchy nodes.
+- Added support in `validate.py` for `businessTaxonomy.businessUnits` registry in `workspace.yaml` and recursively loading and stitching `business_unit_hierarchy` files from the catalog.
+- Added business unit hierarchy documentation in `workspaces.md`, `software-deployment-patterns.md`, and `draftsman.md`.
+- Added unit tests checking federated business unit validation, required pillar policies via lineage checks, and error reporting for unregistered business units.
+
+### Changed
+
+- Updated `generate_browser.py` to construct the fully stitched business unit taxonomy tree for collapsible navigation in the DRAFT browser.
+- Regenerated derived AI index (`AI_INDEX.md`) and static browser assets.
+
+### Fixed
+
+- None (this is a feature release and does not patch existing defects).
+
+### Migration Notes
+
+- Workspace administrators can migrate central inline hierarchies to federated business unit hierarchies by declaring `businessUnits` in `.draft/workspace.yaml` and moving sub-trees to separate `business_unit_hierarchy` catalog files.
+
+## 0.50.0 - 2026-06-04
+
+Extends ProductComponent authoring with product-owned runtime metadata so engineering teams can document listener ports and simple runtime dependencies without editing shared RuntimeService definitions.
+
+### Compatibility Impact
+
+- This release adds optional ProductComponent fields only. Existing ProductComponent YAML remains valid.
+
+### Added
+
+- Added optional `runtimeSpec` to ProductComponent with `ports` and `dependencies` collections for component-owned runtime metadata.
+- Added validation for `runtimeSpec.ports[].number` typing and `runtimeSpec.dependencies[].ref` catalog references.
+- Added ProductComponent runtime metadata tests and authoring documentation.
+
+### Changed
+
+- Updated generated browser and AI assets so ProductComponent schema metadata includes `runtimeSpec`.
+
+### Fixed
+
+- Fixed ProductComponent validation gaps where malformed runtime port numbers and unknown inline runtime dependency references were not checked.
+
+### Migration Notes
+
+- Continue using standalone `relationship` objects for architecturally significant cross-service interactions. Use `runtimeSpec.dependencies` for concise product-owned runtime dependency metadata such as configuration stores, buckets, queues, or APIs consumed by a component.
+
+## 0.49.0 - 2026-06-04
+
+Adds OWASP ASVS v4.0.3 as a reusable third-party provider pack and keeps it optional for workspaces by moving ASVS RequirementGroups out of core framework configurations.
+
+### Compatibility Impact
+
+- OWASP ASVS RequirementGroups are no longer bundled as core framework requirement groups. Workspaces that enforce ASVS should vendor or copy `providers/owasp-asvs/` into `.draft/providers/owasp-asvs/` and keep their existing `activeRequirementGroups` entries.
+
+### Added
+
+- Added `providers/owasp-asvs/` with Level 1, Level 2, and Level 3 ASVS RequirementGroups mapped to DRAFT capability UIDs.
+- Added `tools/import_asvs.py --output-dir` support so the ASVS provider pack can be regenerated from structured ASVS JSON without writing into core framework configurations.
+- Added tests for ASVS importer output and workspace validation against vendored provider packs.
+
+### Changed
+
+- Updated RequirementGroup inheritance resolution in validation and the browser to support list-valued `inherits` declarations.
+- Removed OWASP ASVS RequirementGroups from the core framework configuration set so ASVS remains a modular provider pack.
+
+### Fixed
+
+- Fixed list-valued RequirementGroup inheritance so validators and browser views resolve inherited requirements instead of treating the parent list as an invalid scalar key.
+
+### Migration Notes
+
+- To continue enforcing ASVS, copy or vendor `providers/owasp-asvs/` into your workspace at `.draft/providers/owasp-asvs/`, then activate `01KQQ4Q027-ASV1`, `01KQQ4Q027-ASV2`, or `01KQQ4Q027-ASV3` in `.draft/workspace.yaml`.
+- If you regenerate ASVS controls, run `python3 tools/import_asvs.py --source <asvs.json> --output-dir providers/owasp-asvs/configurations/requirement-groups`.
+
+## 0.48.1 - 2026-06-04
+
+Adds canonical generated catalog indexes for domain-capability mappings and requirement implementation evidence, then wires the static browser and CI workflows to consume and verify them before derived browser and AI assets are generated.
+
+### Compatibility Impact
+
+- This release does not introduce breaking YAML changes. Existing catalogs remain valid; browser output now includes an `indexes` payload derived from existing capability and requirement implementation fields.
+
+### Added
+
+- Added shared catalog index builders for domain-capability mappings and requirement implementation evidence.
+- Added `tools/generate_indexes.py` to write the committed `docs/assets/draft-indexes.json` artifact.
+- Added validation workflow freshness checks for generated catalog indexes.
+
+### Changed
+
+- Updated browser data generation to embed the canonical indexes in `browser-data.js`.
+- Updated acceptable-use and requirement evidence browser views to consume generated indexes first, with existing raw-object scans retained as compatibility fallback.
+- Updated derived-asset workflow ordering so indexes are generated before browser and AI assets.
+- Updated the AI framework index generator to document the new index tooling.
+
+### Fixed
+
+- Prevented browser/domain grouping logic from independently rediscovering domain-capability relationships when a canonical generated index is available.
+
+### Migration Notes
+
+- Run `python tools/generate_indexes.py` before regenerating browser or AI assets so committed generated indexes stay current.
+
+## 0.48.0 - 2026-06-04
+
+Moves Domain capability membership to a generated read model derived from `Capability.domain`, eliminating the duplicated authored `domain.capabilities` edge.
+
+### Compatibility Impact
+
+- Domain objects no longer require an authored `capabilities` list. Existing Domain objects with `capabilities` still validate, but the field is deprecated and generated browser data derives membership from each Capability object's `domain` field.
+
+### Added
+
+- Added a shared domain-capability index builder for generated browser and future AI/search read models.
+- Added browser payload indexes for `domainCapabilities`, `capabilityDomain`, and unassigned capabilities.
+- Added regression tests proving Domain objects validate without authored capability lists and browser data derives the capability map from `capability.domain`.
+
+### Changed
+
+- Updated framework Domain configurations to remove duplicated authored `capabilities` lists.
+- Updated browser Domain detail rendering to read the generated domain-capability index.
+- Updated Domain schema and documentation to make `Capability.domain` the source of record for domain membership.
+
+### Fixed
+
+- Fixed Domain detail implementation link resolution to resolve lifecycle implementations from the capability being rendered, not the parent domain object.
+
+### Migration Notes
+
+- Remove `capabilities` from Domain YAML files. Ensure every Capability has a valid `domain` UID; generated assets will rebuild domain→capability navigation from those capability records.
+
+## 0.47.0 - 2026-06-04
+
+Rename all prose, headings, sidebar links, and documentation occurrences of "Architecture Objects" to "Shared Services Objects" or "Governance Objects" as appropriate, fully aligning the documentation and UI tiles with the three-role framework terminology.
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. All additions are backwards-compatible.
+
+### Added
+
+- Added "Engineering Objects" as a dedicated section in the DRAFT User Manual.
+
+### Changed
+
+- Updated DRAFT User Manual, Framework Overview, and DRAFT Object Types docs to replace "Architecture Objects" with "Shared Services Objects" or "Governance Objects".
+- Renamed "architecture-objects" documentation links and IDs to "shared-services-objects" or "engineering-objects".
+- Updated the browser "Teams" tile description to refer to "catalog objects" instead of "architecture objects".
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration steps are required.
+
+## 0.46.0 - 2026-06-04
+
+Adds a reusable compliance and verification integration for the OWASP Application Security Verification Standard (ASVS) v4.0.3, and updates the object model UML terminology to reflect "Shared Services".
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. All additions are backwards-compatible.
+
+### Added
+
+- Added an automated OWASP ASVS parser and RequirementGroup generator tool (`tools/import_asvs.py`) to download and compile the standard.
+- Bundled the standard OWASP ASVS v4.0.3 compliance pack as three modular, inheriting RequirementGroups: `asvs-l1` (Baseline), `asvs-l2` (Standard), and `asvs-l3` (Advanced).
+
+### Changed
+
+- Updated the DRAFT object model UML diagram and configurations to rename "Architecture Objects" to "Shared Services Objects", aligning with the three-role framework terminology.
+- Updated the DRAFT User Manual section 1.1 "What DRAFT replaces" to describe DRAFT conceptually as the architecture diagram, deployment manifest, and audit evidence.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration steps are required.
+
+## 0.45.0 - 2026-06-02
+
+Adds validator coverage for duplicate capability and domain names across native, provider, and workspace catalog layers.
+
+### Compatibility Impact
+
+- This release adds validation warnings only. Existing catalogs remain valid, but duplicate capability or domain names will now be reported so they can be reconciled before they appear as duplicate browser cards.
+
+### Added
+
+- Added validator warnings for duplicate capability and domain names across native, provider, and workspace objects.
+- Added alias-aware suppression so intentional continuity aliases or object patches do not trigger duplicate-name warnings.
+- Added regression tests covering duplicate capability warnings, duplicate domain warnings, and alias suppression.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- Fixed a validator coverage gap where duplicate native/workspace capability or domain names could pass silently and later render as confusing duplicate browser entries.
+
+### Migration Notes
+
+- Existing catalogs do not require immediate migration. If validation reports a duplicate local capability or domain name, retire the local object and overlay the native object with an `object_patch`, or rename one of the objects.
+
+## 0.44.1 - 2026-06-02
+
+Clarifies GitHub activity ownership expectations for AI-assisted DRAFT work.
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. Documentation-only clarification.
+
+### Added
+
+- None.
+
+### Changed
+
+- Clarified that GitHub issues and pull requests are the shared activity log for DRAFT work.
+- Clarified that agent responsibility should be tracked through real GitHub identities and activity rather than labels.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration steps are required for this release. Existing objects and configurations remain valid.
+
+## 0.44.0 - 2026-06-01
+
+Introduces the DRAFT v1.0 deployment readiness validation contract, including environment target binding schemas, a template, automated secrets scanning, and a topological closed-graph completeness check.
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. All additions are backwards-compatible.
+
+### Added
+
+- Support for first-class environment target bindings via `DeploymentTarget` objects and its schema `schemas/deployment-target.schema.yaml`.
+- Added `templates/deployment-target.yaml.tmpl` for easy catalog onboarding and drafting of environment targets.
+- Added `--deployment-ready <SDP_UID> <TARGET_UID>` command line option to `validate.py` to verify that a SoftwareDeploymentPattern is deployment-ready for a physical target environment.
+- Implement a topological closed-dependency-graph validator for the `--deployment-ready` option, checking that every transitively referenced catalog object is fully mature and set to `catalogStatus: complete`.
+- Added an automated, recursive plaintext secrets scanner in `validate.py` to scan all parsed configuration parameters and enforce the secure `secretReference` design pattern.
+- Added comprehensive unit testing covering secrets scanner blocking and graph completeness validation.
+
+### Changed
+
+- None. This release introduces new schemas, templates, and validator verification steps only.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- No migration steps are required for this release. Existing objects and configurations remain valid.
+
+## 0.43.0 - 2026-06-01
+
+Adds quiet and summary-only modes to the validator command line tool, and clarifies requirement gap warning trace messages.
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. All additions are backwards-compatible.
+
+### Added
+
+- Support for `--quiet` / `-q`, `--summary-only`, and `--verbose` / `-v` command-line options in the `validate.py` validator script.
+- Configured `--quiet` to suppress individual file PASS trace logs and validation warnings (only showing failures and final summary).
+- Configured `--summary-only` to suppress individual pass/fail and errors/warnings detail, only outputting the high-level validation summary.
+- Added comprehensive unit testing verifying `--quiet` option behavior.
+
+### Changed
+
+- Rephrased the standard unsatisfied requirement warning message from 'Satisfy [requirement] using ...' to 'Requirement not satisfied: [requirement]; satisfy using ...' to avoid confusion with trace logs of successful checks.
+
+### Fixed
+
+- None. This release introduces new command-line features and phrasing clarity only.
+
+### Migration Notes
+
+- No migration steps are required for this release. Existing objects and configurations remain valid.
+
+## 0.42.0 - 2026-06-01
+
+Expands capability satisfaction to support shared operational platform services, supports recursive system boundaries (subsystems), and resolves Acceptable Use view browser UI display bugs.
+
+### Compatibility Impact
+
+- This release does not introduce any breaking changes to existing catalogs. All additions are backwards-compatible.
+
+### Added
+
+- Support in schemas and validator for capability implementations to satisfy requirements by referencing shared operational services (`runtime_service`, `data_store_service`, `network_service`) in addition to local `technology_component` objects.
+- Support in schemas and validator for `system` objects to recursively contain other `system` objects in their `containers` list to represent nested subsystems.
+
+### Changed
+
+- Framework schemas and browser rendering logic were updated to support the expanded capability satisfaction models and recursive system boundaries.
+
+### Fixed
+
+- Acceptable Use view in the browser now filters out and suppresses empty domain cards that contain no rows, reducing visual clutter.
+- Acceptable Use capability drill-down in the browser now displays a clean human-readable `"Unresolved Component Reference"` label when the capability's implementation reference cannot be resolved, keeping the raw UID as a smaller subtitle.
+
+### Migration Notes
+
+- No migration steps are required for this release. Existing objects and configurations remain valid under the expanded schemas.
+
+## 0.41.6 - 2026-06-01
+
+Fixes manual framework update ref handling so bare semantic versions resolve to
+the canonical `vX.Y.Z` release tags when those tags exist.
+
+### Added
+
+- A workflow-template guard that accepts manual `target_ref` values such as
+  `0.41.6` or `refs/tags/0.41.6` and normalizes them to `v0.41.6` when that tag
+  exists upstream.
+
+### Changed
+
+- Framework update docs now explicitly state that DRAFT release tags use
+  `vX.Y.Z` and that bare `X.Y.Z` inputs are accepted as a convenience.
+
+### Fixed
+
+- Manual framework update runs no longer try only `refs/tags/X.Y.Z` when the
+  upstream release tag is actually `refs/tags/vX.Y.Z`.
+
+### Compatibility Impact
+
+- None. This is an update workflow and documentation fix only.
+
+### Migration Notes
+
+Existing company workspaces should refresh their
+`.github/workflows/draft-framework-update.yml` from the updated template to pick
+up manual `target_ref` normalization.
+
+## 0.41.5 - 2026-06-01
+
+Removes remaining legacy role wording from command help and role-layer guidance
+so the framework consistently uses Shared Services.
+
+### Added
+
+- None.
+
+### Changed
+
+- `/draft` help now lists `/draft author` and `/draft session` for Engineering
+  and Shared Services.
+- Reuse model and roles/layers docs now use Shared Services consistently.
+
+### Fixed
+
+- Removed stale legacy role names from current docs and prior changelog notes
+  that could confuse vendored company workspace guidance.
+
+### Compatibility Impact
+
+- None. This is terminology and AI instruction guidance only.
+
+### Migration Notes
+
+Existing company workspaces should refresh their vendored framework copy to
+pick up the corrected `/draft` help text.
+
+## 0.41.4 - 2026-06-01
+
+Adds a `/draft security` workflow for security RequirementGroup authoring,
+satisfaction design, posture review, and artifact compliance audit in company
+workspaces.
+
+### Added
+
+- `draft-actions/security.md` for CISO, security architect,
+  security engineering, compliance/GRC, and delegated risk owner workflows.
+- `/draft security [requirements|satisfaction|review|audit]` dispatcher,
+  command help, AI configuration, IDE integration, and workspace template
+  guidance.
+
+### Changed
+
+- Draftsman security/compliance docs now describe the security review persona,
+  workspace boundary, concrete satisfaction mechanisms, and placeholder
+  evidence limits.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. This is command and AI instruction guidance only; no schema, object
+  model, validator, or RequirementGroup contract changed.
+
+### Migration Notes
+
+Existing company workspaces should refresh their workspace bootstrap and IDE
+integration files from the updated templates if they want `/draft security`
+advertised in root AI instruction files.
+
+## 0.41.3 - 2026-06-01
+
+Updates the generated browser's Acceptable Use view so users can drill from
+domains to capabilities to the TechnologyComponents mapped as acceptable-use
+implementations, with lifecycle status visible at the point of technology
+selection.
+
+### Added
+
+- Domain tile landing view for Acceptable Use.
+- Capability tile drilldown for each domain.
+- Capability detail view listing mapped TechnologyComponents, vendor/product
+  details, configuration labels, implementation lifecycle, and component
+  lifecycle.
+- Hash state for deep links to Acceptable Use domain and capability drilldowns.
+
+### Changed
+
+- Acceptable Use now opens on domain tiles instead of a domain-section table.
+- Generated browser shell assets refreshed for the updated Acceptable Use
+  navigation.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. This is a browser/navigation enhancement over existing Domain,
+  Capability, TechnologyComponent, and capability implementation data.
+
+### Migration Notes
+
+No catalog migration is required.
+
+## 0.41.2 - 2026-06-01
+
+Adds the upstream framework feedback path for company vendored workspaces so
+assistants know when to recommend a public DRAFT framework bug report or feature
+request instead of patching around framework-owned findings locally.
+
+### Added
+
+- Public GitHub issue forms for DRAFT framework bugs and reusable framework
+  feature requests.
+- Draftsman upstream feedback routing guidance covering safe public context,
+  issue-template selection, confirmation before public issue creation, and
+  confidentiality boundaries.
+
+### Changed
+
+- `/draft author`, `/draft session`, `/draft validate`, `/draft review`, and
+  `/draft update` now point assistants to the upstream feedback routing path
+  when a framework-owned bug or reusable feature request is discovered.
+- Workspace bootstrap templates now tell company-connected assistants to
+  recommend sanitized upstream reports for framework-owned issues.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. This is AI instruction, command guidance, and public issue-template work
+  only; no schema, object model, RequirementGroup, or validator contract changed.
+
+### Migration Notes
+
+Existing company workspaces should refresh their workspace bootstrap files from
+the updated templates if they want the upstream framework feedback guidance in
+root AI instruction files.
+
+## 0.41.1 - 2026-06-01
+
+Fixes the vendored workspace framework updater when upstream tags are missing
+or stale. The updater now compares the latest visible release tag with
+upstream `main`'s `draft-framework.yaml` version and selects `main` when it is
+newer, so company workspaces can still discover the current framework version.
+
+### Added
+
+- None.
+
+### Changed
+
+- `/draft update`, workspace documentation, and README guidance now describe
+  the stale-tag fallback behavior.
+
+### Fixed
+
+- The generated DRAFT framework update workflow now falls back to upstream
+  `main` when the latest visible semver tag is older than the version declared
+  by `main`'s `draft-framework.yaml`.
+- Main-based updates now link to the main changelog instead of a non-existent
+  release tag URL.
+
+### Compatibility Impact
+
+- None. This is an updater and documentation fix only; no schema, object model,
+  RequirementGroup, or validator contract changed.
+
+### Migration Notes
+
+Existing company workspaces should refresh their
+`.github/workflows/draft-framework-update.yml` from the updated workspace
+template if they want automatic stale-tag fallback behavior.
+
+## 0.41.0 - 2026-06-01
+
+Completes the `note`→DecisionRecord cleanup by applying the rule to the opt-in compliance packs and removing `note` from the satisfaction allowlist entirely (closes #74). With every shipped RequirementGroup now free of note-based satisfiers, `note` is no longer an accepted answer type anywhere — it is purely a drafting annotation.
+
+### Added
+
+- **Compliance example DecisionRecords**: 26 "Security and Compliance decisions" DecisionRecords (one per affected object) satisfying the re-activated Security & Security Compliance pack in the examples catalog.
+
+### Changed
+
+- **Compliance packs converted**: `requirement-group-draft-nist-csf.yaml`, `requirement-group-draft-soc2.yaml`, `requirement-group-draft-tx-ramp.yaml`, and `requirement-group-draft-security-compliance.yaml` had their `note` satisfiers (53) and `field`-into-`notes` satisfiers (19) replaced with `decisionRecord` (keyed by the former note key); `validAnswerTypes` recomputed.
+- **`note` removed from `VALID_REQUIREMENT_ANSWER_TYPES`** — no RequirementGroup may declare it as a satisfaction mechanism.
+- **Compliance re-activated in the examples workspace** (`Security & Security Compliance`), and the OpenStack SDP's compliance satisfactions restored via DecisionRecords.
+- **Fixed a latent key-collision from #71**: runtime/data example objects referenced the Host requirement's `healthWelfareMonitoringApproach` key instead of the Service Behavior/DataStoreService `healthWelfareMonitoring` key; corrected so the health-welfare-monitoring requirement resolves under the re-activated compliance pack.
+- Regenerated `AI_INDEX.md` for the new DecisionRecords.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- **Behavioral, for workspaces using the compliance packs.** A `complete` object that satisfied a compliance requirement via an inline note now requires a DecisionRecord (or concrete evidence). `stub`/`incomplete` objects only warn. No object model or schema field was removed.
+
+### Migration Notes
+
+Workspaces that activate the NIST CSF, SOC 2, TX-RAMP, or Security & Security Compliance packs should commit DecisionRecords for any control previously satisfied by an inline `note`, referencing them from the object's `decisionRecords` list with a `key` matching the control. `note` is no longer a valid `canBeSatisfiedBy`/`validAnswerTypes` mechanism in any RequirementGroup.
+
+## 0.40.0 - 2026-06-01
+
+Enforces the DRAFT principle that an `note` is a drafting placeholder, not a requirement satisfaction (closes #71). A note lets a DraftingSession continue when information or the right decision-maker is not yet available, but the requirement is met only when the decision is committed as a DecisionRecord (or satisfied by concrete implementation). Because requirement gaps already warn for `stub`/`incomplete` objects and fail only for `complete` ones, drafting is unaffected — only completion now requires a real answer. Scope is the always-on core RequirementGroups; the opt-in compliance packs are deferred to a follow-up.
+
+### Added
+
+- **`decisionRecord` satisfaction mechanism** is now usable for non-capability "document X" requirements via a top-level `key`, matched against an object's `decisionRecords` entry whose `key` (or `concern`) equals it. Capability-scoped decisions continue to match via `criteria.capability`.
+- **Concern-grouped example DecisionRecords**: 76 DecisionRecords across 23 example objects (grouped by concern — identity/access, observability, resilience, data protection, deployment, integration) replace note-based satisfaction in the OpenStack demo catalog.
+
+### Changed
+
+- **`note` no longer satisfies a requirement** (`validate.py`: `mechanism_satisfied` and `implementation_resolves` return `False` for it). It remains a recognized answer type so deferred RequirementGroups still parse, but it never resolves a requirement.
+- **Core RequirementGroups converted**: all `note` satisfiers (and `field`-into-`notes` satisfiers) in the 13 always-on RGs were replaced with `decisionRecord` (keyed by the former note key). The ReferenceArchitecture `deployment-qualities` requirement is now also satisfiable by the structured `applicableDefinitionChecklist` field.
+- Regenerated `AI_INDEX.md` for the new DecisionRecords.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- **Behavioral.** A `complete` object that previously satisfied a requirement with an inline `note` now fails until the decision is committed as a DecisionRecord or satisfied by concrete evidence. `stub`/`incomplete` objects only warn, so in-progress drafting is unaffected. No object model or schema field was removed.
+
+### Migration Notes
+
+For each `complete` object that relied on notes, add a `decision_record` object and reference it from the object's `decisionRecords` list with a `key` matching the requirement (or satisfy the requirement with concrete evidence). The compliance packs (NIST CSF, SOC 2, TX-RAMP, Security & Security Compliance) still accept note-style satisfiers and were deactivated in the examples workspace for now; their cleanup and re-activation is tracked as a follow-up to #71.
+
+## 0.39.0 - 2026-05-31
+
+Phase 2 of the native capability vocabulary (follow-up to #66 via #70): promotes generic delivery, integration, analytics, and certificate-management outcomes into native DRAFT capabilities and traces them through the existing Service Capability RequirementGroup using the same conditional, self-declared pattern as Phase 1. Adds three new domains.
+
+### Added
+
+- **Three domains**: `Software Delivery`, `Integration`, `Analytics` (`configurations/domains/`).
+- **Nine native capabilities**: `CI/CD Pipeline`, `Artifact Management`, `Configuration Management` (Software Delivery); `Email Delivery`, `File Transfer`, `Data Integration` (Integration); `Analytics`, `Reporting` (Analytics); `Certificate Management` (Security). All ship `complete` with framework `definitionOwner` and empty `implementations`.
+- **Nine conditional self-declared requirements** added to the Service Capability RequirementGroup, one per new capability, gated on `capabilities contains <uid>` and scoped via `appliesTo` (`runtime_service`, except File Transfer on `network_service`). Each traces its capability through `relatedCapability` and is satisfied by concrete technical evidence or a committed DecisionRecord — never a bare note.
+
+### Changed
+
+- Added `Certificate Management` to the Security domain's capability list and regenerated `AI_INDEX.md`.
+- Extended the native-vs-company-local guidance in `docs/capabilities.md` to cover the delivery, integration, and analytics outcomes.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None for existing catalogs. The new requirements are conditional on a service self-declaring a native capability; no current object references the new capability UIDs, so nothing gains a new obligation.
+
+### Migration Notes
+
+No manual workspace migration is required. As with Phase 1, workspaces that created generic local capabilities for these outcomes should declare the native capability UID on the providing service over time. Remaining open design work (consumer-side demand for outcomes a ProductComponent *needs*, and a possible migration helper) stays tracked under #70; the framework-wide `note`-as-satisfier cleanup is tracked under #71.
+
+## 0.38.0 - 2026-05-31
+
+Begins promoting generic architecture outcomes into native DRAFT capability vocabulary (Phase 1: network, runtime, and data outcomes) so company workspaces stop reinventing them as local capabilities. New native capabilities are traced from a new always-on Service Capability RequirementGroup using conditional, self-declared requirements: a shared service declares the capability it provides in its `capabilities` list, and the matching requirement demands the service document how that capability is delivered. Requirements are conditional on the self-declaration, so existing objects gain no new obligations.
+
+### Added
+
+- **Eleven native capabilities**: `API Gateway`, `DNS`, `CDN`, `WAF` (Network domain); `Application Runtime`, `Service Mesh`, `Caching`, `Messaging` (Compute & Runtime domain); `Data Persistence`, `Object Storage`, `File Storage` (Data domain). All ship `complete` with framework `definitionOwner` and empty `implementations`.
+- **Service Capability RequirementGroup** (`requirement-group-service-capability.yaml`, always-on, applies to `runtime_service`/`data_store_service`/`network_service` across all delivery models): one conditional self-declared requirement per native capability, gated on `capabilities contains <uid>` and scoped per requirement via `appliesTo`. Each requirement traces its capability through `relatedCapability` and is satisfiable by concrete technical evidence (a TechnologyComponent configuration/internal component, or a relationship to a providing service) **or** a committed DecisionRecord — never by a bare architecture note.
+- **`decisionRecord` satisfaction mechanism** in `validate.py`: a requirement can now be satisfied by a committed DecisionRecord referenced from the object's `decisionRecords` list with a `capability` key matching the requirement's capability. Added to `VALID_REQUIREMENT_ANSWER_TYPES` and to both the auto-resolution (`mechanism_satisfied`) and object-implementation (`implementation_resolves`) paths. This makes the "decision instead of implementation" path a first-class, capability-specific way to resolve a requirement.
+- **Native vs company-local capability guidance** in `docs/capabilities.md`: when to use a native capability versus minting a company-local one, how native service capabilities are self-declared, and the rule that an inline `note` is a drafting placeholder that does not satisfy a requirement until it is committed as a DecisionRecord.
+
+### Changed
+
+- **Regenerated `AI_INDEX.md`** to register the eleven new capabilities and the new RequirementGroup.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None for existing catalogs. The new requirements are conditional on a service self-declaring a native capability; no current object references the new capability UIDs, so nothing gains a new obligation. When a workspace migrates a generic local capability to its native equivalent (by declaring the native UID), the service is then asked to document delivery of that capability.
+
+### Migration Notes
+
+No manual workspace migration is required to upgrade. Workspaces that previously created generic local capabilities (caching, messaging, object storage, API gateway, etc.) should, over time, declare the native capability UID on the providing service instead, and reserve company-local capabilities for genuinely company-specific outcomes. Phase 2 (delivery, integration, analytics, and security/identity outcomes, plus a possible migration helper) is tracked as a follow-up to #66.
+
+## 0.37.0 - 2026-05-31
+
+Traces the four framework-native network capabilities (Network Connectivity, Network Segmentation, Traffic Management, WAN Connectivity) from the base NetworkService RequirementGroup so they resolve to a requirement demand signal, then promotes every traced framework-native capability out of `incomplete` so DRAFT no longer ships capabilities at provisional maturity. Previously the validator warned that the network capabilities were untraceable, forcing vendored company workspaces to invent artificial company-specific requirements just to satisfy traceability.
+
+### Added
+
+- None.
+
+### Fixed
+
+- **Untraced native network capabilities**: Added capability-keyed satisfaction mechanisms to the `network-function` requirement in `requirement-group-network-service.yaml`, referencing `01KSWVZSZ5-Q6HW` (Network Connectivity), `01KSWVZSZ5-1RTH` (Network Segmentation), `01KSWVZSZ5-M0FR` (Traffic Management), and `01KSWVZSZ5-26F1` (WAN Connectivity). A NetworkService can now declare its function either with the existing `networkFunction` field/note or by referencing a TechnologyComponent that provides one of the native network capabilities. `minimumSatisfactions` remains `1`, so existing NetworkService objects are unaffected.
+
+### Changed
+
+- **Native capabilities promoted to `complete`**: All eleven framework-native capabilities that were still labeled `catalogStatus: incomplete` are now `complete`, since each is traceable to a RequirementGroup demand signal and structurally identical to the capabilities already shipped as complete. Promoted: Network Connectivity, Network Segmentation, Traffic Management, WAN Connectivity (newly traceable via this release), plus Application Performance Monitoring, Container Orchestration, Performance and Load Testing, Quality Gates, Serverless Function Runtime, Test Authoring, and Test Execution and Automation (already traced). DRAFT no longer ships any capability at `incomplete`.
+
+### Compatibility Impact
+
+- None. The NetworkService change only broadens how the existing `network-function` requirement can be satisfied, and capability promotion is a definition-maturity label change with no new object obligations. Workspace-activated compliance RequirementGroups (TX-RAMP, NIST CSF, SOC 2) remain intentionally provisional and are unaffected.
+
+### Migration Notes
+
+No manual workspace migration is required. Vendored workspaces pick up the traceability fix and capability maturity on their next framework refresh.
+
+## 0.36.3 - 2026-05-31
+
+Replaces the monolithic company onboarding tutorial with three role-targeted onboarding guides aligned to the standardized DRAFT roles (Engineering, Shared Services, Draft Admins), reducing cross-role cognitive load and giving each audience a focused time-to-first-action path.
+
+### Added
+
+- **Engineering Onboarding Guide**: New tutorial at `docs/engineering-onboarding.md` covering ProductComponents, DataComponents, and SoftwareDeploymentPatterns for product development teams.
+- **Shared Services Onboarding Guide**: New tutorial at `docs/shared-services-onboarding.md` covering TechnologyComponents, Hosts, RuntimeServices, DataStoreServices, and NetworkServices for platform/infrastructure teams.
+- **Draft Admins Onboarding Guide**: New tutorial at `docs/draft-admins-onboarding.md` covering workspace bootstrapping, vocabularies, RequirementGroups, and ongoing governance for workspace administrators.
+
+### Changed
+
+- **Onboarding references repointed**: Updated `README.md`, `docs/overview.md`, `docs/workspaces.md`, `draft-actions/review-framework.md`, `llms.txt`, `AI_INDEX.md`, `tools/generate_ai_index.py`, and `draft_table/draftsman.py` to reference the three role-specific guides. Each guide links to the central Draft Operations Guide for ongoing operating policies.
+
+### Removed
+
+- **Monolithic onboarding tutorial**: Deleted `docs/company-onboarding.md`, now superseded by the three role-targeted guides.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. Documentation-only change.
+
+### Migration Notes
+
+No manual workspace migration is required.
+
+## 0.36.2 - 2026-05-31
+
+Creates the comprehensive DRAFT Operations Guide, consolidating all operational commands, registry configurations, ownership routing, generated CODEOWNERS behaviors, issue creation formats, standard label patterns, and issue lifecycles.
+
+### Added
+
+- **Draft Operations Guide**: Published a comprehensive governance and operations standard at `docs/operations-guide.md` providing step-by-step guidance on commands, issue lifecycles, and standard dispositions.
+
+### Changed
+
+- **Operations Guide Location renamed**: Renamed the partial draft `docs/operations.md` to `docs/operations-guide.md` and registered the updated file in `AI_INDEX.md`.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. Standalone legacy command forms are officially deprecated in documentation in favor of the unified `/draft <verb>` command structures.
+
+### Migration Notes
+
+No manual workspace migration is required.
+
+## 0.36.1 - 2026-05-31
+
+Reorganizes catalog files from a flat folder structure under `catalog/` into role-specific subfolders (`engineering/`, `shared-services/`, `governance/`) to align with role terminology (Issue #53) and the team registry (Issue #54).
+
+### Added
+
+- **Nested Catalog Folders**: Reorganized workspace catalog templates in `templates/workspace/catalog/` and example catalog items in `examples/catalog/` into nested paths grouped by content role (`engineering/`, `shared-services/`, `governance/`).
+
+### Changed
+
+- **Backward-Compatible Folder Scanning**: Updated `tools/generate_browser.py` and `draft_table/catalog.py` to scan both the old flat catalog folder names and the new role-nested folder names.
+- **AI Index and Docs updated**: Updated `tools/generate_ai_index.py` with nested example catalog folder paths, regenerated `AI_INDEX.md`, and updated path references in `draftsman.md`, `how-to-add-objects.md`, and `user-manual.md`.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+- None. Both flat and role-nested folders are supported by the browser and CLI tools, ensuring 100% backward-compatibility for existing flat and new nested workspaces.
+
+### Migration Notes
+
+1. To transition an existing workspace to the new nested directory structure, create `catalog/engineering/`, `catalog/shared-services/`, and `catalog/governance/` folders.
+2. Move product components, data components, and software deployment patterns under `engineering/`.
+3. Move hosts, runtime services, data store services, network services, and technology components under `shared-services/`.
+4. Move decision records, sessions, relationships, systems, and reference architectures under `governance/`.
+5. Rerun `/draft validate` to verify the new organization structure.
+
+## 0.36.0 - 2026-05-31
+
+Establishes the authoritative team registry model, team routing semantics, and programmatic CODEOWNERS generation. Introduces strict validation rules requiring owner team assignment for complete catalog artifacts.
+
+### Added
+
+- **DRAFT Operations & Governance Guide**: added `docs/operations.md` covering the schema definition for the authoritative team registry (`vocabulary.teams`), programmatic ownership resolution, default folder/role CODEOWNERS fallbacks, and the fallback team routing logic.
+- **Strict Ownership Validation**: updated `tools/validate.py` to enforce that `owner.team` must be defined for all first-class artifacts (warning for `stub` or `incomplete` catalogStatus, failure for `complete` status). Excluded framework-owned base files and unit test temporary directories.
+
+### Changed
+
+- **AI Index updated**: registered the operations guide in `AI_INDEX.md`.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+This is a contract change. Complete catalog objects in existing workspaces that do not have `owner.team` assigned will now fail validation, and incomplete ones will generate warnings.
+
+### Migration Notes
+
+1. Run `/draft validate` to find all complete or incomplete catalog objects missing ownership.
+2. In each workspace, update the objects to add a valid `owner.team` mapping that matches the company team vocabulary.
+3. Generate the updated `CODEOWNERS` file from the team registry vocabulary if using automated generation.
+
+## 0.35.2 - 2026-05-31
+
+Adds the comprehensive specification for DRAFT's issue routing semantics, default labels, and accountable team resolution rules.
+
+### Added
+
+- **Issue Routing Semantics & Default Labels**: expanded `docs/ticketing.md` to define DRAFT's minimal labeling strategy (`draft`, `needs-triage`, exact role, exact severity, and conditional `needs-routing` labels), role-specific ownership scopes, 3-tier team resolution sequence (Artifact, CODEOWNERS, Fallback), and downstream override configuration.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+None. This release adds documentation and specifications only.
+
+### Migration Notes
+
+No migration is required.
+
+## 0.35.1 - 2026-05-31
+
+Adds the comprehensive specification for DRAFT's shared issue creation and ticketing workflow.
+
+### Added
+
+- **Ticketing & Issue Creation Workflow**: added `docs/ticketing.md` defining the issue body contract (human-readable sections + machine-readable YAML metadata), the deterministic duplicate detection mechanism, fallback routing when ownership is missing, and the interactive issue generation UX.
+
+### Changed
+
+- **AI Index updated**: registered the ticketing guide in `AI_INDEX.md`.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+None. This release adds documentation only.
+
+### Migration Notes
+
+No migration is required.
+
+## 0.35.0 - 2026-05-31
+
+Collapses the legacy `/draft-*` slash commands into a single `/draft` command
+family whose first argument is a verb, and adds a company-facing `/draft review`
+verb distinct from the upstream-only `/draft review-framework`.
+
+### Added
+
+- **Unified `/draft` dispatcher**: added `commands/draft.md` as the
+  sole registered DRAFT command. `/draft` (or `/draft help`) prints the verb
+  list; `/draft <verb>` routes the first argument to an action file under
+  `draft-actions/` and follows it.
+- **`/draft review` verb**: added `draft-actions/review.md` for
+  reviewing company catalog/content in vendored workspaces, separate from the
+  upstream-only framework review.
+
+### Changed
+
+- **Retired the `/draft-*` command surface**: the standalone `/draftsman`,
+  `/draft-session`, `/draft-validate`, `/draft-triage`, `/draft-review`,
+  `/draft-updateframework`, and `/draft-help` commands, plus the
+  `/validate-catalog` alias, are removed. Their bodies now live as verbs:
+  `author`, `session`, `validate`, `triage`, `review-framework`, `update`.
+- **Action file headers**: updated each `draft-actions/*.md` heading
+  to its `/draft <verb>` name.
+- **Claude Code command linking**: `.claude/commands/` now links a single
+  `draft.md`; setup, update, and integration docs link only `/draft`.
+- **Docs updated to verb syntax**: `draftsman-ai-configuration.md`,
+  `setup-mode.md`, `integrations/README.md`, the Cursor and Windsurf
+  integration files, and `draft-actions/update.md` now advertise the
+  `/draft <verb>` form only.
+- **Workspace templates updated**: `templates/workspace/AGENTS.md.tmpl`,
+  `README.md.tmpl`, `GEMINI.md.tmpl`, `.windsurfrules.tmpl`,
+  `.cursor/rules/draftsman.mdc.tmpl`, and
+  `.github/copilot-instructions.md.tmpl` now generate the `/draft <verb>`
+  command surface for new company workspaces.
+
+### Fixed
+
+- **Broken command symlinks**: removed the dangling `.claude/commands/draft-*`
+  symlinks left pointing at the retired `commands/draft-*.md` files.
+
+### Compatibility Impact
+
+This is a breaking change to the command surface. The legacy `/draft-*` commands
+and `/validate-catalog` no longer resolve. Anyone with the old per-command
+symlinks must re-link the single `/draft` command. There is no compatibility
+shim — invoking an old command name will fail.
+
+### Migration Notes
+
+1. In each workspace using Claude Code, remove any old command symlinks and link
+   the unified command:
+   ```bash
+   rm -f .claude/commands/draft-*.md .claude/commands/draftsman.md
+   mkdir -p .claude/commands
+   ln -sf ../../.draft/framework/commands/draft.md .claude/commands/draft.md
+   ```
+2. Replace any references to `/draftsman`, `/draft-session`, `/draft-validate`,
+   `/draft-triage`, `/draft-review`, `/draft-updateframework`, `/draft-help`, or
+   `/validate-catalog` in local docs or muscle memory with the corresponding
+   `/draft <verb>` form (`author`, `session`, `validate`, `triage`,
+   `review-framework`, `update`, `help`).
+
+## 0.34.0 - 2026-05-31
+
+Standardizes DRAFT role terminology around Engineering, Shared Services, and Draft Admins to clarify ownership layers rather than individual job titles.
+
+### Added
+
+- **Standardized role-based onboarding guides issue**: Filed issue #57 to track building role-specific onboarding guides for `Engineering`, `Shared Services`, and `Draft Admins`.
+
+### Changed
+
+- **Standardized roles in schemas**: Updated all 15 schemas to use the new standardized machine roles: `engineering` (was `engineer`), `shared-services` (was `technology-admin`), and `draft-admins` (was `draft-admin`) in their `defaultOwnerRole` values.
+- **CODEOWNERS template updated**: Realigned `templates/workspace/CODEOWNERS.tmpl` to map the new standardized role-based layers and folder paths.
+- **Role terminology standardized in docs**: Updated `roles-and-layers.md`, `draftsman.md`, `setup-mode.md`, and `overview.md` to use standard role terms: `Engineering`, `Shared Services`, and `Draft Admins`.
+- **Draft Actions role updates**: Renamed framework command files and standard role checks in `review-framework.md` and `update.md`.
+
+### Fixed
+
+- **Singular/plural consistency**: Resolved inconsistent singular/plural references to role names in all documentation and action files.
+
+### Compatibility Impact
+
+Workspaces migrating to framework version `0.34.0` must update their `.github/CODEOWNERS` files and any custom configurations referencing old machine roles (`engineer`, `technology-admin`, `draft-admin`) to the new standardized machine names (`engineering`, `shared-services`, `draft-admins`).
+
+### Migration Notes
+
+1. Update your workspace `.github/CODEOWNERS` file based on the new `templates/workspace/CODEOWNERS.tmpl` structure.
+2. If your workspace contains custom configurations, vocabularies, or object-patches that reference `ownerRole: engineer`, `ownerRole: technology-admin`, or `ownerRole: draft-admin`, update them to `engineering`, `shared-services`, or `draft-admins` respectively.
+
+## 0.33.0 - 2026-05-31
+
+Retires `EdgeGatewayService` as a supported object type, expands
+`NetworkService` to cover intrinsic network and traffic-control behavior, and
+codifies the object-type and RequirementGroup principles that decide when a
+new object type is warranted.
+
+### Added
+
+- **Object types as requirement scopes**: added AI-facing guidance in
+  `design-principles.md`, `object-types.md`, `requirement-groups.md`, and
+  `draftsman.md` explaining that object types exist so the Draftsman can apply
+  the right base requirements. Context such as network zone, exposure, delivery
+  model, capability, data classification, or followed ReferenceArchitecture can
+  add obligations without changing the object's intrinsic type.
+- **ReferenceArchitecture and RequirementGroup governance relationship**:
+  documented that RequirementGroups state obligations, while
+  ReferenceArchitectures show approved multi-object compositions for satisfying
+  obligations that no single service or component can answer alone.
+- **NetworkService authoring template and migrated example**: added
+  `templates/network-service.yaml.tmpl` and migrated the OpenStack HAProxy
+  example from an edge gateway object to a `network_service` object with
+  `networkFunction`, `networkTopology`, and `protocols` evidence.
+
+### Changed
+
+- **Removed `edge_gateway_service` from the object contract**: deleted the
+  EdgeGatewayService schema, template, scaffold folder, example folder, and
+  generated/browser references. RequirementGroups, ReferenceArchitectures,
+  validation constants, C4/Backstage/browser generators, Draft Table labels,
+  tests, and AI guidance now use `network_service` where the intrinsic behavior
+  is network or traffic control.
+- **Expanded NetworkService schema coverage**: NetworkService now carries the
+  service-like fields needed by delivery-model RequirementGroups, including
+  `host`, `primaryTechnologyComponent`, `internalComponents`,
+  `deploymentConfigurations`, `configurations`, `vendorGovernance`,
+  `authenticationModel`, `patchingOwner`, `notes`,
+  `decisionRecords`, and requirement implementations.
+- **Tightened hosting semantics**: ProductComponent `runsOn` and SDP
+  `serviceGroup.substrate` now reference only a RuntimeService or Host.
+  NetworkService participation is modeled through service groups,
+  relationships, network zones, RequirementGroups, and ReferenceArchitecture
+  conformance instead of being treated as a hosting substrate.
+- **ReferenceArchitecture constraints use NetworkService**: the bundled
+  three-tier, multi-tenant SaaS, and serverless ReferenceArchitectures now
+  require `network_service` presentation-tier roles when their patterns need
+  traffic control, WAF, API gateway, ingress, event ingress, or load-balancing
+  composition.
+
+### Fixed
+
+- **Stale Product Service wording**: replaced remaining AI-facing documentation
+  references to the retired Product Service name and nonexistent
+  `product-service.schema.yaml` with ProductComponent terminology and schema
+  links.
+- **Generated and browser labels**: regenerated `AI_INDEX.md`, browser data,
+  browser shell assets, the user manual, company vocabulary page, and the
+  object model diagram so AI and browser discovery no longer surface
+  EdgeGatewayService as an active object type.
+
+### Compatibility Impact
+
+Required migration for any workspace that contains `type: edge_gateway_service`
+or files under `catalog/edge-gateway-services/`. No compatibility shim is kept
+in this release. After refreshing the framework, those objects are unsupported
+and will not validate as active catalog objects.
+
+Existing EdgeGatewayService objects do not have a default replacement target.
+Each one must be triaged and migrated to the object type that matches its
+intrinsic behavior:
+
+- runtime or execution behavior becomes RuntimeService
+- durable data or persistence behavior becomes DataStoreService
+- network, traffic-control, ingress, WAF, firewall, load-balancing, proxy, DNS,
+  WAN, routing, switching, or segmentation behavior becomes NetworkService
+- operating substrate behavior becomes Host
+
+ProductComponents that previously used an EdgeGatewayService as `runsOn` must
+be updated to reference the RuntimeService or Host they run on.
+Network paths, WAFs, load balancers, gateways, and perimeter obligations should
+be expressed through SDP placement, relationships, RequirementGroups,
+DecisionRecords, and ReferenceArchitecture conformance.
+
+### Migration Notes
+
+1. Inventory `catalog/edge-gateway-services/` and all YAML with
+   `type: edge_gateway_service`.
+2. For each object, choose the target type from intrinsic behavior, not from
+   placement words such as edge, perimeter, public, partner, or tenant.
+3. Move each object into the correct catalog folder and update `type`. Preserve
+   `uid` when the same architecture object is being reclassified rather than
+   replaced.
+4. For traffic-control objects migrated to `network_service`, fill in
+   `networkFunction`, `networkTopology`, and `protocols`, then keep or add
+   service evidence such as `host`, `primaryTechnologyComponent`,
+   `internalComponents`, `notes`, and `decisionRecords` as
+   applicable.
+5. Update ReferenceArchitecture constraints, SDP service-group entries,
+   relationships, RequirementGroup `appliesTo` scopes, templates, and generated
+   browser output to use the migrated object types.
+6. Run `python3 tools/generate_ai_index.py`,
+   `python3 tools/generate_browser.py --workspace . --output docs/index.html`,
+   and `python3 tools/validate.py --workspace .` after migration.
+
+## 0.32.3 - 2026-05-30
+
+Clarifies DRAFT command integration across Codex, generic AI tools, and
+IDE-specific bootstrap files, and resolves the validation command naming
+mismatch without changing the architecture object contract.
+
+### Added
+
+- **`/validate-catalog` compatibility alias**: added
+  `commands/validate-catalog.md` so older workspace references and
+  symlinks resolve to the canonical `/draft-validate` workflow instead of
+  pointing at a missing command file.
+
+### Changed
+
+- **Canonical validation command guidance**: updated workspace templates,
+  Cursor/Windsurf integrations, setup-mode docs, and AI configuration docs to
+  advertise `/draft-validate` as the canonical validation command.
+- **Codex and generic AI wording**: clarified that `AGENTS.md` provides
+  command-phrase routing for tools such as OpenAI Codex and does not create
+  native slash-command menu entries or autocomplete by itself.
+- **Workspace command inventories**: aligned bootstrap command tables with the
+  command files under `commands/`, including help, triage,
+  framework-update, and review commands.
+
+### Fixed
+
+- **Broken validation command references**: removed live bootstrap and
+  integration references that routed `/validate-catalog` to a missing command
+  file, while preserving the old command as an explicit alias.
+
+### Compatibility Impact
+
+No schema, RequirementGroup, capability, domain, validation-contract, or catalog
+object change. Existing workspaces that still invoke `/validate-catalog`
+continue to work through the compatibility alias; newly generated workspaces
+advertise `/draft-validate`.
+
+### Migration Notes
+
+No action is required for existing workspaces. Workspace owners may refresh
+generated bootstrap or IDE integration files if they want user-facing command
+tables and guidance to show `/draft-validate` as the canonical name.
+
+## 0.32.2 - 2026-05-30
+
+Documents the branch-protection policy now enforced on `main`. This is a
+release-governance/documentation change with no schema, code, or catalog
+impact.
+
+### Added
+
+- **`Branch Protection On main` section in `RELEASE.md`**: records the enforced rules (pull request required, `validate` status check required, branches must be up to date before merge, enforced for admins, force-push and deletion disabled), the command to inspect the policy, and an explicit caveat that the required-check context is named `validate` and must be kept in sync if the workflow job is renamed.
+
+### Changed
+
+- **Corrected the `Publish` section of `RELEASE.md`**: it previously stated that direct commits to `main` are allowed before `1.0.0`. All changes now reach `main` through a pull request that passes the release gate, pre-1.0 included. This closes the policy gap that allowed a schema contract change to be pushed directly to `main` without a changelog entry (see `0.32.1`).
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No framework behavior, schema, or catalog change. Affects contributor workflow only: changes to `main` must now go through a pull request whose `validate` check passes.
+
+### Migration Notes
+
+No action required for existing workspaces. Contributors should branch and open a pull request rather than pushing to `main`; the merge is blocked until the `validate` check passes and the branch is up to date.
+
+## 0.32.1 - 2026-05-30
+
+Release-note correction. Commit `de67d90` was pushed directly to `main`
+(outside the normal branch + pull request flow) and relaxed two schema
+required-field lists without its own changelog entry or version bump. That
+change then shipped to users as part of `0.32.0` because the version bump in
+the PascalCase release sat on top of it. This entry backfills the missing
+release note so the contract change is traceable. No code or schema changes
+ship in `0.32.1` itself.
+
+### Added
+
+- None.
+
+### Changed
+
+- **Documented the `lifecycleStatus` relaxation that shipped in `0.32.0`**: `lifecycleStatus` was moved from `requiredFields` to `optionalFields` in the `product_component` and `data_component` schemas to reduce first-party intake friction, implementing the High-severity review finding "Redundant lifecycleStatus on First-Party Code." This was live on `main` from commit `de67d90` but was absent from the `0.32.0` changelog; it is recorded here.
+
+### Fixed
+
+- **Closed the release-record gap** created when a schema contract change reached `main` without a changelog entry or independent version bump.
+
+### Compatibility Impact
+
+No new behavior in `0.32.1`. The underlying `0.32.0` schema relaxation is backward compatible: objects that already set `lifecycleStatus` on a `product_component` or `data_component` continue to validate unchanged, and new objects may now omit the field. No object that previously validated becomes invalid.
+
+### Migration Notes
+
+No action required. Workspaces that want to keep `lifecycleStatus` mandatory for first-party components can continue to set it on every object; the framework no longer forces it. Tooling or documentation that described `lifecycleStatus` as required for `product_component`/`data_component` should be updated to reflect that it is now optional.
+
+## 0.32.0 - 2026-05-30
+
+Standardizes how object types are *named in text* on a single PascalCase
+convention across the entire framework — documentation, schema `aiHint`s,
+requirement-group `name:` fields, validation messages, command files, the
+browser template, workspace templates, and the DRAFT application strings. Before
+this release the surface was inconsistent: the same row of `object-types.md`
+could read `RuntimeService` and `Edge/Gateway Service` side by side, and stale
+`Data-at-Rest Service` terminology survived in several files. This release also
+folds the legacy `Data-at-Rest Service` label into `DataStoreService`.
+
+### Added
+
+- **`Object Type Names` section in `naming-conventions.md`**: documents the PascalCase display convention (`TechnologyComponent`, `RuntimeService`, `DataStoreService`, `EdgeGatewayService`, `NetworkService`, `ProductComponent`, `DataComponent`, `ReferenceArchitecture`, `SoftwareDeploymentPattern`, `RequirementGroup`, `DecisionRecord`, `DraftingSession`, `ObjectPatch`, and single-word `Host`/`Capability`/`Domain`), and states explicitly that machine identifiers (snake_case `type` values), schema filenames, and catalog folder names are unchanged.
+
+### Changed
+
+- **Uniform PascalCase object-type labels**: replaced spaced/slashed display forms (`Runtime Service`, `Data Store Service`, `Edge/Gateway Service`, `Technology Component`, `Network Service`, `Product Component`, `Data Component`, `Requirement Group`, `Decision Record`, `Drafting Session`, `Software Deployment Pattern`, `Reference Architecture`, `Object Patch`) with their PascalCase forms wherever they name an object type. This includes requirement-group `name:` fields (e.g. `Data Store Service Requirement Group` → `DataStoreService RequirementGroup`), which is why this is a `0.MINOR.0` contract release.
+- **`Data-at-Rest Service` → `DataStoreService`**: removed the last remaining instances of the superseded label from live docs, templates, the application, and `llms.txt`.
+- **Space/slash/hyphen-insensitive question routing**: `draft_table/draftsman.py` now recognizes both `Technology Component` and `TechnologyComponent` (and the other types) when answering local definition questions, so the new canonical spelling routes correctly.
+
+### Fixed
+
+- **Mixed casing inside single passages**: removed cases where one sentence or table row used both spaced and PascalCase forms of the same type name.
+
+### Compatibility Impact
+
+Display-name change to the contract surface: seven built-in requirement groups have a new `name:` value (the spaced "… Requirement Group" forms become "… RequirementGroup", and "Data Store Service Requirement Group" becomes "DataStoreService RequirementGroup"). The opaque `uid` of every requirement group is unchanged, and `activeRequirementGroups` in `.draft/workspace.yaml` references groups by `uid`, so activation is unaffected. No schema `type` value, schema filename, or catalog folder name changed, so existing catalog YAML continues to validate without edits.
+
+### Migration Notes
+
+No catalog edits are required. Workspaces that reference a built-in requirement group by display name in prose, dashboards, or external docs should update those references to the PascalCase form; workspaces that reference groups by `uid` (the supported mechanism) need no change. If a company workspace maintained its own copy of the old "Data-at-Rest Service" wording in local docs, update it to "DataStoreService" to match the refreshed framework vocabulary.
+
+## 0.31.2 - 2026-05-30
+
+Realigns the workspace template scaffold (`templates/workspace/`) with the
+canonical catalog convention used by `examples/`, CODEOWNERS, the browser, and
+`how-to-add-objects.md`. The scaffold had drifted: it used a legacy
+"standards"/delivery-model folder taxonomy and still seeded directories for the
+retired Control Enforcement Profile model.
+
+### Added
+
+- **Canonical catalog folders in the scaffold**: added `catalog/hosts/`, `catalog/runtime-services/`, `catalog/edge-gateway-services/`, `catalog/relationships/`, and `catalog/systems/` so a new workspace scaffolds the behavior-based folders the Draftsman, CODEOWNERS, and the browser actually use. (`catalog/network-services/` was added in 0.30.2.)
+
+### Changed
+
+- **Removed legacy/mismatched scaffold directories**: deleted `catalog/host-standards/`, `catalog/service-standards/`, `catalog/database-standards/`, `catalog/objects/`, `catalog/saas-services/`, and `catalog/appliance-components/`. The first three used the old "standards" naming (objects authored there were not routed by CODEOWNERS or rendered by the browser); `saas-services`/`appliance-components` scaffolded delivery models as if they were object types, contradicting `object-types.md`. The scaffold catalog tree now matches `examples/` (plus `network-services/`).
+- **Removed retired-model configuration directories**: deleted `configurations/compliance-controls/`, `configurations/control-enforcement-profiles/`, `configurations/definition-checklists/`, `configurations/automation-targets/`, and `configurations/object-types/`. These have no live framework references and belong to the model that Requirement Groups replaced.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes. Affects only the new-workspace scaffold under `templates/workspace/`; no schema, requirement group, or existing catalog content changed. The capability-ownership object-patch templates are retained.
+
+### Migration Notes
+
+No action required for existing workspaces. Workspaces scaffolded from an earlier template can delete the empty legacy directories (`catalog/*-standards/`, `catalog/saas-services/`, `catalog/appliance-components/`, `catalog/objects/`, and the retired `configurations/` dirs) and author against the behavior-based catalog folders; objects validate regardless of folder name, but only the canonical folders are routed by CODEOWNERS and rendered by the browser.
+
+## 0.31.1 - 2026-05-30
+
+Resolves a contradiction in the AI instruction surface about whether the
+Draftsman should show the user a running backlog of remaining work.
+
+### Added
+
+- None.
+
+### Changed
+
+- **Reconciled conversation-cadence guidance**: `draft-session.md` and `company-onboarding.md` told the Draftsman to "keep a visible list of what is next / what is left / revisit-later items," while `setup-mode.md` and `draftsman.md` told it to avoid displaying backlogs and checklists. Reworded the two former files to the intended behavior — *record* open questions, assumptions, and next steps in the Drafting Session for resumability, but keep the live conversation focused on the current step without displaying a running backlog. The session-resumption summary in `draftsman.md` (a brief recap on resume) is unchanged.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes. Documentation and command-guidance wording only; no schema, requirement group, or catalog content changed.
+
+### Migration Notes
+
+No action required. Workspaces that vendored an earlier framework copy will pick up the reconciled cadence guidance on their next framework refresh.
+
+## 0.31.0 - 2026-05-30
+
+Converges the human-readable name of the `data_store_service` object on **Data
+Store Service**, matching its machine type (`data_store_service`) and catalog
+folder (`catalog/data-store-services/`). The framework previously used the
+deprecated "Data-at-Rest Service" term across ~14 docs and the delivery
+requirement-group descriptions. Released as a minor because requirement-group
+definitions (the contract surface) changed, though only their display names and
+descriptions were edited.
+
+### Added
+
+- None.
+
+### Changed
+
+- **Standardized the data store object display name on "Data Store Service"**: replaced all "Data-at-Rest Service" occurrences across framework docs, the SaaS/PaaS/Appliance/Runtime/Data Store delivery requirement-group descriptions, and the browser user manual. Renamed the lone PascalCase outlier "DataStoreService Requirement Group" to "Data Store Service Requirement Group" to match the spaced RG-name convention. (The frozen `migrations/0.10.0/` script retains the old term intentionally.)
+
+### Fixed
+
+- **Broken schema link in `yaml-schema-reference.md`**: the data store row linked `data-at-rest-service.schema.yaml`, which does not exist; repointed to `data-store-service.schema.yaml`.
+- **Wrong catalog folder in docs**: `how-to-add-objects.md` and `yaml-schema-reference.md` told authors to use `catalog/data-at-rest-services/`, but CODEOWNERS, the browser, and the scaffold all use `catalog/data-store-services/`. Authoring to the documented folder meant no review routing and no browser rendering. Corrected to `catalog/data-store-services/`.
+
+### Compatibility Impact
+
+No breaking changes. Documentation and display-name alignment only; no schema type, UID, requirement ID, or catalog object content changed. The machine identifiers (`data_store_service`, `data-store-service.schema.yaml`, `data-store-services/`) are unchanged.
+
+### Migration Notes
+
+No action required. The compact PascalCase object-type label "DataStoreService" (used alongside "RuntimeService", "EdgeGatewayService", etc.) was intentionally left as-is; the broader PascalCase-vs-spaced object-type label convention is tracked as a separate decision.
+
+## 0.30.2 - 2026-05-30
+
+Completes the 0.30.0 capability-domain restructure and network-infrastructure
+work: the configuration, schema, and validator layers shipped in 0.30.0, but the
+documentation and the catalog-folder plumbing for the new `network_service` type
+were not updated to match.
+
+### Added
+
+- **`catalog/network-services/` is now a first-class catalog folder**: added to the workspace catalog scaffold (`templates/workspace/catalog/network-services/`), routed to technology-admins in `CODEOWNERS.tmpl`, and registered in `generate_browser.py` `CATALOG_FOLDERS` so `network_service` objects are scaffolded, review-routed, and rendered in the browser.
+
+### Changed
+
+- **Setup-mode and Draftsman docs now describe the 0.30.0 domain structure**: `setup-mode.md` Step 5 listed 19 capabilities under the pre-0.30 grouping (with the dropped General Purpose Compute, the renamed Backup Strategy, and a combined "Security & Identity"). Updated to the actual seven domains (Compute & Runtime, Identity & Access Management, Security, Data, Observability & Monitoring, Network, Testing & Quality) and 22 capabilities. Updated the matching "19 framework capabilities" count in `draftsman.md`.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes. Documentation and workspace-template/tooling alignment only; no schema, requirement group, or catalog object content changed. The four network capabilities remain intentional `incomplete` stubs (advisory validation warnings) pending the requirement-mapping decision tracked in issue #36.
+
+### Migration Notes
+
+No action required for existing catalogs. Workspaces created before this release that author `network_service` objects can add a `catalog/network-services/` folder and a matching `CODEOWNERS` line to pick up review routing; existing objects validate regardless of folder name.
+
+## 0.30.1 - 2026-05-30
+
+### Added
+
+- None.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- **Vendored template paths corrected in docs**: Setup mode, the Draftsman role doc, and the workspaces doc referenced workspace templates at `.draft/framework/templates/...`, but the framework update flow vendors them to `.draft/templates/`. Updated the `CODEOWNERS.tmpl` copy command (`setup-mode.md`), the object-patch template path (`draftsman.md`), and the generic template reference (`workspaces.md`) so they point at the location the vendoring command actually produces. Without this fix, the setup-mode `cp` command for CODEOWNERS failed and the object-patch template lookup resolved to a nonexistent path in vendored company workspaces.
+
+### Compatibility Impact
+
+No breaking changes. Documentation-only fix; no schema, requirement group, or catalog content changed.
+
+### Migration Notes
+
+No action required for existing catalogs. Draft Admins who copied the previous `.draft/framework/templates/...` paths into local setup scripts or runbooks should update them to `.draft/templates/...` to match the location the framework update flow produces.
+
+## 0.30.0 - 2026-05-30
+
+### Added
+
+- **Four new capability domains**: Security, Identity, Data, Network. Each domain is owned by the team that decides implementation selections.
+- **Four new network capabilities**: Network Connectivity, Network Segmentation, Traffic Management, WAN Connectivity.
+- **NetworkService object type** and schema: Represents non-perimeter network fabric infrastructure (switches, routers, SDN controllers, WAN appliances). Includes Network Service requirement group covering network function, topology definition, and protocol governance.
+
+### Changed
+
+- **Capability domain restructuring**: 
+  - Move Authentication, Access Control Model to Identity domain
+  - Move Security Monitoring, Secrets Management to Security domain
+  - Move Encryption at Rest, Data Resilience to Data domain
+  - Remove General Purpose Compute — no meaningful distinction from Compute Platform
+  - Update all capability objects with new domain references
+  - Fix domain `capabilities:` lists to match actual capability assignments
+
+- **Appliance Delivery Requirement Group simplified**: Remove `network-placement` (placement belongs in SDPs/RAs) and `patching-ownership` (duplicate of `patch-update-model`).
+
+- **Validator and object-type documentation** updated to recognize `network_service`.
+
+### Fixed
+
+- Removed example `patch-compute-implementations.yaml` which targeted deleted General Purpose Compute capability.
+- Updated `requirement-group-host-compute-profile.yaml` to reference Compute Platform instead of deleted General Purpose Compute.
+
+### Compatibility Impact
+
+Breaking change: General Purpose Compute capability removed. Any workspace objects or requirement groups referencing it (UID `01KQQ4Q026-9K8G`) must be updated to use Compute Platform (`01KQQ4Q026-1HZP`).
+
+### Migration Notes
+
+1. If your workspace references General Purpose Compute capability, update to Compute Platform.
+2. If you have custom capability domains, align with the new domain model: each domain is owned by the team that decides the HOW for implementations (Compute Platform owner = infrastructure team, Encryption at Rest owner = data team, etc.).
+
+## 0.29.3 - 2026-05-29
+
+### Added
+
+- **`/issue-triage` slash command** (`commands/issue-triage.md`): Fetches open GitHub issues, presents them as a numbered selection table with title, labels, and age, and works through whichever the user picks. Supports optional filters (`bugs`, `features`, `docs`, `all`). For each selected issue: summarises the issue type, offers to work on it, skip, or close as won't fix. Creates a branch, implements the fix, and opens a PR with the issue reference. Works in any repository with a GitHub remote and an authenticated `gh` CLI.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes.
+
+### Migration Notes
+
+None.
+
+## 0.29.2 - 2026-05-29
+
+### Added
+
+- **`/framework-review` slash command** (`commands/framework-review.md`): On-demand expert consultant review command for framework maintainers. Establishes an enterprise architect persona (TOGAF, COBIT, Zachman, data architecture), reads design-principles.md and roles-and-layers.md for DRAFT context, supports configurable scope (full, schemas, ai-instructions, requirement-groups, docs, onboarding), presents all findings as a numbered table before exploring any, and works through each finding interactively with implement/discuss/defer/drop disposition. Checks whether the framework has advanced 2+ minor versions since the last logged review and prompts the maintainer if so.
+
+- **`reviews/review-log.yaml`**: Structured log of framework review sessions. Each entry records date, framework version, scope, and per-finding outcomes using controlled vocabulary (`implemented`, `discussed`, `dropped`, `deferred`). Committed to git so review history is visible alongside code changes. Seeded with the first review session (0.28.5 → 0.29.1, 10 findings, full scope).
+
+- **`/framework-review` symlink** added to `.claude/commands/` in this repo.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes.
+
+### Migration Notes
+
+None.
+
+## 0.29.1 - 2026-05-29
+
+### Added
+
+- None.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- **SaaS Delivery requirement group field keys now match `vendorGovernance` schema structure**: All five vendor governance fields (`dataLeavesInfrastructure`, `dataResidencyCommitment`, `dpaNotes`, `vendorSLA`, `incidentNotificationProcess`) were referenced as flat top-level keys in the requirement group but are nested under `vendorGovernance` in the schema. Updated all keys to use dotted paths (`vendorGovernance.fieldName`) that `resolve_field_path` already supports. Closes #35.
+
+### Compatibility Impact
+
+No breaking changes. SaaS service objects that previously placed fields at the top level to satisfy the requirement group (the only working workaround) will now need to move those fields under `vendorGovernance` to satisfy both the requirement group and the schema structure validator.
+
+### Migration Notes
+
+1. For any SaaS service objects using the workaround of top-level `dataLeavesInfrastructure`, `dataResidencyCommitment`, `dpaNotes`, `vendorSLA`, or `incidentNotificationProcess` fields: move them under a `vendorGovernance:` sub-object.
+
+## 0.29.0 - 2026-05-29
+
+### Added
+
+- **Roles and Layers document** (`docs/roles-and-layers.md`): New document explaining the three roles (Draft Admins, Shared Services, Engineering), the three catalog layers (Governance, Infrastructure, Product), and the reuse scale model. Clarifies that 50 services on a shared platform produces ~60 objects, not hundreds, because infrastructure objects are authored once and referenced by many.
+
+- **Design Principles document** (`docs/design-principles.md`): Seven principles explaining the reasoning behind DRAFT's opinions — reuse over invention, stubs as progress, binary governance, automation-first catalog, compliance as authoring, AI owns the YAML, and uncertainty as first-class. Linked from `overview.md`.
+
+- **Capability domain ownership templates**: Four object-patch template files added to `templates/workspace/configurations/object-patches/` covering all 19 framework capabilities grouped by domain (Compute & Runtime, Security & Identity, Observability, Data & Engineering Quality). Each template contains stub patches targeting framework capability UIDs with `owner` and `implementations` placeholders. The Draftsman generates individual patch files from these during setup mode step 5.
+
+- **Session routing rule in `draftsman.md`**: The Draftsman now determines the correct mode from workspace state (`.draft/workspace.yaml` presence and catalog content) rather than relying solely on user phrasing.
+
+- **Reuse Model section in `draftsman.md`**: Explicit documentation that infrastructure objects are authored once and referenced by many engineering objects. "Creating duplicate infrastructure objects is always wrong" is now a stated rule.
+
+### Changed
+
+- **`externalInteraction` mechanism renamed to `relationship`** across all requirement groups, schemas, and the validator. Any workspace `requirementImplementations` entry using `mechanism: externalInteraction` must be updated to `mechanism: relationship`. The underlying validation logic is unchanged — the mechanism resolves against outbound relationship objects where source matches the object UID and the relationship carries the required capability.
+
+- **`serviceGroup.connections` removed from the SDP schema**: The inline `serviceConnections` field and the `serviceConnection` sub-schema have been removed. The validator now fails (not warns) when a service group contains a `connections` list. Relationship objects in `catalog/relationships/` are the only supported connection model. The browser's `build_sdp_connections` function has been updated to source topology edges from relationship objects only.
+
+- **`setup-mode.md` step 5 reframed as domain standard ownership**: The step now explicitly surfaces the 19 framework capabilities as domain standards requiring designated owners, grouped by domain. Unassigned owners are recorded as `TBD` so gaps are visible immediately.
+
+- **`setup-mode.md` audience declaration added**: A prominent callout at the top clarifies that setup mode is for Draft Admins only. Engineering and Shared Services representatives connect to an already-configured workspace and start a regular Draftsman session.
+
+- **`AGENTS.md` reduced from 187 to 70 lines**: Removed seven sections duplicated in `draftsman.md` — Source Of Truth Order, AI Agent Contract, Compliance Claims, Overlapping Requirements, Capability Lookup, SDP Walkdown, and the condensed Draftsman behavior summary. AGENTS.md now contains only what is needed before `draftsman.md` is read: bootstrap sequence, activation phrases, repository-mode structural facts, and editing rules.
+
+- **Object model diagram updated**: The SDP box display fields now show `deploymentTargets · relationships` instead of `connections · deploymentTargets`.
+
+### Fixed
+
+- **Stale `catalogStatus` vocabulary in documentation**: Three documents (`capabilities.md`, `how-to-add-objects.md`, `sdp-completion-interview.md`) referenced an old status vocabulary (`stub/draft/approved`) instead of the current valid values (`stub/incomplete/complete`). All corrected.
+
+- **`sdp-completion-interview.md` invalid `lifecycleStatus: draft` reference removed**: The incomplete conditions list referenced `lifecycleStatus: draft`, which is not a valid value. Replaced with plain-language description of unresolved placeholder deployment targets.
+
+### Compatibility Impact
+
+Two breaking changes:
+
+1. **`mechanism: externalInteraction` in `requirementImplementations`** — any workspace object using this mechanism value will now fail schema validation. Rename to `mechanism: relationship`.
+
+2. **`serviceGroup.connections`** — any SDP with inline `connections` entries will now fail validation (previously a warning). Migrate each entry to a relationship object file in `catalog/relationships/`.
+
+### Migration Notes
+
+1. **Rename `externalInteraction` to `relationship`** in any `requirementImplementations` entries across your workspace catalog. Search for `mechanism: externalInteraction` and replace with `mechanism: relationship`.
+
+2. **Migrate inline `serviceGroup.connections` to relationship objects**: For each connection entry, create a file in `catalog/relationships/` with `type: relationship`, `source` set to the `from` UID, `target` set to the `to` UID, `technology` set to the protocol, and `label: calls`. Then remove the `connections` list from the service group. See the migration guide in `docs/software-deployment-patterns.md`.
+
+## 0.28.5 - 2026-05-28
+
+### Added
+
+- None.
+
+### Changed
+
+- **`externalInteractions` field fully removed**: The deprecated `externalInteractions` field (plural) is removed from all service, host, and SDP schemas, all framework configurations, all example catalog objects, all documentation, and the `migrate_interactions.py` tool (deleted). The `externalInteraction` mechanism name (singular) is retained in requirement groups and the validator — it now resolves against outbound `relationship` objects where the relationship carries the required capability. Closes #34.
+
+- **`notes.externalInteractionRationales` renamed to `relationshipRationales`**: The machine-readable dependency rationale key inside `notes` has been renamed to match the relationship object model. All 22 affected example catalog objects updated.
+
+- **Detail view now shows relationship objects**: The browser detail view for services and hosts renders outbound and inbound relationship data instead of the removed `externalInteractions` field.
+
+### Fixed
+
+- **`externalInteraction` mechanism satisfaction now resolves against relationship objects**: `implementation_resolves` in `validate.py` previously only checked the deprecated `externalInteractions` field, making it impossible to complete the migration without losing requirement coverage. It now checks relationship objects where `source == obj.uid` and the relationship carries the required capability. Closes #34.
+
+### Compatibility Impact
+
+Breaking change for workspaces that have not yet migrated `externalInteractions` to relationship objects: removing the field from schemas means those objects will fail schema validation. Run `migrate_interactions.py` before upgrading, or migrate manually. Workspaces already on relationship objects are unaffected.
+
+### Migration Notes
+
+1. **Migrate `externalInteractions` to relationship objects before upgrading**: Use the last available version of `migrate_interactions.py` (removed in this release) to generate relationship stubs, or create them manually. Each entry needs a `relationship` YAML file with `source`, `target` or `externalTarget`, `label`, `technology`, and `capabilities` (list of capability UIDs the relationship satisfies).
+
+2. **Rename `notes.externalInteractionRationales` to `relationshipRationales`** in any workspace objects that use this key.
+
+## 0.28.4 - 2026-05-28
+
+### Added
+
+- None.
+
+### Changed
+
+- **`owner` is now optional on `requirement_group`**: Framework-provided requirement groups are not owned by any company team; the field was moved from `requiredFields` to `optionalFields`. Company-authored requirement groups may still declare `owner` and are encouraged to do so for accountability. No existing valid objects are affected.
+
+- **`capability` `aiHint` strengthened**: The schema hint now states both what a capability IS (a technology architecture outcome such as Data Persistence, Container Orchestration, CI/CD Pipeline) and what it IS NOT (a product name, business process, organizational unit, or business domain label). The distinction is called out explicitly for bulk-generation and migration contexts where product labels are most likely to be mistaken for capabilities. Closes #32.
+
+- **`draftsman.md` capability migration guard added**: A paragraph immediately after the existing "do not add or approve a Capability" prohibition now spells out the technology-outcome vs. product-label distinction with migration-specific language. Closes #32.
+
+### Fixed
+
+- **Framework configuration files no longer carry placeholder `owner.team`**: All 21 framework-owned requirement group and reference architecture files had `owner.team: cloud-architecture`, a placeholder value that produced unresolvable vocabulary warnings in company workspaces with a governed teams list. The `owner` block has been removed from all affected files. The vocabulary warning was correct; the data was wrong. Closes #33.
+
+- **SDP topology curvy lines restored**: `build_sdp_connections` now sources connections from `relationship` objects (introduced in 0.26.0) in addition to the deprecated `serviceGroups[].connections[]` field. SDPs that migrated to standalone relationship objects had empty `sdpConnections`, causing the SVG connection overlay to render nothing. Both sources are merged with deduplication; legacy connections are preserved for backward compatibility.
+
+- **C4 diagram structure**: `generate_c4.py` now groups containers into `Boundary` blocks (Mermaid) and `group` blocks (Structurizr DSL) derived from the SDP service group names. Previously all containers were emitted in a flat list with no visual structure. Falls back to flat output when no SDP grouping can be found.
+
+### Compatibility Impact
+
+Schema change: `owner` moved from required to optional on `requirement_group`. No existing valid objects are affected — objects with `owner` set continue to validate normally; framework-provided objects that omit it now also validate normally. Workspaces that relied on the validator to enforce `owner` presence on requirement groups will no longer see that enforcement.
+
+### Migration Notes
+
+1. **No action required for existing requirement groups**: Objects with `owner` set are unaffected. The change only removes the hard requirement so framework-provided groups can omit the field.
+
+2. **Remove placeholder `owner` blocks from framework-provided files if syncing manually**: Any workspace that vendored or forked framework configuration files should remove the `owner: {team: cloud-architecture, contact: ...}` block from framework requirement groups and reference architectures to eliminate vocabulary warnings.
+
+## 0.28.1 - 2026-05-27
+
+### Added
+
+- None.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- **`note` rejected as `requirementImplementations` mechanism**: `validate_requirement_implementations` now fails any implementation entry that sets `mechanism: note`. Inline notes are scratchpad, not evidence — proper mechanisms (`externalInteraction`, `technologyComponentConfiguration`, `field`, etc.) or a promoted `decision_record` are required. All 26 example catalog objects that carried `mechanism: note` implementation entries have been corrected: entries were removed (requirements remain automatically satisfied via `canBeSatisfiedBy` group scanning against `notes` keys) or replaced with valid mechanisms. The `validate_architectural_decisions` inline-notes suppression added in 0.28.0 is reverted — the warning is correct and should fire.
+
+- **SDP `decisionRecords` reference added**: The `sdp-openstack-iaas-platform` object is `complete` and has inline `notes`; it now declares `decisionRecords: [{ref: 01KSE5V73Z-CRZV}]` to resolve the inline-notes promotion warning.
+
+### Compatibility Impact
+
+No schema changes. Behavioral change: `mechanism: note` in `requirementImplementations` is now a validation failure (was silently accepted in 0.28.0). Workspaces that authored implementation entries with `mechanism: note` must remove those entries or migrate to structural mechanism types.
+
+### Migration Notes
+
+1. **Remove `mechanism: note` from `requirementImplementations`**: Requirements that were documented with `mechanism: note` can be satisfied automatically — if the corresponding `notes` key is present on the object, the requirement group scanner resolves it via `canBeSatisfiedBy`. No manual implementation entry is needed.
+
+2. **Promote inline decisions to `decision_record` objects** for complete objects that want to suppress the inline-notes warning without a `decisionRecords` reference.
+
+## 0.28.0 - 2026-05-27
+
+### Added
+
+- **`decisionRecords` field on service, host, and product schemas**: `runtime_service`, `edge_gateway_service`, `data_store_service`, `host`, `product_component`, and `data_component` schemas now declare `decisionRecords` as an optional list field with `decisionRecordRef` collection schema. Objects of these types can now reference `decision_record` objects directly.
+
+- **Decision records for HAProxy and Ops Console**: Two new `decision_record` objects added to the examples catalog — `dr-haproxy-lb-operational-architecture.yaml` (01KSF29JTP-DRHA) documenting HAProxy's pass-through auth, Ansible-managed secrets, and VIP failover decisions, and `dr-ops-console-secrets-injection.yaml` (01KSE5V73Z-DRSC) documenting the Ops Console's deploy-time secrets injection approach.
+
+- **Open drafting session example**: `session-nova-compute-runtime-service.yaml` added to demonstrate an in-progress authoring session with unresolved questions about Nova scheduler election and conductor failover behavior.
+
+- **Security compliance evidence across the examples catalog**: All 14 runtime services, 7 data-store-services, the edge gateway, the OpenStack host, and the Lambda host now carry `notes` keys that satisfy active `Security and Security Compliance Requirement Group` requirements, plus corresponding `requirementImplementations` entries.
+
+### Changed
+
+- **`notes` inline warning suppressed when requirement evidence is present**: `validate_architectural_decisions` no longer warns about inline `notes` when the object has `decisionRecords` references OR when any `requirementImplementations` entry uses `mechanism: note`. Objects whose notes serve as requirement satisfaction evidence are no longer prompted to promote those keys — doing so would remove the only satisfaction mechanism for those requirements. Closes #31.: `validate_architectural_decisions` no longer warns about inline `notes` on complete objects that already declare `decisionRecords` references. Objects that have promoted their narrative to decision records but retain minimal `notes` for requirement satisfaction are no longer flagged.
+
+- **Examples workspace `requireActiveRequirementGroupDisposition` enabled**: The examples workspace now sets `requireActiveRequirementGroupDisposition: true`, requiring all objects to have explicit dispositions for every requirement in the active security compliance requirement group. The workspace validates with zero failures and zero warnings at 159 catalog objects.
+
+### Fixed
+
+- None.
+
+### Compatibility Impact
+
+No breaking changes. New `decisionRecords` field is optional on all affected schemas; existing objects require no changes.
+
+### Migration Notes
+
+1. **Add `decisionRecords` references** to any complete service, host, or product objects that have inline `notes` to suppress the inline-notes warning. The decision record content can be authored incrementally — the warning only fires when the object has neither inline decisions nor linked records.
+
+2. **Add compliance `notes` keys** (e.g. `secrets_management`, `access_control_model`, `backup_strategy`) to objects that should satisfy active security compliance requirement groups. Existing camelCase `notes` keys (e.g. `secretsManagement`) are not automatically recognized by compliance requirements that use snake_case keys.
+
+## 0.27.0 - 2026-05-27
+
+### Added
+
+- None.
+
+### Changed
+
+- **`notes` renamed to `notes`**: The inline scratchpad field for architectural context is renamed across all 67 files (schemas, validator, requirement groups, docs, examples, tests). The `architecturalDecision` mechanism type in requirement group `validAnswerTypes` and `canBeSatisfiedBy` entries is renamed to `note`.
+
+### Fixed
+
+- **Pre-existing test failures**: Added missing `Fixed` section to CHANGELOG 0.26.0 entry (required by `test_release_notes`). Fixed `test_ra_constraint_satisfied_passes_sdp` fixture objects to include vendor fields required by `conditionalRequired` when `deliveryModel` is `paas` or `appliance`.
+
+## 0.26.0 - 2026-05-26
+
+### Added
+
+- **`defaultOwnerRole` schema field**: All 15 object-type schemas now declare `defaultOwnerRole` with a static mapping: `engineer` for `product_component`, `data_component`, and `software_deployment_pattern`; `technology-admin` for all service types, `host`, `technology_component`, `decision_record`, and `relationship`; `draft-admin` for `domain`, `capability`, `requirement_group`, `reference_architecture`, and `drafting_session`. Ownership is now schema-driven rather than per-object-authored.
+
+- **`deprecatedFields` schema mechanism** (`validate.py`): Schemas may now list deprecated field names in a top-level `deprecatedFields` array. The validator emits a warning for any object that still has a value in a deprecated field. Service schemas declare `externalInteractions` as deprecated.
+
+- **`dictSubSchemas` schema mechanism** (`validate.py`): Schemas may map dict-typed fields to named sub-schemas via a top-level `dictSubSchemas` mapping. The validator recursively validates dict field values against their sub-schema. Used for `vendorGovernance` in all three service schemas.
+
+- **`vendorGovernance` sub-object** (runtime-service, data-store-service, edge-gateway-service schemas): Groups the vendor accountability fields `dataLeavesInfrastructure`, `dataResidencyCommitment`, `dpaNotes`, `vendorSLA`, and `incidentNotificationProcess` under a single sub-object. Applies only to objects with `deliveryModel: saas`, `paas`, or `appliance`.
+
+- **`conditionalRequired` for vendor fields** (runtime-service, data-store-service, edge-gateway-service schemas): `vendor`, `productName`, and `productVersion` are now required when `deliveryModel` is one of `saas`, `paas`, or `appliance`.
+
+- **`conditionalRequired` for relationship `target`** (relationship schema): `target` is now required only when `externalTarget` is not set. `externalTarget` (free-text external system name) and `flow` (outbound/inbound/bidirectional) added as optional fields.
+
+- **`migrate_interactions.py`** (`tools/`): New script that reads a workspace, finds objects with deprecated `externalInteractions` entries, and generates stub relationship YAML files. Entries with a `ref` to an existing catalog object get `target`; bare-name entries get `externalTarget`. Supports `--dry-run`.
+
+- **`notes` promotion warning**: The validator now warns when a `catalogStatus: complete` object has inline `notes` content, recommending promotion to `decision_record` objects.
+
+### Changed
+
+- **`matches_conditions`** (`validate.py`): `conditionalRequired` condition values may now be lists; the condition matches when the field value is in the list. Previously only exact equality was supported.
+
+- **`requirementGroups` field deprecated**: Removed from all object schema `optionalFields` lists. The validator now emits a warning (not a failure) when an object contains `requirementGroups`, directing authors to remove the field. Requirement groups are applied via workspace activation and `appliesTo` rules, not per-object claims.
+
+- **`externalInteractions` and `connections` deprecated on service group objects** (`software_deployment_pattern` schema): The validator now warns when a service group still uses these fields. Use relationship objects to model topology instead.
+
+- **Relationship validation** (`validate.py`): `validate_relationship` now validates `source` and `target` independently. Fails when neither `target` nor `externalTarget` is set; skips target catalog lookup when `externalTarget` is provided.
+
+- **Draftsman guidance** (`docs/draftsman.md`): Updated to direct authors toward relationship objects for all dependency modeling. Deprecated `externalInteractions` authoring guidance removed. Connection elicitation procedure updated to generate relationship objects instead of `serviceConnection` entries. Validator error table updated for relationship-related messages.
+
+- **`validate_against_schema` and `validate_schema_section`** now accept an optional `warnings` list so schema-level deprecation warnings surface alongside custom validator warnings.
+
+### Removed
+
+- **`ownerRole` field**: Removed from `optionalFields` and `enumFields` on all object-type schemas. Use the schema-declared `defaultOwnerRole` instead.
+- **`requirementGroups` field**: Removed from `optionalFields` on all object-type schemas. Objects that still have this field receive a deprecation warning.
+- **Top-level vendor accountability fields** (`dataLeavesInfrastructure`, `dataResidencyCommitment`, `dpaNotes`, `vendorSLA`, `incidentNotificationProcess`): Removed from top-level `optionalFields` on service schemas. These fields now live inside the `vendorGovernance` sub-object. The validator warns when any of these are found at the top level.
+
+### Fixed
+
+- **`validate_requirement_implementations` workspace-group gate**: The validator previously rejected `requirementImplementations` entries pointing to a workspace-activated requirement group unless the object also declared that group in `requirementGroups`. Since `requirementGroups` is now deprecated and removed from schemas, any object with pre-existing `requirementImplementations` evidence would fail. The check now gates on the workspace's active group set rather than the deprecated per-object declaration.
+
+### Compatibility Impact
+
+**Pre-1.0 breaking changes** (allowed per the framework contract):
+
+| Removed field | Schema type(s) | Replacement |
+|---|---|---|
+| `ownerRole` | All object types | Schema `defaultOwnerRole` (inferred, no authoring required) |
+| `requirementGroups` | All standard object types | Workspace activation + schema `appliesTo` |
+| `dataLeavesInfrastructure` (top-level) | runtime_service, data_store_service, edge_gateway_service | `vendorGovernance.dataLeavesInfrastructure` |
+| `dataResidencyCommitment` (top-level) | runtime_service, data_store_service, edge_gateway_service | `vendorGovernance.dataResidencyCommitment` |
+| `dpaNotes` (top-level) | runtime_service, data_store_service, edge_gateway_service | `vendorGovernance.dpaNotes` |
+| `vendorSLA` (top-level) | runtime_service, data_store_service, edge_gateway_service | `vendorGovernance.vendorSLA` |
+| `incidentNotificationProcess` (top-level) | runtime_service, data_store_service, edge_gateway_service | `vendorGovernance.incidentNotificationProcess` |
+| `externalInteractions` | All service and host types (deprecated warning only) | `relationship` objects |
+| `connections` | SDP serviceGroups (deprecated warning only) | `relationship` objects |
+
+### Migration Notes
+
+1. **Remove `ownerRole`** from any catalog objects that still declare it. The field is ignored but will generate an "unknown field" warning in future schema-aware tools.
+
+2. **Remove `requirementGroups`** from any catalog objects that declare it. Run `validate.py` to identify files; each will show a deprecation warning.
+
+3. **Move vendor accountability fields** into a `vendorGovernance:` sub-object on any service object with `deliveryModel: saas`, `paas`, or `appliance`.
+
+4. **Convert `externalInteractions`** to relationship objects. Run `python3 tools/migrate_interactions.py --workspace <path> --dry-run` to preview generated stubs, then without `--dry-run` to write them. Remove `externalInteractions` from each source object after verifying the relationship files.
+
+5. **Convert SDP `serviceGroup.connections` and `serviceGroup.externalInteractions`** to relationship objects using the same migration script or manually.
+
+## 0.25.2 - 2026-05-26
+
+### Added
+
+- **OpenStack relationship objects** (14 new files in `examples/catalog/relationships/`): Full inter-service dependency graph for the OpenStack IaaS example. Covers Nova→Keystone, Nova→Neutron, Nova→Cinder, Nova→RabbitMQ, Neutron→Keystone, Neutron→NeutronDB, Neutron→RabbitMQ, Cinder→Keystone, Cinder→CinderDB, Cinder→RabbitMQ, Keystone→KeystoneDB, and API LB→Nova/Neutron/Keystone. Each relationship includes protocol/technology and rationale notes.
+- **Expanded OpenStack system boundary** (`examples/catalog/systems/system-openstack-compute.yaml`): Added RabbitMQ, Keystone Database, Cinder Database, and the API Load Balancer to the container list. The system now covers all 10 objects involved in the relationship graph.
+
+### Changed
+
+- **Browser Diagrams view tech label fix** (`browser/draft-browser.js`): Resolved the `primaryTechnologyComponent` UID ref via `internalComponents[role='function']` → `objectLookup` lookup so Container nodes display the resolved technology component name (e.g. "OpenStack Nova") instead of the generic delivery model value ("self-managed").
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+No migration required. All changes are additive example content and a browser rendering improvement.
+
+### Migration Notes
+
+No migration required.
+
+## 0.25.1 - 2026-05-26
+
+### Added
+
+- **Diagrams view** (`browser/draft-browser.js`): New "Diagrams" sidebar entry (⌘K searchable) renders C4 L2 Container diagrams inline in the browser using Mermaid.js. One diagram per `system` object; falls back to a single diagram when no system objects are defined. Relationship edges are rendered as arrows between containers. External actors appear as `Person_Ext` / `System_Ext` nodes.
+- **Mermaid.js CDN** (`browser/index.template.html`): Mermaid v10 loaded via CDN with `defer`, consistent with all other browser dependencies. Rendering uses the async `mermaid.render()` API so the main thread is never blocked.
+
+### Changed
+
+No breaking changes. The Diagrams view is additive — browsers with no `system` or `relationship` objects show a single auto-generated diagram from all deployable containers.
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+No migration required.
+
+### Migration Notes
+
+No migration required. Pull the release and regenerate the browser to see C4 diagrams inline. Diagrams improve automatically as `system` and `relationship` objects are added to the catalog.
+
+## 0.25.0 - 2026-05-26
+
+### Added
+
+- **`system` schema** (`schemas/system.schema.yaml`): New object type for declaring named system boundaries. Groups deployable container objects and declares external actors (users, third-party systems). Enables C4 L1 Context scoping and Backstage System grouping. Fully additive — existing catalogs validate without modification.
+- **System validation** (`tools/validate.py`): `validate_system` checks that `containers[].ref` UIDs resolve to existing catalog objects and warns when a container ref points to a non-deployable type.
+- **System browser support** (`tools/generate_browser.py`): `systems` added to `CATALOG_FOLDERS` so system objects appear in list view and the reference graph automatically.
+- **System example** (`examples/catalog/systems/system-openstack-compute.yaml`): OpenStack Compute Platform system grouping six deployable objects and three external actors.
+- **Backstage exporter** (`tools/generate_backstage.py`): Reads the DRAFT catalog and emits Backstage `catalog-info.yaml` entity files. Maps `domain`/`system` → `System`, service objects → `Component`, `technology_component` → `Resource`. Supports `--dry-run` and `--output`. Delivers value from existing objects with no relationship authoring required.
+- **C4 exporter** (`tools/generate_c4.py`): Reads DRAFT objects, `relationship` objects, and `system` objects and emits C4 L2 Container diagrams in Structurizr DSL and Mermaid C4 syntax. One diagram per `system` object; falls back to a single diagram when no system objects are defined. Gracefully handles catalogs with no relationship data. Supports `--format`, `--dry-run`, and `--output`.
+- **Exporter documentation** (`docs/exporters.md`): Usage guide for the Backstage and C4 exporters, object mapping tables, and a minimal template for writing custom catalog adapters.
+- **AI_INDEX.md**: System schema row, exporter tool rows, and exporter docs row added.
+
+### Changed
+
+No breaking changes to existing object schemas or validation behavior.
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+No migration required. Existing catalogs validate without modification. System authoring is opt-in and additive.
+
+### Migration Notes
+
+No migration required. Companies can pull this release and immediately run `generate_backstage.py` against their existing catalog. C4 diagrams improve as relationship objects are authored incrementally.
+
+## 0.24.0 - 2026-05-26
+
+### Added
+
+- **`relationship` schema** (`schemas/relationship.schema.yaml`): New first-class object type for recording directed inter-object communication edges. Fields: `source` (UID), `target` (UID), `label` (verb phrase), optional `technology`, optional `direction` (`synchronous` / `asynchronous` / `event`). Relationship objects live in `catalog/relationships/`.
+- **Relationship validation** (`tools/validate.py`): `validate_relationship` function checks that `source` and `target` UIDs resolve to existing catalog objects. Dispatched for all `type: relationship` objects.
+- **Browser topology view** (`browser/draft-browser.js`): New "Topology" view in the sidebar nav renders a table of all relationship objects with linked source/target objects and technology/direction badges. Accessible via the ⇄ nav item and the command palette.
+- **Browser topology data** (`tools/generate_browser.py`): `topologyEdges` key added to the browser payload. `source` and `target` added to `REF_CONTAINER_KEYS` so the existing reference index tracks relationship endpoints. `relationships` added to `CATALOG_FOLDERS`.
+- **Draftsman relationship authoring guidance** (`docs/draftsman.md`): New "Relationship Authoring" section describes when and how to author relationship objects during drafting sessions.
+- **Relationship example** (`examples/catalog/relationships/relationship-nova-reads-nova-database.yaml`): Nova Compute → Nova Database example demonstrating the schema.
+- **AI_INDEX.md**: Relationship schema row added to the schemas table.
+
+### Changed
+
+No breaking changes to existing object schemas.
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+No migration required. Existing catalogs validate without modification. Relationship authoring is opt-in and additive.
+
+### Migration Notes
+
+No migration required. Companies can pull this release and begin authoring relationships incrementally via the Draftsman without touching existing catalog objects.
+
+## 0.23.1 - 2026-05-25
+
+### Added
+
+- Apache 2.0 license (`LICENSE` file, copyright 2026 Dale Sackrider). Attribution is required for redistribution.
+
+### Changed
+
+No changes.
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+No breaking changes.
+
+### Migration Notes
+
+No migration required.
+
+## 0.23.0 - 2026-05-25
+
+### Added
+
+No new features.
+
+### Changed
+
+- **`catalogStatus` enum renamed** (breaking): The three catalog maturity values
+  have been renamed to remove ambiguity with review/approval processes and avoid
+  collision with the word "draft" in the framework name.
+  - `draft` → `incomplete`
+  - `approved` → `complete`
+  - `stub` is unchanged
+  The internal validator function `approved_or_preferred_object` has been renamed
+  to `complete_or_preferred_object`. All enforcement behavior is unchanged — hard
+  failures fire when `catalogStatus: complete`, warnings when `incomplete` or
+  `stub`.
+
+### Fixed
+
+No bug fixes.
+
+### Compatibility Impact
+
+Breaking change for all workspace YAML files that set `catalogStatus: draft` or
+`catalogStatus: approved`. All framework-bundled configurations have been
+migrated. Company workspaces must migrate before validating against this release.
+
+### Migration Notes
+
+Run the following commands from your company workspace root to migrate all YAML
+files in one step:
+
+```bash
+find . -name "*.yaml" | xargs sed -i '' \
+  's/catalogStatus: draft$/catalogStatus: incomplete/g; \
+   s/catalogStatus: approved$/catalogStatus: complete/g'
+```
+
+Verify with `draft validate` after running.
+
+## 0.22.0 - 2026-05-25
+
+### Added
+
+- **Draftsman pre-flight validation** (closes #5): Added
+  `preview_proposals(session_id, proposal_ids)` method to `DraftsmanEngine`:
+  copies the workspace to a temp directory, writes the selected proposals there,
+  runs the validator, and returns the full result without touching the real
+  workspace. Callers use this as an advisory pre-flight check before calling
+  `apply_proposals`. `apply_proposals` continues to write files regardless of
+  validation state — stub and incomplete objects are expected to have gaps.
+- Added `resumptionContext` optional dict field to the Drafting Session schema
+  (`schemas/drafting-session.schema.yaml`): stores Draftsman-internal
+  state (e.g. matched Reference Architecture UID, confirmed delivery models,
+  scope decisions) so interrupted sessions can be resumed without re-asking
+  answered questions.
+- Added three new Draftsman doc sections to `docs/draftsman.md`:
+  - **Pre-Write Review**: protocol for showing a structured review card before
+    writing YAML and holding batches that fail preview validation.
+  - **Validation Repair Procedures**: table mapping common validator error
+    patterns to specific repair steps.
+  - **Resuming a Drafting Session**: how to reconstruct working context from a
+    session YAML using `generatedObjects`, `unresolvedQuestions`, `nextSteps`,
+    `assumptions`, and `resumptionContext`.
+- Added tests: `test_apply_proposals_blocked_when_content_would_fail_validator`
+  (pre-write gate), `test_ra_constraint_violation_fails_sdp` (RA constraint
+  enforcement), `test_ra_constraint_satisfied_passes_sdp` (constraint satisfied
+  passes).
+
+### Changed
+
+- Pre-write review is advisory, not a gate: `apply_proposals` writes files
+  regardless of validation state. Stub and incomplete objects are expected to
+  have gaps; enforcement happens at the `complete` catalogStatus boundary.
+
+### Fixed
+
+- `import shutil` and `import tempfile` added to `draft_table/draftsman.py` for
+  the temp-workspace copy used by `preview_proposals`.
+
+### Compatibility Impact
+
+No breaking changes. `apply_proposals` behavior is unchanged — files are written
+and validation runs after. `preview_proposals` is additive.
+
+### Migration Notes
+
+No migration required. The new `resumptionContext` field on `drafting_session`
+is optional and backwards-compatible.
+
+## 0.21.0 - 2026-05-25
+
+### Added
+
+- **RA constraint enforcement** (closes #21): Reference Architectures now support
+  an optional `constraints` block. Each constraint declares a `when` condition
+  (`anyServiceGroup.diagramTier` or `anyServiceGroup.objectType`) and a `require`
+  list of object characteristics that must be present in every SDP that follows
+  the RA. The validator evaluates constraints at `validate_software_deployment_pattern`
+  time and reports failures for any violated constraint.
+- Added `constraints` to the three baseline framework Reference Architectures:
+  - **Three-Tier Web** (`01KS8N4KR2-3TWA`): `presentation-tier-requires-edge-gateway`
+    and `data-tier-requires-data-store-service`.
+  - **Multi-Tenant SaaS** (`01KS8N4KR3-MTSA`): `presentation-tier-requires-edge-gateway`
+    and `saas-requires-utility-tier`.
+  - **Serverless Event-Driven** (`01KS8N4KR4-SVED`): `ingestion-requires-edge-gateway`
+    and `state-requires-data-store-service`.
+- Added `constraints` to the Reference Architecture schema
+  (`schemas/reference-architecture.schema.yaml`) with full field
+  documentation for `id`, `description`, `rationale`, `when`, `require`, `notes`.
+- Added Draftsman guidance for proactive constraint checking during SDP authoring
+  (`docs/draftsman.md` — "RA Constraint Enforcement" section).
+
+### Changed
+
+- Added `01KSF29JTP-9HYA` (HAProxy OpenStack API Load Balancer, `edge_gateway_service`)
+  to the OpenStack SDP's presentation tier service group, satisfying the new
+  Three-Tier Web RA `presentation-tier-requires-edge-gateway` constraint.
+- Resolved `session-openstack-ha-proxy-edge-service.yaml`: session closed, all
+  unresolved questions answered, generated object confirmed as `01KSF29JTP-9HYA`.
+
+## 0.20.0 - 2026-05-25
+
+### Added
+
+- Added `configurations/requirement-groups/requirement-group-service-engineering.yaml`
+  (`01KSF29JTP-SRVE`, `activation: workspace`): links the APM, Container
+  Orchestration, and Serverless Runtime capabilities to the framework. Workspaces
+  opt in via `activeRequirementGroups` in `.draft/workspace.yaml`.
+- Added `configurations/requirement-groups/requirement-group-engineering-quality.yaml`
+  (`01KSF4NHSP-8HPP`, `activation: workspace`): links the Performance Testing,
+  Quality Gates, Test Authoring, and Test Execution capabilities. Workspaces opt
+  in to require product components to address build quality practices.
+- Added `configurations/requirement-groups/requirement-group-host-compute-profile.yaml`
+  (`01KSF4NHSP-HCPX`, `activation: workspace`): links the General Purpose Compute
+  capability. Workspaces opt in to require hosts to declare their compute type.
+- Added `examples/catalog/technology-components/technology-haproxy-29.yaml`:
+  HAProxy 2.9 Technology Component (`classification: software`) with
+  Health/Welfare Monitoring capability.
+- Added `examples/catalog/edge-gateway-services/edge-gateway-service-openstack-api-lb.yaml`:
+  self-managed HAProxy load balancer for the OpenStack control plane, completing
+  the edge/gateway service object type in the examples catalog.
+- Completed requirement group coverage: all approved framework capabilities are
+  now linked to at least one requirement group, eliminating the eight
+  `capability-not-in-requirement-group` validator warnings.
+
+### Changed
+
+- Renamed all `data-at-rest-*.yaml` files in `examples/catalog/data-store-services/`
+  to `data-store-service-*.yaml` to match the object type naming convention used
+  by all other catalog file types.
+- Completed `notes` and `externalInteractionRationales` on the
+  remaining five data store services (Cinder, Glance, Keystone, Neutron, OpenStack
+  Shared, Swift) and the Keystone and RabbitMQ runtime services to resolve all
+  outstanding requirement group compliance gaps.
+
+## 0.19.1 - 2026-05-24
+
+### Added
+
+- Added golden reference workspace built on the OpenStack IaaS Platform example
+  catalog. Demonstrates how a real SDP adopts a framework RA, activates a
+  requirement group, and carries requirement evidence.
+- Added `examples/catalog/product-components/product-component-openstack-ops-console.yaml`:
+  first-party `ProductComponent` example deploying onto the Horizon runtime service.
+  Includes interfaces, network bindings, environment configuration, and
+  `CC.SecurityCompliance.04.3.1.product_component` evidence.
+- Added `examples/catalog/data-components/data-component-platform-audit-schema.yaml`:
+  first-party `DataComponent` example with table definitions, a scheduled archive
+  job, retention policy, and data classification declarations.
+- Added `examples/catalog/decision-records/dr-openstack-no-waf-internal-only.yaml`:
+  accepted decision record explaining why no WAF is required for the internal-only
+  OpenStack deployment.
+- Added `examples/catalog/sessions/session-openstack-ha-proxy-edge-service.yaml`:
+  drafting session stub capturing unresolved questions about the HAProxy edge
+  gateway service topology; demonstrates the session object model.
+- Activated `01KQQ4Q027-T3CA` (Security and Security Compliance Requirement Group)
+  in `examples/.draft/workspace.yaml`.
+
+### Changed
+
+- Updated `sdp-openstack-iaas-platform.yaml`: promoted `catalogStatus` to
+  `approved`, added `followsReferenceArchitecture: 01KS8N4KR2-3TWA`, added
+  `requirementGroups` and `requirementImplementations` for the three SDP-scoped
+  security compliance requirements (10.1.1, 10.1.2, 00.2.1), and added
+  `notes.deploymentTargets` and
+  `notes.reference_architecture_conformance`.
+- Updated `data-at-rest-nova-database.yaml`: added `access_control_model` and
+  `backup.platform` to `notes`; added `requirementGroups` and
+  `requirementImplementations` for four applicable security compliance requirements;
+  added `externalInteractionRationales` for the Backup Service interaction.
+- Updated `runtime-service-nova.yaml`: added `secrets_management` to
+  `notes`; added `requirementGroups` and
+  `requirementImplementations` for `CC.SecurityCompliance.04.3.1`.
+- Removed obsolete empty placeholder directories: `examples/catalog/ards/`,
+  `examples/catalog/sdms/`, `examples/catalog/saas-services/`.
+
+## 0.19.0 - 2026-05-24
+
+### Compatibility Impact
+
+This release makes `ref` optional in Reference Architecture `deployableObjects`
+entries and adds an `objectType` field. Existing RAs with `ref`-based entries
+continue to validate unchanged. The change enables framework-level and community
+RAs that declare expected object types without pinning to company-specific catalog
+UIDs.
+
+### Added
+
+- Added `configurations/reference-architectures/` directory. Framework
+  RAs are vendored into company workspaces alongside requirement groups and
+  capability definitions. Companies adopt them by referencing the RA UID in
+  `followsReferenceArchitecture` on an SDP; adoption is opt-in.
+- Added three baseline framework RAs: Three-Tier Web Application
+  (`01KS8N4KR2-3TWA`), Multi-Tenant SaaS (`01KS8N4KR3-MTSA`), and Serverless
+  Event-Driven (`01KS8N4KR4-SVED`). Each defines service group tiers, an
+  `applicableDefinitionChecklist`, and `notes` capturing the
+  key pattern rules.
+- Added `objectType` optional field to the Reference Architecture schema's
+  `deployableObjectEntry`. Accepts any standard deployable object type
+  (`host`, `runtime_service`, `data_store_service`, `edge_gateway_service`,
+  `product_component`, `data_component`). Framework and community RAs use
+  `objectType` instead of `ref` so the pattern is not tied to a specific
+  company catalog object.
+
+### Changed
+
+- Updated `generate_ai_index.py` to include
+  `configurations/reference-architectures/` in the framework
+  configuration index so framework RAs appear in `AI_INDEX.md`.
+- Updated `reference-architectures.md` to document the framework RA adoption
+  model, the `objectType` field, and the community contribution path.
+
+### Fixed
+
+- Fixed validator error messages for service group deployable object entries to
+  use `ref or objectType` as the entry label rather than always printing `ref`
+  (which was `None` for type-only entries).
+
+### Migration Notes
+
+No migration required. Existing Reference Architectures with `ref`-based
+`deployableObjects` entries continue to validate. The `ref` field remains
+fully supported and preferred when a specific catalog object is the intended
+target.
+
+---
+
+## 0.18.1 - 2026-05-24
+
+### Compatibility Impact
+
+No breaking changes. Vocabulary files gain UIDs; existing references by name
+continue to work.
+
+### Added
+
+- Added `uid` field to `connection-protocols.yaml` and
+  `network-zone-patterns.yaml` framework vocabulary objects so they are
+  addressable by UID alongside their vocabulary name.
+- Added `commands` and `integrations` to `FRAMEWORK_VENDOR_DIRS` in the
+  installer so those directories are copied when vendoring the framework into
+  a company workspace.
+- Added `.windsurfrules` and `.cursor/rules/draftsman.mdc` to
+  `WORKSPACE_TEMPLATE_FILES` so the Windsurf and Cursor IDE configs generated
+  in 0.17.0 are actually deployed to new workspaces on first install.
+
+### Changed
+
+- Rewrote setup-mode and Draftsman AI instructions to keep onboarding
+  conversational and focused. Replaced the status-dashboard pattern (current
+  step / next step / remaining work / revisit-later lists) with a single-question
+  cadence that explains context before asking.
+- Draftsman now translates camelCase schema field names into clear, capitalized,
+  user-friendly labels when presenting questions (e.g. "Deployment Targets"
+  instead of `deploymentTargets`).
+- Discovery Mode is now explicitly positioned as an optional accelerator in
+  setup instructions, with a defined offer point after the first three basic
+  workspace identity questions are answered.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+No migration required.
+
+---
+
+## 0.18.0 - 2026-05-21
+
+### Compatibility Impact
+
+This release adds `ownerRole` as an optional enum field to eight catalog object
+schemas. Existing objects without `ownerRole` continue to validate. New objects
+created by the Draftsman will include `ownerRole` automatically. No migration
+is required to unblock validation; migration is recommended to enable accurate
+CODEOWNERS routing.
+
+### Added
+
+- Added `ownerRole` optional enum field (`engineer | technology-admin |
+  draft-admin`) to `product_component`, `data_component`,
+  `software_deployment_pattern`, `technology_component`, `runtime_service`,
+  `host`, `edge_gateway_service`, and `data_store_service` schemas. The field
+  makes catalog ownership machine-readable for CODEOWNERS routing and browser
+  team views.
+- Added `templates/workspace/CODEOWNERS.tmpl` workspace template mapping the
+  three DRAFT roles to GitHub path patterns. Deployed to `.github/CODEOWNERS`
+  on first framework install when the file does not already exist.
+- Added Contribution Workflow section to `draftsman.md` documenting the
+  branch-and-PR protocol: create a branch before writing catalog files, commit
+  incrementally, open a PR at session end with `gh pr create`, and let
+  CODEOWNERS route review automatically.
+- Added GitHub Governance step (step 8) to `setup-mode.md` walking through
+  CODEOWNERS configuration and branch protection setup using the GitHub CLI.
+
+### Changed
+
+- `draft-framework-update.yml.tmpl` now includes `CODEOWNERS.tmpl` in the
+  workspace template copy list so new workspaces receive the file on first
+  framework install.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+Add `ownerRole` to existing catalog objects to enable accurate CODEOWNERS
+routing. The correct value is determined by object type:
+
+- `product_component`, `data_component`, `software_deployment_pattern` →
+  `ownerRole: engineer`
+- `runtime_service`, `host`, `technology_component`, `edge_gateway_service`,
+  `data_store_service` → `ownerRole: technology-admin`
+- `requirement_group`, `capability` → `ownerRole: draft-admin`
+
+---
+
+## 0.17.0 - 2026-05-21
+
+### Compatibility Impact
+
+This release renames the `decision_record` field `linkedSoftwareDeployment` to
+`linkedObject`. Existing YAML files that use `linkedSoftwareDeployment` will
+continue to pass validation (the old field is not flagged as an error), but the
+browser cross-reference index will not follow the old field name. Migrate by
+renaming the field to `linkedObject` in each affected decision record.
+
+### Added
+
+- Added `generate-browser.yml.tmpl` workflow template. Workspaces that apply
+  a framework update will now receive a ready-made GitHub Actions workflow that
+  regenerates `docs/index.html`, `docs/assets/`, and `docs/user-manual.html`
+  on every push to `main` that touches a YAML file, browser asset, or
+  framework tool. The workflow commits with `[skip ci]` to avoid feedback loops.
+- Added `paths.catalogFolders` workspace configuration. Set this list in
+  `.draft/workspace.yaml` under a `paths:` key to declare which subdirectory
+  names inside `catalog/` the browser generator and cross-reference index should
+  scan. When unset the framework's default folder list is used. This enables
+  team-namespaced catalog structures such as `catalog/engineering/[team]/` and
+  `catalog/infrastructure/` without any code changes.
+
+### Changed
+
+- Renamed `decision_record` optional field `linkedSoftwareDeployment` →
+  `linkedObject`. The new field accepts the UID of any catalog object type,
+  not just software deployment patterns. This allows a decision record to link
+  directly to a `data_store_service`, `runtime_service`, `host`, or any other
+  catalog object that is the subject of the recorded decision or risk.
+- Updated `generate_browser.py` REF_CONTAINER_KEYS and rendering to use
+  `linkedObject` in place of `linkedSoftwareDeployment`.
+
+### Fixed
+
+- `draft_table/catalog.py` REF_CONTAINER_KEYS updated to match the schema
+  rename from `linkedSoftwareDeployment` to `linkedObject`.
+
+### Migration Notes
+
+Rename `linkedSoftwareDeployment` to `linkedObject` in every
+`decision_record` YAML file. The value (a UID string) is unchanged.
+
+## 0.16.3 - 2026-05-21
+
+### Compatibility Impact
+
+No migration required. This patch adds command discovery documentation; it does
+not change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- Added Commands section to `README.md.tmpl` listing `/draftsman`,
+  `/draft-session`, and `/validate-catalog` with human-readable descriptions
+  and a fallback note for tools without slash command support.
+- Added Available Commands section to `AGENTS.md.tmpl` so any AI reading
+  the bootstrap file can surface the command table when users ask what they
+  can do.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Existing workspaces: add a Commands section to `README.md` and an Available
+  Commands section to `AGENTS.md` manually, following the new template content.
+
+## 0.16.2 - 2026-05-21
+
+### Compatibility Impact
+
+No migration required. This patch adds multi-AI IDE integration support; it
+does not change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- Added `integrations/` directory with ready-to-use IDE integration
+  files for Cursor (`cursor/draftsman.mdc`) and Windsurf (`windsurf/draftsman.md`).
+- Added `integrations/README.md` documenting the AI-agnostic model
+  and how to add support for new IDEs.
+- Added `.cursor/rules/draftsman.mdc.tmpl` workspace template for Cursor.
+- Added `.windsurfrules.tmpl` workspace template for Windsurf.
+- Updated workspace templates (`AGENTS.md`, `GEMINI.md`,
+  `copilot-instructions.md`) to include command invocation guidance so any AI
+  tool reading these files knows about `/draftsman`, `/draft-session`, and
+  `/validate-catalog`.
+
+### Changed
+
+- Expanded setup-mode step 7 (IDE Integration) from Claude Code-only to a
+  multi-IDE wizard covering Claude Code, Cursor, Windsurf, Copilot, Gemini
+  CLI, and OpenAI Codex.
+- Reframed `draftsman-ai-configuration.md` Slash Commands section as
+  AI-Agnostic Design + Workflow Commands + IDE Integration to reflect that
+  the framework is tool-neutral.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- To enable commands in Cursor, copy `.draft/framework/integrations/cursor/draftsman.mdc`
+  to `.cursor/rules/draftsman.mdc`.
+- To enable commands in Windsurf, copy `.draft/framework/integrations/windsurf/draftsman.md`
+  to `.windsurfrules` (or append if the file already exists).
+- `AGENTS.md` and `GEMINI.md` in existing workspaces can be updated manually
+  by adding the command invocation paragraph from the updated templates.
+
+## 0.16.1 - 2026-05-21
+
+### Compatibility Impact
+
+No migration required. This patch adds AI-facing guidance and IDE slash
+commands; it does not change schemas, validation behavior, or catalog object
+formats.
+
+### Added
+
+- Added `commands/` with three Claude Code slash commands:
+  `/draftsman`, `/draft-session`, and `/validate-catalog`.
+- Added setup-mode step 7 with linking instructions for wiring commands into
+  `.claude/commands/` on macOS/Linux and Windows.
+- Added Slash Commands section to `draftsman-ai-configuration.md`.
+
+### Changed
+
+- None.
+
+### Fixed
+
+- None.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- To enable the slash commands, run the symlink step from setup-mode step 7 once
+  at the workspace root after updating the vendored framework.
+
+## 0.16.0 - 2026-05-21
+
+### Compatibility Impact
+
+This release retires the `product_service` object type and renames
+`data_at_rest_service` to `data_store_service`. Both changes are breaking for
+any catalog that uses these types. Existing `product_service` artifacts must be
+deleted or converted; existing `data_at_rest_service` artifacts must have their
+`type` field changed to `data_store_service` and their folder moved. Requirement
+groups that reference either type must be updated to use `data_store_service` or
+`software_deployment_pattern` as appropriate. No other object types are affected.
+
+### Added
+
+- Added `serviceGroup.substrate` optional field to the
+  `software_deployment_pattern` schema. When set to the UID of a
+  `runtime_service`, `host`, or `edge_gateway_service`, that runtime is rendered
+  as the deployment container for the service group's `product_component` members
+  in both the browser card view and the topology graph, eliminating the need to
+  list the hosting runtime as a separate `deployableObjects` entry.
+- Added `data_store_service` as the canonical object type for persistent data
+  stores, replacing the retired `data_at_rest_service` type.
+- Added new catalog scaffold directories: `catalog/data-store-services/`,
+  `catalog/product-components/`, and `catalog/data-components/`.
+- Added `data-store-service` requirement group covering compliance and
+  availability requirements for persistent data stores.
+- Added substrate compound-node rendering in the SDP topology graph (teal
+  bordered compound node wrapping hosted `product_component` nodes).
+- Added substrate bar UI in the SDP service-group card view showing the hosting
+  runtime name and type.
+
+### Changed
+
+- Renamed object type `data_at_rest_service` → `data_store_service` throughout
+  schemas, validation, browser generation, requirement groups, docs, and
+  templates.
+- Retired `product_service` object type. The SDP `serviceGroup` is now the
+  canonical unit for grouping `product_component` objects within a deployment
+  target and network zone. The `serviceGroup.substrate` field replaces the role
+  `product_service` played as a hosting container.
+- Changed `product_component.runsOn` from required to optional. When every SDP
+  that references a `product_component` declares a `substrate`, `runsOn` may be
+  omitted.
+- Updated all built-in requirement groups to replace `product_service` scope
+  references with `software_deployment_pattern` and `data_at_rest_service`
+  references with `data_store_service`.
+- Updated `validate.py` to recognize `data_store_service` and reject
+  `data_at_rest_service` and `product_service` as unknown types.
+- Updated `generate_browser.py` to scan `catalog/data-store-services/`,
+  `catalog/product-components/`, and `catalog/data-components/` folders.
+- Updated browser JS and CSS to render `product_component` and `data_component`
+  type badges and substrate bars.
+- Updated docs (`object-types.md`, `overview.md`, `user-manual.md`) to reflect
+  the new object model.
+
+### Fixed
+
+- Fixed `validate.py` field-path resolution (`resolve_field_path()`) so the
+  `field` mechanism correctly handles dotted paths (e.g. `owner.team`) and
+  list-probe paths (e.g. `serviceGroups[].connections`).
+- Fixed requirement-group rationale enforcement for `runtime_service` and
+  `data_store_service` internal components: referencing a `product_component` or
+  `data_component` no longer incorrectly demands an architectural rationale.
+- Fixed `software-deployment-pattern.schema.yaml` where `deploymentTarget` was
+  listed in both `requiredFields` and `optionalFields`; it is now correctly
+  listed only in `requiredFields`.
+- Fixed the example OpenStack IaaS SDP to include `diagramTier` on all
+  deployable objects.
+
+### Migration Notes
+
+- **`data_at_rest_service` → `data_store_service`**: Change `type:
+  data_at_rest_service` to `type: data_store_service` in every affected catalog
+  file. Move files from `catalog/data-at-rest-services/` to
+  `catalog/data-store-services/`. Update any requirement groups that reference
+  the old type.
+- **`product_service` retirement**: Delete any `product_service` catalog files.
+  The deployment grouping they represented is now expressed via `serviceGroup`
+  entries in the SDP that references those components. Add a `substrate` field to
+  the relevant `serviceGroup` if you need to capture which runtime hosts the
+  group.
+- **`product_component.runsOn`**: If all SDPs referencing a component now use
+  `serviceGroup.substrate`, the `runsOn` field may be removed from the component.
+  It remains valid and may be kept for components that are referenced outside any
+  SDP `serviceGroup.substrate` context.
+- **Requirement groups**: Search for `product_service` and `data_at_rest_service`
+  scope references and replace with `software_deployment_pattern` and
+  `data_store_service` respectively.
+
+## 0.13.16 - 2026-05-17
+
+### Compatibility Impact
+
+No migration is required. This patch fixes generated-doc output paths in
+vendored workspaces; it does not change schemas, validation behavior, or
+catalog object formats.
+
+### Added
+
+- None.
+
+### Changed
+
+- Changed vendored browser generation defaults so a company workspace writes
+  generated docs to `docs/` instead of `.draft/docs/`.
+
+### Fixed
+
+- Fixed `tools/generate_browser.py` so vendored workspaces no longer
+  create stray generated output under `.draft/docs/`.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Refresh the vendored framework and regenerate browser docs to remove any
+  previously created `.draft/docs/` output.
+
+## 0.13.15 - 2026-05-17
+
+### Compatibility Impact
+
+No migration is required. This patch fixes vendored framework script execution;
+it does not change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- None.
+
+### Changed
+
+- Changed vendored tool execution so direct script invocation resolves sibling
+  helper modules without requiring a custom `PYTHONPATH`.
+
+### Fixed
+
+- Fixed `tools/validate.py` in vendored workspaces so
+  `python3 .draft/framework/tools/validate.py --workspace .` works normally.
+- Fixed `tools/repair_uids.py` in vendored workspaces so direct
+  execution also resolves `uid_utils` correctly.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Refresh a vendored framework copy to pick up the script fix.
+
+## 0.13.13 - 2026-05-15
+
+## 0.13.14 - 2026-05-17
+
+### Compatibility Impact
+
+No migration is required. This patch improves framework browser navigation and
+framework documentation; it does not change schemas, validation behavior, or
+catalog object formats.
+
+### Added
+
+- Added an object-model UML diagram asset to the framework documentation and
+  surfaced it from the user manual.
+- Added markdown image rendering and default image styling for generated
+  framework-owned documentation pages.
+- Added executive browser drill-down views for teams, deployment patterns by
+  business pillar, and built-in DRAFT configuration navigation.
+
+### Changed
+
+- Changed the Requirement Groups browser view to separate built-in DRAFT groups
+  from company groups and to classify third-party compliance packs outside the
+  built-in DRAFT bucket.
+- Changed the Teams browser experience from a flat list into a drill-down flow
+  from team to object type to object list.
+- Changed the executive home view to present company configuration navigation
+  under a Draftsman's Office section.
+
+### Fixed
+
+- Fixed stale non-clickable links in newer browser navigation views by routing
+  those views through the shared object-link handler pattern.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Regenerate browser assets after vendoring this framework version to pick up
+  the browser navigation changes.
+
+### Compatibility Impact
+
+No migration is required. This patch improves framework refresh ergonomics for
+vendored workspaces; it does not change schemas, validation behavior, or
+catalog object formats.
+
+### Added
+
+- Added browser shell drift warnings during normal browser generation runs so
+  workspaces are told when `--refresh-shell` is available.
+- Added browser shell refresh as a post-update step in the generated framework
+  refresh workflow.
+
+### Changed
+
+- Changed the generated framework refresh workflow to vendor the
+  `browser` directory in addition to framework configurations, docs,
+  schemas, and tools.
+- Changed the generated framework refresh workflow commit step to include
+  regenerated browser shell assets.
+
+### Fixed
+
+- Fixed generated framework refresh workflows that could update framework tools
+  without also refreshing the installed browser shell assets that depend on
+  them.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Existing workspaces can update `.github/workflows/draft-framework-update.yml`
+  to pick up the new browser refresh behavior.
+
+## 0.13.12 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch fixes browser requirement justification
+resolution for field-backed internal components; it does not change schemas,
+validation behavior, or catalog object formats.
+
+### Added
+
+- Added raw-detail fallback matching when browser dependency justification
+  resolves field-backed internal component requirements.
+
+### Changed
+
+- Changed internal component requirement matching to evaluate both the browser's
+  lightweight object record and the full parsed object detail payload.
+
+### Fixed
+
+- Fixed false `Justification Gap` messages for host operating system and
+  compute platform components when those dependencies are satisfied by base
+  framework field requirements.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Regenerate browser assets to pick up the corrected dependency justification
+  rendering.
+
+## 0.13.11 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch improves browser navigation and display
+labels for modeled service dependencies; it does not change schemas,
+validation behavior, or catalog object formats.
+
+### Added
+
+- Added clickable external interaction titles in the browser detail view when
+  the interaction references another catalog object.
+
+### Changed
+
+- Changed service-facing dependency rendering so runtime service objects can be
+  presented with cleaner human-readable names in adopting workspaces.
+
+### Fixed
+
+- Fixed detail views that showed referenced service dependencies as static text
+  even when the browser could resolve them to another object page.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Workspaces can optionally regenerate their browser output to pick up the
+  clickable external interaction behavior.
+
+## 0.13.10 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch improves browser detail-view rendering for
+ service and host dependencies; it does not change schemas, validation
+ behavior, or catalog object formats.
+
+### Added
+
+- Added dependency justification rendering in the browser detail view so
+  internal components and external interactions show the requirement they
+  satisfy, or the architectural decision rationale when they do not satisfy a
+  requirement directly.
+
+### Changed
+
+- Changed external interaction cards to show human-readable capability labels
+  under the interaction title instead of raw capability IDs.
+- Added an internal component summary list beneath the detail-view component
+  diagram so dependency purpose is readable without inspecting the raw YAML.
+
+### Fixed
+
+- Fixed service and host detail views that previously exposed dependency UIDs
+  and unstated purpose without showing the requirement or architectural
+  decision that justified modeling the dependency.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Workspaces that already document
+  `notes.externalInteractionRationales`,
+  `internalComponentRationales`, or `dependencyRationales` will now see those
+  rationales surfaced directly in the browser.
+
+## 0.13.9 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch updates the vendored framework refresh
+workflow template to point at the new upstream repository location; it does not
+change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- Added the `getdraft/draftsman` repository URL to the workspace framework
+  refresh workflow template.
+
+### Changed
+
+- Updated the generated `draft-framework-update.yml` workflow to use
+  `https://github.com/getdraft/draftsman.git` as its default framework source.
+
+### Fixed
+
+- Fixed the stale framework refresh workflow default that still targeted the
+  retired `dsackr/draft-framework` repository.
+
+### Migration Notes
+
+- Existing workspaces can update their checked-in
+  `.github/workflows/draft-framework-update.yml` to pick up this fix before the
+  next framework refresh.
+
+## 0.13.8 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch updates the canonical upstream framework
+repository location from `dsackr/draft-framework` to `getdraft/draftsman`; it
+does not change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- Added the new `getdraft/draftsman` upstream repository URL to framework
+  onboarding and workspace source references.
+
+### Changed
+
+- Updated the framework default source URL, installer defaults, workspace
+  documentation, generated browser output, and test fixtures to use the new
+  upstream repository location.
+
+### Fixed
+
+- Fixed stale upstream repository references that would otherwise point new or
+  refreshed workspaces at the retired `dsackr/draft-framework` location.
+
+### Migration Notes
+
+- Existing workspaces should update their `framework.source` to
+  `https://github.com/getdraft/draftsman.git` when they refresh framework
+  metadata.
+
+## 0.13.7 - 2026-05-15
+
+### Compatibility Impact
+
+No migration is required. This patch simplifies the upstream and workspace
+bootstrap prompts only; it does not change schemas, validation behavior, or
+catalog object formats.
+
+### Added
+
+- Added explicit upstream prompt language that tells the AI to help select or
+  create the correct company DRAFT workspace before attempting company content
+  authoring.
+
+### Changed
+
+- Simplified the upstream framework README prompt so it is a pure bootstrap
+  handoff to `AGENTS.md` instead of duplicating Draftsman behavior.
+- Updated the workspace README template to remove the assumption that the AI is
+  already connected before the pasted prompt runs.
+
+### Fixed
+
+- Fixed the first-use framework prompt so it no longer front-loads unwanted
+  repo status narration or canned session questions.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Existing company READMEs can refresh from the workspace template or apply the
+  same wording locally.
+
+## 0.13.6 - 2026-05-14
+
+### Compatibility Impact
+
+No migration is required. This patch simplifies the workspace README prompt and
+removes obsolete local app commands; it does not change schemas, validation
+behavior, or catalog object formats.
+
+### Added
+
+- Added explicit fallback prompt language telling the AI assistant to stop and
+  provide actionable enablement steps when it cannot connect to the repo,
+  inspect files, or write changes back.
+
+### Changed
+
+- Changed the workspace README prompt so it speaks directly to the AI
+  assistant, tells it to read the repo bootstrap, and tells it to stop with
+  actionable setup instructions when repo access is incomplete.
+- Removed the obsolete `Local Commands` section from the workspace README
+  template now that the `draft-table` app is not part of the launch path.
+
+### Fixed
+
+- Fixed the onboarding prompt duplication where the README repeated Draftsman
+  instructions that should be loaded from the repo bootstrap instead.
+- Fixed stale README guidance that still referenced the non-launch `draft-table`
+  app workflow.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Existing company READMEs can refresh from the workspace template or apply the
+  same prompt simplification locally.
+
+## 0.13.5 - 2026-05-14
+
+### Compatibility Impact
+
+No migration is required. This patch clarifies how the first-run prompt names
+the target workspace repository; it does not change schemas, validation
+behavior, or catalog object formats.
+
+### Added
+
+- Added rendered repository references to the company workspace README prompt
+  so copied prompts can tell an AI exactly which repo to connect to.
+
+### Changed
+
+- Updated workspace template rendering to derive repository slug and GitHub URL
+  from `.draft/workspace.yaml` repository metadata.
+
+### Fixed
+
+- Fixed the onboarding prompt gap where a copied company README prompt could
+  still be ambiguous about which repo the AI should use.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- To get repo-specific prompts in existing workspaces, add `repository`
+  metadata to `.draft/workspace.yaml` and refresh or update the workspace
+  README.
+
+## 0.13.4 - 2026-05-14
+
+### Compatibility Impact
+
+No migration is required. This patch clarifies the first-run workspace prompt
+only; it does not change schemas, validation behavior, or catalog object
+formats.
+
+### Added
+
+- Added prompt language telling a connected AI assistant to treat the current
+  repository as the selected workspace and only ask for a repo path when it is
+  not actually connected to that workspace.
+
+### Changed
+
+- Updated the company workspace README template so the first-run Draftsman
+  prompt is explicit about using the currently connected repo.
+
+### Fixed
+
+- Fixed the easy-button onboarding prompt ambiguity where an engineer could be
+  connected to the correct repo but still get asked to supply the repo path.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+
+## 0.13.3 - 2026-05-14
+
+### Compatibility Impact
+
+No migration is required. This patch adds a workspace README template and
+refresh behavior for missing bootstrap files; it does not change schemas,
+validation behavior, or catalog object formats.
+
+### Added
+
+- Added `templates/workspace/README.md.tmpl` with a copy/paste Draftsman
+  session prompt for adopting company workspaces.
+- Added workspace template substitutions for `workspace_name`,
+  `workspace_label`, and `company_name` so first-time onboarding files can use
+  the adopting company's name.
+
+### Changed
+
+- Updated workspace scaffolding and framework refresh helpers to create missing
+  root workspace bootstrap files, including the README prompt, without
+  overwriting existing company-owned files.
+- Updated workspace templates to render company-specific README and AI
+  bootstrap language from `.draft/workspace.yaml` or a readable repo-name
+  fallback.
+- Updated onboarding and workspace documentation to call out the README
+  Draftsman start prompt.
+
+### Fixed
+
+- Fixed the adoption gap where a newly created company workspace could include
+  AI bootstrap files but no obvious human-facing prompt for starting a
+  Draftsman session.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- To adopt the prompt in an existing workspace, copy
+  `templates/workspace/README.md.tmpl` to the workspace root as `README.md` or
+  merge the prompt into the existing workspace README.
+
+## 0.13.2 - 2026-05-13
+
+### Compatibility Impact
+
+No migration is required. This patch improves first-run README guidance only;
+it does not change schemas, validation behavior, or catalog object formats.
+
+### Added
+
+- Added a copy/paste Draftsman startup prompt for users connecting their
+  preferred AI assistant to DRAFT for the first time.
+
+### Changed
+
+- Reworked the README opening to explain DRAFT as a repo-based architecture
+  framework and to make the v1.0 repo-first path easier to follow.
+
+### Fixed
+
+- Removed duplicated repo-first onboarding language from the README.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+
+## 0.13.1 - 2026-05-13
+
+### Compatibility Impact
+
+No migration is required. This patch changes v1.0 onboarding guidance and
+roadmap scope; it does not change schemas, validation behavior, or catalog
+object formats.
+
+### Added
+
+- Added roadmap language that explicitly parks the DRAFT Table app and
+  `draft-table` CLI as post-v1.0 future enhancements.
+
+### Changed
+
+- Changed onboarding, setup-mode, workspace, user manual, README, and AI
+  bootstrap guidance to make the v1.0 path repo-first: a company connects its
+  preferred AI tool to a DRAFT workspace repo and the AI follows the bootstrap
+  files as the Draftsman.
+
+### Fixed
+
+- Fixed misleading first-run documentation that implied `draft-table onboard`,
+  a local app, or a DRAFT-specific CLI was required for v1.0 adoption.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- Companies adopting v1.0 should treat local DRAFT Table tooling as optional
+  experimental tooling and rely on Git, pull requests, validation, and their
+  chosen AI assistant for the canonical workflow.
+
+## 0.13.0 - 2026-05-13
+
+### Compatibility Impact
+
+No migration is required for existing workspaces. Company vocabulary lists are
+optional, and undeclared lists preserve the existing free-text behavior.
+
+### Added
+
+- Added optional workspace vocabulary declarations for deployment targets, data
+  classification levels, team IDs, availability tiers, and failure domains.
+- Added advisory and gated vocabulary validation modes.
+- Added `vocabulary` and `vocabulary_proposal` YAML document support for
+  company-owned vocabulary source files and non-standard value review flow.
+- Added `tools/apply_vocabulary_proposals.py` and a workspace GitHub
+  Actions template that can open review pull requests for proposed standard
+  values.
+- Added the Company Vocabulary guide and browser navigation link.
+
+### Changed
+
+- Updated Draftsman, onboarding, setup-mode, workspace, Software Deployment
+  Pattern, and AI bootstrap guidance to use declared vocabulary choices during
+  interviews.
+- Updated workspace scaffolding to create vocabulary folders and install the
+  vocabulary proposal workflow template.
+
+### Fixed
+
+- Fixed the adoption gap where companies had no framework-supported way to
+  move from free-text deployment targets, teams, availability tiers, data
+  classifications, and failure domains toward governed choices.
+
+### Migration Notes
+
+- Existing workspaces can continue unchanged.
+- To adopt vocabulary governance, declare one list at a time under
+  `.draft/workspace.yaml`, start with `mode: advisory`, and move a list to
+  `mode: gated` only when the company wants validation to block non-standard
+  values.
+
+## 0.12.6 - 2026-05-13
+
+### Compatibility Impact
+
+No workspace migration is required. This patch adds roadmap documentation and
+AI discovery metadata without changing schemas, validation contracts, or stored
+object formats.
+
+### Added
+
+- Added `ROADMAP.md` as the stable v1.0 readiness narrative for the executable
+  deployment contract, golden reference workspace, and deterministic Draftsman
+  workflow.
+
+### Changed
+
+- Updated AI discovery metadata so assistants can find the v1.0 roadmap from
+  `AI_INDEX.md` and `llms.txt`.
+
+### Fixed
+
+- Fixed the missing repository-level roadmap for the existing v1.0 milestone
+  and tracking issues.
+
+### Migration Notes
+
+- No migration is required.
+
+## 0.12.5 - 2026-05-13
+
+### Compatibility Impact
+
+No workspace migration is required. This patch strengthens AI bootstrap and
+Draftsman write-boundary guidance without changing DRAFT object schemas.
+
+### Added
+
+- Added company workspace AI bootstrap templates for `AGENTS.md`, `CLAUDE.md`,
+  `GEMINI.md`, `llms.txt`, and `.github/copilot-instructions.md`.
+- Added backend Draftsman proposal protection that rejects writes to
+  `.draft/framework/**` and `.draft/framework.lock`.
+
+### Changed
+
+- Updated Draftsman guidance so company architecture content is not written
+  into the upstream framework repo when no company workspace is selected.
+- Updated the DRAFT Table Draftsman prompt to ask for a company-specific DRAFT
+  repo before proposing content changes against the upstream framework repo.
+
+### Fixed
+
+- Fixed an AI-first gap where company repos could rely only on nested vendored
+  framework instructions, which some AI tools do not load automatically from
+  the repository root.
+
+### Migration Notes
+
+- Refresh the framework in company workspaces to pick up the new Draftsman
+  guardrails and workspace bootstrap templates.
+- Existing company repos can add root AI bootstrap files that point agents at
+  `.draft/framework/` and prohibit normal Draftsman edits to vendored framework
+  files.
+
+## 0.12.4 - 2026-05-04
+
+### Compatibility Impact
+
+Self-managed Runtime Services, Data-at-Rest Services, and Edge/Gateway Services
+now have an explicit service-behavior requirement to reference their Host
+Standard. Existing draft objects without a host will receive validation
+warnings; approved objects without a host will fail validation until the host
+substrate is recorded.
+
+### Added
+
+- Added `DRAFT Service Behavior / runtime-substrate` to require self-managed
+  services to identify the Host Standard that provides their execution
+  substrate.
+- Added RA-guided drafting and composition-closure guidance for Software
+  Deployment Pattern interviews.
+
+### Changed
+
+- Updated Draftsman guidance so Reference Architectures are searched and
+  proposed as drafting maps instead of being asked as a user-facing catalog
+  form question.
+- Updated the DRAFT Table Draftsman prompt to walk the deployable object graph
+  after SDP topology discovery and avoid hidden substrate assumptions such as
+  EKS, EC2, Lambda, VM, physical, or container placement.
+
+### Fixed
+
+- Fixed a gap where a Draftsman could complete a Software Deployment Pattern
+  session without resolving the host/substrate choice for self-managed
+  services.
+
+### Migration Notes
+
+- Refresh the framework and regenerate `docs/index.html`.
+- For any self-managed service object that does not declare `host`, select the
+  correct Host Standard or record the unresolved substrate in a Drafting
+  Session before approving the object.
+
+## 0.12.3 - 2026-05-04
+
+### Compatibility Impact
+
+No workspace migration is required. This patch strengthens Draftsman interview
+guidance without changing schemas or stored object references.
+
+### Added
+
+- No new framework features in this patch release.
+
+### Changed
+
+- Updated Draftsman guidance so requirement-backed capability questions use
+  company-approved `preferred` and `existing-only` implementations as concrete
+  choices whenever they exist.
+- Clarified that "something else" is an exception path requiring
+  capability-owner review before a Technology Component becomes acceptable use.
+- Updated the DRAFT Table Draftsman prompt to resolve capability criteria and
+  ask catalog-grounded multiple-choice questions instead of defaulting to
+  open-ended prompts.
+
+### Fixed
+
+- Fixed guidance that could allow a Draftsman to ask open-ended capability
+  questions even when the effective catalog already contained approved
+  standard choices.
+
+### Migration Notes
+
+- Refresh the framework and regenerate `docs/index.html` to pick up the
+  updated Draftsman interview guidance.
+
+## 0.12.2 - 2026-05-04
+
+### Compatibility Impact
+
+No workspace migration is required. This patch clarifies Software Deployment
+Pattern deployment-target wording and Draftsman interview behavior without
+changing schemas or stored object references.
+
+### Added
+
+- No new framework features in this patch release.
+
+### Changed
+
+- Changed the `deployment-targets` requirement to ask for a deployment boundary
+  or execution context rather than a generic "where it runs" answer.
+- Updated Software Deployment Pattern and Draftsman documentation to clarify
+  that deployment targets are not inherently cloud regions or controlled-list
+  answers unless an active company/control requirement makes them so.
+- Updated Software Deployment Pattern and Reference Architecture templates to
+  use deployment boundary/execution context language.
+
+### Fixed
+
+- Fixed the missing `deploymentTargets` validation message so it no longer
+  implies a raw target field without the architectural boundary semantics.
+
+### Migration Notes
+
+- Refresh the framework and regenerate `docs/index.html` to pick up the
+  clarified requirement wording and Draftsman guidance.
+
+## 0.12.1 - 2026-05-04
+
+### Compatibility Impact
+
+No workspace migration is required. This patch only completes the
+human-readable requirement label rollout in validation messages.
+
+### Added
+
+- No new framework features in this patch release.
+
+### Changed
+
+- Changed remaining requirement implementation validation messages to cite
+  source-aware labels such as `SOC 2.CC7.security-monitoring` and
+  `DRAFT Host / operating-system`.
+
+### Fixed
+
+- Fixed active requirement implementation gap messages that still displayed raw
+  Requirement Group UIDs instead of the resolved authority/control label.
+
+### Migration Notes
+
+- Refresh the framework and regenerate `docs/index.html` to pick up the
+  updated validation wording.
+
+## 0.12.0 - 2026-05-04
+
+### Compatibility Impact
+
+No workspace migration is required. Requirement Group machine references remain
+unchanged: objects still store `requirementGroup` as the group UID and
+`requirementId` as the requirement-local ID. Generated UI and validation
+messages now resolve those keys into human-readable requirement citations.
+
+### Added
+
+- Added `authority.shortName` guidance for Requirement Groups so external
+  controls can render as labels such as `SOC 2.CC7.security-monitoring`,
+  `NIST CSF.PR.AA`, `TX-RAMP.AC-2`, or `CompanyPolicy.IAM.04`.
+- Added explicit DRAFT authority metadata to framework-native always-on
+  Requirement Groups so they render as labels such as
+  `DRAFT Host / operating-system`.
+- Added Requirement Evidence detail tables to generated browser artifact pages
+  when object-level requirement implementations are recorded.
+
+### Changed
+
+- Changed generated browser requirement cards, object Requirement Group badges,
+  requirement evidence drill-downs, and artifact evidence tables to use
+  source-aware requirement labels instead of raw Requirement Group UIDs or
+  unsourced control IDs.
+- Changed validation failure messages for unmet or not-compliant requirements
+  to cite the resolved requirement label and source Requirement Group.
+- Updated Draftsman and authoring documentation to tell AI agents to use
+  sourced requirement labels in conversation.
+
+### Fixed
+
+- Fixed ambiguous requirement/control display where controls such as `CC.04.4.1`
+  appeared without showing whether they came from SOC 2, DRAFT Security,
+  or another activated Requirement Group.
+
+### Migration Notes
+
+- Refresh the framework and regenerate `docs/index.html` to pick up sourced
+  requirement labels.
+- Company-owned external control mappings should add `authority.shortName` to
+  their Requirement Groups. Existing objects do not need their
+  `requirementGroups` or `requirementImplementations` rewritten.
+
+## 0.11.0 - 2026-05-04
+
+### Compatibility Impact
+
+Pre-1.0 validation behavior changed for Capability governance. Approved
+Capabilities must now be traceable to at least one Requirement Group through a
+requirement `relatedCapability` reference. Workspaces with approved
+Capabilities that are not requirement-backed must either add requirement
+coverage or downgrade those Capabilities to draft/stub until the demand signal
+is defined.
+
+### Added
+
+- Added a company onboarding tutorial at `docs/company-onboarding.md`
+  that walks a new company through repository setup, vendored framework
+  refresh, requirement activation, capability ownership, acceptable-use
+  technology, first deployable objects, validation, and update readiness.
+- Added a generated browser Onboarding page so the DRAFT Table UI can guide new
+  users without leaving the local catalog browser.
+- Added onboarding guidance to the Draftsman grounding context, `AI_INDEX.md`,
+  and `llms.txt`.
+
+### Changed
+
+- Changed Capability validation so approved Capabilities must be requirement
+  traceable while draft/stub Capabilities without requirement traceability emit
+  actionable warnings.
+- Changed eight framework base Capabilities that are not yet requirement-backed
+  from approved to draft.
+- Updated Capability, Requirement Group, Draftsman, workspace, and overview
+  documentation to describe requirement-first traceability and company-owned
+  implementation decisions.
+- Changed the generated browser impact graph so Technology Components are not
+  treated as lifecycle-filterable deployable object nodes.
+
+### Fixed
+
+- Fixed generated browser lifecycle filtering so Technology Components do not
+  appear in deployable object lifecycle impact views.
+
+### Migration Notes
+
+- Run validation after refreshing the framework and review any Capability
+  traceability warnings.
+- For each workspace-owned Capability with `catalogStatus: approved`, add at
+  least one Requirement Group requirement with `relatedCapability` pointing to
+  that Capability, or downgrade the Capability to draft/stub until it is backed
+  by a requirement.
+- Regenerate `AI_INDEX.md` and `docs/index.html` after refreshing the
+  framework.
+
+## 0.10.0 - 2026-05-04
+
+### Compatibility Impact
+
+Breaking pre-1.0 object taxonomy migration required. Workspaces using legacy
+Host Standard, Service Standard, Database Standard, PaaS Service Standard, SaaS
+Service Standard, or Appliance Component object types must migrate to the new
+deployable object taxonomy and regenerate derived browser/index output.
+
+### Added
+
+- Added first-class deployable object taxonomy documentation in
+  `docs/object-types.md`.
+- Added `runtime_service`, `data_at_rest_service`, `edge_gateway_service`, and
+  `host` schemas to replace legacy Standard-classification schemas.
+- Added `deliveryModel` support for self-managed, PaaS, SaaS, and appliance
+  delivery on service objects.
+- Added a generated browser Object Types information page that explains
+  deployable versus non-deployable architecture content.
+- Added one-time `tools/migrations/0.10.0/migrate_object_taxonomy.py`
+  migration support for the pre-1.0 adopting workspace.
+
+### Changed
+
+- Replaced legacy Standard-classification object types with explicit deployable
+  object types: Host, Runtime Service, Data-at-Rest Service, Edge/Gateway
+  Service, Product Service, Technology Component, and Software Deployment
+  Pattern.
+- Changed Software Deployment Pattern and Reference Architecture service groups
+  from `standards` plus `applianceComponents` to `deployableObjects`.
+- Changed PaaS, SaaS, and appliance from separate object types into delivery
+  models on Runtime Service, Data-at-Rest Service, and Edge/Gateway Service.
+- Updated Draftsman guidance, templates, validation, DRAFT Table catalog
+  discovery, generated browser rendering, and AI index generation for the new
+  object taxonomy.
+
+### Fixed
+
+- Removed stale Standard-classification language from framework documentation
+  and generated UI copy.
+- Fixed service-group validation messages so they refer to deployable objects
+  instead of standards.
+
+### Migration Notes
+
+- Run the 0.10.0 migration script against existing workspaces, then validate:
+  `python3 .draft/framework/tools/migrations/0.10.0/migrate_object_taxonomy.py .`
+- Regenerate `AI_INDEX.md` and `docs/index.html` after migration.
+- Review service group entries after migration to confirm each
+  `deployableObjects[].ref` points to the intended Host, Runtime Service,
+  Data-at-Rest Service, Edge/Gateway Service, or Product Service.
+- Review PaaS, SaaS, and appliance migrated services to confirm the selected
+  object type matches the behavior first and `deliveryModel` matches how it is
+  operated.
+
+## 0.9.1 - 2026-05-03
+
+### Compatibility Impact
+
+No schema, validation, or catalog object compatibility impact. Existing
+workspaces remain valid.
+
+### Added
+
+- Added subtle accent-tinted backgrounds to DRAFT Overview metric tiles so the
+  generated browser overview has more visual hierarchy without changing object
+  data.
+
+### Changed
+
+- Renamed the generated browser's visible "Executive View" label to "DRAFT
+  Overview" while preserving the existing internal route state.
+
+### Fixed
+
+- No defect fixes in this patch release.
+
+### Migration Notes
+
+- Regenerate `docs/index.html` after refreshing the framework to pick up the
+  updated generated browser labels and metric tile styling.
+
+## 0.9.0 - 2026-05-03
+
+### Compatibility Impact
+
+Breaking pre-1.0 object identity migration required. First-class catalog and
+configuration objects now use generated `uid` values instead of semantic
+top-level `id` values. Existing workspaces must run UID repair and regenerate
+derived browser/index output. Workspaces remain free to opt into
+`businessTaxonomy.requireSoftwareDeploymentPatternPillar` separately.
+
+### Added
+
+- Added optional `businessContext` support to Software Deployment Patterns so
+  company workspaces can identify the primary business pillar, additional
+  pillars, and product family for a deployment pattern.
+- Added workspace `businessTaxonomy.pillars` validation through
+  `.draft/workspace.yaml`.
+- Added generated browser grouping and badges for Software Deployment Patterns
+  by workspace-defined business pillar.
+- Added generated UID validation for first-class objects. Validation now
+  reports missing, malformed, duplicate, and legacy top-level object identity
+  with a suggested UID and an explicit repair command.
+- Added `tools/repair_uids.py` and `tools/uid_utils.py` to
+  generate object UIDs, remove legacy top-level `id`, rewrite exact object
+  references, and migrate legacy Drafting Session UID field names.
+- Added optional `aliases` to first-class object schemas so prior or alternate
+  human-readable names can resolve to the same stable object.
+
+### Changed
+
+- Updated Draftsman and workspace documentation so company business taxonomy is
+  resolved from `.draft/workspace.yaml`, not tags, capabilities, or Strategy
+  Domains.
+- Changed first-class object identity from semantic `id` to generated opaque
+  `uid`. Human-facing object resolution should use name, aliases, path, close
+  match, and only then UID.
+- Changed object reference validation, object patching, browser generation, and
+  AI index generation to use generated UIDs as the machine reference key.
+- Changed Drafting Session object-reference fields from `primaryObjectId` and
+  `proposedId` to `primaryObjectUid` and `proposedUid`.
+
+### Fixed
+
+- Fixed the Software Deployment Pattern browsing experience so product
+  deployment patterns can be scanned by company portfolio ownership instead of
+  only by object type.
+- Fixed generated browser reference discovery so generated UID references are
+  indexed without depending on semantic object prefixes.
+
+### Migration Notes
+
+- Run `python3 tools/repair_uids.py --workspace examples` in the
+  framework repo, or `python3 .draft/framework/tools/repair_uids.py --workspace
+  .` from a company repo, to add generated `uid` values, remove legacy
+  top-level `id`, and rewrite exact object references.
+- Regenerate `AI_INDEX.md` and `docs/index.html` after UID repair.
+- If validation reports a missing, malformed, duplicate, or legacy identity,
+  run the exact repair command it prints; the command includes the suggested
+  UID when repairing a single file.
+- To use the business taxonomy feature, declare `businessTaxonomy.pillars` in
+  `.draft/workspace.yaml`, then add `businessContext.pillar` to each Software
+  Deployment Pattern. Set
+  `businessTaxonomy.requireSoftwareDeploymentPatternPillar: true` only after the
+  workspace is ready to enforce the field.
+
+## 0.8.2 - 2026-05-03
+
+### Compatibility Impact
+
+No schema, validation, or catalog object compatibility impact. Existing
+workspaces remain valid.
+
+### Added
+
+- Added generated browser rendering for Software Deployment Pattern source
+  repositories when repository provenance is recorded on the object.
+
+### Changed
+
+- Updated Draftsman guidance so repository-discovered artifacts record
+  provenance on each generated object, not only in a shared Drafting Session.
+
+### Fixed
+
+- Fixed generated browser rendering for nested architectural decision arrays so
+  structured provenance entries do not appear as `[object Object]`.
+
+### Migration Notes
+
+No workspace data migration is required. Repository-discovered Software
+Deployment Patterns can optionally add
+`notes.sourceRepositories` to make per-pattern provenance
+visible in the generated browser.
+
+## 0.8.1 - 2026-05-03
+
+### Compatibility Impact
+
+No schema, validation, or catalog object compatibility impact. Existing
+workspaces can continue using 0.8.0 content and only need to refresh generated
+browser assets to receive the updated welcome-page branding.
+
+### Added
+
+- Added the transparent 512x512 `draft-logo.png` asset to the framework so
+  generated browser pages can use the official DRAFT logo.
+- Added automated version-bump enforcement to the release-note checker so
+  release-impacting framework changes must advance `draft-framework.yaml`.
+
+### Changed
+
+- Changed the Executive View welcome hero to place the larger DRAFT logo beside
+  the full title, descriptive text, and action area, and retitled the page
+  `Welcome to the DRAFTing Table`.
+- Documented the AI release decision procedure for choosing pre-1.0 minor
+  versus patch releases consistently.
+
+### Fixed
+
+- Fixed framework release metadata so the generated browser branding change is
+  recorded as patch release 0.8.1.
+- Fixed the validation workflow label to make version-bump enforcement explicit
+  in GitHub Actions.
+
+### Migration Notes
+
+No YAML or workspace data migration is required. Regenerate `docs/index.html`
+or pull the updated vendored framework files to display the new welcome logo
+layout in an existing workspace.
+
+## 0.8.0 - 2026-05-03
+
+### Compatibility Impact
+
+Breaking pre-1.0 lifecycle vocabulary migration required. Workspaces must
+replace the old lifecycle labels with the new plain-language labels across
+catalog objects and capability implementation mappings: `pre-invest` becomes
+`candidate`, `invest` becomes `preferred`, `maintain` becomes `existing-only`,
+`disinvest` becomes `deprecated`, and `exit` becomes `retired`.
+
+### Added
+
+- Added an Executive View as the default generated browser landing page, with
+  clickable metric tiles for controls addressed, Technology Components,
+  Capabilities, Software Deployment Patterns, requirement definitions, and
+  acceptable-use mappings.
+- Added an Acceptable Use Technology browser view that groups Technology
+  Component lifecycle mappings by domain and capability, including owner/contact
+  information for change requests.
+
+### Changed
+
+- Renamed lifecycle vocabulary to plainer adopting-company language:
+  `candidate`, `preferred`, `existing-only`, `deprecated`, and `retired`.
+- Renamed the generated browser list navigation to Drafting Table so the
+  executive landing page can hand users into the existing object browser.
+- Documented Reference Architecture lifecycle policy: cloud-forward patterns are
+  `preferred`, legacy supported patterns are `existing-only`, and patterns containing
+  end-of-support Technology Components are `deprecated`. Patterns containing
+  extended-support Technology Components default to `deprecated`, may be
+  `existing-only` with explicit rationale, and must not be `preferred`.
+- Increased Executive View metric and tile heading sizes so each collage tile
+  carries equal visual weight.
+- Fixed Executive View tile CSS so the shared large metric size is not
+  overridden by paragraph styling.
+- Documented the Acceptable Use Technology view as the generated human-readable
+  table for company technology lifecycle mappings.
+- Changed the Acceptable Use Technology table to group Technology Components
+  under capability headers, with owner/contact shown on the capability header
+  instead of repeated in every row.
+- Changed the Acceptable Use Technology view to omit unmapped capabilities and
+  empty domain groups so it remains a Technology Component list.
+- Clarified Draftsman guidance for overlapping base and workspace-activated
+  control requirements that share a capability.
+- Added per-capability Technology Component counts to the Acceptable Use
+  Technology browser view.
+
+### Fixed
+
+- Fixed generated browser payloads so Capability domain assignments are included
+  in the Acceptable Use Technology view instead of appearing as unassigned.
+- Fixed Reference Architecture and Software Deployment Pattern requirement
+  evidence so `serviceGroups`, `patternType`, and `notes`
+  fields satisfy the matching requirement group checks directly.
+- Fixed requirement satisfaction for external interactions declared inside
+  `serviceGroups`, so nested service group interactions count toward the same
+  mechanisms as top-level interactions.
+- Fixed Reference Architecture validation so patterns that include Technology
+  Components past `vendorLifecycle.extendedSupportEnd` must be marked
+  `deprecated`.
+- Fixed Reference Architecture validation so patterns that include Technology
+  Components past `vendorLifecycle.mainstreamSupportEnd` cannot be marked
+  `preferred`; `existing-only` requires an explicit lifecycle rationale.
+
+### Migration Notes
+
+- Replace lifecycle labels in workspace YAML:
+  `pre-invest` -> `candidate`, `invest` -> `preferred`,
+  `maintain` -> `existing-only`, `disinvest` -> `deprecated`,
+  and `exit` -> `retired`.
+- Regenerate `docs/index.html` to publish the Acceptable Use Technology view for
+  a framework or workspace browser.
+
+## 0.7.0 - 2026-05-02
+
+### Compatibility Impact
+
+Breaking workspace migration is required for capability overlays that assign
+Technology Component implementations. DRAFT is still pre-1.0, so breaking
+object model changes are allowed in 0.MINOR.0 releases when documented with
+migration notes.
+
+Existing name-only external interactions remain valid, but shared platforms
+should be modeled and referenced when known.
+
+### Added
+
+- Added validation that `externalInteractions[].ref` values point to existing
+  catalog objects.
+- Added `definitionOwner` to Capability objects so framework, provider, and
+  company vocabulary ownership is separate from company implementation
+  authority.
+- Added validation requiring `owner.team` on the effective Capability whenever
+  implementations are assigned.
+
+### Changed
+
+- Changed framework base Capabilities to carry `definitionOwner` only and leave
+  company `owner` to workspace overlays.
+- Clarified that Capability implementation lifecycle entries must reference
+  Technology Components only, because lifecycle disposition applies to a
+  discrete vendor product and version.
+- Clarified that central logging and other shared enterprise platforms should be
+  modeled as Standards or service classifications rather than left as permanent
+  name-only external interactions.
+- Updated Requirement Group examples and the host template to prefer resolved
+  logging platform references.
+- Updated the browser to distinguish Capability definition owner from company
+  owner.
+
+### Fixed
+
+- Fixed workspace-mode Requirement Group validation so active groups remain
+  incremental when `requireActiveRequirementGroupDisposition` is false, while
+  still requiring explicit activation before an object can claim them.
+- Fixed Requirement Group validation so resolving `requirementImplementations`
+  satisfy the matching requirement evidence during workspace control validation.
+
+### Migration Notes
+
+- Refresh the vendored framework copy.
+- Add `definitionOwner` to any workspace-owned Capability files.
+- Add `patch.owner.team` or full `patch.owner` to object patches that assign
+  Capability implementations.
+- Keep Capability `implementations[].ref` pointed at Technology Components
+  only. If a SaaS or managed service is lifecycle-governed, model the specific
+  vendor product and version as a Technology Component and compose the
+  service-facing Standard separately.
+- Existing black-box external interactions can stay as drafting placeholders.
+  When the target platform is known, add or reuse the modeled DRAFT object and
+  set `externalInteractions[].ref`.
+
+## 0.6.0 - 2026-05-01
+
+### Compatibility Impact
+
+Breaking workspace migration is required for pre-0.6.0 content that uses
+Definition Checklists, Compliance Controls, Control Enforcement Profiles, or
+top-level Technology Component `lifecycleStatus`. DRAFT is still pre-1.0, so
+breaking object model changes are allowed in 0.MINOR.0 releases when documented
+with migration notes.
+
+### Added
+
+- Added first-class `capability` objects in `configurations/capabilities/`.
+- Added unified `requirement_group` objects in
+  `configurations/requirement-groups/`.
+- Added sample workspace capability implementation patches under
+  `examples/configurations/object-patches/`.
+- Added AI-first schema `aiHint` metadata and required-field descriptions.
+- Added a DRAFT Table Guide tab that explains what DRAFT is, how to navigate the
+  UI, what the core artifact families mean, and how content updates flow through
+  Draftsman, validation, and Git.
+
+### Changed
+
+- Replaced Definition Checklists and Compliance Controls plus Control
+  Enforcement Profiles with the unified Requirement Group model.
+- Replaced workspace `compliance.activeControlEnforcementProfiles` with
+  `requirements.activeRequirementGroups`.
+- Replaced object-level `controlEnforcementProfiles` and
+  `controlImplementations` with `requirementGroups` and
+  `requirementImplementations`.
+- Changed Technology Component `capabilities` to reference capability object IDs.
+- Removed top-level Technology Component `lifecycleStatus`; company disposition
+  now lives on capability implementation mappings.
+- Updated the browser to remove the Compliance Build Profile selector and show
+  Capabilities and Requirement Groups as framework content.
+- Updated Draftsman guidance to use the named requirement-to-capability lookup
+  chain before asking users open-ended questions.
+
+### Fixed
+
+- Improved validation failures so missing schema fields and requirement gaps are
+  written as actionable instructions.
+
+### Migration Notes
+
+- Move any workspace Definition Checklist files to `requirement_group` objects
+  under `configurations/requirement-groups/`.
+- Move active compliance profile configuration to:
+  `requirements.activeRequirementGroups`.
+- Rename object evidence fields from `controlEnforcementProfiles` and
+  `controlImplementations` to `requirementGroups` and
+  `requirementImplementations`.
+- Convert bare capability strings such as `log-management` to namespaced
+  capability IDs such as `capability.log-management`.
+- Move Technology Component adoption disposition into capability implementation
+  mappings. Keep vendor support dates in Technology Component `vendorLifecycle`.
+- Refresh the vendored framework copy and run
+  `python3 .draft/framework/tools/validate.py --workspace .`.
+
+## 0.5.0 - 2026-04-30
+
+### Compatibility Impact
+
+No workspace object migration is required. Company workspaces can adopt this
+release by refreshing their vendored framework and adding the optional update
+workflow.
+
+### Added
+
+- Added a default company-side GitHub Actions workflow template that checks for
+  newer DRAFT Framework versions, opens an update branch and pull request,
+  refreshes `.draft/framework/`, updates `.draft/framework.lock`, and records
+  validation status.
+- Added blocked update PR behavior for failed workspace validation so companies
+  can repair migration issues on the update branch instead of losing the
+  attempted framework update.
+
+### Changed
+
+- Updated DRAFT Table workspace bootstrap so new company workspaces receive the
+  framework update workflow by default.
+- Documented the company framework update notification and PR workflow.
+
+### Fixed
+
+- No fixes in this release.
+
+### Migration Notes
+
+- Existing company workspaces can copy
+  `templates/workspace/.github/workflows/draft-framework-update.yml.tmpl` to
+  `.github/workflows/draft-framework-update.yml`.
+- The workflow is optional. Disable it in GitHub Actions or delete the workflow
+  file if the company wants to manage framework updates manually.
+
+## 0.4.0 - 2026-04-30
+
+### Compatibility Impact
+
+Breaking workspace migration may be required for workspaces created from earlier
+pre-1.0 framework commits. This release is still in the pre-1.0 framework
+formation phase, so object model changes are allowed when documented here.
+
+### Added
+
+- Added DRAFT Table as the local-first Draftsman web and CLI experience.
+- Added company workspace bootstrapping with a vendored `.draft/framework/`
+  copy and explicit framework refresh behavior.
+- Added provider-scoped compliance controls and Control Enforcement Profiles.
+- Added active compliance profile configuration in `.draft/workspace.yaml`.
+- Added the current framework version manifest at `draft-framework.yaml`.
+
+### Changed
+
+- Renamed the primary DRAFT terminology around Technology Components,
+  Appliance Components, Host Standards, Service Standards, Database Standards,
+  Reference Architectures, Software Deployment Patterns, Definition Checklists,
+  Decision Records, Compliance Controls, and Control Enforcement Profiles.
+- Updated compliance activation so framework, third-party, and company control
+  providers can coexist without filename or ownership ambiguity.
+- Updated appliance component guidance so service-like required capabilities are
+  captured directly on the appliance component.
+- Updated Draftsman guidance so capability questions ask what satisfies the
+  capability, not which organization team performs the work.
+
+### Fixed
+
+- Fixed DRAFT Table onboarding behavior for piped installers and local content
+  repo creation.
+- Fixed Draftsman chat route diagnostics and provider timeout surfacing.
+- Fixed browser and DRAFT Table UI alignment with the GitHub Pages experience.
+
+### Migration Notes
+
+- Refresh the vendored framework copy in each company workspace through
+  `draft-table framework refresh` or the equivalent repository process.
+- Review object and file naming against the updated terminology before treating
+  old workspace content as current.
+- Update any references to framework-provided compliance profiles to the
+  provider-scoped IDs such as `control-enforcement.draft-soc2`.
+- Use `controlEnforcementProfiles` and `controlImplementations` to record active
+  compliance disposition; `opted-out` has been replaced by `not-compliant`.
+- Run validation after refresh with
+  `python3 .draft/framework/tools/validate.py --workspace .`.

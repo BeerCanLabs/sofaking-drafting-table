@@ -1,4 +1,4 @@
-name: Validate DRAFT Workspace
+name: Validate Catalog
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate:
-    runs-on: [self-hosted, linux, docker]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
